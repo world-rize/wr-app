@@ -1,4 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
+
+// search bar
+class SearchBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: Alignment.centerLeft,
+      color: Colors.white,
+      child: TextField(
+        decoration: InputDecoration(
+//            border: OutlineInputBorder(
+//              borderRadius: BorderRadius.all(
+//                const Radius.circular(10.0),
+//              ),
+//            ),
+        hintText: "Phrase",
+        ),
+      ),
+    );
+  }
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -59,10 +81,42 @@ class _PageContainerState extends State<PageContainer> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bottom Navigation Bar Demo'),
+        // title: Text("AAA"),
+        title: SearchBar(),
+        // Text('Bottom Navigation Bar Demo'),
+//        actions: <Widget>[
+//          IconButton(
+//            icon: Icon(Icons.search),
+//          )
+//        ],
       ),
-      body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            // some contents
+            _widgetOptions.elementAt(_selectedIndex),
+            // slide view
+            Row(
+              children: <Widget>[
+                Flexible(
+                  child: SizedBox(
+                    // width: 200.0,
+                    height: 300.0,
+                    child: Swiper(
+                      itemBuilder: (BuildContext context, int index) {
+                        return new Image.network(
+                            "http://via.placeholder.com/200x300",
+                            fit: BoxFit.contain,
+                        );
+                      },
+                      itemCount: 5,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        )
       ),
       bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
