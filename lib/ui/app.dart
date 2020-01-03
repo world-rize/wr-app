@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 // pages
 import 'package:wr_app/ui/lesson/lesson_page.dart';
@@ -14,10 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'WR App',
-//      theme: ThemeData(
-//        primarySwatch: Colors.blue,
-//      ),
+      theme: ThemeData.light(),
       home: RootView(),
     );
   }
@@ -25,7 +23,7 @@ class MyApp extends StatelessWidget {
 
 // root widget
 class RootView extends StatefulWidget {
-  RootView({ Key key }) : super(key: key);
+  RootView({Key key}) : super(key: key);
 
   @override
   _RootViewState createState() => _RootViewState();
@@ -33,16 +31,16 @@ class RootView extends StatefulWidget {
 
 class _RootViewState extends State<RootView> {
   // selected view's index
-  int _selectedIndex = 0;
+  // int _selectedIndex = 0;
 
   // page views
   List<Widget> _pages;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+//  void _onItemTapped(int index) {
+//    setState(() {
+//      _selectedIndex = index;
+//    });
+//  }
 
   // ページ
   List<Widget> _createPages() {
@@ -56,9 +54,9 @@ class _RootViewState extends State<RootView> {
   }
 
   // 下部ナビゲーションバー
-  BottomNavigationBar _createNavBar() {
-    return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
+  CupertinoTabBar _createNavBar() {
+    return CupertinoTabBar(
+      items: [
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           title: Text('レッスン'),
@@ -80,11 +78,8 @@ class _RootViewState extends State<RootView> {
           title: Text('マイページ'),
         ),
       ],
-      type: BottomNavigationBarType.fixed,
-      currentIndex: _selectedIndex,
-      selectedItemColor: Colors.amber[800],
-      unselectedItemColor: Colors.grey[400],
-      onTap: _onItemTapped,
+//      currentIndex: _selectedIndex,
+//      onTap: _onItemTapped,
     );
   }
 
@@ -92,14 +87,22 @@ class _RootViewState extends State<RootView> {
   Widget build(BuildContext context) {
     _pages = _createPages();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: SearchBar(),
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text("Hoge"),
       ),
-      body: Container(
-        child: _pages.elementAt(_selectedIndex),
+      child: SafeArea(
+        child: CupertinoTabScaffold(
+            tabBar: _createNavBar(),
+            tabBuilder: (context, index) {
+              return CupertinoTabView(builder: (context) {
+                return SingleChildScrollView(
+                  padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 60.0),
+                  child: _pages.elementAt(index)
+                );
+              });
+            }),
       ),
-      bottomNavigationBar: _createNavBar(),
     );
   }
 }
