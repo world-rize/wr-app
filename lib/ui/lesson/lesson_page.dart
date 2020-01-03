@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:wr_app/ui/lesson/section_select.dart';
 
 Widget _createSwiperView() {
   return Flexible(
@@ -71,6 +72,16 @@ class LessonPage extends StatelessWidget {
       children: <Widget>[
         _createHeadline(
             context, Colors.blue, "Lesson", "There are 15 types in all."),
+        CupertinoButton(
+          child: Text("School"),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SectionSelectPage(),
+                ));
+          },
+        ),
         const Placeholder(
           fallbackHeight: 300.0,
         ),
