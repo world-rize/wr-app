@@ -110,37 +110,95 @@ class SectionSelectPage extends StatelessWidget {
 
   final _tabs = <Tab>[Tab(text: "Lesson"), Tab(text: "Test")];
 
+//  Widget _createUnderlinedTabbedCard() {
+//    return Card(
+//      shape: RoundedRectangleBorder(
+//        borderRadius: BorderRadius.circular(40.0),
+//      ),
+//      child: Padding(
+//        padding: EdgeInsets.only(top: 30.0),
+//        child: DefaultTabController(
+//          length: 2,
+//          child: Scaffold(
+//            appBar: AppBar(
+//              backgroundColor: Colors.white,
+//              automaticallyImplyLeading: false,
+//              elevation: 0,
+//              title: TabBar(
+//                unselectedLabelColor: Colors.grey,
+//                labelColor: Colors.black87,
+//                indicatorWeight: 6.0,
+//                indicatorSize: TabBarIndicatorSize.label,
+//                indicatorColor: Colors.orange,
+//                indicatorPadding: EdgeInsets.symmetric(horizontal: 2.0),
+//                tabs: _tabs,
+//              ),
+//            ),
+//            body: TabBarView(
+//              children: [
+//                _createLessonTabView(),
+//                _createTestTabView(),
+//              ],
+//            ),
+//          ),
+//        ),
+//      ),
+//    );
+//  }
+
   Widget _createUnderlinedTabbedCard() {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(40.0),
-      ),
-      child: Padding(
-        padding: EdgeInsets.only(top: 30.0),
-        child: DefaultTabController(
-          length: 2,
-          child: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              automaticallyImplyLeading: false,
-              elevation: 0,
-              title: TabBar(
-                unselectedLabelColor: Colors.grey,
-                labelColor: Colors.black87,
-                indicatorWeight: 6.0,
-                indicatorSize: TabBarIndicatorSize.label,
-                indicatorColor: Colors.orange,
-                indicatorPadding: EdgeInsets.symmetric(horizontal: 2.0),
-                tabs: _tabs,
+    return DefaultTabController(
+      length: 7,
+      child: Scaffold(
+        appBar: AppBar(
+          bottom: TabBar(
+            // タブのオプション
+            isScrollable: true,
+            unselectedLabelColor: Colors.white.withOpacity(0.3),
+            indicatorColor: Colors.white,
+            labelColor: Colors.yellowAccent,
+            labelStyle: TextStyle(fontSize: 16.0),
+            unselectedLabelStyle: TextStyle(fontSize: 12.0),
+            indicatorWeight: 2.0,
+            // タブに表示する内容
+            tabs: [
+              Tab(
+                child: Text('Top'),
               ),
-            ),
-            body: TabBarView(
-              children: [
-                _createLessonTabView(),
-                _createTestTabView(),
-              ],
-            ),
+              Tab(
+                child: Text('Business'),
+              ),
+              Tab(
+                child: Text('Technology'),
+              ),
+              Tab(
+                child: Text('Finance'),
+              ),
+              Tab(
+                child: Text('Food'),
+              ),
+              Tab(
+                child: Text('Economic'),
+              ),
+              Tab(
+                child: Text('Game'),
+              )
+            ],
           ),
+          title: Text('Tabs Demo'),
+        ),
+        body: TabBarView(
+          // 各タブの内容
+          children: [
+            Icon(Icons.directions_car),
+            // new FirstTab('test'),
+            Icon(Icons.directions_transit),
+            Icon(Icons.directions_bike),
+            Icon(Icons.directions_car),
+            Icon(Icons.directions_transit),
+            Icon(Icons.directions_bike),
+            Icon(Icons.directions_car)
+          ],
         ),
       ),
     );
@@ -148,15 +206,10 @@ class SectionSelectPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("School"),
-      ),
-      body: Container(
-        constraints: BoxConstraints.expand(),
-        color: Colors.black45,
-        child: _createUnderlinedTabbedCard(),
-      ),
+    return Container(
+      constraints: BoxConstraints.expand(),
+      color: Colors.black45,
+      child: _createUnderlinedTabbedCard(),
     );
   }
 }
