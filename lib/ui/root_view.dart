@@ -1,46 +1,89 @@
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
-// pages
-import 'package:wr_app/ui/lesson/lesson_page.dart';
-import 'package:wr_app/ui/column/column_page.dart';
-import 'package:wr_app/ui/travel/travel_page.dart';
 import 'package:wr_app/ui/agency/agency_page.dart';
+import 'package:wr_app/ui/column/column_page.dart';
+import 'package:wr_app/ui/lesson/lesson_page.dart';
 import 'package:wr_app/ui/mypage/mypage_page.dart';
+import 'package:wr_app/ui/travel/travel_page.dart';
 
+class RootView extends StatefulWidget {
+  @override
+  _RootViewState createState() => _RootViewState();
+}
 
-class RootView extends StatelessWidget {
+class _RootViewState extends State<RootView>
+    with SingleTickerProviderStateMixin {
+  int _index = 0;
+  PageController _pageController = PageController();
+
   @override
   Widget build(BuildContext context) {
-    var _pages = <Widget>[
-      LessonPage(),
-      ColumnPage(),
-      TravelPage(),
-      AgencyPage(),
-      MyPagePage(),
-    ];
-
-    return CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          middle: Text('ここに検索バー'),
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('WR APP v2020.01.31'),
         ),
-        child: CupertinoTabScaffold(
-            tabBar: CupertinoTabBar(
-              items: [
-                BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('レッスン')),
-                BottomNavigationBarItem(icon: Icon(Icons.business), title: Text('コラム')),
-                BottomNavigationBarItem(icon: Icon(Icons.schedule), title: Text('旅行')),
-                BottomNavigationBarItem(icon: Icon(Icons.email), title: Text('留学先紹介')),
-                BottomNavigationBarItem(icon: Icon(Icons.person), title: Text('マイページ')),
-              ],
-            ),
-            tabBuilder: (context, index) => SafeArea(child: CupertinoTabView(
-              builder: (context) => SingleChildScrollView(
-                padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 60.0),
-                child: _pages.elementAt(index),
-              ),
-            ))
-        )
-    );
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _index = index;
+            });
+          },
+          children: <Widget>[
+            LessonPage(),
+            ColumnPage(),
+            TravelPage(),
+            AgencyPage(),
+            MyPagePage(),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+            fixedColor: Colors.blueAccent,
+            type: BottomNavigationBarType.fixed,
+            onTap: (int index) {
+              _pageController.animateToPage(index,
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.ease);
+            },
+            currentIndex: _index,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home), title: Text('レッスン')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.business), title: Text('コラム')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.schedule), title: Text('旅行')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.email), title: Text('留学先紹介')),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.person), title: Text('マイページ')),
+            ]));
   }
 }
+
+//    return CupertinoPageScaffold(
+//        navigationBar: CupertinoNavigationBar(
+//          middle: Text('ここに検索バー'),
+//        ),
+//        child: CupertinoTabScaffold(
+//            tabBar: CupertinoTabBar(
+//              items: [
+//                BottomNavigationBarItem(
+//                    icon: Icon(Icons.home), title: Text('レッスン')),
+//                BottomNavigationBarItem(
+//                    icon: Icon(Icons.business), title: Text('コラム')),
+//                BottomNavigationBarItem(
+//                    icon: Icon(Icons.schedule), title: Text('旅行')),
+//                BottomNavigationBarItem(
+//                    icon: Icon(Icons.email), title: Text('留学先紹介')),
+//                BottomNavigationBarItem(
+//                    icon: Icon(Icons.person), title: Text('マイページ')),
+//              ],
+//            ),
+//            tabBuilder: (context, index) => SafeArea(
+//                    child: CupertinoTabView(
+//                  builder: (context) => SingleChildScrollView(
+//                    padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 60.0),
+//                    child: _pages.elementAt(index),
+//                  ),
+//                ))));
