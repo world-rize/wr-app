@@ -1,10 +1,13 @@
-// import 'package:flutter/cupertino.dart';
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/ui/agency/agency_page.dart';
 import 'package:wr_app/ui/column/column_page.dart';
 import 'package:wr_app/ui/lesson/lesson_page.dart';
 import 'package:wr_app/ui/mypage/mypage_page.dart';
 import 'package:wr_app/ui/travel/travel_page.dart';
+import 'package:wr_app/env.dart';
 
 class RootView extends StatefulWidget {
   @override
@@ -20,7 +23,7 @@ class _RootViewState extends State<RootView>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('WR APP v2020.01.31'),
+          title: Text('${Env.APP_NAME} ${Env.VERSION}'),
         ),
         body: PageView(
           controller: _pageController,

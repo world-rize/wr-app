@@ -1,3 +1,5 @@
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
 import 'package:flutter/material.dart';
 
 // search bar

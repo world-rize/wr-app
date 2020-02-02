@@ -1,7 +1,10 @@
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
 import 'package:flutter/material.dart';
 
 class MyPagePage extends StatelessWidget {
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const TextStyle optionStyle =
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
