@@ -15,82 +15,88 @@ final List<String> imageList = [
 class LessonPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        GFTypography(
-          text: 'Hello, World',
-          type: GFTypographyType.typo1,
-          dividerColor: GFColor.primary,
-        ),
-        //
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          children: <Widget>[
+            GFTypography(
+              text: 'Hello, World',
+              type: GFTypographyType.typo1,
+              dividerColor: GFColor.primary,
+            ),
+            //
 
-        GFItemsCarousel(
-          rowCount: 3,
-          children: imageList.map(
-            (url) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => SectionSelectPage()),
+            GFItemsCarousel(
+              rowCount: 3,
+              children: imageList.map(
+                (url) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => SectionSelectPage()),
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(5.0),
+                      child: Stack(
+                        children: <Widget>[
+                          ClipRRect(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(5.0)),
+                            child: Image.network(url,
+                                fit: BoxFit.cover, width: 500),
+                          ),
+                          Center(
+                            child: GFTypography(
+                              text: 'Hello',
+                              textColor: Colors.white,
+                              showDivider: false,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   );
                 },
-                child: Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: Stack(
-                    children: <Widget>[
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        child:
-                            Image.network(url, fit: BoxFit.cover, width: 500),
-                      ),
-                      Center(
-                        child: GFTypography(
-                          text: 'Hello',
-                          textColor: Colors.white,
-                          showDivider: false,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ).toList(),
-        ),
+              ).toList(),
+            ),
 
-        GFTypography(
-          text: 'Favorite',
-          type: GFTypographyType.typo1,
-          dividerColor: GFColor.danger,
-        ),
+            GFTypography(
+              text: 'Favorite',
+              type: GFTypographyType.typo1,
+              dividerColor: GFColor.danger,
+            ),
 
-        const Placeholder(
-          fallbackHeight: 100.0,
-        ),
+            const Placeholder(
+              fallbackHeight: 100.0,
+            ),
 
-        // New Coming Phrases Section
-        GFTypography(
-          text: 'New coming phrases',
-          type: GFTypographyType.typo1,
-          dividerColor: GFColor.success,
-        ),
+            // New Coming Phrases Section
+            GFTypography(
+              text: 'New coming phrases',
+              type: GFTypographyType.typo1,
+              dividerColor: GFColor.success,
+            ),
 
-        // TODO: New Coming Phrases
-        const Placeholder(
-          fallbackHeight: 100.0,
-        ),
+            // TODO: New Coming Phrases
+            const Placeholder(
+              fallbackHeight: 100.0,
+            ),
 
-        // Request Section
-        GFTypography(
-          text: 'Request',
-          type: GFTypographyType.typo1,
-          dividerColor: GFColor.secondary,
+            // Request Section
+            GFTypography(
+              text: 'Request',
+              type: GFTypographyType.typo1,
+              dividerColor: GFColor.secondary,
+            ),
+            // TODO: Request
+            const Placeholder(
+              fallbackHeight: 150.0,
+            ),
+          ],
         ),
-        // TODO: Request
-        const Placeholder(
-          fallbackHeight: 150.0,
-        ),
-      ],
+      ),
     );
   }
 }
