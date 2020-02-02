@@ -1,4 +1,6 @@
-// import 'package:flutter/cupertino.dart';
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/ui/agency/agency_page.dart';
 import 'package:wr_app/ui/column/column_page.dart';

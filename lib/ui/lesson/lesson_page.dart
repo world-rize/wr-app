@@ -1,3 +1,5 @@
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wr_app/ui/lesson/section_select_page.dart';

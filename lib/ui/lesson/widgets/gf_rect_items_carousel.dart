@@ -1,3 +1,5 @@
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
 // MODIFIED FROM
 // All the components that we developed or customized has Copyright (c) 2020 Getflutter.
 // https://github.com/ionicfirebaseapp/getflutter/blob/master/lib/components/carousel/gf_items_carousel.dart
