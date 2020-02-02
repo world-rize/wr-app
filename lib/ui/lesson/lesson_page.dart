@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:wr_app/ui/lesson/section_select.dart';
+import 'package:wr_app/ui/lesson/section_select_page.dart';
 import 'package:getflutter/getflutter.dart';
 
 final List<String> imageList = [

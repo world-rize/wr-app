@@ -1,14 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
-
-class Section {
-  bool isExpanded = false;
-  String title;
-  List<String> phrases;
-
-  Section(this.title, this.phrases, {this.isExpanded: false});
-}
+import 'package:wr_app/ui/lesson/phrase_detail_page.dart';
+import 'package:wr_app/model/section.dart';
 
 class SectionSelectPage extends StatefulWidget {
   @override
@@ -40,7 +34,12 @@ class _SectionSelectPageState extends State<SectionSelectPage>
             style: TextStyle(color: Colors.redAccent, fontSize: 20)),
         // right
         icon: GFButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (_) => PhraseDetailPage(section: section)),
+            );
+          },
           child: Text('Start', style: TextStyle(fontSize: 25)),
           color: Colors.orange,
           borderShape:
@@ -51,8 +50,14 @@ class _SectionSelectPageState extends State<SectionSelectPage>
   }
 
   Widget _createTabView(Tab tab) {
-    final _sections = List<Section>.generate(
-        10, (i) => Section('Section $i', ['a', 'b', 'c', 'd']));
+    final _dummyPhrases = List<Phrase>.generate(
+        10,
+        (i) => Phrase(
+            english: 'When is the homework due?',
+            japanese: 'いつ宿題するんだっけ',
+            favorite: i % 2 == 0));
+    final _sections =
+        List<Section>.generate(10, (i) => Section('Section $i', _dummyPhrases));
 
     return SingleChildScrollView(
       child: Column(
