@@ -39,6 +39,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
                 CupertinoButton(
                     child: Text('YES'),
                     onPressed: () {
+                      Navigator.pop(context);
                       Navigator.of(context).push(
                         MaterialPageRoute(
                             builder: (_) => LessonTestPage(section: section)),
