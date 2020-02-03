@@ -44,7 +44,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
                       Navigator.pop(context);
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (_) => LessonTestPage(section: section)),
+                            builder: (_) => TestPage(section: section)),
                       );
                     }),
               ],
@@ -65,7 +65,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (_) => PhraseListPage(section: section)),
+                  builder: (_) => LessonPhrasesPage(section: section)),
             );
           },
           child: Text('Start', style: TextStyle(fontSize: 25)),

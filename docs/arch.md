@@ -32,6 +32,7 @@
     - Firebase Storageとか?
     - Headless CMS?(Contentful)
     - 音声データは?
+        - [音声を再生する](https://qiita.com/tabe_unity/items/f64761a878b94292531c)
     
 - UI
     - Android版との兼ね合い

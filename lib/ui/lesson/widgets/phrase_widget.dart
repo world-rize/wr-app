@@ -9,8 +9,8 @@ import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 Widget PhraseView(BuildContext context, Phrase phrase) {
   return GestureDetector(
     onTap: () {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => PhraseDetailPage(phrase: phrase)));
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => LessonPhrasesDetailPage(phrase: phrase)));
     },
     child: Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),

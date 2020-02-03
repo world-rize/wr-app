@@ -33,10 +33,10 @@ class _RootViewState extends State<RootView>
             });
           },
           children: <Widget>[
-            LessonPage(),
-            ColumnPage(),
+            LessonIndexPage(),
+            ColumnIndexPage(),
             TravelPage(),
-            AgencyPage(),
+            AgencyIndexPage(),
             MyPagePage(),
           ],
         ),

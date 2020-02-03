@@ -5,10 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/model/section.dart';
 
-class PhraseDetailPage extends StatelessWidget {
+class LessonPhrasesDetailPage extends StatelessWidget {
   final Phrase phrase;
 
-  PhraseDetailPage({this.phrase});
+  LessonPhrasesDetailPage({this.phrase});
 
   @override
   Widget build(BuildContext context) {
