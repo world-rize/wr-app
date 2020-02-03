@@ -2,11 +2,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wr_app/ui/agency/agency_page.dart';
-import 'package:wr_app/ui/column/column_page.dart';
-import 'package:wr_app/ui/lesson/lesson_page.dart';
-import 'package:wr_app/ui/mypage/mypage_page.dart';
-import 'package:wr_app/ui/travel/travel_page.dart';
+import 'package:wr_app/ui/agency/index.dart';
+import 'package:wr_app/ui/column/index.dart';
+import 'package:wr_app/ui/lesson/index.dart';
+import 'package:wr_app/ui/mypage/index.dart';
+import 'package:wr_app/ui/travel/index.dart';
 import 'package:wr_app/env.dart';
 
 class RootView extends StatefulWidget {

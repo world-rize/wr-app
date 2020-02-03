@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:wr_app/ui/lesson/phrase_list_page.dart';
+import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/model/section.dart';
-import 'package:wr_app/ui/lesson/lesson_test_page.dart';
+import 'package:wr_app/ui/lesson/test_page.dart';
 
 class SectionSelectPage extends StatefulWidget {
   @override

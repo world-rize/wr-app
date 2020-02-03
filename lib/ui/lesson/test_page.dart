@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/model/section.dart';
+import 'package:wr_app/ui/lesson/widgets/phrase_detail_widgets.dart';
 
 class LessonTestPage extends StatelessWidget {
   final Section section;
@@ -20,7 +21,8 @@ class LessonTestPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Text(section.title + 'のテスト'),
+            PhraseDetailSample(),
+            PhraseDetailChoices(),
           ],
         ),
       ),
