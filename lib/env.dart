@@ -2,5 +2,5 @@
 
 class Env {
   static const APP_NAME = 'WR APP';
-  static const VERSION = 'v2020.02.02';
+  static const VERSION = '0.1.0-dev';
 }

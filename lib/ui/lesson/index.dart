@@ -18,6 +18,7 @@ final List<Lesson> _dummyLessons = List<Lesson>.generate(
     (i) => Lesson(
         'School$i', 'https://source.unsplash.com/category/nature/300x800'));
 
+// TODO: Brush up
 class LessonSelectCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -106,9 +107,22 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColor.secondary,
           ),
 
-          // TODO: Request
-          const Placeholder(
-            fallbackHeight: 150.0,
+          Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100.0),
+              ),
+              child: InkWell(
+                onTap: () {
+                  // TODO Request Page
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 90),
+                  child: Text('フレーズをリクエストする'),
+                ),
+              ),
+            ),
           ),
         ],
       ),
