@@ -5,12 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
-import 'package:wr_app/ui/lesson/phrase_detail_page.dart';
+import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 
-class PhraseListPage extends StatelessWidget {
+class LessonPhrasesPage extends StatelessWidget {
   final Section section;
 
-  PhraseListPage({this.section});
+  LessonPhrasesPage({this.section});
 
   Widget _createHeader() {
     return Padding(

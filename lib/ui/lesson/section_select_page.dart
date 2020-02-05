@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:wr_app/ui/lesson/phrase_list_page.dart';
+import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/model/section.dart';
-import 'package:wr_app/ui/lesson/lesson_test_page.dart';
+import 'package:wr_app/ui/lesson/test_page.dart';
 
 class SectionSelectPage extends StatefulWidget {
   @override
@@ -44,7 +44,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
                       Navigator.pop(context);
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (_) => LessonTestPage(section: section)),
+                            builder: (_) => TestPage(section: section)),
                       );
                     }),
               ],
@@ -65,7 +65,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
           onPressed: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                  builder: (_) => PhraseListPage(section: section)),
+                  builder: (_) => LessonPhrasesPage(section: section)),
             );
           },
           child: Text('Start', style: TextStyle(fontSize: 25)),
