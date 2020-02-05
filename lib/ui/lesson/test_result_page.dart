@@ -1,6 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:getflutter/getflutter.dart';
+import 'package:wr_app/ui/lesson/section_select_page.dart';
 
 class TestResultPage extends StatelessWidget {
   @override
@@ -22,6 +24,14 @@ class TestResultPage extends StatelessWidget {
                 },
                 itemCount: 10,
               ),
+            ),
+            GFButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
+                );
+              },
+              text: '戻る',
             ),
           ],
         ),
