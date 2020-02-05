@@ -1,8 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:getflutter/getflutter.dart';
 
-class ColumnPage extends StatelessWidget {
+class AgencyIndexPage extends StatelessWidget {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
@@ -11,7 +12,7 @@ class ColumnPage extends StatelessWidget {
     return Column(
       children: <Widget>[
         Text(
-          'コラム',
+          '留学先紹介',
           style: optionStyle,
         ),
       ],

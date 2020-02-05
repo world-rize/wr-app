@@ -13,7 +13,7 @@ final List<Lesson> _dummyLessons = List<Lesson>.generate(
     (i) => Lesson(
         'School$i', 'https://source.unsplash.com/category/nature/300x800'));
 
-class LessonPage extends StatelessWidget {
+class LessonIndexPage extends StatelessWidget {
   Widget _createLessonSelectCarousel(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 

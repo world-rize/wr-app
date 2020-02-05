@@ -5,22 +5,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/model/section.dart';
 
-class LessonTestPage extends StatelessWidget {
-  final Section section;
+class LessonPhrasesDetailPage extends StatelessWidget {
+  final Phrase phrase;
 
-  LessonTestPage({this.section});
+  LessonPhrasesDetailPage({this.phrase});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('Test'),
+        title: Text('Phrase Detail'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Text(section.title + 'のテスト'),
+            Text(phrase.english),
           ],
         ),
       ),
