@@ -3,8 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
+
 import 'package:wr_app/model/section.dart';
+import 'package:wr_app/model/phrase.dart';
+
+import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
 
 class SectionSelectPage extends StatefulWidget {
@@ -97,11 +100,13 @@ class _SectionSelectPageState extends State<SectionSelectPage>
 
   Widget _createLessonView() {
     final _dummyPhrases = List<Phrase>.generate(
-        10,
-        (i) => Phrase(
-            english: 'When is the homework due?',
-            japanese: 'いつ宿題するんだっけ',
-            favorite: i % 2 == 0));
+      10,
+      (i) => Phrase(
+        english: 'When is the homework due?',
+        japanese: 'いつ宿題するんだっけ',
+        favorite: i % 2 == 0,
+      ),
+    );
     final _sections =
         List<Section>.generate(10, (i) => Section('Section $i', _dummyPhrases));
 

@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
+
 import 'package:wr_app/model/section.dart';
+
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 
 class TestPage extends StatelessWidget {
