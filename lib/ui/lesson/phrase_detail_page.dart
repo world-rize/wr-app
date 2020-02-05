@@ -20,7 +20,9 @@ class PhraseDetailPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Text(phrase.english),
+            Placeholder(fallbackHeight: 400),
+            Placeholder(fallbackHeight: 200),
+            Placeholder(fallbackHeight: 100),
           ],
         ),
       ),
