@@ -57,14 +57,12 @@ class _LessonViewRow extends StatelessWidget {
 class LessonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final SampleStore store = Provider.of(context);
-    final _sections = List<Section>.generate(10, (i) => store.section);
-
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: _sections.map((s) => _LessonViewRow(section: s)).toList(),
+        children:
+            dummySections().map((s) => _LessonViewRow(section: s)).toList(),
       ),
     );
   }
@@ -77,27 +75,28 @@ class _TestViewRow extends StatelessWidget {
 
   void _showConfirmTestDialog(BuildContext context, Section section) {
     showCupertinoDialog(
-        context: context,
-        builder: (_) => CupertinoAlertDialog(
-              title: Text('テストを開始しますか?'),
-              content: Text('本日のテスト残り3回\n制限時間xx秒'),
-              actions: <Widget>[
-                CupertinoButton(
-                    child: Text('NO'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-                CupertinoButton(
-                    child: Text('YES'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => TestPage(section: section)),
-                      );
-                    }),
-              ],
-            ));
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: Text('テストを開始しますか?'),
+        content: Text('本日のテスト残り3回\n制限時間xx秒'),
+        actions: <Widget>[
+          CupertinoButton(
+              child: Text('NO'),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          CupertinoButton(
+            child: Text('YES'),
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => TestPage(section: section)),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -123,14 +122,11 @@ class _TestViewRow extends StatelessWidget {
 class TestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final SampleStore store = Provider.of(context);
-    final _sections = List<Section>.generate(10, (i) => store.section);
-
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: _sections.map((s) => _TestViewRow(section: s)).toList(),
+        children: dummySections().map((s) => _TestViewRow(section: s)).toList(),
       ),
     );
   }

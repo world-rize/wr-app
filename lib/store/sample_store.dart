@@ -16,6 +16,16 @@ Phrase dummyPhrase() {
   );
 }
 
+List<Section> dummySections() {
+  return List.generate(
+    10,
+    (i) => Section(
+      title: 'セクション$i',
+      phrases: List.generate(10, (_) => dummyPhrase()),
+    ),
+  );
+}
+
 class EmptyStore with ChangeNotifier {
   EmptyStore();
 }

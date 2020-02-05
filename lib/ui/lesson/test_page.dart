@@ -5,13 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/section.dart';
+import 'package:wr_app/model/phrase_sample.dart';
 
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 
-class TestPage extends StatelessWidget {
-  final Section section;
+class PhraseSampleView extends StatelessWidget {
+  final PhraseSample sample;
 
-  TestPage({this.section});
+  PhraseSampleView({this.sample});
 
   Widget _createPhraseSampleConversation() {
     return ListView.builder(
@@ -25,7 +26,8 @@ class TestPage extends StatelessWidget {
     );
   }
 
-  Widget _createPhraseSample() {
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -49,28 +51,48 @@ class TestPage extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _createPhraseChoices(BuildContext context) {
+class PhraseChoiceView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       height: 350,
       child: ListView.builder(
           physics: NeverScrollableScrollPhysics(),
           itemBuilder: (_, index) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(6.0),
               child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => TestResultPage()),
-                  );
-                },
-                child: Placeholder(fallbackHeight: 65),
-              ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => TestResultPage()),
+                    );
+                  },
+                  child: GFListTile(
+                    title: Padding(
+                      padding: EdgeInsets.all(12.0),
+                      child: Text(
+                        'When is the homework due?',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                        ),
+                      ),
+                    ),
+                    color: Colors.lightBlueAccent,
+                  )),
             );
           },
           itemCount: 4),
     );
   }
+}
+
+class TestPage extends StatelessWidget {
+  final Section section;
+
+  TestPage({this.section});
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +104,8 @@ class TestPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            _createPhraseSample(),
-            _createPhraseChoices(context),
+            PhraseSampleView(),
+            PhraseChoiceView(),
           ],
         ),
       ),

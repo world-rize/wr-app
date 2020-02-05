@@ -22,7 +22,6 @@ class LessonSelectCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print('${Provider.of<EmptyStore>(context) != null}@LessonSelectCarousel');
 
     return GFRectItemsCarousel(
       rowCount: 3,
