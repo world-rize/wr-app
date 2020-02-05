@@ -3,10 +3,25 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/model/phrase.dart';
+import 'package:wr_app/model/phrase_sample.dart';
+import 'package:wr_app/model/section.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
+Phrase dummyPhrase() {
+  return Phrase(
+    english: 'When is the homework due?',
+    japanese: '宿題終わった?',
+    favorite: true,
+    sample: PhraseSample(type: SampleType.None, content: []),
+  );
+}
+
+class EmptyStore with ChangeNotifier {
+  EmptyStore();
+}
+
 class SampleStore with ChangeNotifier {
-  Phrase phrase = Phrase(english: '', japanese: '');
+  Section section = Section();
 
   SampleStore() {
     _fetch();
@@ -18,9 +33,10 @@ class SampleStore with ChangeNotifier {
       print('[Asset Load] $path');
       return jsonDecode(data);
     }).then((json) {
-      return Phrase.fromJson(json);
+      return Section.fromJson(json);
     }).then((phrase) {
-      this.phrase = phrase;
+      print('${phrase.title} Loaded');
+      this.section = section;
       notifyListeners();
     }).catchError((error) {
       print(error);

@@ -1,11 +1,14 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/phrase.dart';
+
+import 'package:wr_app/store/sample_store.dart';
 
 import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
@@ -15,46 +18,16 @@ class SectionSelectPage extends StatefulWidget {
   _SectionSelectPageState createState() => _SectionSelectPageState();
 }
 
-class _SectionSelectPageState extends State<SectionSelectPage>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  final List<Tab> _tabs = [
-    Tab(text: 'Lesson'),
-    Tab(text: 'Test'),
-  ];
+class _LessonViewRow extends StatelessWidget {
+  final Section section;
+
+  _LessonViewRow({this.section});
 
   @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
-  }
+  Widget build(BuildContext context) {
+    // TODO stateful widget
+    assert(section.title != null);
 
-  void _showConfirmTestDialog(Section section) {
-    showCupertinoDialog(
-        context: context,
-        builder: (_) => CupertinoAlertDialog(
-              title: Text('テストを開始しますか?'),
-              content: Text('本日のテスト残り3回\n制限時間xx秒'),
-              actions: <Widget>[
-                CupertinoButton(
-                    child: Text('NO'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-                CupertinoButton(
-                    child: Text('YES'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => TestPage(section: section)),
-                      );
-                    }),
-              ],
-            ));
-  }
-
-  Widget _createLessonSectionView(Section section) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
       child: GFListTile(
@@ -79,11 +52,59 @@ class _SectionSelectPageState extends State<SectionSelectPage>
       ),
     );
   }
+}
 
-  Widget _createTestSectionView(Section section) {
+class LessonView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final SampleStore store = Provider.of(context);
+    final _sections = List<Section>.generate(10, (i) => store.section);
+
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: _sections.map((s) => _LessonViewRow(section: s)).toList(),
+      ),
+    );
+  }
+}
+
+class _TestViewRow extends StatelessWidget {
+  final Section section;
+
+  _TestViewRow({this.section});
+
+  void _showConfirmTestDialog(BuildContext context, Section section) {
+    showCupertinoDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              title: Text('テストを開始しますか?'),
+              content: Text('本日のテスト残り3回\n制限時間xx秒'),
+              actions: <Widget>[
+                CupertinoButton(
+                    child: Text('NO'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+                CupertinoButton(
+                    child: Text('YES'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (_) => TestPage(section: section)),
+                      );
+                    }),
+              ],
+            ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        _showConfirmTestDialog(section);
+        _showConfirmTestDialog(context, section);
       },
       child: Padding(
         padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
@@ -97,66 +118,62 @@ class _SectionSelectPageState extends State<SectionSelectPage>
       ),
     );
   }
+}
 
-  Widget _createLessonView() {
-    final _dummyPhrases = List<Phrase>.generate(
-      10,
-      (i) => Phrase(
-        english: 'When is the homework due?',
-        japanese: 'いつ宿題するんだっけ',
-        favorite: i % 2 == 0,
-      ),
-    );
-    final _sections =
-        List<Section>.generate(10, (i) => Section('Section $i', _dummyPhrases));
+class TestView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final SampleStore store = Provider.of(context);
+    final _sections = List<Section>.generate(10, (i) => store.section);
 
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: _sections.map(_createLessonSectionView).toList(),
+        children: _sections.map((s) => _TestViewRow(section: s)).toList(),
       ),
     );
   }
+}
 
-  Widget _createTestView() {
-    final _dummyPhrases = List<Phrase>.generate(
-        10,
-        (i) => Phrase(
-            english: 'When is the homework due?',
-            japanese: 'いつ宿題するんだっけ',
-            favorite: i % 2 == 0));
-    final _sections =
-        List<Section>.generate(10, (i) => Section('Section $i', _dummyPhrases));
+class _SectionSelectPageState extends State<SectionSelectPage>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  final List<Tab> _tabs = [
+    Tab(text: 'Lesson'),
+    Tab(text: 'Test'),
+  ];
 
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: _sections.map(_createTestSectionView).toList(),
-      ),
-    );
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: _tabs.length, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: Colors.blue,
-            title: Text('School'),
-            bottom: TabBar(
-              tabs: _tabs,
-              controller: _tabController,
-              indicatorColor: Colors.orange,
-              indicatorWeight: 3,
-              labelStyle: TextStyle(fontSize: 20),
-            )),
-        body: TabBarView(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: Text('School'),
+        bottom: TabBar(
+          tabs: _tabs,
+          controller: _tabController,
+          indicatorColor: Colors.orange,
+          indicatorWeight: 3,
+          labelStyle: TextStyle(fontSize: 20),
+        ),
+      ),
+      body: Provider<SampleStore>(
+        create: (_) => SampleStore(),
+        child: TabBarView(
           controller: _tabController,
           children: [
-            _createLessonView(),
-            _createTestView(),
+            LessonView(),
+            TestView(),
           ],
-        ));
+        ),
+      ),
+    );
   }
 }
