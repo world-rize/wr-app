@@ -44,8 +44,9 @@ class SampleStore with ChangeNotifier {
       return jsonDecode(data);
     }).then((json) {
       return Section.fromJson(json);
-    }).then((phrase) {
-      print('${phrase.title} Loaded');
+    }).then((section) {
+      print(section.phrases[0].sample.content[0]);
+      print('${section.title} Loaded');
       this.section = section;
       notifyListeners();
     }).catchError((error) {

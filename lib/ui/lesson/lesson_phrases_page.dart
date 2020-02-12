@@ -17,6 +17,7 @@ class LessonPhrasesPage extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
       child: GFListTile(
+        // color: Colo,
         avatar: Text(section.title, style: TextStyle(fontSize: 30)),
         title: Text('未クリア',
             style: TextStyle(fontSize: 20, color: Colors.redAccent)),

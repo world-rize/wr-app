@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
-import 'package:wr_app/store/sample_store.dart' show EmptyStore, dummyPhrase;
+import 'package:wr_app/store/sample_store.dart'
+    show EmptyStore, dummyPhrase, SampleStore;
 
 import 'package:wr_app/model/section.dart';
 
@@ -133,6 +134,8 @@ class LessonMenus extends StatelessWidget {
 class LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SampleStore();
+
     // provider
     // TODO: create LessonPageState
     return Provider<EmptyStore>(

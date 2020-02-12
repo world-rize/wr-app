@@ -72,7 +72,7 @@ class PhraseChoiceView extends StatelessWidget {
                   title: Padding(
                     padding: EdgeInsets.all(6.0),
                     child: Text(
-                      'When is the homework due?',
+                      'Choice $index',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -112,9 +112,33 @@ class TestPageState extends State<TestPage> {
   }
 
   void _next() {
+    // show result
+    showDialog(
+      context: context,
+      builder: (_) => Material(
+        type: MaterialType.transparency,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              color: Colors.red,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // seek index
     setState(() {
       _index++;
     });
+
+    // test finish
     if (_index == section.phrases.length - 1) {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TestResultPage()),
