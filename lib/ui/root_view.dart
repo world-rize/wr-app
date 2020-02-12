@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:getflutter/getflutter.dart';
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
 import 'package:wr_app/ui/lesson/index.dart';
@@ -17,7 +19,42 @@ class RootView extends StatefulWidget {
 class _RootViewState extends State<RootView>
     with SingleTickerProviderStateMixin {
   int _index = 0;
-  PageController _pageController = PageController();
+  bool _isSearching = false;
+  SearchBarController _searchBarController;
+  PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+    _searchBarController = SearchBarController();
+  }
+
+  // TODO: implement
+  Widget _createSearchBar() {
+    return Container(
+      height: 80,
+      child: SearchBar<String>(
+        searchBarController: _searchBarController,
+        onSearch: (q) => Future.value(<String>['aaa', 'bbb', 'ccc']),
+        onItemFound: (item, i) => Text(item),
+      ),
+    );
+  }
+
+  void _stopSearch() {
+    print('stop search');
+    setState(() {
+      _isSearching = false;
+    });
+  }
+
+  void _startSearch() {
+    print('start search');
+    setState(() {
+      _isSearching = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,42 +88,15 @@ class _RootViewState extends State<RootView>
             currentIndex: _index,
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home), title: Text('レッスン')),
+                  icon: Icon(Icons.create), title: Text('レッスン')),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.business), title: Text('コラム')),
+                  icon: Icon(Icons.view_column), title: Text('コラム')),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.schedule), title: Text('旅行')),
+                  icon: Icon(Icons.airplanemode_active), title: Text('旅行')),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.email), title: Text('留学先紹介')),
+                  icon: Icon(Icons.public), title: Text('留学先紹介')),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person), title: Text('マイページ')),
+                  icon: Icon(Icons.person_outline), title: Text('マイページ')),
             ]));
   }
 }
-
-//    return CupertinoPageScaffold(
-//        navigationBar: CupertinoNavigationBar(
-//          middle: Text('ここに検索バー'),
-//        ),
-//        child: CupertinoTabScaffold(
-//            tabBar: CupertinoTabBar(
-//              items: [
-//                BottomNavigationBarItem(
-//                    icon: Icon(Icons.home), title: Text('レッスン')),
-//                BottomNavigationBarItem(
-//                    icon: Icon(Icons.business), title: Text('コラム')),
-//                BottomNavigationBarItem(
-//                    icon: Icon(Icons.schedule), title: Text('旅行')),
-//                BottomNavigationBarItem(
-//                    icon: Icon(Icons.email), title: Text('留学先紹介')),
-//                BottomNavigationBarItem(
-//                    icon: Icon(Icons.person), title: Text('マイページ')),
-//              ],
-//            ),
-//            tabBuilder: (context, index) => SafeArea(
-//                    child: CupertinoTabView(
-//                  builder: (context) => SingleChildScrollView(
-//                    padding: EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 60.0),
-//                    child: _pages.elementAt(index),
-//                  ),
-//                ))));

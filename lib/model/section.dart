@@ -1,37 +1,23 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-// 会話の例
-class PhraseSample {
-  // TODO
-}
-
-// TODO
-class Phrase {
-  String english;
-  String japanese;
-  bool favorite;
-  // TODO
-  // PhraseSample sample;
-
-  Phrase({this.english, this.japanese, this.favorite: false});
-
-  Phrase.fromJson(Map<String, dynamic> json)
-      : english = json['name'],
-        japanese = json['email'],
-        favorite = json['favorite'];
-
-  Map<String, dynamic> toJson() => {
-        'english': english,
-        'japanese': japanese,
-        'favorite': favorite,
-      };
-}
+import 'package:wr_app/model/phrase.dart';
 
 class Section {
-  String title;
-  List<Phrase> phrases;
+  final String title;
+  final List<Phrase> phrases;
 
-  Section(this.title, this.phrases);
+  Section({this.title: '', this.phrases: const []});
+
+  factory Section.fromJson(Map<String, dynamic> json) {
+    return Section(
+      title: json['title'],
+      phrases: json['phrases'].map<Phrase>((p) => Phrase.fromJson(p)).toList(),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'title': title, 'phrases': phrases.map((p) => p.toJson())};
+  }
 }
 
 class Lesson {

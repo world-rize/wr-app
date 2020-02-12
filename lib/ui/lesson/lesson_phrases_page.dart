@@ -3,9 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
+
 import 'package:wr_app/model/section.dart';
+
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
-import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 
 class LessonPhrasesPage extends StatelessWidget {
   final Section section;
