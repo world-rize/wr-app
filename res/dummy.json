@@ -26,6 +26,36 @@
         ]
       },
       "advice": "\"due\"は「支払い期限のきた〜」や「満期の〜」といった"
+    },
+    {
+      "english": "Do you want to study after school??",
+      "japanese": "放課後勉強しない？",
+      "favorite": true,
+      "sample": {
+        "type": "none",
+        "content": []
+      },
+      "advice": "\"due\"は「支払い期限のきた〜」や「満期の〜」といった"
+    },
+    {
+      "english": "When does it start?",
+      "japanese": "いつから始まるの？",
+      "favorite": true,
+      "sample": {
+        "type": "none",
+        "content": []
+      },
+      "advice": "\"due\"は「支払い期限のきた〜」や「満期の〜」といった"
+    },
+    {
+      "english": "Could  I borrow your notes?",
+      "japanese": "ノート貸してくれる？",
+      "favorite": true,
+      "sample": {
+        "type": "none",
+        "content": []
+      },
+      "advice": "\"due\"は「支払い期限のきた〜」や「満期の〜」といった"
     }
   ]
 }

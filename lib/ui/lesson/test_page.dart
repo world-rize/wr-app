@@ -89,20 +89,34 @@ class PhraseChoiceView extends StatelessWidget {
   }
 }
 
-class TestPage extends StatelessWidget {
-  // FIXME: bad code
-  BuildContext _context;
-
+class TestPage extends StatefulWidget {
   final Section section;
   TestPage({this.section});
+
+  @override
+  State<StatefulWidget> createState() => TestPageState(section: section);
+}
+
+class TestPageState extends State<TestPage> {
+  final Section section;
+  TestPageState({this.section});
 
   int _index = 0;
   Phrase get currentPhrase => section.phrases[_index];
 
+  @override
+  void initState() {
+    print(section.phrases);
+    super.initState();
+    _index = 0;
+  }
+
   void _next() {
-    print(_index++);
+    setState(() {
+      _index++;
+    });
     if (_index == section.phrases.length - 1) {
-      Navigator.of(_context).push(
+      Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TestResultPage()),
       );
     }
@@ -110,7 +124,6 @@ class TestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
