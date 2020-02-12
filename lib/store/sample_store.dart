@@ -7,12 +7,12 @@ import 'package:wr_app/model/phrase_sample.dart';
 import 'package:wr_app/model/section.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
-Phrase dummyPhrase() {
+Phrase dummyPhrase({int i: 0}) {
   return Phrase(
-    english: 'When is the homework due?',
-    japanese: '宿題終わった?',
-    favorite: true,
-    sample: PhraseSample(type: SampleType.None, content: []),
+    english: 'sample English text $i',
+    japanese: 'サンプル日本語訳 $i',
+    favorite: i % 2 == 0,
+    sample: PhraseSample(type: SampleType.Conversation, content: []),
   );
 }
 
@@ -21,7 +21,7 @@ List<Section> dummySections() {
     10,
     (i) => Section(
       title: 'セクション$i',
-      phrases: List.generate(10, (_) => dummyPhrase()),
+      phrases: List.generate(10, (i) => dummyPhrase(i: i)),
     ),
   );
 }
@@ -44,8 +44,9 @@ class SampleStore with ChangeNotifier {
       return jsonDecode(data);
     }).then((json) {
       return Section.fromJson(json);
-    }).then((phrase) {
-      print('${phrase.title} Loaded');
+    }).then((section) {
+      print(section.phrases[0].sample.content[0]);
+      print('${section.title} Loaded');
       this.section = section;
       notifyListeners();
     }).catchError((error) {

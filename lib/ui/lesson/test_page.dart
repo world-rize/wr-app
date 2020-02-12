@@ -72,7 +72,7 @@ class PhraseChoiceView extends StatelessWidget {
                   title: Padding(
                     padding: EdgeInsets.all(6.0),
                     child: Text(
-                      'When is the homework due?',
+                      'Choice $index',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -89,20 +89,58 @@ class PhraseChoiceView extends StatelessWidget {
   }
 }
 
-class TestPage extends StatelessWidget {
-  // FIXME: bad code
-  BuildContext _context;
-
+class TestPage extends StatefulWidget {
   final Section section;
   TestPage({this.section});
+
+  @override
+  State<StatefulWidget> createState() => TestPageState(section: section);
+}
+
+class TestPageState extends State<TestPage> {
+  final Section section;
+  TestPageState({this.section});
 
   int _index = 0;
   Phrase get currentPhrase => section.phrases[_index];
 
+  @override
+  void initState() {
+    print(section.phrases);
+    super.initState();
+    _index = 0;
+  }
+
   void _next() {
-    print(_index++);
+    // show result
+    showDialog(
+      context: context,
+      builder: (_) => Material(
+        type: MaterialType.transparency,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              color: Colors.red,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    // seek index
+    setState(() {
+      _index++;
+    });
+
+    // test finish
     if (_index == section.phrases.length - 1) {
-      Navigator.of(_context).push(
+      Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TestResultPage()),
       );
     }
@@ -110,7 +148,6 @@ class TestPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    _context = context;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,

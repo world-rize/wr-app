@@ -70,7 +70,6 @@ class LessonView extends StatelessWidget {
 
 class _TestViewRow extends StatelessWidget {
   final Section section;
-
   _TestViewRow({this.section});
 
   void _showConfirmTestDialog(BuildContext context, Section section) {
