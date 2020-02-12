@@ -57,9 +57,9 @@ class PhraseSample {
     return PhraseSample(
       type: SampleTypeHelper.fromValue(json['type']),
       // json['phrases'].map<Phrase>((p) => Phrase.fromJson(p)).toList(),
-      content: json['content'].map<Conversation>((c) {
-        return Conversation.fromJson(c.cast < Map<String, dynamic>());
-      }).toList(),
+      content: List<Map<String, dynamic>>.from(json['content'])
+          .map<Conversation>((c) => Conversation.fromJson(c))
+          .toList(),
     );
   }
 
