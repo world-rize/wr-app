@@ -5,21 +5,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/section.dart';
+import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/model/phrase_sample.dart';
 
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 
 class PhraseSampleView extends StatelessWidget {
-  final PhraseSample sample;
-
-  PhraseSampleView({this.sample});
+  final Phrase phrase;
+  PhraseSampleView({this.phrase});
 
   Widget _createPhraseSampleConversation() {
     return ListView.builder(
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Placeholder(fallbackHeight: 80),
+          child: Placeholder(fallbackHeight: 60),
         );
       },
       itemCount: 3,
@@ -33,9 +33,9 @@ class PhraseSampleView extends StatelessWidget {
       child: Card(
         child: Column(
           children: <Widget>[
-            const ListTile(
+            ListTile(
               title: Text(
-                'タイトル',
+                phrase.japanese,
                 style: TextStyle(
                     fontSize: 30,
                     color: Colors.black54,
@@ -43,7 +43,7 @@ class PhraseSampleView extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 300,
+              height: 240,
               child: _createPhraseSampleConversation(),
             ),
           ],
@@ -54,48 +54,63 @@ class PhraseSampleView extends StatelessWidget {
 }
 
 class PhraseChoiceView extends StatelessWidget {
+  void Function() onTap;
+  PhraseChoiceView({this.onTap});
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 350,
       child: ListView.builder(
-          physics: NeverScrollableScrollPhysics(),
-          itemBuilder: (_, index) {
-            return Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => TestResultPage()),
-                    );
-                  },
-                  child: GFListTile(
-                    title: Padding(
-                      padding: EdgeInsets.all(12.0),
-                      child: Text(
-                        'When is the homework due?',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                        ),
+        physics: NeverScrollableScrollPhysics(),
+        itemBuilder: (_, index) {
+          return Padding(
+            padding: const EdgeInsets.all(6.0),
+            child: InkWell(
+                onTap: onTap,
+                child: GFListTile(
+                  title: Padding(
+                    padding: EdgeInsets.all(6.0),
+                    child: Text(
+                      'When is the homework due?',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
                       ),
                     ),
-                    color: Colors.lightBlueAccent,
-                  )),
-            );
-          },
-          itemCount: 4),
+                  ),
+                  color: Colors.lightBlueAccent,
+                )),
+          );
+        },
+        itemCount: 4,
+      ),
     );
   }
 }
 
 class TestPage extends StatelessWidget {
-  final Section section;
+  // FIXME: bad code
+  BuildContext _context;
 
+  final Section section;
   TestPage({this.section});
+
+  int _index = 0;
+  Phrase get currentPhrase => section.phrases[_index];
+
+  void _next() {
+    print(_index++);
+    if (_index == section.phrases.length - 1) {
+      Navigator.of(_context).push(
+        MaterialPageRoute(builder: (_) => TestResultPage()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    _context = context;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -104,8 +119,8 @@ class TestPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            PhraseSampleView(),
-            PhraseChoiceView(),
+            PhraseSampleView(phrase: currentPhrase),
+            PhraseChoiceView(onTap: _next),
           ],
         ),
       ),
