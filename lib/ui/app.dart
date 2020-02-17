@@ -13,11 +13,6 @@ class WRApp extends StatefulWidget {
 class WRAppState extends State<WRApp> {
   @override
   Widget build(BuildContext context) {
-    // TODO: supress No MaterialLocalizations found. error
-//    return CupertinoApp(
-//      theme: wrThemeData,
-//      home: RootView(),
-//    );
     return MaterialApp(
       theme: wrThemeData,
       home: RootView(),

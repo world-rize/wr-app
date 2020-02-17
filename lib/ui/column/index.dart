@@ -9,7 +9,7 @@ class ColumnIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: <Widget>[
+      children: const <Widget>[
         Text(
           'コラム',
           style: optionStyle,

@@ -2,7 +2,6 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
@@ -30,7 +29,7 @@ class _RootViewState extends State<RootView>
     _searchBarController = SearchBarController();
   }
 
-  // TODO: implement
+  // TODO(wakame-tech): implement
   Widget _createSearchBar() {
     return Container(
       height: 80,
@@ -88,15 +87,25 @@ class _RootViewState extends State<RootView>
             currentIndex: _index,
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.create), title: Text('レッスン')),
+                icon: Icon(Icons.create),
+                title: const Text('レッスン'),
+              ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.view_column), title: Text('コラム')),
+                icon: Icon(Icons.view_column),
+                title: const Text('コラム'),
+              ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.airplanemode_active), title: Text('旅行')),
+                icon: Icon(Icons.airplanemode_active),
+                title: const Text('旅行'),
+              ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.public), title: Text('留学先紹介')),
+                icon: Icon(Icons.public),
+                title: const Text('留学先紹介'),
+              ),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline), title: Text('マイページ')),
+                icon: Icon(Icons.person_outline),
+                title: const Text('マイページ'),
+              ),
             ]));
   }
 }

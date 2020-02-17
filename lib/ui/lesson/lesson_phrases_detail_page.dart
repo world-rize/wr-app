@@ -2,15 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/phrase.dart';
 
 class LessonPhrasesDetailPage extends StatelessWidget {
+  const LessonPhrasesDetailPage({@required this.phrase});
   final Phrase phrase;
 
   LessonPhrasesDetailPage({this.phrase});
 
+  // TODO(yoshiki301): 実装
   Widget _createPhraseSampleConversation() {
     return ListView.builder(
       itemBuilder: (context, index) {
@@ -55,7 +56,7 @@ class LessonPhrasesDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('Phrase Detail'),
+        title: const Text('Phrase Detail'),
       ),
       body: SingleChildScrollView(
         child: Column(

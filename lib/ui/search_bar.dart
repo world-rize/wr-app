@@ -9,14 +9,9 @@ class SearchBar extends StatelessWidget {
     return Container(
       alignment: Alignment.centerLeft,
       color: Colors.white,
-      child: TextField(
+      child: const TextField(
         decoration: InputDecoration(
-//            border: OutlineInputBorder(
-//              borderRadius: BorderRadius.all(
-//                const Radius.circular(10.0),
-//              ),
-//            ),
-          hintText: "Phrase",
+          hintText: 'Phrase',
         ),
       ),
     );

@@ -28,17 +28,14 @@
 - [マイページ - トップ]() `/ui/mypage/mypage_page.dart`
 
 # TODO
-- データの管理
-    - Firebase Storageとか?
-    - Headless CMS?(Contentful)
-    - 音声データは?
-        - [音声を再生する](https://qiita.com/tabe_unity/items/f64761a878b94292531c)
-    
-- UI
-    - Android版との兼ね合い
-    
-- マネタイズ
+## データの管理    - Firebase Storageとか?
+Contentful, max5000records, 
+[音声を再生する](https://qiita.com/tabe_unity/items/f64761a878b94292531c)
 
+## UI
+- Android版との兼ね合い
+    
+## マネタイズ
 
 # 📖 参考文献
 ## アーキテクチャ参考

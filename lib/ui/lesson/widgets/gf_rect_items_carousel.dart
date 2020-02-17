@@ -73,7 +73,7 @@ class _GFRectItemsCarouselState extends State<GFRectItemsCarousel>
   static const int shiftAnimationDuration = 300;
 
   /// Size of cell
-  Size size = Size(0, 0);
+  Size size = const Size(0, 0);
 
   /// Width of cells container
   double width = 0;
@@ -94,7 +94,7 @@ class _GFRectItemsCarouselState extends State<GFRectItemsCarousel>
     );
     Future.delayed(Duration.zero, () {
       setState(() {
-        final double localWidth = MediaQuery.of(context).size.width;
+        final localWidth = MediaQuery.of(context).size.width;
         width = localWidth;
         size =
             Size(width / widget.rowCount, height /* width / widget.rowCount */);
@@ -103,15 +103,15 @@ class _GFRectItemsCarouselState extends State<GFRectItemsCarousel>
     super.initState();
   }
 
+  @override
   void dispose() {
     super.dispose();
     animationController.dispose();
   }
 
   double calculateOffset(double shift) {
-    double localOffset = offset + shift;
-    final double rightLimit =
-        size.width * (widget.children.length - widget.rowCount);
+    var localOffset = offset + shift;
+    final rightLimit = size.width * (widget.children.length - widget.rowCount);
 
     /// Check cells container limits
     if (localOffset > 0) {
@@ -139,7 +139,7 @@ class _GFRectItemsCarouselState extends State<GFRectItemsCarousel>
   }
 
   void onSlideEnd(DragEndDetails details) {
-    final double dx = details.velocity.pixelsPerSecond.dx;
+    final dx = details.velocity.pixelsPerSecond.dx;
 
     if (dx == 0) {
       return slideAnimation();
@@ -156,17 +156,17 @@ class _GFRectItemsCarouselState extends State<GFRectItemsCarousel>
     animation = tween.animate(CurvedAnimation(
       parent: animationController,
       curve: Curves.easeOut,
-    ));
-    animation.addStatusListener((AnimationStatus status) {
-      if (status == AnimationStatus.completed) {
-        slideAnimation();
-      }
-    });
-    animation.addListener(() {
-      setState(() {
-        offset = animation.value;
+    ))
+      ..addStatusListener((AnimationStatus status) {
+        if (status == AnimationStatus.completed) {
+          slideAnimation();
+        }
+      })
+      ..addListener(() {
+        setState(() {
+          offset = animation.value;
+        });
       });
-    });
 
     animationController.forward();
     if (widget.onSlideEnd != null) {
@@ -175,15 +175,14 @@ class _GFRectItemsCarouselState extends State<GFRectItemsCarousel>
   }
 
   void slideAnimation() {
-    final double beginAnimation = offset;
-    final double endAnimation =
-        size.width * (offset / size.width).round().toDouble();
+    final beginAnimation = offset;
+    final endAnimation = size.width * (offset / size.width).round().toDouble();
     animationController = AnimationController(
       duration: const Duration(milliseconds: shiftAnimationDuration),
       vsync: this,
     );
-    final Tween tween = Tween<double>(begin: beginAnimation, end: endAnimation);
-    final Animation animation = tween.animate(animationController);
+    final tween = Tween<double>(begin: beginAnimation, end: endAnimation);
+    final animation = tween.animate(animationController);
     animation.addListener(() {
       setState(() {
         offset = animation.value;

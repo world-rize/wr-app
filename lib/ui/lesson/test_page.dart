@@ -6,19 +6,19 @@ import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/model/phrase_sample.dart';
 
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 
+// TODO(wakame-tech): 遷移アニメーション
 class PhraseSampleView extends StatelessWidget {
+  const PhraseSampleView({@required this.phrase});
   final Phrase phrase;
-  PhraseSampleView({this.phrase});
 
   Widget _createPhraseSampleConversation() {
     return ListView.builder(
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
+        return const Padding(
+          padding: EdgeInsets.all(8),
           child: Placeholder(fallbackHeight: 60),
         );
       },
@@ -29,7 +29,7 @@ class PhraseSampleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: Card(
         child: Column(
           children: <Widget>[
@@ -54,23 +54,23 @@ class PhraseSampleView extends StatelessWidget {
 }
 
 class PhraseChoiceView extends StatelessWidget {
+  PhraseChoiceView({@required this.onTap});
   void Function() onTap;
-  PhraseChoiceView({this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 350,
       child: ListView.builder(
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (_, index) {
           return Padding(
-            padding: const EdgeInsets.all(6.0),
+            padding: const EdgeInsets.all(6),
             child: InkWell(
                 onTap: onTap,
                 child: GFListTile(
                   title: Padding(
-                    padding: EdgeInsets.all(6.0),
+                    padding: const EdgeInsets.all(6),
                     child: Text(
                       'Choice $index',
                       style: TextStyle(
@@ -90,16 +90,18 @@ class PhraseChoiceView extends StatelessWidget {
 }
 
 class TestPage extends StatefulWidget {
+  const TestPage({@required this.section});
+
   final Section section;
-  TestPage({this.section});
 
   @override
   State<StatefulWidget> createState() => TestPageState(section: section);
 }
 
 class TestPageState extends State<TestPage> {
+  TestPageState({@required this.section});
+
   final Section section;
-  TestPageState({this.section});
 
   int _index = 0;
   Phrase get currentPhrase => section.phrases[_index];
@@ -113,25 +115,25 @@ class TestPageState extends State<TestPage> {
 
   void _next() {
     // show result
-    showDialog(
-      context: context,
-      builder: (_) => Material(
-        type: MaterialType.transparency,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Center(
-            child: Container(
-              width: 100,
-              height: 100,
-              color: Colors.red,
-            ),
-          ),
-        ),
-      ),
-    );
+//    showDialog(
+//      context: context,
+//      builder: (_) => Material(
+//        type: MaterialType.transparency,
+//        child: GestureDetector(
+//          behavior: HitTestBehavior.opaque,
+//          onTap: () {
+//            Navigator.pop(context);
+//          },
+//          child: Center(
+//            child: Container(
+//              width: 100,
+//              height: 100,
+//              color: Colors.red,
+//            ),
+//          ),
+//        ),
+//      ),
+//    );
 
     // seek index
     setState(() {
@@ -141,7 +143,7 @@ class TestPageState extends State<TestPage> {
     // test finish
     if (_index == section.phrases.length - 1) {
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => TestResultPage()),
+        MaterialPageRoute(builder: (_) => TestResultPage(section: section)),
       );
     }
   }
@@ -151,7 +153,7 @@ class TestPageState extends State<TestPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('Test'),
+        title: const Text('Test'),
       ),
       body: SingleChildScrollView(
         child: Column(

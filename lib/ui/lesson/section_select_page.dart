@@ -6,9 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/section.dart';
-import 'package:wr_app/model/phrase.dart';
-
-import 'package:wr_app/store/sample_store.dart';
+import 'package:wr_app/store/masterdata.dart';
 
 import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
@@ -19,20 +17,18 @@ class SectionSelectPage extends StatefulWidget {
 }
 
 class _LessonViewRow extends StatelessWidget {
-  final Section section;
+  const _LessonViewRow({@required this.section});
 
-  _LessonViewRow({this.section});
+  final Section section;
 
   @override
   Widget build(BuildContext context) {
-    // TODO stateful widget
-    assert(section.title != null);
-
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       child: GFListTile(
         // left
-        avatar: Text(section.title, style: TextStyle(fontSize: 28)),
+        avatar:
+            Text(section.sectionTitle, style: const TextStyle(fontSize: 28)),
         // middle
         title: Text('クリア',
             style: TextStyle(color: Colors.redAccent, fontSize: 20)),
@@ -44,10 +40,10 @@ class _LessonViewRow extends StatelessWidget {
                   builder: (_) => LessonPhrasesPage(section: section)),
             );
           },
-          child: Text('Start', style: TextStyle(fontSize: 25)),
+          child: const Text('Start', style: TextStyle(fontSize: 25)),
           color: Colors.orange,
           borderShape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
       ),
     );
@@ -61,31 +57,32 @@ class LessonView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children:
-            dummySections().map((s) => _LessonViewRow(section: s)).toList(),
+        children: MasterDataStore.dummySections
+            .map((s) => _LessonViewRow(section: s))
+            .toList(),
       ),
     );
   }
 }
 
 class _TestViewRow extends StatelessWidget {
+  const _TestViewRow({@required this.section});
   final Section section;
-  _TestViewRow({this.section});
 
   void _showConfirmTestDialog(BuildContext context, Section section) {
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-        title: Text('テストを開始しますか?'),
-        content: Text('本日のテスト残り3回\n制限時間xx秒'),
+        title: const Text('テストを開始しますか?'),
+        content: const Text('本日のテスト残り3回\n制限時間xx秒'),
         actions: <Widget>[
           CupertinoButton(
-              child: Text('NO'),
+              child: const Text('NO'),
               onPressed: () {
                 Navigator.pop(context);
               }),
           CupertinoButton(
-            child: Text('YES'),
+            child: const Text('YES'),
             onPressed: () {
               Navigator.pop(context);
               Navigator.of(context).push(
@@ -105,10 +102,11 @@ class _TestViewRow extends StatelessWidget {
         _showConfirmTestDialog(context, section);
       },
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         child: GFListTile(
           // left
-          avatar: Text(section.title + 'テスト', style: TextStyle(fontSize: 28)),
+          avatar:
+              Text(section.sectionTitle, style: const TextStyle(fontSize: 28)),
           // middle
           title: Text('クリア',
               style: TextStyle(color: Colors.redAccent, fontSize: 20)),
@@ -125,7 +123,9 @@ class TestView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: dummySections().map((s) => _TestViewRow(section: s)).toList(),
+        children: MasterDataStore.dummySections
+            .map((s) => _TestViewRow(section: s))
+            .toList(),
       ),
     );
   }
@@ -135,8 +135,8 @@ class _SectionSelectPageState extends State<SectionSelectPage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   final List<Tab> _tabs = [
-    Tab(text: 'Lesson'),
-    Tab(text: 'Test'),
+    const Tab(text: 'Lesson'),
+    const Tab(text: 'Test'),
   ];
 
   @override
@@ -150,17 +150,17 @@ class _SectionSelectPageState extends State<SectionSelectPage>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text('School'),
+        title: const Text('School'),
         bottom: TabBar(
           tabs: _tabs,
           controller: _tabController,
           indicatorColor: Colors.orange,
           indicatorWeight: 3,
-          labelStyle: TextStyle(fontSize: 20),
+          labelStyle: const TextStyle(fontSize: 20),
         ),
       ),
-      body: Provider<SampleStore>(
-        create: (_) => SampleStore(),
+      body: Provider<MasterDataStore>(
+        create: (_) => MasterDataStore(),
         child: TabBarView(
           controller: _tabController,
           children: [
