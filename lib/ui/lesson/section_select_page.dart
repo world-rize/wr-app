@@ -27,7 +27,8 @@ class _LessonViewRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       child: GFListTile(
         // left
-        avatar: Text(section.title, style: const TextStyle(fontSize: 28)),
+        avatar:
+            Text(section.sectionTitle, style: const TextStyle(fontSize: 28)),
         // middle
         title: Text('クリア',
             style: TextStyle(color: Colors.redAccent, fontSize: 20)),
@@ -105,7 +106,7 @@ class _TestViewRow extends StatelessWidget {
         child: GFListTile(
           // left
           avatar:
-              Text('${section.title}テスト', style: const TextStyle(fontSize: 28)),
+              Text(section.sectionTitle, style: const TextStyle(fontSize: 28)),
           // middle
           title: Text('クリア',
               style: TextStyle(color: Colors.redAccent, fontSize: 20)),

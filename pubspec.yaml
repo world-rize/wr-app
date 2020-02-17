@@ -1,7 +1,8 @@
 name: wr_app
-description: WorkdRIZe App
+description: WorldRIZe App
 authors:
   - wakame-tech
+  - yoshiki301
 version: 0.1.0-dev
 repository: https://github.com/WorldRIZe/wr-app
 

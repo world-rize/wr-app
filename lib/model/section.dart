@@ -1,22 +1,38 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:flutter/cupertino.dart';
 import 'package:wr_app/model/phrase.dart';
 
 class Section {
-  Section({this.title = '', this.phrases = const []});
+  Section({
+    @required this.lessonTitle,
+    @required this.sectionTitle,
+    @required this.phrases,
+  });
 
   factory Section.fromJson(Map<String, dynamic> json) {
     return Section(
-      title: json['title'],
+      lessonTitle: json['lessonTitle'],
+      sectionTitle: json['sectionTitle'],
       phrases: json['phrases'].map<Phrase>((p) => Phrase.fromJson(p)).toList(),
     );
   }
 
-  final String title;
+  /// title of Lesson
+  final String lessonTitle;
+
+  /// title of Section
+  final String sectionTitle;
+
+  /// list of phrase
   final List<Phrase> phrases;
 
   Map<String, dynamic> toJson() {
-    return {'title': title, 'phrases': phrases.map((p) => p.toJson())};
+    return {
+      'lessonTitle': lessonTitle,
+      'sectionTitle': sectionTitle,
+      'phrases': phrases.map((p) => p.toJson()),
+    };
   }
 }
 

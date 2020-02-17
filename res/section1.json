@@ -1,5 +1,6 @@
 {
-  "title": "Section1",
+  "lessonTitle": "School",
+  "sectionTitle": "Section1",
   "phrases": [
     {
       "english": "When is the homework due?",
@@ -10,17 +11,17 @@
           {
             "english": "Have you finished the English homework yet?",
             "japanese": "宿題終わった?",
-            "avatartUrl": ""
+            "avatarUrl": ""
           },
           {
             "english": "No I haven't.\nWhen is the homework due?",
             "japanese": "いや、終わってないよ\nいつ宿題提出するんだっけ？",
-            "avatartUrl": ""
+            "avatarUrl": ""
           },
           {
             "english": "It's due next Tuesday.",
             "japanese": "火曜日だよ",
-            "avatartUrl": ""
+            "avatarUrl": ""
           }
         ]
       },
@@ -31,7 +32,6 @@
       "japanese": "放課後勉強しない？",
       "favorite": true,
       "sample": {
-        "type": "none",
         "content": []
       },
       "advice": "\"due\"は「支払い期限のきた〜」や「満期の〜」といった"
@@ -41,7 +41,6 @@
       "japanese": "いつから始まるの？",
       "favorite": true,
       "sample": {
-        "type": "none",
         "content": []
       },
       "advice": "\"due\"は「支払い期限のきた〜」や「満期の〜」といった"
@@ -51,7 +50,6 @@
       "japanese": "ノート貸してくれる？",
       "favorite": true,
       "sample": {
-        "type": "none",
         "content": []
       },
       "advice": "\"due\"は「支払い期限のきた〜」や「満期の〜」といった"

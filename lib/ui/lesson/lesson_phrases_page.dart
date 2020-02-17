@@ -18,7 +18,8 @@ class LessonPhrasesPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       child: GFListTile(
         // color: Colo,
-        avatar: Text(section.title, style: const TextStyle(fontSize: 30)),
+        avatar:
+            Text(section.sectionTitle, style: const TextStyle(fontSize: 30)),
         title: Text('未クリア',
             style: TextStyle(fontSize: 20, color: Colors.redAccent)),
       ),
@@ -36,7 +37,7 @@ class LessonPhrasesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text(section.title),
+        title: Text(section.sectionTitle),
       ),
       body: SingleChildScrollView(
         child: Column(

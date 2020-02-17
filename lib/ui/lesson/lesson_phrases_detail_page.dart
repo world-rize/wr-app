@@ -9,6 +9,7 @@ class LessonPhrasesDetailPage extends StatelessWidget {
   const LessonPhrasesDetailPage({@required this.phrase});
   final Phrase phrase;
 
+  // TODO(yoshiki301): 実装
   @override
   Widget build(BuildContext context) {
     return Scaffold(

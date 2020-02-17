@@ -22,7 +22,7 @@ class MasterDataStore with ChangeNotifier {
         .then((json) => Section.fromJson(json));
   }
 
-  static Phrase dummyPhrase({int i = 0}) {
+  static Phrase dummyPhrase({int i = 1}) {
     return Phrase(
       english: 'sample English text $i',
       japanese: 'サンプル日本語訳 $i',
@@ -34,8 +34,9 @@ class MasterDataStore with ChangeNotifier {
   static final List<Section> dummySections = List.generate(
     10,
     (i) => Section(
-      title: 'セクション$i',
-      phrases: List.generate(10, (i) => dummyPhrase(i: i)),
+      lessonTitle: 'Shcool',
+      sectionTitle: 'Section${i + 1}',
+      phrases: List.generate(10, (i) => dummyPhrase(i: i + 1)),
     ),
   );
 
@@ -48,10 +49,10 @@ class MasterDataStore with ChangeNotifier {
   );
 
   static _internal() async {
-    const path = 'res/dummy.json';
+    const path = 'res/section1.json';
     final section = await _loadSectionFromJson(path).catchError(print);
 
-    print('${section.title} Loaded');
+    print('${section.sectionTitle} Loaded');
     _sections['dummy'] = section;
   }
 }
