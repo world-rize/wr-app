@@ -3,6 +3,17 @@
 import 'package:wr_app/model/phrase_sample.dart';
 
 class Phrase {
+  Phrase({this.english, this.japanese, this.favorite = false, this.sample});
+
+  factory Phrase.fromJson(Map<String, dynamic> json) {
+    return Phrase(
+      english: json['english'] as String,
+      japanese: json['japanese'] as String,
+      favorite: json['favorite'] as bool,
+      sample: PhraseSample.fromJson(json['sample']),
+    );
+  }
+
   // 英語
   String english;
   // 日本語
@@ -11,17 +22,6 @@ class Phrase {
   bool favorite;
   // 例
   PhraseSample sample;
-
-  Phrase({this.english, this.japanese, this.favorite: false, this.sample});
-
-  factory Phrase.fromJson(Map<String, dynamic> json) {
-    return Phrase(
-      english: json['english'],
-      japanese: json['japanese'],
-      favorite: json['favorite'],
-      sample: PhraseSample.fromJson(json['sample']),
-    );
-  }
 
   Map<String, dynamic> toJson() {
     return {

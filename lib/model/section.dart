@@ -3,10 +3,7 @@
 import 'package:wr_app/model/phrase.dart';
 
 class Section {
-  final String title;
-  final List<Phrase> phrases;
-
-  Section({this.title: '', this.phrases: const []});
+  Section({this.title = '', this.phrases = const []});
 
   factory Section.fromJson(Map<String, dynamic> json) {
     return Section(
@@ -15,14 +12,17 @@ class Section {
     );
   }
 
+  final String title;
+  final List<Phrase> phrases;
+
   Map<String, dynamic> toJson() {
     return {'title': title, 'phrases': phrases.map((p) => p.toJson())};
   }
 }
 
 class Lesson {
+  Lesson(this.title, this.thumbnailUrl);
+
   String title;
   String thumbnailUrl;
-
-  Lesson(this.title, this.thumbnailUrl);
 }

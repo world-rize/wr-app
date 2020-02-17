@@ -3,11 +3,16 @@
 import 'package:flutter/cupertino.dart';
 
 class Conversation {
+  Conversation(
+      {@required this.english,
+      @required this.japanese,
+      @required this.avatarUrl});
+
   String english;
   String japanese;
   String avatarUrl;
 
-  static fromJson(Map<String, dynamic> json) {
+  static Conversation fromJson(Map<String, dynamic> json) {
     return Conversation(
       english: json['english'],
       japanese: json['japanese'],
@@ -22,20 +27,17 @@ class Conversation {
       'avatarUrl': avatarUrl,
     };
   }
-
-  Conversation(
-      {@required this.english,
-      @required this.japanese,
-      @required this.avatarUrl});
 }
 
 class PhraseSample {
+  PhraseSample({@required this.content});
+
   List<Conversation> content;
 
-  static fromJson(Map<String, dynamic> json) {
+  static PhraseSample fromJson(Map<String, dynamic> json) {
     return PhraseSample(
       content: List<Map<String, dynamic>>.from(json['content'])
-          .map<Conversation>((c) => Conversation.fromJson(c))
+          .map<Conversation>(Conversation.fromJson)
           .toList(),
     );
   }
@@ -45,6 +47,4 @@ class PhraseSample {
       'content': content.map((c) => c.toJson()),
     };
   }
-
-  PhraseSample({@required this.content});
 }

@@ -12,11 +12,10 @@ import 'package:wr_app/ui/lesson/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/lesson/widgets/gf_rect_items_carousel.dart';
 
-// TODO: Brush up
 class LessonSelectCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
 
     return GFRectItemsCarousel(
       rowCount: 3,
@@ -32,9 +31,9 @@ class LessonSelectCarousel extends StatelessWidget {
             child: Container(
               height: size.height,
               width: size.width,
-              margin: EdgeInsets.all(5.0),
+              margin: const EdgeInsets.all(5),
               child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
                 child: Stack(
                   children: <Widget>[
                     Image.network(
@@ -59,13 +58,13 @@ class LessonSelectCarousel extends StatelessWidget {
 class LessonMenus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var store = Provider.of<UserStore>(context);
+    final store = Provider.of<UserStore>(context);
 
     return Padding(
-      padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.all(12),
       child: Column(
         children: <Widget>[
-          GFTypography(
+          const GFTypography(
             text: 'Lesson',
             type: GFTypographyType.typo1,
             dividerColor: GFColor.primary,
@@ -77,41 +76,39 @@ class LessonMenus extends StatelessWidget {
             child: LessonSelectCarousel(),
           ),
 
-          GFTypography(
+          const GFTypography(
             text: 'Favorite',
             type: GFTypographyType.typo1,
             dividerColor: GFColor.danger,
           ),
 
-          PhraseView(context, store.pickedUpFavoritePhrase),
+          phraseView(context, store.pickedUpFavoritePhrase),
 
           // New Coming Phrases Section
-          GFTypography(
+          const GFTypography(
             text: 'New coming phrases',
             type: GFTypographyType.typo1,
             dividerColor: GFColor.success,
           ),
 
-          PhraseView(context, store.pickedUpNewComingPhrase),
+          phraseView(context, store.pickedUpNewComingPhrase),
 
           // Request Section
-          GFTypography(
+          const GFTypography(
             text: 'Request',
             type: GFTypographyType.typo1,
             dividerColor: GFColor.secondary,
           ),
 
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8),
             child: Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100.0),
+                borderRadius: BorderRadius.circular(100),
               ),
               child: InkWell(
-                onTap: () {
-                  // TODO Request Page
-                },
-                child: Padding(
+                onTap: () {},
+                child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 30, horizontal: 90),
                   child: Text('フレーズをリクエストする'),
                 ),

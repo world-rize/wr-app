@@ -3,4 +3,4 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-final ThemeData wrThemeData = new ThemeData();
+final ThemeData wrThemeData = ThemeData();
