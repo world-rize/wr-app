@@ -5,19 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
-import 'package:wr_app/store/sample_store.dart'
-    show EmptyStore, dummyPhrase, SampleStore;
-
-import 'package:wr_app/model/section.dart';
+import 'package:wr_app/store/masterdata.dart';
+import 'package:wr_app/store/user.dart';
 
 import 'package:wr_app/ui/lesson/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/lesson/widgets/gf_rect_items_carousel.dart';
-
-final List<Lesson> _dummyLessons = List<Lesson>.generate(
-    6,
-    (i) => Lesson(
-        'School$i', 'https://source.unsplash.com/category/nature/300x800'));
 
 // TODO: Brush up
 class LessonSelectCarousel extends StatelessWidget {
@@ -28,7 +21,7 @@ class LessonSelectCarousel extends StatelessWidget {
     return GFRectItemsCarousel(
       rowCount: 3,
       height: size.height.round(),
-      children: _dummyLessons.map(
+      children: MasterDataStore.dummyLessons.map(
         (lesson) {
           return GestureDetector(
             onTap: () {
@@ -66,7 +59,7 @@ class LessonSelectCarousel extends StatelessWidget {
 class LessonMenus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final EmptyStore store = Provider.of(context);
+    var store = Provider.of<UserStore>(context);
 
     return Padding(
       padding: const EdgeInsets.all(12.0),
@@ -90,7 +83,7 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColor.danger,
           ),
 
-          PhraseView(context, dummyPhrase()),
+          PhraseView(context, store.pickedUpFavoritePhrase),
 
           // New Coming Phrases Section
           GFTypography(
@@ -99,7 +92,7 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColor.success,
           ),
 
-          PhraseView(context, dummyPhrase()),
+          PhraseView(context, store.pickedUpNewComingPhrase),
 
           // Request Section
           GFTypography(
@@ -134,12 +127,8 @@ class LessonMenus extends StatelessWidget {
 class LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SampleStore();
-
-    // provider
-    // TODO: create LessonPageState
-    return Provider<EmptyStore>(
-      create: (context) => EmptyStore(),
+    return Provider<UserStore>(
+      create: (context) => UserStore(),
       child: SingleChildScrollView(
         child: LessonMenus(),
       ),

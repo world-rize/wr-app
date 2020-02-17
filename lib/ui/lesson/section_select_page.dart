@@ -6,9 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/section.dart';
-import 'package:wr_app/model/phrase.dart';
-
-import 'package:wr_app/store/sample_store.dart';
+import 'package:wr_app/store/masterdata.dart';
 
 import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
@@ -21,13 +19,10 @@ class SectionSelectPage extends StatefulWidget {
 class _LessonViewRow extends StatelessWidget {
   final Section section;
 
-  _LessonViewRow({this.section});
+  _LessonViewRow({@required this.section});
 
   @override
   Widget build(BuildContext context) {
-    // TODO stateful widget
-    assert(section.title != null);
-
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
       child: GFListTile(
@@ -61,8 +56,9 @@ class LessonView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children:
-            dummySections().map((s) => _LessonViewRow(section: s)).toList(),
+        children: MasterDataStore.dummySections
+            .map((s) => _LessonViewRow(section: s))
+            .toList(),
       ),
     );
   }
@@ -70,7 +66,7 @@ class LessonView extends StatelessWidget {
 
 class _TestViewRow extends StatelessWidget {
   final Section section;
-  _TestViewRow({this.section});
+  _TestViewRow({@required this.section});
 
   void _showConfirmTestDialog(BuildContext context, Section section) {
     showCupertinoDialog(
@@ -125,7 +121,9 @@ class TestView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: dummySections().map((s) => _TestViewRow(section: s)).toList(),
+        children: MasterDataStore.dummySections
+            .map((s) => _TestViewRow(section: s))
+            .toList(),
       ),
     );
   }
@@ -159,8 +157,8 @@ class _SectionSelectPageState extends State<SectionSelectPage>
           labelStyle: TextStyle(fontSize: 20),
         ),
       ),
-      body: Provider<SampleStore>(
-        create: (_) => SampleStore(),
+      body: Provider<MasterDataStore>(
+        create: (_) => MasterDataStore(),
         child: TabBarView(
           controller: _tabController,
           children: [

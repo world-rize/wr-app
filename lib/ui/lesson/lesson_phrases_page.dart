@@ -11,7 +11,7 @@ import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 class LessonPhrasesPage extends StatelessWidget {
   final Section section;
 
-  LessonPhrasesPage({this.section});
+  LessonPhrasesPage({@required this.section});
 
   Widget _createHeader() {
     return Padding(

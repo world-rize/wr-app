@@ -4,11 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
-import 'package:wr_app/store/sample_store.dart';
+import 'package:wr_app/model/section.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/lesson/section_select_page.dart';
 
 class TestResultPage extends StatelessWidget {
+  final Section section;
+  TestResultPage({@required this.section});
+
   void _showRewardDialog(BuildContext context) {
     showCupertinoDialog(
       context: context,
@@ -57,25 +60,14 @@ class TestResultPage extends StatelessWidget {
             ),
             Container(
               child: Column(
-                children: List.generate(
-                  10,
-                  (i) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: PhraseView(context, dummyPhrase()),
-                    );
-                  },
-                ),
+                children: section.phrases.map((phrase) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PhraseView(context, phrase),
+                  );
+                }).toList(),
               ),
             ),
-//            GFButton(
-//              onPressed: () {
-//                Navigator.of(context).push(
-//                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
-//                );
-//              },
-//              text: '戻る',
-//            ),
           ],
         ),
       ),

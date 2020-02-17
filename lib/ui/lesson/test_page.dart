@@ -6,13 +6,13 @@ import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/model/phrase_sample.dart';
 
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 
+// TODO: 遷移アニメーション
 class PhraseSampleView extends StatelessWidget {
   final Phrase phrase;
-  PhraseSampleView({this.phrase});
+  PhraseSampleView({@required this.phrase});
 
   Widget _createPhraseSampleConversation() {
     return ListView.builder(
@@ -55,7 +55,7 @@ class PhraseSampleView extends StatelessWidget {
 
 class PhraseChoiceView extends StatelessWidget {
   void Function() onTap;
-  PhraseChoiceView({this.onTap});
+  PhraseChoiceView({@required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +91,7 @@ class PhraseChoiceView extends StatelessWidget {
 
 class TestPage extends StatefulWidget {
   final Section section;
-  TestPage({this.section});
+  TestPage({@required this.section});
 
   @override
   State<StatefulWidget> createState() => TestPageState(section: section);
@@ -99,7 +99,7 @@ class TestPage extends StatefulWidget {
 
 class TestPageState extends State<TestPage> {
   final Section section;
-  TestPageState({this.section});
+  TestPageState({@required this.section});
 
   int _index = 0;
   Phrase get currentPhrase => section.phrases[_index];
@@ -113,25 +113,25 @@ class TestPageState extends State<TestPage> {
 
   void _next() {
     // show result
-    showDialog(
-      context: context,
-      builder: (_) => Material(
-        type: MaterialType.transparency,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Center(
-            child: Container(
-              width: 100,
-              height: 100,
-              color: Colors.red,
-            ),
-          ),
-        ),
-      ),
-    );
+//    showDialog(
+//      context: context,
+//      builder: (_) => Material(
+//        type: MaterialType.transparency,
+//        child: GestureDetector(
+//          behavior: HitTestBehavior.opaque,
+//          onTap: () {
+//            Navigator.pop(context);
+//          },
+//          child: Center(
+//            child: Container(
+//              width: 100,
+//              height: 100,
+//              color: Colors.red,
+//            ),
+//          ),
+//        ),
+//      ),
+//    );
 
     // seek index
     setState(() {
@@ -141,7 +141,7 @@ class TestPageState extends State<TestPage> {
     // test finish
     if (_index == section.phrases.length - 1) {
       Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => TestResultPage()),
+        MaterialPageRoute(builder: (_) => TestResultPage(section: section)),
       );
     }
   }

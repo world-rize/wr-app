@@ -9,7 +9,7 @@ import 'package:wr_app/model/phrase.dart';
 class LessonPhrasesDetailPage extends StatelessWidget {
   final Phrase phrase;
 
-  LessonPhrasesDetailPage({this.phrase});
+  LessonPhrasesDetailPage({@required this.phrase});
 
   @override
   Widget build(BuildContext context) {
