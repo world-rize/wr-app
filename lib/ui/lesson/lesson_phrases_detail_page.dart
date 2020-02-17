@@ -9,7 +9,48 @@ class LessonPhrasesDetailPage extends StatelessWidget {
   const LessonPhrasesDetailPage({@required this.phrase});
   final Phrase phrase;
 
+  LessonPhrasesDetailPage({this.phrase});
+
   // TODO(yoshiki301): 実装
+  Widget _createPhraseSampleConversation() {
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            "dummy",
+          )
+        );
+      },
+      itemCount: 4,
+    );
+  }
+
+  Widget _createPhraseSample() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(
+                phrase.japanese,
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 400,
+              child: _createPhraseSampleConversation(),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +61,7 @@ class LessonPhrasesDetailPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            Text(phrase.english),
+            _createPhraseSample(),
           ],
         ),
       ),
