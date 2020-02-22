@@ -4,21 +4,34 @@
 - git/GitHub
     - [Sourcetree](https://www.sourcetreeapp.com/)使うと楽かも
 - Android Studio v3+
+- Xcode 11.0
 
-## ✎ 方針
-Flutterを書いて思った所感やTipsを雑に列挙します。
+## ✎ Tips
+### コンポーネント
+GetFlutterを使用しているのでコンポーネントに困ったら
+[Getflutter | Docs](https://docs.getflutter.dev/) を見るといいかも
 
-- ページは各フォルダの直下に作る
-    - 最初に表示されるページは `index.dart`
-    - それ以外は `xxx_page.dart` とする
-    - なるべくページの親子関係がわかるようにする
+### ファイル/ディレクトリ構成
+- 各ページはフォルダの直下に作る
+
+### ファイル
+- **Doc Commentを書こう**
+  - `///` で始まるコメント
+  - <https://dart.dev/guides/language/effective-dart/documentation>
+- **構造の大きい順にクラスを宣言すると見やすい**
+  - なるべくページの親子関係がわかるようにする
+- 最初に表示されるページは `index.dart`
+- それ以外は `xxx_page.dart` とする
+
+### ウィジェット
 - ウィジェットはフォルダの`widgets/`フォルダ以下に作る
-    - 複数箇所で使う可能性のある `Widget` のため
-    - `build()` 関数はなるべく短くするため
-    - まずは標準ウィジェットの組み合わせで実現できないか考える
-    - なるべく `StatelessWidget` を使うように
-    - とりあえず `Placeholder()` で大体のワイヤーフレームを作る
-    - なるべく `Widget` を返す関数を作ってコンポーネント化をすすめる
+  - 複数箇所で使う可能性のある `Widget` のため
+  - `build()` 関数をなるべく短くするため
+- `Placeholder()` はページの概形を作れて便利
+
+### ストア(WIP)
+- [Provider](https://pub.dev/packages/provider) を使用しています
+- <https://qiita.com/kabochapo/items/a90d8438243c27e2f6d9>
 
 ## 👓 タスク
 作業をタスクに分けて割り振りをして開発を進めていきます。

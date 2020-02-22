@@ -6,24 +6,32 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 
 import 'package:wr_app/model/phrase.dart';
 
+/// フレーズ詳細ページ
+///
+/// ## プロトタイプ
+/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469134>
 class LessonPhrasesDetailPage extends StatelessWidget {
   const LessonPhrasesDetailPage({@required this.phrase});
   final Phrase phrase;
 
-  // TODO(yoshiki301): 実装
-  Widget _createPhraseSampleConversation() {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return const Padding(
-            padding: EdgeInsets.all(8),
-            child: Text(
-              'dummy',
-            ));
-      },
-      itemCount: 4,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text('Phrase Detail'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            _createPhraseSample(),
+          ],
+        ),
+      ),
     );
   }
 
+  /// フレーズの例の画面
   Widget _createPhraseSample() {
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -58,20 +66,18 @@ class LessonPhrasesDetailPage extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('Phrase Detail'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            _createPhraseSample(),
-          ],
-        ),
-      ),
+  // TODO(yoshiki301): 実装
+  /// 例の会話部分
+  Widget _createPhraseSampleConversation() {
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        return const Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              'dummy',
+            ));
+      },
+      itemCount: 4,
     );
   }
 }

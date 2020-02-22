@@ -11,11 +11,108 @@ import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
 
+/// セクション選択画面
+///
+/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469132>
 class SectionSelectPage extends StatefulWidget {
   @override
   _SectionSelectPageState createState() => _SectionSelectPageState();
 }
 
+/// セクション選択画面
+/// [SectionSelectPage] の State
+///
+/// [LessonView] レッスン一覧画面
+/// [TestView] テスト一覧画面
+class _SectionSelectPageState extends State<SectionSelectPage>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  final List<Tab> _tabs = [
+    const Tab(text: 'Lesson'),
+    const Tab(text: 'Test'),
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: _tabs.length, vsync: this);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text('School'),
+        bottom: TabBar(
+          tabs: _tabs,
+          controller: _tabController,
+          indicatorColor: Colors.orange,
+          indicatorWeight: 3,
+          labelStyle: const TextStyle(fontSize: 20),
+        ),
+      ),
+      body: Provider<MasterDataStore>(
+        create: (_) => MasterDataStore(),
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            LessonView(),
+            TestView(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// テスト一覧画面
+///
+/// 各レッスンに対応する [_LessonViewRow] を列挙
+class LessonView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    const _bgColor = Color.fromARGB(255, 230, 230, 230);
+
+    return Container(
+      decoration: const BoxDecoration(color: _bgColor),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: MasterDataStore.dummySections
+              .map((s) => _LessonViewRow(section: s))
+              .toList(),
+        ),
+      ),
+    );
+  }
+}
+
+/// テスト一覧画面
+///
+/// 各テストに対応する [_TestViewRow] を列挙
+class TestView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    const _bgColor = Color.fromARGB(255, 230, 230, 230);
+
+    return Container(
+      decoration: const BoxDecoration(color: _bgColor),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: MasterDataStore.dummySections
+              .map((s) => _TestViewRow(section: s))
+              .toList(),
+        ),
+      ),
+    );
+  }
+}
+
+/// レッスン
 class _LessonViewRow extends StatelessWidget {
   const _LessonViewRow({@required this.section});
 
@@ -54,26 +151,7 @@ class _LessonViewRow extends StatelessWidget {
   }
 }
 
-class LessonView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    const _bgColor = Color.fromARGB(255, 230, 230, 230);
-
-    return Container(
-      decoration: const BoxDecoration(color: _bgColor),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: MasterDataStore.dummySections
-              .map((s) => _LessonViewRow(section: s))
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
-
+/// テスト
 class _TestViewRow extends StatelessWidget {
   const _TestViewRow({@required this.section});
   final Section section;
@@ -123,68 +201,6 @@ class _TestViewRow extends StatelessWidget {
           // middle
           title: Text('クリア',
               style: TextStyle(color: Colors.redAccent, fontSize: 20)),
-        ),
-      ),
-    );
-  }
-}
-
-class TestView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    const _bgColor = Color.fromARGB(255, 230, 230, 230);
-
-    return Container(
-      decoration: const BoxDecoration(color: _bgColor),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: MasterDataStore.dummySections
-              .map((s) => _TestViewRow(section: s))
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
-
-class _SectionSelectPageState extends State<SectionSelectPage>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  final List<Tab> _tabs = [
-    const Tab(text: 'Lesson'),
-    const Tab(text: 'Test'),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('School'),
-        bottom: TabBar(
-          tabs: _tabs,
-          controller: _tabController,
-          indicatorColor: Colors.orange,
-          indicatorWeight: 3,
-          labelStyle: const TextStyle(fontSize: 20),
-        ),
-      ),
-      body: Provider<MasterDataStore>(
-        create: (_) => MasterDataStore(),
-        child: TabBarView(
-          controller: _tabController,
-          children: [
-            LessonView(),
-            TestView(),
-          ],
         ),
       ),
     );

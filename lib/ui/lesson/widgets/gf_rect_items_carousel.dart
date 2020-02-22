@@ -1,36 +1,21 @@
-// Copyright © 2020 WorldRIZe. All rights reserved.
-
-// MODIFIED FROM
 // All the components that we developed or customized has Copyright (c) 2020 Getflutter.
-// https://github.com/ionicfirebaseapp/getflutter/blob/master/lib/components/carousel/gf_items_carousel.dart
 
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-/// When a pointer has come to contact with screen and has begun to move.
+/// 縦長カルーセル
 ///
-/// The function provides the position of the touch when it first
-/// touched the surface.
+/// 参考元
+/// <https://github.com/ionicfirebaseapp/getflutter/blob/master/lib/components/carousel/gf_items_carousel.dart>
+
 typedef GFItemsCarouselSlideStartCallback = void Function(
     DragStartDetails details);
 
-/// When a pointer that is in contact with the screen and moving
-/// has moved again.
-///
-/// The function provides the position of the touch and the distance it
-/// has travelled since the last update.
 typedef GFItemsCarouselSlideCallback = void Function(DragUpdateDetails details);
 
-/// When a pointer that was previously in contact with the screen
-/// and moving is no longer in contact with the screen.
-///
-/// The velocity at which the pointer was moving when it stopped contacting
-/// the screen.
 typedef GFItemsCarouselSlideEndCallback = void Function(DragEndDetails details);
 
 class GFRectItemsCarousel extends StatefulWidget {
-  /// Creates slide show of Images and [Widget] with animation for sliding.
-  /// Shows multiple items on one slide, items number depends on rowCount.
   const GFRectItemsCarousel(
       {Key key,
       this.height,
@@ -42,22 +27,10 @@ class GFRectItemsCarousel extends StatefulWidget {
       : super(key: key);
 
   final int height;
-
-  /// Count of visible cells
   final int rowCount;
-
-  /// The widgets to be shown as sliders.
   final List<Widget> children;
-
-  /// When a pointer has contacted the screen and has begun to move.
   final GFItemsCarouselSlideStartCallback onSlideStart;
-
-  /// When a pointer that is in contact with the screen and moving
-  /// has moved again.
   final GFItemsCarouselSlideCallback onSlide;
-
-  /// When a pointer that was previously in contact with the screen
-  /// and moving is no longer in contact with the screen.
   final GFItemsCarouselSlideEndCallback onSlideEnd;
 
   @override
@@ -66,23 +39,13 @@ class GFRectItemsCarousel extends StatefulWidget {
 
 class _GFRectItemsCarouselState extends State<GFRectItemsCarousel>
     with TickerProviderStateMixin {
-  /// In milliseconds
   static const int dragAnimationDuration = 1000;
-
-  /// In milliseconds
   static const int shiftAnimationDuration = 300;
-
-  /// Size of cell
+  // modified
   Size size = const Size(0, 0);
-
-  /// Width of cells container
   double width = 0;
-
   double height;
-
   AnimationController animationController;
-
-  /// Shift of cells container
   double offset;
 
   @override

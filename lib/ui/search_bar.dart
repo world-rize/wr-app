@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-// search bar
+/// 検索バー
+///
+/// **WIP**
 class SearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

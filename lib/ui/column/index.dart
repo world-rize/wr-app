@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 
+/// `コラム` ページのトップ
+///
+/// **未実装**
 class ColumnIndexPage extends StatelessWidget {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);

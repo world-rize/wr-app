@@ -8,29 +8,13 @@ import 'package:wr_app/model/section.dart';
 
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
+/// フレーズ一覧ページ
+///
+/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469136>
 class LessonPhrasesPage extends StatelessWidget {
   const LessonPhrasesPage({@required this.section});
 
   final Section section;
-
-  Widget _createHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-      child: GFListTile(
-        // color: Colo,
-        avatar:
-            Text(section.sectionTitle, style: const TextStyle(fontSize: 30)),
-        title: Text('未クリア',
-            style: TextStyle(fontSize: 20, color: Colors.redAccent)),
-      ),
-    );
-  }
-
-  List<Widget> _createPhraseList(BuildContext context) {
-    return section.phrases
-        .map((phrase) => phraseView(context, phrase))
-        .toList();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,5 +33,26 @@ class LessonPhrasesPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// セクション名
+  Widget _createHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      child: GFListTile(
+        // color: Colo,
+        avatar:
+            Text(section.sectionTitle, style: const TextStyle(fontSize: 30)),
+        title: Text('未クリア',
+            style: TextStyle(fontSize: 20, color: Colors.redAccent)),
+      ),
+    );
+  }
+
+  /// 各フレーズ
+  List<Widget> _createPhraseList(BuildContext context) {
+    return section.phrases
+        .map((phrase) => phraseView(context, phrase))
+        .toList();
   }
 }

@@ -5,11 +5,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:wr_app/ui/root_view.dart';
 import 'package:wr_app/theme.dart';
 
+/// root widget
 class WRApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => WRAppState();
 }
 
+/// [WRApp] state
 class WRAppState extends State<WRApp> {
   @override
   Widget build(BuildContext context) {

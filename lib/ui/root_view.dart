@@ -10,11 +10,15 @@ import 'package:wr_app/ui/mypage/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
 import 'package:wr_app/env.dart';
 
+/// 全ての画面のガワ
+///
+/// 検索ボックス等
 class RootView extends StatefulWidget {
   @override
   _RootViewState createState() => _RootViewState();
 }
 
+/// [RootView] state
 class _RootViewState extends State<RootView>
     with SingleTickerProviderStateMixin {
   int _index = 0;
@@ -29,7 +33,7 @@ class _RootViewState extends State<RootView>
     _searchBarController = SearchBarController();
   }
 
-  // TODO(wakame-tech): implement
+  // TODO(wakame-tech): 検索バーを実装
   Widget _createSearchBar() {
     return Container(
       height: 80,
@@ -41,6 +45,7 @@ class _RootViewState extends State<RootView>
     );
   }
 
+  /// WIP
   void _stopSearch() {
     print('stop search');
     setState(() {
@@ -48,6 +53,7 @@ class _RootViewState extends State<RootView>
     });
   }
 
+  /// WIP
   void _startSearch() {
     print('start search');
     setState(() {
@@ -59,7 +65,7 @@ class _RootViewState extends State<RootView>
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('${Env.APP_NAME} ${Env.VERSION}'),
+          title: Text('${Env.appName} ${Env.version}'),
         ),
         body: PageView(
           controller: _pageController,

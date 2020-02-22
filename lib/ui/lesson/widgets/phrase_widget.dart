@@ -6,6 +6,10 @@ import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 
+/// フレーズを表示するコンポーネント
+///
+/// クリックすることで [LessonPhrasesDetailPage] へ移動
+///
 Widget phraseView(BuildContext context, Phrase phrase) {
   return GestureDetector(
     onTap: () {

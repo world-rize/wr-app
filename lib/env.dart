@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+/// 定数等
 class Env {
-  static const APP_NAME = 'WR APP';
-  static const VERSION = '0.1.0-dev';
+  static const appName = 'WR APP';
+  static const version = '0.1.0-dev';
 }
