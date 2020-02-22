@@ -10,9 +10,13 @@ import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 
 // TODO(wakame-tech): 遷移アニメーション
-class PhraseSampleView extends StatelessWidget {
-  const PhraseSampleView({@required this.phrase});
+class QuestionView extends StatelessWidget {
+  const QuestionView(
+      {@required this.phrase, @required this.selection, @required this.onNext});
+
   final Phrase phrase;
+  final List<String> selection;
+  final void Function() onNext;
 
   Widget _createPhraseSampleConversation() {
     return ListView.builder(
@@ -26,68 +30,108 @@ class PhraseSampleView extends StatelessWidget {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Card(
-        child: Column(
-          children: <Widget>[
-            ListTile(
-              title: Text(
-                phrase.japanese,
-                style: TextStyle(
-                    fontSize: 30,
-                    color: Colors.black54,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            SizedBox(
-              height: 240,
-              child: _createPhraseSampleConversation(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class PhraseChoiceView extends StatelessWidget {
-  PhraseChoiceView({@required this.onTap});
-  void Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 350,
-      child: ListView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (_, index) {
-          return Padding(
-            padding: const EdgeInsets.all(6),
-            child: InkWell(
-                onTap: onTap,
-                child: GFListTile(
-                  title: Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Text(
-                      'Choice $index',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                      ),
+  Widget _createSelection() {
+    return ListView.builder(
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (_, index) {
+        return Padding(
+          padding: const EdgeInsets.all(6),
+          child: InkWell(
+              onTap: onNext,
+              child: GFListTile(
+                title: Padding(
+                  padding: const EdgeInsets.all(6),
+                  child: Text(
+                    'Choice $index',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
                     ),
                   ),
-                  color: Colors.lightBlueAccent,
-                )),
-          );
-        },
-        itemCount: 4,
-      ),
+                ),
+                color: Colors.lightBlueAccent,
+              )),
+        );
+      },
+      itemCount: 4,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        // title
+        ListTile(
+          title: Text(
+            phrase.japanese,
+            style: TextStyle(
+                fontSize: 30,
+                color: Colors.black54,
+                fontWeight: FontWeight.bold),
+          ),
+        ),
+        // sample
+        SizedBox(
+          height: 240,
+          child: _createPhraseSampleConversation(),
+        ),
+        // selection
+        SizedBox(
+          height: 350,
+          child: _createSelection(),
+        ),
+      ],
     );
   }
 }
+
+//class TestStoryPageState extends State<TestPage> {
+//  TestStoryPageState({@required this.section});
+//
+//  final Section section;
+//  final _storyController = StoryController();
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    final dummySelection = [
+//      'When is the homework due?',
+//      'When is the homework due?',
+//      'When is the homework due?',
+//      'When is the homework due?',
+//    ];
+//
+//    return Scaffold(
+//        appBar: AppBar(
+//          backgroundColor: Colors.blue,
+//          title: const Text('Test'),
+//        ),
+//        body: StoryView(
+//          section.phrases
+//              .map(
+//                (phrase) => StoryItem(
+//                  QuestionView(
+//                    phrase: phrase,
+//                    selection: dummySelection,
+//                    onNext: () {},
+//                  ),
+//                ),
+//              )
+//              .toList(),
+//          controller: _storyController,
+//          inline: true,
+//          onStoryShow: (item) {
+//            print('story show');
+//          },
+//          onComplete: () {
+//            Navigator.of(context).push(
+//              MaterialPageRoute(
+//                  builder: (_) => TestResultPage(section: section)),
+//            );
+//          },
+//        ));
+//  }
+//}
 
 class TestPage extends StatefulWidget {
   const TestPage({@required this.section});
@@ -115,41 +159,45 @@ class TestPageState extends State<TestPage> {
 
   void _next() {
     // show result
-//    showDialog(
-//      context: context,
-//      builder: (_) => Material(
-//        type: MaterialType.transparency,
-//        child: GestureDetector(
-//          behavior: HitTestBehavior.opaque,
-//          onTap: () {
-//            Navigator.pop(context);
-//          },
-//          child: Center(
-//            child: Container(
-//              width: 100,
-//              height: 100,
-//              color: Colors.red,
-//            ),
-//          ),
-//        ),
-//      ),
-//    );
-
-    // seek index
-    setState(() {
-      _index++;
-    });
+    showDialog(
+      context: context,
+      builder: (_) => Material(
+        type: MaterialType.transparency,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Center(
+            child: Image.network(
+                'https://lh4.googleusercontent.com/proxy/NSEhjqnplbvFpayOYa5fKRT8ky2NnOLW8N7vWW0kHqjNs46lUE05KP7y6rTm1qggHRbK_xlHxiHYDzIgBxqSGJ2bnJL02NejzQ=s0-d'),
+          ),
+        ),
+      ),
+    );
 
     // test finish
     if (_index == section.phrases.length - 1) {
       Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TestResultPage(section: section)),
       );
+    } else {
+      // seek index
+      setState(() {
+        _index++;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final dummySelection = [
+      'When is the homework due?',
+      'When is the homework due?',
+      'When is the homework due?',
+      'When is the homework due?',
+    ];
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -158,8 +206,10 @@ class TestPageState extends State<TestPage> {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            PhraseSampleView(phrase: currentPhrase),
-            PhraseChoiceView(onTap: _next),
+            QuestionView(
+                phrase: currentPhrase,
+                selection: dummySelection,
+                onNext: _next),
           ],
         ),
       ),

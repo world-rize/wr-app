@@ -33,11 +33,11 @@ class MasterDataStore with ChangeNotifier {
   }
 
   static final List<Section> dummySections = List.generate(
-    10,
+    7,
     (i) => Section(
       lessonTitle: 'Shcool',
       sectionTitle: 'Section${i + 1}',
-      phrases: List.generate(50, (i) => dummyPhrase(i: i + 1)),
+      phrases: List.generate(7, (i) => dummyPhrase(i: i + 1)),
     ),
   );
 
