@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 
 import 'package:wr_app/model/phrase.dart';
 
@@ -42,6 +43,15 @@ class LessonPhrasesDetailPage extends StatelessWidget {
               height: 400,
               child: _createPhraseSampleConversation(),
             ),
+            // test
+            MaterialButton(
+              onPressed: () {
+                final _player = AssetsAudioPlayer()
+                  ..open(phrase.audioPath)
+                  ..play();
+              },
+              child: Text(phrase.audioPath),
+            )
           ],
         ),
       ),

@@ -39,6 +39,7 @@ class LessonPhrasesPage extends StatelessWidget {
         backgroundColor: Colors.blue,
         title: Text(section.sectionTitle),
       ),
+      // TODO(somebody): per-page scroll physics
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[

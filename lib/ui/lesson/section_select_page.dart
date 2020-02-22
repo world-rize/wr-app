@@ -24,8 +24,9 @@ class _LessonViewRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       child: GFListTile(
+        color: Colors.white,
         // left
         avatar:
             Text(section.sectionTitle, style: const TextStyle(fontSize: 28)),
@@ -40,7 +41,10 @@ class _LessonViewRow extends StatelessWidget {
                   builder: (_) => LessonPhrasesPage(section: section)),
             );
           },
-          child: const Text('Start', style: TextStyle(fontSize: 25)),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            child: Text('Start', style: TextStyle(fontSize: 25)),
+          ),
           color: Colors.orange,
           borderShape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -53,13 +57,18 @@ class _LessonViewRow extends StatelessWidget {
 class LessonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: MasterDataStore.dummySections
-            .map((s) => _LessonViewRow(section: s))
-            .toList(),
+    const _bgColor = Color.fromARGB(255, 230, 230, 230);
+
+    return Container(
+      decoration: const BoxDecoration(color: _bgColor),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: MasterDataStore.dummySections
+              .map((s) => _LessonViewRow(section: s))
+              .toList(),
+        ),
       ),
     );
   }
@@ -102,11 +111,15 @@ class _TestViewRow extends StatelessWidget {
         _showConfirmTestDialog(context, section);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: GFListTile(
+          color: Colors.white,
           // left
-          avatar:
-              Text(section.sectionTitle, style: const TextStyle(fontSize: 28)),
+          avatar: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Text(section.sectionTitle,
+                style: const TextStyle(fontSize: 28)),
+          ),
           // middle
           title: Text('クリア',
               style: TextStyle(color: Colors.redAccent, fontSize: 20)),
@@ -119,13 +132,18 @@ class _TestViewRow extends StatelessWidget {
 class TestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: MasterDataStore.dummySections
-            .map((s) => _TestViewRow(section: s))
-            .toList(),
+    const _bgColor = Color.fromARGB(255, 230, 230, 230);
+
+    return Container(
+      decoration: const BoxDecoration(color: _bgColor),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: MasterDataStore.dummySections
+              .map((s) => _TestViewRow(section: s))
+              .toList(),
+        ),
       ),
     );
   }

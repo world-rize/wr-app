@@ -26,6 +26,7 @@ class MasterDataStore with ChangeNotifier {
     return Phrase(
       english: 'sample English text $i',
       japanese: 'サンプル日本語訳 $i',
+      audioPath: 'res/Welcome_1_.mp3',
       favorite: i % 2 == 0,
       sample: PhraseSample(content: []),
     );
@@ -36,7 +37,7 @@ class MasterDataStore with ChangeNotifier {
     (i) => Section(
       lessonTitle: 'Shcool',
       sectionTitle: 'Section${i + 1}',
-      phrases: List.generate(10, (i) => dummyPhrase(i: i + 1)),
+      phrases: List.generate(50, (i) => dummyPhrase(i: i + 1)),
     ),
   );
 

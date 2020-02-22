@@ -5,6 +5,7 @@
     {
       "english": "When is the homework due?",
       "japanese": "いつ宿題するんだっけ",
+      "audio": "res/Welcome_1_.mp3",
       "favorite": true,
       "sample": {
         "content": [
@@ -30,6 +31,7 @@
     {
       "english": "Do you want to study after school??",
       "japanese": "放課後勉強しない？",
+      "audio": "res/Welcome_1_.mp3",
       "favorite": true,
       "sample": {
         "content": []
@@ -39,6 +41,7 @@
     {
       "english": "When does it start?",
       "japanese": "いつから始まるの？",
+      "audio": "res/Welcome_1_.mp3",
       "favorite": true,
       "sample": {
         "content": []
@@ -48,6 +51,7 @@
     {
       "english": "Could  I borrow your notes?",
       "japanese": "ノート貸してくれる？",
+      "audio": "res/Welcome_1_.mp3",
       "favorite": true,
       "sample": {
         "content": []
