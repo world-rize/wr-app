@@ -18,6 +18,10 @@ dependencies:
   getflutter: ^1.0.4
   provider: ^4.0.2
   flappy_search_bar: 1.4.1
+  assets_audio_player: ^1.2.3
+#    git:
+#      url: git://github.com/florent37/Flutter-AssetsAudioPlayer.git
+#      ref: master
 
 dev_dependencies:
   flutter_test:

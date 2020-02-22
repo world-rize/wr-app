@@ -9,18 +9,15 @@ class LessonPhrasesDetailPage extends StatelessWidget {
   const LessonPhrasesDetailPage({@required this.phrase});
   final Phrase phrase;
 
-  LessonPhrasesDetailPage({this.phrase});
-
   // TODO(yoshiki301): 実装
   Widget _createPhraseSampleConversation() {
     return ListView.builder(
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "dummy",
-          )
-        );
+        return const Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              'dummy',
+            ));
       },
       itemCount: 4,
     );
@@ -28,7 +25,7 @@ class LessonPhrasesDetailPage extends StatelessWidget {
 
   Widget _createPhraseSample() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: Card(
         child: Column(
           children: <Widget>[

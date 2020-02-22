@@ -1,5 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -107,7 +108,11 @@ class LessonMenus extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  final _player = AssetsAudioPlayer()
+                    ..open('res/Welcome_1_.mp3')
+                    ..play();
+                },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 30, horizontal: 90),
                   child: Text('フレーズをリクエストする'),
