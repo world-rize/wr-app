@@ -2,33 +2,39 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 
 import 'package:wr_app/model/phrase.dart';
 
+/// フレーズ詳細ページ
+///
+/// ## プロトタイプ
+/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469134>
 class LessonPhrasesDetailPage extends StatelessWidget {
   const LessonPhrasesDetailPage({@required this.phrase});
   final Phrase phrase;
 
-  LessonPhrasesDetailPage({this.phrase});
-
-  // TODO(yoshiki301): 実装
-  Widget _createPhraseSampleConversation() {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "dummy",
-          )
-        );
-      },
-      itemCount: 4,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blue,
+        title: const Text('Phrase Detail'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            _createPhraseSample(),
+          ],
+        ),
+      ),
     );
   }
 
+  /// フレーズの例の画面
   Widget _createPhraseSample() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: Card(
         child: Column(
           children: <Widget>[
@@ -45,26 +51,33 @@ class LessonPhrasesDetailPage extends StatelessWidget {
               height: 400,
               child: _createPhraseSampleConversation(),
             ),
+            // test
+            MaterialButton(
+              onPressed: () {
+                final _player = AssetsAudioPlayer()
+                  ..open(phrase.audioPath)
+                  ..play();
+              },
+              child: Text(phrase.audioPath),
+            )
           ],
         ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('Phrase Detail'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            _createPhraseSample(),
-          ],
-        ),
-      ),
+  // TODO(yoshiki301): 実装
+  /// 例の会話部分
+  Widget _createPhraseSampleConversation() {
+    return ListView.builder(
+      itemBuilder: (context, index) {
+        return const Padding(
+            padding: EdgeInsets.all(8),
+            child: Text(
+              'dummy',
+            ));
+      },
+      itemCount: 4,
     );
   }
 }

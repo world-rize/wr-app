@@ -8,7 +8,7 @@ import 'package:wr_app/env.dart';
 void main() {
   Provider.debugCheckInvalidValueType = null;
 
-  print('${Env.APP_NAME} ${Env.VERSION}');
+  print('${Env.appName} ${Env.version}');
 
   runApp(WRApp());
 }

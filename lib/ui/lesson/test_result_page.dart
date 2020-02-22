@@ -8,11 +8,17 @@ import 'package:wr_app/model/section.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/lesson/section_select_page.dart';
 
+/// テスト結果画面
+///
+/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469140>
 class TestResultPage extends StatelessWidget {
   const TestResultPage({@required this.section});
 
   final Section section;
 
+  // TODO: 解答情報も保持
+
+  /// 「ピースのカケラを取得」画面
   void _showRewardDialog(BuildContext context) {
     showCupertinoDialog(
       context: context,

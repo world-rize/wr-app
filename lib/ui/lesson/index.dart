@@ -12,49 +12,22 @@ import 'package:wr_app/ui/lesson/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/lesson/widgets/gf_rect_items_carousel.dart';
 
-class LessonSelectCarousel extends StatelessWidget {
+/// `レッスン` ページのトップ
+///
+/// [UserStore] を保持
+class LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
-    return GFRectItemsCarousel(
-      rowCount: 3,
-      height: size.height.round(),
-      children: MasterDataStore.dummyLessons.map(
-        (lesson) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => SectionSelectPage()),
-              );
-            },
-            child: Container(
-              height: size.height,
-              width: size.width,
-              margin: const EdgeInsets.all(5),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Stack(
-                  children: <Widget>[
-                    Image.network(
-                      lesson.thumbnailUrl,
-                      fit: BoxFit.cover,
-                      height: size.height,
-                      width: size.width,
-                    ),
-                    Text(lesson.title,
-                        style: TextStyle(color: Colors.white, fontSize: 30)),
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ).toList(),
+    return Provider<UserStore>(
+      create: (context) => UserStore(),
+      child: SingleChildScrollView(
+        child: LessonMenus(),
+      ),
     );
   }
 }
 
+/// ページの中身
 class LessonMenus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -121,14 +94,46 @@ class LessonMenus extends StatelessWidget {
   }
 }
 
-class LessonIndexPage extends StatelessWidget {
+/// レッスン選択カルーセル
+class LessonSelectCarousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider<UserStore>(
-      create: (context) => UserStore(),
-      child: SingleChildScrollView(
-        child: LessonMenus(),
-      ),
+    final size = MediaQuery.of(context).size;
+
+    return GFRectItemsCarousel(
+      rowCount: 3,
+      height: size.height.round(),
+      children: MasterDataStore.dummyLessons.map(
+        (lesson) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => SectionSelectPage()),
+              );
+            },
+            child: Container(
+              height: size.height,
+              width: size.width,
+              margin: const EdgeInsets.all(5),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
+                child: Stack(
+                  children: <Widget>[
+                    Image.network(
+                      lesson.thumbnailUrl,
+                      fit: BoxFit.cover,
+                      height: size.height,
+                      width: size.width,
+                    ),
+                    Text(lesson.title,
+                        style: TextStyle(color: Colors.white, fontSize: 30)),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 }

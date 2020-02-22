@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:wr_app/model/phrase.dart';
 
+/// セクション: フレーズの集まり
 class Section {
   Section({
     @required this.lessonTitle,
@@ -10,6 +11,7 @@ class Section {
     @required this.phrases,
   });
 
+  /// json to [Section]
   factory Section.fromJson(Map<String, dynamic> json) {
     return Section(
       lessonTitle: json['lessonTitle'],
@@ -27,6 +29,7 @@ class Section {
   /// list of phrase
   final List<Phrase> phrases;
 
+  /// [Section] to json
   Map<String, dynamic> toJson() {
     return {
       'lessonTitle': lessonTitle,
@@ -34,11 +37,4 @@ class Section {
       'phrases': phrases.map((p) => p.toJson()),
     };
   }
-}
-
-class Lesson {
-  Lesson(this.title, this.thumbnailUrl);
-
-  String title;
-  String thumbnailUrl;
 }
