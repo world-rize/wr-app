@@ -12,21 +12,30 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  # DO NOT CHANGE VERSIONS
+  # https://github.com/FirebaseExtended/flutterfire/issues/2084
+  firebase_core: 0.4.4
+  firebase_auth: 0.15.3
   cupertino_icons: ^0.1.2
   flutter_swiper : ^1.1.5
   getflutter: ^1.0.4
   provider: ^4.0.2
   flappy_search_bar: 1.4.1
   assets_audio_player: ^1.2.3
-  story_view: ^0.11.2
+  # story_view: ^0.11.2
+  settings_ui: ^0.2.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   pedantic_mono: any
+  flutter_native_splash: ^0.1.9
 
 flutter:
   uses-material-design: true
   assets:
     - res/
+
+flutter_native_splash:
+  color: "42a5f5"
+  image: res/wr_icon.jpg

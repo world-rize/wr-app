@@ -18,11 +18,8 @@ import 'package:wr_app/ui/lesson/widgets/gf_rect_items_carousel.dart';
 class LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Provider<UserStore>(
-      create: (context) => UserStore(),
-      child: SingleChildScrollView(
-        child: LessonMenus(),
-      ),
+    return SingleChildScrollView(
+      child: LessonMenus(),
     );
   }
 }

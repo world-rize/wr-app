@@ -32,6 +32,13 @@ GetFlutterを使用しているのでコンポーネントに困ったら
 ### ストア(WIP)
 - [Provider](https://pub.dev/packages/provider) を使用しています
 - <https://qiita.com/kabochapo/items/a90d8438243c27e2f6d9>
+- RootView に UserData をもたせています(TODO: 複数ストア)
+
+### Firebaseセットアップ
+1. `pubspec.yaml` を開き `Packages get` または `$ flutter pub get`
+2. [worldwize - firebase](https://console.firebase.google.com/u/0/project/worldrize-9248e/settings/general/ios:com.worldrize.wrApp) の `マイアプリ` から `GoogleService-Info.plist` をダウンロード
+3. `$ open ios/Runner.xcworkspace` で Xcodeを開き `Runner/Flutter/Runner` にplistファイルを移動
+4. ビルドして匿名ログインが出来ているか確認
 
 ## 👓 タスク
 作業をタスクに分けて割り振りをして開発を進めていきます。
