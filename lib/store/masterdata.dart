@@ -12,15 +12,15 @@ import 'package:flutter/services.dart' show rootBundle;
 ///
 /// フレーズのデータ等を保持
 class MasterDataStore with ChangeNotifier {
+  /// シングルトンインスタンス
+  static final MasterDataStore _cache = MasterDataStore._internal();
+
   factory MasterDataStore() {
     return _cache;
   }
 
   /// セクション名: セクション のマップ
   static final Map<String, Section> _sections = {};
-
-  /// シングルトンインスタンス
-  static final MasterDataStore _cache = MasterDataStore._internal();
 
   /// ローカルjsonファイルからセクションをロード
   /// **試験的**

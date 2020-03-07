@@ -3,6 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:provider/provider.dart';
+import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
 import 'package:wr_app/ui/lesson/index.dart';
@@ -29,8 +31,12 @@ class _RootViewState extends State<RootView>
   @override
   void initState() {
     super.initState();
+    // init controller
     _pageController = PageController();
     _searchBarController = SearchBarController();
+
+    // login
+    UserStore().signIn();
   }
 
   // TODO(wakame-tech): 検索バーを実装
@@ -61,57 +67,66 @@ class _RootViewState extends State<RootView>
     });
   }
 
+  /// メイン画面
+  Widget _tabView() {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('${Env.appName} ${Env.version}'),
+      ),
+      body: PageView(
+        controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _index = index;
+          });
+        },
+        children: <Widget>[
+          LessonIndexPage(),
+          ColumnIndexPage(),
+          TravelPage(),
+          AgencyIndexPage(),
+          MyPagePage(),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        fixedColor: Colors.blueAccent,
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          _pageController.animateToPage(index,
+              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+        },
+        currentIndex: _index,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.create),
+            title: const Text('レッスン'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.view_column),
+            title: const Text('コラム'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.airplanemode_active),
+            title: const Text('旅行'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.public),
+            title: const Text('留学先紹介'),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            title: const Text('マイページ'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text('${Env.appName} ${Env.version}'),
-        ),
-        body: PageView(
-          controller: _pageController,
-          onPageChanged: (index) {
-            setState(() {
-              _index = index;
-            });
-          },
-          children: <Widget>[
-            LessonIndexPage(),
-            ColumnIndexPage(),
-            TravelPage(),
-            AgencyIndexPage(),
-            MyPagePage(),
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-            fixedColor: Colors.blueAccent,
-            type: BottomNavigationBarType.fixed,
-            onTap: (int index) {
-              _pageController.animateToPage(index,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.ease);
-            },
-            currentIndex: _index,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.create),
-                title: const Text('レッスン'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.view_column),
-                title: const Text('コラム'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.airplanemode_active),
-                title: const Text('旅行'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.public),
-                title: const Text('留学先紹介'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                title: const Text('マイページ'),
-              ),
-            ]));
+    return Provider<UserStore>(
+      create: (context) => UserStore(),
+      child: _tabView(),
+    );
   }
 }

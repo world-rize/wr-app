@@ -1,23 +1,30 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/env.dart';
 import 'package:wr_app/store/user.dart';
 
 // TODO(wakame-tech): アカウント情報と設定項目を考える
 /// 設定ページ
-class MyPagePage extends StatelessWidget {
+class MyPagePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  _MyPagePageState createState() => _MyPagePageState();
+}
+
+class _MyPagePageState extends State<MyPagePage> {
+  Widget _settingsView() {
+    final store = Provider.of<UserStore>(context);
+
     return SettingsList(
       sections: [
         SettingsSection(
           title: 'アカウント',
           tiles: [
             SettingsTile(
-              title: 'アカウント名',
-              subtitle: 'ゲスト',
+              title: 'アカウント',
+              subtitle: store.displayName(),
               leading: Icon(Icons.people),
               onTap: () {},
             ),
@@ -54,13 +61,18 @@ class MyPagePage extends StatelessWidget {
               subtitle: Env.version,
             ),
             SettingsTile(
-              title: 'クレジット',
-              subtitle: 'ああああ',
+              title: '開発者',
+              subtitle: Env.authors.join(', '),
               onTap: () {},
             )
           ],
         )
       ],
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _settingsView();
   }
 }
