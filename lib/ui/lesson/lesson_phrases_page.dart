@@ -18,6 +18,8 @@ class LessonPhrasesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = Theme.of(context).primaryTextTheme;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -27,32 +29,27 @@ class LessonPhrasesPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-            _createHeader(),
-            ..._createPhraseList(context),
+            // ヘッダ
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+              child: GFListTile(
+                avatar: Text(
+                  section.sectionTitle,
+                  style: style.display1.apply(color: Colors.black),
+                ),
+                title: Text(
+                  '未クリア',
+                  style: style.title.apply(color: Colors.redAccent),
+                ),
+              ),
+            ),
+            // フレーズ一覧
+            ...section.phrases.map((phrase) {
+              return phraseView(context, phrase);
+            }).toList(),
           ],
         ),
       ),
     );
-  }
-
-  /// セクション名
-  Widget _createHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-      child: GFListTile(
-        // color: Colo,
-        avatar:
-            Text(section.sectionTitle, style: const TextStyle(fontSize: 30)),
-        title: Text('未クリア',
-            style: TextStyle(fontSize: 20, color: Colors.redAccent)),
-      ),
-    );
-  }
-
-  /// 各フレーズ
-  List<Widget> _createPhraseList(BuildContext context) {
-    return section.phrases
-        .map((phrase) => phraseView(context, phrase))
-        .toList();
   }
 }

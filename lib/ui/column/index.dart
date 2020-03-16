@@ -1,7 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 
 /// 記事
 class Article {
