@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/phrase.dart';
 
@@ -25,6 +26,8 @@ class LessonPhrasesDetailPage extends StatelessWidget {
         child: Column(
           children: <Widget>[
             _createPhraseSample(),
+            _createOnePointAdvice(),
+            _createButtonArea(),
           ],
         ),
       ),
@@ -48,7 +51,7 @@ class LessonPhrasesDetailPage extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 400,
+              height: 300,
               child: _createPhraseSampleConversation(),
             ),
             // test
@@ -80,4 +83,71 @@ class LessonPhrasesDetailPage extends StatelessWidget {
       itemCount: 4,
     );
   }
+
+  Widget _createOnePointAdvice() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              title: Text(
+                "One Point Advice",
+                style: TextStyle(
+                    fontSize: 30,
+                    color: Colors.black54,
+                    fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 100,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _createButtonArea(){
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: FloatingActionButton(
+              child: const Text('1'),
+              onPressed: () {},
+            ),
+          ),
+          Expanded(
+            child: FloatingActionButton(
+              child: const Text('2'),
+              onPressed: () {},
+            ),
+          ),
+          Expanded(
+            child: FloatingActionButton(
+              child: const Text('3'),
+              onPressed: () {},
+            ),
+          ),
+          Expanded(
+            child: FloatingActionButton(
+              child: const Text('4'),
+              onPressed: () {},
+            ),
+          ),
+          Expanded(
+            child: FloatingActionButton(
+              child: const Text('5'),
+              onPressed: () {},
+            ),
+          ),
+        ],
+      )
+    );
+  }
+
+  
 }
