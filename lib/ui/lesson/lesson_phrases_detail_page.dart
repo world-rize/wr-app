@@ -34,23 +34,13 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   void initState() {
     super.initState();
 
-    _player = AudioPlayer();
+    _player = AudioPlayer()
+      ..onPlayerStateChanged.listen((AudioPlayerState state) {
+        setState(() {
+          _isPlaying = state == AudioPlayerState.PLAYING;
+        });
+      });
     _cache = AudioCache(fixedPlayer: _player)..load(phrase.audioPath);
-
-//      .._player = AssetsAudioPlayer()
-//      ..open(phrase.audioPath)
-//      ..isPlaying.listen((isPlaying) {
-//        print('isPlaying: $isPlaying');
-//        setState(() {
-//          _isPlaying = isPlaying;
-//        });
-//      })
-//      ..finished.listen((finished) {
-//        print('finished $finished');
-//        setState(() {
-//          _isPlaying = !finished;
-//        });
-//      });
   }
 
   @override
@@ -170,11 +160,15 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               backgroundColor: Colors.white,
               heroTag: '3',
               child: Icon(
-                _isPlaying ? Icons.pause : Icons.play_arrow,
+                _isPlaying ? Icons.stop : Icons.play_arrow,
                 color: Colors.blueAccent,
               ),
               onPressed: () {
-                _cache.play(phrase.audioPath);
+                if (!_isPlaying) {
+                  _cache.play(phrase.audioPath);
+                } else {
+                  _cache.fixedPlayer.stop();
+                }
               },
             ),
           ),
