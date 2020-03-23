@@ -30,8 +30,8 @@
 .pub/
 /build/
 
-# resource
-res/
+# Local Assets
+assets/
 
 # Web related
 lib/generated_plugin_registrant.dart

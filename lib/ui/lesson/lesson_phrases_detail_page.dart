@@ -1,7 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:assets_audio_player/assets_audio_player.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/audio_cache.dart';
 import 'package:wr_app/model/conversation.dart';
 
 import 'package:wr_app/model/phrase.dart';
@@ -11,9 +12,46 @@ import 'package:wr_app/model/phrase_sample.dart';
 ///
 /// ## プロトタイプ
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469134>
-class LessonPhrasesDetailPage extends StatelessWidget {
+class LessonPhrasesDetailPage extends StatefulWidget {
   const LessonPhrasesDetailPage({@required this.phrase});
   final Phrase phrase;
+
+  @override
+  _LessonPhrasesDetailPageState createState() =>
+      _LessonPhrasesDetailPageState(phrase: phrase);
+}
+
+class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
+  _LessonPhrasesDetailPageState({@required this.phrase});
+  final Phrase phrase;
+  bool _isPlaying = false;
+  List<double> playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
+  double _currentPlaybackSpeed = 1;
+  AudioPlayer _player;
+  AudioCache _cache;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _player = AudioPlayer();
+    _cache = AudioCache(fixedPlayer: _player)..load(phrase.audioPath);
+
+//      .._player = AssetsAudioPlayer()
+//      ..open(phrase.audioPath)
+//      ..isPlaying.listen((isPlaying) {
+//        print('isPlaying: $isPlaying');
+//        setState(() {
+//          _isPlaying = isPlaying;
+//        });
+//      })
+//      ..finished.listen((finished) {
+//        print('finished $finished');
+//        setState(() {
+//          _isPlaying = !finished;
+//        });
+//      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,41 +141,75 @@ class LessonPhrasesDetailPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
+            // 吹き出しボタン
             child: FloatingActionButton(
+              backgroundColor: Colors.white,
               heroTag: '1',
-              child: const Text('1'),
+              child: const Icon(
+                Icons.message,
+                color: Colors.blueAccent,
+              ),
               onPressed: () {},
             ),
           ),
+          // お気に入りボタン
           Expanded(
             child: FloatingActionButton(
+              backgroundColor: Colors.white,
               heroTag: '2',
-              child: const Text('2'),
+              child: const Icon(
+                Icons.star,
+                color: Colors.blueAccent,
+              ),
               onPressed: () {},
             ),
           ),
+          // 再生ボタン
           Expanded(
             child: FloatingActionButton(
+              backgroundColor: Colors.white,
               heroTag: '3',
-              child: const Text('3'),
+              child: Icon(
+                _isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.blueAccent,
+              ),
               onPressed: () {
-                AssetsAudioPlayer()
-                  ..open(phrase.audioPath)
-                  ..play();
+                _cache.play(phrase.audioPath);
               },
             ),
           ),
+          // 再生速度
           Expanded(
             child: FloatingActionButton(
+              backgroundColor: Colors.white,
               heroTag: '4',
-              child: const Text('4'),
-              onPressed: () {},
+              child: Text(
+                _currentPlaybackSpeed.toString(),
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Colors.blue,
+                ),
+              ),
+              onPressed: () {
+                final _index = playbackSpeeds.indexOf(_currentPlaybackSpeed);
+                final _nextSpeed =
+                    playbackSpeeds[(_index + 1) % playbackSpeeds.length];
+                _cache.fixedPlayer.setPlaybackRate(playbackRate: _nextSpeed);
+                setState(() {
+                  _currentPlaybackSpeed = _nextSpeed;
+                });
+              },
             ),
           ),
+          // 発音
           Expanded(
             child: FloatingActionButton(
+              backgroundColor: Colors.white,
               heroTag: '5',
-              child: const Text('5'),
+              child: const Icon(
+                Icons.record_voice_over,
+                color: Colors.blueAccent,
+              ),
               onPressed: () {},
             ),
           ),

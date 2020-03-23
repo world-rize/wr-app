@@ -37,7 +37,7 @@ class MasterDataStore with ChangeNotifier {
     return Phrase(
       english: 'When is the homework due?',
       japanese: 'いつ宿題提出するんだっけ？',
-      audioPath: 'res/Welcome_1_.mp3',
+      audioPath: 'Welcome_1_.mp3',
       favorite: i % 2 == 0,
       sample: PhraseSample(
         content: [
@@ -85,7 +85,7 @@ class MasterDataStore with ChangeNotifier {
   /// ストアの初期化
   /// 一度しか呼ばれない
   static _internal() async {
-    const path = 'res/section1.json';
+    const path = 'assets/section1.json';
     final section = await _loadSectionFromJson(path).catchError(print);
 
     print('${section.sectionTitle} Loaded');
