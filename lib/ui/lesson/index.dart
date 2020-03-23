@@ -37,7 +37,7 @@ class LessonMenus extends StatelessWidget {
           const GFTypography(
             text: 'Lesson',
             type: GFTypographyType.typo1,
-            dividerColor: GFColor.primary,
+            dividerColor: GFColors.PRIMARY,
           ),
 
           Container(
@@ -49,7 +49,7 @@ class LessonMenus extends StatelessWidget {
           const GFTypography(
             text: 'Favorite',
             type: GFTypographyType.typo1,
-            dividerColor: GFColor.danger,
+            dividerColor: GFColors.DANGER,
           ),
 
           phraseView(context, store.pickedUpFavoritePhrase),
@@ -58,7 +58,7 @@ class LessonMenus extends StatelessWidget {
           const GFTypography(
             text: 'New coming phrases',
             type: GFTypographyType.typo1,
-            dividerColor: GFColor.success,
+            dividerColor: GFColors.SUCCESS,
           ),
 
           phraseView(context, store.pickedUpNewComingPhrase),
@@ -67,7 +67,7 @@ class LessonMenus extends StatelessWidget {
           const GFTypography(
             text: 'Request',
             type: GFTypographyType.typo1,
-            dividerColor: GFColor.secondary,
+            dividerColor: GFColors.SECONDARY,
           ),
 
           Padding(

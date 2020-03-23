@@ -1,6 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
@@ -52,15 +51,12 @@ class _SectionSelectPageState extends State<SectionSelectPage>
           labelStyle: const TextStyle(fontSize: 20),
         ),
       ),
-      body: Provider<MasterDataStore>(
-        create: (_) => MasterDataStore(),
-        child: TabBarView(
-          controller: _tabController,
-          children: [
-            LessonView(),
-            TestView(),
-          ],
-        ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          LessonView(),
+          TestView(),
+        ],
       ),
     );
   }
@@ -68,22 +64,25 @@ class _SectionSelectPageState extends State<SectionSelectPage>
 
 /// テスト一覧画面
 ///
-/// 各レッスンに対応する [_LessonViewRow] を列挙
+/// 各レッスンに対応する [_SectionRow] を列挙
 class LessonView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const _bgColor = Color.fromARGB(255, 230, 230, 230);
-
-    return Container(
-      decoration: const BoxDecoration(color: _bgColor),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: MasterDataStore.dummySections
-              .map((s) => _LessonViewRow(section: s))
-              .toList(),
-        ),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: MasterDataStore.dummySections
+            .map((section) => _SectionRow(
+                  section: section,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (_) => LessonPhrasesPage(section: section)),
+                    );
+                  },
+                ))
+            .toList(),
       ),
     );
   }
@@ -91,76 +90,14 @@ class LessonView extends StatelessWidget {
 
 /// テスト一覧画面
 ///
-/// 各テストに対応する [_TestViewRow] を列挙
+/// 各テストに対応する [_SectionRow] を列挙
 class TestView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    const _bgColor = Color.fromARGB(255, 230, 230, 230);
-
-    return Container(
-      decoration: const BoxDecoration(color: _bgColor),
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: MasterDataStore.dummySections
-              .map((s) => _TestViewRow(section: s))
-              .toList(),
-        ),
-      ),
-    );
-  }
-}
-
-/// レッスン
-class _LessonViewRow extends StatelessWidget {
-  const _LessonViewRow({@required this.section});
-
-  final Section section;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-      child: GFListTile(
-        color: Colors.white,
-        // left
-        avatar:
-            Text(section.sectionTitle, style: const TextStyle(fontSize: 28)),
-        // middle
-        title: Text('クリア',
-            style: TextStyle(color: Colors.redAccent, fontSize: 20)),
-        // right
-        icon: GFButton(
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (_) => LessonPhrasesPage(section: section)),
-            );
-          },
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Text('Start', style: TextStyle(fontSize: 25)),
-          ),
-          color: Colors.orange,
-          borderShape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      ),
-    );
-  }
-}
-
-/// テスト
-class _TestViewRow extends StatelessWidget {
-  const _TestViewRow({@required this.section});
-  final Section section;
-
+  // タップした時にダイアログを表示
   void _showConfirmTestDialog(BuildContext context, Section section) {
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-        title: const Text('テストを開始しますか?'),
+        title: Text('${section.sectionTitle}のテストを開始しますか?'),
         content: const Text('本日のテスト残り3回\n制限時間xx秒'),
         actions: <Widget>[
           CupertinoButton(
@@ -184,23 +121,64 @@ class _TestViewRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: MasterDataStore.dummySections
+            .map((section) => _SectionRow(
+                  section: section,
+                  onTap: () {
+                    _showConfirmTestDialog(context, section);
+                  },
+                ))
+            .toList(),
+      ),
+    );
+  }
+}
+
+/// 各セクションのタイル
+class _SectionRow extends StatelessWidget {
+  const _SectionRow({
+    @required this.section,
+    @required this.onTap,
+  });
+
+  /// 表示する Section
+  final Section section;
+
+  /// タップしたときのコールバック関数
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = Theme.of(context).primaryTextTheme;
+
     return GestureDetector(
-      onTap: () {
-        _showConfirmTestDialog(context, section);
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: GFListTile(
-          color: Colors.white,
-          // left
-          avatar: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(section.sectionTitle,
-                style: const TextStyle(fontSize: 28)),
+      onTap: onTap,
+      child: GFListTile(
+        color: Colors.white,
+        // left
+        avatar: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: Text(
+            section.sectionTitle,
+            style: style.headline.apply(color: Colors.black),
           ),
-          // middle
-          title: Text('クリア',
-              style: TextStyle(color: Colors.redAccent, fontSize: 20)),
+        ),
+        // middle
+        title: Text(
+          'クリア',
+          style: style.title.apply(color: Colors.redAccent),
+        ),
+        // right
+        icon: Padding(
+          padding: const EdgeInsets.only(right: 20),
+          child: Icon(
+            Icons.chevron_right,
+            size: 40,
+          ),
         ),
       ),
     );

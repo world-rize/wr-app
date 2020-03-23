@@ -22,43 +22,46 @@ class Article {
 
 /// `コラム` ページのトップ
 ///
-/// **未実装**
+// TODO(anyone): fix
 class ColumnIndexPage extends StatelessWidget {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   Widget _articleView(Article article) {
-    return Column(
-      children: <Widget>[
-        // thumbnail
-        Container(
-          constraints: const BoxConstraints.expand(height: 300),
-          padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image:
-                  NetworkImage('https://source.unsplash.com/category/nature'),
-              fit: BoxFit.cover,
-            ),
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Container(
+        constraints: const BoxConstraints.expand(height: 170),
+        padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: NetworkImage('https://source.unsplash.com/category/nature'),
+            fit: BoxFit.cover,
           ),
-          child: Stack(
-            children: const <Widget>[
-              Positioned(
-                left: 0,
-                bottom: 0,
-                child: Text(
-                  'Title',
-                  style: TextStyle(fontSize: 40, color: Colors.white),
-                ),
-              ),
-            ],
-          ),
+          borderRadius: BorderRadius.circular(10),
         ),
-        // contents
-        const Placeholder(
-          fallbackHeight: 200,
-        )
-      ],
+        child: Stack(
+          children: <Widget>[
+            // title
+            Positioned(
+              left: 0,
+              top: 10,
+              child: Text(
+                'Title',
+                style: TextStyle(fontSize: 30, color: Colors.white),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: Text(
+                '107/350',
+                style: TextStyle(fontSize: 30, color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
 
     return Padding(
@@ -85,11 +88,27 @@ class ColumnIndexPage extends StatelessWidget {
     ''',
           ));
 
+  static const _headLineStyle = TextStyle(
+    fontSize: 30,
+    color: Colors.black54,
+    fontWeight: FontWeight.bold,
+  );
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: articles.map(_articleView).toList(),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(10),
+            child: Text(
+              'Column',
+              style: _headLineStyle,
+            ),
+          ),
+          ...articles.map(_articleView).toList(),
+        ],
       ),
     );
   }

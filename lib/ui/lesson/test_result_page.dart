@@ -32,7 +32,7 @@ class TestResultPage extends StatelessWidget {
             GFButton(
               color: Colors.orange,
               text: '閉じる',
-              size: GFSize.large,
+              size: GFSize.LARGE,
               shape: GFButtonShape.pills,
               padding: const EdgeInsets.symmetric(horizontal: 80),
               onPressed: () {
