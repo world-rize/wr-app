@@ -1,5 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:flutter/cupertino.dart';
 import 'package:wr_app/model/phrase_sample.dart';
 
 /// フレーズ
@@ -42,11 +43,12 @@ import 'package:wr_app/model/phrase_sample.dart';
 /// ```
 class Phrase {
   Phrase({
-    this.english,
-    this.japanese,
-    this.audioPath,
+    @required this.english,
+    @required this.japanese,
+    @required this.audioPath,
     this.favorite = false,
-    this.sample,
+    @required this.sample,
+    @required this.advice,
   });
 
   /// json to [Phrase]
@@ -57,6 +59,7 @@ class Phrase {
       audioPath: json['audio'] as String,
       favorite: json['favorite'] as bool,
       sample: PhraseSample.fromJson(json['sample']),
+      advice: json['advice'] as String,
     );
   }
 
@@ -75,6 +78,9 @@ class Phrase {
   /// [sample] 会話例、[PhraseSample] を参照
   PhraseSample sample;
 
+  /// [advice] ワンポイントアドバイス
+  String advice;
+
   Map<String, dynamic> toJson() {
     return {
       'english': english,
@@ -82,6 +88,7 @@ class Phrase {
       'favorite': favorite,
       'audio': audioPath,
       'sample': sample,
+      'advice': advice,
     };
   }
 }
