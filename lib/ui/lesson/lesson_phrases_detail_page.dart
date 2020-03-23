@@ -92,14 +92,14 @@ class LessonPhrasesDetailPage extends StatelessWidget {
           children: <Widget>[
             ListTile(
               title: Text(
-                "One Point Advice",
+                'One Point Advice',
                 style: TextStyle(
                     fontSize: 30,
                     color: Colors.black54,
                     fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 100,
             ),
           ],
@@ -110,37 +110,46 @@ class LessonPhrasesDetailPage extends StatelessWidget {
 
   Widget _createButtonArea(){
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Expanded(
             child: FloatingActionButton(
-              child: const Text('1'),
+              heroTag: 'Japanese',
+              child: const Icon(Icons.chat),
               onPressed: () {},
             ),
           ),
           Expanded(
             child: FloatingActionButton(
-              child: const Text('2'),
+              heroTag: 'Favorite',
+              child: const Icon(Icons.favorite_border),
               onPressed: () {},
             ),
           ),
           Expanded(
             child: FloatingActionButton(
-              child: const Text('3'),
+              heroTag: 'Playback',
+              child: const Icon(Icons.play_arrow),
+              onPressed: () {
+                final _player = AssetsAudioPlayer()
+                  ..open(phrase.audioPath)
+                  ..play();
+              },
+            ),
+          ),
+          Expanded(
+            child: FloatingActionButton(
+              heroTag: 'Speed',
+              child: const Text('1.0'),
               onPressed: () {},
             ),
           ),
           Expanded(
             child: FloatingActionButton(
-              child: const Text('4'),
-              onPressed: () {},
-            ),
-          ),
-          Expanded(
-            child: FloatingActionButton(
-              child: const Text('5'),
+              heroTag: 'Country',
+              child: const Icon(Icons.flag),
               onPressed: () {},
             ),
           ),
