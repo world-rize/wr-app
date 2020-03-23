@@ -108,46 +108,48 @@ class LessonPhrasesDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _createButtonArea(){
+  Widget _createButtonArea() {
     return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: FloatingActionButton(
-              child: const Text('1'),
-              onPressed: () {},
+        padding: const EdgeInsets.all(8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: FloatingActionButton(
+                heroTag: '1',
+                child: const Text('1'),
+                onPressed: () {},
+              ),
             ),
-          ),
-          Expanded(
-            child: FloatingActionButton(
-              child: const Text('2'),
-              onPressed: () {},
+            Expanded(
+              child: FloatingActionButton(
+                heroTag: '2',
+                child: const Text('2'),
+                onPressed: () {},
+              ),
             ),
-          ),
-          Expanded(
-            child: FloatingActionButton(
-              child: const Text('3'),
-              onPressed: () {},
+            Expanded(
+              child: FloatingActionButton(
+                heroTag: '3',
+                child: const Text('3'),
+                onPressed: () {},
+              ),
             ),
-          ),
-          Expanded(
-            child: FloatingActionButton(
-              child: const Text('4'),
-              onPressed: () {},
+            Expanded(
+              child: FloatingActionButton(
+                heroTag: '4',
+                child: const Text('4'),
+                onPressed: () {},
+              ),
             ),
-          ),
-          Expanded(
-            child: FloatingActionButton(
-              child: const Text('5'),
-              onPressed: () {},
+            Expanded(
+              child: FloatingActionButton(
+                heroTag: '5',
+                child: const Text('5'),
+                onPressed: () {},
+              ),
             ),
-          ),
-        ],
-      )
-    );
+          ],
+        ));
   }
-
-  
 }
