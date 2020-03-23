@@ -54,7 +54,7 @@ class LessonPhrasesDetailPage extends StatelessWidget {
               title: Text(
                 phrase.japanese,
                 style: TextStyle(
-                    fontSize: 30,
+                    fontSize: 24,
                     color: Colors.black54,
                     fontWeight: FontWeight.bold),
               ),
@@ -80,14 +80,14 @@ class LessonPhrasesDetailPage extends StatelessWidget {
               title: Text(
                 'One Point Advice',
                 style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Colors.lightBlue,
                 ),
               ),
             ),
-            const SizedBox(
-              height: 100,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: Text(phrase.advice),
             ),
           ],
         ),
@@ -152,6 +152,28 @@ class PhraseSampleView extends StatelessWidget {
   const PhraseSampleView({@required this.sample});
   final PhraseSample sample;
 
+  /// "()" で囲まれた部分を太字にします
+  /// 例 "abc(def)g" -> "abc<strong>def</strong>g"
+  Text _boldify(String text, TextStyle basicStyle) {
+    final _children = <InlineSpan>[];
+    // not good code
+    text.splitMapJoin(RegExp(r'\((.*)\)'), onMatch: (match) {
+      _children.add(TextSpan(
+        text: match.group(1),
+        style: TextStyle(fontWeight: FontWeight.bold).merge(basicStyle),
+      ));
+      return '';
+    }, onNonMatch: (plain) {
+      _children.add(TextSpan(
+        text: plain,
+        style: basicStyle,
+      ));
+      return '';
+    });
+
+    return Text.rich(TextSpan(children: _children));
+  }
+
   Widget _createMessageView(Conversation conversation, {bool primary = false}) {
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -169,18 +191,17 @@ class PhraseSampleView extends StatelessWidget {
             ),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(
-                conversation.english,
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
+              child: _boldify(
+                  conversation.english,
+                  TextStyle(
+                    fontSize: 22,
+                    color: Colors.white,
+                  )),
             ),
           ),
           // アバター・日本語訳
           Container(
-            transform: Matrix4.translationValues(0, -10, 0),
+            // transform: Matrix4.translationValues(0, -10, 0),
             child: Row(
               textDirection: primary ? TextDirection.rtl : TextDirection.ltr,
               children: <Widget>[
@@ -194,7 +215,11 @@ class PhraseSampleView extends StatelessWidget {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  child: Text(conversation.japanese),
+                  // child: Text(conversation.japanese),
+                  child: _boldify(
+                    conversation.japanese,
+                    TextStyle(),
+                  ),
                 ),
               ],
             ),
