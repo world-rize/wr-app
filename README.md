@@ -1,10 +1,3 @@
 # WR APP
 
-[タスクの作成](https://github.com/WorldRIZe/wr-app/issues/new?assignees=&labels=&template=---.md&title=)
-
-# Docs
-## 仕様等
-[仕様等](docs/arch.md)
-
-## 開発について
-[開発について](docs/task.md)
+[![Codemagic build status](https://api.codemagic.io/apps/5e78acb1064d84000c741bf5/5e78acb1064d84000c741bf4/status_badge.svg)](https://codemagic.io/apps/5e78acb1064d84000c741bf5/5e78acb1064d84000c741bf4/latest_build)
