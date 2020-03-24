@@ -40,3 +40,10 @@
 - Android版との兼ね合い
 
 ## マネタイズ
+
+## ビルド
+種類 | ビルドモード | Flavor | Configuration名
+:--- | :--- | :--- | :---
+A: 開発 | Debug | Development | Debug-Development
+C: テスト | Release | Staging | Release-Staging
+D: リリース | Release | Production | Release-Production
