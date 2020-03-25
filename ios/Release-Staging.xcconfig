@@ -1,2 +1,7 @@
+//
+// Release-Staging.xcconfig
+//
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
 #include "Release.xcconfig"
-#include "Staging.xcconfig"
+#include "staging.xcconfig"

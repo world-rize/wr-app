@@ -1,2 +1,7 @@
+//
+// Release-Production.xcconfig
+//
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
 #include "Release.xcconfig"
-#include "Production.xcconfig"
+#include "production.xcconfig"
