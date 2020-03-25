@@ -5,4 +5,3 @@
 
 FLUTTER_FLAVOR=development
 FLUTTER_TARGET=lib/main_development.dart
-DISPLAY_NAME=WR APP(dev)
