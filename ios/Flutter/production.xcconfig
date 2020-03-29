@@ -5,3 +5,5 @@
 
 FLUTTER_FLAVOR=production
 FLUTTER_TARGET=lib/main.dart
+PRODUCT_BUNDLE_IDENTIFIER=com.worldrize.app
+DISPLAY_NAME=WorldRIZe

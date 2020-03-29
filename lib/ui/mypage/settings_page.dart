@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:wr_app/env.dart';
 import 'package:wr_app/store/user.dart';
+import 'package:wr_app/store/env.dart';
 
 // TODO(wakame-tech): アカウント情報と設定項目を考える
 /// 設定ページ
@@ -15,7 +15,8 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsState extends State<SettingsPage> {
   Widget _settingsView() {
-    final store = Provider.of<UserStore>(context);
+    final userStore = Provider.of<UserStore>(context);
+    final envStore = Provider.of<EnvStore>(context);
 
     return SettingsList(
       sections: [
@@ -24,7 +25,7 @@ class _SettingsState extends State<SettingsPage> {
           tiles: [
             SettingsTile(
               title: 'アカウント',
-              subtitle: store.displayName(),
+              subtitle: userStore.displayName(),
               leading: Icon(Icons.people),
               onTap: () {},
             ),
@@ -57,12 +58,16 @@ class _SettingsState extends State<SettingsPage> {
           title: 'その他',
           tiles: [
             SettingsTile(
+              title: 'Flavor',
+              subtitle: envStore.flavor.toShortString(),
+            ),
+            SettingsTile(
               title: 'バージョン',
-              subtitle: Env.version,
+              subtitle: envStore.version,
             ),
             SettingsTile(
               title: '開発者',
-              subtitle: Env.authors.join(', '),
+              subtitle: envStore.author,
               onTap: () {},
             )
           ],

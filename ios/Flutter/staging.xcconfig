@@ -5,3 +5,5 @@
 
 FLUTTER_FLAVOR=staging
 FLUTTER_TARGET=lib/main.dart
+PRODUCT_BUNDLE_IDENTIFIER=com.worldrize.app.stg
+DISPLAY_NAME=WorldRIZe-stg

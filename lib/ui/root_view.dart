@@ -2,6 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wr_app/store/env.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/agency/index.dart';
@@ -10,7 +12,6 @@ import 'package:wr_app/ui/lesson/index.dart';
 import 'package:wr_app/ui/mypage/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
 import 'package:wr_app/ui/mypage/settings_page.dart';
-import 'package:wr_app/env.dart';
 
 /// 全ての画面のガワ
 ///
@@ -69,9 +70,11 @@ class _RootViewState extends State<RootView>
 
   /// メイン画面
   Widget _tabView() {
+    final store = Provider.of<EnvStore>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('${Env.appName} ${Env.version}'),
+        title: Text(store.appTitle()),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),
