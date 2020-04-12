@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 enum Flavor {
   development,
@@ -24,6 +25,13 @@ class EnvStore with ChangeNotifier {
 
   EnvStore._internal() {
     readPubSpec();
+
+    if (flavor == Flavor.development) {
+      DotEnv().load('.env/.env.development').then((value) {
+        print('.env loaded');
+        print(DotEnv().env);
+      });
+    }
   }
 
   /// シングルトンインスタンス
