@@ -1,6 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:logger/logger.dart';
+import 'dart:developer' as dev;
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/masterdata.dart';
@@ -32,13 +32,9 @@ class UserStore with ChangeNotifier {
 
   /// Firebase Auth にログイン
   Future<void> signIn() async {
-    final logger = Logger(
-      printer: SimplePrinter()..useColor = true,
-    );
-
     final _result = await _auth.signInAnonymously();
 
-    logger.d('[UserStore#signIn] anonymous sign in');
+    dev.log('[UserStore#signIn] anonymous sign in');
 
     _user = _result.user;
 

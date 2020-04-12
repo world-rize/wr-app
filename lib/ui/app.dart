@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wr_app/ui/onboarding_page.dart';
 import 'package:wr_app/ui/root_view.dart';
 import 'package:wr_app/theme.dart';
 
@@ -17,7 +18,7 @@ class WRAppState extends State<WRApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: wrThemeData,
-      home: RootView(),
+      home: OnBoardingPage(), // RootView(),
     );
   }
 }
