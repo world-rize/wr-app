@@ -1,10 +1,14 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/store/env.dart';
+import 'package:wr_app/ui/onboarding_page.dart';
+import 'package:wr_app/ui/mypage/logger_view.dart';
+import 'package:wr_app/ui/mypage/api_test_view.dart';
 
 // TODO(wakame-tech): アカウント情報と設定項目を考える
 /// 設定ページ
@@ -34,24 +38,12 @@ class _SettingsState extends State<SettingsPage> {
               subtitle: 'ノーマル',
               leading: Icon(Icons.attach_money),
               onTap: () {},
-            )
-          ],
-        ),
-        SettingsSection(
-          title: 'レッスン',
-          tiles: [
-            SettingsTile(
-              title: '発音',
-              subtitle: 'アメリカ',
-              leading: Icon(Icons.speaker_notes),
-              onTap: () {},
             ),
             SettingsTile(
-              title: 'カードめくりの間隔',
-              subtitle: '5秒',
-              leading: Icon(Icons.speaker_notes),
+              title: 'ポイント交換',
+              leading: Icon(Icons.attach_money),
               onTap: () {},
-            )
+            ),
           ],
         ),
         SettingsSection(
@@ -69,9 +61,44 @@ class _SettingsState extends State<SettingsPage> {
               title: '開発者',
               subtitle: envStore.author,
               onTap: () {},
+            ),
+            SettingsTile(
+              title: 'このアプリについて',
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
+              },
             )
           ],
-        )
+        ),
+        if (envStore.flavor != Flavor.production)
+          SettingsSection(
+            title: 'デバッグ',
+            tiles: [
+              SettingsTile(
+                title: 'ログ',
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) => LoggerView()));
+                },
+              ),
+              SettingsTile(
+                title: 'API',
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) => APITestView()));
+                },
+              ),
+              SettingsTile.switchTile(
+                title: 'Paint Size Enabled',
+                onToggle: (value) {
+                  print(value);
+                  debugPaintSizeEnabled = value;
+                },
+                switchValue: debugPaintSizeEnabled,
+              )
+            ],
+          ),
       ],
     );
   }

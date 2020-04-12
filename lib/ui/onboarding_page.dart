@@ -18,7 +18,7 @@ List<PageModel> _createOnBoardingPages(BuildContext context) {
       heroAssetPath: 'assets/wr_icon.jpg',
       title: Text('OnBoarding 2'),
       body: Text('page 2'),
-      iconAssetPath: 'assets/wr_icon.jpg',
+      iconAssetPath: Icons.call.,
     ),
     PageModel(
       color: const Color(0xFF9B90BC),

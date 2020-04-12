@@ -30,6 +30,9 @@ class UserStore with ChangeNotifier {
   /// レッスントップ画面に表示される新着フレーズ
   Phrase pickedUpNewComingPhrase = MasterDataStore.dummyPhrase();
 
+  /// ポイント
+  int point = 0;
+
   /// Firebase Auth にログイン
   Future<void> signIn() async {
     final _result = await _auth.signInAnonymously();
