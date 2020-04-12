@@ -20,18 +20,15 @@ extension FlavorEx on Flavor {
 class EnvStore with ChangeNotifier {
   factory EnvStore({Flavor flavor}) {
     _cache.flavor = flavor;
+
+    readEnv();
+
     return _cache;
   }
 
   EnvStore._internal() {
+    print('EnvStore#_internal');
     readPubSpec();
-
-    if (flavor == Flavor.development) {
-      DotEnv().load('.env/.env.development').then((value) {
-        print('.env loaded');
-        print(DotEnv().env);
-      });
-    }
   }
 
   /// シングルトンインスタンス
@@ -49,11 +46,18 @@ class EnvStore with ChangeNotifier {
   /// author
   String author = '';
 
-  Future<void> readPubSpec() async {
+  static Future<void> readPubSpec() async {
     final info = await PackageInfo.fromPlatform();
     _cache.version = info.version;
     _cache.appName = info.appName;
-    notifyListeners();
+  }
+
+  static Future<void> readEnv() async {
+    if (_cache.flavor == Flavor.development) {
+      await DotEnv().load('.env/.env.development');
+      print('.env loaded');
+      print(DotEnv().env);
+    }
   }
 
   /// App Title
