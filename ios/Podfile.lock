@@ -1,5 +1,5 @@
 PODS:
-  - assets_audio_player (0.0.1):
+  - audioplayers (0.0.1):
     - Flutter
   - Firebase/Auth (6.13.0):
     - Firebase/CoreOnly
@@ -87,14 +87,23 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+  - package_info (0.0.1):
+    - Flutter
+  - path_provider (0.0.1):
+    - Flutter
+  - path_provider_macos (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
-  - assets_audio_player (from `.symlinks/plugins/assets_audio_player/ios`)
+  - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_auth_web (from `.symlinks/plugins/firebase_auth_web/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_core_web (from `.symlinks/plugins/firebase_core_web/ios`)
   - Flutter (from `Flutter`)
+  - package_info (from `.symlinks/plugins/package_info/ios`)
+  - path_provider (from `.symlinks/plugins/path_provider/ios`)
+  - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
 
 SPEC REPOS:
   trunk:
@@ -114,8 +123,8 @@ SPEC REPOS:
     - nanopb
 
 EXTERNAL SOURCES:
-  assets_audio_player:
-    :path: ".symlinks/plugins/assets_audio_player/ios"
+  audioplayers:
+    :path: ".symlinks/plugins/audioplayers/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_auth_web:
@@ -126,9 +135,15 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core_web/ios"
   Flutter:
     :path: Flutter
+  package_info:
+    :path: ".symlinks/plugins/package_info/ios"
+  path_provider:
+    :path: ".symlinks/plugins/path_provider/ios"
+  path_provider_macos:
+    :path: ".symlinks/plugins/path_provider_macos/ios"
 
 SPEC CHECKSUMS:
-  assets_audio_player: 828c5761d1e51c569f40e622db3a2cbfd61ecb7d
+  audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c
   Firebase: 458d109512200d1aca2e1b9b6cf7d68a869a4a46
   firebase_auth: 6838289663da45c488af0a82c246928588fcddc5
   firebase_auth_web: 0955c07bcc06e84af76b9d4e32e6f31518f2d7de
@@ -148,7 +163,10 @@ SPEC CHECKSUMS:
   GoogleUtilities: 547a86735c6f0ee30ad17e94df4fc21f616b71cb
   GTMSessionFetcher: 43b8b64263023d4f32caa0b40f4c8bfa3c5f36d8
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+  package_info: 48b108e75b8802c2d5e126f208ef540561c98aef
+  path_provider: fb74bd0465e96b594bb3b5088ee4a4e7bb1f2a9d
+  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
 
-PODFILE CHECKSUM: 1a91a9e1cb514fdf6f3fdb4d47cc602372b6842d
+PODFILE CHECKSUM: 560b2a657a00397dbff8ebc581c19891a386995b
 
 COCOAPODS: 1.8.4

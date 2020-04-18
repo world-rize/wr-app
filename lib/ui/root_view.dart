@@ -2,15 +2,16 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/store/env.dart';
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
 import 'package:wr_app/ui/lesson/index.dart';
 import 'package:wr_app/ui/mypage/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
-import 'package:wr_app/env.dart';
+import 'package:wr_app/ui/mypage/settings_page.dart';
 
 /// 全ての画面のガワ
 ///
@@ -69,9 +70,20 @@ class _RootViewState extends State<RootView>
 
   /// メイン画面
   Widget _tabView() {
+    final store = Provider.of<EnvStore>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('${Env.appName} ${Env.version}'),
+        title: Text(store.appTitle()),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => SettingsPage()));
+            },
+          )
+        ],
       ),
       body: PageView(
         controller: _pageController,
@@ -124,9 +136,6 @@ class _RootViewState extends State<RootView>
 
   @override
   Widget build(BuildContext context) {
-    return Provider<UserStore>(
-      create: (context) => UserStore(),
-      child: _tabView(),
-    );
+    return _tabView();
   }
 }

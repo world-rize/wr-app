@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:wr_app/model/conversation.dart';
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/lesson.dart';
 import 'package:wr_app/model/phrase.dart';
@@ -34,11 +35,31 @@ class MasterDataStore with ChangeNotifier {
   /// ダミーのフレーズを返す
   static Phrase dummyPhrase({int i = 1}) {
     return Phrase(
-      english: 'sample English text $i',
-      japanese: 'サンプル日本語訳 $i',
-      audioPath: 'res/Welcome_1_.mp3',
+      english: 'When is the homework due?',
+      japanese: 'いつ宿題提出するんだっけ？',
+      audioPath: 'Welcome_1_.mp3',
       favorite: i % 2 == 0,
-      sample: PhraseSample(content: []),
+      sample: PhraseSample(
+        content: [
+          Conversation(
+            japanese: '宿題終わった?',
+            english: 'Have you finished the English homework yet?',
+            avatarUrl: 'https://threadreaderapp.com/images/default_avatar.png',
+          ),
+          Conversation(
+            japanese: 'いや、終わってないよ\n(いつ宿題提出するんだっけ？)',
+            english: 'No I haven\'t.\n(When is the homework due?)',
+            avatarUrl: 'https://threadreaderapp.com/images/default_avatar.png',
+          ),
+          Conversation(
+            japanese: '火曜日だよ',
+            english: 'It\'s due next Tuesday.',
+            avatarUrl: 'https://threadreaderapp.com/images/default_avatar.png',
+          ),
+        ],
+      ),
+      advice:
+          '“due”は「支払い期限のきた~」や「 満期の~」といった意味を持ちます。よって、”When is ~ due?”で「~の期限はいつだっけ？」となり、”When is the homework due?”を意訳すると「いつ宿題提出するんだっけ？」となります。',
     );
   }
 
@@ -64,7 +85,7 @@ class MasterDataStore with ChangeNotifier {
   /// ストアの初期化
   /// 一度しか呼ばれない
   static _internal() async {
-    const path = 'res/section1.json';
+    const path = 'assets/section1.json';
     final section = await _loadSectionFromJson(path).catchError(print);
 
     print('${section.sectionTitle} Loaded');

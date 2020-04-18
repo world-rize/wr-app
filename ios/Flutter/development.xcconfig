@@ -1,0 +1,9 @@
+//
+// development.xcconfig
+//
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
+FLUTTER_FLAVOR=development
+FLUTTER_TARGET=lib/main_development.dart
+PRODUCT_BUNDLE_IDENTIFIER=com.worldrize.app //.dev
+DISPLAY_NAME=WorldRIZe-dev

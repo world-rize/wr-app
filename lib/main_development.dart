@@ -15,7 +15,7 @@ void main() {
     providers: [
       // 環境変数
       Provider(
-        create: (_) => EnvStore(flavor: Flavor.production),
+        create: (_) => EnvStore(flavor: Flavor.development),
       ),
       // ユーザーデータ
       Provider(
