@@ -126,7 +126,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   /// 下部ボタン
   Widget _createButtonArea() {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -134,7 +134,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
             // 吹き出しボタン
             child: FloatingActionButton(
               backgroundColor: Colors.white,
-              heroTag: '1',
+              heroTag: 'Japanese',
               child: const Icon(
                 Icons.message,
                 color: Colors.blueAccent,
@@ -146,9 +146,9 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
           Expanded(
             child: FloatingActionButton(
               backgroundColor: Colors.white,
-              heroTag: '2',
+              heroTag: 'Favorite',
               child: const Icon(
-                Icons.star,
+                Icons.favorite_border,
                 color: Colors.blueAccent,
               ),
               onPressed: () {},
@@ -199,9 +199,9 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
           Expanded(
             child: FloatingActionButton(
               backgroundColor: Colors.white,
-              heroTag: '5',
+              heroTag: 'Country',
               child: const Icon(
-                Icons.record_voice_over,
+                Icons.flag,
                 color: Colors.blueAccent,
               ),
               onPressed: () {},
