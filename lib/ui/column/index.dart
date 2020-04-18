@@ -27,12 +27,16 @@ class ColumnIndexPage extends StatelessWidget {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
+  Widget _titleCreate() {
+    
+  }
+
   Widget _articleView(Article article) {
     return Column(
       children: <Widget>[
         // thumbnail
         Container(
-          constraints: const BoxConstraints.expand(height: 300),
+          constraints: const BoxConstraints.expand(height: 180, width: 380),
           padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
           decoration: const BoxDecoration(
             image: DecorationImage(
@@ -40,15 +44,24 @@ class ColumnIndexPage extends StatelessWidget {
                   NetworkImage('https://source.unsplash.com/category/nature'),
               fit: BoxFit.cover,
             ),
+            borderRadius: BorderRadius.all(Radius.circular(16)),
           ),
           child: Stack(
             children: const <Widget>[
               Positioned(
                 left: 0,
-                bottom: 0,
+                top: 16,
                 child: Text(
                   'Title',
-                  style: TextStyle(fontSize: 40, color: Colors.white),
+                  style: TextStyle(fontSize: 36, color: Colors.white),
+                ),
+              ),
+              Positioned(
+                right: 0,
+                bottom: 0,
+                child: Text(
+                  '100/350',
+                  style: TextStyle(fontSize: 36, color: Colors.white),
                 ),
               ),
             ],
@@ -72,6 +85,8 @@ class ColumnIndexPage extends StatelessWidget {
       ),
     );
   }
+
+  
 
   final List<Article> articles = List.generate(
       5,
