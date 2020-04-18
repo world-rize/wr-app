@@ -18,7 +18,7 @@ class WRAppState extends State<WRApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: wrThemeData,
-      home: OnBoardingPage(), // RootView(),
+      home: RootView(),
     );
   }
 }
