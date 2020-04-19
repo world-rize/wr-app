@@ -15,7 +15,16 @@ class APITestView extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          Text(userStore.toString()),
+          FlatButton(
+            onPressed: userStore.callTestApi,
+            color: Colors.blueAccent,
+            child: const Text('Call Test Api'),
+          ),
+          FlatButton(
+            onPressed: userStore.callCreateUserApi,
+            color: Colors.blueAccent,
+            child: const Text('Call CreateUser Api'),
+          )
         ],
       ),
     );

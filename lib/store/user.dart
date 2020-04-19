@@ -54,12 +54,24 @@ class UserStore with ChangeNotifier {
         .getHttpsCallable(functionName: 'test')
           ..timeout = const Duration(seconds: 10);
 
-    print(callable);
-
     try {
       final result = await callable.call({
         'hoge': 'aaa',
       });
+
+      print(result.data);
+    } on CloudFunctionsException catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> callCreateUserApi() async {
+    final callable = CloudFunctions.instance
+        .getHttpsCallable(functionName: 'createUser')
+          ..timeout = const Duration(seconds: 10);
+
+    try {
+      final result = await callable.call({});
 
       print(result.data);
     } on CloudFunctionsException catch (e) {
