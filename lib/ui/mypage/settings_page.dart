@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/store/env.dart';
-import 'package:wr_app/ui/onboarding_page.dart';
+//import 'package:wr_app/ui/onboarding_page.dart';
 import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
 
@@ -62,13 +62,13 @@ class _SettingsState extends State<SettingsPage> {
               subtitle: envStore.author,
               onTap: () {},
             ),
-            SettingsTile(
-              title: 'このアプリについて',
-              onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
-              },
-            )
+//            SettingsTile(
+//              title: 'このアプリについて',
+//              onTap: () {
+//                Navigator.of(context)
+//                    .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
+//              },
+//            )
           ],
         ),
         if (envStore.flavor != Flavor.production)
