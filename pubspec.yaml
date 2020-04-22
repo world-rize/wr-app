@@ -3,7 +3,7 @@ description: WorldRIZe App
 authors:
   - wakame-tech
   - yoshiki301
-version: 0.1.0
+version: 0.1.1
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
