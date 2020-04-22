@@ -35,7 +35,6 @@ dependencies:
   package_info: ^0.4.0+16
   flutter_dotenv: ^2.0.1
   flutter_sliding_tutorial: ^0.1.0
-  fancy_on_boarding: ^1.5.0
 
 dev_dependencies:
   flutter_test:
