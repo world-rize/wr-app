@@ -32,6 +32,7 @@
 
 # Local Assets
 assets/
+!assets/*.jsonc
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -41,3 +42,5 @@ lib/generated_plugin_registrant.dart
 
 # Firebase service account
 /ios/Runner/GoogleService-Info.plist
+
+.env/

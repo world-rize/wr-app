@@ -3,7 +3,7 @@ description: WorldRIZe App
 authors:
   - wakame-tech
   - yoshiki301
-version: 0.1.0
+version: 0.1.1
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
@@ -21,6 +21,7 @@ dependencies:
   # https://github.com/FirebaseExtended/flutterfire/issues/2084
   firebase_core: 0.4.4
   firebase_auth: 0.15.3
+  cloud_functions: ^0.4.2+3
   cupertino_icons: ^0.1.2
   flutter_swiper : ^1.1.5
   getflutter: ^1.0.10
@@ -32,17 +33,32 @@ dependencies:
   settings_ui: ^0.2.0
   flutter_markdown: ^0.3.4
   package_info: ^0.4.0+16
+  flutter_dotenv: ^2.0.1
+  flutter_sliding_tutorial: ^0.1.0
+  flutter_launcher_icons: ^0.7.4
+  fluttertoast: ^4.0.0
+  data_classes: ^3.0.0
+  json_annotation: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   pedantic_mono: any
   flutter_native_splash: ^0.1.9
+  build_runner: ^1.7.1
+  data_classes_generator: ^3.0.0
+  json_serializable: ^2.0.0
 
 flutter:
   uses-material-design: true
   assets:
     - assets/
+    - .env/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 flutter_native_splash:
   color: "42a5f5"

@@ -70,11 +70,12 @@ class _RootViewState extends State<RootView>
 
   /// メイン画面
   Widget _tabView() {
-    final store = Provider.of<EnvStore>(context);
+    final envStore = Provider.of<EnvStore>(context);
+    final userStore = Provider.of<UserStore>(context);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(store.appTitle()),
+        title: Text('${userStore.user.point} ポイント'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),

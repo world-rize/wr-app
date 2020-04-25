@@ -14,7 +14,6 @@ import 'package:wr_app/ui/lesson/widgets/gf_rect_items_carousel.dart';
 
 /// `レッスン` ページのトップ
 ///
-/// [UserStore] を保持
 class LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -40,10 +39,18 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.PRIMARY,
           ),
 
+          // TODO: fix LessonSelectCarousel
           Container(
             width: MediaQuery.of(context).size.width,
             height: 200,
-            child: LessonSelectCarousel(),
+            // child: LessonSelectCarousel(),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
+                );
+              },
+            ),
           ),
 
           const GFTypography(

@@ -1,0 +1,27 @@
+{
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@firebase/app": "^0.6.2",
+    "firebase-admin": "^8.10.0",
+    "firebase-firestorm": "^2.0.5",
+    "firebase-functions": "^3.3.0",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^0.1.6",
+    "typescript": "^3.2.2"
+  },
+  "private": true
+}

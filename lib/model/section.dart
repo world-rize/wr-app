@@ -2,8 +2,12 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:wr_app/model/phrase.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'section.g.dart';
 
 /// セクション: フレーズの集まり
+@JsonSerializable()
 class Section {
   Section({
     @required this.lessonTitle,
@@ -11,14 +15,10 @@ class Section {
     @required this.phrases,
   });
 
-  /// json to [Section]
-  factory Section.fromJson(Map<String, dynamic> json) {
-    return Section(
-      lessonTitle: json['lessonTitle'],
-      sectionTitle: json['sectionTitle'],
-      phrases: json['phrases'].map<Phrase>((p) => Phrase.fromJson(p)).toList(),
-    );
-  }
+  factory Section.fromJson(Map<String, dynamic> json) =>
+      _$SectionFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SectionToJson(this);
 
   /// title of Lesson
   final String lessonTitle;
@@ -28,13 +28,4 @@ class Section {
 
   /// list of phrase
   final List<Phrase> phrases;
-
-  /// [Section] to json
-  Map<String, dynamic> toJson() {
-    return {
-      'lessonTitle': lessonTitle,
-      'sectionTitle': sectionTitle,
-      'phrases': phrases.map((p) => p.toJson()),
-    };
-  }
 }
