@@ -9,12 +9,12 @@ part 'api.g.dart';
 class TestResponse {
   TestResponse({this.success});
 
-  bool success;
-
   factory TestResponse.fromJson(Map<String, dynamic> json) =>
       _$TestResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$TestResponseToJson(this);
+
+  bool success;
 }
 
 @JsonSerializable()

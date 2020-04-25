@@ -3,6 +3,7 @@
 import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -36,11 +37,23 @@ class UserStore with ChangeNotifier {
   /// ユーザーデータ
   User user = User();
 
-  /// トーストを出す
-  void toast(String message, {Color color = Colors.redAccent}) {
+  /// 成功トーストを出す
+  void successToast(String message) {
+    dev.log(message);
     Fluttertoast.showToast(
       msg: message,
-      backgroundColor: color,
+      toastLength: Toast.LENGTH_LONG,
+      backgroundColor: Colors.green,
+    );
+  }
+
+  /// エラートーストを出す
+  void errorToast(Exception e) {
+    dev.log(e.toString(), level: 1);
+    Fluttertoast.showToast(
+      msg: 'エラーが発生',
+      toastLength: Toast.LENGTH_LONG,
+      backgroundColor: Colors.redAccent,
     );
   }
 
@@ -49,6 +62,8 @@ class UserStore with ChangeNotifier {
     final _result = await _auth.signInAnonymously();
 
     auth = _result.user;
+
+    successToast('ログインしました');
 
     dev.log('[UserStore#signIn] anonymous sign in ${auth.uid}');
   }
@@ -62,60 +77,70 @@ class UserStore with ChangeNotifier {
   Future<void> callTestAPI() async {
     dev.log('callTestAPI');
 
-    final data = await test().catchError((e) {
-      dev.log(e.toString());
-      toast(e.toString());
-    });
+    try {
+      final data = await test();
 
-    toast('success: ${data.success}', color: Colors.blue);
+      successToast('成功');
 
-    notifyListeners();
+      notifyListeners();
+    } on Exception catch (e) {
+      errorToast(e);
+    }
   }
 
   /// ユーザーデータを習得します
   Future<void> fetchUser() async {
     dev.log('fetchUser');
 
-    final data = await readUser().catchError((e) {
-      dev.log(e.toString());
-      toast(e.toString());
-    });
+    try {
+      final data = await readUser();
 
-    dev.log(data.user.uuid);
-    toast('uid: ${data.user.uuid}');
+      dev.log(data.user.uuid);
 
-    user = data.user;
+      successToast('uid: ${data.user.uuid}');
 
-    notifyListeners();
+      user = data.user;
+
+      notifyListeners();
+    } on Exception catch (e) {
+      errorToast(e);
+    }
   }
 
   /// ユーザーを作成します
   Future<void> callCreateUser() async {
     dev.log('callCreateUser');
 
-    final data = await createUser().catchError((e) {
-      dev.log(e.toString());
-      toast(e.toString());
-    });
+    try {
+      final data = await createUser();
 
-    toast(data.user.uuid, color: Colors.blue);
+      user = data.user;
 
-    user = data.user;
+      successToast('ユーザーを作成しました');
 
-    notifyListeners();
+      notifyListeners();
+    } on Exception catch (e) {
+      errorToast(e);
+    }
   }
 
   /// フレーズをお気に入りに登録します
-  Future<void> callFavoritePhrase(Phrase phrase) async {
+  Future<void> callFavoritePhrase(
+      {@required String phraseId, @required bool value}) async {
     dev.log('callFavoritePhrase');
 
-    final data = await favoritePhrase(auth.uid, phrase).catchError((e) {
-      dev.log(e.toString());
-    });
+    try {
+      final data =
+          await favoritePhrase(uid: auth.uid, phraseId: phraseId, value: value);
 
-    dev.log(data.toString());
+      dev.log(data.toString());
 
-    notifyListeners();
+      successToast('お気に入りに登録しました');
+
+      notifyListeners();
+    } on Exception catch (e) {
+      errorToast(e);
+    }
   }
 
   /// 名前を取得
