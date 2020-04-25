@@ -71,7 +71,7 @@ class _SettingsState extends State<SettingsPage> {
 //            )
           ],
         ),
-        if (envStore.flavor != Flavor.production)
+        if (true)
           SettingsSection(
             title: 'デバッグ',
             tiles: [

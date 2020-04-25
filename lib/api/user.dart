@@ -23,7 +23,10 @@ Future<ReadUserResponse> readUser() async {
       .getHttpsCallable(functionName: 'readUser')
         ..timeout = const Duration(seconds: 10);
 
-  final result = await callable.call({});
+  final result = await callable.call({}).catchError((e) {
+    print(e);
+    throw e;
+  });
   final payload = Map.castFrom<dynamic, dynamic, String, dynamic>(result.data);
   return ReadUserResponse.fromJson(payload);
 }

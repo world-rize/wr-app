@@ -57,15 +57,38 @@ class UserStore with ChangeNotifier {
     );
   }
 
+  /// ユーザーデータを習得します
+  Future<void> fetchUser() async {
+    dev.log('fetchUser');
+
+    try {
+      final data = await readUser();
+
+      print(data);
+
+      dev.log(data.user.uuid);
+
+      successToast('uid: ${data.user.uuid}');
+
+      user = data.user;
+
+      notifyListeners();
+    } on Exception catch (e) {
+      errorToast(e);
+    }
+  }
+
   /// Firebase Auth にログイン
   Future<void> signIn() async {
     final _result = await _auth.signInAnonymously();
 
     auth = _result.user;
 
-    successToast('ログインしました');
-
     dev.log('[UserStore#signIn] anonymous sign in ${auth.uid}');
+
+    await fetchUser();
+
+    successToast('ログインしました');
   }
 
   /// ゲストユーザーかどうか
@@ -81,25 +104,6 @@ class UserStore with ChangeNotifier {
       final data = await test();
 
       successToast('成功');
-
-      notifyListeners();
-    } on Exception catch (e) {
-      errorToast(e);
-    }
-  }
-
-  /// ユーザーデータを習得します
-  Future<void> fetchUser() async {
-    dev.log('fetchUser');
-
-    try {
-      final data = await readUser();
-
-      dev.log(data.user.uuid);
-
-      successToast('uid: ${data.user.uuid}');
-
-      user = data.user;
 
       notifyListeners();
     } on Exception catch (e) {
