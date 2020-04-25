@@ -32,7 +32,7 @@ Runner/GeneratedPluginRegistrant.*
 !default.perspectivev3
 
 build/
-.env*
 
 # assets
 Assets.xcassets/
+.env*

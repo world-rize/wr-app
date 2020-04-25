@@ -27,6 +27,10 @@ class ColumnIndexPage extends StatelessWidget {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
+  Widget _titleCreate() {
+    
+  }
+
   Widget _articleView(Article article) {
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -75,6 +79,8 @@ class ColumnIndexPage extends StatelessWidget {
       ),
     );
   }
+
+  
 
   final List<Article> articles = List.generate(
       5,
