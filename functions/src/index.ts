@@ -6,9 +6,7 @@ import { User } from './user/model'
 
 // onCall() has varify firebase tokens unlike onRequest()
 
-interface TestRequest {
-  hoge: string
-}
+interface TestRequest {}
 
 interface TestResponse {
   success: boolean
@@ -18,9 +16,8 @@ interface TestResponse {
  *  デバッグ用
  */
 export const test = functions.https.onCall((data: TestRequest, context): TestResponse => {
-  console.log(data.hoge)
-  console.log(context.auth?.uid)
-  
+  console.log(`[test] done`)
+
   return {
     success: true
   }
@@ -42,18 +39,29 @@ export const readUser = functions.https.onCall(async (data: ReadUserRequest, con
 
   const uid = context.auth.uid
   const user = await userService.readUser(uid)
+    .catch(e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', e)
+    })
+
+  console.log(`[readUser] done`)
 
   if (!user) {
     console.error('user not found')
     throw new functions.https.HttpsError('not-found', 'user not found')
   }
 
+  console.log(`[readUser] done`)
+
   return { user }
 })
 
-interface CreateUserRequest {}
+interface CreateUserRequest {
+  uid: string
+}
+
 interface CreateUserResponse {
-  success: boolean
+  user: User
 }
 
 /**
@@ -67,18 +75,22 @@ export const createUser = functions.https.onCall(async (data: CreateUserRequest,
 
   const uid = context.auth.uid
 
+  console.log(`[createUser] uid: ${uid}`)
+
   if (await userService.existUser(uid)) {
     console.error('user already exist')
     throw new functions.https.HttpsError('already-exists', 'user already exist')
   }
 
-  await userService.createUser(uid)
+  const user = await userService.createUser(uid)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to create user')
     })
 
-  return { success: true }
+  console.log(`[createUser] uid: ${uid} user created`)
+
+  return { user }
 })
 
 interface FavoritePhraseRequest {
@@ -102,6 +114,8 @@ export const favoritePhrase = functions.https.onCall(async (data: FavoritePhrase
   const phraseId: string = data.phraseId
   const value: boolean = data.value
 
+  console.log(`[favoritePhrase] uid: ${uid}, phraseId: ${phraseId}, value: ${value}`)
+
   if (!phraseId || value === null) {
     console.error('phraseId or value is invalid')
     throw new functions.https.HttpsError('invalid-argument', 'phraseId or value is invalid')
@@ -112,6 +126,8 @@ export const favoritePhrase = functions.https.onCall(async (data: FavoritePhrase
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to favorite phrase')
     })
+
+  console.log(`[favoritePhrase] favorited uid: ${uid}, phraseId: ${phraseId}, value: ${value}`)
 
   return {
     success

@@ -2,7 +2,7 @@ import { User, users } from './model'
 
 export const userService = {
   existUser: async (uuid: string): Promise<boolean> => {
-    return !!users.findById(uuid)
+    return users.exists(uuid)
   },
   createUser: async (uuid: string) => {
     return users.create(uuid)
