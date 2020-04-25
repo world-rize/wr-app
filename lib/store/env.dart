@@ -1,5 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:developer' as dev;
 import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -27,7 +28,6 @@ class EnvStore with ChangeNotifier {
   }
 
   EnvStore._internal() {
-    print('EnvStore#_internal');
     readPubSpec();
   }
 
@@ -50,13 +50,16 @@ class EnvStore with ChangeNotifier {
     final info = await PackageInfo.fromPlatform();
     _cache.version = info.version;
     _cache.appName = info.appName;
+    dev.log('read pubspec.yml ${info.appName} ${info.version}');
   }
 
   static Future<void> readEnv() async {
     if (_cache.flavor == Flavor.development) {
-      await DotEnv().load('.env/.env.development');
-      print('.env loaded');
-      print(DotEnv().env);
+      const envPath = '.env/.env.development';
+      dev.log('read $envPath');
+      await DotEnv().load(envPath);
+      dev.log('$envPath loaded');
+      dev.log(DotEnv().env.toString());
     }
   }
 

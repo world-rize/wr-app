@@ -1,5 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:developer' as dev;
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/model/conversation.dart';
@@ -26,6 +27,7 @@ class MasterDataStore with ChangeNotifier {
   /// ローカルjsonファイルからセクションをロード
   /// **試験的**
   static Future<Section> _loadSectionFromJson(String path) {
+    dev.log('read json from $path');
     return rootBundle
         .loadString(path)
         .then(jsonDecode)

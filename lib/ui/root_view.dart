@@ -75,7 +75,7 @@ class _RootViewState extends State<RootView>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${userStore.point} ポイント'),
+        title: Text('${userStore.user.point} ポイント'),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings),

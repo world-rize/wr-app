@@ -36,12 +36,18 @@ dependencies:
   flutter_dotenv: ^2.0.1
   flutter_sliding_tutorial: ^0.1.0
   flutter_launcher_icons: ^0.7.4
+  fluttertoast: ^4.0.0
+  data_classes: ^3.0.0
+  json_annotation: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   pedantic_mono: any
   flutter_native_splash: ^0.1.9
+  build_runner: ^1.7.1
+  data_classes_generator: ^3.0.0
+  json_serializable: ^2.0.0
 
 flutter:
   uses-material-design: true
