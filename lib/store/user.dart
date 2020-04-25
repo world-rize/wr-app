@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:wr_app/api/user.dart';
 
 /// FireStore Auth
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -40,8 +40,6 @@ class UserStore with ChangeNotifier {
     dev.log('[UserStore#signIn] anonymous sign in');
 
     _user = _result.user;
-
-    await callTestApi();
   }
 
   /// ゲストユーザーかどうか
@@ -49,34 +47,22 @@ class UserStore with ChangeNotifier {
     return _user.isAnonymous;
   }
 
-  Future<void> callTestApi() async {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'test')
-          ..timeout = const Duration(seconds: 10);
-
-    try {
-      final result = await callable.call({
-        'hoge': 'aaa',
-      });
-
-      print(result.data);
-    } on CloudFunctionsException catch (e) {
-      print(e);
-    }
+  /// テストAPIを呼ぶ
+  Future<void> callTestAPI() {
+    return test();
   }
 
-  Future<void> callCreateUserApi() async {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'createUser')
-          ..timeout = const Duration(seconds: 10);
+  /// ユーザーデータを習得します
+  Future<void> callReadUser() {}
 
-    try {
-      final result = await callable.call({});
+  /// ユーザーを作成します
+  Future<void> callCreateUser() {
+    return createUser();
+  }
 
-      print(result.data);
-    } on CloudFunctionsException catch (e) {
-      print(e);
-    }
+  /// フレーズをお気に入りに登録します
+  Future<void> callFavoritePhrase(Phrase phrase) {
+    return favoritePhrase(_user.uid, phrase);
   }
 
   /// 名前を取得

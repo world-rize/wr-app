@@ -35,6 +35,7 @@ class MasterDataStore with ChangeNotifier {
   /// ダミーのフレーズを返す
   static Phrase dummyPhrase({int i = 1}) {
     return Phrase(
+      id: i.toString(),
       english: 'When is the homework due?',
       japanese: 'いつ宿題提出するんだっけ？',
       audioPath: 'Welcome_1_.mp3',

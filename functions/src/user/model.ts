@@ -2,6 +2,7 @@ import { firestore } from 'firebase-admin'
 
 export interface User {
   uuid: string
+  point: number,
   favorites: Record<string, boolean>
 }
 

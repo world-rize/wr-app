@@ -43,6 +43,7 @@ import 'package:wr_app/model/phrase_sample.dart';
 /// ```
 class Phrase {
   Phrase({
+    @required this.id,
     @required this.english,
     @required this.japanese,
     @required this.audioPath,
@@ -54,6 +55,7 @@ class Phrase {
   /// json to [Phrase]
   factory Phrase.fromJson(Map<String, dynamic> json) {
     return Phrase(
+      id: json['id'] as String,
       english: json['english'] as String,
       japanese: json['japanese'] as String,
       audioPath: json['audio'] as String,
@@ -62,6 +64,9 @@ class Phrase {
       advice: json['advice'] as String,
     );
   }
+
+  /// ID
+  String id;
 
   /// 英語本文
   String english;
@@ -83,6 +88,7 @@ class Phrase {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'english': english,
       'japanese': japanese,
       'favorite': favorite,
