@@ -97,7 +97,7 @@ class TestView extends StatelessWidget {
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-        title: Text('${section.sectionTitle}のテストを開始しますか?'),
+        title: Text('${section.title}のテストを開始しますか?'),
         content: const Text('本日のテスト残り3回\n制限時間xx秒'),
         actions: <Widget>[
           CupertinoButton(
@@ -163,7 +163,7 @@ class _SectionRow extends StatelessWidget {
         avatar: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Text(
-            section.sectionTitle,
+            section.title,
             style: style.headline.apply(color: Colors.black),
           ),
         ),

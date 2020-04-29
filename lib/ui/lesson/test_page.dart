@@ -126,7 +126,7 @@ class QuestionView extends StatelessWidget {
         // title
         ListTile(
           title: Text(
-            phrase.japanese,
+            phrase.title['ja'],
             style: TextStyle(
                 fontSize: 30,
                 color: Colors.black54,

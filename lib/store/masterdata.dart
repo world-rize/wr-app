@@ -47,9 +47,9 @@ class MasterDataStore with ChangeNotifier {
   /// ダミーのフレーズを返す
   static Phrase dummyPhrase({int i = 1}) {
     final dummyAssets = Assets(voice: {
-      'en-us': 'assets/lessons/school/0001/en-us.mp3',
-      'en-uk': 'assets/lessons/school/0001/en-uk.mp3',
-      'en-au': 'assets/lessons/school/0001/en-au.mp3',
+      'en-us': 'lessons/school/0001/en-us.mp3',
+      'en-uk': 'lessons/school/0001/en-uk.mp3',
+      'en-au': 'lessons/school/0001/en-au.mp3',
     });
 
     return Phrase(

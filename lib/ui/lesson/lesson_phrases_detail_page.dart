@@ -27,8 +27,14 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   bool _isPlaying = false;
   List<double> playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
   double _currentPlaybackSpeed = 1;
+  String _currentVoiceType = 'en-us';
   AudioPlayer _player;
   AudioCache _cache;
+
+  String voicePath() {
+    final path = phrase.example.value[0].assets.voice['en-us'];
+    return path;
+  }
 
   @override
   void initState() {
@@ -40,7 +46,8 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
           _isPlaying = state == AudioPlayerState.PLAYING;
         });
       });
-    _cache = AudioCache(fixedPlayer: _player)..load(phrase.audioPath);
+
+    _cache = AudioCache(fixedPlayer: _player)..load(voicePath());
   }
 
   @override
@@ -80,7 +87,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
           children: <Widget>[
             ListTile(
               title: Text(
-                phrase.japanese,
+                phrase.title['ja'],
                 style: TextStyle(
                     fontSize: 24,
                     color: Colors.black54,
@@ -89,7 +96,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
             ),
             Expanded(
               // height: 300,
-              child: PhraseSampleView(sample: phrase.sample),
+              child: PhraseSampleView(example: phrase.example),
             ),
           ],
         ),
@@ -115,7 +122,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Text(phrase.advice),
+              child: Text(phrase.advice['ja']),
             ),
           ],
         ),
@@ -165,7 +172,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               ),
               onPressed: () {
                 if (!_isPlaying) {
-                  _cache.play(phrase.audioPath);
+                  _cache.play(voicePath());
                 } else {
                   _cache.fixedPlayer.stop();
                 }
@@ -215,8 +222,8 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
 
 /// フレーズ例
 class PhraseSampleView extends StatelessWidget {
-  const PhraseSampleView({@required this.sample});
-  final PhraseSample sample;
+  const PhraseSampleView({@required this.example});
+  final Example example;
 
   /// "()" で囲まれた部分を太字にします
   /// 例 "abc(def)g" -> "abc<strong>def</strong>g"
@@ -240,7 +247,7 @@ class PhraseSampleView extends StatelessWidget {
     return Text.rich(TextSpan(children: _children));
   }
 
-  Widget _createMessageView(Conversation conversation, {bool primary = false}) {
+  Widget _createMessageView(Message message, {bool primary = false}) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -258,7 +265,7 @@ class PhraseSampleView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: _boldify(
-                  conversation.english,
+                  message.text['en'],
                   TextStyle(
                     fontSize: 22,
                     color: Colors.white,
@@ -273,7 +280,7 @@ class PhraseSampleView extends StatelessWidget {
               children: <Widget>[
                 ClipOval(
                   child: Image.network(
-                    conversation.avatarUrl,
+                    'https://placehold.jp/150x150.png',
                     width: 50,
                     height: 50,
                   ),
@@ -283,8 +290,8 @@ class PhraseSampleView extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                   // child: Text(conversation.japanese),
                   child: _boldify(
-                    conversation.japanese,
-                    TextStyle(),
+                    message.text['ja'],
+                    const TextStyle(),
                   ),
                 ),
               ],
@@ -299,9 +306,9 @@ class PhraseSampleView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        _createMessageView(sample.content[0]),
-        _createMessageView(sample.content[1], primary: true),
-        _createMessageView(sample.content[2]),
+        _createMessageView(example.value[0]),
+        _createMessageView(example.value[1], primary: true),
+        _createMessageView(example.value[2]),
       ],
     );
   }

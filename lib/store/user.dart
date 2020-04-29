@@ -86,7 +86,7 @@ class UserStore with ChangeNotifier {
 
     dev.log('[UserStore#signIn] anonymous sign in ${auth.uid}');
 
-    await fetchUser();
+    // await fetchUser();
 
     successToast('ログインしました');
   }

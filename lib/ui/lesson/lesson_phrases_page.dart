@@ -23,7 +23,7 @@ class LessonPhrasesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: Text(section.sectionTitle),
+        title: Text(section.title),
       ),
       // TODO(somebody): per-page scroll physics
       body: SingleChildScrollView(
@@ -34,7 +34,7 @@ class LessonPhrasesPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
               child: GFListTile(
                 avatar: Text(
-                  section.sectionTitle,
+                  section.title,
                   style: style.display1.apply(color: Colors.black),
                 ),
                 title: Text(

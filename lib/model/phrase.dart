@@ -10,7 +10,7 @@ part 'phrase.g.dart';
 class Phrase {
   Phrase({
     @required this.id,
-    @required this.title,
+    this.title,
     this.meta,
     @required this.advice,
     @required this.example,

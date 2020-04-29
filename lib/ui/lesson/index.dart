@@ -124,12 +124,12 @@ class LessonSelectCarousel extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     Image.network(
-                      lesson.thumbnailUrl,
+                      lesson.assets.img['thumbnail'],
                       fit: BoxFit.cover,
                       height: size.height,
                       width: size.width,
                     ),
-                    Text(lesson.title,
+                    Text(lesson.title['ja'],
                         style: TextStyle(color: Colors.white, fontSize: 30)),
                   ],
                 ),
