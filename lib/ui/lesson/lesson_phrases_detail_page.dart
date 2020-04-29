@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
-import 'package:wr_app/model/conversation.dart';
+import 'package:wr_app/model/message.dart';
 
 import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/model/phrase_sample.dart';
+import 'package:wr_app/model/example.dart';
 
 /// フレーズ詳細ページ
 ///

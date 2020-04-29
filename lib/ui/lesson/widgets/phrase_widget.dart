@@ -19,15 +19,15 @@ Widget phraseView(BuildContext context, Phrase phrase) {
     child: Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       child: GFListTile(
-        title: Text(phrase.english, style: const TextStyle(fontSize: 22)),
-        subtitleText: phrase.japanese,
+        title: Text(phrase.title['en'], style: const TextStyle(fontSize: 22)),
+        subtitleText: phrase.title['ja'],
         icon: GestureDetector(
           onTap: () {
             // TODO
             print('favorite');
           },
           child: Icon(
-            phrase.favorite ? Icons.favorite : Icons.favorite_border,
+            true ? Icons.favorite : Icons.favorite_border,
             color: Colors.redAccent,
             size: 30,
           ),
