@@ -9,6 +9,8 @@ import 'package:wr_app/store/masterdata.dart';
 
 import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
+import 'package:wr_app/ui/lesson/widgets/section_select_lesson_tab.dart';
+import 'package:wr_app/ui/lesson/widgets/section_select_test_tab.dart';
 
 /// セクション選択画面
 ///
@@ -21,8 +23,8 @@ class SectionSelectPage extends StatefulWidget {
 /// セクション選択画面
 /// [SectionSelectPage] の State
 ///
-/// [LessonView] レッスン一覧画面
-/// [TestView] テスト一覧画面
+/// [LessonTab] レッスン一覧画面
+/// [TestTab] テスト一覧画面
 class _SectionSelectPageState extends State<SectionSelectPage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
@@ -39,6 +41,8 @@ class _SectionSelectPageState extends State<SectionSelectPage>
 
   @override
   Widget build(BuildContext context) {
+    final sections = MasterDataStore.dummySections;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
@@ -54,60 +58,18 @@ class _SectionSelectPageState extends State<SectionSelectPage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          LessonView(),
-          TestView(),
-        ],
-      ),
-    );
-  }
-}
-
-/// テスト一覧画面
-///
-/// 各レッスンに対応する [_SectionRow] を列挙
-class LessonView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: MasterDataStore.dummySections
-            .map((section) => _SectionRow(
-                  section: section,
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (_) => LessonPhrasesPage(section: section)),
-                    );
-                  },
-                ))
-            .toList(),
-      ),
-    );
-  }
-}
-
-/// テスト一覧画面
-///
-/// 各テストに対応する [_SectionRow] を列挙
-class TestView extends StatelessWidget {
-  // タップした時にダイアログを表示
-  void _showConfirmTestDialog(BuildContext context, Section section) {
-    showCupertinoDialog(
-      context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: Text('${section.title}のテストを開始しますか?'),
-        content: const Text('本日のテスト残り3回\n制限時間xx秒'),
-        actions: <Widget>[
-          CupertinoButton(
-              child: const Text('NO'),
-              onPressed: () {
-                Navigator.pop(context);
-              }),
-          CupertinoButton(
-            child: const Text('YES'),
-            onPressed: () {
+          LessonTab(
+            sections: sections,
+            onTap: (section) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (_) => LessonPhrasesPage(section: section)),
+              );
+            },
+          ),
+          TestTab(
+            sections: sections,
+            onTap: (section) {
               Navigator.pop(context);
               Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => TestPage(section: section)),
@@ -115,71 +77,6 @@ class TestView extends StatelessWidget {
             },
           ),
         ],
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: MasterDataStore.dummySections
-            .map((section) => _SectionRow(
-                  section: section,
-                  onTap: () {
-                    _showConfirmTestDialog(context, section);
-                  },
-                ))
-            .toList(),
-      ),
-    );
-  }
-}
-
-/// 各セクションのタイル
-class _SectionRow extends StatelessWidget {
-  const _SectionRow({
-    @required this.section,
-    @required this.onTap,
-  });
-
-  /// 表示する Section
-  final Section section;
-
-  /// タップしたときのコールバック関数
-  final Function onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final style = Theme.of(context).primaryTextTheme;
-
-    return GestureDetector(
-      onTap: onTap,
-      child: GFListTile(
-        color: Colors.white,
-        // left
-        avatar: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Text(
-            section.title,
-            style: style.headline.apply(color: Colors.black),
-          ),
-        ),
-        // middle
-        title: Text(
-          'クリア',
-          style: style.title.apply(color: Colors.redAccent),
-        ),
-        // right
-        icon: Padding(
-          padding: const EdgeInsets.only(right: 20),
-          child: Icon(
-            Icons.chevron_right,
-            size: 40,
-          ),
-        ),
       ),
     );
   }

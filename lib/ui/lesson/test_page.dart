@@ -8,6 +8,7 @@ import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/phrase.dart';
 
 import 'package:wr_app/ui/lesson/test_result_page.dart';
+import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
 /// テストページ
 ///
@@ -33,6 +34,8 @@ class TestPageState extends State<TestPage> {
 
   /// 現在の問題
   Phrase get currentPhrase => section.phrases[_index];
+
+  String get title => '$_index問目';
 
   @override
   void initState() {
@@ -86,18 +89,13 @@ class TestPageState extends State<TestPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('Test'),
+        title: Text(title),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            QuestionView(
-                phrase: currentPhrase,
-                selection: dummySelection,
-                onNext: _next),
-          ],
-        ),
-      ),
+      body: QuestionView(
+          index: _index,
+          phrase: currentPhrase,
+          selection: dummySelection,
+          onNext: _next),
     );
   }
 }
@@ -108,7 +106,13 @@ class TestPageState extends State<TestPage> {
 /// [phrase] と [selection] を表示し選択されたら [onNext] がコールバックされる
 class QuestionView extends StatelessWidget {
   const QuestionView(
-      {@required this.phrase, @required this.selection, @required this.onNext});
+      {@required this.index,
+      @required this.phrase,
+      @required this.selection,
+      @required this.onNext});
+
+  /// index
+  final int index;
 
   /// フレーズ
   final Phrase phrase;
@@ -123,40 +127,27 @@ class QuestionView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        // title
-        ListTile(
-          title: Text(
-            phrase.title['ja'],
-            style: TextStyle(
-                fontSize: 30,
-                color: Colors.black54,
-                fontWeight: FontWeight.bold),
+        Flexible(
+          flex: 2,
+          child: ListTile(
+            title: Text(
+              'Q$index: ${phrase.title['ja']}',
+              style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold),
+            ),
           ),
         ),
-        // sample
-        SizedBox(
-          height: 240,
-          child: _createPhraseSampleConversation(),
+        Flexible(
+          flex: 9,
+          child: PhraseSampleView(example: phrase.example),
         ),
-        // selection
-        SizedBox(
-          height: 350,
+        Flexible(
+          flex: 5,
           child: _createSelection(),
         ),
       ],
-    );
-  }
-
-  /// 会話例
-  Widget _createPhraseSampleConversation() {
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.all(8),
-          child: Placeholder(fallbackHeight: 60),
-        );
-      },
-      itemCount: 3,
     );
   }
 
