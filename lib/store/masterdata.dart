@@ -103,9 +103,9 @@ class MasterDataStore with ChangeNotifier {
   static final List<Lesson> dummyLessons = List<Lesson>.generate(
     6,
     (i) => Lesson(
-      id: 'shcool',
+      id: 'shcool$i',
       title: {
-        'ja': 'School',
+        'ja': 'School vol.$i',
       },
       assets: Assets(
         img: {

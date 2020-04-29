@@ -35,7 +35,7 @@ class UserStore with ChangeNotifier {
   Phrase pickedUpNewComingPhrase = MasterDataStore.dummyPhrase();
 
   /// ユーザーデータ
-  User user = User();
+  User user = User(name: '', point: 0);
 
   /// 成功トーストを出す
   void successToast(String message) {
@@ -62,15 +62,16 @@ class UserStore with ChangeNotifier {
     dev.log('fetchUser');
 
     try {
-      final data = await readUser();
+//      final data = await readUser();
+//      print(data);
+//      final user = data.user;
+      final user = User(name: 'Tom', point: 100);
 
-      print(data);
+      dev.log(user.uuid);
 
-      dev.log(data.user.uuid);
+      successToast('uid: ${user.uuid}');
 
-      successToast('uid: ${data.user.uuid}');
-
-      user = data.user;
+      this.user = user;
 
       notifyListeners();
     } on Exception catch (e) {
