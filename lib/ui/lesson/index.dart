@@ -7,6 +7,8 @@ import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
+import 'package:wr_app/model/lesson.dart';
+import 'package:wr_app/ui/lesson/request_page.dart';
 
 import 'package:wr_app/ui/lesson/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
@@ -42,15 +44,15 @@ class LessonMenus extends StatelessWidget {
           // TODO: fix LessonSelectCarousel
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 200,
-            // child: LessonSelectCarousel(),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
-                );
-              },
-            ),
+            height: 250,
+            child: LessonSelectCarousel(),
+//            child: InkWell(
+//              onTap: () {
+//                Navigator.of(context).push(
+//                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
+//                );
+//              },
+//            ),
           ),
 
           const GFTypography(
@@ -84,7 +86,11 @@ class LessonMenus extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
               ),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => RequestPage()),
+                  );
+                },
                 child: const Padding(
                   padding: EdgeInsets.symmetric(vertical: 30, horizontal: 90),
                   child: Text('フレーズをリクエストする'),
@@ -100,44 +106,104 @@ class LessonMenus extends StatelessWidget {
 
 /// レッスン選択カルーセル
 class LessonSelectCarousel extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
+  Widget __carouselCell(Lesson lesson) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        child: Image.network(lesson.assets.img['thumbnail'],
+            fit: BoxFit.cover, width: 1000),
+      ),
+    );
+  }
+
+  Widget _carouselCell(BuildContext context, Lesson lesson) {
     final size = MediaQuery.of(context).size;
 
-    return GFRectItemsCarousel(
-      rowCount: 3,
-      height: size.height.round(),
-      children: MasterDataStore.dummyLessons.map(
-        (lesson) {
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => SectionSelectPage()),
-              );
-            },
-            child: Container(
-              height: size.height,
-              width: size.width,
-              margin: const EdgeInsets.all(5),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(5)),
-                child: Stack(
-                  children: <Widget>[
-                    Image.network(
-                      lesson.thumbnailUrl,
-                      fit: BoxFit.cover,
-                      height: size.height,
-                      width: size.width,
-                    ),
-                    Text(lesson.title,
-                        style: TextStyle(color: Colors.white, fontSize: 30)),
-                  ],
-                ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => SectionSelectPage()),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.all(8),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          child: Stack(
+            children: <Widget>[
+              Image.network(
+                lesson.assets.img['thumbnail'],
+                fit: BoxFit.cover,
+                height: size.height,
+                width: size.width,
               ),
-            ),
-          );
-        },
-      ).toList(),
+              Positioned(
+                top: 20,
+                left: 20,
+                child: Text(lesson.title['ja'],
+                    style: TextStyle(color: Colors.white, fontSize: 40)),
+              ),
+              const Positioned(
+                bottom: 20,
+                right: 20,
+                child: Text('150 / 200',
+                    style: TextStyle(color: Colors.white, fontSize: 30)),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lessons = MasterDataStore.dummyLessons;
+    return GFCarousel(
+      enableInfiniteScroll: false,
+      items: lessons.map((lesson) => _carouselCell(context, lesson)).toList(),
+//      onPageChanged: (index) {
+//        setState(() {
+//          index;
+//        });
+//      },
+    );
+
+//    return GFRectItemsCarousel(
+//      rowCount: 3,
+//      height: size.height.round(),
+//      children: MasterDataStore.dummyLessons.map(
+//        (lesson) {
+//          return GestureDetector(
+//            onTap: () {
+//              Navigator.of(context).push(
+//                MaterialPageRoute(builder: (_) => SectionSelectPage()),
+//              );
+//            },
+//            child: Container(
+//              height: size.height,
+//              width: size.width,
+//              margin: const EdgeInsets.all(5),
+//              child: ClipRRect(
+//                borderRadius: const BorderRadius.all(Radius.circular(5)),
+//                child: Stack(
+//                  children: <Widget>[
+//                    Image.network(
+//                      lesson.assets.img['thumbnail'],
+//                      fit: BoxFit.cover,
+//                      height: size.height,
+//                      width: size.width,
+//                    ),
+//                    Text(lesson.title['ja'],
+//                        style: TextStyle(color: Colors.white, fontSize: 30)),
+//                  ],
+//                ),
+//              ),
+//            ),
+//          );
+//        },
+//      ).toList(),
+//    );
   }
 }

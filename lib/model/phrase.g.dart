@@ -9,22 +9,24 @@ part of 'phrase.dart';
 Phrase _$PhraseFromJson(Map<String, dynamic> json) {
   return Phrase(
       id: json['id'] as String,
-      english: json['english'] as String,
-      japanese: json['japanese'] as String,
-      audioPath: json['audioPath'] as String,
-      favorite: json['favorite'] as bool,
-      sample: json['sample'] == null
+      meta: (json['meta'] as Map<String, dynamic>)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      advice: (json['advice'] as Map<String, dynamic>)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
+      example: json['example'] == null
           ? null
-          : PhraseSample.fromJson(json['sample'] as Map<String, dynamic>),
-      advice: json['advice'] as String);
+          : Example.fromJson(json['example'] as Map<String, dynamic>))
+    ..title = (json['title'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, e as String),
+    );
 }
 
 Map<String, dynamic> _$PhraseToJson(Phrase instance) => <String, dynamic>{
       'id': instance.id,
-      'english': instance.english,
-      'japanese': instance.japanese,
-      'favorite': instance.favorite,
-      'audioPath': instance.audioPath,
-      'sample': instance.sample,
-      'advice': instance.advice
+      'title': instance.title,
+      'meta': instance.meta,
+      'advice': instance.advice,
+      'example': instance.example
     };

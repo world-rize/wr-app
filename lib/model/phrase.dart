@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/cupertino.dart';
-import 'package:wr_app/model/phrase_sample.dart';
+import 'package:wr_app/model/example.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'phrase.g.dart';
@@ -10,36 +10,27 @@ part 'phrase.g.dart';
 class Phrase {
   Phrase({
     @required this.id,
-    @required this.english,
-    @required this.japanese,
-    @required this.audioPath,
-    this.favorite = false,
-    @required this.sample,
+    this.title,
+    this.meta,
     @required this.advice,
+    @required this.example,
   });
 
   factory Phrase.fromJson(Map<String, dynamic> json) => _$PhraseFromJson(json);
 
   Map<String, dynamic> toJson() => _$PhraseToJson(this);
 
-  /// ID
   String id;
 
-  /// 英語本文
-  String english;
+  /// タイトル
+  Map<String, String> title;
 
-  /// [japanese] 日本語訳
-  String japanese;
+  /// meta
+  Map<String, String> meta;
 
-  /// [audioPath] 英語音声のmp3ファイルのパス(res/...)
-  bool favorite;
+  /// advice
+  Map<String, String> advice;
 
-  /// [favorite] お気に入りをしているか
-  String audioPath;
-
-  /// [sample] 会話例、[PhraseSample] を参照
-  PhraseSample sample;
-
-  /// [advice] ワンポイントアドバイス
-  String advice;
+  /// example
+  Example example;
 }

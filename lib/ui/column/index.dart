@@ -28,7 +28,7 @@ class ColumnIndexPage extends StatelessWidget {
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   Widget _titleCreate() {
-    
+    return const Placeholder();
   }
 
   Widget _articleView(Article article) {
@@ -79,8 +79,6 @@ class ColumnIndexPage extends StatelessWidget {
       ),
     );
   }
-
-  
 
   final List<Article> articles = List.generate(
       5,
