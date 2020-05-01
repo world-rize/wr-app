@@ -12,6 +12,7 @@ import 'package:wr_app/ui/lesson/index.dart';
 import 'package:wr_app/ui/mypage/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
 import 'package:wr_app/ui/mypage/settings_page.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 /// 全ての画面のガワ
 ///
@@ -75,8 +76,18 @@ class _RootViewState extends State<RootView>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('${userStore.user.point} ポイント'),
+        title: Row(
+          children: <Widget>[
+            Text('${userStore.user.point} ポイント'),
+            Text(I.of(context).hello),
+          ],
+        ),
         actions: <Widget>[
+          // TODO(someone): 検索実装
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {},
+          ),
           IconButton(
             icon: Icon(Icons.settings),
             onPressed: () {
