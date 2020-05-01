@@ -3,7 +3,7 @@ description: WorldRIZe App
 authors:
   - wakame-tech
   - yoshiki301
-version: 0.1.1
+version: 0.2.0
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
@@ -51,8 +51,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # https://flutter.dev/docs/development/ui/assets-and-images#specifying-assets
+  # サブディレクトリは明示的に指定しないといけない
   assets:
     - assets/
+    - assets/icon/
+    - assets/lessons/
     - .env/
 
 flutter_icons:

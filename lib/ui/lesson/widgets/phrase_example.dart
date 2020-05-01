@@ -29,7 +29,10 @@ class PhraseSampleView extends StatelessWidget {
       return '';
     });
 
-    return Text.rich(TextSpan(children: _children));
+    return Text.rich(
+      TextSpan(children: _children),
+      softWrap: true,
+    );
   }
 
   Widget _createMessageView(Message message, {bool primary = false}) {
@@ -50,11 +53,12 @@ class PhraseSampleView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: _boldify(
-                  message.text['en'],
-                  TextStyle(
-                    fontSize: 22,
-                    color: Colors.white,
-                  )),
+                message.text['en'],
+                TextStyle(
+                  fontSize: 22,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
           // アバター・日本語訳
@@ -70,13 +74,15 @@ class PhraseSampleView extends StatelessWidget {
                     height: 50,
                   ),
                 ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                  // child: Text(conversation.japanese),
-                  child: _boldify(
-                    message.text['ja'],
-                    const TextStyle(),
+                Flexible(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 10),
+                    // child: Text(conversation.japanese),
+                    child: _boldify(
+                      message.text['ja'],
+                      const TextStyle(),
+                    ),
                   ),
                 ),
               ],
@@ -90,11 +96,12 @@ class PhraseSampleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        _createMessageView(example.value[0]),
-        _createMessageView(example.value[1], primary: true),
-        _createMessageView(example.value[2]),
-      ],
+      children: example.value
+          .asMap()
+          .map((i, message) =>
+              MapEntry(i, _createMessageView(message, primary: i % 2 == 1)))
+          .values
+          .toList(),
     );
   }
 }

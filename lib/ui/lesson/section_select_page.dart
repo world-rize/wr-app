@@ -2,10 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:getflutter/getflutter.dart';
 
+import 'package:wr_app/model/lesson.dart';
 import 'package:wr_app/model/section.dart';
-import 'package:wr_app/store/masterdata.dart';
 
 import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
@@ -16,8 +15,13 @@ import 'package:wr_app/ui/lesson/widgets/section_select_test_tab.dart';
 ///
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469132>
 class SectionSelectPage extends StatefulWidget {
+  const SectionSelectPage({@required this.lesson});
+
+  final Lesson lesson;
+
   @override
-  _SectionSelectPageState createState() => _SectionSelectPageState();
+  _SectionSelectPageState createState() =>
+      _SectionSelectPageState(lesson: lesson);
 }
 
 /// セクション選択画面
@@ -27,6 +31,12 @@ class SectionSelectPage extends StatefulWidget {
 /// [TestTab] テスト一覧画面
 class _SectionSelectPageState extends State<SectionSelectPage>
     with SingleTickerProviderStateMixin {
+  _SectionSelectPageState({@required this.lesson});
+
+  ///レッスン
+  final Lesson lesson;
+
+  /// タブ
   TabController _tabController;
   final List<Tab> _tabs = [
     const Tab(text: 'Lesson'),
@@ -41,12 +51,12 @@ class _SectionSelectPageState extends State<SectionSelectPage>
 
   @override
   Widget build(BuildContext context) {
-    final sections = MasterDataStore.dummySections;
+    final sections = Section.fromLesson(lesson);
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blue,
-        title: const Text('School'),
+        title: Text(lesson.title['ja']),
         bottom: TabBar(
           tabs: _tabs,
           controller: _tabController,

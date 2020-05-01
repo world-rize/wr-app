@@ -3,9 +3,8 @@
 import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+import 'package:wr_app/api/mock.dart';
 import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/store/masterdata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wr_app/model/user.dart';
 import 'package:wr_app/api/user.dart';
@@ -20,7 +19,9 @@ class UserStore with ChangeNotifier {
     return _cache;
   }
 
-  UserStore._internal();
+  UserStore._internal() {
+    dev.log('✨ UserStore._internal()');
+  }
 
   /// シングルトンインスタンス
   static final UserStore _cache = UserStore._internal();
@@ -29,10 +30,10 @@ class UserStore with ChangeNotifier {
   FirebaseUser auth;
 
   /// レッスントップ画面に表示されるお気に入りフレーズ
-  Phrase pickedUpFavoritePhrase = MasterDataStore.dummyPhrase();
+  Phrase pickedUpFavoritePhrase = dummyPhrase();
 
   /// レッスントップ画面に表示される新着フレーズ
-  Phrase pickedUpNewComingPhrase = MasterDataStore.dummyPhrase();
+  Phrase pickedUpNewComingPhrase = dummyPhrase();
 
   /// ユーザーデータ
   User user = User(name: '', point: 0);
@@ -59,7 +60,7 @@ class UserStore with ChangeNotifier {
 
   /// ユーザーデータを習得します
   Future<void> fetchUser() async {
-    dev.log('fetchUser');
+    dev.log('\t fetchUser ...');
 
     try {
 //      final data = await readUser();
@@ -85,7 +86,7 @@ class UserStore with ChangeNotifier {
 
     auth = _result.user;
 
-    dev.log('[UserStore#signIn] anonymous sign in ${auth.uid}');
+    dev.log('\t ✔ anonymous sign in ${auth.uid}');
 
     // await fetchUser();
 
@@ -114,7 +115,7 @@ class UserStore with ChangeNotifier {
 
   /// ユーザーを作成します
   Future<void> callCreateUser() async {
-    dev.log('callCreateUser');
+    dev.log('\tcallCreateUser()');
 
     try {
       final data = await createUser();
@@ -132,7 +133,7 @@ class UserStore with ChangeNotifier {
   /// フレーズをお気に入りに登録します
   Future<void> callFavoritePhrase(
       {@required String phraseId, @required bool value}) async {
-    dev.log('callFavoritePhrase');
+    dev.log('\tcallFavoritePhrase()');
 
     try {
       final data =

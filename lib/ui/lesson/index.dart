@@ -12,7 +12,6 @@ import 'package:wr_app/ui/lesson/request_page.dart';
 
 import 'package:wr_app/ui/lesson/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
-import 'package:wr_app/ui/lesson/widgets/gf_rect_items_carousel.dart';
 
 /// `レッスン` ページのトップ
 ///
@@ -41,18 +40,11 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.PRIMARY,
           ),
 
-          // TODO: fix LessonSelectCarousel
+          // TODO(someone): fix LessonSelectCarousel
           Container(
             width: MediaQuery.of(context).size.width,
             height: 250,
             child: LessonSelectCarousel(),
-//            child: InkWell(
-//              onTap: () {
-//                Navigator.of(context).push(
-//                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
-//                );
-//              },
-//            ),
           ),
 
           const GFTypography(
@@ -106,16 +98,16 @@ class LessonMenus extends StatelessWidget {
 
 /// レッスン選択カルーセル
 class LessonSelectCarousel extends StatelessWidget {
-  Widget __carouselCell(Lesson lesson) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
-        child: Image.network(lesson.assets.img['thumbnail'],
-            fit: BoxFit.cover, width: 1000),
-      ),
-    );
-  }
+//  Widget __carouselCell(Lesson lesson) {
+//    return Container(
+//      margin: const EdgeInsets.all(8),
+//      child: ClipRRect(
+//        borderRadius: const BorderRadius.all(Radius.circular(5)),
+//        child: Image.network(lesson.assets.img['thumbnail'],
+//            fit: BoxFit.cover, width: 1000),
+//      ),
+//    );
+//  }
 
   Widget _carouselCell(BuildContext context, Lesson lesson) {
     final size = MediaQuery.of(context).size;
@@ -123,7 +115,7 @@ class LessonSelectCarousel extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => SectionSelectPage()),
+          MaterialPageRoute(builder: (_) => SectionSelectPage(lesson: lesson)),
         );
       },
       child: Container(
@@ -132,8 +124,15 @@ class LessonSelectCarousel extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(5)),
           child: Stack(
             children: <Widget>[
+//              Image.asset(
+//                lesson.assets.img['thumbnail'],
+//                fit: BoxFit.cover,
+//                height: size.height,
+//                width: size.width,
+//              ),
               Image.network(
-                lesson.assets.img['thumbnail'],
+                'https://source.unsplash.com/random/300x800',
+                // lesson.assets.img['thumbnail'],
                 fit: BoxFit.cover,
                 height: size.height,
                 width: size.width,
@@ -142,13 +141,13 @@ class LessonSelectCarousel extends StatelessWidget {
                 top: 20,
                 left: 20,
                 child: Text(lesson.title['ja'],
-                    style: TextStyle(color: Colors.white, fontSize: 40)),
+                    style: const TextStyle(color: Colors.white, fontSize: 40)),
               ),
-              const Positioned(
+              Positioned(
                 bottom: 20,
                 right: 20,
-                child: Text('150 / 200',
-                    style: TextStyle(color: Colors.white, fontSize: 30)),
+                child: Text('XXX / ${lesson.phrases.length}',
+                    style: const TextStyle(color: Colors.white, fontSize: 30)),
               ),
             ],
           ),
@@ -159,7 +158,9 @@ class LessonSelectCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lessons = MasterDataStore.dummyLessons;
+    final masterData = Provider.of<MasterDataStore>(context);
+    final lessons = masterData.getLessons();
+
     return GFCarousel(
       enableInfiniteScroll: false,
       items: lessons.map((lesson) => _carouselCell(context, lesson)).toList(),

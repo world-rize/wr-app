@@ -14,15 +14,15 @@ void runAppWithFlavor(final Flavor flavor) {
   runApp(MultiProvider(
     providers: [
       // 環境変数
-      Provider(
+      ChangeNotifierProvider(
         create: (_) => EnvStore(flavor: flavor),
       ),
       // ユーザーデータ
-      Provider(
+      ChangeNotifierProvider(
         create: (_) => UserStore(),
       ),
       // マスターデータ
-      Provider(
+      ChangeNotifierProvider(
         create: (_) => MasterDataStore(),
       )
     ],
