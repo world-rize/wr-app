@@ -5,8 +5,18 @@ import sys
 import os
 import glob
 
-bold_pattern = re.compile(r"\((.*?)\)") # 強調文字のマッチング
+bold_pattern = re.compile(r"[\(（](.*?)[\)）]") # 強調文字のマッチング
 id_counter = 1 # 通しフレーズのid開始番号
+
+def voice_path(lesson_id, code):
+    """
+    lesson_id: e.g. Shcool
+    code: e.g. en-us
+    """
+    # asset_path = "phrases/" + lesson_id
+    # dummy
+    # /assets prefix-ed
+    return f'voice_sample.mp3'
 
 def txt2json(lesson_id, readlines):
     global id_counter
@@ -38,6 +48,12 @@ def txt2json(lesson_id, readlines):
                 bold = re.search(bold_pattern,line) # 強調文字を取得
                 if bold is not None:
                     phrase_jap = bold.group(1)
+                
+                content_line['assets'] = {
+                    'voice': { 
+                        code: voice_path(lesson_id, code) for code in ['en-us', 'en-au', 'en-uk']
+                    }
+                }
                 value_list.append(copy.copy(content_line)) # 値渡しすることに注意
 
         elif label == "contents" and line == "\n":
@@ -69,14 +85,6 @@ def txt2json(lesson_id, readlines):
                 data["meta"] = {
                     "lessonId": lesson_id,
                 }
-                asset_path = "phrases/" + lesson_id
-                data["assets"] = {
-                    "voice": {
-                        "en-us": asset_path + "/en-us.mp3",
-                        "en-au": asset_path + "/en-au.mp3",
-                        "en-uk": asset_path + "/en-uk.mp3"
-                    }
-                }
                 data["advice"] = {
                     'ja': advice
                 }
@@ -92,6 +100,7 @@ def txt2json(lesson_id, readlines):
     return content_data
 
 if __name__ == '__main__':
+    preview = False
     RAW_TARGET = '../assets/raw/*.txt'
     DST_DIR = '../assets/lessons'
 
@@ -102,6 +111,10 @@ if __name__ == '__main__':
             readlines = rf.readlines()
 
         content_data = txt2json(base, readlines)
+
+        if preview:
+            print(json.dumps(content_data[0], indent = 2, ensure_ascii=False))
+            sys.exit(0)
 
         # jsonデータへ変換
         json_data_path = f'{DST_DIR}/{base}.json'

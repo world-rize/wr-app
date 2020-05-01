@@ -33,35 +33,39 @@ class MasterDataStore with ChangeNotifier {
   /// シングルトンインスタンス
   static final MasterDataStore _cache = MasterDataStore._internal();
 
-  static final List<Phrase> _phrases = [];
-
   static final List<Lesson> _lessons = [];
 
   /// ローカルjsonファイルからレッスンをロード
-  static Future<void> _loadLessonsFromJson() async {
+  Future<void> _loadLessonsFromJson() async {
     const path = 'assets/lessons.json';
 
     dev.log('\t Lessons @ $path');
-    await rootBundle.loadString(path).then(jsonDecode).then((list) {
-      final lessons = List.from(list).map((json) => Lesson.fromJson(json));
-      _lessons.addAll(lessons);
+    final lessons = await rootBundle
+        .loadString(path)
+        .then(jsonDecode)
+        .then((json) => List.from(json))
+        .then((list) =>
+            List.from(list).map((json) => Lesson.fromJson(json)).toList());
+
+    await Future.forEach(lessons, (lesson) async {
+      lesson.phrases = await _loadPhrases(lesson);
     });
+
+    _lessons.addAll(lessons);
 
     dev.log('\t✨ ${_lessons.length} Lessons Loaded');
 
     await Future.forEach(_lessons, _loadPhrases);
 
-    dev.log('\t✨ ${_phrases.length} Phrases Loaded');
+    notifyListeners();
   }
 
-  static Future<void> _loadPhrases(Lesson lesson) async {
+  Future<List<Phrase>> _loadPhrases(Lesson lesson) async {
     final path = 'assets/lessons/${lesson.id}.json';
 
     dev.log('\t${lesson.id} @ $path');
-    await rootBundle.loadString(path).then(jsonDecode).then((list) {
-      final lessons = List.from(list).map((json) => Phrase.fromJson(json));
-      _phrases.addAll(lessons);
-    });
+    return rootBundle.loadString(path).then(jsonDecode).then((list) =>
+        List.from(list).map((json) => Phrase.fromJson(json)).toList());
   }
 
   Phrase getPhraseById({int i}) {
@@ -69,10 +73,12 @@ class MasterDataStore with ChangeNotifier {
   }
 
   List<Section> getSectionsById({String id}) {
-    return dummySections();
+    final lesson = _lessons.firstWhere((lesson) => lesson.id == id);
+
+    return Section.fromLesson(lesson);
   }
 
   List<Lesson> getLessons() {
-    return dummyLessons();
+    return _lessons;
   }
 }

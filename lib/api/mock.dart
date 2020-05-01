@@ -9,9 +9,9 @@ import 'package:wr_app/model/example.dart';
 /// ダミーのフレーズを返す
 Phrase dummyPhrase({int i = 1}) {
   final dummyAssets = Assets(voice: {
-    'en-us': 'lessons/school/0001/en-us.mp3',
-    'en-uk': 'lessons/school/0001/en-uk.mp3',
-    'en-au': 'lessons/school/0001/en-au.mp3',
+    'en-us': 'voice_sample.mp3',
+    'en-uk': 'voice_sample.mp3',
+    'en-au': 'voice_sample.mp3',
   });
 
   return Phrase(
@@ -63,7 +63,7 @@ List<Lesson> dummyLessons() {
       },
       assets: Assets(
         img: {
-          'thumbnail': 'https://source.unsplash.com/category/nature/300x800',
+          'thumbnail': 'https://source.unsplash.com/random/300x800',
         },
       ),
     ),
