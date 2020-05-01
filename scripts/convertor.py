@@ -67,16 +67,20 @@ def txt2json(lesson_id, readlines):
         elif line != "\n":
             if re.search("_",line): # lessonの区切りを検出
                 label = "lesson"
+                # print('-> lesson')
             elif label == "lesson":
                 lesson_title = line.strip("\n")
                 if not lesson_title in lesson_to_id:
                     zfill_id = str(len(lesson_to_id)+1).zfill(4)
                     lesson_to_id[lesson_title] = zfill_id
                 # lesson_id = lesson_to_id[lesson_title]
-                label = "section"
+                # label = "section"
+                label = 'contents'
+                # print('-> contents')
             elif label == "section":
                 section_id = line.strip().strip(".").zfill(4)
                 label = "contents"
+                # print('-> contents')
             elif label == "advice":
                 advice = line
                 label = "section"

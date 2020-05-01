@@ -35,7 +35,7 @@ class TestPageState extends State<TestPage> {
   /// 現在の問題
   Phrase get currentPhrase => section.phrases[_index];
 
-  String get title => '$_index問目';
+  String get title => '${_index + 1}問目';
 
   @override
   void initState() {
@@ -100,7 +100,7 @@ class TestPageState extends State<TestPage> {
   }
 }
 
-// TODO(wakame-tech): 遷移アニメーション
+// TODO(someone): 遷移アニメーション
 /// 問題画面
 ///
 /// [phrase] と [selection] を表示し選択されたら [onNext] がコールバックされる
@@ -127,24 +127,24 @@ class QuestionView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+//        Flexible(
+//          flex: 2,
+//          child: ListTile(
+//            title: Text(
+//              'Q$index: ${phrase.title['ja']}',
+//              style: TextStyle(
+//                  fontSize: 25,
+//                  color: Colors.black54,
+//                  fontWeight: FontWeight.bold),
+//            ),
+//          ),
+//        ),
         Flexible(
-          flex: 2,
-          child: ListTile(
-            title: Text(
-              'Q$index: ${phrase.title['ja']}',
-              style: TextStyle(
-                  fontSize: 25,
-                  color: Colors.black54,
-                  fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
-        Flexible(
-          flex: 9,
+          flex: 5,
           child: PhraseSampleView(example: phrase.example),
         ),
         Flexible(
-          flex: 5,
+          flex: 3,
           child: _createSelection(),
         ),
       ],
