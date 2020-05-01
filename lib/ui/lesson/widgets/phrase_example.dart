@@ -90,11 +90,12 @@ class PhraseSampleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: [
-        _createMessageView(example.value[0]),
-        _createMessageView(example.value[1], primary: true),
-        _createMessageView(example.value[2]),
-      ],
+      children: example.value
+          .asMap()
+          .map((i, message) =>
+              MapEntry(i, _createMessageView(message, primary: i % 2 == 1)))
+          .values
+          .toList(),
     );
   }
 }

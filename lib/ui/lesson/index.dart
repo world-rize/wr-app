@@ -115,7 +115,7 @@ class LessonSelectCarousel extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => SectionSelectPage()),
+          MaterialPageRoute(builder: (_) => SectionSelectPage(lesson: lesson)),
         );
       },
       child: Container(

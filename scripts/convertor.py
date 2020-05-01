@@ -1,3 +1,8 @@
+"""
+Phrase to Json Convertor
+
+@author yoshiki301
+"""
 import json
 import re
 import copy
@@ -25,26 +30,26 @@ def txt2json(lesson_id, readlines):
     label = ""
     eng_or_jap = "en"
     value_list = []
-    content_line = {
-        "@type": "Message",
-        "en": "",
-        "ja": ""
-    }
     phrase_eng = ""
     phrase_jap = ""
     content_data = []
+    content_line = {
+        '@type': 'Message',
+        'text': {},
+        'assets': {},
+    }
 
     for line in readlines:
         if label == "contents" and line != "\n":
-            if eng_or_jap == "en":
-                content_line[eng_or_jap] = line
-                eng_or_jap = "ja"
+            if eng_or_jap == 'en':
+                content_line['text'][eng_or_jap] = line
+                eng_or_jap = 'ja'
                 bold = re.search(bold_pattern,line) # 強調文字を取得
                 if bold is not None:
                     phrase_eng = bold.group(1)
-            elif eng_or_jap == "ja":
-                content_line[eng_or_jap] = line
-                eng_or_jap = "en"
+            elif eng_or_jap == 'ja':
+                content_line['text'][eng_or_jap] = line
+                eng_or_jap = 'en'
                 bold = re.search(bold_pattern,line) # 強調文字を取得
                 if bold is not None:
                     phrase_jap = bold.group(1)
@@ -54,7 +59,7 @@ def txt2json(lesson_id, readlines):
                         code: voice_path(lesson_id, code) for code in ['en-us', 'en-au', 'en-uk']
                     }
                 }
-                value_list.append(copy.copy(content_line)) # 値渡しすることに注意
+                value_list.append(copy.deepcopy(content_line)) # 値渡しすることに注意
 
         elif label == "contents" and line == "\n":
             label = "advice"
@@ -92,7 +97,7 @@ def txt2json(lesson_id, readlines):
                     "@type": "Conversation",
                     "value": value_list
                 }
-                content_data.append(copy.copy(data)) # 値渡しすることに注意
+                content_data.append(copy.deepcopy(data)) # 値渡しすることに注意
                 id_counter += 1
                 value_list = []
                 label = "section"
