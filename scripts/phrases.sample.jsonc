@@ -1,0 +1,56 @@
+[
+  {
+    // フレーズの通し番号
+    "id": "1234",
+    // フレーズのタイトル
+    "title": {
+      "ja": "上司に確認してみますね",
+      "en": "I’ll check with the boss"
+    },
+    // メタ情報
+    "meta": {
+      "lessonId": "0001",
+      "sectionId": "0001"
+    },
+    // 音声や画像データのパス
+    "assets": {
+      "voice": {
+        // フレーズ毎にフォルダにまとめたい
+        "en-us": "phrases/school/0001/en-us.mp3",
+        "en-au": "phrases/school/0001/en-au.mp3",
+        "en-uk": "phrases/school/0001/en-uk.mp3"
+      }
+    },
+    // 一言アドバイス
+    "advice": {
+      "ja": "“check with A”（Aは人）で「Aに確認してみる, 許可を取る」という意味になります。"
+    },
+    // 具体例、変更しやすいようにJSON-LDっぽく
+    "example": {
+      "@type": "Conversation",
+      "value": [
+        {
+          "@type": "Message",
+          "value": {
+            "en": " Do you want me to stack the shelves?",
+            "ja": "棚に品物を積んだ方がいいですか？"
+          }
+        },
+        {
+          "@type": "Message",
+          "value": {
+            "en": "That would be good, but (I’ll check with the boss) to see if that’s okay.",
+            "ja": "いいけど(一回上司に確認してみますね)"
+          }
+        },
+        {
+          "@type": "Message",
+          "value": {
+            "en": "Thank you!",
+            "ja": "よろしくお願いします！"
+          }
+        }
+      ]
+    }
+  }
+]

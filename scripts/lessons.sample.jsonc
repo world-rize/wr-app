@@ -1,0 +1,17 @@
+[
+  {
+    // レッスンのID
+    "id": "School",
+    // フレーズのタイトル
+    "title": {
+      "ja": "レッスン",
+      "en": "Lesson"
+    },
+    // 音声や画像データのパス
+    "assets": {
+      "img": {
+        "thumbnail": "thumbnails/school.png"
+      }
+    }
+  }
+]
