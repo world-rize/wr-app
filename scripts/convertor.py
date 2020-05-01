@@ -77,7 +77,9 @@ def txt2json(lesson_id, readlines):
                         "en-uk": asset_path + "/en-uk.mp3"
                     }
                 }
-                data["advice"] = advice
+                data["advice"] = {
+                    'ja': advice
+                }
                 data["example"] = {
                     "@type": "Conversation",
                     "value": value_list
@@ -102,15 +104,12 @@ if __name__ == '__main__':
         content_data = txt2json(base, readlines)
 
         # jsonデータへ変換
-        json_data_path = f'{DST_DIR}/{base}/phrases.json'
+        json_data_path = f'{DST_DIR}/{base}.json'
 
         print(f'{base}: {len(content_data)}({id_counter}) phrases')
 
         print(f'{raw_data_path} -> {json_data_path}')
 
-        lesson_dir = os.path.dirname(json_data_path)
-        if not os.path.exists(lesson_dir):
-            os.makedirs(lesson_dir)
         with open(json_data_path,"w") as jf:
             json.dump(content_data,jf,ensure_ascii=False,indent=4)
             print("json file generated.")

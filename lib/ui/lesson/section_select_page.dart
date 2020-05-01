@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
+import 'package:provider/provider.dart';
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/store/masterdata.dart';
 
@@ -41,7 +42,8 @@ class _SectionSelectPageState extends State<SectionSelectPage>
 
   @override
   Widget build(BuildContext context) {
-    final sections = MasterDataStore.dummySections;
+    final masterData = Provider.of<MasterDataStore>(context);
+    final sections = masterData.getSectionsById(id: 'School');
 
     return Scaffold(
       appBar: AppBar(

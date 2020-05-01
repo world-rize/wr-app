@@ -51,8 +51,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # https://flutter.dev/docs/development/ui/assets-and-images#specifying-assets
+  # サブディレクトリは明示的に指定しないといけない
   assets:
     - assets/
+    - assets/icon/
+    - assets/lessons/
     - .env/
 
 flutter_icons:

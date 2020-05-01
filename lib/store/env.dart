@@ -28,6 +28,7 @@ class EnvStore with ChangeNotifier {
   }
 
   EnvStore._internal() {
+    dev.log('✨ EnvStore._internal()');
     readPubSpec();
   }
 
@@ -50,16 +51,15 @@ class EnvStore with ChangeNotifier {
     final info = await PackageInfo.fromPlatform();
     _cache.version = info.version;
     _cache.appName = info.appName;
-    dev.log('read pubspec.yml ${info.appName} ${info.version}');
+    dev.log('\t📎 read pubspec.yml');
+    dev.log('\t${info.appName} ${info.version}');
   }
 
   static Future<void> readEnv() async {
     if (_cache.flavor == Flavor.development) {
       const envPath = '.env/.env.development';
-      dev.log('read $envPath');
       await DotEnv().load(envPath);
-      dev.log('$envPath loaded');
-      dev.log(DotEnv().env.toString());
+      dev.log('\t📎 read .env');
     }
   }
 

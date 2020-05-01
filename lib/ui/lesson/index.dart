@@ -12,7 +12,6 @@ import 'package:wr_app/ui/lesson/request_page.dart';
 
 import 'package:wr_app/ui/lesson/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
-import 'package:wr_app/ui/lesson/widgets/gf_rect_items_carousel.dart';
 
 /// `レッスン` ページのトップ
 ///
@@ -159,7 +158,9 @@ class LessonSelectCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final lessons = MasterDataStore.dummyLessons;
+    final masterData = Provider.of<MasterDataStore>(context);
+    final lessons = masterData.getLessons();
+
     return GFCarousel(
       enableInfiniteScroll: false,
       items: lessons.map((lesson) => _carouselCell(context, lesson)).toList(),
