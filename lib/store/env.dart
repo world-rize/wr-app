@@ -19,7 +19,7 @@ extension FlavorEx on Flavor {
 
 /// Env
 class EnvStore with ChangeNotifier {
-  factory EnvStore({Flavor flavor}) {
+  factory EnvStore({@required Flavor flavor}) {
     _cache.flavor = flavor;
 
     readEnv();
@@ -27,9 +27,12 @@ class EnvStore with ChangeNotifier {
     return _cache;
   }
 
-  EnvStore._internal() {
-    dev.log('✨ EnvStore._internal()');
-    readPubSpec();
+  EnvStore._internal();
+
+  Future<void> init() async {
+    await readPubSpec();
+    await readEnv();
+    dev.log('✨ EnvStore.init()');
   }
 
   /// シングルトンインスタンス
@@ -61,6 +64,10 @@ class EnvStore with ChangeNotifier {
       await DotEnv().load(envPath);
       dev.log('\t📎 read .env');
     }
+  }
+
+  Map<String, dynamic> get env {
+    return DotEnv().env;
   }
 
   /// App Title
