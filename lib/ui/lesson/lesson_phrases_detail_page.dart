@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/model/phrase.dart';
+import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
 /// フレーズ詳細ページ
@@ -31,7 +33,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   AudioCache _cache;
 
   String voicePath() {
-    final path = phrase.example.value[0].assets.voice['en-us'];
+    final path = phrase.example.value[0].assets.voice[_currentVoiceType];
     return path;
   }
 
@@ -139,6 +141,9 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
 
   /// 下部ボタン
   Widget _createButtonArea() {
+    final userStore = Provider.of<UserStore>(context);
+    final favorite = userStore.user.favorites.containsKey(phrase.id);
+
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Row(
@@ -161,11 +166,14 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
             child: FloatingActionButton(
               backgroundColor: Colors.white,
               heroTag: 'Favorite',
-              child: const Icon(
-                Icons.favorite_border,
+              child: Icon(
+                favorite ? Icons.favorite : Icons.favorite_border,
                 color: Colors.blueAccent,
               ),
-              onPressed: () {},
+              onPressed: () {
+                userStore.callFavoritePhrase(
+                    phraseId: phrase.id, value: !favorite);
+              },
             ),
           ),
           // 再生ボタン
@@ -179,9 +187,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               ),
               onPressed: () {
                 if (!_isPlaying) {
-                  _cache.play(voicePath()).catchError((e) {
-                    showErrorDialog(e);
-                  });
+                  _cache.play(voicePath()).catchError(showErrorDialog);
                 } else {
                   _cache.fixedPlayer.stop();
                 }
