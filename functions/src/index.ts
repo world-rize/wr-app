@@ -1,7 +1,8 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase)
-import { userService } from './user'
+
+import { UserService } from './user/service'
 import { User } from './user/model'
 
 // onCall() has varify firebase tokens unlike onRequest()
@@ -38,7 +39,7 @@ export const readUser = functions.https.onCall(async (data: ReadUserRequest, con
   }
 
   const uid = context.auth.uid
-  const user = await userService.readUser(uid)
+  const user = await UserService.readUser(uid)
     .catch(e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', e)
@@ -56,8 +57,12 @@ export const readUser = functions.https.onCall(async (data: ReadUserRequest, con
   return { user }
 })
 
-interface CreateUserRequest {
-  uid: string
+export interface CreateUserRequest {
+  uuid: string
+  name: string
+  userId: string
+  email: string
+  age: string
 }
 
 interface CreateUserResponse {
@@ -67,28 +72,31 @@ interface CreateUserResponse {
 /**
  *  ユーザーを作成します
  */
-export const createUser = functions.https.onCall(async (data: CreateUserRequest, context): Promise<CreateUserResponse> => {
+export const createUser = functions.https.onCall(async (req: CreateUserRequest, context): Promise<CreateUserResponse> => {
   if (!context.auth) {
     console.error('not authorized')
     throw new functions.https.HttpsError('permission-denied', 'not authorized')
   }
 
-  const uid = context.auth.uid
+  if (context.auth.uid !== req.uuid) {
+    console.error('illegal uuid')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
 
-  console.log(`[createUser] uid: ${uid}`)
+  console.log(`[createUser] uid: ${req.uuid}`)
 
-  if (await userService.existUser(uid)) {
+  if (await UserService.existUser(req.uuid)) {
     console.error('user already exist')
     throw new functions.https.HttpsError('already-exists', 'user already exist')
   }
 
-  const user = await userService.createUser(uid)
+  const user = await UserService.createUser(req)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to create user')
     })
 
-  console.log(`[createUser] uid: ${uid} user created`)
+  console.log(`[createUser] uid: ${req.uuid} user created`)
 
   return { user }
 })
@@ -121,7 +129,7 @@ export const favoritePhrase = functions.https.onCall(async (data: FavoritePhrase
     throw new functions.https.HttpsError('invalid-argument', 'phraseId or value is invalid')
   }
 
-  const success = await userService.favoritePhrase(uid, phraseId, value)
+  const success = await UserService.favoritePhrase(uid, phraseId, value)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to favorite phrase')
