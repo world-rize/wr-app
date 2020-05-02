@@ -1,5 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/ui/app.dart';
@@ -10,9 +12,16 @@ import 'package:wr_app/store/env.dart';
 void runAppWithFlavor(final Flavor flavor) {
   Provider.debugCheckInvalidValueType = null;
 
+  final analytics = FirebaseAnalytics();
+  final observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   // アプリ全体にストアを Provide する
   runApp(MultiProvider(
     providers: [
+      // Firebase Analytics
+      // TODO(someone): create Analytics Store
+      Provider.value(value: analytics),
+      Provider.value(value: observer),
       // 環境変数
       ChangeNotifierProvider(
         create: (_) => EnvStore(flavor: flavor),

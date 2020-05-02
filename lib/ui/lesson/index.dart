@@ -1,5 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +17,20 @@ import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 /// `レッスン` ページのトップ
 ///
 class LessonIndexPage extends StatelessWidget {
+  Future<void> _sendAnalyticsEvent(BuildContext context) async {
+    final userStore = Provider.of<UserStore>(context);
+    if (userStore == null) {
+      return;
+    }
+    final analytics = Provider.of<FirebaseAnalytics>(context);
+    await analytics.logEvent(
+      name: 'test_event',
+      parameters: {
+        'uid': userStore.user.uuid,
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
