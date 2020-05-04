@@ -32,14 +32,22 @@ class APITestView extends StatelessWidget {
               SettingsTile(
                 title: 'ユーザーを取得',
                 leading: Icon(Icons.people),
-                onTap: userStore.fetchUser,
+                onTap: userStore.callReadUser,
               ),
               SettingsTile(
-                  title: 'お気に入りに登録',
-                  leading: Icon(Icons.favorite),
-                  onTap: () {
-                    userStore.callFavoritePhrase(phraseId: '0001', value: true);
-                  }),
+                title: 'お気に入りに登録',
+                leading: Icon(Icons.favorite),
+                onTap: () {
+                  userStore.callFavoritePhrase(phraseId: '0000', value: true);
+                },
+              ),
+              SettingsTile(
+                title: '1ポイントゲット',
+                leading: Icon(Icons.attach_money),
+                onTap: () {
+                  userStore.callGetPoint(point: 1);
+                },
+              ),
             ],
           ),
         ],

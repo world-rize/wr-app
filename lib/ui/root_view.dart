@@ -38,7 +38,8 @@ class _RootViewState extends State<RootView>
     _searchBarController = SearchBarController();
 
     // login
-    UserStore().signIn();
+    // TODO(someone): ログイン画面を表示
+    UserStore().signIn(email: 'a@b.com', password: '123456');
   }
 
   // TODO(wakame-tech): 検索バーを実装

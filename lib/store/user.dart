@@ -36,11 +36,18 @@ class UserStore with ChangeNotifier {
   Phrase pickedUpNewComingPhrase = dummyPhrase();
 
   /// ユーザーデータ
-  User user = User(name: '', point: 0);
+  User user = User(
+      name: '',
+      point: 0,
+      age: 0,
+      email: '',
+      favorites: {},
+      userId: '',
+      uuid: '');
 
   /// 成功トーストを出す
   void successToast(String message) {
-    dev.log(message);
+    dev.log('\t ✔ $message');
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
@@ -50,7 +57,7 @@ class UserStore with ChangeNotifier {
 
   /// エラートーストを出す
   void errorToast(Exception e) {
-    dev.log(e.toString(), level: 1);
+    dev.log('\t⚠ $e', level: 1);
     Fluttertoast.showToast(
       msg: 'エラーが発生',
       toastLength: Toast.LENGTH_LONG,
@@ -59,20 +66,32 @@ class UserStore with ChangeNotifier {
   }
 
   /// ユーザーデータを習得します
-  Future<void> fetchUser() async {
-    dev.log('\t fetchUser ...');
+  Future<User> callReadUser() async {
+    dev.log('callReadUser()');
 
     try {
-//      final data = await readUser();
-//      print(data);
-//      final user = data.user;
-      final user = User(name: 'Tom', point: 100);
+      final res = await readUser();
+      return res.user;
+    } on Exception catch (e) {
+      errorToast(e);
+    }
+  }
 
-      dev.log(user.uuid);
+  /// Firebase Auth にサインインしユーザーデータを取得する
+  Future<void> signIn({
+    @required String email,
+    @required String password,
+  }) async {
+    try {
+      auth = await _signInAuth(email: email, password: password);
 
-      successToast('uid: ${user.uuid}');
+      dev.log('\t ✔ user sign in ${auth.uid}');
 
-      this.user = user;
+      user = await callReadUser();
+
+      dev.log('\t ✔ user fetched ${user.name}');
+
+      successToast('ログインしました');
 
       notifyListeners();
     } on Exception catch (e) {
@@ -81,16 +100,21 @@ class UserStore with ChangeNotifier {
   }
 
   /// Firebase Auth にログイン
-  Future<void> signIn() async {
-    final _result = await _auth.signInAnonymously();
+  Future<FirebaseUser> _signInAuth({
+    @required String email,
+    @required String password,
+  }) async {
+    try {
+      final _result = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      // final _result = await _auth.signInAnonymously();
 
-    auth = _result.user;
-
-    dev.log('\t ✔ anonymous sign in ${auth.uid}');
-
-    // await fetchUser();
-
-    successToast('ログインしました');
+      return _result.user;
+    } on Exception catch (e) {
+      errorToast(e);
+    }
   }
 
   /// ゲストユーザーかどうか
@@ -132,16 +156,33 @@ class UserStore with ChangeNotifier {
 
   /// フレーズをお気に入りに登録します
   Future<void> callFavoritePhrase(
-      {@required String phraseId, @required bool value}) async {
+      {@required String phraseId, @required bool value}) {
     dev.log('\tcallFavoritePhrase()');
 
     try {
-      final data =
-          await favoritePhrase(uid: auth.uid, phraseId: phraseId, value: value);
+      favoritePhrase(uid: auth.uid, phraseId: phraseId, value: value)
+          .then((res) {
+        successToast(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
+      });
+
+      user.favorites[phraseId] = value;
+
+      notifyListeners();
+    } on Exception catch (e) {
+      errorToast(e);
+    }
+  }
+
+  /// ポイントを習得します
+  Future<void> callGetPoint({@required int point}) async {
+    dev.log('\tcallGetPoint()');
+
+    try {
+      final data = await getPoint(uid: auth.uid, point: point);
 
       dev.log(data.toString());
 
-      successToast('お気に入りに登録しました');
+      successToast('$pointポイントゲットしました');
 
       notifyListeners();
     } on Exception catch (e) {
@@ -151,6 +192,6 @@ class UserStore with ChangeNotifier {
 
   /// 名前を取得
   String displayName() {
-    return _isGuest() ? 'ゲスト' : auth.displayName;
+    return (user != null) ? user.name : '---';
   }
 }

@@ -21,7 +21,7 @@ Phrase dummyPhrase({int i = 1}) {
         'en': 'When is the homework due?',
       },
       meta: {
-        'lessonId': '0001',
+        'lessonId': 'Shcool',
       },
       example: Example(value: [
         Message(

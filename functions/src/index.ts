@@ -88,11 +88,6 @@ export const createUser = functions.https.onCall(async (req: CreateUserRequest, 
     throw new functions.https.HttpsError('permission-denied', 'not authorized')
   }
 
-  if (context.auth.uid !== req.uuid) {
-    console.error('illegal uuid')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
-
   console.log(`[createUser] uid: ${req.uuid}`)
 
   if (await UserService.existUser(req.uuid)) {
@@ -167,11 +162,6 @@ interface GetPointResponse {
 export const getPoint = functions.https.onCall(async (req: GetPointRequest, context): Promise<GetPointResponse> => {
   if (!context.auth) {
     console.error('not authorized')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
-
-  if (context.auth.uid !== req.uuid) {
-    console.error('illegal uuid')
     throw new functions.https.HttpsError('permission-denied', 'not authorized')
   }
 

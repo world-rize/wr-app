@@ -142,7 +142,8 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   /// 下部ボタン
   Widget _createButtonArea() {
     final userStore = Provider.of<UserStore>(context);
-    final favorite = userStore.user.favorites.containsKey(phrase.id);
+    final favorite = userStore.user.favorites.containsKey(phrase.id) &&
+        userStore.user.favorites[phrase.id];
 
     return Padding(
       padding: const EdgeInsets.all(12),

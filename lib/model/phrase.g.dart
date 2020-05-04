@@ -9,6 +9,9 @@ part of 'phrase.dart';
 Phrase _$PhraseFromJson(Map<String, dynamic> json) {
   return Phrase(
       id: json['id'] as String,
+      title: (json['title'] as Map<String, dynamic>)?.map(
+        (k, e) => MapEntry(k, e as String),
+      ),
       meta: (json['meta'] as Map<String, dynamic>)?.map(
         (k, e) => MapEntry(k, e as String),
       ),
@@ -17,10 +20,7 @@ Phrase _$PhraseFromJson(Map<String, dynamic> json) {
       ),
       example: json['example'] == null
           ? null
-          : Example.fromJson(json['example'] as Map<String, dynamic>))
-    ..title = (json['title'] as Map<String, dynamic>)?.map(
-      (k, e) => MapEntry(k, e as String),
-    );
+          : Example.fromJson(json['example'] as Map<String, dynamic>));
 }
 
 Map<String, dynamic> _$PhraseToJson(Phrase instance) => <String, dynamic>{

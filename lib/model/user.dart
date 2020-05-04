@@ -1,13 +1,22 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'user.g.dart';
 
 /// ユーザー
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class User {
-  User({this.uuid, this.name, this.point, this.favorites});
+  User({
+    @required this.uuid,
+    @required this.userId,
+    @required this.email,
+    @required this.age,
+    @required this.name,
+    @required this.point,
+    @required this.favorites,
+  });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
@@ -15,6 +24,15 @@ class User {
 
   /// uuid
   String uuid;
+
+  /// userId
+  String userId;
+
+  /// email
+  String email;
+
+  /// age
+  int age;
 
   /// 名前
   String name;
