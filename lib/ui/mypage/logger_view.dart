@@ -1,22 +1,21 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
+import 'package:wr_app/store/logger.dart';
 
 class LoggerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ログ'),
+        title: const Text('Logs'),
       ),
-      body: Column(
-        children: <Widget>[
-          FlatButton(
-            child: Text('Hoge'),
-            onPressed: () {},
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: Logger.logs.map((log) => Text(log)).toList(),
+        ),
       ),
     );
   }

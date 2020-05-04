@@ -4,6 +4,7 @@ import 'dart:developer' as dev;
 import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:wr_app/store/logger.dart';
 
 enum Flavor {
   development,
@@ -32,7 +33,7 @@ class EnvStore with ChangeNotifier {
   Future<void> init() async {
     await readPubSpec();
     await readEnv();
-    dev.log('✨ EnvStore.init()');
+    Logger.log('✨ EnvStore.init()');
   }
 
   /// シングルトンインスタンス
@@ -54,15 +55,15 @@ class EnvStore with ChangeNotifier {
     final info = await PackageInfo.fromPlatform();
     _cache.version = info.version;
     _cache.appName = info.appName;
-    dev.log('\t📎 read pubspec.yml');
-    dev.log('\t${info.appName} ${info.version}');
+    Logger.log('\t📎 read pubspec.yml');
+    Logger.log('\t${info.appName} ${info.version}');
   }
 
   static Future<void> readEnv() async {
     if (_cache.flavor == Flavor.development) {
       const envPath = '.env/.env.development';
       await DotEnv().load(envPath);
-      dev.log('\t📎 read .env');
+      Logger.log('\t📎 read .env');
     }
   }
 

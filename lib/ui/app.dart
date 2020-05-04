@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/env.dart';
+import 'package:wr_app/store/logger.dart';
 //import 'package:wr_app/ui/onboarding_page.dart';
 import 'package:wr_app/ui/root_view.dart';
 import 'package:wr_app/theme.dart';
@@ -29,7 +30,7 @@ class WRAppState extends State<WRApp> {
 
     if (envStore?.env?.containsKey('ADMOB_APP_ID') ?? false) {
       FirebaseAdMob.instance.initialize(appId: envStore?.env['ADMOB_APP_ID']);
-      dev.log('🔥 Admob Initialized');
+      Logger.log('🔥 Admob Initialized');
     }
 
     return MaterialApp(

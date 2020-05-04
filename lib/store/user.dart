@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wr_app/model/user.dart';
 import 'package:wr_app/api/user.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wr_app/store/logger.dart';
 
 /// FireStore Auth
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -20,7 +21,7 @@ class UserStore with ChangeNotifier {
   }
 
   UserStore._internal() {
-    dev.log('✨ UserStore._internal()');
+    Logger.log('✨ UserStore._internal()');
   }
 
   /// シングルトンインスタンス
@@ -47,7 +48,7 @@ class UserStore with ChangeNotifier {
 
   /// 成功トーストを出す
   void successToast(String message) {
-    dev.log('\t ✔ $message');
+    Logger.log('\t ✔ $message');
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
@@ -57,7 +58,7 @@ class UserStore with ChangeNotifier {
 
   /// エラートーストを出す
   void errorToast(Exception e) {
-    dev.log('\t⚠ $e', level: 1);
+    Logger.log('\t⚠ $e');
     Fluttertoast.showToast(
       msg: 'エラーが発生',
       toastLength: Toast.LENGTH_LONG,
@@ -67,7 +68,7 @@ class UserStore with ChangeNotifier {
 
   /// ユーザーデータを習得します
   Future<User> callReadUser() async {
-    dev.log('callReadUser()');
+    Logger.log('callReadUser()');
 
     try {
       final res = await readUser();
@@ -85,11 +86,11 @@ class UserStore with ChangeNotifier {
     try {
       auth = await _signInAuth(email: email, password: password);
 
-      dev.log('\t ✔ user sign in ${auth.uid}');
+      Logger.log('\t ✔ user sign in ${auth.uid}');
 
       user = await callReadUser();
 
-      dev.log('\t ✔ user fetched ${user.name}');
+      Logger.log('\t ✔ user fetched ${user.name}');
 
       successToast('ログインしました');
 
@@ -124,7 +125,7 @@ class UserStore with ChangeNotifier {
 
   /// テストAPIを呼ぶ
   Future<void> callTestAPI() async {
-    dev.log('callTestAPI');
+    Logger.log('callTestAPI');
 
     try {
       final data = await test();
@@ -139,7 +140,7 @@ class UserStore with ChangeNotifier {
 
   /// ユーザーを作成します
   Future<void> callCreateUser() async {
-    dev.log('\tcallCreateUser()');
+    Logger.log('\tcallCreateUser()');
 
     try {
       final data = await createUser();
@@ -157,7 +158,7 @@ class UserStore with ChangeNotifier {
   /// フレーズをお気に入りに登録します
   Future<void> callFavoritePhrase(
       {@required String phraseId, @required bool value}) {
-    dev.log('\tcallFavoritePhrase()');
+    Logger.log('\tcallFavoritePhrase()');
 
     try {
       favoritePhrase(uid: auth.uid, phraseId: phraseId, value: value)
@@ -175,12 +176,12 @@ class UserStore with ChangeNotifier {
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int point}) async {
-    dev.log('\tcallGetPoint()');
+    Logger.log('\tcallGetPoint()');
 
     try {
       final data = await getPoint(uid: auth.uid, point: point);
 
-      dev.log(data.toString());
+      Logger.log(data.toString());
 
       successToast('$pointポイントゲットしました');
 
