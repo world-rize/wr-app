@@ -1,3 +1,6 @@
+/**
+ * Copyright © 2020 WorldRIZe. All rights reserved.
+ */
 import { Questionnaire } from './model'
 import { questionnaires } from './repo'
 import { UserService } from '../user/service'

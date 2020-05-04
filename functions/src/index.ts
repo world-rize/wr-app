@@ -1,9 +1,19 @@
+/**
+ * WorldRize API
+ * 
+ * Copyright © 2020 WorldRIZe. All rights reserved.
+ */
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase)
 
 import { UserService } from './user/service'
 import { User } from './user/model'
+
+// TODO: request object validation
+// TODO: certification
+// TODO: logging
+// TODO: testing
 
 // onCall() has varify firebase tokens unlike onRequest()
 
@@ -136,6 +146,52 @@ export const favoritePhrase = functions.https.onCall(async (data: FavoritePhrase
     })
 
   console.log(`[favoritePhrase] favorited uid: ${uid}, phraseId: ${phraseId}, value: ${value}`)
+
+  return {
+    success
+  }
+})
+
+interface GetPointRequest {
+  uuid: string
+  point: number
+}
+
+interface GetPointResponse {
+  success: boolean
+}
+
+/**
+ * ユーザーがポイントを獲得
+ */
+export const getPoint = functions.https.onCall(async (req: GetPointRequest, context): Promise<GetPointResponse> => {
+  if (!context.auth) {
+    console.error('not authorized')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
+
+  if (context.auth.uid !== req.uuid) {
+    console.error('illegal uuid')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
+
+  const uid = context.auth.uid
+  const point = req.point
+
+  console.log(`[getPoint] uid: ${uid}, point: ${point}`)
+
+  if (!point || Number.isNaN(point)) {
+    console.error('point is invalid')
+    throw new functions.https.HttpsError('invalid-argument', 'point is invalid')
+  }
+
+  const success = await UserService.getPoint(uid, point)
+    .catch (e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to get point')
+    })
+
+  console.log(`[getPoint] getPoint uid: ${uid}, point: ${point}`)
 
   return {
     success

@@ -1,3 +1,6 @@
+/**
+ * Copyright © 2020 WorldRIZe. All rights reserved.
+ */
 import { firestore } from 'firebase-admin'
 import { User } from './model'
 

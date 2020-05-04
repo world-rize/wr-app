@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2020 WorldRIZe. All rights reserved.
+ */
+
 export interface User {
   // firebase UUID
   uuid: string

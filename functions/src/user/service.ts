@@ -1,3 +1,6 @@
+/**
+ * Copyright © 2020 WorldRIZe. All rights reserved.
+ */
 import { User } from './model'
 import { users } from './repo'
 import { CreateUserRequest } from '../index'
@@ -35,7 +38,20 @@ export class UserService {
     }
     user.favorites[phraseId] = value
     await users.update(user)
-    return false
+    return true
+  }
+
+  static async getPoint (uuid: string, point: number): Promise<boolean> {
+    const user = await users.findById(uuid)
+    if (!user) {
+      throw 'User not found'
+    }
+    if (user.point + point < 0) {
+      throw 'Not enough points'
+    }
+    user.point += point
+    await users.update(user)
+    return true
   }
 
   static async delete(uuid: string): Promise<void> {
