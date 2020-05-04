@@ -3,15 +3,10 @@ description: WorldRIZe App
 authors:
   - wakame-tech
   - yoshiki301
-version: 0.2.0
+version: 0.2.1
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
-  # default
-  # sdk: ">=2.1.0 <3.0.0"
-  # for spread operator
-  # sdk: ">=2.3.0 <3.0.0"
-  # for extension
   sdk: ">=2.6.0 <3.0.0"
 
 dependencies:
@@ -21,6 +16,7 @@ dependencies:
   # https://github.com/FirebaseExtended/flutterfire/issues/2084
   firebase_core: 0.4.4
   firebase_auth: 0.15.3
+  firebase_admob: ^0.9.3+2
   firebase_analytics: ^1.0.4
   cloud_functions: ^0.4.2+3
   cupertino_icons: ^0.1.2
@@ -28,9 +24,7 @@ dependencies:
   getflutter: ^1.0.10
   provider: ^4.0.2
   flappy_search_bar: 1.4.1
-  # assets_audio_player: ^1.2.3
   audioplayers: ^0.14.2
-  # story_view: ^0.11.2
   settings_ui: ^0.2.0
   flutter_markdown: ^0.3.4
   package_info: ^0.4.0+16
@@ -69,5 +63,4 @@ flutter_icons:
   image_path: "assets/icon/icon.png"
 
 flutter_native_splash:
-  color: "42a5f5"
-  image: assets/wr_icon.jpg
+  color: "70BFE6"

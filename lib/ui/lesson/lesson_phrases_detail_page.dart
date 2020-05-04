@@ -24,17 +24,24 @@ class LessonPhrasesDetailPage extends StatefulWidget {
 
 class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   _LessonPhrasesDetailPageState({@required this.phrase});
+
+  // State Options
+  static List<double> playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
+  static List<String> pronunciations = ['en-us', 'en-uk', 'en-au'];
+
   final Phrase phrase;
+
+  // State
   bool _isPlaying = false;
-  List<double> playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
   double _currentPlaybackSpeed = 1;
-  String _currentVoiceType = 'en-us';
+  String _currentVoiceType = pronunciations[0];
   AudioPlayer _player;
   AudioCache _cache;
 
   String voicePath() {
-    final path = phrase.example.value[0].assets.voice[_currentVoiceType];
-    return path;
+    // TODO(someone): titlePhraseは[1]ではない可能性も
+    final titlePhrase = phrase.example.value[1];
+    return titlePhrase.assets.voice[_currentVoiceType];
   }
 
   void showErrorDialog(Error e) {
@@ -142,7 +149,8 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   /// 下部ボタン
   Widget _createButtonArea() {
     final userStore = Provider.of<UserStore>(context);
-    final favorite = userStore.user.favorites.containsKey(phrase.id);
+    final favorite = userStore.user.favorites.containsKey(phrase.id) &&
+        userStore.user.favorites[phrase.id];
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -202,7 +210,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               child: Text(
                 _currentPlaybackSpeed.toString(),
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 24,
                   color: Colors.blue,
                 ),
               ),
@@ -222,11 +230,21 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
             child: FloatingActionButton(
               backgroundColor: Colors.white,
               heroTag: 'Country',
-              child: const Icon(
-                Icons.flag,
-                color: Colors.blueAccent,
+              child: Text(
+                _currentVoiceType,
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.blue,
+                ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                final _index = pronunciations.indexOf(_currentVoiceType);
+                final _nextPron =
+                    pronunciations[(_index + 1) % pronunciations.length];
+                setState(() {
+                  _currentVoiceType = _nextPron;
+                });
+              },
             ),
           ),
         ],

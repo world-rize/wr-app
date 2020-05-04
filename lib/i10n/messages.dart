@@ -1,42 +1,24 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-// referenced https://github.com/mono0926/intl_sample/blob/master/lib/l10n/messages.dart
 import 'package:intl/intl.dart';
 
+enum Membership {
+  normal,
+  premium,
+}
+
+// referenced https://github.com/mono0926/intl_sample/blob/master/lib/l10n/messages.dart
 mixin Messages {
-  String get hello => Intl.message(
-        'こんにちは',
-        name: 'hello',
-        desc: '挨拶', // オプション
+  /// point
+  String points(int point) =>
+      _points(NumberFormat.compact(locale: 'en').format(point));
+
+  String _points(String point) => Intl.message(
+        '$point ポイント',
+        name: 'point',
+        args: [point],
       );
 
-  // NumberFormatは実際には使い回したりするがサンプルなので毎回生成
-  String followers(int count) =>
-      _followers(NumberFormat.compact(locale: 'en').format(count));
-
-  String _followers(String count) => Intl.message(
-        'フォロワー: $count',
-        name: '_followers',
-        args: [count],
-      );
-
-  String dogsCount(int howMany) => Intl.plural(
-        howMany,
-        zero: 'no dog😢',
-        one: 'a dog',
-        other: '$howMany dogs',
-        args: [howMany],
-        name: 'dogsCount',
-      );
-
-  String hungry(String gender) => Intl.gender(
-        gender,
-        male: '僕はお腹が空きました',
-        female: '私はお腹が空いたわ',
-        other: 'はらぺこりん',
-        name: 'hungry',
-        args: [gender],
-      );
-
+  /// plan
   String memberStatus(Membership membership) => Intl.select(
         membership,
         {
@@ -46,6 +28,51 @@ mixin Messages {
         name: 'memberStatus',
         args: [membership],
       );
-}
 
-enum Membership { normal, premium }
+  /// bottom nav bar
+  String get bottomNavLesson => Intl.message(
+        'Lesson',
+        name: 'lesson',
+      );
+
+  String get bottomNavColumn => Intl.message(
+        'Columns',
+        name: 'columns',
+      );
+
+  String get bottomNavTravel => Intl.message(
+        'Travel',
+        name: 'travel',
+      );
+
+  String get bottomNavAgency => Intl.message(
+        'Agency',
+        name: 'agency',
+      );
+
+  String get bottomNavMyPage => Intl.message(
+        'My page',
+        name: 'mypage',
+      );
+
+  /// settings
+  String get myPageTitle => Intl.message(
+        '設定',
+        name: 'settings',
+      );
+
+  String get accountSection => Intl.message(
+        'アカウント',
+        name: 'accountSection',
+      );
+
+  String get studySection => Intl.message(
+        '学習',
+        name: 'studySection',
+      );
+
+  String get otherSection => Intl.message(
+        'その他',
+        name: 'otherSection',
+      );
+}

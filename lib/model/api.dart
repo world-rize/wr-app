@@ -5,7 +5,8 @@ import 'package:wr_app/model/user.dart';
 
 part 'api.g.dart';
 
-@JsonSerializable()
+// see https://stackoverflow.com/questions/58741971/casterror-type-internallinkedhashmapdynamic-dynamic-is-not-a-subtype-of
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class TestResponse {
   TestResponse({this.success});
 
@@ -17,7 +18,7 @@ class TestResponse {
   bool success;
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class ReadUserResponse {
   ReadUserResponse({this.user});
 
@@ -29,7 +30,7 @@ class ReadUserResponse {
   User user;
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateUserResponse {
   CreateUserResponse({this.user});
 
@@ -41,7 +42,7 @@ class CreateUserResponse {
   User user;
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class FavoritePhraseResponse {
   FavoritePhraseResponse({this.success});
 
@@ -49,6 +50,18 @@ class FavoritePhraseResponse {
       _$FavoritePhraseResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$FavoritePhraseResponseToJson(this);
+
+  bool success;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class GetPointResponse {
+  GetPointResponse({this.success});
+
+  factory GetPointResponse.fromJson(Map<String, dynamic> json) =>
+      _$GetPointResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GetPointResponseToJson(this);
 
   bool success;
 }

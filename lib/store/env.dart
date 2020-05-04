@@ -4,6 +4,7 @@ import 'dart:developer' as dev;
 import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:wr_app/store/logger.dart';
 
 enum Flavor {
   development,
@@ -19,7 +20,7 @@ extension FlavorEx on Flavor {
 
 /// Env
 class EnvStore with ChangeNotifier {
-  factory EnvStore({Flavor flavor}) {
+  factory EnvStore({@required Flavor flavor}) {
     _cache.flavor = flavor;
 
     readEnv();
@@ -27,9 +28,12 @@ class EnvStore with ChangeNotifier {
     return _cache;
   }
 
-  EnvStore._internal() {
-    dev.log('✨ EnvStore._internal()');
-    readPubSpec();
+  EnvStore._internal();
+
+  Future<void> init() async {
+    await readPubSpec();
+    await readEnv();
+    Logger.log('✨ EnvStore.init()');
   }
 
   /// シングルトンインスタンス
@@ -51,16 +55,20 @@ class EnvStore with ChangeNotifier {
     final info = await PackageInfo.fromPlatform();
     _cache.version = info.version;
     _cache.appName = info.appName;
-    dev.log('\t📎 read pubspec.yml');
-    dev.log('\t${info.appName} ${info.version}');
+    Logger.log('\t📎 read pubspec.yml');
+    Logger.log('\t${info.appName} ${info.version}');
   }
 
   static Future<void> readEnv() async {
     if (_cache.flavor == Flavor.development) {
       const envPath = '.env/.env.development';
       await DotEnv().load(envPath);
-      dev.log('\t📎 read .env');
+      Logger.log('\t📎 read .env');
     }
+  }
+
+  Map<String, dynamic> get env {
+    return DotEnv().env;
   }
 
   /// App Title

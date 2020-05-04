@@ -38,9 +38,9 @@ class TestResultPage extends StatelessWidget {
               onPressed: () {
                 // pop history
                 Navigator.popUntil(context, (route) => route.isFirst);
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
-                );
+//                Navigator.of(context).push(
+//                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
+//                );
               },
             )
           ],

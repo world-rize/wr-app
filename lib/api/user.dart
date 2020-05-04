@@ -13,8 +13,9 @@ Future<TestResponse> test() async {
         ..timeout = const Duration(seconds: 10);
 
   final result = await callable.call({});
-  final payload = Map.castFrom<dynamic, dynamic, String, dynamic>(result.data);
-  return TestResponse.fromJson(payload);
+
+  // dynamic -> Map<String, dynamic> -> Response
+  return TestResponse.fromJson(Map<String, dynamic>.from(result.data));
 }
 
 /// read user
@@ -27,8 +28,9 @@ Future<ReadUserResponse> readUser() async {
     print(e);
     throw e;
   });
-  final payload = Map.castFrom<dynamic, dynamic, String, dynamic>(result.data);
-  return ReadUserResponse.fromJson(payload);
+
+  // dynamic -> Map<String, dynamic> -> Response
+  return ReadUserResponse.fromJson(Map<String, dynamic>.from(result.data));
 }
 
 /// create user
@@ -42,8 +44,8 @@ Future<CreateUserResponse> createUser() async {
     throw e;
   });
 
-  final payload = Map.castFrom<dynamic, dynamic, String, dynamic>(result.data);
-  return CreateUserResponse.fromJson(payload);
+  // dynamic -> Map<String, dynamic> -> Response
+  return CreateUserResponse.fromJson(Map<String, dynamic>.from(result.data));
 }
 
 /// favorite phrase
@@ -60,6 +62,24 @@ Future<FavoritePhraseResponse> favoritePhrase(
     'phraseId': phraseId,
     'value': value,
   });
-  final payload = Map.castFrom<dynamic, dynamic, String, dynamic>(result.data);
-  return FavoritePhraseResponse.fromJson(payload);
+
+  // dynamic -> Map<String, dynamic> -> Response
+  return FavoritePhraseResponse.fromJson(
+      Map<String, dynamic>.from(result.data));
+}
+
+/// get point
+Future<GetPointResponse> getPoint(
+    {@required String uid, @required int point}) async {
+  final callable = CloudFunctions.instance
+      .getHttpsCallable(functionName: 'getPoint')
+        ..timeout = const Duration(seconds: 10);
+
+  final result = await callable.call({
+    'uid': uid,
+    'point': point,
+  });
+
+  // dynamic -> Map<String, dynamic> -> Response
+  return GetPointResponse.fromJson(Map<String, dynamic>.from(result.data));
 }

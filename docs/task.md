@@ -40,6 +40,32 @@ GetFlutterを使用しているのでコンポーネントに困ったら
 3. `$ open ios/Runner.xcworkspace` で Xcodeを開き `Runner/Flutter/Runner` にplistファイルを移動
 4. ビルドして匿名ログインが出来ているか確認
 
+### タスクランナー
+`json_annotation` などのコード生成をしたい時は
+
+```bash
+$ flutter pub run build_runner build
+```
+
+### i18n
+`lib/i10n` 以下にi18n用のファイル等があります。コード生成は
+
+```bash
+$ sh update_i10n.sh
+```
+
+を実行
+
+### アセット生成
+フレーズJSON等の生成は `RAW_TARGET` に文書が入った状態で
+
+```bash
+$ cd scripts
+$ python convertor.py
+```
+
+で `/assets` 以下に展開されます
+
 ## 👓 タスク
 作業をタスクに分けて割り振りをして開発を進めていきます。
 

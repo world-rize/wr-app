@@ -23,8 +23,12 @@ void runAppWithFlavor(final Flavor flavor) {
       Provider.value(value: analytics),
       Provider.value(value: observer),
       // 環境変数
-      ChangeNotifierProvider(
-        create: (_) => EnvStore(flavor: flavor),
+      FutureProvider(
+        create: (_) async {
+          final store = EnvStore(flavor: flavor);
+          await store.init();
+          return store;
+        },
       ),
       // ユーザーデータ
       ChangeNotifierProvider(

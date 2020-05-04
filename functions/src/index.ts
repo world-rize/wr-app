@@ -1,8 +1,19 @@
+/**
+ * WorldRize API
+ * 
+ * Copyright © 2020 WorldRIZe. All rights reserved.
+ */
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase)
-import { userService } from './user'
+
+import { UserService } from './user/service'
 import { User } from './user/model'
+
+// TODO: request object validation
+// TODO: certification
+// TODO: logging
+// TODO: testing
 
 // onCall() has varify firebase tokens unlike onRequest()
 
@@ -38,7 +49,7 @@ export const readUser = functions.https.onCall(async (data: ReadUserRequest, con
   }
 
   const uid = context.auth.uid
-  const user = await userService.readUser(uid)
+  const user = await UserService.readUser(uid)
     .catch(e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', e)
@@ -56,8 +67,12 @@ export const readUser = functions.https.onCall(async (data: ReadUserRequest, con
   return { user }
 })
 
-interface CreateUserRequest {
-  uid: string
+export interface CreateUserRequest {
+  uuid: string
+  name: string
+  userId: string
+  email: string
+  age: string
 }
 
 interface CreateUserResponse {
@@ -67,28 +82,26 @@ interface CreateUserResponse {
 /**
  *  ユーザーを作成します
  */
-export const createUser = functions.https.onCall(async (data: CreateUserRequest, context): Promise<CreateUserResponse> => {
+export const createUser = functions.https.onCall(async (req: CreateUserRequest, context): Promise<CreateUserResponse> => {
   if (!context.auth) {
     console.error('not authorized')
     throw new functions.https.HttpsError('permission-denied', 'not authorized')
   }
 
-  const uid = context.auth.uid
+  console.log(`[createUser] uid: ${req.uuid}`)
 
-  console.log(`[createUser] uid: ${uid}`)
-
-  if (await userService.existUser(uid)) {
+  if (await UserService.existUser(req.uuid)) {
     console.error('user already exist')
     throw new functions.https.HttpsError('already-exists', 'user already exist')
   }
 
-  const user = await userService.createUser(uid)
+  const user = await UserService.createUser(req)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to create user')
     })
 
-  console.log(`[createUser] uid: ${uid} user created`)
+  console.log(`[createUser] uid: ${req.uuid} user created`)
 
   return { user }
 })
@@ -121,13 +134,54 @@ export const favoritePhrase = functions.https.onCall(async (data: FavoritePhrase
     throw new functions.https.HttpsError('invalid-argument', 'phraseId or value is invalid')
   }
 
-  const success = await userService.favoritePhrase(uid, phraseId, value)
+  const success = await UserService.favoritePhrase(uid, phraseId, value)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to favorite phrase')
     })
 
   console.log(`[favoritePhrase] favorited uid: ${uid}, phraseId: ${phraseId}, value: ${value}`)
+
+  return {
+    success
+  }
+})
+
+interface GetPointRequest {
+  uuid: string
+  point: number
+}
+
+interface GetPointResponse {
+  success: boolean
+}
+
+/**
+ * ユーザーがポイントを獲得
+ */
+export const getPoint = functions.https.onCall(async (req: GetPointRequest, context): Promise<GetPointResponse> => {
+  if (!context.auth) {
+    console.error('not authorized')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
+
+  const uid = context.auth.uid
+  const point = req.point
+
+  console.log(`[getPoint] uid: ${uid}, point: ${point}`)
+
+  if (!point || Number.isNaN(point)) {
+    console.error('point is invalid')
+    throw new functions.https.HttpsError('invalid-argument', 'point is invalid')
+  }
+
+  const success = await UserService.getPoint(uid, point)
+    .catch (e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to get point')
+    })
+
+  console.log(`[getPoint] getPoint uid: ${uid}, point: ${point}`)
 
   return {
     success

@@ -2,12 +2,14 @@
 
 import 'dart:developer' as dev;
 import 'dart:convert';
+import 'dart:math';
 import 'package:wr_app/api/mock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/lesson.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:wr_app/store/logger.dart';
 
 /// マスタデータを保持するストア(__シングルトン__)
 ///
@@ -20,13 +22,13 @@ class MasterDataStore with ChangeNotifier {
   /// ストアの初期化
   /// 一度しか呼ばれない
   MasterDataStore._internal() {
-    dev.log('✨ MasterDataStore._internal()');
+    Logger.log('✨ MasterDataStore._internal()');
 
     try {
       _loadLessonsFromJson();
     } on Exception catch (e) {
       print(e);
-      dev.log('- Failed to init MasterDataStore');
+      Logger.log('- Failed to init MasterDataStore');
     }
   }
 
@@ -39,7 +41,7 @@ class MasterDataStore with ChangeNotifier {
   Future<void> _loadLessonsFromJson() async {
     const path = 'assets/lessons.json';
 
-    dev.log('\t Lessons @ $path');
+    Logger.log('\t Lessons @ $path');
     final lessons = await rootBundle
         .loadString(path)
         .then(jsonDecode)
@@ -53,7 +55,7 @@ class MasterDataStore with ChangeNotifier {
 
     _lessons.addAll(lessons);
 
-    dev.log('\t✨ ${_lessons.length} Lessons Loaded');
+    Logger.log('\t✨ ${_lessons.length} Lessons Loaded');
 
     await Future.forEach(_lessons, _loadPhrases);
 
@@ -63,7 +65,7 @@ class MasterDataStore with ChangeNotifier {
   Future<List<Phrase>> _loadPhrases(Lesson lesson) async {
     final path = 'assets/lessons/${lesson.id}.json';
 
-    dev.log('\t${lesson.id} @ $path');
+    Logger.log('\t${lesson.id} @ $path');
     return rootBundle.loadString(path).then(jsonDecode).then((list) =>
         List.from(list).map((json) => Phrase.fromJson(json)).toList());
   }
@@ -80,5 +82,21 @@ class MasterDataStore with ChangeNotifier {
 
   List<Lesson> getLessons() {
     return _lessons;
+  }
+
+  List<Phrase> allPhrases() {
+    return _lessons.expand((lesson) => lesson.phrases).toList();
+  }
+
+  List<String> randomSelections(Phrase phrase) {
+    final selections = <String>[phrase.example.value[1].text['en']];
+    final phrases = allPhrases();
+    for (var i = 0; i < 3; i++) {
+      final r = Random();
+      final randomPhrase = phrases[r.nextInt(phrases.length)];
+      selections.add(randomPhrase.example.value[1].text['en']);
+    }
+    assert(selections.length == 4);
+    return selections;
   }
 }
