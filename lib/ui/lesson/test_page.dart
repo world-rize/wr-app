@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:provider/provider.dart';
 
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/phrase.dart';
+import 'package:wr_app/store/masterdata.dart';
 
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
@@ -78,13 +80,8 @@ class TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
-    // 問題の選択肢
-    final dummySelection = [
-      'When is the homework due?',
-      'When is the homework due?',
-      'When is the homework due?',
-      'When is the homework due?',
-    ];
+    final masterData = Provider.of<MasterDataStore>(context);
+    final selection = masterData.randomSelections(currentPhrase);
 
     return Scaffold(
       appBar: AppBar(
@@ -94,7 +91,7 @@ class TestPageState extends State<TestPage> {
       body: QuestionView(
           index: _index,
           phrase: currentPhrase,
-          selection: dummySelection,
+          selection: selection,
           onNext: _next),
     );
   }
@@ -154,7 +151,7 @@ class QuestionView extends StatelessWidget {
   /// 選択肢
   Widget _createSelection() {
     return ListView.builder(
-      physics: const NeverScrollableScrollPhysics(),
+      // physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (_, index) {
         return Padding(
           padding: const EdgeInsets.all(6),
@@ -162,12 +159,12 @@ class QuestionView extends StatelessWidget {
               onTap: onNext,
               child: GFListTile(
                 title: Padding(
-                  padding: const EdgeInsets.all(6),
+                  padding: const EdgeInsets.all(2),
                   child: Text(
-                    'Choice $index',
+                    selection[index],
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 24,
+                      fontSize: 18,
                     ),
                   ),
                 ),

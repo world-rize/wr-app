@@ -4,11 +4,16 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/store/env.dart';
+import 'package:wr_app/ui/lesson/widgets/admob_widget.dart';
+import 'package:wr_app/ui/mypage/account_page.dart';
+import 'package:wr_app/ui/mypage/all_phrases_page.dart';
 //import 'package:wr_app/ui/onboarding_page.dart';
 import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 // TODO(wakame-tech): アカウント情報と設定項目を考える
 /// 設定ページ
@@ -19,23 +24,28 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsState extends State<SettingsPage> {
   Widget _settingsView() {
+    final masterData = Provider.of<MasterDataStore>(context);
     final userStore = Provider.of<UserStore>(context);
     final envStore = Provider.of<EnvStore>(context);
 
     return SettingsList(
       sections: [
+        // about account
         SettingsSection(
-          title: 'アカウント',
+          title: I.of(context).accountSection,
           tiles: [
             SettingsTile(
               title: 'アカウント',
               subtitle: userStore.displayName(),
               leading: Icon(Icons.people),
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => AccountPage()));
+              },
             ),
             SettingsTile(
               title: 'プラン',
-              subtitle: 'ノーマル',
+              subtitle: I.of(context).memberStatus(Membership.premium),
               leading: Icon(Icons.attach_money),
               onTap: () {},
             ),
@@ -46,20 +56,43 @@ class _SettingsState extends State<SettingsPage> {
             ),
           ],
         ),
+        // about study
         SettingsSection(
-          title: 'その他',
+          title: I.of(context).studySection,
           tiles: [
             SettingsTile(
-              title: 'Flavor',
-              subtitle: envStore.flavor.toShortString(),
+              title: 'お気に入りフレーズ一覧',
+              leading: Icon(Icons.favorite),
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => AllPhrasesPage(
+                          filter: (phrase) =>
+                              userStore.user.favorites.containsKey(phrase.id) &&
+                              userStore.user.favorites[phrase.id],
+                        )));
+              },
             ),
             SettingsTile(
-              title: 'バージョン',
+              title: '本日の残りテスト回数',
+              subtitle: '3',
+              leading: Icon(Icons.access_time),
+              onTap: () {},
+            ),
+          ],
+        ),
+        SettingsSection(
+          title: I.of(context).otherSection,
+          tiles: [
+            SettingsTile(
+              title: 'version',
               subtitle: envStore.version,
             ),
             SettingsTile(
-              title: '開発者',
-              subtitle: envStore.author,
+              title: 'このアプリについて',
+              onTap: () {},
+            ),
+            SettingsTile(
+              title: '利用規約',
               onTap: () {},
             ),
 //            SettingsTile(
@@ -73,17 +106,31 @@ class _SettingsState extends State<SettingsPage> {
         ),
         if (true)
           SettingsSection(
-            title: 'デバッグ',
+            title: 'Debug',
             tiles: [
               SettingsTile(
-                title: 'ログ',
+                title: 'Flavor',
+                subtitle: envStore.flavor.toShortString(),
+              ),
+              SettingsTile(
+                title: 'All Phrases',
+                subtitle: '${masterData.allPhrases().length} Phrases',
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => AllPhrasesPage(
+                            filter: (phrase) => true,
+                          )));
+                },
+              ),
+              SettingsTile(
+                title: 'Application Log',
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => LoggerView()));
                 },
               ),
               SettingsTile(
-                title: 'API',
+                title: 'API Testing',
                 onTap: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (_) => APITestView()));

@@ -2,6 +2,7 @@
 
 import 'dart:developer' as dev;
 import 'dart:convert';
+import 'dart:math';
 import 'package:wr_app/api/mock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/model/section.dart';
@@ -80,5 +81,21 @@ class MasterDataStore with ChangeNotifier {
 
   List<Lesson> getLessons() {
     return _lessons;
+  }
+
+  List<Phrase> allPhrases() {
+    return _lessons.expand((lesson) => lesson.phrases).toList();
+  }
+
+  List<String> randomSelections(Phrase phrase) {
+    final selections = <String>[phrase.example.value[1].text['en']];
+    final phrases = allPhrases();
+    for (var i = 0; i < 3; i++) {
+      final r = Random();
+      final randomPhrase = phrases[r.nextInt(phrases.length)];
+      selections.add(randomPhrase.example.value[1].text['en']);
+    }
+    assert(selections.length == 4);
+    return selections;
   }
 }

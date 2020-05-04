@@ -184,6 +184,8 @@ class UserStore with ChangeNotifier {
 
       successToast('$pointポイントゲットしました');
 
+      user.point += point;
+
       notifyListeners();
     } on Exception catch (e) {
       errorToast(e);

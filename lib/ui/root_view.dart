@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/store/env.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/agency/index.dart';
@@ -72,15 +71,13 @@ class _RootViewState extends State<RootView>
 
   /// メイン画面
   Widget _tabView() {
-    final envStore = Provider.of<EnvStore>(context);
     final userStore = Provider.of<UserStore>(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children: <Widget>[
-            Text('${userStore.user.point} ポイント'),
-            Text(I.of(context).hello),
+            Text(I.of(context).points(userStore.user.point)),
           ],
         ),
         actions: <Widget>[
@@ -124,23 +121,23 @@ class _RootViewState extends State<RootView>
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.create),
-            title: const Text('レッスン'),
+            title: Text(I.of(context).bottomNavLesson),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.view_column),
-            title: const Text('コラム'),
+            title: Text(I.of(context).bottomNavColumn),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.airplanemode_active),
-            title: const Text('旅行'),
+            title: Text(I.of(context).bottomNavTravel),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.public),
-            title: const Text('留学先紹介'),
+            title: Text(I.of(context).bottomNavAgency),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
-            title: const Text('マイページ'),
+            title: Text(I.of(context).bottomNavMyPage),
           ),
         ],
       ),
