@@ -12,11 +12,12 @@ class AllPhrasesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
     final masterData = Provider.of<MasterDataStore>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
         title: const Text('All Phrases'),
       ),
       body: SingleChildScrollView(

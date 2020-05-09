@@ -72,12 +72,21 @@ class _RootViewState extends State<RootView>
   /// メイン画面
   Widget _tabView() {
     final userStore = Provider.of<UserStore>(context);
+    final primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: primaryColor,
         title: Row(
           children: <Widget>[
-            Text(I.of(context).points(userStore.user.point)),
+            Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Icon(Icons.euro_symbol),
+            ),
+            Text(
+              I.of(context).points(userStore.user.point),
+              style: TextStyle(color: Colors.white),
+            ),
           ],
         ),
         actions: <Widget>[
@@ -112,7 +121,7 @@ class _RootViewState extends State<RootView>
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        fixedColor: Colors.blueAccent,
+        fixedColor: primaryColor,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           _pageController.jumpToPage(index);

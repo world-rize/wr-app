@@ -51,9 +51,10 @@ class TestResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
         title: const Text('Test'),
       ),
       body: SingleChildScrollView(

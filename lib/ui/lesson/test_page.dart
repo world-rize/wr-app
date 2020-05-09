@@ -80,12 +80,13 @@ class TestPageState extends State<TestPage> {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
     final masterData = Provider.of<MasterDataStore>(context);
     final selection = masterData.randomSelections(currentPhrase);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
         title: Text(title),
       ),
       body: QuestionView(

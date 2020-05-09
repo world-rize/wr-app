@@ -83,10 +83,15 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('Phrase Detail'),
+        backgroundColor: primaryColor,
+        title: const Text(
+          'Phrase Detail',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -167,7 +172,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               heroTag: 'Japanese',
               child: const Icon(
                 Icons.message,
-                color: Colors.blueAccent,
+                color: Colors.lightBlueAccent,
               ),
               onPressed: () {},
             ),
@@ -179,7 +184,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               heroTag: 'Favorite',
               child: Icon(
                 favorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.blueAccent,
+                color: Colors.redAccent,
               ),
               onPressed: () {
                 userStore.callFavoritePhrase(
@@ -193,8 +198,9 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               backgroundColor: Colors.white,
               heroTag: '3',
               child: Icon(
-                _isPlaying ? Icons.stop : Icons.play_arrow,
-                color: Colors.blueAccent,
+                _isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.orangeAccent,
+                size: 40,
               ),
               onPressed: () {
                 if (!_isPlaying) {
@@ -214,6 +220,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
                 _currentPlaybackSpeed.toString(),
                 style: TextStyle(
                   fontSize: 24,
+                  fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
               ),

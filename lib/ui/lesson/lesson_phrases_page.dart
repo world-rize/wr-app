@@ -18,12 +18,15 @@ class LessonPhrasesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).primaryTextTheme;
+    final primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text(section.title),
+        backgroundColor: primaryColor,
+        title: Text(
+          section.title,
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       // TODO(somebody): per-page scroll physics
       body: SingleChildScrollView(
@@ -35,11 +38,11 @@ class LessonPhrasesPage extends StatelessWidget {
               child: GFListTile(
                 avatar: Text(
                   section.title,
-                  style: style.display1.apply(color: Colors.black),
+                  style: TextStyle(color: Colors.black, fontSize: 24),
                 ),
                 title: Text(
                   '未クリア',
-                  style: style.title.apply(color: Colors.redAccent),
+                  style: TextStyle(color: Colors.redAccent, fontSize: 20),
                 ),
               ),
             ),

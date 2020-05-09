@@ -7,9 +7,11 @@ import 'package:flutter/cupertino.dart';
 class RequestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: primaryColor,
         title: const Text('フレーズのリクエスト'),
       ),
       body: const SingleChildScrollView(

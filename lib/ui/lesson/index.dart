@@ -161,17 +161,35 @@ class LessonSelectCarousel extends StatelessWidget {
                 height: size.height,
                 width: size.width,
               ),
-              Positioned(
-                top: 20,
-                left: 20,
-                child: Text(lesson.title['ja'],
-                    style: const TextStyle(color: Colors.white, fontSize: 30)),
+              ClipRect(
+                child: Container(
+                  color: const Color.fromRGBO(128, 128, 128, 0.5),
+                ),
+              ),
+              const Positioned(
+                top: 10,
+                left: 10,
+                child: Text('No.1',
+                    style: TextStyle(color: Colors.white, fontSize: 18)),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(
+                    lesson.title['ja'],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
               Positioned(
-                bottom: 20,
+                bottom: 10,
                 right: 20,
-                child: Text('0 / ${lesson.phrases.length}',
-                    style: const TextStyle(color: Colors.white, fontSize: 30)),
+                child: Text('クリア[0/${lesson.phrases.length}]',
+                    style: const TextStyle(color: Colors.white, fontSize: 18)),
               ),
             ],
           ),
