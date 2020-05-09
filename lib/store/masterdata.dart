@@ -88,14 +88,15 @@ class MasterDataStore with ChangeNotifier {
     return _lessons.expand((lesson) => lesson.phrases).toList();
   }
 
-  List<String> randomSelections(Phrase phrase) {
-    final selections = <String>[phrase.example.value[1].text['en']];
+  List<String> randomSelections(Phrase phrase, int correctIndex) {
+    final selections = <String>[];
     final phrases = allPhrases();
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < 4; i++) {
       final r = Random();
       final randomPhrase = phrases[r.nextInt(phrases.length)];
       selections.add(randomPhrase.example.value[1].text['en']);
     }
+    selections[correctIndex] = phrase.example.value[1].text['en'];
     assert(selections.length == 4);
     return selections;
   }

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
@@ -114,9 +115,10 @@ class LessonMenus extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => RequestPage()),
                   );
                 },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 90),
-                  child: Text('フレーズをリクエストする'),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 90),
+                  child: Text(I.of(context).requestPhraseButton),
                 ),
               ),
             ),
@@ -188,7 +190,8 @@ class LessonSelectCarousel extends StatelessWidget {
               Positioned(
                 bottom: 10,
                 right: 20,
-                child: Text('クリア[0/${lesson.phrases.length}]',
+                child: Text(
+                    I.of(context).lessonStatus(0, lesson.phrases.length),
                     style: const TextStyle(color: Colors.white, fontSize: 18)),
               ),
             ],
@@ -206,47 +209,6 @@ class LessonSelectCarousel extends StatelessWidget {
     return GFCarousel(
       enableInfiniteScroll: false,
       items: lessons.map((lesson) => _carouselCell(context, lesson)).toList(),
-//      onPageChanged: (index) {
-//        setState(() {
-//          index;
-//        });
-//      },
     );
-
-//    return GFRectItemsCarousel(
-//      rowCount: 3,
-//      height: size.height.round(),
-//      children: MasterDataStore.dummyLessons.map(
-//        (lesson) {
-//          return GestureDetector(
-//            onTap: () {
-//              Navigator.of(context).push(
-//                MaterialPageRoute(builder: (_) => SectionSelectPage()),
-//              );
-//            },
-//            child: Container(
-//              height: size.height,
-//              width: size.width,
-//              margin: const EdgeInsets.all(5),
-//              child: ClipRRect(
-//                borderRadius: const BorderRadius.all(Radius.circular(5)),
-//                child: Stack(
-//                  children: <Widget>[
-//                    Image.network(
-//                      lesson.assets.img['thumbnail'],
-//                      fit: BoxFit.cover,
-//                      height: size.height,
-//                      width: size.width,
-//                    ),
-//                    Text(lesson.title['ja'],
-//                        style: TextStyle(color: Colors.white, fontSize: 30)),
-//                  ],
-//                ),
-//              ),
-//            ),
-//          );
-//        },
-//      ).toList(),
-//    );
   }
 }

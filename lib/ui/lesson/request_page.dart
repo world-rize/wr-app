@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 /// リクエスト画面
 class RequestPage extends StatelessWidget {
@@ -12,7 +13,7 @@ class RequestPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: const Text('フレーズのリクエスト'),
+        title: Text(I.of(context).requestPhrase),
       ),
       body: const SingleChildScrollView(
         child: Placeholder(

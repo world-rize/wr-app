@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
@@ -53,11 +54,11 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-        title: const Text('エラー'),
-        content: Text('音声の再生に失敗しました\n$e'),
+        title: Text(I.of(context).error),
+        content: Text('$e'),
         actions: <Widget>[
           CupertinoButton(
-            child: const Text('OK'),
+            child: Text(I.of(context).ok),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -137,7 +138,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
           children: <Widget>[
             ListTile(
               title: Text(
-                'One Point Advice',
+                I.of(context).onePointAdvice,
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.lightBlue,

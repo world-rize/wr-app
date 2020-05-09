@@ -16,7 +16,7 @@ class AccountPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: const Text('Account'),
+        title: Text(I.of(context).accountPageTitle),
       ),
       body: SettingsList(
         sections: [
