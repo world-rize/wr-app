@@ -86,17 +86,18 @@ class _RootViewState extends State<RootView>
             icon: Icon(Icons.search),
             onPressed: () {},
           ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => SettingsPage()));
-            },
-          )
+//          IconButton(
+//            icon: Icon(Icons.settings),
+//            onPressed: () {
+//              Navigator.of(context)
+//                  .push(MaterialPageRoute(builder: (_) => SettingsPage()));
+//            },
+//          )
         ],
       ),
       body: PageView(
         controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (index) {
           setState(() {
             _index = index;
@@ -114,8 +115,9 @@ class _RootViewState extends State<RootView>
         fixedColor: Colors.blueAccent,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
-          _pageController.animateToPage(index,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+          _pageController.jumpToPage(index);
+//          _pageController.animateToPage(index,
+//              duration: const Duration(milliseconds: 300), curve: Curves.ease);
         },
         currentIndex: _index,
         items: [
