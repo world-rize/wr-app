@@ -15,7 +15,7 @@ class PhraseSampleView extends StatelessWidget {
   Text _boldify(String text, TextStyle basicStyle) {
     final _children = <InlineSpan>[];
     // not good code
-    text.splitMapJoin(RegExp(r'\((.*)\)'), onMatch: (match) {
+    text.splitMapJoin(RegExp(r'[\(（](.*)[\)）]'), onMatch: (match) {
       _children.add(TextSpan(
         text: match.group(1),
         style: TextStyle(fontWeight: FontWeight.bold).merge(basicStyle),

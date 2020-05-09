@@ -124,7 +124,7 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
         for ja, en in zip(jas, ens):
             example_value.append({
                 '@type': 'Message',
-                'value': {
+                'text': {
                     'en': en,
                     'ja': ja,
                 },
@@ -140,10 +140,13 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
         lesson_id: e.g. Shcool
         code: e.g. en-us
         """
+        def voice_path(locale):
+            return f'voice_sample.mp3'
+
         return {
             'voice': { 
                 # todo
-                code: f'voice_sample.mp3' for code in ['en-us', 'en-au', 'en-uk']
+                locale: voice_path(locale) for locale in ['en-us', 'en-au', 'en-uk']
             }
         }
 
@@ -240,7 +243,7 @@ def lesson2json(lesson_txt):
         },
         'assets': {
             'img': {
-                'thumbnail': 'thumbnails/school.png'
+                'thumbnail': 'assets/icon/school.png'
             }
         }
     }
@@ -281,21 +284,27 @@ def generate(preview=False):
         # print(json.dumps(phrases_json_list, indent=2, ensure_ascii=False))
         return
 
-    with open(lessons_json_path, 'w') as f:
-        if not preview:
-            print(json.dumps(lessons_json, ensure_ascii=False, indent=2), file=f)
-        print(f'[Generated] {lessons_json_path}')
+    if os.path.exists(lessons_json_path):
+        print(f'[Warn] {lessons_json_path} is already exists')
+    else:
+        with open(lessons_json_path, 'w') as f:
+            if not preview:
+                print(json.dumps(lessons_json, ensure_ascii=False, indent=2), file=f)
+            print(f'[Generated] {lessons_json_path}')
 
     if not preview and not os.path.exists(phrases_json_dir):
         os.makedirs(phrases_json_dir)
 
     for lesson_json, phrases_json in zip(lessons_json, phrases_json_list):
         phrase_json_path = f'{phrases_json_dir}/{lesson_json["id"]}.json'
-        with open(phrase_json_path, 'w') as f:
-            if not preview:
-                print(json.dumps(phrases_json, ensure_ascii=False, indent=2), file=f)
+        if False and os.path.exists(phrase_json_path):
+            print(f'[Warn] {phrase_json_path} is already exists')
+        else:
+            with open(phrase_json_path, 'w') as f:
+                if not preview:
+                    print(json.dumps(phrases_json, ensure_ascii=False, indent=2), file=f)
 
-        print(f'[Generated] {phrase_json_path}')
+            print(f'[Generated] {phrase_json_path}')
 
 
 if __name__ == '__main__':

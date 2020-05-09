@@ -43,7 +43,8 @@ class LessonIndexPage extends StatelessWidget {
 class LessonMenus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<UserStore>(context);
+    final userStore = Provider.of<UserStore>(context);
+    final masterData = Provider.of<MasterDataStore>(context);
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -68,7 +69,15 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.DANGER,
           ),
 
-          phraseView(context, store.pickedUpFavoritePhrase),
+          Column(
+            children: masterData
+                .allPhrases()
+                .where((phrase) =>
+                    userStore.user.favorites.containsKey(phrase.id) &&
+                    userStore.user.favorites[phrase.id])
+                .map((phrase) => phraseView(context, phrase))
+                .toList(),
+          ),
 
           // New Coming Phrases Section
           const GFTypography(
@@ -77,7 +86,14 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.SUCCESS,
           ),
 
-          phraseView(context, store.pickedUpNewComingPhrase),
+          Column(
+            children: masterData
+                .allPhrases()
+                // TODO
+                .where((phrase) => phrase.id.endsWith('5'))
+                .map((phrase) => phraseView(context, phrase))
+                .toList(),
+          ),
 
           // Request Section
           const GFTypography(
@@ -139,15 +155,8 @@ class LessonSelectCarousel extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(5)),
           child: Stack(
             children: <Widget>[
-//              Image.asset(
-//                lesson.assets.img['thumbnail'],
-//                fit: BoxFit.cover,
-//                height: size.height,
-//                width: size.width,
-//              ),
-              Image.network(
-                'https://source.unsplash.com/random/300x800',
-                // lesson.assets.img['thumbnail'],
+              Image.asset(
+                lesson.assets.img['thumbnail'],
                 fit: BoxFit.cover,
                 height: size.height,
                 width: size.width,
@@ -156,12 +165,12 @@ class LessonSelectCarousel extends StatelessWidget {
                 top: 20,
                 left: 20,
                 child: Text(lesson.title['ja'],
-                    style: const TextStyle(color: Colors.white, fontSize: 40)),
+                    style: const TextStyle(color: Colors.white, fontSize: 30)),
               ),
               Positioned(
                 bottom: 20,
                 right: 20,
-                child: Text('XXX / ${lesson.phrases.length}',
+                child: Text('0 / ${lesson.phrases.length}',
                     style: const TextStyle(color: Colors.white, fontSize: 30)),
               ),
             ],

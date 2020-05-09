@@ -57,7 +57,7 @@ List<Lesson> dummyLessons() {
   return List<Lesson>.generate(
     6,
     (i) => Lesson(
-      id: 'shcool$i',
+      id: 'school.png$i',
       title: {
         'ja': 'School vol.$i',
       },

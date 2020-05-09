@@ -39,9 +39,12 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   AudioCache _cache;
 
   String voicePath() {
-    // TODO(someone): titlePhraseは[1]ではない可能性も
-    final titlePhrase = phrase.example.value[1];
-    return titlePhrase.assets.voice[_currentVoiceType];
+    final mainPhrase = phrase.example.value[1];
+    if (mainPhrase.assets?.voice?.containsKey(_currentVoiceType) ?? false) {
+      return mainPhrase.assets.voice[_currentVoiceType];
+    } else {
+      return 'voice_sample.mp3';
+    }
   }
 
   void showErrorDialog(Error e) {
