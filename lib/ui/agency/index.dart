@@ -1,86 +1,88 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:getflutter/components/typography/gf_typography.dart';
+import 'package:getflutter/getflutter.dart';
 
 /// `留学先紹介` ページのトップ
 class AgencyIndexPage extends StatelessWidget {
-//  final _headLineStyle = TextStyle(
-//    fontSize: 30,
-//    color: Colors.black54,
-//    fontWeight: FontWeight.bold,
-//  );
+  static final _headLineStyle = TextStyle(
+    fontSize: 30,
+    color: Colors.black54,
+    fontWeight: FontWeight.bold,
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: <Widget>[
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+        SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // This makes the blue container full width.
-              Expanded(
-                child: Container(
-                  height: 50,
-                  child: Center(
-                    child: Text(
-                      "Coming Soon",
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
+              // map
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: GFTypography(
+                  text: 'Map',
+                  type: GFTypographyType.typo1,
+                  dividerColor: GFColors.SUCCESS,
                 ),
+              ),
+
+              const Placeholder(
+                fallbackHeight: 150,
+              ),
+
+              // 今月のおすすめ
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  '今月のおすすめ',
+                  style: _headLineStyle,
+                ),
+              ),
+
+              const Placeholder(
+                fallbackHeight: 200,
+              ),
+
+              // あなたにおすすめ
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Text(
+                  'あなたにおすすめ',
+                  style: _headLineStyle,
+                ),
+              ),
+              const Placeholder(
+                fallbackHeight: 200,
               ),
             ],
           ),
         ),
+        ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              color: const Color(0).withOpacity(0),
+            ),
+          ),
+        ),
+        Container(
+          child: Center(
+            child: Text(
+              'Coming Soon',
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ),
       ],
     );
-
-//    return SingleChildScrollView(
-//      child: Column(
-//        crossAxisAlignment: CrossAxisAlignment.start,
-//        children: [
-//          // map
-//          Padding(
-//            padding: EdgeInsets.all(10),
-//            child: Text(
-//              'Map',
-//              style: _headLineStyle,
-//            ),
-//          ),
-//          const Placeholder(
-//            fallbackHeight: 150,
-//          ),
-//
-//          // 場所から選ぶ
-//          Padding(
-//            padding: EdgeInsets.all(10),
-//            child: Text(
-//              '場所から選ぶ',
-//              style: _headLineStyle,
-//            ),
-//          ),
-//          const Placeholder(
-//            fallbackHeight: 200,
-//          ),
-//
-//          // あなたにおすすめ
-//          Padding(
-//            padding: EdgeInsets.all(10),
-//            child: Text(
-//              'あなたにおすすめ',
-//              style: _headLineStyle,
-//            ),
-//          ),
-//          const Placeholder(
-//            fallbackHeight: 200,
-//          ),
-//        ],
-//      ),
-//    );
   }
 }

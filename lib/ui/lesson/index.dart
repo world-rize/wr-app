@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
@@ -43,7 +44,8 @@ class LessonIndexPage extends StatelessWidget {
 class LessonMenus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final store = Provider.of<UserStore>(context);
+    final userStore = Provider.of<UserStore>(context);
+    final masterData = Provider.of<MasterDataStore>(context);
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -68,7 +70,15 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.DANGER,
           ),
 
-          phraseView(context, store.pickedUpFavoritePhrase),
+          Column(
+            children: masterData
+                .allPhrases()
+                .where((phrase) =>
+                    userStore.user.favorites.containsKey(phrase.id) &&
+                    userStore.user.favorites[phrase.id])
+                .map((phrase) => phraseView(context, phrase))
+                .toList(),
+          ),
 
           // New Coming Phrases Section
           const GFTypography(
@@ -77,7 +87,14 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.SUCCESS,
           ),
 
-          phraseView(context, store.pickedUpNewComingPhrase),
+          Column(
+            children: masterData
+                .allPhrases()
+                // TODO
+                .where((phrase) => phrase.id.endsWith('5'))
+                .map((phrase) => phraseView(context, phrase))
+                .toList(),
+          ),
 
           // Request Section
           const GFTypography(
@@ -98,9 +115,10 @@ class LessonMenus extends StatelessWidget {
                     MaterialPageRoute(builder: (_) => RequestPage()),
                   );
                 },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 90),
-                  child: Text('フレーズをリクエストする'),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 90),
+                  child: Text(I.of(context).requestPhraseButton),
                 ),
               ),
             ),
@@ -139,30 +157,42 @@ class LessonSelectCarousel extends StatelessWidget {
           borderRadius: const BorderRadius.all(Radius.circular(5)),
           child: Stack(
             children: <Widget>[
-//              Image.asset(
-//                lesson.assets.img['thumbnail'],
-//                fit: BoxFit.cover,
-//                height: size.height,
-//                width: size.width,
-//              ),
-              Image.network(
-                'https://source.unsplash.com/random/300x800',
-                // lesson.assets.img['thumbnail'],
+              Image.asset(
+                lesson.assets.img['thumbnail'],
                 fit: BoxFit.cover,
                 height: size.height,
                 width: size.width,
               ),
-              Positioned(
-                top: 20,
-                left: 20,
-                child: Text(lesson.title['ja'],
-                    style: const TextStyle(color: Colors.white, fontSize: 40)),
+              ClipRect(
+                child: Container(
+                  color: const Color.fromRGBO(128, 128, 128, 0.5),
+                ),
+              ),
+              const Positioned(
+                top: 10,
+                left: 10,
+                child: Text('No.1',
+                    style: TextStyle(color: Colors.white, fontSize: 18)),
+              ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(
+                    lesson.title['ja'],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
               Positioned(
-                bottom: 20,
+                bottom: 10,
                 right: 20,
-                child: Text('XXX / ${lesson.phrases.length}',
-                    style: const TextStyle(color: Colors.white, fontSize: 30)),
+                child: Text(
+                    I.of(context).lessonStatus(0, lesson.phrases.length),
+                    style: const TextStyle(color: Colors.white, fontSize: 18)),
               ),
             ],
           ),
@@ -179,47 +209,6 @@ class LessonSelectCarousel extends StatelessWidget {
     return GFCarousel(
       enableInfiniteScroll: false,
       items: lessons.map((lesson) => _carouselCell(context, lesson)).toList(),
-//      onPageChanged: (index) {
-//        setState(() {
-//          index;
-//        });
-//      },
     );
-
-//    return GFRectItemsCarousel(
-//      rowCount: 3,
-//      height: size.height.round(),
-//      children: MasterDataStore.dummyLessons.map(
-//        (lesson) {
-//          return GestureDetector(
-//            onTap: () {
-//              Navigator.of(context).push(
-//                MaterialPageRoute(builder: (_) => SectionSelectPage()),
-//              );
-//            },
-//            child: Container(
-//              height: size.height,
-//              width: size.width,
-//              margin: const EdgeInsets.all(5),
-//              child: ClipRRect(
-//                borderRadius: const BorderRadius.all(Radius.circular(5)),
-//                child: Stack(
-//                  children: <Widget>[
-//                    Image.network(
-//                      lesson.assets.img['thumbnail'],
-//                      fit: BoxFit.cover,
-//                      height: size.height,
-//                      width: size.width,
-//                    ),
-//                    Text(lesson.title['ja'],
-//                        style: TextStyle(color: Colors.white, fontSize: 30)),
-//                  ],
-//                ),
-//              ),
-//            ),
-//          );
-//        },
-//      ).toList(),
-//    );
   }
 }

@@ -30,12 +30,6 @@ class UserStore with ChangeNotifier {
   /// Firebase User
   FirebaseUser auth;
 
-  /// レッスントップ画面に表示されるお気に入りフレーズ
-  Phrase pickedUpFavoritePhrase = dummyPhrase();
-
-  /// レッスントップ画面に表示される新着フレーズ
-  Phrase pickedUpNewComingPhrase = dummyPhrase();
-
   /// ユーザーデータ
   User user = User(
       name: '',

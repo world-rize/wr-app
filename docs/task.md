@@ -57,14 +57,25 @@ $ sh update_i10n.sh
 を実行
 
 ### アセット生成
-フレーズJSON等の生成は `RAW_TARGET` に文書が入った状態で
+フレーズJSON等の生成はGoogleドライブから `.txt でエクスポートしたものを `assets/phrases.txt` に置き、
 
 ```bash
-$ cd scripts
 $ python convertor.py
 ```
 
 で `/assets` 以下に展開されます
+
+### スプラッシュ画像生成
+```bash
+$ flutter pub pub run flutter_native_splash:create
+```
+
+### アプリアイコン生成
+`assets/icon/icon.jpg` がある状態で
+
+```bash
+$ flutter packages pub run flutter_launcher_icons:main
+```
 
 ## 👓 タスク
 作業をタスクに分けて割り振りをして開発を進めていきます。

@@ -12,9 +12,11 @@ class LoggerView extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: Logger.logs.map((log) => Text(log)).toList(),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: Logger.logs.map((log) => Text(log)).toList(),
+          ),
         ),
       ),
     );

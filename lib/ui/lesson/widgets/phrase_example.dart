@@ -15,10 +15,10 @@ class PhraseSampleView extends StatelessWidget {
   Text _boldify(String text, TextStyle basicStyle) {
     final _children = <InlineSpan>[];
     // not good code
-    text.splitMapJoin(RegExp(r'\((.*)\)'), onMatch: (match) {
+    text.splitMapJoin(RegExp(r'[\(（](.*)[\)）]'), onMatch: (match) {
       _children.add(TextSpan(
         text: match.group(1),
-        style: TextStyle(fontWeight: FontWeight.bold).merge(basicStyle),
+        style: basicStyle.merge(TextStyle(fontWeight: FontWeight.bold)),
       ));
       return '';
     }, onNonMatch: (plain) {
@@ -47,7 +47,7 @@ class PhraseSampleView extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             width: 350,
             decoration: BoxDecoration(
-              color: primary ? Colors.lightBlue : Colors.grey,
+              color: primary ? Colors.lightBlue.shade300 : Colors.grey.shade200,
               borderRadius: BorderRadius.circular(10),
             ),
             child: Padding(
@@ -56,7 +56,8 @@ class PhraseSampleView extends StatelessWidget {
                 message.text['en'],
                 TextStyle(
                   fontSize: 22,
-                  color: Colors.white,
+                  fontWeight: FontWeight.w300,
+                  color: primary ? Colors.white : Colors.black,
                 ),
               ),
             ),
@@ -68,8 +69,8 @@ class PhraseSampleView extends StatelessWidget {
               textDirection: primary ? TextDirection.rtl : TextDirection.ltr,
               children: <Widget>[
                 ClipOval(
-                  child: Image.network(
-                    'https://placehold.jp/150x150.png',
+                  child: Image.asset(
+                    primary ? 'assets/icon/woman.png' : 'assets/icon/man.png',
                     width: 50,
                     height: 50,
                   ),

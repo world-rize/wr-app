@@ -1,6 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:getflutter/getflutter.dart';
 
 /// `旅行` ページのトップ
 ///
@@ -13,75 +16,72 @@ class TravelPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: <Widget>[
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              // This makes the blue container full width.
-              Expanded(
-                child: Container(
-                  height: 50,
-                  child: Center(
-                    child: Text(
-                      "Coming Soon",
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
+        SingleChildScrollView(
+          physics: const NeverScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const <Widget>[
+              // map
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: GFTypography(
+                  text: 'Map',
+                  type: GFTypographyType.typo1,
+                  dividerColor: GFColors.SUCCESS,
                 ),
+              ),
+              Placeholder(
+                fallbackHeight: 150,
+              ),
+
+              // 今月のおすすめ
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  '今月のおすすめ',
+                  style: _headLineStyle,
+                ),
+              ),
+              Placeholder(
+                fallbackHeight: 200,
+              ),
+
+              // あなたにおすすめ
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                  'あなたにおすすめ',
+                  style: _headLineStyle,
+                ),
+              ),
+              Placeholder(
+                fallbackHeight: 200,
               ),
             ],
           ),
         ),
+        ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              color: const Color(0).withOpacity(0),
+            ),
+          ),
+        ),
+        Container(
+          child: Center(
+            child: Text(
+              'Coming Soon',
+              style: TextStyle(
+                fontSize: 22,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        ),
       ],
     );
-
-//    return SingleChildScrollView(
-//      child: Column(
-//        crossAxisAlignment: CrossAxisAlignment.start,
-//        children: const <Widget>[
-//          // map
-//          Padding(
-//            padding: EdgeInsets.all(10),
-//            child: Text(
-//              'Map',
-//              style: _headLineStyle,
-//            ),
-//          ),
-//          Placeholder(
-//            fallbackHeight: 150,
-//          ),
-//
-//          // 今月のおすすめ
-//          Padding(
-//            padding: EdgeInsets.all(10),
-//            child: Text(
-//              '今月のおすすめ',
-//              style: _headLineStyle,
-//            ),
-//          ),
-//          Placeholder(
-//            fallbackHeight: 200,
-//          ),
-//
-//          // あなたにおすすめ
-//          Padding(
-//            padding: EdgeInsets.all(10),
-//            child: Text(
-//              'あなたにおすすめ',
-//              style: _headLineStyle,
-//            ),
-//          ),
-//          Placeholder(
-//            fallbackHeight: 200,
-//          ),
-//        ],
-//      ),
-//    );
   }
 }

@@ -7,10 +7,8 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/store/env.dart';
-import 'package:wr_app/ui/lesson/widgets/admob_widget.dart';
 import 'package:wr_app/ui/mypage/account_page.dart';
 import 'package:wr_app/ui/mypage/all_phrases_page.dart';
-//import 'package:wr_app/ui/onboarding_page.dart';
 import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
 import 'package:wr_app/i10n/i10n.dart';
@@ -152,11 +150,12 @@ class _SettingsState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('設定'),
-      ),
-      body: _settingsView(),
-    );
+//    return Scaffold(
+//      appBar: AppBar(
+//        title: const Text('設定'),
+//      ),
+//      body: _settingsView(),
+//    );
+    return _settingsView();
   }
 }

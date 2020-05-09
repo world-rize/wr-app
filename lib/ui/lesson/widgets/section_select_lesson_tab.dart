@@ -20,12 +20,14 @@ class LessonTab extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: sections
-            .map((section) => SectionRow(
-                  section: section,
-                  onTap: () {
-                    onTap(section);
-                  },
-                ))
+            .map(
+              (section) => SectionRow(
+                section: section,
+                onTap: () {
+                  onTap(section);
+                },
+              ),
+            )
             .toList(),
       ),
     );

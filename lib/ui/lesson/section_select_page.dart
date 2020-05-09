@@ -52,16 +52,18 @@ class _SectionSelectPageState extends State<SectionSelectPage>
   @override
   Widget build(BuildContext context) {
     final sections = Section.fromLesson(lesson);
+    final primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text(lesson.title['ja']),
+        backgroundColor: primaryColor,
+        title: Text(lesson.title['ja'], style: TextStyle(color: Colors.white)),
         bottom: TabBar(
           tabs: _tabs,
           controller: _tabController,
           indicatorColor: Colors.orange,
           indicatorWeight: 3,
+          labelColor: Colors.white,
           labelStyle: const TextStyle(fontSize: 20),
         ),
       ),

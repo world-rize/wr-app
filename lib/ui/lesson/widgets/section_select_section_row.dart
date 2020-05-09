@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 import 'package:wr_app/model/section.dart';
 
@@ -37,7 +38,7 @@ class SectionRow extends StatelessWidget {
         ),
         // middle
         title: Text(
-          'クリア',
+          I.of(context).sectionStatus(clear: true),
           style: style.title.apply(color: Colors.redAccent),
         ),
         // right

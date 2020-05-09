@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_section_row.dart';
 import 'package:wr_app/model/section.dart';
 
@@ -19,16 +20,16 @@ class TestTab extends StatelessWidget {
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-        title: Text('${section.title}のテストを開始しますか?'),
-        content: const Text('本日のテスト残り3回\n制限時間xx秒'),
+        title: Text(I.of(context).testConfirm(section.title)),
+        content: Text(I.of(context).testMessage(3, 60)),
         actions: <Widget>[
           CupertinoButton(
-              child: const Text('NO'),
+              child: Text(I.of(context).no),
               onPressed: () {
                 Navigator.pop(context);
               }),
           CupertinoButton(
-            child: const Text('YES'),
+            child: Text(I.of(context).yes),
             onPressed: () {
               onTap(section);
             },

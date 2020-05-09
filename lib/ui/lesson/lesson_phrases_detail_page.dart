@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:audioplayers/audio_cache.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
@@ -39,9 +40,12 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   AudioCache _cache;
 
   String voicePath() {
-    // TODO(someone): titlePhraseは[1]ではない可能性も
-    final titlePhrase = phrase.example.value[1];
-    return titlePhrase.assets.voice[_currentVoiceType];
+    final mainPhrase = phrase.example.value[1];
+    if (mainPhrase.assets?.voice?.containsKey(_currentVoiceType) ?? false) {
+      return mainPhrase.assets.voice[_currentVoiceType];
+    } else {
+      return 'voice_sample.mp3';
+    }
   }
 
   void showErrorDialog(Error e) {
@@ -50,11 +54,11 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-        title: const Text('エラー'),
-        content: Text('音声の再生に失敗しました\n$e'),
+        title: Text(I.of(context).error),
+        content: Text('$e'),
         actions: <Widget>[
           CupertinoButton(
-            child: const Text('OK'),
+            child: Text(I.of(context).ok),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -80,10 +84,15 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).primaryColor;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: const Text('Phrase Detail'),
+        backgroundColor: primaryColor,
+        title: const Text(
+          'Phrase Detail',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -129,7 +138,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
           children: <Widget>[
             ListTile(
               title: Text(
-                'One Point Advice',
+                I.of(context).onePointAdvice,
                 style: TextStyle(
                   fontSize: 24,
                   color: Colors.lightBlue,
@@ -164,7 +173,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               heroTag: 'Japanese',
               child: const Icon(
                 Icons.message,
-                color: Colors.blueAccent,
+                color: Colors.lightBlueAccent,
               ),
               onPressed: () {},
             ),
@@ -176,7 +185,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               heroTag: 'Favorite',
               child: Icon(
                 favorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.blueAccent,
+                color: Colors.redAccent,
               ),
               onPressed: () {
                 userStore.callFavoritePhrase(
@@ -190,8 +199,9 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               backgroundColor: Colors.white,
               heroTag: '3',
               child: Icon(
-                _isPlaying ? Icons.stop : Icons.play_arrow,
-                color: Colors.blueAccent,
+                _isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.orangeAccent,
+                size: 40,
               ),
               onPressed: () {
                 if (!_isPlaying) {
@@ -211,6 +221,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
                 _currentPlaybackSpeed.toString(),
                 style: TextStyle(
                   fontSize: 24,
+                  fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
               ),
