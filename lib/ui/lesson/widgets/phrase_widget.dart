@@ -13,7 +13,7 @@ import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 ///
 /// クリックすることで [LessonPhrasesDetailPage] へ移動
 ///
-Widget phraseView(BuildContext context, Phrase phrase) {
+Widget phraseView(BuildContext context, Phrase phrase, {Function onTap}) {
   final userStore = Provider.of<UserStore>(context);
   final favorite = userStore.user.favorites.containsKey(phrase.id) &&
       userStore.user.favorites[phrase.id];
@@ -23,10 +23,7 @@ Widget phraseView(BuildContext context, Phrase phrase) {
   return Padding(
     padding: const EdgeInsets.all(8),
     child: GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => LessonPhrasesDetailPage(phrase: phrase)));
-      },
+      onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

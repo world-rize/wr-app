@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
 
 import 'package:wr_app/model/section.dart';
+import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
@@ -48,7 +49,11 @@ class LessonPhrasesPage extends StatelessWidget {
             ),
             // フレーズ一覧
             ...section.phrases.map((phrase) {
-              return phraseView(context, phrase);
+              return phraseView(context, phrase, onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => LessonPhrasesDetailPage(phrase: phrase),
+                ));
+              });
             }).toList(),
           ],
         ),

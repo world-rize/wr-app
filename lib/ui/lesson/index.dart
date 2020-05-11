@@ -10,10 +10,21 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/model/lesson.dart';
+import 'package:wr_app/ui/lesson/favorite_page.dart';
 import 'package:wr_app/ui/lesson/request_page.dart';
 
 import 'package:wr_app/ui/lesson/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
+
+extension IndexedMap<T, E> on List<T> {
+  List<E> indexedMap<E>(E Function(int index, T item) function) {
+    final list = <E>[];
+    asMap().forEach((index, element) {
+      list.add(function(index, element));
+    });
+    return list;
+  }
+}
 
 /// `レッスン` ページのトップ
 ///
@@ -47,6 +58,17 @@ class LessonMenus extends StatelessWidget {
     final userStore = Provider.of<UserStore>(context);
     final masterData = Provider.of<MasterDataStore>(context);
 
+    final favoritePhrase = masterData.allPhrases().firstWhere(
+        (phrase) =>
+            userStore.user.favorites.containsKey(phrase.id) &&
+            userStore.user.favorites[phrase.id],
+        orElse: () => null);
+
+    // TODO(someone): call api
+    final newComingPhrase = masterData
+        .allPhrases()
+        .firstWhere((phrase) => phrase.id.endsWith('5'), orElse: () => null);
+
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Column(
@@ -70,15 +92,20 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.DANGER,
           ),
 
-          Column(
-            children: masterData
-                .allPhrases()
-                .where((phrase) =>
-                    userStore.user.favorites.containsKey(phrase.id) &&
-                    userStore.user.favorites[phrase.id])
-                .map((phrase) => phraseView(context, phrase))
-                .toList(),
-          ),
+          if (favoritePhrase != null)
+            Column(
+              children: [
+                phraseView(
+                  context,
+                  favoritePhrase,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => FavoritePage()),
+                    );
+                  },
+                ),
+              ],
+            ),
 
           // New Coming Phrases Section
           const GFTypography(
@@ -87,14 +114,20 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.SUCCESS,
           ),
 
-          Column(
-            children: masterData
-                .allPhrases()
-                // TODO
-                .where((phrase) => phrase.id.endsWith('5'))
-                .map((phrase) => phraseView(context, phrase))
-                .toList(),
-          ),
+          if (newComingPhrase != null)
+            Column(
+              children: [
+                phraseView(
+                  context,
+                  favoritePhrase,
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => FavoritePage()),
+                    );
+                  },
+                ),
+              ],
+            ),
 
           // Request Section
           const GFTypography(
@@ -142,7 +175,7 @@ class LessonSelectCarousel extends StatelessWidget {
 //    );
 //  }
 
-  Widget _carouselCell(BuildContext context, Lesson lesson) {
+  Widget _carouselCell(BuildContext context, Lesson lesson, int index) {
     final size = MediaQuery.of(context).size;
 
     return GestureDetector(
@@ -168,11 +201,11 @@ class LessonSelectCarousel extends StatelessWidget {
                   color: const Color.fromRGBO(128, 128, 128, 0.5),
                 ),
               ),
-              const Positioned(
+              Positioned(
                 top: 10,
                 left: 10,
-                child: Text('No.1',
-                    style: TextStyle(color: Colors.white, fontSize: 18)),
+                child: Text('No.${index + 1}',
+                    style: const TextStyle(color: Colors.white, fontSize: 18)),
               ),
               Center(
                 child: Padding(
@@ -208,7 +241,9 @@ class LessonSelectCarousel extends StatelessWidget {
 
     return GFCarousel(
       enableInfiniteScroll: false,
-      items: lessons.map((lesson) => _carouselCell(context, lesson)).toList(),
+      items: lessons
+          .indexedMap((i, lesson) => _carouselCell(context, lesson, i))
+          .toList(),
     );
   }
 }

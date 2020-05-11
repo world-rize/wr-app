@@ -77,6 +77,11 @@ mixin Messages {
         name: 'question',
       );
 
+  String get testInterrupt => Intl.message(
+        'テストを中断しますか?',
+        name: 'testInterrupt',
+      );
+
   /// test result page
   String get testClear => Intl.message(
         'Test Clear!',

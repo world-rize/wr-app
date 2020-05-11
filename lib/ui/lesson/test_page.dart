@@ -15,6 +15,17 @@ import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
+extension ListEx<T> on List<T> {
+  List<T> sample(int count) {
+    final result = <T>[];
+    for (var i = 0; i < count; i++) {
+      result.add(this[Random().nextInt(length)]);
+    }
+    assert(result.length == count);
+    return result;
+  }
+}
+
 /// テストページ
 ///
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469139>
@@ -117,19 +128,58 @@ class TestPageState extends State<TestPage> {
     }
   }
 
+  List<String> _randomSelections() {
+    final selections = Provider.of<MasterDataStore>(context)
+        .allPhrases()
+        .sample(4)
+        .map((phrase) => phrase.title['en'])
+        .toList();
+    _answerIndex = Random().nextInt(4);
+    selections[_answerIndex] = currentPhrase.title['en'];
+    return selections;
+  }
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final masterData = Provider.of<MasterDataStore>(context);
-
-    final r = Random();
-    _answerIndex = r.nextInt(4);
-    final selection = masterData.randomSelections(currentPhrase, _answerIndex);
+    final selection = _randomSelections();
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
         title: Text(I.of(context).question(_index + 1)),
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              showCupertinoDialog(
+                context: context,
+                builder: (_) => CupertinoAlertDialog(
+                  title: Text(I.of(context).testInterrupt),
+                  // content: Text(''),
+                  actions: <Widget>[
+                    CupertinoButton(
+                      child: Text(I.of(context).yes),
+                      onPressed: () {
+                        // pop dialog
+                        Navigator.pop(context);
+                        // pop this view
+                        Navigator.pop(context);
+                      },
+                    ),
+                    CupertinoButton(
+                      child: Text(I.of(context).no),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          )
+        ],
       ),
       body: QuestionView(
           index: _index,
@@ -182,7 +232,10 @@ class QuestionView extends StatelessWidget {
 //        ),
         Flexible(
           flex: 5,
-          child: PhraseSampleView(example: phrase.example),
+          child: PhraseSampleView(
+            example: phrase.example,
+            showKeyphrase: false,
+          ),
         ),
         Flexible(
           flex: 3,
@@ -222,51 +275,3 @@ class QuestionView extends StatelessWidget {
     );
   }
 }
-
-/// テストをストーリ風に表示するUI(experimental)
-//class TestStoryPageState extends State<TestPage> {
-//  TestStoryPageState({@required this.section});
-//
-//  final Section section;
-//  final _storyController = StoryController();
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    final dummySelection = [
-//      'When is the homework due?',
-//      'When is the homework due?',
-//      'When is the homework due?',
-//      'When is the homework due?',
-//    ];
-//
-//    return Scaffold(
-//        appBar: AppBar(
-//          backgroundColor: Colors.blue,
-//          title: const Text('Test'),
-//        ),
-//        body: StoryView(
-//          section.phrases
-//              .map(
-//                (phrase) => StoryItem(
-//                  QuestionView(
-//                    phrase: phrase,
-//                    selection: dummySelection,
-//                    onNext: () {},
-//                  ),
-//                ),
-//              )
-//              .toList(),
-//          controller: _storyController,
-//          inline: true,
-//          onStoryShow: (item) {
-//            print('story show');
-//          },
-//          onComplete: () {
-//            Navigator.of(context).push(
-//              MaterialPageRoute(
-//                  builder: (_) => TestResultPage(section: section)),
-//            );
-//          },
-//        ));
-//  }
-//}

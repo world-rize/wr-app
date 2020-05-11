@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/masterdata.dart';
+import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
 class AllPhrasesPage extends StatelessWidget {
@@ -25,7 +26,13 @@ class AllPhrasesPage extends StatelessWidget {
           children: masterData
               .allPhrases()
               .where(filter)
-              .map((phrase) => phraseView(context, phrase))
+              .map((phrase) => phraseView(context, phrase, onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => LessonPhrasesDetailPage(
+                        phrase: phrase,
+                      ),
+                    ));
+                  }))
               .toList(),
         ),
       ),
