@@ -113,6 +113,8 @@ def strip_brs(txt):
 
 
 def phrase_txt2json(phrase_txt, lesson_id, start):
+    global id_counter
+
     def create_meta():
         return {
             'lessonId': lesson_id,
@@ -121,13 +123,14 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
 
     def create_examples(jas, ens):
         example_value = []
-        for ja, en in zip(jas, ens):
+        for i, (ja, en) in enumerate(zip(jas, ens), start=1):
             example_value.append({
                 '@type': 'Message',
                 'text': {
                     'en': en,
                     'ja': ja,
                 },
+                'assets': create_assets(id_counter, i),
             })
 
         return {
@@ -135,13 +138,15 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
             'value': example_value,
         }
 
-    def create_assets(jas, ens):
+    def create_assets(phrase_id, index):
         """
         lesson_id: e.g. Shcool
         code: e.g. en-us
         """
         def voice_path(locale):
-            return f'voice_sample.mp3'
+            # assets/voice/<id>-<1-3>_<locale>.mp3
+            # return f'assets/voice/{phrase_id}-{index}_{locale}.mp3'
+            return f'assets/voice/0001-{index}_{locale}.mp3'
 
         return {
             'voice': { 
@@ -189,7 +194,6 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
 
     """
     """
-    global id_counter
     content = strip_brs(phrase_txt)
     
     try:
@@ -202,14 +206,14 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
             'id': str(id_counter).zfill(4),
             'title': create_title(jas, ens),
             'meta': create_meta(),
-            'assets': create_assets(jas, ens),
             'advice': create_advice(advice),
             'example': create_examples(jas, ens),
         }
 
         return phrase_json
-    except:
+    except Exception as e:
         print(f'[Warn] {lesson_id} {id_counter - start} invalid')
+        print(e)
         return None
     finally:
         id_counter += 1
@@ -230,10 +234,10 @@ def lesson2json(lesson_txt):
     """
     # phrases[0]: title
     # phrases[1..]: phrases contents
-    header, *phrases_txt = re.split(r'^\d+\.$', lesson_txt, flags=re.MULTILINE)
+    header, *phrases_txt = re.split(r'^\d+\.', lesson_txt, flags=re.MULTILINE)
     title = strip_brs(header)
-    _id = title.split(' ')[0].strip(string.punctuation)
-    # print(f'title: {title}, id: {_id}')
+    _id = title.split(' ')[0].strip(string.punctuation).lower()
+    print(f'title: {title}, id: {_id}')
 
     lesson_json = {
         'id': _id,
@@ -243,7 +247,7 @@ def lesson2json(lesson_txt):
         },
         'assets': {
             'img': {
-                'thumbnail': 'assets/icon/school.png'
+                'thumbnail': f'assets/thumbnails/{_id}.png'
             }
         }
     }
@@ -261,9 +265,14 @@ def lesson2json(lesson_txt):
 
 
 def generate(preview=False):
-    lessons_txt_path = f'{root}/phrases.txt'
+    # exported from google drive
+    lessons_txt_path = f'{root}/World RIZe Main Part Phrases.txt'
     lessons_json_path = f'{root}/lessons.json'
     phrases_json_dir = f'{root}/lessons'
+    force = '-f' in sys.argv
+
+    if force:
+        print('-f')
 
     with open(lessons_txt_path) as f:
         lessons_txt = f.read()
@@ -284,7 +293,7 @@ def generate(preview=False):
         # print(json.dumps(phrases_json_list, indent=2, ensure_ascii=False))
         return
 
-    if os.path.exists(lessons_json_path):
+    if not force and os.path.exists(lessons_json_path):
         print(f'[Warn] {lessons_json_path} is already exists')
     else:
         with open(lessons_json_path, 'w') as f:
@@ -292,12 +301,12 @@ def generate(preview=False):
                 print(json.dumps(lessons_json, ensure_ascii=False, indent=2), file=f)
             print(f'[Generated] {lessons_json_path}')
 
-    if not preview and not os.path.exists(phrases_json_dir):
+    if not force and not preview and not os.path.exists(phrases_json_dir):
         os.makedirs(phrases_json_dir)
 
     for lesson_json, phrases_json in zip(lessons_json, phrases_json_list):
         phrase_json_path = f'{phrases_json_dir}/{lesson_json["id"]}.json'
-        if False and os.path.exists(phrase_json_path):
+        if not force and os.path.exists(phrase_json_path):
             print(f'[Warn] {phrase_json_path} is already exists')
         else:
             with open(phrase_json_path, 'w') as f:
