@@ -31,6 +31,11 @@ mixin Messages {
         name: 'onePointAdvice',
       );
 
+  String get phraseDetailTitle => Intl.message(
+        'Phrase Detail',
+        name: 'phraseDetailTitle',
+      );
+
   /// point
   String points(int point) =>
       _points(NumberFormat.compact(locale: 'en').format(point));

@@ -144,9 +144,10 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
         code: e.g. en-us
         """
         def voice_path(locale):
-            # assets/voice/<id>-<1-3>_<locale>.mp3
+            # 'assets/' prefixed
+            # voice/<id>-<1-3>_<locale>.mp3
             # return f'assets/voice/{phrase_id}-{index}_{locale}.mp3'
-            return f'assets/voice/0001-{index}_{locale}.mp3'
+            return f'voice/0001-{index}_{locale}.mp3'
 
         return {
             'voice': { 

@@ -7,7 +7,8 @@ import 'package:wr_app/model/example.dart';
 
 /// フレーズ例
 class PhraseSampleView extends StatelessWidget {
-  const PhraseSampleView({@required this.example});
+  const PhraseSampleView({@required this.example, this.showTranslation = true});
+  final bool showTranslation;
   final Example example;
 
   /// "()" で囲まれた部分を太字にします
@@ -55,7 +56,7 @@ class PhraseSampleView extends StatelessWidget {
               child: _boldify(
                 message.text['en'],
                 TextStyle(
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: FontWeight.w300,
                   color: primary ? Colors.white : Colors.black,
                 ),
@@ -80,10 +81,14 @@ class PhraseSampleView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     // child: Text(conversation.japanese),
-                    child: _boldify(
-                      message.text['ja'],
-                      const TextStyle(),
-                    ),
+                    child: showTranslation
+                        ? _boldify(
+                            message.text['ja'],
+                            const TextStyle(
+                              fontSize: 14,
+                            ),
+                          )
+                        : const Text(''),
                   ),
                 ),
               ],
