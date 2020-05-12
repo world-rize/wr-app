@@ -1,7 +1,7 @@
 [
   {
     // フレーズの通し番号
-    "id": "1234",
+    "id": "0001",
     // フレーズのタイトル
     "title": {
       "ja": "上司に確認してみますね",
@@ -9,17 +9,7 @@
     },
     // メタ情報
     "meta": {
-      "lessonId": "0001",
-      "sectionId": "0001"
-    },
-    // 音声や画像データのパス
-    "assets": {
-      "voice": {
-        // フレーズ毎にフォルダにまとめたい
-        "en-us": "phrases/school/0001/en-us.mp3",
-        "en-au": "phrases/school/0001/en-au.mp3",
-        "en-uk": "phrases/school/0001/en-uk.mp3"
-      }
+      "lessonId": "school"
     },
     // 一言アドバイス
     "advice": {
@@ -31,9 +21,18 @@
       "value": [
         {
           "@type": "Message",
-          "value": {
+          "text": {
             "en": " Do you want me to stack the shelves?",
             "ja": "棚に品物を積んだ方がいいですか？"
+          },
+          // 音声や画像データのパス
+          "assets": {
+            "voice": {
+              // 音声は assets/voice/ 以下にすべて置く
+              "en-us": "voice/0001-1_en-us.mp3",
+              "en-au": "voice/0001-1_en-au.mp3",
+              "en-uk": "voice/0001-1_en-uk.mp3"
+            }
           }
         },
         {
@@ -41,6 +40,12 @@
           "value": {
             "en": "That would be good, but (I’ll check with the boss) to see if that’s okay.",
             "ja": "いいけど(一回上司に確認してみますね)"
+          },
+          "voice": {
+            // 音声は assets/voice/ 以下にすべて置く
+            "en-us": "voice/0001-2_en-us.mp3",
+            "en-au": "voice/0001-2_en-au.mp3",
+            "en-uk": "voice/0001-2_en-uk.mp3"
           }
         },
         {
@@ -48,6 +53,12 @@
           "value": {
             "en": "Thank you!",
             "ja": "よろしくお願いします！"
+          },
+          "voice": {
+            // 音声は assets/voice/ 以下にすべて置く
+            "en-us": "voice/0001-3_en-us.mp3",
+            "en-au": "voice/0001-3_en-au.mp3",
+            "en-uk": "voice/0001-3_en-uk.mp3"
           }
         }
       ]
