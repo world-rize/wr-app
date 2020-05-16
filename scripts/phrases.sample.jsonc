@@ -7,20 +7,15 @@
       "ja": "上司に確認してみますね",
       "en": "I’ll check with the boss"
     },
-    // メタ情報
-    "meta": {
-      "lessonId": "school"
-    },
     // 一言アドバイス
     "advice": {
       "ja": "“check with A”（Aは人）で「Aに確認してみる, 許可を取る」という意味になります。"
     },
-    // 具体例、変更しやすいようにJSON-LDっぽく
+    // 具体例
     "example": {
       "@type": "Conversation",
       "value": [
         {
-          "@type": "Message",
           "text": {
             "en": " Do you want me to stack the shelves?",
             "ja": "棚に品物を積んだ方がいいですか？"
@@ -29,36 +24,34 @@
           "assets": {
             "voice": {
               // 音声は assets/voice/ 以下にすべて置く
-              "en-us": "voice/0001-1_en-us.mp3",
-              "en-au": "voice/0001-1_en-au.mp3",
-              "en-uk": "voice/0001-1_en-uk.mp3"
+              "en-us": "voice/business-1-1_en-us.mp3",
+              "en-au": "voice/business-1-1_en-au.mp3",
+              "en-uk": "voice/business-1-1_en-uk.mp3"
             }
           }
         },
         {
-          "@type": "Message",
           "value": {
             "en": "That would be good, but (I’ll check with the boss) to see if that’s okay.",
             "ja": "いいけど(一回上司に確認してみますね)"
           },
           "voice": {
             // 音声は assets/voice/ 以下にすべて置く
-            "en-us": "voice/0001-2_en-us.mp3",
-            "en-au": "voice/0001-2_en-au.mp3",
-            "en-uk": "voice/0001-2_en-uk.mp3"
+            "en-us": "voice/business-1-2_en-us.mp3",
+            "en-au": "voice/business-1-2_en-au.mp3",
+            "en-uk": "voice/business-1-2_en-uk.mp3"
           }
         },
         {
-          "@type": "Message",
           "value": {
             "en": "Thank you!",
             "ja": "よろしくお願いします！"
           },
           "voice": {
             // 音声は assets/voice/ 以下にすべて置く
-            "en-us": "voice/0001-3_en-us.mp3",
-            "en-au": "voice/0001-3_en-au.mp3",
-            "en-uk": "voice/0001-3_en-uk.mp3"
+            "en-us": "voice/business-1-3_en-us.mp3",
+            "en-au": "voice/business-1-3_en-au.mp3",
+            "en-uk": "voice/business-1-3_en-uk.mp3"
           }
         }
       ]

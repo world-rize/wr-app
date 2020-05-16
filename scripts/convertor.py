@@ -15,93 +15,6 @@ pwd = os.path.dirname(__file__)
 root = f'{pwd}/../assets'
 # bold pettern
 bold_pattern = re.compile(r"[\(（](.*?)[\)）]")
-id_counter = 1
-valid_counter = 0
-
-def txt2json(lesson_id, readlines):
-    global id_counter
-    # テキストデータの読み込み
-    lesson_to_id = {}
-    label = ""
-    eng_or_jap = "en"
-    value_list = []
-    phrase_eng = ""
-    phrase_jap = ""
-    content_data = []
-    content_line = {
-        '@type': 'Message',
-        'text': {},
-        'assets': {},
-    }
-
-    for line in readlines:
-        if label == "contents" and line != "\n":
-            if eng_or_jap == 'en':
-                content_line['text'][eng_or_jap] = line
-                eng_or_jap = 'ja'
-                bold = re.search(bold_pattern,line) # 強調文字を取得
-                if bold is not None:
-                    phrase_eng = bold.group(1)
-            elif eng_or_jap == 'ja':
-                content_line['text'][eng_or_jap] = line
-                eng_or_jap = 'en'
-                bold = re.search(bold_pattern,line) # 強調文字を取得
-                if bold is not None:
-                    phrase_jap = bold.group(1)
-                
-                content_line['assets'] = {
-                    'voice': { 
-                        code: voice_path(lesson_id, code) for code in ['en-us', 'en-au', 'en-uk']
-                    }
-                }
-                value_list.append(copy.deepcopy(content_line)) # 値渡しすることに注意
-
-        elif label == "contents" and line == "\n":
-            label = "advice"
-
-        elif line != "\n":
-            if re.search("_",line): # lessonの区切りを検出
-                label = "lesson"
-                # print('-> lesson')
-            elif label == "lesson":
-                lesson_title = line.strip("\n")
-                if not lesson_title in lesson_to_id:
-                    zfill_id = str(len(lesson_to_id)+1).zfill(4)
-                    lesson_to_id[lesson_title] = zfill_id
-                # lesson_id = lesson_to_id[lesson_title]
-                # label = "section"
-                label = 'contents'
-                # print('-> contents')
-            elif label == "section":
-                section_id = line.strip().strip(".").zfill(4)
-                label = "contents"
-                # print('-> contents')
-            elif label == "advice":
-                advice = line
-                label = "section"
-                # このタイミングで作成
-                data = {}
-                data["id"] = str(id_counter).zfill(4)
-                data["title"] = {
-                    "ja": phrase_jap,
-                    "en": phrase_eng
-                }
-                data["meta"] = {
-                    "lessonId": lesson_id,
-                }
-                data["advice"] = {
-                    'ja': advice
-                }
-                data["example"] = {
-                    "@type": "Conversation",
-                    "value": value_list
-                }
-                content_data.append(copy.deepcopy(data)) # 値渡しすることに注意
-                id_counter += 1
-                value_list = []
-                label = "section"
-
-    return content_data
 
 
 def strip_brs(txt):
@@ -112,9 +25,7 @@ def strip_brs(txt):
     return '\n'.join(lines).strip()
 
 
-def phrase_txt2json(phrase_txt, lesson_id, start):
-    global id_counter
-
+def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
     def create_meta():
         return {
             'lessonId': lesson_id,
@@ -125,34 +36,34 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
         example_value = []
         for i, (ja, en) in enumerate(zip(jas, ens), start=1):
             example_value.append({
-                '@type': 'Message',
+                # '@type': 'Message',
                 'text': {
                     'en': en,
                     'ja': ja,
                 },
-                'assets': create_assets(id_counter, i),
+                'assets': create_assets(i),
             })
 
         return {
-            '@type': 'Conversation',
+            # '@type': 'Conversation',
             'value': example_value,
         }
 
-    def create_assets(phrase_id, index):
+    def voice_path(index, locale):
+        # 'assets/' prefixed
+        # voice/<lesson_id>-<phrase-id>-<1-3>_<locale>.mp3
+        # return f'voice/{phrase_id}-{index}_{locale}.mp3'
+        return f'voice/{lesson_id}-{phrase_id}-{index}_{locale}.mp3'
+
+    def create_assets(index):
         """
         lesson_id: e.g. Shcool
         code: e.g. en-us
         """
-        def voice_path(locale):
-            # 'assets/' prefixed
-            # voice/<id>-<1-3>_<locale>.mp3
-            # return f'assets/voice/{phrase_id}-{index}_{locale}.mp3'
-            return f'voice/0001-{index}_{locale}.mp3'
-
         return {
             'voice': { 
                 # todo
-                locale: voice_path(locale) for locale in ['en-us', 'en-au', 'en-uk']
+                locale: voice_path(index, locale) for locale in ['en-us', 'en-au', 'en-uk']
             }
         }
 
@@ -165,7 +76,7 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
                 title_ja = bold.group(1)
                 break
         else:
-            print(f'[Warn] {lesson_id} {id_counter - start} title(ja) is empty')
+            print(f'[Warn] {lesson_id} {phrase_id} title(ja) is empty')
             title_ja = jas[1]
 
 
@@ -175,7 +86,7 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
                 title_en = bold.group(1)
                 break
         else:
-            print(f'[Warn] {lesson_id} {id_counter - start} title(en) is empty')
+            print(f'[Warn] {lesson_id} {phrase_id} title(en) is empty')
             title_en = ens[1]
 
         return {
@@ -186,7 +97,7 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
 
     def create_advice(advice):
         if advice == '':
-            print(f'[Warn] {lesson_id} {id_counter - start} advice is empty')
+            print(f'[Warn] {lesson_id} {phrase_id} advice is empty')
 
         return {
             'ja': advice.strip()
@@ -204,117 +115,101 @@ def phrase_txt2json(phrase_txt, lesson_id, start):
         advice = strip_brs('\n'.join(advice))
 
         phrase_json = {
-            'id': str(id_counter).zfill(4),
+            'id': str(phrase_id).zfill(4),
             'title': create_title(jas, ens),
-            'meta': create_meta(),
+            'assets': {
+                'voice': { 
+                    locale: voice_path('kp', locale) for locale in ['en-us', 'en-au', 'en-uk']
+                },
+            },
             'advice': create_advice(advice),
             'example': create_examples(jas, ens),
         }
 
         return phrase_json
     except Exception as e:
-        print(f'[Warn] {lesson_id} {id_counter - start} invalid')
+        print(f'[Warn] {lesson_id} {phrase_id} invalid')
         print(e)
         return None
-    finally:
-        id_counter += 1
 
-def lessons_splitter(lessons_txt):
+def parse_txt(text):
     """
-    returns lesson: Lesson, phrases: Phrase[]
     """
+    # split lessons
     sep = '________________'
     # lessons[0]: legends
     # lessons[1..]: lessons contents
-    _, *lessons = lessons_txt.split(sep)
-    return list(map(strip_brs, lessons))
+    _, *lessons = text.split(sep)
+    lessons = list(map(strip_brs, lessons))
 
-
-def lesson2json(lesson_txt):
-    """
-    """
-    # phrases[0]: title
-    # phrases[1..]: phrases contents
-    header, *phrases_txt = re.split(r'^\d+\.', lesson_txt, flags=re.MULTILINE)
-    title = strip_brs(header)
-    _id = title.split(' ')[0].strip(string.punctuation).lower()
-    print(f'title: {title}, id: {_id}')
-
-    lesson_json = {
-        'id': _id,
-        'title': {
-            'en': title,
-            'ja': title,
-        },
-        'assets': {
-            'img': {
-                'thumbnail': f'assets/thumbnails/{_id}.png'
+    phrases_txt_list = []
+    lessons_json = []
+    # parse lessons
+    for lesson in lessons:
+        # phrases[0]: title
+        # phrases[1..]: phrases contents
+        header, *phrases = re.split(r'^\d+\.', lesson, flags=re.MULTILINE)
+        phrases_txt_list.append(phrases)
+        title = strip_brs(header)
+        lesson_id = title.split(' ')[0].strip(string.punctuation).lower()
+        print(f'title: {title}, id: {lesson_id}')
+    
+        lesson_json = {
+            'id': lesson_id,
+            'title': {
+                'en': title,
+                'ja': title,
+            },
+            'assets': {
+                'img': {
+                    'thumbnail': f'assets/thumbnails/{lesson_id}.png'
+                }
             }
         }
-    }
+
+        lessons_json.append(lesson_json)
 
     phrases_json = []
-    global id_counter, valid_counter
-    start = id_counter
-    for phrase_txt in phrases_txt:
-        phrase_json = phrase_txt2json(phrase_txt, _id, start)
-        if phrase_json is not None:
-            phrases_json.append(phrase_json)
-            valid_counter += 1
+    for lesson_json, phrases in zip(lessons_json, phrases_txt_list):
+        for phrase_id, phrase in enumerate(phrases, start=1):
+            phrase_json = phrase_txt2json(phrase, lesson_id=lesson_json['id'], phrase_id=phrase_id)
+            if phrase_json is not None:
+                phrases_json.append(phrase_json)
 
-    return lesson_json, phrases_json
+    print(f'{len(phrases_json)} / {sum(map(len, phrases_txt_list))} phrases successfully dumped.') 
+
+    return lessons_json, phrases_json
 
 
 def generate(preview=False):
     # exported from google drive
     lessons_txt_path = f'{root}/World RIZe Main Part Phrases.txt'
     lessons_json_path = f'{root}/lessons.json'
-    phrases_json_dir = f'{root}/lessons'
+    phrases_json_path  = f'{root}/phrases.json'
     force = '-f' in sys.argv
 
     if force:
         print('-f')
 
     with open(lessons_txt_path) as f:
-        lessons_txt = f.read()
+        text = f.read()
 
-    lessons_json = []
-    phrases_json_list = []
-    lessons = lessons_splitter(lessons_txt)
-    for lesson in lessons:
-        lesson_json, phrases_json = lesson2json(lesson)
-        lessons_json.append(lesson_json)
-        phrases_json_list.append(phrases_json)
-
-    global id_counter, valid_counter
-    print(f'{valid_counter} / {id_counter} phrases successfully dumped.') 
+    lessons_json, phrases_json = parse_txt(text)
 
     if preview:
-        # print(json.dumps(lessons_json, indent=2, ensure_ascii=False))
-        # print(json.dumps(phrases_json_list, indent=2, ensure_ascii=False))
         return
 
     if not force and os.path.exists(lessons_json_path):
         print(f'[Warn] {lessons_json_path} is already exists')
-    else:
-        with open(lessons_json_path, 'w') as f:
-            if not preview:
-                print(json.dumps(lessons_json, ensure_ascii=False, indent=2), file=f)
-            print(f'[Generated] {lessons_json_path}')
+        return
 
-    if not force and not preview and not os.path.exists(phrases_json_dir):
-        os.makedirs(phrases_json_dir)
+    with open(lessons_json_path, 'w') as f:
+        print(json.dumps(lessons_json, ensure_ascii=False, indent=2), file=f)
+        print(f'[Generated] {lessons_json_path}')
 
-    for lesson_json, phrases_json in zip(lessons_json, phrases_json_list):
-        phrase_json_path = f'{phrases_json_dir}/{lesson_json["id"]}.json'
-        if not force and os.path.exists(phrase_json_path):
-            print(f'[Warn] {phrase_json_path} is already exists')
-        else:
-            with open(phrase_json_path, 'w') as f:
-                if not preview:
-                    print(json.dumps(phrases_json, ensure_ascii=False, indent=2), file=f)
-
-            print(f'[Generated] {phrase_json_path}')
+    with open(phrases_json_path, 'w') as f:
+        print(json.dumps(phrases_json, ensure_ascii=False, indent=2), file=f)
+        print(f'[Generated] {phrases_json_path}')
 
 
 if __name__ == '__main__':
