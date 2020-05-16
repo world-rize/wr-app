@@ -4,7 +4,7 @@
   const sleep = async (s) => new Promise(resolve => setTimeout(resolve, s * 1000))
   for (let row of document.getElementsByClassName('cell-name')) {
     row.click()
-    await sleep(3)
+    await sleep(5)
     // download
     document.getElementsByClassName('mat-raised-button')[2].click()
     await sleep(1)
@@ -16,4 +16,4 @@
 })();
 
 // タイトル取得
-[...document.getElementsByClassName('name-test')].map(el => el.innerHTML.replace(/^\s+|\s+$/g, ''))
+[...document.getElementsByClassName('name-test')].map(el => el.innerHTML.replace(/^\s+|\s+$/g, '')).join(',')

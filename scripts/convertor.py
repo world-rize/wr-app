@@ -11,7 +11,7 @@ import os
 import glob
 import string
 
-pwd = os.path.dirname(__file__)
+pwd = os.path.dirname(os.path.abspath(__file__))
 root = f'{pwd}/../assets'
 # bold pettern
 bold_pattern = re.compile(r"[\(（](.*?)[\)）]")
