@@ -3,7 +3,7 @@ description: WorldRIZe App
 authors:
   - wakame-tech
   - yoshiki301
-version: 0.2.3
+version: 0.2.4
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
@@ -66,4 +66,4 @@ flutter_icons:
 
 flutter_native_splash:
   image: "assets/icon/icon.jpg"
-  color: "70BFE6"
+  color: "56C0EA"

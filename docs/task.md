@@ -60,10 +60,20 @@ $ sh update_i10n.sh
 フレーズJSON等の生成はGoogleドライブから `.txt でエクスポートしたものを `assets/phrases.txt` に置き、
 
 ```bash
-$ python convertor.py
+$ python scripts/convertor.py
 ```
 
 で `/assets` 以下に展開されます
+
+### 音声データ
+naturalreaders からダウンロードしてきた zip を適切な場所に置き、
+
+```bash
+$ python scripts/rename.py
+```
+
+を実行するとmp3ファイルが展開されます。
+
 
 ### スプラッシュ画像生成
 ```bash
