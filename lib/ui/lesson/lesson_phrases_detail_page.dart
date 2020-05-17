@@ -7,6 +7,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/phrase.dart';
+import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
@@ -40,15 +41,8 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   AudioPlayer _player;
   AudioCache _cache;
 
-  String voicePath() {
-    print('locale: $_currentVoiceType');
-    final mainPhrase = phrase.example.value[1];
-    if (mainPhrase.assets?.voice?.containsKey(_currentVoiceType) ?? false) {
-      return mainPhrase.assets.voice[_currentVoiceType];
-    } else {
-      print('fallback voice');
-      return 'voice_sample.mp3';
-    }
+  String get voicePath {
+    return phrase.assets.voice[_currentVoiceType] ?? 'voice_sample.mp3';
   }
 
   void showErrorDialog(dynamic e) {
@@ -82,7 +76,12 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
         });
       });
 
-    _cache = AudioCache(fixedPlayer: _player)..load(voicePath());
+    _cache = AudioCache(fixedPlayer: _player)
+      ..load(voicePath).catchError((e) {
+        print(e);
+        showErrorDialog(e);
+        Logger.log('[error] $voicePath failed to load.');
+      });
   }
 
   @override
@@ -227,7 +226,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               ),
               onPressed: () {
                 if (!_isPlaying) {
-                  _cache.play(voicePath()).catchError(showErrorDialog);
+                  _cache.play(voicePath).catchError(showErrorDialog);
                 } else {
                   _cache.fixedPlayer.stop();
                 }

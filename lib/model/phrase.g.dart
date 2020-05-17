@@ -12,6 +12,9 @@ Phrase _$PhraseFromJson(Map<String, dynamic> json) {
       title: (json['title'] as Map<String, dynamic>)?.map(
         (k, e) => MapEntry(k, e as String),
       ),
+      assets: json['assets'] == null
+          ? null
+          : Assets.fromJson(json['assets'] as Map<String, dynamic>),
       meta: (json['meta'] as Map<String, dynamic>)?.map(
         (k, e) => MapEntry(k, e as String),
       ),
@@ -26,6 +29,7 @@ Phrase _$PhraseFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$PhraseToJson(Phrase instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
+      'assets': instance.assets,
       'meta': instance.meta,
       'advice': instance.advice,
       'example': instance.example

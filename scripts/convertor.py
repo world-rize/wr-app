@@ -29,6 +29,7 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
     def create_meta():
         return {
             'lessonId': lesson_id,
+            'phraseId': str(phrase_id),
         }
 
 
@@ -51,9 +52,7 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
 
     def voice_path(index, locale):
         # 'assets/' prefixed
-        # voice/<lesson_id>-<phrase-id>-<1-3>_<locale>.mp3
-        # return f'voice/{phrase_id}-{index}_{locale}.mp3'
-        return f'voice/{lesson_id}-{phrase_id}-{index}_{locale}.mp3'
+        return f'voice/{lesson_id}_{phrase_id}_{index}_{locale}.mp3'
 
     def create_assets(index):
         """
@@ -117,6 +116,8 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
         phrase_json = {
             'id': str(phrase_id).zfill(4),
             'title': create_title(jas, ens),
+            'meta': create_meta(),
+            # key phrase
             'assets': {
                 'voice': { 
                     locale: voice_path('kp', locale) for locale in ['en-us', 'en-au', 'en-uk']
