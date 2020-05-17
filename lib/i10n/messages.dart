@@ -12,6 +12,7 @@ mixin Messages {
   String lessonStatus(int count, int all) => Intl.message(
         'クリア[$count/$all]',
         name: 'lessonStatus',
+        args: [count, all],
       );
 
   /// phrase request
@@ -31,13 +32,15 @@ mixin Messages {
         name: 'onePointAdvice',
       );
 
-  /// point
-  String points(int point) =>
-      _points(NumberFormat.compact(locale: 'en').format(point));
+  String get phraseDetailTitle => Intl.message(
+        'Phrase Detail',
+        name: 'phraseDetailTitle',
+      );
 
-  String _points(String point) => Intl.message(
+  /// point
+  String points(int point) => Intl.message(
         '$point ポイント',
-        name: 'point',
+        name: 'points',
         args: [point],
       );
 
@@ -53,8 +56,11 @@ mixin Messages {
       );
 
   /// test page
-  String testConfirm(String title) =>
-      Intl.message('$titleのテストを開始しますか?', name: 'testConfirm');
+  String testConfirm(String title) => Intl.message(
+        '$titleのテストを開始しますか?',
+        name: 'testConfirm',
+        args: [title],
+      );
 
   String get no => Intl.message('No', name: 'no');
 
@@ -65,11 +71,18 @@ mixin Messages {
   String testMessage(int limit, int time) => Intl.message(
         '本日のテスト残り$limit回\n制限時間$time秒',
         name: 'testMessage',
+        args: [limit, time],
       );
 
   String question(int q) => Intl.message(
         '$q問目',
         name: 'question',
+        args: [q],
+      );
+
+  String get testInterrupt => Intl.message(
+        'テストを中断しますか?',
+        name: 'testInterrupt',
       );
 
   /// test result page
@@ -80,7 +93,8 @@ mixin Messages {
 
   String getPoints(int point) => Intl.message(
         '$point ポイントGet!',
-        name: 'pointGet',
+        name: 'getPoints',
+        args: [point],
       );
 
   String get getPiece => Intl.message(
@@ -96,9 +110,10 @@ mixin Messages {
   String testScore(int questions, int corrects) => Intl.message(
         '$questions問中$corrects問正解！',
         name: 'testScore',
+        args: [questions, corrects],
       );
 
-  String testResult({bool success}) => Intl.select(
+  String testResult(bool success) => Intl.select(
         success,
         {
           true: 'テストに合格！',
@@ -116,31 +131,31 @@ mixin Messages {
   /// bottom nav bar
   String get bottomNavLesson => Intl.message(
         'Lesson',
-        name: 'lesson',
+        name: 'bottomNavLesson',
       );
 
   String get bottomNavColumn => Intl.message(
         'Columns',
-        name: 'columns',
+        name: 'bottomNavColumn',
       );
 
   String get bottomNavTravel => Intl.message(
         'Travel',
-        name: 'travel',
+        name: 'bottomNavTravel',
       );
 
   String get bottomNavAgency => Intl.message(
         'Agency',
-        name: 'agency',
+        name: 'bottomNavAgency',
       );
 
   String get bottomNavMyPage => Intl.message(
         'My page',
-        name: 'mypage',
+        name: 'bottomNavMyPage',
       );
 
   /// section select page
-  String sectionStatus({bool clear}) => Intl.select(
+  String sectionStatus(bool clear) => Intl.select(
         clear,
         {
           true: 'クリア',
@@ -153,7 +168,7 @@ mixin Messages {
   /// settings
   String get myPageTitle => Intl.message(
         '設定',
-        name: 'settings',
+        name: 'myPageTitle',
       );
 
   String get accountSection => Intl.message(
@@ -174,7 +189,7 @@ mixin Messages {
   /// account page
   String get accountPageTitle => Intl.message(
         'Account',
-        name: 'account',
+        name: 'accountPageTitle',
       );
 
   /// system messages

@@ -1,10 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-
-import 'dart:developer' as dev;
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:wr_app/api/mock.dart';
-import 'package:wr_app/model/phrase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wr_app/model/user.dart';
 import 'package:wr_app/api/user.dart';
@@ -37,6 +33,7 @@ class UserStore with ChangeNotifier {
       age: 0,
       email: '',
       favorites: {},
+      testLimitCount: 3,
       userId: '',
       uuid: '');
 
@@ -46,7 +43,7 @@ class UserStore with ChangeNotifier {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.lightGreen,
     );
   }
 

@@ -61,6 +61,7 @@ List<Lesson> dummyLessons() {
       title: {
         'ja': 'School vol.$i',
       },
+      phrases: [],
       assets: Assets(
         img: {
           'thumbnail': 'https://source.unsplash.com/random/300x800',

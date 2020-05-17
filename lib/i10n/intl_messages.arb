@@ -1,31 +1,39 @@
 {
   "@@locale": "messages",
-  "@@last_modified": "2020-05-02T04:14:15.301674",
-  "hello": "こんにちは",
-  "@hello": {
-    "description": "挨拶",
+  "@@last_modified": "2020-05-17T19:16:16.637702",
+  "lessonStatus": "クリア[{count}/{all}]",
+  "@lessonStatus": {
+    "type": "text",
+    "placeholders": {
+      "count": {},
+      "all": {}
+    }
+  },
+  "requestPhraseButton": "フレーズをリクエストする",
+  "@requestPhraseButton": {
     "type": "text",
     "placeholders": {}
   },
-  "_followers": "フォロワー: {count}",
-  "@_followers": {
+  "requestPhrase": "フレーズのリクエスト",
+  "@requestPhrase": {
     "type": "text",
-    "placeholders": {
-      "count": {}
-    }
+    "placeholders": {}
   },
-  "dogsCount": "{howMany,plural, =0{no dog😢}=1{a dog}other{{howMany} dogs}}",
-  "@dogsCount": {
+  "onePointAdvice": "One Point Advice",
+  "@onePointAdvice": {
     "type": "text",
-    "placeholders": {
-      "howMany": {}
-    }
+    "placeholders": {}
   },
-  "hungry": "{gender,select, female{私はお腹が空いたわ}male{僕はお腹が空きました}other{はらぺこりん}}",
-  "@hungry": {
+  "phraseDetailTitle": "Phrase Detail",
+  "@phraseDetailTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "points": "{point} ポイント",
+  "@points": {
     "type": "text",
     "placeholders": {
-      "gender": {}
+      "point": {}
     }
   },
   "memberStatus": "{membership,select, normal{通常会員です}premium{プレミアム会員です✨✨}}",
@@ -34,5 +42,151 @@
     "placeholders": {
       "membership": {}
     }
+  },
+  "testConfirm": "{title}のテストを開始しますか?",
+  "@testConfirm": {
+    "type": "text",
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "no": "No",
+  "@no": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "yes": "Yes",
+  "@yes": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "ok": "OK",
+  "@ok": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "testMessage": "本日のテスト残り{limit}回\n制限時間{time}秒",
+  "@testMessage": {
+    "type": "text",
+    "placeholders": {
+      "limit": {},
+      "time": {}
+    }
+  },
+  "question": "{q}問目",
+  "@question": {
+    "type": "text",
+    "placeholders": {
+      "q": {}
+    }
+  },
+  "testInterrupt": "テストを中断しますか?",
+  "@testInterrupt": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "testClear": "Test Clear!",
+  "@testClear": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "getPoints": "{point} ポイントGet!",
+  "@getPoints": {
+    "type": "text",
+    "placeholders": {
+      "point": {}
+    }
+  },
+  "getPiece": "ピースのカケラGet!",
+  "@getPiece": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "close": "閉じる",
+  "@close": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "testScore": "{questions}問中{corrects}問正解！",
+  "@testScore": {
+    "type": "text",
+    "placeholders": {
+      "questions": {},
+      "corrects": {}
+    }
+  },
+  "testResult": "{success,select, true{テストに合格！}false{テストに不合格...}}",
+  "@testResult": {
+    "type": "text",
+    "placeholders": {
+      "success": {}
+    }
+  },
+  "next": "次へ",
+  "@next": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "bottomNavLesson": "Lesson",
+  "@bottomNavLesson": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "bottomNavColumn": "Columns",
+  "@bottomNavColumn": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "bottomNavTravel": "Travel",
+  "@bottomNavTravel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "bottomNavAgency": "Agency",
+  "@bottomNavAgency": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "bottomNavMyPage": "My page",
+  "@bottomNavMyPage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sectionStatus": "{clear,select, true{クリア}false{未クリア}}",
+  "@sectionStatus": {
+    "type": "text",
+    "placeholders": {
+      "clear": {}
+    }
+  },
+  "myPageTitle": "設定",
+  "@myPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "accountSection": "アカウント",
+  "@accountSection": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "studySection": "学習",
+  "@studySection": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "otherSection": "その他",
+  "@otherSection": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "accountPageTitle": "Account",
+  "@accountPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "error": "エラー",
+  "@error": {
+    "type": "text",
+    "placeholders": {}
   }
 }

@@ -38,7 +38,7 @@ class SectionRow extends StatelessWidget {
         ),
         // middle
         title: Text(
-          I.of(context).sectionStatus(clear: true),
+          I.of(context).sectionStatus(true),
           style: style.title.apply(color: Colors.redAccent),
         ),
         // right

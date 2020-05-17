@@ -26,7 +26,7 @@ class TestResultPage extends StatelessWidget {
         title: Text(I.of(context).testClear),
         content: Column(
           children: <Widget>[
-            Text(I.of(context).getPoints(3)),
+            Text(I.of(context).getPoints(stats.corrects)),
             Text(I.of(context).getPiece),
             Image.network('https://zettoku.up.seesaa.net/image/pazuru01.jpg'),
             GFButton(
@@ -54,7 +54,7 @@ class TestResultPage extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
     final useStore = Provider.of<UserStore>(context);
     final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
-    final resultText = I.of(context).testResult(success: true);
+    final resultText = I.of(context).testResult(true);
 
     return Scaffold(
       appBar: AppBar(
@@ -91,14 +91,14 @@ class TestResultPage extends StatelessWidget {
         child: FloatingActionButton.extended(
           backgroundColor: Colors.orange,
           onPressed: () {
-            useStore.callGetPoint(point: 3);
+            useStore.callGetPoint(point: stats.corrects);
             _showRewardDialog(context);
           },
           label: Padding(
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 100),
             child: Text(
               I.of(context).next,
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
           ),
         ),

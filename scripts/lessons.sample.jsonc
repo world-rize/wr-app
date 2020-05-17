@@ -1,7 +1,7 @@
 [
   {
     // レッスンのID
-    "id": "School",
+    "id": "school",
     // フレーズのタイトル
     "title": {
       "ja": "レッスン",
@@ -10,7 +10,7 @@
     // 音声や画像データのパス
     "assets": {
       "img": {
-        "thumbnail": "thumbnails/school.png"
+        "thumbnail": "assets/thumbnails/school.png"
       }
     }
   }

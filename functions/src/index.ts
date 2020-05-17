@@ -187,3 +187,13 @@ export const getPoint = functions.https.onCall(async (req: GetPointRequest, cont
     success
   }
 })
+
+/**
+ *  テストを受ける(TODO)
+ */
+interface DoTestRequest {}
+
+interface DoTestResponse {}
+export const doTest = functions.https.onCall(async (req: DoTestRequest, context): Promise<DoTestResponse> => {
+  return {}
+})

@@ -1,8 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'dart:developer' as dev;
 import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:math';
+import 'package:collection/collection.dart';
 import 'package:wr_app/api/mock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/model/section.dart';
@@ -25,7 +26,7 @@ class MasterDataStore with ChangeNotifier {
     Logger.log('✨ MasterDataStore._internal()');
 
     try {
-      _loadLessonsFromJson();
+      _loadPhrases();
     } on Exception catch (e) {
       print(e);
       Logger.log('- Failed to init MasterDataStore');
@@ -38,36 +39,48 @@ class MasterDataStore with ChangeNotifier {
   static final List<Lesson> _lessons = [];
 
   /// ローカルjsonファイルからレッスンをロード
-  Future<void> _loadLessonsFromJson() async {
-    const path = 'assets/lessons.json';
+  Future<void> _loadPhrases() async {
+    const lessonsJsonPath = 'assets/lessons.json';
+    const phrasesJsonPath = 'assets/phrases.json';
 
-    Logger.log('\t Lessons @ $path');
+    Logger.log('\t Lessons Json @ $lessonsJsonPath');
+    Logger.log('\t Phrases Json @ $phrasesJsonPath');
+
+    // load lessons
     final lessons = await rootBundle
-        .loadString(path)
+        .loadString(lessonsJsonPath)
         .then(jsonDecode)
         .then((json) => List.from(json))
         .then((list) =>
             List.from(list).map((json) => Lesson.fromJson(json)).toList());
 
-    await Future.forEach(lessons, (lesson) async {
-      lesson.phrases = await _loadPhrases(lesson);
+    // load phrases
+    final phrases = await rootBundle
+        .loadString(phrasesJsonPath)
+        .then(jsonDecode)
+        .then((json) => List.from(json))
+        .then((list) =>
+            List.from(list).map((json) => Phrase.fromJson(json)).toList());
+
+    // mapping phrases
+    final phraseMap =
+        groupBy<Phrase, String>(phrases, (phrase) => phrase.meta['lessonId']);
+
+    lessons.forEach((lesson) {
+      if (phraseMap.containsKey(lesson.id)) {
+        lesson.phrases = phraseMap[lesson.id];
+        Logger.log(
+            '\t ${lesson.id}: ${phraseMap[lesson.id].length} phrases found');
+      } else {
+        Logger.log('\t warn ${lesson.id} not found');
+      }
     });
 
     _lessons.addAll(lessons);
 
     Logger.log('\t✨ ${_lessons.length} Lessons Loaded');
 
-    await Future.forEach(_lessons, _loadPhrases);
-
     notifyListeners();
-  }
-
-  Future<List<Phrase>> _loadPhrases(Lesson lesson) async {
-    final path = 'assets/lessons/${lesson.id}.json';
-
-    Logger.log('\t${lesson.id} @ $path');
-    return rootBundle.loadString(path).then(jsonDecode).then((list) =>
-        List.from(list).map((json) => Phrase.fromJson(json)).toList());
   }
 
   Phrase getPhraseById({int i}) {
@@ -86,18 +99,5 @@ class MasterDataStore with ChangeNotifier {
 
   List<Phrase> allPhrases() {
     return _lessons.expand((lesson) => lesson.phrases).toList();
-  }
-
-  List<String> randomSelections(Phrase phrase, int correctIndex) {
-    final selections = <String>[];
-    final phrases = allPhrases();
-    for (var i = 0; i < 4; i++) {
-      final r = Random();
-      final randomPhrase = phrases[r.nextInt(phrases.length)];
-      selections.add(randomPhrase.example.value[1].text['en']);
-    }
-    selections[correctIndex] = phrase.example.value[1].text['en'];
-    assert(selections.length == 4);
-    return selections;
   }
 }

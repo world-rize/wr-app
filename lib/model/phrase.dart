@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/cupertino.dart';
+import 'package:wr_app/model/assets.dart';
 import 'package:wr_app/model/example.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -11,6 +12,7 @@ class Phrase {
   Phrase({
     @required this.id,
     this.title,
+    this.assets,
     this.meta,
     @required this.advice,
     @required this.example,
@@ -24,6 +26,9 @@ class Phrase {
 
   /// タイトル
   Map<String, String> title;
+
+  /// キーフレーズ
+  Assets assets;
 
   /// meta
   Map<String, String> meta;

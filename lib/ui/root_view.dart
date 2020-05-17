@@ -81,7 +81,11 @@ class _RootViewState extends State<RootView>
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: Icon(Icons.euro_symbol),
+              child: Image.asset(
+                'assets/icon/wr_coin.jpg',
+                width: 32,
+                height: 32,
+              ),
             ),
             Text(
               I.of(context).points(userStore.user.point),

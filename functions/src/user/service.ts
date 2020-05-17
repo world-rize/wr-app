@@ -12,6 +12,7 @@ export class UserService {
       name: req.name,
       userId: req.userId,
       point: 0,
+      testLimitCount: 3,
       favorites: {},
       email: req.email,
       age: req.age,

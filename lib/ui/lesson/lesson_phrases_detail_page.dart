@@ -7,6 +7,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/phrase.dart';
+import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
@@ -34,22 +35,18 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
 
   // State
   bool _isPlaying = false;
+  bool _showTranslation = false;
   double _currentPlaybackSpeed = 1;
   String _currentVoiceType = pronunciations[0];
   AudioPlayer _player;
   AudioCache _cache;
 
-  String voicePath() {
-    final mainPhrase = phrase.example.value[1];
-    if (mainPhrase.assets?.voice?.containsKey(_currentVoiceType) ?? false) {
-      return mainPhrase.assets.voice[_currentVoiceType];
-    } else {
-      return 'voice_sample.mp3';
-    }
+  String get voicePath {
+    return phrase.assets.voice[_currentVoiceType] ?? 'voice_sample.mp3';
   }
 
-  void showErrorDialog(Error e) {
-    print(e);
+  void showErrorDialog(dynamic e) {
+    print(e.toString());
 
     showCupertinoDialog(
       context: context,
@@ -79,7 +76,12 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
         });
       });
 
-    _cache = AudioCache(fixedPlayer: _player)..load(voicePath());
+    _cache = AudioCache(fixedPlayer: _player)
+      ..load(voicePath).catchError((e) {
+        print(e);
+        showErrorDialog(e);
+        Logger.log('[error] $voicePath failed to load.');
+      });
   }
 
   @override
@@ -89,8 +91,8 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: const Text(
-          'Phrase Detail',
+        title: Text(
+          I.of(context).phraseDetailTitle,
           style: TextStyle(color: Colors.white),
         ),
       ),
@@ -112,17 +114,32 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
       padding: const EdgeInsets.all(8),
       child: Card(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ListTile(
-              title: Text(
-                phrase.title['ja'],
+            Padding(
+              padding: const EdgeInsets.only(left: 12, top: 12),
+              child: Text(
+                phrase.title['en'],
                 style: TextStyle(
                     fontSize: 24,
-                    color: Colors.black54,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
             ),
-            PhraseSampleView(example: phrase.example),
+            Padding(
+              padding: const EdgeInsets.only(left: 12),
+              child: Text(
+                phrase.title['ja'],
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.black38,
+                ),
+              ),
+            ),
+            PhraseSampleView(
+              example: phrase.example,
+              showTranslation: _showTranslation,
+            ),
           ],
         ),
       ),
@@ -171,11 +188,15 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
             child: FloatingActionButton(
               backgroundColor: Colors.white,
               heroTag: 'Japanese',
-              child: const Icon(
+              child: Icon(
                 Icons.message,
-                color: Colors.lightBlueAccent,
+                color: _showTranslation ? Colors.lightBlueAccent : Colors.grey,
               ),
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _showTranslation = !_showTranslation;
+                });
+              },
             ),
           ),
           // お気に入りボタン
@@ -205,7 +226,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               ),
               onPressed: () {
                 if (!_isPlaying) {
-                  _cache.play(voicePath()).catchError(showErrorDialog);
+                  _cache.play(voicePath).catchError(showErrorDialog);
                 } else {
                   _cache.fixedPlayer.stop();
                 }

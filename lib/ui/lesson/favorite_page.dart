@@ -2,36 +2,32 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/masterdata.dart';
+import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
-class AllPhrasesPage extends StatelessWidget {
-  const AllPhrasesPage({this.filter});
-  final bool Function(Phrase) filter;
-
+class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
+    final userStore = Provider.of<UserStore>(context);
     final masterData = Provider.of<MasterDataStore>(context);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: const Text('All Phrases'),
+        title: const Text('Favorite Phrases'),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: masterData
               .allPhrases()
-              .where(filter)
+              .where((phrase) =>
+                  userStore.user.favorites.containsKey(phrase.id) &&
+                  userStore.user.favorites[phrase.id])
               .map((phrase) => phraseView(context, phrase, onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => LessonPhrasesDetailPage(
-                        phrase: phrase,
-                      ),
-                    ));
+                        builder: (_) =>
+                            LessonPhrasesDetailPage(phrase: phrase)));
                   }))
               .toList(),
         ),

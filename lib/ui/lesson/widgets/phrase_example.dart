@@ -7,19 +7,39 @@ import 'package:wr_app/model/example.dart';
 
 /// フレーズ例
 class PhraseSampleView extends StatelessWidget {
-  const PhraseSampleView({@required this.example});
+  const PhraseSampleView({
+    @required this.example,
+    this.showTranslation = true,
+    this.showKeyphrase = true,
+  });
+  final bool showKeyphrase;
+  final bool showTranslation;
   final Example example;
 
   /// "()" で囲まれた部分を太字にします
   /// 例 "abc(def)g" -> "abc<strong>def</strong>g"
-  Text _boldify(String text, TextStyle basicStyle) {
+  Text _boldify(String text, TextStyle basicStyle, {bool hide = false}) {
     final _children = <InlineSpan>[];
     // not good code
     text.splitMapJoin(RegExp(r'[\(（](.*)[\)）]'), onMatch: (match) {
-      _children.add(TextSpan(
-        text: match.group(1),
-        style: basicStyle.merge(TextStyle(fontWeight: FontWeight.bold)),
-      ));
+      // blinding
+      if (hide) {
+        _children.add(TextSpan(
+          text: ''.padLeft(text.length, '■'),
+          style: basicStyle.merge(TextStyle(
+            fontWeight: FontWeight.bold,
+            letterSpacing: -10,
+          )),
+        ));
+      } else {
+        _children.add(TextSpan(
+          text: match.group(1),
+          style: basicStyle.merge(TextStyle(
+            fontWeight: FontWeight.bold,
+          )),
+        ));
+      }
+
       return '';
     }, onNonMatch: (plain) {
       _children.add(TextSpan(
@@ -55,10 +75,11 @@ class PhraseSampleView extends StatelessWidget {
               child: _boldify(
                 message.text['en'],
                 TextStyle(
-                  fontSize: 22,
+                  fontSize: 18,
                   fontWeight: FontWeight.w300,
                   color: primary ? Colors.white : Colors.black,
                 ),
+                hide: !showKeyphrase,
               ),
             ),
           ),
@@ -80,10 +101,14 @@ class PhraseSampleView extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
                     // child: Text(conversation.japanese),
-                    child: _boldify(
-                      message.text['ja'],
-                      const TextStyle(),
-                    ),
+                    child: showTranslation
+                        ? _boldify(
+                            message.text['ja'],
+                            const TextStyle(
+                              fontSize: 14,
+                            ),
+                          )
+                        : const Text(''),
                   ),
                 ),
               ],
