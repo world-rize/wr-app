@@ -10,7 +10,9 @@ export interface User {
   // user id
   userId: string
   // WR point
-  point: number,
+  point: number
+  // test limit
+  testLimitCount: number
   // favorite phrase ids
   favorites: Record<string, boolean>
   // email

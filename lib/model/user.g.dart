@@ -14,6 +14,7 @@ User _$UserFromJson(Map json) {
       age: json['age'] as int,
       name: json['name'] as String,
       point: json['point'] as int,
+      testLimitCount: json['testLimitCount'] as int,
       favorites: (json['favorites'] as Map)?.map(
         (k, e) => MapEntry(k as String, e as bool),
       ));
@@ -26,5 +27,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'age': instance.age,
       'name': instance.name,
       'point': instance.point,
+      'testLimitCount': instance.testLimitCount,
       'favorites': instance.favorites
     };

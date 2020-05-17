@@ -15,6 +15,7 @@ class User {
     @required this.age,
     @required this.name,
     @required this.point,
+    @required this.testLimitCount,
     @required this.favorites,
   });
 
@@ -39,6 +40,9 @@ class User {
 
   /// 所持ポイント
   int point;
+
+  /// 本日のテスト可能回数
+  int testLimitCount;
 
   /// お気に入りフレーズ
   Map<String, bool> favorites;
