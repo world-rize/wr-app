@@ -17,17 +17,20 @@ class FavoritePage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Favorite Phrases'),
       ),
-      body: Column(
-        children: masterData
-            .allPhrases()
-            .where((phrase) =>
-                userStore.user.favorites.containsKey(phrase.id) &&
-                userStore.user.favorites[phrase.id])
-            .map((phrase) => phraseView(context, phrase, onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => LessonPhrasesDetailPage(phrase: phrase)));
-                }))
-            .toList(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: masterData
+              .allPhrases()
+              .where((phrase) =>
+                  userStore.user.favorites.containsKey(phrase.id) &&
+                  userStore.user.favorites[phrase.id])
+              .map((phrase) => phraseView(context, phrase, onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) =>
+                            LessonPhrasesDetailPage(phrase: phrase)));
+                  }))
+              .toList(),
+        ),
       ),
     );
   }

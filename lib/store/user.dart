@@ -46,7 +46,7 @@ class UserStore with ChangeNotifier {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.green,
+      backgroundColor: Colors.lightGreen,
     );
   }
 

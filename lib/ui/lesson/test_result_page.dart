@@ -54,7 +54,7 @@ class TestResultPage extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
     final useStore = Provider.of<UserStore>(context);
     final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
-    final resultText = I.of(context).testResult(success: true);
+    final resultText = I.of(context).testResult(true);
 
     return Scaffold(
       appBar: AppBar(
