@@ -37,9 +37,9 @@ if __name__ == '__main__':
   zips = glob(zip_path)
   zips.sort(key=os.path.getmtime, reverse=False)
 
-  # if len(zips) != len(filenames):
-  #   print(f'need 100 zips')
-  #   exit()
+  if len(zips) != len(filenames):
+    print(f'need 100 zips')
+    exit()
 
   # rename
   for name, zip_path in zip(filenames, zips):
@@ -74,8 +74,3 @@ if __name__ == '__main__':
 
       print(f'\t{os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
       os.rename(mp3path, dst_path)
-
-    # clean
-    # os.remove(zip_file)
-    # for p in glob(extract_path):
-    #   os.remove(p)
