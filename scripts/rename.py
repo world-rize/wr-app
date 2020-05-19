@@ -52,21 +52,21 @@ filenames = [
     "PINOCCHIO21米,PINOCCHIO20米,PINOCCHIO19米,PINOCCHIO18米,PINOCCHO17米,PINOCCHIO16米,PINOCCHIO15米,PINOCCHIO14米,PINOCCHIO13米,PINOCCHIO12米,PINOCCHIO11米,PINOCHHIO10米,PINOCCHIO9米,PINOCCHIO8米,PINOCCHIO7米,PINOCCHIO6米,PINOCCHIO5米,PINOCCHIO4米,PINOCCHIO3米,PINOCCHIO2米,PINOCCHIO1米,Restaurant, Cafe1豪,Restaurant, Cafe1英,Restaurant, Cafe1米,Emotions, Physical conditions1豪,Emotions, Physical conditions1英,Emotions, Physical conditions1米,Aussie Slang1豪,Aussie Slang1英,Aussie Slang1米,Acting as a guide1豪,Acting as a guide1英,Acting as a guide1米,Shopping1豪,Shopping1英,Shopping1米,Weather1豪,Weather1英,Weather1米,Greeting1豪,Greeting1英,Greeting1米,Relationship1豪,Relationship1英,Relationship1米,Social Media1豪,Social Media1英,Social Media1米,House1豪,House1英,House1米,School1豪,School1英,School1米,Business English1豪,Business English1英,Business English1米",
 ]
 
-name_lesson_id_map = {
-  'Business': 'business',
-  'school': 'school',
-  '': 'travelling',
-  '': 'house',
-  '': 'social',
-  '': 'greeting',
-  ''; 'weather',
-  '': 'shopping',
-  '': 'acting',
-  '': 'aussie',
-  '': 'emotions',
-  '': 'restaurant',
-  '': 'part-time',
-}
+# name_lesson_id_map = {
+#   'Business': 'business',
+#   'school': 'school',
+#   '': 'travelling',
+#   '': 'house',
+#   '': 'social',
+#   '': 'greeting',
+#   ''; 'weather',
+#   '': 'shopping',
+#   '': 'acting',
+#   '': 'aussie',
+#   '': 'emotions',
+#   '': 'restaurant',
+#   '': 'part-time',
+# }
 
 pwd = os.path.dirname(os.path.abspath(__file__))
 
@@ -85,14 +85,11 @@ def name_to_meta(name):
 
 
 if __name__ == '__main__':
-    for 
-    exit()
-
     filename_101_200 = filenames[1]
     filenames = filename_101_200.split(',')
-    zip_path = f'{pwd}/../assets/raw/*.zip'
+    zip_path = f'{pwd}/../assets/raw/101-200/*.zip'
     dir_name = os.path.dirname(zip_path)
-    dst_dir = f'{dir_name}/voice'
+    dst_dir = f'{pwd}/../assets/voice'
     if not os.path.exists(dst_dir):
         os.makedirs(dst_dir)
 
@@ -134,5 +131,5 @@ if __name__ == '__main__':
             filename = f'{lesson_id}_{phrase_id}_{index}_{locale}.mp3'
             dst_path = f'{dst_dir}/{filename}'
 
-            print(f'\t{os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
+            print(f'\t- {os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
             os.rename(mp3path, dst_path)
