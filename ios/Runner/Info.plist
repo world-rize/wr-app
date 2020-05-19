@@ -49,5 +49,18 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+
+	<!-- for google signin -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>ccom.googleusercontent.apps.34380133980-gf915vqf501moh0oeq90n0gs6k1nm1pd</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

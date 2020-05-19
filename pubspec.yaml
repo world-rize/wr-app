@@ -35,6 +35,8 @@ dependencies:
   data_classes: ^3.0.0
   json_annotation: ^2.0.0
   collection: 1.14.11
+  shared_preferences: ^0.5.7+2
+  google_sign_in: ^4.4.6
   flutter_localizations:
     sdk: flutter
 
