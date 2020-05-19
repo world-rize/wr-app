@@ -8,10 +8,72 @@ import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/index.dart';
 import 'package:wr_app/ui/root_view.dart';
 
-class OnBoardModal extends StatelessWidget {
+class OnBoardModal extends StatefulWidget {
+  @override
+  _OnBoardModalState createState() => _OnBoardModalState();
+}
+
+class _OnBoardModalState extends State<OnBoardModal> {
+  Future<void> _signUpWithGoogle() async {
+    final userStore = Provider.of<UserStore>(context, listen: false);
+    try {
+      await userStore.signUpWithGoogle();
+
+      userStore.setFirstLaunch(flag: false);
+
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RootView(),
+        ),
+      );
+    } on Exception catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  Future<void> _signUpEmailAndPassword() async {
+    final userStore = Provider.of<UserStore>(context, listen: false);
+    try {
+      // TODO
+      await userStore
+          .signInWithMock(email: 'a@b.com', password: 'hoge')
+          .catchError(print);
+      userStore.setFirstLaunch(flag: false);
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RootView(),
+        ),
+      );
+    } on Exception catch (e) {
+      print(e);
+      return;
+    }
+  }
+
+  Future<void> _signInTestUser() async {
+    final userStore = Provider.of<UserStore>(context, listen: false);
+    try {
+      await userStore.signIn(email: 'a@b.com', password: '123456');
+
+      userStore.setFirstLaunch(flag: false);
+
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RootView(),
+        ),
+      );
+    } on Exception catch (e) {
+      print(e);
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserStore>(context);
     final logo = Image.asset(
       'assets/icon/wr_icon.jpg',
       fit: BoxFit.contain,
@@ -19,19 +81,7 @@ class OnBoardModal extends StatelessWidget {
 
     final buttons = <Widget>[
       MaterialButton(
-        onPressed: () {
-          userStore.signUpWithGoogle().then((_) {
-            userStore.setFirstLaunch(flag: false);
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => RootView(),
-              ),
-            );
-          }).catchError((e) {
-            print(e);
-          });
-        },
+        onPressed: _signUpWithGoogle,
         child: const Padding(
           padding: EdgeInsets.all(12),
           child: Text(
@@ -47,7 +97,7 @@ class OnBoardModal extends StatelessWidget {
         shape: const StadiumBorder(),
       ),
       MaterialButton(
-        onPressed: () {},
+        onPressed: _signUpEmailAndPassword,
         child: const Padding(
           padding: EdgeInsets.all(12),
           child: Text(
@@ -63,11 +113,7 @@ class OnBoardModal extends StatelessWidget {
         shape: const StadiumBorder(),
       ),
       MaterialButton(
-        onPressed: () {
-          // login
-          // TODO(someone): ログイン画面を表示
-          userStore.signInWithMock(email: 'a@b.com', password: '123456');
-        },
+        onPressed: _signInTestUser,
         child: const Padding(
           padding: EdgeInsets.all(12),
           child: Text(

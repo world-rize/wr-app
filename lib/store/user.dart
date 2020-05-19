@@ -93,6 +93,8 @@ class UserStore with ChangeNotifier {
       return null;
     }
 
+    print(_user.email);
+
     // google user -> credential
     final _gauth = await _user.authentication;
     final _credential = GoogleAuthProvider.getCredential(
@@ -114,6 +116,7 @@ class UserStore with ChangeNotifier {
       fbUser = (await fbAuth.signInWithCredential(_credential)).user;
     } on Exception catch (e) {
       print(e);
+      rethrow;
     }
   }
 
@@ -139,7 +142,20 @@ class UserStore with ChangeNotifier {
       return;
     } on Exception catch (e) {
       print(e);
+      rethrow;
     }
+  }
+
+  /// Sign up with Google
+  Future<void> signOutWithGoogle() async {
+    final _googleSignIn = GoogleSignIn();
+    // try google sign in
+    var _user = _googleSignIn.currentUser;
+    if (_user == null) {
+      return;
+    }
+    await _googleSignIn.signOut();
+    return;
   }
 
   /// モックでサインインする
@@ -178,8 +194,17 @@ class UserStore with ChangeNotifier {
 
       notifyListeners();
     } on Exception catch (e) {
+      print(e);
       errorToast(e);
     }
+  }
+
+  Future<void> signOut() async {
+    await signOutWithGoogle();
+    await fbAuth.signOut();
+    fbUser = null;
+    user = null;
+    Logger.log('\t ✔ user signed out');
   }
 
   /// Firebase Auth にログイン

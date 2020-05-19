@@ -12,6 +12,7 @@ import 'package:wr_app/ui/mypage/all_phrases_page.dart';
 import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/ui/mypage/onboading_page.dart';
 
 // TODO(wakame-tech): アカウント情報と設定項目を考える
 /// 設定ページ
@@ -92,6 +93,14 @@ class _SettingsState extends State<SettingsPage> {
             SettingsTile(
               title: '利用規約',
               onTap: () {},
+            ),
+            SettingsTile(
+              title: 'サインアウト',
+              onTap: () async {
+                await userStore.signOut();
+                await Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => OnBoardModal()));
+              },
             ),
 //            SettingsTile(
 //              title: 'このアプリについて',
