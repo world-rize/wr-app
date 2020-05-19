@@ -14,6 +14,7 @@ import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 /// クリックすることで [LessonPhrasesDetailPage] へ移動
 ///
 Widget phraseView(BuildContext context, Phrase phrase, {Function onTap}) {
+  assert(phrase != null);
   final userStore = Provider.of<UserStore>(context);
   final favorite = userStore.user.favorites.containsKey(phrase.id) &&
       userStore.user.favorites[phrase.id];

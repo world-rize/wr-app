@@ -9,6 +9,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/env.dart';
 import 'package:wr_app/store/logger.dart';
+import 'package:wr_app/store/user.dart';
+import 'package:wr_app/ui/mypage/onboading_page.dart';
 //import 'package:wr_app/ui/onboarding_page.dart';
 import 'package:wr_app/ui/root_view.dart';
 import 'package:wr_app/theme.dart';

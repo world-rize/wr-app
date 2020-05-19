@@ -105,7 +105,9 @@ class LessonMenus extends StatelessWidget {
                   },
                 ),
               ],
-            ),
+            )
+          else
+            const Text('no favorites'),
 
           // New Coming Phrases Section
           const GFTypography(
@@ -119,7 +121,7 @@ class LessonMenus extends StatelessWidget {
               children: [
                 phraseView(
                   context,
-                  favoritePhrase,
+                  newComingPhrase,
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => FavoritePage()),
@@ -127,7 +129,9 @@ class LessonMenus extends StatelessWidget {
                   },
                 ),
               ],
-            ),
+            )
+          else
+            const Text('no newcomming'),
 
           // Request Section
           const GFTypography(

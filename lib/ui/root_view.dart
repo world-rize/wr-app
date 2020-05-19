@@ -9,6 +9,7 @@ import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
 import 'package:wr_app/ui/lesson/index.dart';
 import 'package:wr_app/ui/mypage/index.dart';
+import 'package:wr_app/ui/mypage/onboading_page.dart';
 import 'package:wr_app/ui/travel/index.dart';
 import 'package:wr_app/ui/mypage/settings_page.dart';
 import 'package:wr_app/i10n/i10n.dart';
@@ -36,9 +37,20 @@ class _RootViewState extends State<RootView>
     _pageController = PageController();
     _searchBarController = SearchBarController();
 
-    // login
-    // TODO(someone): ログイン画面を表示
-    UserStore().signIn(email: 'a@b.com', password: '123456');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final firstLaunch = UserStore().firstLaunch;
+      print('first launch: $firstLaunch');
+
+      // show on boarding modal
+      if (firstLaunch) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => OnBoardModal(),
+            fullscreenDialog: true,
+          ),
+        );
+      }
+    });
   }
 
   // TODO(wakame-tech): 検索バーを実装
