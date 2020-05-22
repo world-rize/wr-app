@@ -38,6 +38,7 @@ dependencies:
   shared_preferences: ^0.5.7+2
   google_sign_in: ^4.4.6
   flutter_svg: ^0.17.4
+  intro_slider: ^2.3.1
   flutter_localizations:
     sdk: flutter
 

@@ -12,7 +12,7 @@ import 'package:wr_app/ui/mypage/all_phrases_page.dart';
 import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/ui/mypage/onboading_page.dart';
+import 'package:wr_app/ui/onboarding/sign_up_view.dart';
 
 // TODO(wakame-tech): アカウント情報と設定項目を考える
 /// 設定ページ
@@ -63,17 +63,20 @@ class _SettingsState extends State<SettingsPage> {
               title: 'お気に入りフレーズ一覧',
               leading: Icon(Icons.favorite),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context).push(
+                  MaterialPageRoute(
                     builder: (_) => AllPhrasesPage(
-                          filter: (phrase) =>
-                              userStore.user.favorites.containsKey(phrase.id) &&
-                              userStore.user.favorites[phrase.id],
-                        )));
+                      filter: (phrase) =>
+                          userStore.user.favorites.containsKey(phrase.id) &&
+                          userStore.user.favorites[phrase.id],
+                    ),
+                  ),
+                );
               },
             ),
             SettingsTile(
               title: '本日の残りテスト回数',
-              subtitle: '3',
+              subtitle: '${userStore.user.testLimitCount}',
               leading: Icon(Icons.access_time),
               onTap: () {},
             ),
@@ -99,7 +102,7 @@ class _SettingsState extends State<SettingsPage> {
               onTap: () async {
                 await userStore.signOut();
                 await Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => OnBoardModal()));
+                    .push(MaterialPageRoute(builder: (_) => SignUpView()));
               },
             ),
 //            SettingsTile(

@@ -330,7 +330,7 @@ class UserStore with ChangeNotifier {
     Logger.log('\callDoTest()');
 
     try {
-      await doTest();
+      // await doTest();
 
       Logger.log('success');
 
