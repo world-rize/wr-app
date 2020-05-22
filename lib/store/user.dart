@@ -108,42 +108,48 @@ class UserStore with ChangeNotifier {
   /// Sign in with google
   /// see <https://qiita.com/unsoluble_sugar/items/95b16c01b456be19f9ac>
   Future<void> signInWithGoogle() async {
-    try {
-      final _credential = await getGoogleAuthCredential();
-      assert(_credential != null);
+    final _credential = await getGoogleAuthCredential();
+    assert(_credential != null);
 
-      // credential -> firebase user
-      fbUser = (await fbAuth.signInWithCredential(_credential)).user;
-    } on Exception catch (e) {
-      print(e);
-      rethrow;
-    }
+    // credential -> firebase user
+    final signInResponse =
+        await fbAuth.signInWithCredential(_credential).catchError(print);
+
+    assert(signInResponse != null);
+
+    final functionResponse = await readUser().catchError(print);
+
+    assert(functionResponse != null);
+
+    Logger.log(user.toJson().toString());
+    user = functionResponse.user;
   }
 
   /// Sign up with Google
   Future<void> signUpWithGoogle() async {
-    try {
-      final _credential = await getGoogleAuthCredential();
-      assert(_credential != null);
+    final _credential = await getGoogleAuthCredential();
+    assert(_credential != null);
 
-      print(_credential);
+    // credential -> firebase user
+    final signInResponse =
+        await fbAuth.signInWithCredential(_credential).catchError(print);
 
-      // credential -> firebase user
-      fbUser = (await fbAuth.signInWithCredential(_credential)).user;
+    assert(signInResponse != null);
 
-      final res = await createUser(
-          name: fbUser.displayName, email: fbUser.email, age: 0);
+    final functionResponse = await createUser(
+      uuid: signInResponse.user.uid,
+      userId: signInResponse.user.uid,
+      name: signInResponse.user.displayName,
+      email: signInResponse.user.email,
+      age: 0,
+    ).catchError(print);
 
-      print(res.user.toJson());
+    assert(functionResponse != null);
 
-      user = res.user;
+    Logger.log(user.toJson().toString());
+    user = functionResponse.user;
 
-      user = dummyUser();
-      return;
-    } on Exception catch (e) {
-      print(e);
-      rethrow;
-    }
+    return;
   }
 
   /// Sign up with Google

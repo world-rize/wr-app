@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:wr_app/store/user.dart';
@@ -93,10 +94,10 @@ class _RootViewState extends State<RootView>
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: Image.asset(
-                'assets/icon/wr_coin.jpg',
-                width: 32,
-                height: 32,
+              child: SvgPicture.asset(
+                'assets/icon/wr_coin.svg',
+//                width: 32,
+//                height: 32,
               ),
             ),
             Text(
