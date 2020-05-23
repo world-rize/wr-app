@@ -11,6 +11,7 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/masterdata.dart';
+import 'package:wr_app/store/user.dart';
 
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
@@ -72,12 +73,14 @@ class TestPageState extends State<TestPage> {
   }
 
   /// 次の問題へ
-  void _next(int answer) {
+  Future<void> _next(int answer) async {
+    final userStore = Provider.of<UserStore>(context, listen: false);
+
     // show result
     if (answer == _answerIndex) {
       _corrects += 1;
 
-      showDialog(
+      await showDialog(
         context: context,
         builder: (_) => Material(
           type: MaterialType.transparency,
@@ -94,7 +97,7 @@ class TestPageState extends State<TestPage> {
         ),
       );
     } else {
-      showDialog(
+      await showDialog(
         context: context,
         builder: (_) => Material(
           type: MaterialType.transparency,
@@ -117,7 +120,9 @@ class TestPageState extends State<TestPage> {
       final stats =
           TestStats(section: section, questions: 7, corrects: _corrects);
 
-      Navigator.of(context).push(
+      await userStore.callDoTest();
+
+      await Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TestResultPage(stats: stats)),
       );
     } else {

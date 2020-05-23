@@ -52,7 +52,11 @@ class MasterDataStore with ChangeNotifier {
         .then(jsonDecode)
         .then((json) => List.from(json))
         .then((list) =>
-            List.from(list).map((json) => Lesson.fromJson(json)).toList());
+            List.from(list).map((json) => Lesson.fromJson(json)).toList())
+        .catchError((e) {
+      print(e);
+      Logger.log(e.toString());
+    });
 
     // load phrases
     final phrases = await rootBundle
@@ -60,7 +64,11 @@ class MasterDataStore with ChangeNotifier {
         .then(jsonDecode)
         .then((json) => List.from(json))
         .then((list) =>
-            List.from(list).map((json) => Phrase.fromJson(json)).toList());
+            List.from(list).map((json) => Phrase.fromJson(json)).toList())
+        .catchError((e) {
+      print(e);
+      Logger.log(e.toString());
+    });
 
     // mapping phrases
     final phraseMap =

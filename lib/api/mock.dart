@@ -5,6 +5,7 @@ import 'package:wr_app/model/section.dart';
 import 'package:wr_app/model/lesson.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/model/example.dart';
+import 'package:wr_app/model/user.dart';
 
 /// ダミーのフレーズを返す
 Phrase dummyPhrase({int i = 1}) {
@@ -79,5 +80,18 @@ List<Section> dummySections() {
       title: 'Section${i + 1}',
       phrases: List.generate(7, (i) => dummyPhrase(i: i + 1)),
     ),
+  );
+}
+
+User dummyUser() {
+  return User(
+    uuid: 'test-test',
+    userId: '0123-4567-89',
+    email: 'hoge@example.com',
+    age: 10,
+    name: 'テスト',
+    point: 100,
+    testLimitCount: 3,
+    favorites: {},
   );
 }

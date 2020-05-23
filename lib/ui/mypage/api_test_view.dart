@@ -24,11 +24,11 @@ class APITestView extends StatelessWidget {
                 leading: Icon(Icons.info),
                 onTap: userStore.callTestAPI,
               ),
-              SettingsTile(
-                title: 'ユーザーを作成',
-                leading: Icon(Icons.people),
-                onTap: userStore.callCreateUser,
-              ),
+//              SettingsTile(
+//                title: 'ユーザーを作成',
+//                leading: Icon(Icons.people),
+//                onTap: userStore.callCreateUser,
+//              ),
               SettingsTile(
                 title: 'ユーザーを取得',
                 leading: Icon(Icons.people),
@@ -44,6 +44,13 @@ class APITestView extends StatelessWidget {
               SettingsTile(
                 title: '1ポイントゲット',
                 leading: Icon(Icons.attach_money),
+                onTap: () {
+                  userStore.callGetPoint(point: 1);
+                },
+              ),
+              SettingsTile(
+                title: 'テストを受ける(未実装)',
+                leading: Icon(Icons.title),
                 onTap: () {
                   userStore.callGetPoint(point: 1);
                 },

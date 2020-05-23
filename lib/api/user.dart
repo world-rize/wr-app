@@ -34,12 +34,24 @@ Future<ReadUserResponse> readUser() async {
 }
 
 /// create user
-Future<CreateUserResponse> createUser() async {
+Future<CreateUserResponse> createUser({
+  @required String uuid,
+  @required String name,
+  @required String userId,
+  @required String email,
+  @required int age,
+}) async {
   final callable = CloudFunctions.instance
       .getHttpsCallable(functionName: 'createUser')
         ..timeout = const Duration(seconds: 10);
 
-  final result = await callable.call({}).catchError((e) {
+  final result = await callable.call({
+    'uuid': uuid,
+    'name': name,
+    'userId': userId,
+    'email': email,
+    'age': age,
+  }).catchError((e) {
     print(e);
     throw e;
   });
@@ -49,10 +61,11 @@ Future<CreateUserResponse> createUser() async {
 }
 
 /// favorite phrase
-Future<FavoritePhraseResponse> favoritePhrase(
-    {@required String uid,
-    @required String phraseId,
-    @required bool value}) async {
+Future<FavoritePhraseResponse> favoritePhrase({
+  @required String uid,
+  @required String phraseId,
+  @required bool value,
+}) async {
   final callable = CloudFunctions.instance
       .getHttpsCallable(functionName: 'favoritePhrase')
         ..timeout = const Duration(seconds: 10);
@@ -82,4 +95,17 @@ Future<GetPointResponse> getPoint(
 
   // dynamic -> Map<String, dynamic> -> Response
   return GetPointResponse.fromJson(Map<String, dynamic>.from(result.data));
+}
+
+/// テストを受ける
+Future<void> doTest() async {
+  final callable = CloudFunctions.instance
+      .getHttpsCallable(functionName: 'doTest')
+        ..timeout = const Duration(seconds: 10);
+
+  final result = await callable.call({});
+
+  // dynamic -> Map<String, dynamic> -> Response
+  return;
+  // return TestResponse.fromJson(Map<String, dynamic>.from(result.data));
 }

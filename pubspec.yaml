@@ -3,7 +3,7 @@ description: WorldRIZe App
 authors:
   - wakame-tech
   - yoshiki301
-version: 0.2.4
+version: 0.3.0
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
@@ -35,6 +35,10 @@ dependencies:
   data_classes: ^3.0.0
   json_annotation: ^2.0.0
   collection: 1.14.11
+  shared_preferences: ^0.5.7+2
+  google_sign_in: ^4.4.6
+  flutter_svg: ^0.17.4
+  intro_slider: ^2.3.1
   flutter_localizations:
     sdk: flutter
 
@@ -54,6 +58,7 @@ flutter:
   # サブディレクトリは明示的に指定しないといけない
   assets:
     - assets/
+    # 国旗アイコン https://www.smashingmagazine.com/2010/04/the-ultimate-free-web-designer-s-icon-set-750-icons-incl-psd-sources/
     - assets/icon/
     - assets/voice/
     - assets/thumbnails/

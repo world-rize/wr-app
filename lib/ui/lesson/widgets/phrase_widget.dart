@@ -14,11 +14,14 @@ import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 /// クリックすることで [LessonPhrasesDetailPage] へ移動
 ///
 Widget phraseView(BuildContext context, Phrase phrase, {Function onTap}) {
+  assert(phrase != null);
   final userStore = Provider.of<UserStore>(context);
   final favorite = userStore.user.favorites.containsKey(phrase.id) &&
       userStore.user.favorites[phrase.id];
   final englishStyle = wrThemeData.primaryTextTheme.bodyText1;
   final japaneseStyle = wrThemeData.primaryTextTheme.bodyText2;
+  // TODO: debug
+  final existVoice = phrase.assets.voice.isEmpty;
 
   return Padding(
     padding: const EdgeInsets.all(8),
@@ -49,7 +52,7 @@ Widget phraseView(BuildContext context, Phrase phrase, {Function onTap}) {
                     Padding(
                       padding: const EdgeInsets.all(4),
                       child: Text(
-                        phrase.title['en'],
+                        (existVoice ? '[x]' : '') + phrase.title['en'],
                         style: englishStyle,
                       ),
                     ),

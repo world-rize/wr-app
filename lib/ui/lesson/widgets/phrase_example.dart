@@ -9,12 +9,15 @@ import 'package:wr_app/model/example.dart';
 class PhraseSampleView extends StatelessWidget {
   const PhraseSampleView({
     @required this.example,
+    this.onMessageTapped,
     this.showTranslation = true,
     this.showKeyphrase = true,
   });
-  final bool showKeyphrase;
-  final bool showTranslation;
+
   final Example example;
+  final Function(Message, int) onMessageTapped;
+  final bool showTranslation;
+  final bool showKeyphrase;
 
   /// "()" で囲まれた部分を太字にします
   /// 例 "abc(def)g" -> "abc<strong>def</strong>g"
@@ -55,7 +58,11 @@ class PhraseSampleView extends StatelessWidget {
     );
   }
 
-  Widget _createMessageView(Message message, {bool primary = false}) {
+  Widget _createMessageView(
+    Message message,
+    int index, {
+    bool primary = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -63,23 +70,31 @@ class PhraseSampleView extends StatelessWidget {
             primary ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
           // 英語メッセージ
-          Container(
-            padding: const EdgeInsets.all(10),
-            width: 350,
-            decoration: BoxDecoration(
-              color: primary ? Colors.lightBlue.shade300 : Colors.grey.shade200,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: _boldify(
-                message.text['en'],
-                TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w300,
-                  color: primary ? Colors.white : Colors.black,
+          GestureDetector(
+            onTap: () {
+              if (onMessageTapped != null) {
+                onMessageTapped(message, index);
+              }
+            },
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              width: 350,
+              decoration: BoxDecoration(
+                color:
+                    primary ? Colors.lightBlue.shade300 : Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: _boldify(
+                  message.text['en'],
+                  TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300,
+                    color: primary ? Colors.white : Colors.black,
+                  ),
+                  hide: !showKeyphrase,
                 ),
-                hide: !showKeyphrase,
               ),
             ),
           ),
@@ -125,7 +140,7 @@ class PhraseSampleView extends StatelessWidget {
       children: example.value
           .asMap()
           .map((i, message) =>
-              MapEntry(i, _createMessageView(message, primary: i % 2 == 1)))
+              MapEntry(i, _createMessageView(message, i, primary: i % 2 == 1)))
           .values
           .toList(),
     );

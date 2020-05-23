@@ -81,6 +81,7 @@ interface CreateUserResponse {
 
 /**
  *  ユーザーを作成します
+ *  TODO: functions側でユーザー作成?
  */
 export const createUser = functions.https.onCall(async (req: CreateUserRequest, context): Promise<CreateUserResponse> => {
   if (!context.auth) {

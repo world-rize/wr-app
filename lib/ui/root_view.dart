@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:wr_app/store/user.dart';
@@ -9,6 +10,8 @@ import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
 import 'package:wr_app/ui/lesson/index.dart';
 import 'package:wr_app/ui/mypage/index.dart';
+import 'package:wr_app/ui/onboarding/index.dart';
+import 'package:wr_app/ui/onboarding/sign_up_view.dart';
 import 'package:wr_app/ui/travel/index.dart';
 import 'package:wr_app/ui/mypage/settings_page.dart';
 import 'package:wr_app/i10n/i10n.dart';
@@ -36,9 +39,20 @@ class _RootViewState extends State<RootView>
     _pageController = PageController();
     _searchBarController = SearchBarController();
 
-    // login
-    // TODO(someone): ログイン画面を表示
-    UserStore().signIn(email: 'a@b.com', password: '123456');
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final firstLaunch = UserStore().firstLaunch;
+      print('first launch: $firstLaunch');
+
+      // show on boarding modal
+      if (firstLaunch) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => OnBoardModal(),
+            fullscreenDialog: true,
+          ),
+        );
+      }
+    });
   }
 
   // TODO(wakame-tech): 検索バーを実装
@@ -81,10 +95,10 @@ class _RootViewState extends State<RootView>
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(right: 8),
-              child: Image.asset(
-                'assets/icon/wr_coin.jpg',
-                width: 32,
-                height: 32,
+              child: SvgPicture.asset(
+                'assets/icon/wr_coin.svg',
+//                width: 32,
+//                height: 32,
               ),
             ),
             Text(
