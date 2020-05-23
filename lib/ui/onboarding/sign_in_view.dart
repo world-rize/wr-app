@@ -19,11 +19,11 @@ class _SignInViewState extends State<SignInView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
+        logo,
         Padding(
-          padding: const EdgeInsets.only(top: 60),
-          child: logo,
+          padding: const EdgeInsets.all(8.0),
+          child: SignInForm(),
         ),
-        SignInForm(),
       ],
     );
   }

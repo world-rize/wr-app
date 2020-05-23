@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/user.dart';
+import 'package:wr_app/ui/onboarding/widgets/sign_up_form.dart';
 import 'package:wr_app/ui/root_view.dart';
 
 class SignInForm extends StatefulWidget {
@@ -68,16 +69,16 @@ class _SignInFormState extends State<SignInForm> {
     }
   }
 
-  String _email;
-  String _password;
+  UserSignUpInfo _model;
   bool _accept;
+  bool _showPassword;
 
   @override
   void initState() {
     super.initState();
-    _email = '';
-    _password = '';
+    _model = UserSignUpInfo(email: '', password: '');
     _accept = false;
+    _showPassword = false;
   }
 
   @override
@@ -85,98 +86,150 @@ class _SignInFormState extends State<SignInForm> {
     final _formKey = GlobalKey<FormState>();
     return Form(
       key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          TextFormField(
-            autovalidate: false,
-            onChanged: (text) {
-              setState(() {
-                _password = text;
-              });
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'Email',
-            ),
-          ),
-          TextFormField(
-            onChanged: (text) {
-              setState(() {
-                _password = text;
-              });
-            },
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              filled: true,
-              fillColor: Colors.white,
-              hintText: 'Password',
-            ),
-          ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
-            child: CheckboxListTile(
-              value: _accept,
-              activeColor: Colors.blue,
-              title: const Text('利用規約に同意します'),
-              subtitle: InkWell(
-                child: const Text('利用規約'),
-                onTap: () {},
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _accept = value;
-                });
-              },
-            ),
-          ),
-          RaisedButton(
-            onPressed: _signInEmailAndPassword,
-            child: const Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Sign in',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            // Email
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                onSaved: (email) {
+                  _model.email = email;
+                },
+                validator: (text) {
+                  if (text.isEmpty) {
+                    return 'do not empty';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Email',
                 ),
               ),
             ),
-            color: Colors.blueAccent,
-          ),
-          RaisedButton(
-            onPressed: _signInWithGoogle,
-            child: const Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Sign in with Google',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
+
+            // Password
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                obscureText: !_showPassword,
+                onSaved: (password) {
+                  _model.password = password;
+                },
+                validator: (text) {
+                  if (text.isEmpty) {
+                    return 'do not empty';
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _showPassword
+                          ? Icons.remove_circle_outline
+                          : Icons.remove_red_eye,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _showPassword = !_showPassword;
+                      });
+                    },
+                  ),
+                  border: InputBorder.none,
+                  hintText: 'Password',
                 ),
               ),
             ),
-            color: Colors.blueAccent,
-          ),
-          RaisedButton(
-            onPressed: _signInTestUser,
-            child: const Padding(
-              padding: EdgeInsets.all(12),
-              child: Text(
-                'Sign in with test user',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
+
+            // Sign Up
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: FlatButton(
+                  onPressed: () {
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      _signInEmailAndPassword();
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      'Sign in',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  color: Colors.blueAccent,
                 ),
               ),
             ),
-            color: Colors.redAccent,
-          ),
-        ],
+
+            // Or
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(
+                child: Text('または'),
+              ),
+            ),
+
+            // Sign in google
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: FlatButton(
+                  onPressed: () {
+                    _signInWithGoogle();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      'Sign in with Google',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  color: Colors.redAccent,
+                ),
+              ),
+            ),
+
+            // Sign in by Test User(Debug)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.infinity,
+                child: FlatButton(
+                  onPressed: () {
+                    _signInTestUser();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(12),
+                    child: Text(
+                      'Sign in by Test User(Debug)',
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  color: Colors.greenAccent,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -16,19 +16,18 @@ class _SignUpViewState extends State<SignUpView> {
       fit: BoxFit.contain,
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 60),
-          child: logo,
-        ),
-        // Form
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: SignUpForm(),
-        ),
-      ],
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          logo,
+          // Form
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: SignUpForm(),
+          ),
+        ],
+      ),
     );
   }
 }
