@@ -20,6 +20,8 @@ Widget phraseView(BuildContext context, Phrase phrase, {Function onTap}) {
       userStore.user.favorites[phrase.id];
   final englishStyle = wrThemeData.primaryTextTheme.bodyText1;
   final japaneseStyle = wrThemeData.primaryTextTheme.bodyText2;
+  // TODO: debug
+  final existVoice = phrase.assets.voice.isEmpty;
 
   return Padding(
     padding: const EdgeInsets.all(8),
@@ -50,7 +52,7 @@ Widget phraseView(BuildContext context, Phrase phrase, {Function onTap}) {
                     Padding(
                       padding: const EdgeInsets.all(4),
                       child: Text(
-                        phrase.title['en'],
+                        (existVoice ? '[x]' : '') + phrase.title['en'],
                         style: englishStyle,
                       ),
                     ),

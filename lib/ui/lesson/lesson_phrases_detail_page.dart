@@ -38,11 +38,32 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   bool _showTranslation = false;
   double _currentPlaybackSpeed = 1;
   String _currentVoiceType = pronunciations[0];
+
+  // Player
   AudioPlayer _player;
   AudioCache _cache;
 
   String get voicePath {
     return phrase.assets.voice[_currentVoiceType] ?? 'voice_sample.mp3';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _player = AudioPlayer()
+      ..onPlayerStateChanged.listen((AudioPlayerState state) {
+        setState(() {
+          _isPlaying = state == AudioPlayerState.PLAYING;
+        });
+      });
+
+    _cache = AudioCache(fixedPlayer: _player)
+      ..load(voicePath).catchError((e) {
+        print(e);
+        showErrorDialog(e);
+        Logger.log('[error] $voicePath failed to load.');
+      });
   }
 
   void showErrorDialog(dynamic e) {
@@ -63,25 +84,6 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
         ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _player = AudioPlayer()
-      ..onPlayerStateChanged.listen((AudioPlayerState state) {
-        setState(() {
-          _isPlaying = state == AudioPlayerState.PLAYING;
-        });
-      });
-
-    _cache = AudioCache(fixedPlayer: _player)
-      ..load(voicePath).catchError((e) {
-        print(e);
-        showErrorDialog(e);
-        Logger.log('[error] $voicePath failed to load.');
-      });
   }
 
   @override
@@ -139,6 +141,11 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
             PhraseSampleView(
               example: phrase.example,
               showTranslation: _showTranslation,
+              onMessageTapped: (message, index) {
+                _cache
+                    .play(message.assets.voice[_currentVoiceType])
+                    .catchError(showErrorDialog);
+              },
             ),
           ],
         ),
