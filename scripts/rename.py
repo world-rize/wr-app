@@ -52,23 +52,26 @@ filenames = [
     "PINOCCHIO21米,PINOCCHIO20米,PINOCCHIO19米,PINOCCHIO18米,PINOCCHO17米,PINOCCHIO16米,PINOCCHIO15米,PINOCCHIO14米,PINOCCHIO13米,PINOCCHIO12米,PINOCCHIO11米,PINOCHHIO10米,PINOCCHIO9米,PINOCCHIO8米,PINOCCHIO7米,PINOCCHIO6米,PINOCCHIO5米,PINOCCHIO4米,PINOCCHIO3米,PINOCCHIO2米,PINOCCHIO1米,Restaurant, Cafe1豪,Restaurant, Cafe1英,Restaurant, Cafe1米,Emotions, Physical conditions1豪,Emotions, Physical conditions1英,Emotions, Physical conditions1米,Aussie Slang1豪,Aussie Slang1英,Aussie Slang1米,Acting as a guide1豪,Acting as a guide1英,Acting as a guide1米,Shopping1豪,Shopping1英,Shopping1米,Weather1豪,Weather1英,Weather1米,Greeting1豪,Greeting1英,Greeting1米,Relationship1豪,Relationship1英,Relationship1米,Social Media1豪,Social Media1英,Social Media1米,House1豪,House1英,House1米,School1豪,School1英,School1米,Business English1豪,Business English1英,Business English1米",
 ]
 
-# name_lesson_id_map = {
-#   'Business': 'business',
-#   'school': 'school',
-#   '': 'travelling',
-#   '': 'house',
-#   '': 'social',
-#   '': 'greeting',
-#   ''; 'weather',
-#   '': 'shopping',
-#   '': 'acting',
-#   '': 'aussie',
-#   '': 'emotions',
-#   '': 'restaurant',
-#   '': 'part-time',
-# }
+name_lesson_id_map = {
+  'business': 'business',
+  'school': 'school',
+  'guide': 'travelling',
+  'house': 'house',
+  'relationship': 'social',
+#  '': 'greeting',
+  'weather': 'weather',
+#  '': 'shopping',
+  'phonecall': 'acting',
+  'english': 'aussie',
+  'emotion': 'emotions',
+  'cafe': 'restaurant',
+#  '': 'part-time',
+}
 
 pwd = os.path.dirname(os.path.abspath(__file__))
+root = f'{pwd}/../assets'
+zip_cnt = 0
+mp3_cnt = 0
 
 extractor = re.compile(r"([a-zA-Z\-]+)(\d+)([英米豪])((?:KP)?)")
 def name_to_meta(name):
@@ -76,32 +79,37 @@ def name_to_meta(name):
     try:
         match = re.search(extractor, name)
         id_upper, phrase_id, locale_ja, kp = match.groups()
+        # convert
+        kp = kp.lower()
         locale = { '英': 'en-uk', '豪': 'en-au', '米': 'en-us' }[locale_ja]
-        if not locale:
-            raise Exception()
-        return id_upper.lower(), phrase_id, locale, kp.lower()
+        lesson_id = name_lesson_id_map[id_upper.lower()]
+        if lesson_id is None:
+            raise Exception(f'invalid lesson_id {id_upper}')
+
+        if locale is None:
+            raise Exception(f'invalid locale {locale_ja}')
+        return lesson_id, phrase_id, locale, kp
     except:
         return None
 
 
-if __name__ == '__main__':
-    filename_101_200 = filenames[1]
-    filenames = filename_101_200.split(',')
-    zip_path = f'{pwd}/../assets/raw/101-200/*.zip'
+def extract_mp3(zip_path, filename_list):
+    global zip_cnt, mp3_cnt
     dir_name = os.path.dirname(zip_path)
-    dst_dir = f'{pwd}/../assets/voice'
+    dst_dir = f'{root}/voice'
     if not os.path.exists(dst_dir):
         os.makedirs(dst_dir)
 
     zips = glob(zip_path)
     zips.sort(key=os.path.getmtime, reverse=False)
 
-    if len(zips) != len(filenames):
+    if len(zips) != len(filename_list):
         print(f'need 100 zips')
         exit()
 
     # rename
-    for name, zip_path in zip(filenames, zips):
+    lesson_ids = set()
+    for name, zip_path in zip(filename_list, zips):
         meta = name_to_meta(name)
         if not meta:
             print(f'{name} is invalid name')
@@ -111,6 +119,9 @@ if __name__ == '__main__':
 
         extract_file_name = zip_path.split('.')[0]
         extract_path = f'{dir_name}/{extract_file_name}'
+
+        # lesson id sampling
+        # lesson_ids.add(lesson_id)
 
         # 解凍
         print(f'extract {os.path.basename(zip_path)} -> {name}')
@@ -133,3 +144,18 @@ if __name__ == '__main__':
 
             print(f'\t- {os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
             os.rename(mp3path, dst_path)
+
+            mp3_cnt += 1
+
+        zip_cnt += 1
+
+
+if __name__ == '__main__':
+    for i in range(1, 400, 100):
+        voice_100_dir = f'{root}/raw/{i}-{i+99}'
+        if not os.path.exists(voice_100_dir):
+            continue
+
+        extract_mp3(f'{voice_100_dir}/*.zip', filenames[i // 100].split(','))
+
+    print(f'[Success] {zip_cnt} zips {mp3_cnt} voices extracted')

@@ -15,7 +15,7 @@ pwd = os.path.dirname(os.path.abspath(__file__))
 root = f'{pwd}/../assets'
 # bold pettern
 bold_pattern = re.compile(r"[\(（](.*?)[\)）]")
-
+verbose = False
 
 def strip_brs(txt):
     """
@@ -68,6 +68,7 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
 
 
     def create_title(jas, ens):
+        global verbose
         title_ja, title_en = '', ''
         for ja in jas:
             bold = re.search(bold_pattern, ja)
@@ -75,7 +76,9 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
                 title_ja = bold.group(1)
                 break
         else:
-            print(f'[Warn] {lesson_id} {phrase_id} title(ja) is empty')
+            global verbose
+            if verbose:
+                print(f'[Warn] {lesson_id} {phrase_id} title(ja) is empty')
             title_ja = jas[1]
 
 
@@ -85,7 +88,8 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
                 title_en = bold.group(1)
                 break
         else:
-            print(f'[Warn] {lesson_id} {phrase_id} title(en) is empty')
+            if verbose:
+                print(f'[Warn] {lesson_id} {phrase_id} title(en) is empty')
             title_en = ens[1]
 
         return {
@@ -96,7 +100,9 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
 
     def create_advice(advice):
         if advice == '':
-            print(f'[Warn] {lesson_id} {phrase_id} advice is empty')
+            global verbose
+            if verbose:
+                print(f'[Warn] {lesson_id} {phrase_id} advice is empty')
 
         return {
             'ja': advice.strip()
@@ -119,7 +125,7 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
             'meta': create_meta(),
             # key phrase
             'assets': {
-                'voice': { 
+                'voice': {
                     locale: voice_path('kp', locale) for locale in ['en-us', 'en-au', 'en-uk']
                 },
             },
@@ -127,10 +133,20 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
             'example': create_examples(jas, ens),
         }
 
+        # check voice
+        kp_path = phrase_json['assets']['voice']['en-us']
+        exist_voice = os.path.exists(f'{root}/{kp_path}')
+        if exist_voice:
+            print(f'[Info] {lesson_id} {phrase_id} voice found')
+        else:
+            phrase_json['assets']['voice'] = {}
+
         return phrase_json
     except Exception as e:
-        print(f'[Warn] {lesson_id} {phrase_id} invalid')
-        print(e)
+        global verbose
+        if verbose:
+            print(f'[Warn] {lesson_id} {phrase_id} invalid')
+            print(e)
         return None
 
 def parse_txt(text):
@@ -188,9 +204,13 @@ def generate(preview=False):
     lessons_json_path = f'{root}/lessons.json'
     phrases_json_path  = f'{root}/phrases.json'
     force = '-f' in sys.argv
+    global verbose
+    verbose = '-v' in sys.argv
 
     if force:
-        print('-f')
+        print('force')
+    if verbose:
+        print('verbose')
 
     with open(lessons_txt_path) as f:
         text = f.read()
