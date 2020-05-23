@@ -269,12 +269,8 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
             child: FloatingActionButton(
               backgroundColor: Colors.white,
               heroTag: 'Country',
-              child: Text(
-                _currentVoiceType,
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.blue,
-                ),
+              child: Image.asset(
+                'assets/icon/locale_$_currentVoiceType.png',
               ),
               onPressed: () {
                 final _index = pronunciations.indexOf(_currentVoiceType);
