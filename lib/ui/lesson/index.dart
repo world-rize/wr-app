@@ -14,6 +14,7 @@ import 'package:wr_app/ui/lesson/favorite_page.dart';
 import 'package:wr_app/ui/lesson/request_page.dart';
 
 import 'package:wr_app/ui/lesson/section_select_page.dart';
+import 'package:wr_app/ui/lesson/widgets/locked_view.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
 extension IndexedMap<T, E> on List<T> {
@@ -182,56 +183,63 @@ class LessonSelectCarousel extends StatelessWidget {
   Widget _carouselCell(BuildContext context, Lesson lesson, int index) {
     final size = MediaQuery.of(context).size;
 
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => SectionSelectPage(lesson: lesson)),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.all(8),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-          child: Stack(
-            children: <Widget>[
-              Image.asset(
-                lesson.assets.img['thumbnail'],
-                fit: BoxFit.cover,
-                height: size.height,
-                width: size.width,
-              ),
-              ClipRect(
-                child: Container(
-                  color: const Color.fromRGBO(128, 128, 128, 0.5),
+    return Container(
+      margin: const EdgeInsets.all(8),
+      child: ClipRRect(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        child: LockedView(
+          locked: index % 2 == 0,
+          child: GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => SectionSelectPage(lesson: lesson),
                 ),
-              ),
-              Positioned(
-                top: 10,
-                left: 10,
-                child: Text('No.${index + 1}',
-                    style: const TextStyle(color: Colors.white, fontSize: 18)),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text(
-                    lesson.title['ja'],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+              );
+            },
+            child: Stack(
+              children: <Widget>[
+                Image.asset(
+                  lesson.assets.img['thumbnail'],
+                  fit: BoxFit.cover,
+                  height: size.height,
+                  width: size.width,
+                ),
+                ClipRect(
+                  child: Container(
+                    color: const Color.fromRGBO(128, 128, 128, 0.5),
+                  ),
+                ),
+                Positioned(
+                  top: 10,
+                  left: 10,
+                  child: Text('No.${index + 1}',
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 18)),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text(
+                      lesson.title['ja'],
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 10,
-                right: 20,
-                child: Text(
-                    I.of(context).lessonStatus(0, lesson.phrases.length),
-                    style: const TextStyle(color: Colors.white, fontSize: 18)),
-              ),
-            ],
+                Positioned(
+                  bottom: 10,
+                  right: 20,
+                  child: Text(
+                      I.of(context).lessonStatus(0, lesson.phrases.length),
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 18)),
+                ),
+              ],
+            ),
           ),
         ),
       ),
