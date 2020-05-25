@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/theme.dart';
+import 'package:wr_app/extension/string_capitalization.dart';
 import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
 
 /// フレーズを表示するコンポーネント
@@ -52,7 +52,8 @@ Widget phraseView(BuildContext context, Phrase phrase, {Function onTap}) {
                     Padding(
                       padding: const EdgeInsets.all(4),
                       child: Text(
-                        (existVoice ? '[x]' : '') + phrase.title['en'],
+                        (existVoice ? '[x]' : '') +
+                            phrase.title['en'].capitalize(),
                         style: englishStyle,
                       ),
                     ),
