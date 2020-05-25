@@ -3,7 +3,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 
 /// `旅行` ページのトップ
 ///
@@ -18,49 +17,52 @@ class TravelPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const <Widget>[
-              // map
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: GFTypography(
-                  text: 'Map',
-                  type: GFTypographyType.typo1,
-                  dividerColor: GFColors.SUCCESS,
-                ),
-              ),
-              Placeholder(
-                fallbackHeight: 150,
-              ),
-
-              // 今月のおすすめ
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  '今月のおすすめ',
-                  style: _headLineStyle,
-                ),
-              ),
-              Placeholder(
-                fallbackHeight: 200,
-              ),
-
-              // あなたにおすすめ
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Text(
-                  'あなたにおすすめ',
-                  style: _headLineStyle,
-                ),
-              ),
-              Placeholder(
-                fallbackHeight: 200,
-              ),
-            ],
-          ),
+//        SingleChildScrollView(
+//          physics: const NeverScrollableScrollPhysics(),
+//          child: Column(
+//            crossAxisAlignment: CrossAxisAlignment.start,
+//            children: const <Widget>[
+//              // map
+//              Padding(
+//                padding: EdgeInsets.all(10),
+//                child: GFTypography(
+//                  text: 'Map',
+//                  type: GFTypographyType.typo1,
+//                  dividerColor: GFColors.SUCCESS,
+//                ),
+//              ),
+//              Placeholder(
+//                fallbackHeight: 150,
+//              ),
+//
+//              // 今月のおすすめ
+//              Padding(
+//                padding: EdgeInsets.all(10),
+//                child: Text(
+//                  '今月のおすすめ',
+//                  style: _headLineStyle,
+//                ),
+//              ),
+//              Placeholder(
+//                fallbackHeight: 200,
+//              ),
+//
+//              // あなたにおすすめ
+//              Padding(
+//                padding: EdgeInsets.all(10),
+//                child: Text(
+//                  'あなたにおすすめ',
+//                  style: _headLineStyle,
+//                ),
+//              ),
+//              Placeholder(
+//                fallbackHeight: 200,
+//              ),
+//            ],
+//          ),
+//        ),
+        Image.asset(
+          'assets/mock.png',
         ),
         ClipRect(
           child: BackdropFilter(
@@ -75,8 +77,8 @@ class TravelPage extends StatelessWidget {
             child: Text(
               'Coming Soon',
               style: TextStyle(
-                fontSize: 22,
-                color: Colors.grey,
+                fontSize: 30,
+                color: Colors.greenAccent,
               ),
             ),
           ),
