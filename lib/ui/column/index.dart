@@ -4,24 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/colors/gf_color.dart';
 import 'package:getflutter/components/typography/gf_typography.dart';
 import 'package:getflutter/getflutter.dart';
-
-/// 記事
-class Article {
-  Article({
-    @required this.title,
-    @required this.date,
-    @required this.content,
-  });
-
-  /// タイトル
-  final String title;
-
-  /// 投稿日時
-  final DateTime date;
-
-  /// 内容(マークダウンを想定?)
-  final String content;
-}
+import 'package:wr_app/model/article.dart';
+import 'package:wr_app/model/category.dart';
+import 'package:wr_app/ui/column/article_view.dart';
+import 'package:wr_app/ui/column/category_posts.dart';
+import 'package:wr_app/ui/column/category_view.dart';
 
 /// `コラム` ページのトップ
 ///
@@ -34,65 +21,25 @@ class ColumnIndexPage extends StatelessWidget {
     return const Placeholder();
   }
 
-  Widget _articleView(Article article) {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Container(
-        constraints: const BoxConstraints.expand(height: 170),
-        padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
-        decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: NetworkImage('https://source.unsplash.com/category/nature'),
-            fit: BoxFit.cover,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Stack(
-          children: <Widget>[
-            // title
-            Positioned(
-              left: 0,
-              top: 10,
-              child: Text(
-                'Title',
-                style: TextStyle(fontSize: 30, color: Colors.white),
-              ),
-            ),
-            Positioned(
-              right: 0,
-              bottom: 0,
-              child: Text(
-                '107/350',
-                style: TextStyle(fontSize: 30, color: Colors.white),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadiusDirectional.circular(20),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: Image.network('https://source.unsplash.com/category/nature'),
-      ),
-    );
-  }
-
-  final List<Article> articles = List.generate(
+  /// カテゴリモック
+  final List<Category> categories = List.generate(
     5,
-    (i) => Article(
-      title: 'これは記事$iです',
+    (i) => Category(
+      title: 'カテゴリ$i',
+      thumbnailUrl: 'https://source.unsplash.com/category/nature',
+    ),
+  );
+
+  /// 記事モック
+  final List<Article> articles = List.generate(
+    10,
+    (index) => Article(
+      id: '$index',
+      title: '記事$index',
+      thumbnailUrl: 'https://source.unsplash.com/category/nature',
       date: DateTime.now(),
-      content: '''
-    # 見出し
-    ## 小見出し
-    内容$iです
-    ''',
+      content:
+          'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
     ),
   );
 
@@ -116,7 +63,22 @@ class ColumnIndexPage extends StatelessWidget {
               dividerColor: GFColors.SUCCESS,
             ),
           ),
-          ...articles.map(_articleView).toList(),
+          ...categories
+              .map(
+                (category) => CategoryView(
+                  category: category,
+                  onTap: (article) => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => CategoryPosts(
+                        category: category,
+                        articles: articles,
+                        onTap: (article) {},
+                      ),
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
         ],
       ),
     );
