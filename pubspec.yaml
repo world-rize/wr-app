@@ -3,7 +3,7 @@ description: WorldRIZe App
 authors:
   - wakame-tech
   - yoshiki301
-version: 0.3.0
+version: 0.3.1
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
@@ -12,6 +12,13 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # store, model
+  provider: ^4.0.2
+  data_classes: ^3.0.0
+  json_annotation: ^2.0.0
+
+  # firebase
   # DO NOT CHANGE VERSIONS
   # https://github.com/FirebaseExtended/flutterfire/issues/2084
   firebase_core: 0.4.4
@@ -19,37 +26,46 @@ dependencies:
   firebase_admob: ^0.9.3+2
   firebase_analytics: ^1.0.4
   cloud_functions: ^0.4.2+3
+  google_sign_in: ^4.4.6
+
+  # ui
+  fluttertoast: ^4.0.0
   cupertino_icons: ^0.1.2
-  flutter_swiper : ^1.1.5
+  flutter_swiper: ^1.1.5
   getflutter: ^1.0.10
-  provider: ^4.0.2
   flappy_search_bar: 1.4.1
+  intro_slider: ^2.3.1
+  flutter_sliding_tutorial: ^0.1.0
+
+  # util
+  flutter_markdown: ^0.3.4
+  flutter_svg: ^0.17.4
+  collection: 1.14.11
+
+  # native
   audioplayers: ^0.14.2
   settings_ui: ^0.2.0
-  flutter_markdown: ^0.3.4
   package_info: ^0.4.0+16
   flutter_dotenv: ^2.0.1
-  flutter_sliding_tutorial: ^0.1.0
-  flutter_launcher_icons: ^0.7.4
-  fluttertoast: ^4.0.0
-  data_classes: ^3.0.0
-  json_annotation: ^2.0.0
-  collection: 1.14.11
   shared_preferences: ^0.5.7+2
-  google_sign_in: ^4.4.6
-  flutter_svg: ^0.17.4
-  intro_slider: ^2.3.1
+  flutter_launcher_icons: ^0.7.4
+
+  # other
   flutter_localizations:
     sdk: flutter
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # linter
   pedantic_mono: any
-  flutter_native_splash: ^0.1.9
+  # task runner
   build_runner: ^1.7.1
+  # generator
   data_classes_generator: ^3.0.0
   json_serializable: ^2.0.0
+  flutter_native_splash: ^0.1.9
+  # i18n
   intl_translation: any
 
 flutter:
