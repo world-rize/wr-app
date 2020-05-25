@@ -11,6 +11,7 @@ class ArticleContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final h1 = Theme.of(context).primaryTextTheme.headline1;
     final primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
@@ -28,14 +29,10 @@ class ArticleContentView extends StatelessWidget {
                   Positioned(
                     bottom: 0,
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8),
                       child: Text(
                         article.title,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: h1,
                       ),
                     ),
                   ),

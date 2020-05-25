@@ -11,6 +11,8 @@ class CategoryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final h1 = Theme.of(context).primaryTextTheme.headline1;
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: GestureDetector(
@@ -35,7 +37,7 @@ class CategoryView extends StatelessWidget {
                 top: 10,
                 child: Text(
                   category.title,
-                  style: TextStyle(fontSize: 30, color: Colors.white),
+                  style: h1,
                 ),
               ),
             ],
