@@ -9,6 +9,7 @@ import 'package:wr_app/store/user.dart';
 
 import 'package:wr_app/ui/lesson/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
+import 'package:wr_app/ui/lesson/widgets/primary_button.dart';
 
 /// テスト結果画面
 ///
@@ -88,12 +89,7 @@ class TestResultPage extends StatelessWidget {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20),
-        child: FloatingActionButton.extended(
-          backgroundColor: Colors.orange,
-          onPressed: () {
-            useStore.callGetPoint(point: stats.corrects);
-            _showRewardDialog(context);
-          },
+        child: PrimaryButton(
           label: Padding(
             padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 100),
             child: Text(
@@ -101,6 +97,10 @@ class TestResultPage extends StatelessWidget {
               style: const TextStyle(fontSize: 20),
             ),
           ),
+          onPressed: () {
+            useStore.callGetPoint(point: stats.corrects);
+            _showRewardDialog(context);
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
