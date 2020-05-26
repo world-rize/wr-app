@@ -2,14 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:audioplayers/audio_cache.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
+
+import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 
 /// フレーズ詳細ページ
 ///
@@ -27,43 +26,24 @@ class LessonPhrasesDetailPage extends StatefulWidget {
 class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
   _LessonPhrasesDetailPageState({@required this.phrase});
 
-  // State Options
-  static List<double> playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
-  static List<String> pronunciations = ['en-us', 'en-uk', 'en-au'];
-
   final Phrase phrase;
 
   // State
-  bool _isPlaying = false;
   bool _showTranslation = false;
-  double _currentPlaybackSpeed = 1;
-  String _currentVoiceType = pronunciations[0];
 
-  // Player
-  AudioPlayer _player;
-  AudioCache _cache;
-
-  String get voicePath {
-    return phrase.assets.voice[_currentVoiceType] ?? 'voice_sample.mp3';
-  }
+  VoicePlayer player;
 
   @override
   void initState() {
     super.initState();
 
-    _player = AudioPlayer()
-      ..onPlayerStateChanged.listen((AudioPlayerState state) {
-        setState(() {
-          _isPlaying = state == AudioPlayerState.PLAYING;
-        });
-      });
-
-    _cache = AudioCache(fixedPlayer: _player)
-      ..load(voicePath).catchError((e) {
+    player = VoicePlayer(
+      phrase: phrase,
+      onError: (e) {
         print(e);
         showErrorDialog(e);
-        Logger.log('[error] $voicePath failed to load.');
-      });
+      },
+    );
   }
 
   void showErrorDialog(dynamic e) {
@@ -142,9 +122,7 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               example: phrase.example,
               showTranslation: _showTranslation,
               onMessageTapped: (message, index) {
-                _cache
-                    .play(message.assets.voice[_currentVoiceType])
-                    .catchError(showErrorDialog);
+                player.play(message);
               },
             ),
           ],
@@ -227,17 +205,11 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               backgroundColor: Colors.white,
               heroTag: '3',
               child: Icon(
-                _isPlaying ? Icons.pause : Icons.play_arrow,
+                player.isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.orangeAccent,
                 size: 40,
               ),
-              onPressed: () {
-                if (!_isPlaying) {
-                  _cache.play(voicePath).catchError(showErrorDialog);
-                } else {
-                  _cache.fixedPlayer.stop();
-                }
-              },
+              onPressed: player.toggle,
             ),
           ),
           // 再生速度
@@ -246,22 +218,14 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               backgroundColor: Colors.white,
               heroTag: '4',
               child: Text(
-                _currentPlaybackSpeed.toString(),
+                player.speed.toString(),
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: Colors.blue,
                 ),
               ),
-              onPressed: () {
-                final _index = playbackSpeeds.indexOf(_currentPlaybackSpeed);
-                final _nextSpeed =
-                    playbackSpeeds[(_index + 1) % playbackSpeeds.length];
-                _cache.fixedPlayer.setPlaybackRate(playbackRate: _nextSpeed);
-                setState(() {
-                  _currentPlaybackSpeed = _nextSpeed;
-                });
-              },
+              onPressed: player.toggleSpeed,
             ),
           ),
           // 発音
@@ -270,16 +234,9 @@ class _LessonPhrasesDetailPageState extends State<LessonPhrasesDetailPage> {
               backgroundColor: Colors.white,
               heroTag: 'Country',
               child: Image.asset(
-                'assets/icon/locale_$_currentVoiceType.png',
+                'assets/icon/locale_${player.locale}.png',
               ),
-              onPressed: () {
-                final _index = pronunciations.indexOf(_currentVoiceType);
-                final _nextPron =
-                    pronunciations[(_index + 1) % pronunciations.length];
-                setState(() {
-                  _currentVoiceType = _nextPron;
-                });
-              },
+              onPressed: player.toggleLocale,
             ),
           ),
         ],

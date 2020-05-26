@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/ui/lesson/widgets/primary_button.dart';
-import 'package:wr_app/ui/lesson/widgets/shadowed_container.dart';
+import 'package:wr_app/ui/widgets/primary_button.dart';
+import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// リクエスト画面
 class RequestPage extends StatefulWidget {

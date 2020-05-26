@@ -16,16 +16,8 @@ import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
-extension ListEx<T> on List<T> {
-  List<T> sample(int count) {
-    final result = <T>[];
-    for (var i = 0; i < count; i++) {
-      result.add(this[Random().nextInt(length)]);
-    }
-    assert(result.length == count);
-    return result;
-  }
-}
+import 'package:wr_app/extension/collection_extension.dart';
+import 'package:wr_app/extension/padding_extension.dart';
 
 /// テストページ
 ///
@@ -187,10 +179,11 @@ class TestPageState extends State<TestPage> {
         ],
       ),
       body: QuestionView(
-          index: _index,
-          phrase: currentPhrase,
-          selection: selection,
-          onNext: _next),
+        index: _index,
+        phrase: currentPhrase,
+        selection: selection,
+        onNext: _next,
+      ),
     );
   }
 }
@@ -223,18 +216,6 @@ class QuestionView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-//        Flexible(
-//          flex: 2,
-//          child: ListTile(
-//            title: Text(
-//              'Q$index: ${phrase.title['ja']}',
-//              style: TextStyle(
-//                  fontSize: 25,
-//                  color: Colors.black54,
-//                  fontWeight: FontWeight.bold),
-//            ),
-//          ),
-//        ),
         Flexible(
           flex: 5,
           child: PhraseSampleView(
@@ -255,26 +236,24 @@ class QuestionView extends StatelessWidget {
     return ListView.builder(
       // physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (_, index) {
-        return Padding(
-          padding: const EdgeInsets.all(6),
-          child: InkWell(
-              onTap: () {
-                onNext(index);
-              },
-              child: GFListTile(
-                title: Padding(
-                  padding: const EdgeInsets.all(2),
-                  child: Text(
-                    selection[index],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
+        return InkWell(
+          onTap: () {
+            onNext(index);
+          },
+          child: GFListTile(
+            title: Padding(
+              padding: const EdgeInsets.all(2),
+              child: Text(
+                selection[index],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
                 ),
-                color: Colors.lightBlueAccent,
-              )),
-        );
+              ),
+            ),
+            color: Colors.lightBlueAccent,
+          ),
+        ).p(6);
       },
       itemCount: 4,
     );

@@ -26,13 +26,19 @@ class AllPhrasesPage extends StatelessWidget {
           children: masterData
               .allPhrases()
               .where(filter)
-              .map((phrase) => phraseView(context, phrase, onTap: () {
+              .map(
+                (phrase) => phraseView(
+                  context,
+                  phrase,
+                  onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => LessonPhrasesDetailPage(
                         phrase: phrase,
                       ),
                     ));
-                  }))
+                  },
+                ),
+              )
               .toList(),
         ),
       ),

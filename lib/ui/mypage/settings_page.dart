@@ -13,9 +13,8 @@ import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
-import 'package:wr_app/flavor/flavor.dart';
+import 'package:wr_app/build/flavor.dart';
 
-// TODO(wakame-tech): アカウント情報と設定項目を考える
 /// 設定ページ
 class SettingsPage extends StatefulWidget {
   @override
@@ -23,7 +22,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsPage> {
-  Widget _settingsView() {
+  @override
+  Widget build(BuildContext context) {
     final masterData = Provider.of<MasterDataStore>(context);
     final userStore = Provider.of<UserStore>(context);
     final envStore = Provider.of<EnvStore>(context);
@@ -152,16 +152,5 @@ class _SettingsState extends State<SettingsPage> {
           ),
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-//    return Scaffold(
-//      appBar: AppBar(
-//        title: const Text('設定'),
-//      ),
-//      body: _settingsView(),
-//    );
-    return _settingsView();
   }
 }

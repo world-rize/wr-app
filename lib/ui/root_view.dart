@@ -11,10 +11,9 @@ import 'package:wr_app/ui/column/index.dart';
 import 'package:wr_app/ui/lesson/index.dart';
 import 'package:wr_app/ui/mypage/index.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
-import 'package:wr_app/ui/onboarding/sign_up_view.dart';
 import 'package:wr_app/ui/travel/index.dart';
-import 'package:wr_app/ui/mypage/settings_page.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/extension/padding_extension.dart';
 
 /// 全ての画面のガワ
 ///
@@ -93,14 +92,11 @@ class _RootViewState extends State<RootView>
         backgroundColor: primaryColor,
         title: Row(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: SvgPicture.asset(
-                'assets/icon/wr_coin.svg',
+            SvgPicture.asset(
+              'assets/icon/wr_coin.svg',
 //                width: 32,
 //                height: 32,
-              ),
-            ),
+            ).p_1(),
             Text(
               I.of(context).points(userStore.user.point),
               style: TextStyle(color: Colors.white),

@@ -11,23 +11,10 @@ import 'package:wr_app/extension/padding_extension.dart';
 
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
-import 'package:wr_app/model/lesson.dart';
 import 'package:wr_app/ui/lesson/favorite_page.dart';
 import 'package:wr_app/ui/lesson/request_page.dart';
-
-import 'package:wr_app/ui/lesson/section_select_page.dart';
-import 'package:wr_app/ui/lesson/widgets/locked_view.dart';
+import 'package:wr_app/ui/lesson/widgets/lesson_select_carousel.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
-
-extension IndexedMap<T, E> on List<T> {
-  List<E> indexedMap<E>(E Function(int index, T item) function) {
-    final list = <E>[];
-    asMap().forEach((index, element) {
-      list.add(function(index, element));
-    });
-    return list;
-  }
-}
 
 /// `レッスン` ページのトップ
 ///
@@ -48,16 +35,6 @@ class LessonIndexPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: LessonMenus(),
-    );
-  }
-}
-
-/// ページの中身
-class LessonMenus extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
     final userStore = Provider.of<UserStore>(context);
     final masterData = Provider.of<MasterDataStore>(context);
 
@@ -72,8 +49,7 @@ class LessonMenus extends StatelessWidget {
         .allPhrases()
         .firstWhere((phrase) => phrase.id.endsWith('5'), orElse: () => null);
 
-    return Padding(
-      padding: const EdgeInsets.all(12),
+    return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           const GFTypography(
@@ -161,100 +137,7 @@ class LessonMenus extends StatelessWidget {
             ),
           ).p_1(),
         ],
-      ),
-    );
-  }
-}
-
-/// レッスン選択カルーセル
-class LessonSelectCarousel extends StatelessWidget {
-//  Widget __carouselCell(Lesson lesson) {
-//    return Container(
-//      margin: const EdgeInsets.all(8),
-//      child: ClipRRect(
-//        borderRadius: const BorderRadius.all(Radius.circular(5)),
-//        child: Image.network(lesson.assets.img['thumbnail'],
-//            fit: BoxFit.cover, width: 1000),
-//      ),
-//    );
-//  }
-
-  Widget _carouselCell(BuildContext context, Lesson lesson, int index) {
-    final size = MediaQuery.of(context).size;
-
-    return Container(
-      margin: const EdgeInsets.all(8),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
-        child: LockedView(
-          locked: index % 2 == 0,
-          child: GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => SectionSelectPage(lesson: lesson),
-                ),
-              );
-            },
-            child: Stack(
-              children: <Widget>[
-                Image.asset(
-                  lesson.assets.img['thumbnail'],
-                  fit: BoxFit.cover,
-                  height: size.height,
-                  width: size.width,
-                ),
-                ClipRect(
-                  child: Container(
-                    color: const Color.fromRGBO(128, 128, 128, 0.5),
-                  ),
-                ),
-                Positioned(
-                  top: 10,
-                  left: 10,
-                  child: Text('No.${index + 1}',
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 18)),
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Text(
-                      lesson.title['ja'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  bottom: 10,
-                  right: 20,
-                  child: Text(
-                      I.of(context).lessonStatus(0, lesson.phrases.length),
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 18)),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final masterData = Provider.of<MasterDataStore>(context);
-    final lessons = masterData.getLessons();
-
-    return GFCarousel(
-      enableInfiniteScroll: false,
-      items: lessons
-          .indexedMap((i, lesson) => _carouselCell(context, lesson, i))
-          .toList(),
+      ).p_1(),
     );
   }
 }
