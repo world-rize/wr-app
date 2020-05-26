@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:getflutter/getflutter.dart';
+
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/extension/padding_extension.dart';
 
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
@@ -141,26 +143,23 @@ class LessonMenus extends StatelessWidget {
             dividerColor: GFColors.SECONDARY,
           ),
 
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(100),
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => RequestPage()),
-                  );
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 30, horizontal: 90),
-                  child: Text(I.of(context).requestPhraseButton),
-                ),
+          Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => RequestPage()),
+                );
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 30, horizontal: 90),
+                child: Text(I.of(context).requestPhraseButton),
               ),
             ),
-          ),
+          ).p_1(),
         ],
       ),
     );

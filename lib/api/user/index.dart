@@ -2,21 +2,7 @@
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:data_classes/data_classes.dart';
-import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/model/api.dart';
-import 'package:wr_app/model/user.dart';
-
-/// debug api
-Future<TestResponse> test() async {
-  final callable = CloudFunctions.instance
-      .getHttpsCallable(functionName: 'test')
-        ..timeout = const Duration(seconds: 10);
-
-  final result = await callable.call({});
-
-  // dynamic -> Map<String, dynamic> -> Response
-  return TestResponse.fromJson(Map<String, dynamic>.from(result.data));
-}
+import 'package:wr_app/api/model/api.dart';
 
 /// read user
 Future<ReadUserResponse> readUser() async {

@@ -6,9 +6,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:wr_app/api/debug/test.dart';
 import 'package:wr_app/api/mock.dart';
 import 'package:wr_app/model/user.dart';
-import 'package:wr_app/api/user.dart';
+import 'package:wr_app/api/user/index.dart';
 import 'package:wr_app/store/logger.dart';
 
 /// FireStore Auth

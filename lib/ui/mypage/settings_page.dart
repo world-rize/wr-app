@@ -13,6 +13,7 @@ import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
+import 'package:wr_app/flavor/flavor.dart';
 
 // TODO(wakame-tech): アカウント情報と設定項目を考える
 /// 設定ページ
