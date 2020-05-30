@@ -9,8 +9,10 @@ import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
 import 'package:wr_app/ui/lesson/index.dart';
+import 'package:wr_app/ui/lesson/widgets/phrase_search_iconbutton.dart';
 import 'package:wr_app/ui/mypage/index.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
+import 'package:wr_app/ui/settings/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/extension/padding_extension.dart';
@@ -26,17 +28,15 @@ class RootView extends StatefulWidget {
 /// [RootView] state
 class _RootViewState extends State<RootView>
     with SingleTickerProviderStateMixin {
-  int _index = 0;
-  bool _isSearching = false;
-  SearchBarController _searchBarController;
+  int _index;
   PageController _pageController;
 
   @override
   void initState() {
     super.initState();
+    _index = 0;
     // init controller
     _pageController = PageController();
-    _searchBarController = SearchBarController();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final firstLaunch = UserStore().firstLaunch;
@@ -54,69 +54,76 @@ class _RootViewState extends State<RootView>
     });
   }
 
-  // TODO(wakame-tech): 検索バーを実装
-  Widget _createSearchBar() {
-    return Container(
-      height: 80,
-      child: SearchBar<String>(
-        searchBarController: _searchBarController,
-        onSearch: (q) => Future.value(<String>['aaa', 'bbb', 'ccc']),
-        onItemFound: (item, i) => Text(item),
-      ),
-    );
-  }
-
-  /// WIP
-  void _stopSearch() {
-    print('stop search');
-    setState(() {
-      _isSearching = false;
-    });
-  }
-
-  /// WIP
-  void _startSearch() {
-    print('start search');
-    setState(() {
-      _isSearching = true;
-    });
-  }
-
-  /// メイン画面
-  Widget _tabView() {
+  @override
+  Widget build(BuildContext context) {
     final userStore = Provider.of<UserStore>(context);
     final primaryColor = Theme.of(context).primaryColor;
+
+    final header = Row(
+      children: <Widget>[
+        SvgPicture.asset(
+          'assets/icon/wr_coin.svg',
+        ).p_1(),
+        Text(
+          I.of(context).points(userStore.user.point),
+          style: const TextStyle(color: Colors.white),
+        ),
+      ],
+    );
+
+    final actions = <Widget>[
+      // phrase search
+      PhraseSearchIconButton(),
+      // settings
+      IconButton(
+        icon: const Icon(Icons.settings),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => SettingsPage(),
+            fullscreenDialog: true,
+          ));
+        },
+      )
+    ];
+
+    final navbar = BottomNavigationBar(
+      fixedColor: primaryColor,
+      type: BottomNavigationBarType.fixed,
+      onTap: (int index) {
+        _pageController.jumpToPage(index);
+//          _pageController.animateToPage(index,
+//              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      },
+      currentIndex: _index,
+      items: [
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.create),
+          title: Text(I.of(context).bottomNavLesson),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.view_column),
+          title: Text(I.of(context).bottomNavColumn),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.airplanemode_active),
+          title: Text(I.of(context).bottomNavTravel),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.public),
+          title: Text(I.of(context).bottomNavAgency),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.person_outline),
+          title: Text(I.of(context).bottomNavMyPage),
+        ),
+      ],
+    );
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Row(
-          children: <Widget>[
-            SvgPicture.asset(
-              'assets/icon/wr_coin.svg',
-//                width: 32,
-//                height: 32,
-            ).p_1(),
-            Text(
-              I.of(context).points(userStore.user.point),
-              style: TextStyle(color: Colors.white),
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          // TODO(someone): 検索実装
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-//          IconButton(
-//            icon: Icon(Icons.settings),
-//            onPressed: () {
-//              Navigator.of(context)
-//                  .push(MaterialPageRoute(builder: (_) => SettingsPage()));
-//            },
-//          )
-        ],
+        title: header,
+        actions: actions,
       ),
       body: PageView(
         controller: _pageController,
@@ -134,43 +141,7 @@ class _RootViewState extends State<RootView>
           MyPagePage(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        fixedColor: primaryColor,
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          _pageController.jumpToPage(index);
-//          _pageController.animateToPage(index,
-//              duration: const Duration(milliseconds: 300), curve: Curves.ease);
-        },
-        currentIndex: _index,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.create),
-            title: Text(I.of(context).bottomNavLesson),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.view_column),
-            title: Text(I.of(context).bottomNavColumn),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.airplanemode_active),
-            title: Text(I.of(context).bottomNavTravel),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.public),
-            title: Text(I.of(context).bottomNavAgency),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            title: Text(I.of(context).bottomNavMyPage),
-          ),
-        ],
-      ),
+      bottomNavigationBar: navbar,
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _tabView();
   }
 }
