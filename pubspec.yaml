@@ -7,7 +7,7 @@ version: 0.3.1
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
-  sdk: ">=2.6.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -67,6 +67,11 @@ dev_dependencies:
   flutter_native_splash: ^0.1.9
   # i18n
   intl_translation: any
+
+
+# https://stackoverflow.com/questions/61285541/flutter-test-from-sdk-is-forbidden
+dependency_overrides:
+  collection: ^1.14.12
 
 flutter:
   uses-material-design: true

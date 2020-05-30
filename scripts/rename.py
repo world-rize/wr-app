@@ -151,7 +151,7 @@ def extract_mp3(zip_path, filename_list):
 
 
 if __name__ == '__main__':
-    for i in range(1, 400, 100):
+    for i in range(1, 100 * len(filenames), 100):
         voice_100_dir = f'{root}/raw/{i}-{i+99}'
         if not os.path.exists(voice_100_dir):
             continue
