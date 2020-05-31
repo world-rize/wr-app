@@ -1,18 +1,20 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/rendering.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:wr_app/build/flavor.dart';
+import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/store/env.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
-import 'package:wr_app/store/env.dart';
 import 'package:wr_app/ui/mypage/all_phrases_page.dart';
-import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
-import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
-import 'package:wr_app/build/flavor.dart';
+import 'package:wr_app/ui/settings/account_settings.dart';
 
 /// 設定ページ
 class SettingsPage extends StatefulWidget {
@@ -21,28 +23,59 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsPage> {
-  // general section
-  SettingsSection generalSection() {
+  // account section
+  SettingsSection accountSection() {
     final userStore = Provider.of<UserStore>(context);
 
     return SettingsSection(
       title: I.of(context).accountSection,
       tiles: [
         SettingsTile(
-          title: 'プラン',
-          subtitle: I.of(context).memberStatus(Membership.premium),
-          leading: Icon(Icons.attach_money),
-          onTap: () {},
+          title: 'アカウント設定',
+          leading: const Icon(Icons.people),
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => AccountSettingsPage()));
+          },
         ),
         SettingsTile(
           title: 'ポイント交換',
-          leading: Icon(Icons.attach_money),
-          onTap: () {},
+          leading: const Icon(Icons.attach_money),
+          onTap: () {
+            // TODO(high): confirm view
+          },
         ),
         SettingsTile(
+          title: 'サインアウト',
+          leading: const Icon(Icons.attach_file),
+          onTap: () async {
+            await userStore.signOut();
+            await Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => OnBoardModal()));
+          },
+        ),
+      ],
+    );
+  }
+
+  // general
+  SettingsSection generalSection() {
+    return SettingsSection(
+      title: I.of(context).accountSection,
+      tiles: [
+        SettingsTile(
           title: 'ダークモード',
-          leading: Icon(Icons.attach_money),
-          onTap: () {},
+          leading: const Icon(Icons.attach_money),
+          onTap: () {
+            // TODO(high): dark mode select view
+          },
+        ),
+        SettingsTile(
+          title: 'フィードバック',
+          leading: const Icon(Icons.attach_money),
+          onTap: () {
+            // TODO(high):feedback view
+          },
         ),
       ],
     );
@@ -57,28 +90,60 @@ class _SettingsState extends State<SettingsPage> {
       title: I.of(context).otherSection,
       tiles: [
         SettingsTile(
-          title: 'version',
-          subtitle: envStore.version,
-        ),
-        SettingsTile(
-          title: 'このアプリについて',
-          onTap: () {},
+          title: 'WorldRIZeホームページ',
+          onTap: () async {
+            const url = 'https://world-rize.com';
+            if (await canLaunch(url)) {
+              await launch(
+                url,
+                forceSafariVC: false,
+                forceWebView: false,
+              );
+            }
+          },
         ),
         SettingsTile(
           title: 'よくある質問',
-          onTap: () {},
+          onTap: () async {
+            const url = 'https://world-rize.com';
+            if (await canLaunch(url)) {
+              await launch(
+                url,
+                forceSafariVC: false,
+                forceWebView: false,
+              );
+            }
+          },
         ),
         SettingsTile(
           title: '利用規約',
-          onTap: () {},
+          onTap: () async {
+            const url = 'https://world-rize.com';
+            if (await canLaunch(url)) {
+              await launch(
+                url,
+                forceSafariVC: false,
+                forceWebView: false,
+              );
+            }
+          },
         ),
         SettingsTile(
-          title: 'サインアウト',
+          title: 'プライバシーポリシー',
           onTap: () async {
-            await userStore.signOut();
-            await Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => OnBoardModal()));
+            const url = 'https://world-rize.com';
+            if (await canLaunch(url)) {
+              await launch(
+                url,
+                forceSafariVC: false,
+                forceWebView: false,
+              );
+            }
           },
+        ),
+        SettingsTile(
+          title: 'アプリバージョン',
+          subtitle: envStore.version,
         ),
       ],
     );
@@ -107,7 +172,7 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
-          title: 'Application Log',
+          title: 'Log',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => LoggerView()));
@@ -134,12 +199,18 @@ class _SettingsState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsList(
-      sections: [
-        generalSection(),
-        aboutSection(),
-        if (true) debugSection(),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('設定'),
+      ),
+      body: SettingsList(
+        sections: [
+          accountSection(),
+          generalSection(),
+          aboutSection(),
+          if (true) debugSection(),
+        ],
+      ),
     );
   }
 }
