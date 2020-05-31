@@ -2,7 +2,7 @@ name: wr_app
 description: WorldRIZe App
 authors:
   - WorldRIZe
-version: 0.3.1
+version: 0.3.2
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:

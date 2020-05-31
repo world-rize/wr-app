@@ -1,9 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/lesson.dart';
 import 'package:wr_app/ui/widgets/locked_view.dart';
-import 'package:wr_app/i10n/i10n.dart';
 
 class CarouselCell extends StatelessWidget {
   const CarouselCell({this.lesson, this.index, this.onTap});
@@ -21,7 +21,7 @@ class CarouselCell extends StatelessWidget {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(5)),
         child: LockedView(
-          locked: index % 2 == 0,
+          locked: false,
           child: GestureDetector(
             onTap: onTap,
             child: Stack(
