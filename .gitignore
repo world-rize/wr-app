@@ -45,4 +45,4 @@ lib/generated_plugin_registrant.dart
 # Firebase service account
 /ios/Runner/GoogleService-Info.plist
 
-.env/
+.env/*
