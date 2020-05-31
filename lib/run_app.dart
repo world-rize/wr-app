@@ -8,6 +8,7 @@ import 'package:wr_app/ui/app.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/store/env.dart';
+import 'package:wr_app/build/flavor.dart';
 
 void runAppWithFlavor(final Flavor flavor) {
   Provider.debugCheckInvalidValueType = null;

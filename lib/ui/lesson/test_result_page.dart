@@ -9,7 +9,9 @@ import 'package:wr_app/store/user.dart';
 
 import 'package:wr_app/ui/lesson/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
-import 'package:wr_app/ui/lesson/widgets/primary_button.dart';
+import 'package:wr_app/ui/widgets/primary_button.dart';
+
+import 'package:wr_app/extension/padding_extension.dart';
 
 /// テスト結果画面
 ///
@@ -63,29 +65,22 @@ class TestResultPage extends StatelessWidget {
         title: const Text('Test'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                '$scoreText$resultText',
-                style: const TextStyle(fontSize: 20),
-              ),
-            ),
+            Text(
+              '$scoreText$resultText',
+              style: const TextStyle(fontSize: 20),
+            ).p_1(),
             Container(
               child: Column(
                 children: stats.section.phrases.map((phrase) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: phraseView(context, phrase),
-                  );
+                  return phraseView(context, phrase).p_1();
                 }).toList(),
               ),
             ),
           ],
-        ),
+        ).p_1(),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20),

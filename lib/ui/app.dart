@@ -1,6 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'dart:developer' as dev;
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,22 +1,10 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'dart:developer' as dev;
 import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:package_info/package_info.dart';
+import 'package:wr_app/build/flavor.dart';
 import 'package:wr_app/store/logger.dart';
-
-enum Flavor {
-  development,
-  staging,
-  production,
-}
-
-extension FlavorEx on Flavor {
-  String toShortString() {
-    return toString().split('.').last;
-  }
-}
 
 /// Env
 class EnvStore with ChangeNotifier {
@@ -50,6 +38,10 @@ class EnvStore with ChangeNotifier {
 
   /// author
   String author = '';
+
+  /// pref
+  bool followSystemTheme = true;
+  bool darkMode = false;
 
   static Future<void> readPubSpec() async {
     final info = await PackageInfo.fromPlatform();

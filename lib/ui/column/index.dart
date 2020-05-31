@@ -8,6 +8,8 @@ import 'package:wr_app/api/mock.dart';
 import 'package:wr_app/ui/column/category_posts.dart';
 import 'package:wr_app/ui/column/category_view.dart';
 
+import 'package:wr_app/extension/padding_extension.dart';
+
 /// `コラム` ページのトップ
 ///
 // TODO(anyone): fix
@@ -18,14 +20,11 @@ class ColumnIndexPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Padding(
-            padding: EdgeInsets.all(10),
-            child: GFTypography(
-              text: 'Column',
-              type: GFTypographyType.typo1,
-              dividerColor: GFColors.SUCCESS,
-            ),
-          ),
+          GFTypography(
+            text: 'Column',
+            type: GFTypographyType.typo1,
+            dividerColor: GFColors.SUCCESS,
+          ).p_1(),
           ...dummyCategories(5)
               .map(
                 (category) => CategoryView(

@@ -1,10 +1,10 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/ui/lesson/widgets/primary_button.dart';
-import 'package:wr_app/ui/lesson/widgets/shadowed_container.dart';
+import 'package:wr_app/ui/widgets/primary_button.dart';
+import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// リクエスト画面
 class RequestPage extends StatefulWidget {
@@ -13,20 +13,20 @@ class RequestPage extends StatefulWidget {
 }
 
 class _RequestPageState extends State<RequestPage> {
-  String _requestType;
+  // String _requestType;
   String _message;
 
   // リクエストの種類
-  static final List<String> requestTypes = [
-    '新しいフレーズがほしい',
-    'アプリの感想',
-    'その他要望',
-  ];
+//  static final List<String> requestTypes = [
+//    '新しいフレーズがほしい',
+//    'アプリの感想',
+//    'その他要望',
+//  ];
 
   @override
   void initState() {
     super.initState();
-    _requestType = requestTypes[0];
+    // _requestType = requestTypes[0];
     _message = '';
   }
 
@@ -44,42 +44,15 @@ class _RequestPageState extends State<RequestPage> {
           padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Padding(
+            children: [
+              Padding(
                 padding: EdgeInsets.all(8),
                 child: Text(
                   'リクエストを送る',
                   style: TextStyle(fontSize: 24),
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: ShadowedContainer(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: DropdownButton<String>(
-                        value: _requestType,
-                        icon: Icon(Icons.arrow_drop_down),
-                        onChanged: (value) {
-                          setState(() {
-                            _requestType = value;
-                          });
-                        },
-                        items: requestTypes
-                            .map((text) => DropdownMenuItem(
-                                  value: text,
-                                  child: Text(text,
-                                      style: TextStyle(fontSize: 18)),
-                                ))
-                            .toList(),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8),
                 child: ShadowedContainer(
                   child: Padding(
@@ -101,7 +74,7 @@ class _RequestPageState extends State<RequestPage> {
           label: const Text('送信'),
           onPressed: () {
             // TODO(someone): send email
-            print('$_requestType, $_message');
+            print('$_message');
           },
         ),
       ),

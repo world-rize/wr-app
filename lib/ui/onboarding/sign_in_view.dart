@@ -12,16 +12,20 @@ class _SignInViewState extends State<SignInView> {
   @override
   Widget build(BuildContext context) {
     final logo = Image.asset(
-      'assets/icon/wr_icon.jpg',
+      'assets/icon/icon.jpg',
+      width: 200,
       fit: BoxFit.contain,
     );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        logo,
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(bottom: 20),
+          child: logo,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
           child: SignInForm(),
         ),
       ],
