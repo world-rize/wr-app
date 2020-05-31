@@ -3,12 +3,10 @@
 import 'package:flutter/material.dart';
 
 /// アプリのUIスタイル
-///
-/// WIP
-// TODO(wakame-tech): implement
+// TODO(high): implement
 final ThemeData wrThemeData = ThemeData(
   primaryColor: Colors.blueAccent.shade200,
-  primaryTextTheme: TextTheme(
+  primaryTextTheme: const TextTheme(
     headline1: TextStyle(
       color: Colors.white,
       fontSize: 32,
@@ -22,11 +20,11 @@ final ThemeData wrThemeData = ThemeData(
     bodyText1: TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.bold,
-      fontSize: 24,
+      fontSize: 20,
     ),
     bodyText2: TextStyle(
       color: Colors.grey,
-      fontSize: 18,
+      fontSize: 16,
     ),
   ),
 );

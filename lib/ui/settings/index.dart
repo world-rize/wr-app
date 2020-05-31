@@ -10,11 +10,14 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/env.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
+import 'package:wr_app/ui/lesson/request_page.dart';
 import 'package:wr_app/ui/mypage/all_phrases_page.dart';
 import 'package:wr_app/ui/mypage/api_test_view.dart';
 import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
 import 'package:wr_app/ui/settings/account_settings.dart';
+import 'package:wr_app/ui/settings/dark_mode.dart';
+import 'package:wr_app/ui/settings/shop.dart';
 
 /// 設定ページ
 class SettingsPage extends StatefulWidget {
@@ -42,7 +45,8 @@ class _SettingsState extends State<SettingsPage> {
           title: 'ポイント交換',
           leading: const Icon(Icons.attach_money),
           onTap: () {
-            // TODO(high): confirm view
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => Shop()));
           },
         ),
         SettingsTile(
@@ -67,14 +71,16 @@ class _SettingsState extends State<SettingsPage> {
           title: 'ダークモード',
           leading: const Icon(Icons.attach_money),
           onTap: () {
-            // TODO(high): dark mode select view
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => ThemeSettingsPage()));
           },
         ),
         SettingsTile(
           title: 'フィードバック',
           leading: const Icon(Icons.attach_money),
           onTap: () {
-            // TODO(high):feedback view
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => RequestPage()));
           },
         ),
       ],
@@ -83,7 +89,6 @@ class _SettingsState extends State<SettingsPage> {
 
   // about
   SettingsSection aboutSection() {
-    final userStore = Provider.of<UserStore>(context);
     final envStore = Provider.of<EnvStore>(context);
 
     return SettingsSection(

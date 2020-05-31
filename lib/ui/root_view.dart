@@ -2,9 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
+import 'package:wr_app/extension/padding_extension.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
@@ -14,8 +14,6 @@ import 'package:wr_app/ui/mypage/index.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
 import 'package:wr_app/ui/settings/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
-import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/extension/padding_extension.dart';
 
 /// 全ての画面のガワ
 ///
@@ -61,11 +59,13 @@ class _RootViewState extends State<RootView>
 
     final header = Row(
       children: <Widget>[
-        SvgPicture.asset(
-          'assets/icon/wr_coin.svg',
+        Image.asset(
+          'assets/icon/wr_coin.png',
+          width: 30,
+          height: 30,
         ).p_1(),
         Text(
-          I.of(context).points(userStore.user.point),
+          '${userStore.user.point}',
           style: const TextStyle(color: Colors.white),
         ),
       ],

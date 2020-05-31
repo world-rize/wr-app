@@ -1,9 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/widgets.dart';
-import 'package:wr_app/ui/app.dart';
+import 'package:wr_app/build/flavor.dart';
+import 'package:wr_app/run_app.dart';
 
 void main() {
-  // runAppWithFlavor(Flavor.production);
-  runApp(WRApp());
+  runAppWithFlavor(Flavor.production);
 }
