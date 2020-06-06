@@ -7,13 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		052132DEBB5F3A4916E05B20 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02603D7AB5691F8460A60F8E /* Pods_Runner.framework */; };
 		0B047432242B1B1A00B74B4F /* Release-staging.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0B047425242B1B1A00B74B4F /* Release-staging.xcconfig */; };
 		0B047433242B1B1A00B74B4F /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0B047426242B1B1A00B74B4F /* Debug.xcconfig */; };
 		0B047434242B1B1A00B74B4F /* Release-production.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0B047427242B1B1A00B74B4F /* Release-production.xcconfig */; };
 		0B047435242B1B1A00B74B4F /* development.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0B047428242B1B1A00B74B4F /* development.xcconfig */; };
 		0B047436242B1B1A00B74B4F /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B047429242B1B1A00B74B4F /* AppFrameworkInfo.plist */; };
-		0B047437242B1B1A00B74B4F /* Flutter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B04742A242B1B1A00B74B4F /* Flutter.framework */; };
 		0B047438242B1B1A00B74B4F /* production.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0B04742B242B1B1A00B74B4F /* production.xcconfig */; };
 		0B047439242B1B1A00B74B4F /* flutter_export_environment.sh in Resources */ = {isa = PBXBuildFile; fileRef = 0B04742C242B1B1A00B74B4F /* flutter_export_environment.sh */; };
 		0B04743A242B1B1A00B74B4F /* Debug-development.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0B04742D242B1B1A00B74B4F /* Debug-development.xcconfig */; };
@@ -24,6 +22,7 @@
 		0B69846B2413708700C14A5F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B69846A2413708700C14A5F /* GoogleService-Info.plist */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
+		8EB2679023C6F74ED57249A8 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02603D7AB5691F8460A60F8E /* Pods_Runner.framework */; };
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
@@ -50,7 +49,6 @@
 		0B047427242B1B1A00B74B4F /* Release-production.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Release-production.xcconfig"; path = "Flutter/Release-production.xcconfig"; sourceTree = "<group>"; };
 		0B047428242B1B1A00B74B4F /* development.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = development.xcconfig; path = Flutter/development.xcconfig; sourceTree = "<group>"; };
 		0B047429242B1B1A00B74B4F /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
-		0B04742A242B1B1A00B74B4F /* Flutter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Flutter.framework; path = Flutter/Flutter.framework; sourceTree = "<group>"; };
 		0B04742B242B1B1A00B74B4F /* production.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = production.xcconfig; path = Flutter/production.xcconfig; sourceTree = "<group>"; };
 		0B04742C242B1B1A00B74B4F /* flutter_export_environment.sh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.script.sh; name = flutter_export_environment.sh; path = Flutter/flutter_export_environment.sh; sourceTree = "<group>"; };
 		0B04742D242B1B1A00B74B4F /* Debug-development.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Debug-development.xcconfig"; path = "Flutter/Debug-development.xcconfig"; sourceTree = "<group>"; };
@@ -82,8 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				052132DEBB5F3A4916E05B20 /* Pods_Runner.framework in Frameworks */,
-				0B047437242B1B1A00B74B4F /* Flutter.framework in Frameworks */,
+				8EB2679023C6F74ED57249A8 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,7 +108,6 @@
 				0B047426242B1B1A00B74B4F /* Debug.xcconfig */,
 				0B047428242B1B1A00B74B4F /* development.xcconfig */,
 				0B04742C242B1B1A00B74B4F /* flutter_export_environment.sh */,
-				0B04742A242B1B1A00B74B4F /* Flutter.framework */,
 				0B04742F242B1B1A00B74B4F /* Flutter.podspec */,
 				0B047431242B1B1A00B74B4F /* Generated.xcconfig */,
 				0B04742B242B1B1A00B74B4F /* production.xcconfig */,
@@ -275,7 +271,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
+			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed\n/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" thin\n";
 		};
 		40391ADD439B97C3079E439F /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
