@@ -43,6 +43,9 @@ class EnvStore with ChangeNotifier {
   bool followSystemTheme = true;
   bool darkMode = false;
 
+  /// 訳を表示するか
+  bool showTranslation = false;
+
   static Future<void> readPubSpec() async {
     final info = await PackageInfo.fromPlatform();
     _cache.version = info.version;
@@ -57,6 +60,11 @@ class EnvStore with ChangeNotifier {
       await DotEnv().load(envPath);
       Logger.log('\t📎 read .env');
     }
+  }
+
+  void toggleShowTranslation() {
+    showTranslation = !showTranslation;
+    notifyListeners();
   }
 
   Map<String, dynamic> get env {

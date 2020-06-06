@@ -2,12 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/store/env.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 
 class PhraseDetailSample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final envStore = Provider.of<EnvStore>(context);
     final player = Provider.of<VoicePlayer>(context);
     final header = Container(
       child: Column(
@@ -46,7 +48,7 @@ class PhraseDetailSample extends StatelessWidget {
             header,
             PhraseSampleView(
               example: player.phrase.example,
-              showTranslation: player.showTranslation,
+              showTranslation: envStore.showTranslation,
               onMessageTapped: (message, index) {
                 player.play(message);
               },

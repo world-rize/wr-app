@@ -11,7 +11,6 @@ class VoicePlayer with ChangeNotifier {
     isPlaying = false;
     speed = 1.0;
     locale = _locales[0];
-    showTranslation = false;
 
     _player = AudioPlayer()
       ..onPlayerStateChanged.listen((AudioPlayerState state) {
@@ -32,7 +31,6 @@ class VoicePlayer with ChangeNotifier {
   bool isPlaying;
   double speed;
   String locale;
-  bool showTranslation;
 
   // Player
   AudioPlayer _player;
@@ -55,11 +53,6 @@ class VoicePlayer with ChangeNotifier {
     } else {
       _cache.fixedPlayer.stop();
     }
-    notifyListeners();
-  }
-
-  void toggleShowTranslation() {
-    showTranslation = !showTranslation;
     notifyListeners();
   }
 

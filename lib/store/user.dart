@@ -8,6 +8,7 @@ import 'package:wr_app/api/debug/test.dart';
 import 'package:wr_app/api/mock.dart';
 import 'package:wr_app/api/user/index.dart';
 import 'package:wr_app/model/membership.dart';
+import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/model/user.dart';
 import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/ui/common/toast.dart';
@@ -41,6 +42,7 @@ class UserStore with ChangeNotifier {
 
   /// ユーザーデータ
   User user = User(
+    membership: Membership.normal,
     name: '',
     point: 0,
     age: 0,
@@ -271,6 +273,11 @@ class UserStore with ChangeNotifier {
     } on Exception catch (e) {
       NotifyToast.error(e);
     }
+  }
+
+  ///
+  bool favorited(Phrase phrase) {
+    return user.favorites.containsKey(phrase.id) && user.favorites[phrase.id];
   }
 
   /// 初回起動時か

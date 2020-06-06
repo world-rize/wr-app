@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/store/env.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 
@@ -10,9 +11,9 @@ class PhraseDetailButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = Provider.of<VoicePlayer>(context);
+    final envStore = Provider.of<EnvStore>(context);
     final userStore = Provider.of<UserStore>(context);
-    final favorite = userStore.user.favorites.containsKey(player.phrase.id) &&
-        userStore.user.favorites[player.phrase.id];
+    final favorite = userStore.favorited(player.phrase);
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -26,11 +27,11 @@ class PhraseDetailButtons extends StatelessWidget {
               heroTag: 'Japanese',
               child: Icon(
                 Icons.message,
-                color: player.showTranslation
+                color: envStore.showTranslation
                     ? Colors.lightBlueAccent
                     : Colors.grey,
               ),
-              onPressed: player.toggleShowTranslation,
+              onPressed: envStore.toggleShowTranslation,
             ),
           ),
           // お気に入りボタン

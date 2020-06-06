@@ -4,6 +4,7 @@ import 'package:wr_app/model/assets.dart';
 import 'package:wr_app/model/category.dart';
 import 'package:wr_app/model/example.dart';
 import 'package:wr_app/model/lesson.dart';
+import 'package:wr_app/model/membership.dart';
 import 'package:wr_app/model/message.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/model/section.dart';
@@ -88,6 +89,7 @@ List<Section> dummySections() {
 /// ダミーユーザー
 User dummyUser() {
   return User(
+    membership: Membership.normal,
     uuid: 'test-test',
     userId: '0123-4567-89',
     email: 'hoge@example.com',
