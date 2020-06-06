@@ -65,7 +65,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          '${userStore.user.point}',
+          '${userStore.user.point} coins',
           style: const TextStyle(color: Colors.white),
         ),
       ],
