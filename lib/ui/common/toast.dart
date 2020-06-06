@@ -7,7 +7,7 @@ import 'package:wr_app/store/logger.dart';
 class NotifyToast {
   /// 成功トーストを出す
   static void success(String message) {
-    Logger.log('\t ✔ $message');
+    InAppLogger.log('\t ✔ $message');
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
@@ -17,7 +17,7 @@ class NotifyToast {
 
   /// エラートーストを出す
   static void error(dynamic e) {
-    Logger.log('\t⚠ $e');
+    InAppLogger.log('\t⚠ $e');
     Fluttertoast.showToast(
       msg: '$e',
       toastLength: Toast.LENGTH_LONG,

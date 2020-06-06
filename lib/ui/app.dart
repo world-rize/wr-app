@@ -27,7 +27,7 @@ class WRAppState extends State<WRApp> {
 
     if (envStore?.env?.containsKey('ADMOB_APP_ID') ?? false) {
       FirebaseAdMob.instance.initialize(appId: envStore?.env['ADMOB_APP_ID']);
-      Logger.log('🔥 Admob Initialized');
+      InAppLogger.log('🔥 Admob Initialized');
     }
 
     return MaterialApp(

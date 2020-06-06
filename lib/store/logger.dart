@@ -1,13 +1,16 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'dart:developer' as dev;
+import 'package:wr_app/model/activity.dart';
 
 // TODO(someone): refactoring
-class Logger {
-  static List<String> logs = [];
+class InAppLogger {
+  const InAppLogger();
 
-  static void log(String message, {String name: 'dev'}) {
-    dev.log(message);
-    logs.add('[$name] $message');
+  static List<Activity> logs = [];
+
+  static void log(String text, {String type = 'default'}) {
+    final now = DateTime.now();
+    print('[$type/$now] $text');
+    logs.add(Activity(uuid: '', type: type, text: text, date: now));
   }
 }

@@ -18,8 +18,17 @@ User _$UserFromJson(Map json) {
       favorites: (json['favorites'] as Map)?.map(
         (k, e) => MapEntry(k as String, e as bool),
       ),
-      membership:
-          _$enumDecodeNullable(_$MembershipEnumMap, json['membership']));
+      membership: _$enumDecodeNullable(_$MembershipEnumMap, json['membership']))
+    ..sectionStates = (json['sectionStates'] as Map)?.map(
+      (k, e) => MapEntry(k as String, e as bool),
+    )
+    ..logs = (json['logs'] as List)
+        ?.map((e) => e == null
+            ? null
+            : Activity.fromJson((e as Map)?.map(
+                (k, e) => MapEntry(k as String, e),
+              )))
+        ?.toList();
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
@@ -31,7 +40,9 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'name': instance.name,
       'point': instance.point,
       'testLimitCount': instance.testLimitCount,
-      'favorites': instance.favorites
+      'favorites': instance.favorites,
+      'sectionStates': instance.sectionStates,
+      'logs': instance.logs?.map((e) => e?.toJson())?.toList()
     };
 
 T _$enumDecode<T>(Map<T, dynamic> enumValues, dynamic source) {

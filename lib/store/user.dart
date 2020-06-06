@@ -23,11 +23,11 @@ class UserStore with ChangeNotifier {
   }
 
   UserStore._internal() {
-    Logger.log('✨ UserStore._internal()');
+    InAppLogger.log('✨ UserStore._internal()');
 
     SharedPreferences.getInstance().then((prefs) {
       _prefs = prefs;
-      Logger.log('\t load SharedPreferences');
+      InAppLogger.log('\t load SharedPreferences');
     });
   }
 
@@ -55,7 +55,7 @@ class UserStore with ChangeNotifier {
 
   /// ユーザーデータを習得します
   Future<User> callReadUser() async {
-    Logger.log('callReadUser()');
+    InAppLogger.log('callReadUser()', type: 'user');
 
     try {
       final res = await readUser();
@@ -105,7 +105,7 @@ class UserStore with ChangeNotifier {
 
     assert(functionResponse != null);
 
-    Logger.log(user.toJson().toString());
+    InAppLogger.log(user.toJson().toString(), type: 'user');
     user = functionResponse.user;
   }
 
@@ -130,7 +130,7 @@ class UserStore with ChangeNotifier {
 
     assert(functionResponse != null);
 
-    Logger.log(user.toJson().toString());
+    InAppLogger.log(user.toJson().toString(), type: 'user');
     user = functionResponse.user;
 
     return;
@@ -159,7 +159,7 @@ class UserStore with ChangeNotifier {
 
     user = dummyUser();
 
-    Logger.log('\t ✔ user fetched ${user.name}');
+    InAppLogger.log('\t ✔ user fetched ${user.name}', type: 'user');
 
     NotifyToast.success('ログインしました');
 
@@ -174,11 +174,11 @@ class UserStore with ChangeNotifier {
     try {
       fbUser = await _signInAuth(email: email, password: password);
 
-      Logger.log('\t ✔ user sign in ${fbUser.uid}');
+      InAppLogger.log('\t ✔ user sign in ${fbUser.uid}');
 
       user = await callReadUser();
 
-      Logger.log('\t ✔ user fetched ${user.name}');
+      InAppLogger.log('\t ✔ user fetched ${user.name}');
 
       NotifyToast.success('ログインしました');
 
@@ -194,7 +194,7 @@ class UserStore with ChangeNotifier {
     await fbAuth.signOut();
     fbUser = null;
     user = null;
-    Logger.log('\t ✔ user signed out');
+    InAppLogger.log('\t ✔ user signed out', type: 'user');
   }
 
   /// Firebase Auth にログイン
@@ -218,7 +218,7 @@ class UserStore with ChangeNotifier {
 
   /// テストAPIを呼ぶ
   Future<void> callTestAPI() async {
-    Logger.log('callTestAPI');
+    InAppLogger.log('callTestAPI');
 
     try {
       final data = await test();
@@ -241,7 +241,7 @@ class UserStore with ChangeNotifier {
       final uuid = fbUser.uid;
       final userId = fbUser.uid;
 
-      Logger.log(
+      InAppLogger.log(
           '\tcallCreateUser(uuid: $uuid, name: $name, email: $email, age: $age)');
       final data = await createUser(
           uuid: uuid, userId: userId, name: name, email: email, age: age);
@@ -259,7 +259,7 @@ class UserStore with ChangeNotifier {
   /// フレーズをお気に入りに登録します
   Future<void> callFavoritePhrase(
       {@required String phraseId, @required bool value}) {
-    Logger.log('\tcallFavoritePhrase()');
+    InAppLogger.log('\tcallFavoritePhrase()');
 
     try {
       favoritePhrase(uid: fbUser.uid, phraseId: phraseId, value: value)
@@ -292,12 +292,12 @@ class UserStore with ChangeNotifier {
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int point}) async {
-    Logger.log('\tcallGetPoint()');
+    InAppLogger.log('\tcallGetPoint()');
 
     try {
       final data = await getPoint(uid: fbUser.uid, point: point);
 
-      Logger.log(data.toString());
+      InAppLogger.log(data.toString());
 
       NotifyToast.success('$pointポイントゲットしました');
 
@@ -311,12 +311,12 @@ class UserStore with ChangeNotifier {
 
   /// テストを受ける
   Future<void> callDoTest() async {
-    Logger.log('\callDoTest()');
+    InAppLogger.log('\callDoTest()');
 
     try {
       // await doTest();
 
-      Logger.log('success');
+      InAppLogger.log('success');
 
       user.testLimitCount--;
 

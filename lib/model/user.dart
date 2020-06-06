@@ -2,6 +2,7 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wr_app/model/activity.dart';
 import 'package:wr_app/model/membership.dart';
 
 part 'user.g.dart';
@@ -51,4 +52,10 @@ class User {
 
   /// お気に入りフレーズ
   Map<String, bool> favorites;
+
+  /// クリア済みのセクション
+  Map<String, bool> sectionStates;
+
+  /// ユーザーログ
+  List<Activity> logs;
 }
