@@ -20,11 +20,11 @@ final ThemeData wrThemeData = ThemeData(
     bodyText1: TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.bold,
-      fontSize: 20,
+      fontSize: 18,
     ),
     bodyText2: TextStyle(
       color: Colors.grey,
-      fontSize: 16,
+      fontSize: 14,
     ),
   ),
 );

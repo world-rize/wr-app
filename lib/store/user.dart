@@ -1,16 +1,15 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wr_app/api/debug/test.dart';
 import 'package:wr_app/api/mock.dart';
-import 'package:wr_app/model/user.dart';
 import 'package:wr_app/api/user/index.dart';
+import 'package:wr_app/model/user.dart';
 import 'package:wr_app/store/logger.dart';
+import 'package:wr_app/ui/common/toast.dart';
 
 /// FireStore Auth
 final FirebaseAuth fbAuth = FirebaseAuth.instance;
@@ -41,34 +40,15 @@ class UserStore with ChangeNotifier {
 
   /// ユーザーデータ
   User user = User(
-      name: '',
-      point: 0,
-      age: 0,
-      email: '',
-      favorites: {},
-      testLimitCount: 3,
-      userId: '',
-      uuid: '');
-
-  /// 成功トーストを出す
-  void successToast(String message) {
-    Logger.log('\t ✔ $message');
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.lightGreen,
-    );
-  }
-
-  /// エラートーストを出す
-  void errorToast(Exception e) {
-    Logger.log('\t⚠ $e');
-    Fluttertoast.showToast(
-      msg: 'エラーが発生',
-      toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.redAccent,
-    );
-  }
+    name: '',
+    point: 0,
+    age: 0,
+    email: '',
+    favorites: {},
+    testLimitCount: 3,
+    userId: '',
+    uuid: '',
+  );
 
   /// ユーザーデータを習得します
   Future<User> callReadUser() async {
@@ -78,7 +58,7 @@ class UserStore with ChangeNotifier {
       final res = await readUser();
       return res.user;
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
       return null;
     }
   }
@@ -178,7 +158,7 @@ class UserStore with ChangeNotifier {
 
     Logger.log('\t ✔ user fetched ${user.name}');
 
-    successToast('ログインしました');
+    NotifyToast.success('ログインしました');
 
     notifyListeners();
   }
@@ -197,12 +177,12 @@ class UserStore with ChangeNotifier {
 
       Logger.log('\t ✔ user fetched ${user.name}');
 
-      successToast('ログインしました');
+      NotifyToast.success('ログインしました');
 
       notifyListeners();
     } on Exception catch (e) {
       print(e);
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
@@ -228,14 +208,9 @@ class UserStore with ChangeNotifier {
 
       return _result.user;
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
       return null;
     }
-  }
-
-  /// ゲストユーザーかどうか
-  bool _isGuest() {
-    return fbUser.isAnonymous;
   }
 
   /// テストAPIを呼ぶ
@@ -245,11 +220,11 @@ class UserStore with ChangeNotifier {
     try {
       final data = await test();
 
-      successToast('成功');
+      NotifyToast.success('成功');
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
@@ -270,11 +245,11 @@ class UserStore with ChangeNotifier {
 
       user = data.user;
 
-      successToast('ユーザーを作成しました');
+      NotifyToast.success('ユーザーを作成しました');
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
@@ -286,14 +261,14 @@ class UserStore with ChangeNotifier {
     try {
       favoritePhrase(uid: fbUser.uid, phraseId: phraseId, value: value)
           .then((res) {
-        successToast(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
+        NotifyToast.success(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
       });
 
       user.favorites[phraseId] = value;
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
@@ -316,13 +291,13 @@ class UserStore with ChangeNotifier {
 
       Logger.log(data.toString());
 
-      successToast('$pointポイントゲットしました');
+      NotifyToast.success('$pointポイントゲットしました');
 
       user.point += point;
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
@@ -339,7 +314,7 @@ class UserStore with ChangeNotifier {
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 

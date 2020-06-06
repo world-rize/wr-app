@@ -1,26 +1,27 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:getflutter/components/avatar/gf_avatar.dart';
+import 'package:getflutter/components/list_tile/gf_list_tile.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/user.dart';
 
 class MyPagePage extends StatelessWidget {
-  Widget _cell() {
+  Widget _cell({
+    @required String title,
+    @required Icon icon,
+  }) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: const <Widget>[
+        children: <Widget>[
           Expanded(
-            child: Icon(
-              Icons.email,
-              size: 80,
-              color: Colors.grey,
-            ),
+            child: icon,
           ),
           Text(
-            'メニュー',
-            style: TextStyle(
+            title,
+            style: const TextStyle(
               fontSize: 20,
             ),
           ),
@@ -38,24 +39,53 @@ class MyPagePage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text('${userStore.user.name} さん'),
+          child: GFListTile(
+            avatar: const GFAvatar(),
+            titleText: '${userStore.user.name} さん',
+            subtitleText: userStore.user.email,
+          ),
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Text('テスト本日残り${userStore.user.testLimitCount} 回'),
+          child: GFListTile(
+            titleText: 'テスト本日残り${userStore.user.testLimitCount} 回',
+          ),
         ),
-        const Padding(
+        Padding(
           padding: EdgeInsets.all(8),
-          child: Text('レッスン別達成率: xxx %'),
+          child: GFListTile(
+            titleText: 'レッスン別達成率: xxx %',
+          ),
         ),
         Expanded(
           child: GridView.count(
-            crossAxisCount: 3,
+            // physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
             children: [
-              _cell(),
-              _cell(),
-              _cell(),
-              _cell(),
+              _cell(
+                  title: 'お知らせ',
+                  icon: const Icon(
+                    Icons.email,
+                    size: 60,
+                  )),
+              _cell(
+                  title: '友達紹介',
+                  icon: const Icon(
+                    Icons.email,
+                    size: 60,
+                  )),
+              _cell(
+                  title: 'ポイント交換',
+                  icon: const Icon(
+                    Icons.email,
+                    size: 60,
+                  )),
+              _cell(
+                  title: 'HP',
+                  icon: const Icon(
+                    Icons.email,
+                    size: 60,
+                  )),
             ],
           ),
         ),

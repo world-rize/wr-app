@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/user.dart';
+import 'package:wr_app/ui/common/toast.dart';
 import 'package:wr_app/ui/root_view.dart';
 
 class UserSignUpInfo {
@@ -37,7 +38,7 @@ class _SignUpFormState extends State<SignUpForm> {
       );
     } on Exception catch (e) {
       print(e);
-      userStore.errorToast(e);
+      NotifyToast.error(e);
       return;
     }
   }
@@ -57,7 +58,7 @@ class _SignUpFormState extends State<SignUpForm> {
       );
     } on Exception catch (e) {
       print(e);
-      userStore.errorToast(e);
+      NotifyToast.error(e);
       return;
     }
   }
@@ -88,7 +89,7 @@ class _SignUpFormState extends State<SignUpForm> {
           children: <Widget>[
             // Email
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: TextFormField(
                 onSaved: (email) {
                   _model.email = email;
@@ -108,7 +109,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
             // Password
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: TextFormField(
                 obscureText: !_showPassword,
                 onSaved: (password) {
@@ -161,7 +162,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
             // Sign Up
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: SizedBox(
                 width: double.infinity,
                 child: FlatButton(
@@ -188,7 +189,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
             // Or
             const Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: EdgeInsets.all(8),
               child: Center(
                 child: Text('または'),
               ),
@@ -196,7 +197,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
             // Google Sign up
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: SizedBox(
                 width: double.infinity,
                 child: FlatButton(
