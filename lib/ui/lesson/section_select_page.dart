@@ -1,12 +1,10 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:flutter/material.dart';
 import 'package:wr_app/model/lesson.dart';
 import 'package:wr_app/model/section.dart';
-
-import 'package:wr_app/ui/lesson/lesson_phrases_page.dart';
+import 'package:wr_app/ui/lesson/section_list_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_lesson_tab.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_test_tab.dart';
@@ -57,7 +55,8 @@ class _SectionSelectPageState extends State<SectionSelectPage>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text(lesson.title['ja'], style: TextStyle(color: Colors.white)),
+        title: Text(lesson.title['ja'],
+            style: const TextStyle(color: Colors.white)),
         bottom: TabBar(
           tabs: _tabs,
           controller: _tabController,
@@ -75,7 +74,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
             onTap: (section) {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (_) => LessonPhrasesPage(section: section)),
+                    builder: (_) => SectionListPage(section: section)),
               );
             },
           ),

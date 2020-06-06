@@ -2,9 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/store/masterdata.dart';
-import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
+import 'package:wr_app/store/user.dart';
+import 'package:wr_app/ui/lesson/phrase_detail_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
 class AllPhrasesPage extends StatelessWidget {
@@ -13,6 +15,7 @@ class AllPhrasesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userStore = Provider.of<UserStore>(context);
     final primaryColor = Theme.of(context).primaryColor;
     final masterData = Provider.of<MasterDataStore>(context);
 
@@ -27,15 +30,25 @@ class AllPhrasesPage extends StatelessWidget {
               .allPhrases()
               .where(filter)
               .map(
-                (phrase) => phraseView(
-                  context,
-                  phrase,
+                (phrase) => PhraseCard(
+                  phrase: phrase,
+                  favorite: userStore.favorited(phrase),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => LessonPhrasesDetailPage(
-                        phrase: phrase,
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => Scaffold(
+                          appBar: AppBar(
+                            title: Text(
+                              I.of(context).phraseDetailTitle,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          body: PhrasesDetailPage(
+                            phrase: phrase,
+                          ),
+                        ),
                       ),
-                    ));
+                    );
                   },
                 ),
               )

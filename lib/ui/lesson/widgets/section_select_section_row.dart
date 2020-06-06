@@ -1,10 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/i10n/i10n.dart';
-
 import 'package:wr_app/model/section.dart';
 
 /// 各セクションのタイル
@@ -42,8 +41,8 @@ class SectionRow extends StatelessWidget {
           style: style.title.apply(color: Colors.redAccent),
         ),
         // right
-        icon: Padding(
-          padding: const EdgeInsets.only(right: 20),
+        icon: const Padding(
+          padding: EdgeInsets.only(right: 20),
           child: Icon(
             Icons.chevron_right,
             size: 40,

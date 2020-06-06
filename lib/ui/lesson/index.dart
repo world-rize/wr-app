@@ -1,14 +1,12 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
-
-import 'package:wr_app/i10n/i10n.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/extension/padding_extension.dart';
-
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/favorite_page.dart';
@@ -74,9 +72,9 @@ class LessonIndexPage extends StatelessWidget {
           if (favoritePhrase != null)
             Column(
               children: [
-                phraseView(
-                  context,
-                  favoritePhrase,
+                PhraseCard(
+                  phrase: favoritePhrase,
+                  favorite: userStore.favorited(favoritePhrase),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => FavoritePage()),
@@ -98,9 +96,9 @@ class LessonIndexPage extends StatelessWidget {
           if (newComingPhrase != null)
             Column(
               children: [
-                phraseView(
-                  context,
-                  newComingPhrase,
+                PhraseCard(
+                  phrase: newComingPhrase,
+                  favorite: userStore.favorited(newComingPhrase),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(builder: (_) => FavoritePage()),

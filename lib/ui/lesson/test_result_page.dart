@@ -1,17 +1,15 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/user.dart';
-
 import 'package:wr_app/ui/lesson/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
-
-import 'package:wr_app/extension/padding_extension.dart';
 
 /// テスト結果画面
 ///
@@ -41,9 +39,6 @@ class TestResultPage extends StatelessWidget {
               onPressed: () {
                 // pop history
                 Navigator.popUntil(context, (route) => route.isFirst);
-//                Navigator.of(context).push(
-//                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
-//                );
               },
             )
           ],
@@ -75,7 +70,10 @@ class TestResultPage extends StatelessWidget {
             Container(
               child: Column(
                 children: stats.section.phrases.map((phrase) {
-                  return phraseView(context, phrase).p_1();
+                  return PhraseCard(
+                    phrase: phrase,
+                    favorite: useStore.favorited(phrase),
+                  ).p_1();
                 }).toList(),
               ),
             ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
-import 'package:wr_app/ui/lesson/lesson_phrases_detail_page.dart';
+import 'package:wr_app/ui/lesson/phrase_detail_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
 class FavoritePage extends StatelessWidget {
@@ -21,14 +21,15 @@ class FavoritePage extends StatelessWidget {
         child: Column(
           children: masterData
               .allPhrases()
-              .where((phrase) =>
-                  userStore.user.favorites.containsKey(phrase.id) &&
-                  userStore.user.favorites[phrase.id])
-              .map((phrase) => phraseView(context, phrase, onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) =>
-                            LessonPhrasesDetailPage(phrase: phrase)));
-                  }))
+              .where(userStore.favorited)
+              .map((phrase) => PhraseCard(
+                    phrase: phrase,
+                    favorite: userStore.favorited(phrase),
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => PhrasesDetailPage(phrase: phrase)));
+                    },
+                  ))
               .toList(),
         ),
       ),

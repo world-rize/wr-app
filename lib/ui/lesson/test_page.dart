@@ -2,22 +2,19 @@
 
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/i10n/i10n.dart';
-
-import 'package:wr_app/model/section.dart';
-import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/store/masterdata.dart';
-import 'package:wr_app/store/user.dart';
-
-import 'package:wr_app/ui/lesson/test_result_page.dart';
-import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
-
 import 'package:wr_app/extension/collection_extension.dart';
 import 'package:wr_app/extension/padding_extension.dart';
+import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/model/phrase.dart';
+import 'package:wr_app/model/section.dart';
+import 'package:wr_app/store/masterdata.dart';
+import 'package:wr_app/store/user.dart';
+import 'package:wr_app/ui/lesson/test_result_page.dart';
+import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
 /// テストページ
 ///
@@ -71,40 +68,9 @@ class TestPageState extends State<TestPage> {
     // show result
     if (answer == _answerIndex) {
       _corrects += 1;
-
-      await showDialog(
-        context: context,
-        builder: (_) => Material(
-          type: MaterialType.transparency,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Center(
-              child: Image.network(
-                  'https://4.bp.blogspot.com/-CUR5NlGuXkU/UsZuCrI78dI/AAAAAAAAc20/mMqQPb9bBI0/s800/mark_maru.png'),
-            ),
-          ),
-        ),
-      );
+      _showQuestionResult(correct: true);
     } else {
-      await showDialog(
-        context: context,
-        builder: (_) => Material(
-          type: MaterialType.transparency,
-          child: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Center(
-              child: Image.network(
-                  'https://1.bp.blogspot.com/-eJGNGE4u8LA/UsZuCAMuehI/AAAAAAAAc2c/QQ5eBSC2Ey0/s800/mark_batsu.png'),
-            ),
-          ),
-        ),
-      );
+      _showQuestionResult(correct: false);
     }
 
     // test finish
@@ -136,6 +102,53 @@ class TestPageState extends State<TestPage> {
     return selections;
   }
 
+  void _showConfirmDialog() {
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: Text(I.of(context).testInterrupt),
+        // content: Text(''),
+        actions: <Widget>[
+          CupertinoButton(
+            child: Text(I.of(context).yes),
+            onPressed: () {
+              // pop dialog
+              Navigator.pop(context);
+              // pop this view
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoButton(
+            child: Text(I.of(context).no),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showQuestionResult({bool correct}) {
+    showDialog(
+      context: context,
+      builder: (_) => Material(
+        type: MaterialType.transparency,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Center(
+            child: Image.network(correct
+                ? 'https://4.bp.blogspot.com/-CUR5NlGuXkU/UsZuCrI78dI/AAAAAAAAc20/mMqQPb9bBI0/s800/mark_maru.png'
+                : 'https://1.bp.blogspot.com/-eJGNGE4u8LA/UsZuCAMuehI/AAAAAAAAc2c/QQ5eBSC2Ey0/s800/mark_batsu.png'),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
@@ -148,33 +161,8 @@ class TestPageState extends State<TestPage> {
         automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              showCupertinoDialog(
-                context: context,
-                builder: (_) => CupertinoAlertDialog(
-                  title: Text(I.of(context).testInterrupt),
-                  // content: Text(''),
-                  actions: <Widget>[
-                    CupertinoButton(
-                      child: Text(I.of(context).yes),
-                      onPressed: () {
-                        // pop dialog
-                        Navigator.pop(context);
-                        // pop this view
-                        Navigator.pop(context);
-                      },
-                    ),
-                    CupertinoButton(
-                      child: Text(I.of(context).no),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
+            icon: const Icon(Icons.menu),
+            onPressed: _showConfirmDialog,
           )
         ],
       ),
@@ -245,7 +233,7 @@ class QuestionView extends StatelessWidget {
               padding: const EdgeInsets.all(2),
               child: Text(
                 selection[index],
-                style: TextStyle(
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
                 ),
