@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/model/article.dart';
 import 'package:wr_app/model/category.dart';
-import 'package:wr_app/ui/column/article_view.dart';
+import 'package:wr_app/ui/column/article_overview.dart';
 
 /// カテゴリ内記事一覧
 class CategoryPosts extends StatelessWidget {
@@ -45,7 +45,7 @@ class CategoryPosts extends StatelessWidget {
                     onTap: () {
                       onTap(article);
                     },
-                    child: ArticleView(article: article),
+                    child: ArticleOverView(article: article),
                   ),
                 )
                 .toList(),

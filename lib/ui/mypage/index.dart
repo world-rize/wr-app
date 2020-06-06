@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
+import 'package:getflutter/components/badge/gf_badge.dart';
 import 'package:getflutter/components/list_tile/gf_list_tile.dart';
+import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/user.dart';
 
@@ -41,7 +43,20 @@ class MyPagePage extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: GFListTile(
             avatar: const GFAvatar(),
-            titleText: '${userStore.user.name} さん',
+            title: Row(
+              children: [
+                Text('${userStore.user.name} さん'),
+                if (userStore.isPremium)
+                  const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: GFBadge(
+                      color: Colors.redAccent,
+                      child: Text('pro'),
+                      shape: GFBadgeShape.pills,
+                    ),
+                  ),
+              ],
+            ),
             subtitleText: userStore.user.email,
           ),
         ),
@@ -49,12 +64,6 @@ class MyPagePage extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: GFListTile(
             titleText: 'テスト本日残り${userStore.user.testLimitCount} 回',
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(8),
-          child: GFListTile(
-            titleText: 'レッスン別達成率: xxx %',
           ),
         ),
         Expanded(

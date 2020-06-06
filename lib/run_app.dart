@@ -4,11 +4,12 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/ui/app.dart';
+import 'package:wr_app/build/flavor.dart';
+import 'package:wr_app/store/column.dart';
+import 'package:wr_app/store/env.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
-import 'package:wr_app/store/env.dart';
-import 'package:wr_app/build/flavor.dart';
+import 'package:wr_app/ui/app.dart';
 
 void runAppWithFlavor(final Flavor flavor) {
   Provider.debugCheckInvalidValueType = null;
@@ -38,7 +39,11 @@ void runAppWithFlavor(final Flavor flavor) {
       // マスターデータ
       ChangeNotifierProvider(
         create: (_) => MasterDataStore(),
-      )
+      ),
+      // 記事
+      Provider(
+        create: (_) => ArticleStore(),
+      ),
     ],
     child: WRApp(),
   ));

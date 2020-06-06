@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/api/debug/test.dart';
 import 'package:wr_app/api/mock.dart';
 import 'package:wr_app/api/user/index.dart';
+import 'package:wr_app/model/membership.dart';
 import 'package:wr_app/model/user.dart';
 import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/ui/common/toast.dart';
@@ -321,5 +322,14 @@ class UserStore with ChangeNotifier {
   /// 名前を取得
   String displayName() {
     return (user != null) ? user.name : '---';
+  }
+
+  bool get isPremium => user.membership == Membership.pro;
+
+  /// プランを変更
+  void changePlan(Membership membership) {
+    user.membership = membership;
+
+    notifyListeners();
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wr_app/model/membership.dart';
 
 part 'user.g.dart';
 
@@ -17,11 +18,15 @@ class User {
     @required this.point,
     @required this.testLimitCount,
     @required this.favorites,
+    @required this.membership,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  /// ユーザータイプ
+  Membership membership;
 
   /// uuid
   String uuid;

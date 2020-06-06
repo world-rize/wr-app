@@ -1,16 +1,16 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/env.dart';
 import 'package:wr_app/store/logger.dart';
-import 'package:wr_app/ui/root_view.dart';
 import 'package:wr_app/theme.dart';
-import 'package:wr_app/i10n/i10n.dart';
-import 'package:firebase_admob/firebase_admob.dart';
+import 'package:wr_app/ui/root_view.dart';
 
 /// root widget
 class WRApp extends StatefulWidget {
@@ -37,7 +37,7 @@ class WRAppState extends State<WRApp> {
         RouteObserver<PageRoute<dynamic>>(),
         observer,
       ],
-      localizationsDelegates: [
+      localizationsDelegates: const [
         I.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

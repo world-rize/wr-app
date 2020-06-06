@@ -14,6 +14,7 @@ Article _$ArticleFromJson(Map<String, dynamic> json) {
       thumbnailUrl: json['thumbnailUrl'] as String,
       date:
           json['date'] == null ? null : DateTime.parse(json['date'] as String),
+      tags: json['tags'] as String,
       content: json['content'] as String,
       url: json['url'] as String);
 }
@@ -24,6 +25,7 @@ Map<String, dynamic> _$ArticleToJson(Article instance) => <String, dynamic>{
       'title': instance.title,
       'date': instance.date?.toIso8601String(),
       'thumbnailUrl': instance.thumbnailUrl,
+      'tags': instance.tags,
       'content': instance.content,
       'url': instance.url
     };
@@ -49,6 +51,6 @@ T _$enumDecodeNullable<T>(Map<T, dynamic> enumValues, dynamic source) {
 }
 
 const _$ArticleTypeEnumMap = <ArticleType, dynamic>{
-  ArticleType.inApp: 'inApp',
+  ArticleType.inApp: 'inapp',
   ArticleType.external: 'external'
 };

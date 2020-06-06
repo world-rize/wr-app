@@ -103,6 +103,7 @@ User dummyUser() {
 List<Category> dummyCategories(int size) => List.generate(
       size,
       (i) => Category(
+        id: '$i',
         title: 'Category $i',
         thumbnailUrl: 'https://source.unsplash.com/category/nature',
       ),
@@ -113,8 +114,9 @@ Article dummyInAppArticle(int index) => Article.internal(
       title: '記事$index',
       thumbnailUrl: 'https://source.unsplash.com/category/nature',
       date: DateTime.now(),
+      tags: 'AAA,BBB,CCC',
       content: """
-      # Markdown Example
+# Markdown Example
 Markdown allows you to easily include formatted text, images, and even formatted Dart code in your app.
 
 ## Titles
@@ -209,6 +211,7 @@ Article dummyExternalArticle(int index) => Article.external(
       title: '記事$index',
       thumbnailUrl: 'https://source.unsplash.com/category/nature',
       date: DateTime.now(),
+      tags: 'AAA,BBB',
       url: 'https://world-rize.com/',
     );
 

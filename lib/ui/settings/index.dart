@@ -7,6 +7,7 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/build/flavor.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/model/membership.dart';
 import 'package:wr_app/store/env.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/store/user.dart';
@@ -156,6 +157,7 @@ class _SettingsState extends State<SettingsPage> {
 
   // debug menu
   SettingsSection debugSection() {
+    final userStore = Provider.of<UserStore>(context);
     final envStore = Provider.of<EnvStore>(context);
     final masterData = Provider.of<MasterDataStore>(context);
 
@@ -189,6 +191,17 @@ class _SettingsState extends State<SettingsPage> {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => APITestView()));
           },
+        ),
+        SettingsTile.switchTile(
+          title: 'プレミアムプラン',
+          onToggle: (value) {
+            if (value) {
+              userStore.changePlan(Membership.pro);
+            } else {
+              userStore.changePlan(Membership.normal);
+            }
+          },
+          switchValue: userStore.user.membership == Membership.pro,
         ),
         SettingsTile.switchTile(
           title: 'Paint Size Enabled',

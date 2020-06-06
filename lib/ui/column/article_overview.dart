@@ -1,71 +1,13 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/model/article.dart';
-
-/// 記事本文
-class ArticleContentView extends StatelessWidget {
-  const ArticleContentView({this.article});
-
-  final Article article;
-
-  @override
-  Widget build(BuildContext context) {
-    final h1 = Theme.of(context).primaryTextTheme.headline1;
-    final primaryColor = Theme.of(context).primaryColor;
-
-    final headline = Stack(
-      children: <Widget>[
-        SizedBox(
-          width: double.infinity,
-          height: 200,
-          child: Image.network(
-            article.thumbnailUrl,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              article.title,
-              style: h1,
-            ),
-          ),
-        ),
-      ],
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: Text('${article.title}'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            headline,
-            Flexible(
-              child: Markdown(
-                selectable: true,
-                physics: const NeverScrollableScrollPhysics(),
-                data: article.content,
-                imageDirectory: 'https://raw.githubusercontent.com',
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+import 'package:wr_app/ui/column/article_detail_page.dart';
 
 /// 記事見出し
-class ArticleView extends StatelessWidget {
-  const ArticleView({this.article});
+class ArticleOverView extends StatelessWidget {
+  const ArticleOverView({this.article});
 
   final Article article;
 
@@ -77,14 +19,13 @@ class ArticleView extends StatelessWidget {
         children: <Widget>[
           SizedBox(
             width: double.infinity,
-            height: 200,
+            height: 150,
             child: Image.network(
               article.thumbnailUrl,
               fit: BoxFit.cover,
             ),
           ),
           ListTile(
-            leading: Icon(Icons.label),
             title: Padding(
               padding: const EdgeInsets.all(8),
               child: Text(
@@ -110,7 +51,7 @@ class ArticleView extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => ArticleContentView(article: article),
+                        builder: (_) => ArticleDetailPage(article: article),
                       ),
                     );
                   },
