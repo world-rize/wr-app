@@ -138,10 +138,10 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
         # check voice
         kp_path = phrase_json['assets']['voice']['en-us']
         exist_voice = os.path.exists(f'{root}/{kp_path}')
-        if exist_voice and verbose:
+
+        
+        if exist_voice:
             print(f'[Info] {lesson_id} {phrase_id} voice found')
-        else:
-            phrase_json['assets']['voice'] = {}
 
         return phrase_json
     except Exception as e:

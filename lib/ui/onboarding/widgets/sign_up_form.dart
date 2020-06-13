@@ -76,8 +76,128 @@ class _SignUpFormState extends State<SignUpForm> {
     _model = UserSignUpInfo(email: '', password: '');
   }
 
+  Widget _buildButton({String text, Color color, Function onTap}) {
+    return RaisedButton(
+      onPressed: onTap,
+      color: Colors.white,
+      shape: StadiumBorder(
+        side: BorderSide(
+          color: color,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _emailField = Padding(
+      padding: const EdgeInsets.all(8),
+      child: TextFormField(
+        onSaved: (email) {
+          _model.email = email;
+        },
+        validator: (text) {
+          if (text.isEmpty) {
+            return 'do not empty';
+          }
+          return null;
+        },
+        decoration: const InputDecoration(
+          border: InputBorder.none,
+          hintText: 'Email',
+        ),
+      ),
+    );
+
+    final _passwordField = Padding(
+      padding: const EdgeInsets.all(8),
+      child: TextFormField(
+        obscureText: !_showPassword,
+        onSaved: (password) {
+          _model.password = password;
+        },
+        validator: (text) {
+          if (text.isEmpty) {
+            return 'do not empty';
+          }
+          return null;
+        },
+        decoration: InputDecoration(
+          suffixIcon: IconButton(
+            icon: Icon(
+              _showPassword
+                  ? Icons.remove_circle_outline
+                  : Icons.remove_red_eye,
+            ),
+            onPressed: () {
+              setState(() {
+                _showPassword = !_showPassword;
+              });
+            },
+          ),
+          border: InputBorder.none,
+          hintText: 'Password',
+        ),
+      ),
+    );
+
+    final _acceptTermsCheckbox = Container(
+      child: CheckboxListTile(
+        value: _agree,
+        activeColor: Colors.blue,
+        title: const Text('利用規約に同意します'),
+        subtitle: !_agree
+            ? const Text(
+                'required',
+                style: TextStyle(color: Colors.red),
+              )
+            : null,
+        onChanged: (value) {
+          setState(() {
+            _agree = value;
+          });
+        },
+      ),
+    );
+
+    final _signUpButton = Padding(
+      padding: const EdgeInsets.all(8),
+      child: SizedBox(
+        width: double.infinity,
+        child: _buildButton(
+          text: 'Sign up',
+          color: Colors.blueAccent,
+          onTap: () {
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              _signUpEmailAndPassword();
+            }
+          },
+        ),
+      ),
+    );
+
+    final _signUpWithGoogleButton = Padding(
+      padding: const EdgeInsets.all(8),
+      child: SizedBox(
+        width: double.infinity,
+        child: _buildButton(
+          text: 'Sign up with Google',
+          color: Colors.redAccent,
+          onTap: _signUpWithGoogle,
+        ),
+      ),
+    );
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -88,104 +208,16 @@ class _SignUpFormState extends State<SignUpForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // Email
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: TextFormField(
-                onSaved: (email) {
-                  _model.email = email;
-                },
-                validator: (text) {
-                  if (text.isEmpty) {
-                    return 'do not empty';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Email',
-                ),
-              ),
-            ),
+            _emailField,
 
             // Password
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: TextFormField(
-                obscureText: !_showPassword,
-                onSaved: (password) {
-                  _model.password = password;
-                },
-                validator: (text) {
-                  if (text.isEmpty) {
-                    return 'do not empty';
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _showPassword
-                          ? Icons.remove_circle_outline
-                          : Icons.remove_red_eye,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _showPassword = !_showPassword;
-                      });
-                    },
-                  ),
-                  border: InputBorder.none,
-                  hintText: 'Password',
-                ),
-              ),
-            ),
+            _passwordField,
 
             // Agree
-            Container(
-              child: CheckboxListTile(
-                value: _agree,
-                activeColor: Colors.blue,
-                title: const Text('利用規約に同意します'),
-                subtitle: !_agree
-                    ? Text(
-                        'required',
-                        style: TextStyle(color: Colors.red),
-                      )
-                    : null,
-                onChanged: (value) {
-                  setState(() {
-                    _agree = value;
-                  });
-                },
-              ),
-            ),
+            _acceptTermsCheckbox,
 
             // Sign Up
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: SizedBox(
-                width: double.infinity,
-                child: FlatButton(
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      _signUpEmailAndPassword();
-                    }
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Text(
-                      'Sign up',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  color: Colors.blueAccent,
-                ),
-              ),
-            ),
+            _signUpButton,
 
             // Or
             const Padding(
@@ -196,28 +228,7 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
 
             // Google Sign up
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: SizedBox(
-                width: double.infinity,
-                child: FlatButton(
-                  onPressed: () {
-                    _signUpWithGoogle();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Text(
-                      'Sign up with Google',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  color: Colors.redAccent,
-                ),
-              ),
-            ),
+            _signUpWithGoogleButton,
           ],
         ),
       ),

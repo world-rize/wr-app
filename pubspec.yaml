@@ -2,7 +2,7 @@ name: wr_app
 description: WorldRIZe App
 authors:
   - WorldRIZe
-version: 0.3.2
+version: 0.3.3
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
@@ -40,6 +40,7 @@ dependencies:
   flutter_markdown: ^0.4.1
   flutter_svg: ^0.17.4
   collection: ^1.14.12
+  yaml: ^2.2.1
 
   # native
   url_launcher: ^5.4.10

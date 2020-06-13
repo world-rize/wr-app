@@ -12,7 +12,6 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/phrase.dart';
 import 'package:wr_app/model/section.dart';
 import 'package:wr_app/store/masterdata.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
@@ -29,11 +28,17 @@ class TestPage extends StatefulWidget {
 }
 
 class TestStats {
-  TestStats({this.section, this.questions, this.corrects});
+  TestStats({
+    @required this.section,
+    @required this.answers,
+    this.questions = 7,
+    this.corrects = 0,
+  });
 
   Section section;
-  int questions = 7;
-  int corrects = 0;
+  int questions;
+  int corrects;
+  List<bool> answers;
 }
 
 /// [TestPage] の State
@@ -52,6 +57,9 @@ class TestPageState extends State<TestPage> {
   /// 正解数
   int _corrects = 0;
 
+  /// 選択
+  List<bool> _answers;
+
   /// 現在の問題
   Phrase get currentPhrase => section.phrases[_index];
 
@@ -59,26 +67,30 @@ class TestPageState extends State<TestPage> {
   void initState() {
     super.initState();
     _index = 0;
+    _answers = [];
   }
 
   /// 次の問題へ
+  // TODO: リファクタリング
   Future<void> _next(int answer) async {
-    final userStore = Provider.of<UserStore>(context, listen: false);
+    _answers.add(answer == _answerIndex);
 
     // show result
     if (answer == _answerIndex) {
       _corrects += 1;
-      _showQuestionResult(correct: true);
+      // _showQuestionResult(correct: true);
     } else {
-      _showQuestionResult(correct: false);
+      // _showQuestionResult(correct: false);
     }
 
     // test finish
     if (_index == section.phrases.length - 1) {
-      final stats =
-          TestStats(section: section, questions: 7, corrects: _corrects);
-
-      await userStore.callDoTest();
+      final stats = TestStats(
+        section: section,
+        questions: 7,
+        corrects: _corrects,
+        answers: _answers,
+      );
 
       await Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TestResultPage(stats: stats)),
@@ -107,7 +119,7 @@ class TestPageState extends State<TestPage> {
       context: context,
       builder: (_) => CupertinoAlertDialog(
         title: Text(I.of(context).testInterrupt),
-        // content: Text(''),
+        content: Text(I.of(context).testInterruptDetail),
         actions: <Widget>[
           CupertinoButton(
             child: Text(I.of(context).yes),
@@ -129,25 +141,25 @@ class TestPageState extends State<TestPage> {
     );
   }
 
-  void _showQuestionResult({bool correct}) {
-    showDialog(
-      context: context,
-      builder: (_) => Material(
-        type: MaterialType.transparency,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Center(
-            child: Image.network(correct
-                ? 'https://4.bp.blogspot.com/-CUR5NlGuXkU/UsZuCrI78dI/AAAAAAAAc20/mMqQPb9bBI0/s800/mark_maru.png'
-                : 'https://1.bp.blogspot.com/-eJGNGE4u8LA/UsZuCAMuehI/AAAAAAAAc2c/QQ5eBSC2Ey0/s800/mark_batsu.png'),
-          ),
-        ),
-      ),
-    );
-  }
+//  void _showQuestionResult({bool correct}) {
+//    showDialog(
+//      context: context,
+//      builder: (_) => Material(
+//        type: MaterialType.transparency,
+//        child: GestureDetector(
+//          behavior: HitTestBehavior.opaque,
+//          onTap: () {
+//            Navigator.pop(context);
+//          },
+//          child: Center(
+//            child: Image.network(correct
+//                ? 'https://4.bp.blogspot.com/-CUR5NlGuXkU/UsZuCrI78dI/AAAAAAAAc20/mMqQPb9bBI0/s800/mark_maru.png'
+//                : 'https://1.bp.blogspot.com/-eJGNGE4u8LA/UsZuCAMuehI/AAAAAAAAc2c/QQ5eBSC2Ey0/s800/mark_batsu.png'),
+//          ),
+//        ),
+//      ),
+//    );
+//  }
 
   @override
   Widget build(BuildContext context) {

@@ -25,6 +25,20 @@ class ArticleOverView extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
+//          Padding(
+//            padding: const EdgeInsets.all(8),
+//            child: Row(
+//              children: article.tags
+//                  .split(',')
+//                  .map((tag) => GFButtonBadge(
+//                        text: tag,
+//                        color: Colors.grey.shade500,
+//                        shape: GFButtonShape.square,
+//                        type: GFButtonType.outline,
+//                      ).p(4))
+//                  .toList(),
+//            ),
+//          ),
           ListTile(
             title: Padding(
               padding: const EdgeInsets.all(8),

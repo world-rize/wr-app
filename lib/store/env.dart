@@ -44,6 +44,7 @@ class EnvStore with ChangeNotifier {
   bool darkMode = false;
 
   /// 訳を表示するか
+  bool showText = false;
   bool showTranslation = false;
 
   static Future<void> readPubSpec() async {

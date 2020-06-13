@@ -17,6 +17,8 @@ import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 class PhrasesDetailPage extends StatelessWidget {
   const PhrasesDetailPage({@required this.phrase});
 
+  // TODO: 日本語 <=> 英語 切り替え
+
   final Phrase phrase;
 
   @override

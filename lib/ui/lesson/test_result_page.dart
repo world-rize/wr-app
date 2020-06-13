@@ -69,12 +69,18 @@ class TestResultPage extends StatelessWidget {
             ).p_1(),
             Container(
               child: Column(
-                children: stats.section.phrases.map((phrase) {
-                  return PhraseCard(
-                    phrase: phrase,
-                    favorite: useStore.favorited(phrase),
-                  ).p_1();
-                }).toList(),
+                children: List.generate(
+                  stats.section.phrases.length,
+                  (i) => Stack(
+                    children: [
+                      PhraseCard(
+                        phrase: stats.section.phrases[i],
+                        favorite: useStore.favorited(stats.section.phrases[i]),
+                      ),
+                      Text('${stats.answers[i]}'),
+                    ],
+                  ).p_1(),
+                ),
               ),
             ),
           ],

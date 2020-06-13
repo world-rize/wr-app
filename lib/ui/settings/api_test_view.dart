@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:wr_app/store/user.dart';
 
 class APITestView extends StatelessWidget {
   @override
@@ -21,7 +21,7 @@ class APITestView extends StatelessWidget {
             tiles: [
               SettingsTile(
                 title: 'テスト',
-                leading: Icon(Icons.info),
+                leading: const Icon(Icons.info),
                 onTap: userStore.callTestAPI,
               ),
 //              SettingsTile(
@@ -31,29 +31,34 @@ class APITestView extends StatelessWidget {
 //              ),
               SettingsTile(
                 title: 'ユーザーを取得',
-                leading: Icon(Icons.people),
+                leading: const Icon(Icons.people),
                 onTap: userStore.callReadUser,
               ),
               SettingsTile(
                 title: 'お気に入りに登録',
-                leading: Icon(Icons.favorite),
+                leading: const Icon(Icons.favorite),
                 onTap: () {
                   userStore.callFavoritePhrase(phraseId: '0000', value: true);
                 },
               ),
               SettingsTile(
                 title: '1ポイントゲット',
-                leading: Icon(Icons.attach_money),
+                leading: const Icon(Icons.attach_money),
                 onTap: () {
                   userStore.callGetPoint(point: 1);
                 },
               ),
               SettingsTile(
                 title: 'テストを受ける(未実装)',
-                leading: Icon(Icons.title),
+                leading: const Icon(Icons.title),
                 onTap: () {
                   userStore.callGetPoint(point: 1);
                 },
+              ),
+              SettingsTile(
+                title: '受講可能回数をリセット',
+                leading: const Icon(Icons.access_alarm),
+                onTap: userStore.resetTestLimitCount,
               ),
             ],
           ),

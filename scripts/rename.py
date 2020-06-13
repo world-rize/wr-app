@@ -58,14 +58,14 @@ name_lesson_id_map = {
   'guide': 'travelling',
   'house': 'house',
   'relationship': 'social',
-#  '': 'greeting',
+  'greeting': 'greeting',
   'weather': 'weather',
-#  '': 'shopping',
+  'shopping': 'shopping',
   'phonecall': 'acting',
   'english': 'aussie',
   'emotion': 'emotions',
   'cafe': 'restaurant',
-#  '': 'part-time',
+  'parttime': 'part-time',
 }
 
 pwd = os.path.dirname(os.path.abspath(__file__))
@@ -142,10 +142,11 @@ def extract_mp3(zip_path, filename_list):
             filename = f'{lesson_id}_{phrase_id}_{index}_{locale}.mp3'
             dst_path = f'{dst_dir}/{filename}'
 
-            print(f'\t- {os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
-            os.rename(mp3path, dst_path)
+            if not os.path.exists(dst_path):
+                print(f'\t- {os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
+                os.rename(mp3path, dst_path)
 
-            mp3_cnt += 1
+                mp3_cnt += 1
 
         zip_cnt += 1
 

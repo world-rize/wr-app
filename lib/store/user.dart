@@ -149,6 +149,7 @@ class UserStore with ChangeNotifier {
   }
 
   /// モックでサインインする
+  // TODO: ログイン状態を保持
   Future<void> signInWithMock({
     @required String email,
     @required String password,
@@ -290,6 +291,22 @@ class UserStore with ChangeNotifier {
     _prefs.setBool('first_launch', flag);
   }
 
+  /// 受講可能回数をリセット
+  Future<void> resetTestLimitCount() async {
+    InAppLogger.log('\tresetTestLimitCount()');
+
+    try {
+      user.testLimitCount = 3;
+
+      InAppLogger.log('受講可能回数がリセットされました');
+      NotifyToast.success('受講可能回数がリセットされました');
+
+      notifyListeners();
+    } on Exception catch (e) {
+      NotifyToast.error(e);
+    }
+  }
+
   /// ポイントを習得します
   Future<void> callGetPoint({@required int point}) async {
     InAppLogger.log('\tcallGetPoint()');
@@ -336,6 +353,10 @@ class UserStore with ChangeNotifier {
   /// プランを変更
   void changePlan(Membership membership) {
     user.membership = membership;
+
+    InAppLogger.log('membership to be $membership');
+
+    NotifyToast.success('$membership');
 
     notifyListeners();
   }

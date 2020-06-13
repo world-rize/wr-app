@@ -10,6 +10,7 @@ import 'package:wr_app/store/column.dart';
 import 'package:wr_app/ui/column/article_detail_page.dart';
 import 'package:wr_app/ui/column/category_posts.dart';
 import 'package:wr_app/ui/column/category_view.dart';
+import 'package:wr_app/ui/common/admob_widget.dart';
 
 /// `コラム` ページのトップ
 ///
@@ -28,6 +29,7 @@ class ColumnIndexPage extends StatelessWidget {
             type: GFTypographyType.typo1,
             dividerColor: GFColors.SUCCESS,
           ).p_1(),
+          // categories
           ...articleStore.categories.map(
             (category) => CategoryView(
               category: category,
@@ -48,6 +50,7 @@ class ColumnIndexPage extends StatelessWidget {
               ),
             ),
           ),
+          const AdmobBannerWidget(),
         ],
       ),
     );

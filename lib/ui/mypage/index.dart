@@ -7,27 +7,35 @@ import 'package:getflutter/components/list_tile/gf_list_tile.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/user.dart';
+import 'package:wr_app/ui/mypage/friends_page.dart';
+import 'package:wr_app/ui/mypage/gift_page.dart';
+import 'package:wr_app/ui/mypage/info_page.dart';
+import 'package:wr_app/ui/mypage/upgrade_page.dart';
 
 class MyPagePage extends StatelessWidget {
   Widget _cell({
     @required String title,
     @required Icon icon,
+    @required Function onTap,
   }) {
     return Padding(
       padding: const EdgeInsets.all(8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: icon,
-          ),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 20,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Expanded(
+              child: icon,
             ),
-          ),
-        ],
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -72,29 +80,49 @@ class MyPagePage extends StatelessWidget {
             crossAxisCount: 2,
             children: [
               _cell(
-                  title: 'お知らせ',
-                  icon: const Icon(
-                    Icons.email,
-                    size: 60,
-                  )),
+                title: 'お知らせ',
+                icon: const Icon(
+                  Icons.email,
+                  size: 60,
+                ),
+                onTap: () {
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => InformationPage()));
+                },
+              ),
               _cell(
-                  title: '友達紹介',
-                  icon: const Icon(
-                    Icons.email,
-                    size: 60,
-                  )),
+                title: '友達紹介',
+                icon: const Icon(
+                  Icons.email,
+                  size: 60,
+                ),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) => FriendsPage()));
+                },
+              ),
               _cell(
-                  title: 'ポイント交換',
-                  icon: const Icon(
-                    Icons.email,
-                    size: 60,
-                  )),
+                title: '有料版購入',
+                icon: const Icon(
+                  Icons.email,
+                  size: 60,
+                ),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) => UpgradePage()));
+                },
+              ),
               _cell(
-                  title: 'HP',
-                  icon: const Icon(
-                    Icons.email,
-                    size: 60,
-                  )),
+                title: 'WR coins交換',
+                icon: const Icon(
+                  Icons.email,
+                  size: 60,
+                ),
+                onTap: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (_) => GiftPage()));
+                },
+              ),
             ],
           ),
         ),

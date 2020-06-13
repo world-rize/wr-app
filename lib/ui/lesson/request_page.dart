@@ -33,6 +33,14 @@ class _RequestPageState extends State<RequestPage> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+    const hintText = '''
+(記入例)
+「電気をつけっぱなしにしないで」はどうやって表現すれば良いですか？
+
+”I’ll keep you company”はどのようなシチュエーションで使えば良いですか？
+
+”I don’t understand”の言い換えってありますか？
+    ''';
 
     return Scaffold(
       appBar: AppBar(
@@ -44,7 +52,7 @@ class _RequestPageState extends State<RequestPage> {
           padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: const [
               Padding(
                 padding: EdgeInsets.all(8),
                 child: Text(
@@ -59,7 +67,7 @@ class _RequestPageState extends State<RequestPage> {
                     padding: EdgeInsets.all(12),
                     child: TextField(
                       maxLines: 20,
-                      decoration: InputDecoration.collapsed(hintText: '本文'),
+                      decoration: InputDecoration.collapsed(hintText: hintText),
                     ),
                   ),
                 ),

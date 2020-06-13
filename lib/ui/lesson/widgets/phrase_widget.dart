@@ -24,7 +24,7 @@ class PhraseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final englishStyle = wrThemeData.primaryTextTheme.bodyText1;
     final japaneseStyle = wrThemeData.primaryTextTheme.bodyText2;
-    final existVoice = phrase.assets.voice.isEmpty;
+    // final existVoice = phrase.assets.voice.isEmpty;
 
     return GestureDetector(
       onTap: onTap,
@@ -37,7 +37,7 @@ class PhraseCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    (existVoice ? '[x]' : '') + phrase.title['en'].capitalize(),
+                    phrase.title['en'].capitalize(),
                     style: englishStyle,
                   ).p(4),
                   Text(

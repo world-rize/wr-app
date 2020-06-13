@@ -21,8 +21,8 @@ class _OnBoardModalState extends State<OnBoardModal> {
         Slide(
           backgroundColor: splashColor,
           backgroundBlendMode: BlendMode.src,
-          widgetTitle: Text(
-            'Sign in',
+          widgetTitle: const Text(
+            'Sign up',
             style: TextStyle(
               color: Colors.white,
               fontSize: 30,
@@ -37,8 +37,8 @@ class _OnBoardModalState extends State<OnBoardModal> {
         Slide(
           backgroundColor: splashColor,
           backgroundBlendMode: BlendMode.src,
-          widgetTitle: Text(
-            'Sign up',
+          widgetTitle: const Text(
+            'Sign in',
             style: TextStyle(
               color: Colors.white,
               fontSize: 30,

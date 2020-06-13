@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 
-class Shop extends StatelessWidget {
+class FriendsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('引き換え'),
+        title: const Text('友人紹介'),
       ),
       body: Column(
         children: const [
-          Text('引き換え'),
+          Text('友人紹介'),
         ],
       ),
     );

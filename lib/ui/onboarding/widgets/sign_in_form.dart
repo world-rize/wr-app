@@ -81,12 +81,33 @@ class _SignInFormState extends State<SignInForm> {
     _showPassword = false;
   }
 
+  Widget _buildButton({String text, Color color, Function onTap}) {
+    return RaisedButton(
+      onPressed: onTap,
+      color: Colors.white,
+      shape: StadiumBorder(
+        side: BorderSide(
+          color: color,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 20,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
 
     final email = Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: TextFormField(
         onSaved: (email) {
           _model.email = email;
@@ -97,7 +118,7 @@ class _SignInFormState extends State<SignInForm> {
           }
           return null;
         },
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           border: InputBorder.none,
           hintText: 'Email',
         ),
@@ -105,7 +126,7 @@ class _SignInFormState extends State<SignInForm> {
     );
 
     final password = Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: TextFormField(
         obscureText: !_showPassword,
         onSaved: (password) {
@@ -137,72 +158,41 @@ class _SignInFormState extends State<SignInForm> {
     );
 
     final signUpButton = Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: SizedBox(
         width: double.infinity,
-        child: FlatButton(
-          onPressed: () {
+        child: _buildButton(
+          text: 'Sign in',
+          color: Colors.blueAccent,
+          onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
               _signInEmailAndPassword();
             }
           },
-          child: const Padding(
-            padding: EdgeInsets.all(12),
-            child: Text(
-              'Sign in',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          color: Colors.blueAccent,
         ),
       ),
     );
 
     final signInWithGoogleButton = Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: SizedBox(
         width: double.infinity,
-        child: FlatButton(
-          onPressed: () {
-            _signInWithGoogle();
-          },
-          child: const Padding(
-            padding: EdgeInsets.all(12),
-            child: Text(
-              'Sign in with Google',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
-            ),
-          ),
+        child: _buildButton(
+          onTap: _signInWithGoogle,
           color: Colors.redAccent,
+          text: 'Sign in with Google',
         ),
       ),
     );
 
     final signInByTestUser = Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8),
       child: SizedBox(
         width: double.infinity,
-        child: FlatButton(
-          onPressed: () {
-            _signInTestUser();
-          },
-          child: const Padding(
-            padding: EdgeInsets.all(12),
-            child: Text(
-              'Sign in by Test User(Debug)',
-              style: TextStyle(
-                fontSize: 20,
-                color: Colors.white,
-              ),
-            ),
-          ),
+        child: _buildButton(
+          onTap: _signInTestUser,
+          text: 'Sign in by Test User(Debug)',
           color: Colors.greenAccent,
         ),
       ),

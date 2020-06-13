@@ -64,10 +64,10 @@ mixin Messages {
 
   String get ok => Intl.message('OK', name: 'ok');
 
-  String testMessage(int limit, int time) => Intl.message(
-        '本日のテスト残り$limit回\n制限時間$time秒',
+  String testMessage(int limit) => Intl.message(
+        '本日のテスト残り$limit回',
         name: 'testMessage',
-        args: [limit, time],
+        args: [limit],
       );
 
   String question(int q) => Intl.message(
@@ -76,9 +76,24 @@ mixin Messages {
         args: [q],
       );
 
+  String get testLimitAlert => Intl.message(
+        '本日はこれ以上テストを受講することはできません',
+        name: 'testLimitAlert',
+      );
+
+  String get testLimitAlertDetail => Intl.message(
+        'テストは1日に3回まで受講することができます(未実装)',
+        name: 'testLimitAlertDetail',
+      );
+
   String get testInterrupt => Intl.message(
         'テストを中断しますか?',
         name: 'testInterrupt',
+      );
+
+  String get testInterruptDetail => Intl.message(
+        'テストを中断した場合このテストは0点となり、1日のテスト受講可能回数は1回分消費されます',
+        name: 'testInterruptDetail',
       );
 
   /// test result page

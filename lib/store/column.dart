@@ -54,42 +54,58 @@ class ArticleStore with foundation.ChangeNotifier {
 
     _articles.addAll([
       Article.internal(
-          id: 'abcd_efgh_0000',
-          title: 'Hello, World',
+          id: 'article_001',
+          title: 'Article1',
           thumbnailUrl: 'https://source.unsplash.com/category/nature',
           date: DateTime.now(),
-          tags: 'AAA,BBB,CCC',
+          tags: '',
           content: '''
 # Hello, World
 hogehoge
 
     '''),
       Article.internal(
-          id: 'abcd_efgh_0000',
-          title: 'Hello, World',
+          id: 'article_002',
+          title: 'Article2',
           thumbnailUrl: 'https://source.unsplash.com/category/nature',
           date: DateTime.now(),
-          tags: 'AAA,BBB,CCC',
+          tags: '',
           content: '''
 # Hello, World
 hogehoge
 
     '''),
       Article.internal(
-          id: 'abcd_efgh_0000',
-          title: 'Hello, World',
+          id: 'article_003',
+          title: 'Article3',
           thumbnailUrl: 'https://source.unsplash.com/category/nature',
           date: DateTime.now(),
-          tags: 'AAA,BBB,CCC',
+          tags: '',
           content: '''
 # Hello, World
 hogehoge
 
     '''),
+      Article.external(
+        id: 'tips_002',
+        title: '視覚で捉える！！前置詞マスター講座＃1【接触の前置詞on】',
+        thumbnailUrl:
+            'https://world-rize.com/wp-content/themes/jstork/library/images/noimg.png',
+        date: DateTime.now(),
+        tags: '',
+      ),
+      Article.external(
+        id: 'tips_001',
+        title: '視覚で捉える！！前置詞マスター講座＃0【導入編】',
+        thumbnailUrl:
+            'https://world-rize.com/wp-content/themes/jstork/library/images/noimg.png',
+        date: DateTime.now(),
+        tags: '',
+      ),
     ]);
   }
 
   List<Article> articlesById(String id) {
-    return _articles;
+    return _articles.where((article) => article.id.startsWith(id)).toList();
   }
 }

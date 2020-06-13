@@ -2,8 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/model/lesson.dart';
 import 'package:wr_app/model/section.dart';
+import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/section_list_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_lesson_tab.dart';
@@ -49,6 +51,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
 
   @override
   Widget build(BuildContext context) {
+    final userStore = Provider.of<UserStore>(context);
     final sections = Section.fromLesson(lesson);
     final primaryColor = Theme.of(context).primaryColor;
 
@@ -80,9 +83,10 @@ class _SectionSelectPageState extends State<SectionSelectPage>
           ),
           TestTab(
             sections: sections,
-            onTap: (section) {
+            onTap: (section) async {
+              await userStore.callDoTest();
               Navigator.pop(context);
-              Navigator.of(context).push(
+              await Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => TestPage(section: section)),
               );
             },
