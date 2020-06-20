@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/model/article.dart';
-import 'package:wr_app/model/category.dart';
+import 'package:wr_app/model/column/article.dart';
+import 'package:wr_app/model/column/category.dart';
 import 'package:wr_app/ui/column/article_overview.dart';
 
 /// カテゴリ内記事一覧

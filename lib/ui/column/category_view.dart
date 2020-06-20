@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/model/category.dart';
+import 'package:wr_app/model/column/category.dart';
 
 class CategoryView extends StatelessWidget {
   const CategoryView({this.category, this.onTap});

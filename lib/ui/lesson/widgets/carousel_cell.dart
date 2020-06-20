@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/model/lesson.dart';
+import 'package:wr_app/model/phrase/lesson.dart';
 import 'package:wr_app/ui/widgets/locked_view.dart';
 
 class CarouselCell extends StatelessWidget {

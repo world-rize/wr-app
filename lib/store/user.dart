@@ -8,7 +8,7 @@ import 'package:wr_app/api/debug/test.dart';
 import 'package:wr_app/api/mock.dart';
 import 'package:wr_app/api/user/index.dart';
 import 'package:wr_app/model/membership.dart';
-import 'package:wr_app/model/phrase.dart';
+import 'package:wr_app/model/phrase/phrase.dart';
 import 'package:wr_app/model/user.dart';
 import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/ui/common/toast.dart';

@@ -1,16 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wr_app/model/column/article_type.dart';
 
 part 'article.g.dart';
-
-enum ArticleType {
-  @JsonValue('inapp')
-  inApp,
-  @JsonValue('external')
-  external,
-}
 
 /// 記事
 @JsonSerializable()
@@ -21,7 +14,6 @@ class Article {
     @required this.title,
     @required this.thumbnailUrl,
     @required this.date,
-    @required this.tags,
     @required this.content,
     @required this.url,
   });
@@ -30,7 +22,6 @@ class Article {
   Article.internal({
     String id,
     String title,
-    String tags,
     String thumbnailUrl,
     DateTime date,
     String content,
@@ -40,7 +31,6 @@ class Article {
           title: title,
           thumbnailUrl: thumbnailUrl,
           date: date,
-          tags: tags,
           content: content,
           url: '',
         );
@@ -50,7 +40,6 @@ class Article {
     String id,
     String title,
     String thumbnailUrl,
-    String tags,
     DateTime date,
     String url,
   }) : this(
@@ -59,7 +48,6 @@ class Article {
           title: title,
           thumbnailUrl: thumbnailUrl,
           date: date,
-          tags: tags,
           content: '',
           url: url,
         );
@@ -81,9 +69,6 @@ class Article {
 
   /// サムネ
   final String thumbnailUrl;
-
-  /// タグ(,区切り)
-  final String tags;
 
   /// 内容(マークダウンを想定?)
   final String content;

@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wr_app/model/article.dart';
+import 'package:wr_app/model/column/article.dart';
+import 'package:wr_app/model/column/article_type.dart';
 import 'package:wr_app/ui/column/article_detail_page.dart';
 
 /// 記事見出し

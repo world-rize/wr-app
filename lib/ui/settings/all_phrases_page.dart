@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/model/section.dart';
+import 'package:wr_app/model/phrase/phrase.dart';
+import 'package:wr_app/model/phrase/section.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/ui/lesson/section_list_page.dart';
 

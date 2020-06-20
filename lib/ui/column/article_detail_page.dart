@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
-import 'package:wr_app/model/article.dart';
+import 'package:wr_app/model/column/article.dart';
 
 /// 記事本文
 class ArticleDetailPage extends StatelessWidget {

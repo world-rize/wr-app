@@ -17,7 +17,6 @@ import 'package:wr_app/ui/settings/all_phrases_page.dart';
 import 'package:wr_app/ui/settings/api_test_view.dart';
 import 'package:wr_app/ui/settings/dark_mode.dart';
 import 'package:wr_app/ui/settings/logger_view.dart';
-import 'package:wr_app/ui/settings/shop.dart';
 
 /// 設定ページ
 class SettingsPage extends StatefulWidget {

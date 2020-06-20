@@ -57,7 +57,7 @@ class EnvStore with ChangeNotifier {
 
   static Future<void> readEnv() async {
     if (_cache.flavor == Flavor.development) {
-      const envPath = '.env/.env.development';
+      const envPath = '.env/.env';
       await DotEnv().load(envPath);
       InAppLogger.log('\t📎 read .env');
     }

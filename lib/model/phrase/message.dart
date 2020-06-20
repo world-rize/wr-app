@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/cupertino.dart';
-import 'package:wr_app/model/assets.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wr_app/model/phrase/assets.dart';
 
 part 'message.g.dart';
 

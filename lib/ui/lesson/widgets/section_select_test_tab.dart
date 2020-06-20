@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/model/section.dart';
+import 'package:wr_app/model/phrase/section.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_section_row.dart';
 

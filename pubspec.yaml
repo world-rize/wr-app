@@ -1,8 +1,9 @@
+
 name: wr_app
 description: WorldRIZe App
 authors:
   - WorldRIZe
-version: 0.3.3
+version: 0.3.2
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
@@ -37,10 +38,9 @@ dependencies:
   flutter_sliding_tutorial: ^0.1.0
 
   # util
-  flutter_markdown: ^0.4.1
+  flutter_markdown: ^0.3.2
   flutter_svg: ^0.17.4
-  collection: ^1.14.12
-  yaml: ^2.2.1
+  collection: ^1.14.11
 
   # native
   url_launcher: ^5.4.10

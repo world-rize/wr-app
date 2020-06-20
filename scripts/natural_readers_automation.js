@@ -2,7 +2,7 @@
 // F12 Console に貼り付ける
 (async () => {
   // ex: 301-400 => page 4
-  let [begin, end] = [1401, 2000]
+  let [begin, end] = [2120, 3000]
   const sleep = async (s) => new Promise(resolve => setTimeout(resolve, s * 1000))
   const page = (i) => Math.floor((i - 1) / 100) + 1
   const next = async () => {
@@ -24,6 +24,16 @@
     await sleep(10)
     
     // download
+    await new Promise(async resolve => {
+      while (true) {
+        const buttons = document.getElementsByClassName('mat-raised-button')
+        if (buttons[2]) {
+          resolve()
+        }
+        await sleep(1)
+      }
+    })
+
     document.getElementsByClassName('mat-raised-button')[2].click()
 
     await sleep(1)

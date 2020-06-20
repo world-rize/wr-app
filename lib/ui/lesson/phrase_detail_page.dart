@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/model/phrase.dart';
+import 'package:wr_app/model/phrase/phrase.dart';
 import 'package:wr_app/ui/common/toast.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_detail_advice.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_detail_buttons.dart';

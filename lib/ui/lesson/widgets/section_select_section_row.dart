@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/model/section.dart';
+import 'package:wr_app/model/phrase/section.dart';
 
 /// 各セクションのタイル
 class SectionRow extends StatelessWidget {

@@ -1,13 +1,13 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-import 'package:wr_app/model/article.dart';
-import 'package:wr_app/model/assets.dart';
-import 'package:wr_app/model/category.dart';
-import 'package:wr_app/model/example.dart';
-import 'package:wr_app/model/lesson.dart';
+import 'package:wr_app/model/column/article.dart';
+import 'package:wr_app/model/column/category.dart';
 import 'package:wr_app/model/membership.dart';
-import 'package:wr_app/model/message.dart';
-import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/model/section.dart';
+import 'package:wr_app/model/phrase/assets.dart';
+import 'package:wr_app/model/phrase/example.dart';
+import 'package:wr_app/model/phrase/lesson.dart';
+import 'package:wr_app/model/phrase/message.dart';
+import 'package:wr_app/model/phrase/phrase.dart';
+import 'package:wr_app/model/phrase/section.dart';
 import 'package:wr_app/model/user.dart';
 
 /// ダミーのフレーズを返す
@@ -116,7 +116,6 @@ Article dummyInAppArticle(int index) => Article.internal(
       title: '記事$index',
       thumbnailUrl: 'https://source.unsplash.com/category/nature',
       date: DateTime.now(),
-      tags: 'AAA,BBB,CCC',
       content: """
 # Markdown Example
 Markdown allows you to easily include formatted text, images, and even formatted Dart code in your app.
@@ -213,14 +212,55 @@ Article dummyExternalArticle(int index) => Article.external(
       title: '記事$index',
       thumbnailUrl: 'https://source.unsplash.com/category/nature',
       date: DateTime.now(),
-      tags: 'AAA,BBB',
       url: 'https://world-rize.com/',
     );
 
 /// ダミー記事
-List<Article> dummyArticles(int size) => List.generate(
-      size,
-      (index) => index % 2 == 0
-          ? dummyInAppArticle(index)
-          : dummyExternalArticle(index),
-    );
+List<Article> dummyArticles() {
+  return [
+    Article.internal(
+        id: 'article_001',
+        title: 'Article1',
+        thumbnailUrl: 'https://source.unsplash.com/category/nature',
+        date: DateTime.now(),
+        content: '''
+# Hello, World
+hogehoge
+
+    '''),
+    Article.internal(
+        id: 'article_002',
+        title: 'Article2',
+        thumbnailUrl: 'https://source.unsplash.com/category/nature',
+        date: DateTime.now(),
+        content: '''
+# Hello, World
+hogehoge
+
+    '''),
+    Article.internal(
+        id: 'article_003',
+        title: 'Article3',
+        thumbnailUrl: 'https://source.unsplash.com/category/nature',
+        date: DateTime.now(),
+        content: '''
+# Hello, World
+hogehoge
+
+    '''),
+    Article.external(
+      id: 'tips_002',
+      title: '視覚で捉える！！前置詞マスター講座＃1【接触の前置詞on】',
+      thumbnailUrl:
+          'https://world-rize.com/wp-content/themes/jstork/library/images/noimg.png',
+      date: DateTime.now(),
+    ),
+    Article.external(
+      id: 'tips_001',
+      title: '視覚で捉える！！前置詞マスター講座＃0【導入編】',
+      thumbnailUrl:
+          'https://world-rize.com/wp-content/themes/jstork/library/images/noimg.png',
+      date: DateTime.now(),
+    ),
+  ];
+}
