@@ -44,7 +44,7 @@ class _RootViewState extends State<RootView>
       if (firstLaunch) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => OnBoardModal(),
+            builder: (context) => OnBoardingPage(),
             fullscreenDialog: true,
           ),
         );

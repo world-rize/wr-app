@@ -3,15 +3,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/user.dart';
-import 'package:wr_app/ui/onboarding/widgets/sign_up_form.dart';
+import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
 import 'package:wr_app/ui/root_view.dart';
 
-class SignInForm extends StatefulWidget {
+class SignInPage extends StatefulWidget {
   @override
-  _SignInFormState createState() => _SignInFormState();
+  _SignInPageState createState() => _SignInPageState();
 }
 
-class _SignInFormState extends State<SignInForm> {
+class _SignInPageState extends State<SignInPage> {
+  bool _showPassword;
+  String _email;
+  String _password;
+
   Future<void> _signInEmailAndPassword() async {
     final userStore = Provider.of<UserStore>(context, listen: false);
     try {
@@ -69,48 +73,27 @@ class _SignInFormState extends State<SignInForm> {
     }
   }
 
-  UserSignUpInfo _model;
-  bool _accept;
-  bool _showPassword;
-
   @override
   void initState() {
     super.initState();
-    _model = UserSignUpInfo(email: '', password: '');
-    _accept = false;
     _showPassword = false;
-  }
-
-  Widget _buildButton({String text, Color color, Function onTap}) {
-    return RaisedButton(
-      onPressed: onTap,
-      color: Colors.white,
-      shape: StadiumBorder(
-        side: BorderSide(
-          color: color,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ),
-    );
+    _email = '';
+    _password = '';
   }
 
   @override
   Widget build(BuildContext context) {
+    const splashColor = Color(0xff56c0ea);
+
     final _formKey = GlobalKey<FormState>();
 
-    final email = Padding(
+    final _emailField = Padding(
       padding: const EdgeInsets.all(8),
       child: TextFormField(
         onSaved: (email) {
-          _model.email = email;
+          setState(() {
+            _email = email;
+          });
         },
         validator: (text) {
           if (text.isEmpty) {
@@ -125,12 +108,14 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
 
-    final password = Padding(
+    final _passwordField = Padding(
       padding: const EdgeInsets.all(8),
       child: TextFormField(
         obscureText: !_showPassword,
         onSaved: (password) {
-          _model.password = password;
+          setState(() {
+            _password = password;
+          });
         },
         validator: (text) {
           if (text.isEmpty) {
@@ -157,11 +142,11 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
 
-    final signUpButton = Padding(
+    final _signUpButton = Padding(
       padding: const EdgeInsets.all(8),
       child: SizedBox(
         width: double.infinity,
-        child: _buildButton(
+        child: RoundedButton(
           text: 'Sign in',
           color: Colors.blueAccent,
           onTap: () {
@@ -174,23 +159,23 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
 
-    final signInWithGoogleButton = Padding(
-      padding: const EdgeInsets.all(8),
-      child: SizedBox(
-        width: double.infinity,
-        child: _buildButton(
-          onTap: _signInWithGoogle,
-          color: Colors.redAccent,
-          text: 'Sign in with Google',
-        ),
-      ),
-    );
+//    final _signInWithGoogleButton = Padding(
+//      padding: const EdgeInsets.all(8),
+//      child: SizedBox(
+//        width: double.infinity,
+//        child: RoundedButton(
+//          onTap: _signInWithGoogle,
+//          color: Colors.redAccent,
+//          text: 'Sign in with Google',
+//        ),
+//      ),
+//    );
 
-    final signInByTestUser = Padding(
+    final _signInByTestUser = Padding(
       padding: const EdgeInsets.all(8),
       child: SizedBox(
         width: double.infinity,
-        child: _buildButton(
+        child: RoundedButton(
           onTap: _signInTestUser,
           text: 'Sign in by Test User(Debug)',
           color: Colors.greenAccent,
@@ -198,34 +183,43 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
 
-    return Form(
-      key: _formKey,
-      child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            email,
-            password,
-            signUpButton,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: splashColor,
+        title: Text('Signin'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // Email
+                _emailField,
 
-            // Or
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: Center(
-                child: Text('または'),
-              ),
+                // Password
+                _passwordField,
+              ],
             ),
+          ),
 
-            // Sign in google
-            signInWithGoogleButton,
+          const Spacer(),
 
-            // Sign in by Test User(Debug)
-            signInByTestUser,
-          ],
-        ),
+          // Sign Up
+          _signUpButton,
+
+          Divider(
+            indent: 20,
+            endIndent: 20,
+            color: Colors.grey,
+          ),
+
+          // Google Sign up
+          // _signInWithGoogleButton,
+
+          _signInByTestUser,
+        ],
       ),
     );
   }

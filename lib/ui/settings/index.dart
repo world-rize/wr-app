@@ -46,7 +46,7 @@ class _SettingsState extends State<SettingsPage> {
           onTap: () async {
             await userStore.signOut();
             await Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => OnBoardModal()));
+                .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
           },
         ),
       ],

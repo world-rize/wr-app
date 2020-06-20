@@ -4,29 +4,37 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/common/toast.dart';
+import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
 import 'package:wr_app/ui/root_view.dart';
 
-class UserSignUpInfo {
-  UserSignUpInfo({this.email, this.password});
-
-  String email;
-  String password;
-}
-
-class SignUpForm extends StatefulWidget {
+class SignUpPage extends StatefulWidget {
   @override
-  _SignUpFormState createState() => _SignUpFormState();
+  _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class _SignUpPageState extends State<SignUpPage> {
+  final _formKey = GlobalKey<FormState>();
+  bool _agree;
+  bool _showPassword;
+  String _email;
+  String _password;
+
+  @override
+  void initState() {
+    super.initState();
+    _agree = false;
+    _showPassword = false;
+    _email = '';
+    _password = '';
+  }
+
   Future<void> _signUpEmailAndPassword() async {
-    print(_model);
     final userStore = Provider.of<UserStore>(context, listen: false);
-    print('email: $_model.email password: $_model.password');
+    print('email: $_email password: $_password');
 
     try {
       await userStore
-          .signInWithMock(email: _model.email, password: _model.password)
+          .signInWithMock(email: _email, password: _password)
           .catchError(print);
 
       userStore.setFirstLaunch(flag: false);
@@ -63,47 +71,17 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
-  final _formKey = GlobalKey<FormState>();
-  bool _agree;
-  bool _showPassword;
-  UserSignUpInfo _model;
-
-  @override
-  void initState() {
-    super.initState();
-    _agree = false;
-    _showPassword = false;
-    _model = UserSignUpInfo(email: '', password: '');
-  }
-
-  Widget _buildButton({String text, Color color, Function onTap}) {
-    return RaisedButton(
-      onPressed: onTap,
-      color: Colors.white,
-      shape: StadiumBorder(
-        side: BorderSide(
-          color: color,
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 20,
-          ),
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    const splashColor = Color(0xff56c0ea);
+
     final _emailField = Padding(
       padding: const EdgeInsets.all(8),
       child: TextFormField(
         onSaved: (email) {
-          _model.email = email;
+          setState(() {
+            _email = email;
+          });
         },
         validator: (text) {
           if (text.isEmpty) {
@@ -123,7 +101,9 @@ class _SignUpFormState extends State<SignUpForm> {
       child: TextFormField(
         obscureText: !_showPassword,
         onSaved: (password) {
-          _model.password = password;
+          setState(() {
+            _password = password;
+          });
         },
         validator: (text) {
           if (text.isEmpty) {
@@ -173,9 +153,9 @@ class _SignUpFormState extends State<SignUpForm> {
       padding: const EdgeInsets.all(8),
       child: SizedBox(
         width: double.infinity,
-        child: _buildButton(
+        child: RoundedButton(
           text: 'Sign up',
-          color: Colors.blueAccent,
+          color: splashColor,
           onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
@@ -190,7 +170,7 @@ class _SignUpFormState extends State<SignUpForm> {
       padding: const EdgeInsets.all(8),
       child: SizedBox(
         width: double.infinity,
-        child: _buildButton(
+        child: RoundedButton(
           text: 'Sign up with Google',
           color: Colors.redAccent,
           onTap: _signUpWithGoogle,
@@ -198,39 +178,45 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
     );
 
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: splashColor,
+        title: const Text('Signup'),
       ),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // Email
-            _emailField,
+      body: Column(
+        children: <Widget>[
+          Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                // Email
+                _emailField,
 
-            // Password
-            _passwordField,
+                // Password
+                _passwordField,
 
-            // Agree
-            _acceptTermsCheckbox,
-
-            // Sign Up
-            _signUpButton,
-
-            // Or
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: Center(
-                child: Text('または'),
-              ),
+                // Agree
+                _acceptTermsCheckbox,
+              ],
             ),
+          ),
 
-            // Google Sign up
-            _signUpWithGoogleButton,
-          ],
-        ),
+          const Spacer(),
+
+          // Sign Up
+          _signUpButton,
+
+          // Or
+          Divider(
+            indent: 20,
+            endIndent: 20,
+            color: Colors.grey,
+          ),
+
+          // Google Sign up
+          _signUpWithGoogleButton,
+        ],
       ),
     );
   }
