@@ -8,17 +8,17 @@ part of 'message.dart';
 
 Message _$MessageFromJson(Map<String, dynamic> json) {
   return Message(
-      text: (json['text'] as Map<String, dynamic>)?.map(
-        (k, e) => MapEntry(k, e as String),
-      ),
-      assets: json['assets'] == null
-          ? null
-          : Assets.fromJson(json['assets'] as Map<String, dynamic>))
-    ..type = json['@type'] as String;
+    text: (json['text'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, e as String),
+    ),
+    assets: json['assets'] == null
+        ? null
+        : Assets.fromJson(json['assets'] as Map<String, dynamic>),
+  )..type = json['@type'] as String;
 }
 
 Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       '@type': instance.type,
       'text': instance.text,
-      'assets': instance.assets
+      'assets': instance.assets,
     };
