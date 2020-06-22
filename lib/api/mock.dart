@@ -101,16 +101,6 @@ User dummyUser() {
   );
 }
 
-/// ダミーカテゴリ
-List<Category> dummyCategories(int size) => List.generate(
-      size,
-      (i) => Category(
-        id: '$i',
-        title: 'Category $i',
-        thumbnailUrl: 'https://source.unsplash.com/category/nature',
-      ),
-    );
-
 Article dummyInAppArticle(int index) => Article.internal(
       id: '$index',
       title: '記事$index',
@@ -215,52 +205,47 @@ Article dummyExternalArticle(int index) => Article.external(
       url: 'https://world-rize.com/',
     );
 
-/// ダミー記事
-List<Article> dummyArticles() {
-  return [
-    Article.internal(
-        id: 'article_001',
-        title: 'Article1',
-        thumbnailUrl: 'https://source.unsplash.com/category/nature',
-        date: DateTime.now(),
-        content: '''
-# Hello, World
-hogehoge
+/// マークダウンファイル
+String dummyRawArticle() => '''
+---
+title: Hello, world!
+category: article
+tags: [A, B, C]
+---
 
-    '''),
-    Article.internal(
-        id: 'article_002',
-        title: 'Article2',
-        thumbnailUrl: 'https://source.unsplash.com/category/nature',
-        date: DateTime.now(),
-        content: '''
-# Hello, World
-hogehoge
+# Hello World!
+This is an example.
+''';
 
-    '''),
-    Article.internal(
-        id: 'article_003',
-        title: 'Article3',
-        thumbnailUrl: 'https://source.unsplash.com/category/nature',
-        date: DateTime.now(),
-        content: '''
-# Hello, World
-hogehoge
-
-    '''),
-    Article.external(
-      id: 'tips_002',
-      title: '視覚で捉える！！前置詞マスター講座＃1【接触の前置詞on】',
-      thumbnailUrl:
-          'https://world-rize.com/wp-content/themes/jstork/library/images/noimg.png',
-      date: DateTime.now(),
-    ),
-    Article.external(
-      id: 'tips_001',
-      title: '視覚で捉える！！前置詞マスター講座＃0【導入編】',
-      thumbnailUrl:
-          'https://world-rize.com/wp-content/themes/jstork/library/images/noimg.png',
-      date: DateTime.now(),
-    ),
-  ];
-}
+final List<Category> categories = [
+  Category(
+    id: 'online_lesson',
+    title: 'オンライン英会話',
+    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+  ),
+  Category(
+    id: 'article',
+    title: '記事',
+    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+  ),
+  Category(
+    id: 'listening',
+    title: 'Listening Practice',
+    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+  ),
+  Category(
+    id: 'illust',
+    title: '絵付き漫画',
+    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+  ),
+  Category(
+    id: 'dish',
+    title: '世界の料理',
+    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+  ),
+  Category(
+    id: 'tips',
+    title: 'Random facts',
+    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+  ),
+];

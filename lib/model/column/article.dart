@@ -21,10 +21,10 @@ class Article {
   /// アプリ内で読める記事
   Article.internal({
     String id,
-    String title,
+    @required String title,
     String thumbnailUrl,
     DateTime date,
-    String content,
+    @required String content,
   }) : this(
           id: id,
           type: ArticleType.inApp,

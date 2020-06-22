@@ -42,6 +42,7 @@ dependencies:
 
   # util
   flutter_markdown: ^0.3.2
+  front_matter: ^1.1.0
   flutter_svg: ^0.17.4
   collection: ^1.14.11
 
