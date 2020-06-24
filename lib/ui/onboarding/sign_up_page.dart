@@ -75,72 +75,75 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     const splashColor = Color(0xff56c0ea);
 
-    final _emailField = Padding(
-      padding: const EdgeInsets.all(8),
-      child: TextFormField(
-        onSaved: (email) {
-          setState(() {
-            _email = email;
-          });
-        },
-        validator: (text) {
-          if (text.isEmpty) {
-            return 'do not empty';
-          }
-          return null;
-        },
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Email',
+    final _emailField = TextFormField(
+      onSaved: (email) {
+        setState(() {
+          _email = email;
+        });
+      },
+      validator: (text) {
+        if (text.isEmpty) {
+          return 'do not empty';
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
         ),
+        hintText: 'Email',
       ),
     );
 
-    final _passwordField = Padding(
-      padding: const EdgeInsets.all(8),
-      child: TextFormField(
-        obscureText: !_showPassword,
-        onSaved: (password) {
-          setState(() {
-            _password = password;
-          });
-        },
-        validator: (text) {
-          if (text.isEmpty) {
-            return 'do not empty';
-          }
-          return null;
-        },
-        decoration: InputDecoration(
-          suffixIcon: IconButton(
-            icon: Icon(
-              _showPassword
-                  ? Icons.remove_circle_outline
-                  : Icons.remove_red_eye,
-            ),
-            onPressed: () {
-              setState(() {
-                _showPassword = !_showPassword;
-              });
-            },
+    final _passwordField = TextFormField(
+      obscureText: !_showPassword,
+      onSaved: (password) {
+        setState(() {
+          _password = password;
+        });
+      },
+      validator: (text) {
+        if (text.isEmpty) {
+          return 'do not empty';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        suffixIcon: IconButton(
+          icon: Icon(
+            _showPassword ? Icons.remove_circle_outline : Icons.remove_red_eye,
           ),
-          border: InputBorder.none,
-          hintText: 'Password',
+          onPressed: () {
+            setState(() {
+              _showPassword = !_showPassword;
+            });
+          },
         ),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        hintText: 'Password',
       ),
     );
 
     final _acceptTermsCheckbox = Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.blueAccent),
+      ),
       child: CheckboxListTile(
         value: _agree,
         activeColor: Colors.blue,
         title: const Text('利用規約に同意します'),
-        subtitle: !_agree
-            ? const Text(
-                'required',
-                style: TextStyle(color: Colors.red),
-              )
-            : null,
+//        subtitle: !_agree
+//            ? const Text(
+//                'required',
+//                style: TextStyle(color: Colors.red),
+//              )
+//            : null,
         onChanged: (value) {
           setState(() {
             _agree = value;
@@ -183,40 +186,66 @@ class _SignUpPageState extends State<SignUpPage> {
         backgroundColor: splashColor,
         title: const Text('Signup'),
       ),
-      body: Column(
-        children: <Widget>[
-          Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                // Email
-                _emailField,
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints:
+              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      // Email
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: _emailField,
+                      ),
 
-                // Password
-                _passwordField,
+                      // Password
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 16),
+                        child: _passwordField,
+                      ),
 
-                // Agree
-                _acceptTermsCheckbox,
-              ],
-            ),
+                      // Agree
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: _acceptTermsCheckbox,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              // Sign Up
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: _signUpButton,
+              ),
+
+              // Or
+              const Divider(
+                indent: 20,
+                endIndent: 20,
+                color: Colors.grey,
+              ),
+
+              // Google Sign up
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: _signUpWithGoogleButton,
+              ),
+            ],
           ),
-
-          const Spacer(),
-
-          // Sign Up
-          _signUpButton,
-
-          // Or
-          Divider(
-            indent: 20,
-            endIndent: 20,
-            color: Colors.grey,
-          ),
-
-          // Google Sign up
-          _signUpWithGoogleButton,
-        ],
+        ),
       ),
     );
   }

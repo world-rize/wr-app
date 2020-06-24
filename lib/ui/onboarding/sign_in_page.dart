@@ -12,6 +12,8 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
+  final _formKey = GlobalKey<FormState>();
+
   bool _showPassword;
   String _email;
   String _password;
@@ -85,67 +87,65 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     const splashColor = Color(0xff56c0ea);
 
-    final _formKey = GlobalKey<FormState>();
-
-    final _emailField = Padding(
-      padding: const EdgeInsets.all(8),
-      child: TextFormField(
-        onSaved: (email) {
-          setState(() {
-            _email = email;
-          });
-        },
-        validator: (text) {
-          if (text.isEmpty) {
-            return 'do not empty';
-          }
-          return null;
-        },
-        decoration: const InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Email',
-        ),
-      ),
-    );
-
-    final _passwordField = Padding(
-      padding: const EdgeInsets.all(8),
-      child: TextFormField(
-        obscureText: !_showPassword,
-        onSaved: (password) {
-          setState(() {
-            _password = password;
-          });
-        },
-        validator: (text) {
-          if (text.isEmpty) {
-            return 'do not empty';
-          }
-          return null;
-        },
-        decoration: InputDecoration(
-          suffixIcon: IconButton(
-            icon: Icon(
-              _showPassword
-                  ? Icons.remove_circle_outline
-                  : Icons.remove_red_eye,
-            ),
-            onPressed: () {
-              setState(() {
-                _showPassword = !_showPassword;
-              });
-            },
+    final _emailField = TextFormField(
+      onSaved: (email) {
+        setState(() {
+          _email = email;
+        });
+      },
+      validator: (text) {
+        if (text.isEmpty) {
+          return 'do not empty';
+        }
+        return null;
+      },
+      decoration: const InputDecoration(
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
           ),
-          border: InputBorder.none,
-          hintText: 'Password',
         ),
+        hintText: 'Email',
       ),
     );
 
-    final _signUpButton = Padding(
-      padding: const EdgeInsets.all(8),
-      child: SizedBox(
-        width: double.infinity,
+    final _passwordField = TextFormField(
+      obscureText: !_showPassword,
+      onSaved: (password) {
+        setState(() {
+          _password = password;
+        });
+      },
+      validator: (text) {
+        if (text.isEmpty) {
+          return 'do not empty';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _showPassword ? Icons.remove_circle_outline : Icons.remove_red_eye,
+          ),
+          onPressed: () {
+            setState(() {
+              _showPassword = !_showPassword;
+            });
+          },
+        ),
+        hintText: 'Password',
+      ),
+    );
+
+    final _signUpButton = SizedBox(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
         child: RoundedButton(
           text: 'Sign in',
           color: Colors.blueAccent,
@@ -171,10 +171,10 @@ class _SignInPageState extends State<SignInPage> {
 //      ),
 //    );
 
-    final _signInByTestUser = Padding(
-      padding: const EdgeInsets.all(8),
-      child: SizedBox(
-        width: double.infinity,
+    final _signInByTestUser = SizedBox(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
         child: RoundedButton(
           onTap: _signInTestUser,
           text: 'Sign in by Test User(Debug)',
@@ -188,38 +188,62 @@ class _SignInPageState extends State<SignInPage> {
         backgroundColor: splashColor,
         title: Text('Signin'),
       ),
-      body: Column(
-        children: <Widget>[
-          Form(
-            key: _formKey,
+      // TODO(someone): height = maxHeight - appBarHeight
+      body: SingleChildScrollView(
+        child: LayoutBuilder(
+          builder: (_, constraints) => ConstrainedBox(
+            constraints:
+                BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Email
-                _emailField,
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        // Email
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: _emailField,
+                        ),
 
-                // Password
-                _passwordField,
+                        // Password
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: _passwordField,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const Spacer(),
+
+                // Sign Up
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: _signUpButton,
+                ),
+
+                const Divider(
+                  indent: 20,
+                  endIndent: 20,
+                  color: Colors.grey,
+                ),
+
+                // Google Sign up
+                // _signInWithGoogleButton,
+
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: _signInByTestUser,
+                ),
               ],
             ),
           ),
-
-          const Spacer(),
-
-          // Sign Up
-          _signUpButton,
-
-          Divider(
-            indent: 20,
-            endIndent: 20,
-            color: Colors.grey,
-          ),
-
-          // Google Sign up
-          // _signInWithGoogleButton,
-
-          _signInByTestUser,
-        ],
+        ),
       ),
     );
   }

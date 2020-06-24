@@ -69,7 +69,7 @@ name_lesson_id_map = {
 }
 
 pwd = os.path.dirname(os.path.abspath(__file__))
-root = f'{pwd}/../assets'
+root = f'/{pwd}/../assets'
 zip_cnt = 0
 mp3_cnt = 0
 
@@ -147,17 +147,20 @@ def extract_mp3(zip_path, filename_list):
                 os.rename(mp3path, dst_path)
 
                 mp3_cnt += 1
+            else:
+                print(f'{os.path.basename(dst_path)} already exist')
 
         zip_cnt += 1
 
 
 if __name__ == '__main__':
     for i in range(1, 100 * len(filenames), 100):
-        voice_100_dir = f'{root}/raw/original/{i}-{i+99}'
+        voice_100_dir = f'{root}/raw/{i}-{i+99}'
         if not os.path.exists(voice_100_dir):
             print(f'[Warn] {voice_100_dir} not found')
             continue
 
         extract_mp3(f'{voice_100_dir}/*.zip', filenames[i // 100].split(','))
+        break
 
     print(f'[Success] {zip_cnt} zips {mp3_cnt} voices extracted')
