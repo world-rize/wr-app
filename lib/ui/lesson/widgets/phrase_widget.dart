@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/extension/string_capitalization.dart';
 import 'package:wr_app/model/phrase/phrase.dart';
-import 'package:wr_app/theme.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// フレーズを表示するコンポーネント
@@ -22,8 +21,8 @@ class PhraseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final englishStyle = WorldRizeLightTheme.primaryTextTheme.bodyText1;
-    final japaneseStyle = WorldRizeLightTheme.primaryTextTheme.bodyText2;
+    final englishStyle = Theme.of(context).primaryTextTheme.bodyText1;
+    final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;
     // final existVoice = phrase.assets.voice.isEmpty;
 
     return GestureDetector(

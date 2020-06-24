@@ -35,7 +35,7 @@ class WRAppState extends State<WRApp> {
 
     return MaterialApp(
       theme: WorldRizeLightTheme,
-      darkTheme: ThemeData.dark(),
+      darkTheme: WorldRizeDarkTheme,
       themeMode: themeMode,
       navigatorObservers: <NavigatorObserver>[
         // route observer

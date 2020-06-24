@@ -24,7 +24,7 @@ class CategoryView extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: NetworkImage(category.thumbnailUrl),
+              image: AssetImage(category.thumbnailUrl),
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(10),
@@ -37,7 +37,7 @@ class CategoryView extends StatelessWidget {
                 top: 10,
                 child: Text(
                   category.title,
-                  style: h1,
+                  style: h1.apply(color: Colors.white),
                 ),
               ),
             ],

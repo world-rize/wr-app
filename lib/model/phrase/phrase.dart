@@ -22,6 +22,13 @@ class Phrase {
 
   Map<String, dynamic> toJson() => _$PhraseToJson(this);
 
+  List<String> voicePaths() {
+    return [
+      ...assets.voice.values.toList(),
+      ...example.value.expand((message) => message.assets.voice.values.toList())
+    ];
+  }
+
   String id;
 
   /// タイトル

@@ -83,12 +83,17 @@ class _TestTabState extends State<TestTab> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: widget.sections
-            .map((section) => SectionRow(
+            .map(
+              (section) => Padding(
+                padding: const EdgeInsets.all(8),
+                child: SectionRow(
                   section: section,
                   onTap: () {
                     _onTapTestSection(section);
                   },
-                ))
+                ),
+              ),
+            )
             .toList(),
       ),
     );

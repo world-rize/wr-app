@@ -161,6 +161,5 @@ if __name__ == '__main__':
             continue
 
         extract_mp3(f'{voice_100_dir}/*.zip', filenames[i // 100].split(','))
-        break
 
     print(f'[Success] {zip_cnt} zips {mp3_cnt} voices extracted')

@@ -7,11 +7,21 @@ part of 'article_contentful.dart';
 // **************************************************************************
 
 NewArticle _$NewArticleFromJson(Map<String, dynamic> json) {
-  return NewArticle();
+  return NewArticle(
+    sys: json['sys'] == null
+        ? null
+        : SystemFields.fromJson(json['sys'] as Map<String, dynamic>),
+    fields: json['fields'] == null
+        ? null
+        : ArticleFields.fromJson(json['fields'] as Map<String, dynamic>),
+  );
 }
 
 Map<String, dynamic> _$NewArticleToJson(NewArticle instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'sys': instance.sys,
+      'fields': instance.fields,
+    };
 
 ArticleFields _$ArticleFieldsFromJson(Map<String, dynamic> json) {
   return ArticleFields(
@@ -24,7 +34,10 @@ ArticleFields _$ArticleFieldsFromJson(Map<String, dynamic> json) {
     createdat: json['createdat'] == null
         ? null
         : DateTime.parse(json['createdat'] as String),
-    assets: json['assets'] as List,
+    assets: (json['assets'] as List)
+        ?.map(
+            (e) => e == null ? null : Asset.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 

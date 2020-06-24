@@ -5,7 +5,6 @@ import 'package:wr_app/api/column/get_articles.dart';
 import 'package:wr_app/model/column/article.dart';
 import 'package:wr_app/model/column/category.dart';
 import 'package:wr_app/ui/column/article_overview.dart';
-import 'package:wr_app/ui/common/overlay_loading.dart';
 
 /// カテゴリ内記事一覧
 class CategoryPosts extends StatelessWidget {
@@ -42,15 +41,16 @@ class CategoryPosts extends StatelessWidget {
       ),
     );
 
+    // TODO(someone): caching
     final articlesView = FutureBuilder<List<Article>>(
       future: getArticles(category.id),
       builder: (_, snapshot) {
         return Stack(
           children: <Widget>[
-            if (!snapshot.hasData)
-              Center(
-                child: OverlayLoading(loading: !snapshot.hasData),
-              ),
+//            if (!snapshot.hasData)
+//              Center(
+//                child: OverlayLoading(loading: !snapshot.hasData),
+//              ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

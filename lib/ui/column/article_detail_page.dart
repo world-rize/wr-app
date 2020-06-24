@@ -31,7 +31,7 @@ class ArticleDetailPage extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: Text(
               article.title,
-              style: h1,
+              style: h1.apply(color: Colors.white),
             ),
           ),
         ),

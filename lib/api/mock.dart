@@ -221,31 +221,31 @@ final List<Category> categories = [
   Category(
     id: 'online_lesson',
     title: 'オンライン英会話',
-    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+    thumbnailUrl: 'assets/thumbnails/english.jpg',
   ),
   Category(
     id: 'article',
     title: '記事',
-    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+    thumbnailUrl: 'assets/thumbnails/article.jpg',
   ),
   Category(
     id: 'listening',
     title: 'Listening Practice',
-    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+    thumbnailUrl: 'assets/thumbnails/listening.jpg',
   ),
   Category(
     id: 'illust',
     title: '絵付き漫画',
-    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+    thumbnailUrl: 'assets/thumbnails/english.jpg',
   ),
   Category(
     id: 'dish',
     title: '世界の料理',
-    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+    thumbnailUrl: 'assets/thumbnails/english.jpg',
   ),
   Category(
     id: 'tips',
     title: 'Random facts',
-    thumbnailUrl: 'https://source.unsplash.com/category/nature',
+    thumbnailUrl: 'assets/thumbnails/facts.png',
   ),
 ];

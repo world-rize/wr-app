@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 /// アプリのUIスタイル
 // TODO(high): implement
 final ThemeData WorldRizeLightTheme = ThemeData(
+  brightness: Brightness.light,
   primaryColor: Colors.blueAccent.shade200,
   primaryTextTheme: const TextTheme(
     headline1: TextStyle(
-      color: Colors.white,
+      color: Colors.black,
       fontSize: 32,
       fontWeight: FontWeight.bold,
     ),
@@ -30,6 +31,7 @@ final ThemeData WorldRizeLightTheme = ThemeData(
 );
 
 final ThemeData WorldRizeDarkTheme = ThemeData(
+  brightness: Brightness.dark,
   primaryColor: Colors.blueAccent.shade200,
   primaryTextTheme: const TextTheme(
     headline1: TextStyle(
