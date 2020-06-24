@@ -18,19 +18,25 @@ class _SignInPageState extends State<SignInPage> {
   String _email;
   String _password;
 
-  Future<void> _signInEmailAndPassword() async {
+  void _gotoHome() {
+    final userStore = Provider.of<UserStore>(context, listen: false);
+    // initial login
+    userStore.setFirstLaunch(flag: false);
+
+    Navigator.popUntil(context, (route) => route.isFirst);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => RootView(),
+      ),
+    );
+  }
+
+  Future<void> _signInEmailAndPassword(String email, String password) async {
     final userStore = Provider.of<UserStore>(context, listen: false);
     try {
       await userStore.signIn(email: 'a@b.com', password: '123456');
-
-      userStore.setFirstLaunch(flag: false);
-
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RootView(),
-        ),
-      );
+      _gotoHome();
     } on Exception catch (e) {
       print(e);
       return;
@@ -42,33 +48,7 @@ class _SignInPageState extends State<SignInPage> {
     try {
       await userStore.signInWithGoogle();
 
-      userStore.setFirstLaunch(flag: false);
-
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RootView(),
-        ),
-      );
-    } on Exception catch (e) {
-      print(e);
-      return;
-    }
-  }
-
-  Future<void> _signInTestUser() async {
-    final userStore = Provider.of<UserStore>(context, listen: false);
-    try {
-      await userStore.signIn(email: 'a@b.com', password: '123456');
-
-      userStore.setFirstLaunch(flag: false);
-
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RootView(),
-        ),
-      );
+      _gotoHome();
     } on Exception catch (e) {
       print(e);
       return;
@@ -152,7 +132,7 @@ class _SignInPageState extends State<SignInPage> {
           onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              _signInEmailAndPassword();
+              _signInEmailAndPassword(_email, _password);
             }
           },
         ),
@@ -176,7 +156,9 @@ class _SignInPageState extends State<SignInPage> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: RoundedButton(
-          onTap: _signInTestUser,
+          onTap: () {
+            _signInEmailAndPassword('a@b.com', '123456');
+          },
           text: 'Sign in by Test User(Debug)',
           color: Colors.greenAccent,
         ),
@@ -186,7 +168,7 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: splashColor,
-        title: Text('Signin'),
+        title: const Text('Signin'),
       ),
       // TODO(someone): height = maxHeight - appBarHeight
       body: SingleChildScrollView(

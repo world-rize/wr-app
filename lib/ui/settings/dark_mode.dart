@@ -23,22 +23,14 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
           switchValue: envStore.followSystemTheme,
           title: '端末の設定に従う',
           leading: const Icon(Icons.people),
-          onToggle: (value) {
-            setState(() {
-              envStore.followSystemTheme = value;
-            });
-          },
+          onToggle: envStore.setFollowSystemMode,
         ),
         if (!envStore.followSystemTheme)
           SettingsTile.switchTile(
             switchValue: envStore.darkMode,
             title: 'ダークモード',
             leading: const Icon(Icons.attach_money),
-            onToggle: (value) {
-              setState(() {
-                envStore.darkMode = value;
-              });
-            },
+            onToggle: envStore.setDarkMode,
           ),
       ],
     );

@@ -1,19 +1,16 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:getflutter/components/avatar/gf_avatar.dart';
-import 'package:getflutter/components/badge/gf_badge.dart';
-import 'package:getflutter/components/list_tile/gf_list_tile.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/mypage/friends_page.dart';
 import 'package:wr_app/ui/mypage/gift_page.dart';
-import 'package:wr_app/ui/mypage/info_page.dart';
 import 'package:wr_app/ui/mypage/upgrade_page.dart';
 
 class MyPagePage extends StatelessWidget {
-  Widget _cell({
+  Widget _menuCell({
     @required String title,
     @required Icon icon,
     @required Function onTap,
@@ -31,7 +28,7 @@ class MyPagePage extends StatelessWidget {
             Text(
               title,
               style: const TextStyle(
-                fontSize: 20,
+                fontSize: 16,
               ),
             ),
           ],
@@ -44,15 +41,14 @@ class MyPagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final userStore = Provider.of<UserStore>(context);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: GFListTile(
-            avatar: const GFAvatar(),
-            title: Row(
-              children: [
+    final userInfo = Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              children: <Widget>[
                 Text('${userStore.user.name} さん'),
                 if (userStore.isPremium)
                   const Padding(
@@ -63,68 +59,99 @@ class MyPagePage extends StatelessWidget {
                       shape: GFBadgeShape.pills,
                     ),
                   ),
+                Text(userStore.user.email),
               ],
             ),
-            subtitleText: userStore.user.email,
           ),
+          const Spacer(),
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.attach_money),
+                Text(I.of(context).points(userStore.user.point)),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+
+    final gridMenus = GridView.count(
+      // physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      crossAxisCount: 3,
+      children: [
+        _menuCell(
+          title: '友達紹介',
+          icon: const Icon(
+            Icons.email,
+            color: Colors.blueGrey,
+            size: 40,
+          ),
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => FriendsPage()));
+          },
+        ),
+        _menuCell(
+          title: '有料版購入',
+          icon: const Icon(
+            Icons.email,
+            color: Colors.blueGrey,
+            size: 40,
+          ),
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => UpgradePage()));
+          },
+        ),
+        _menuCell(
+          title: '交換',
+          icon: const Icon(
+            Icons.email,
+            color: Colors.blueGrey,
+            size: 40,
+          ),
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => GiftPage()));
+          },
+        ),
+      ],
+    );
+
+//    final settings = SettingsList(
+//      sections: [
+//        SettingsSection(
+//          title: '設定',
+//          tiles: [
+//            SettingsTile(
+//              title: 'ユーザー設定',
+//              leading: const Icon(Icons.notifications),
+//              onTap: () {},
+//            )
+//          ],
+//        ),
+//      ],
+//    );
+    final settings = Placeholder(
+      fallbackHeight: 100,
+    );
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: userInfo,
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: GFListTile(
-            titleText: 'テスト本日残り${userStore.user.testLimitCount} 回',
-          ),
+          child: gridMenus,
         ),
-        Expanded(
-          child: GridView.count(
-            // physics: const NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            children: [
-              _cell(
-                title: 'お知らせ',
-                icon: const Icon(
-                  Icons.email,
-                  size: 60,
-                ),
-                onTap: () {
-                  Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => InformationPage()));
-                },
-              ),
-              _cell(
-                title: '友達紹介',
-                icon: const Icon(
-                  Icons.email,
-                  size: 60,
-                ),
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => FriendsPage()));
-                },
-              ),
-              _cell(
-                title: '有料版購入',
-                icon: const Icon(
-                  Icons.email,
-                  size: 60,
-                ),
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => UpgradePage()));
-                },
-              ),
-              _cell(
-                title: 'WR coins交換',
-                icon: const Icon(
-                  Icons.email,
-                  size: 60,
-                ),
-                onTap: () {
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (_) => GiftPage()));
-                },
-              ),
-            ],
-          ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: settings,
         ),
       ],
     );

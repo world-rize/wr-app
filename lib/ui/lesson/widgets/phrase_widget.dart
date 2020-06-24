@@ -22,8 +22,8 @@ class PhraseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final englishStyle = wrThemeData.primaryTextTheme.bodyText1;
-    final japaneseStyle = wrThemeData.primaryTextTheme.bodyText2;
+    final englishStyle = WorldRizeLightTheme.primaryTextTheme.bodyText1;
+    final japaneseStyle = WorldRizeLightTheme.primaryTextTheme.bodyText2;
     // final existVoice = phrase.assets.voice.isEmpty;
 
     return GestureDetector(

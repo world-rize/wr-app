@@ -24,6 +24,9 @@ class WRAppState extends State<WRApp> {
   Widget build(BuildContext context) {
     final observer = Provider.of<FirebaseAnalyticsObserver>(context);
     final envStore = Provider.of<EnvStore>(context);
+    final themeMode = envStore.followSystemTheme
+        ? ThemeMode.system
+        : envStore.darkMode ? ThemeMode.dark : ThemeMode.light;
 
     if (envStore?.env?.containsKey('ADMOB_APP_ID') ?? false) {
       FirebaseAdMob.instance.initialize(appId: envStore?.env['ADMOB_APP_ID']);
@@ -31,7 +34,9 @@ class WRAppState extends State<WRApp> {
     }
 
     return MaterialApp(
-      theme: wrThemeData,
+      theme: WorldRizeLightTheme,
+      darkTheme: ThemeData.dark(),
+      themeMode: themeMode,
       navigatorObservers: <NavigatorObserver>[
         // route observer
         RouteObserver<PageRoute<dynamic>>(),

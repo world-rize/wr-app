@@ -76,4 +76,14 @@ class EnvStore with ChangeNotifier {
   String appTitle() {
     return '$appName ${flavor.toShortString()} $version';
   }
+
+  void setFollowSystemMode(bool value) {
+    followSystemTheme = value;
+    notifyListeners();
+  }
+
+  void setDarkMode(bool value) {
+    darkMode = value;
+    notifyListeners();
+  }
 }
