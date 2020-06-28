@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/store/preferences.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
 import 'package:wr_app/ui/root_view.dart';
@@ -19,9 +20,9 @@ class _SignInPageState extends State<SignInPage> {
   String _password;
 
   void _gotoHome() {
-    final userStore = Provider.of<UserStore>(context, listen: false);
+    final preferences = Provider.of<PreferencesStore>(context, listen: false);
     // initial login
-    userStore.setFirstLaunch(flag: false);
+    preferences.setFirstLaunch(flag: false);
 
     Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(
@@ -35,7 +36,8 @@ class _SignInPageState extends State<SignInPage> {
   Future<void> _signInEmailAndPassword(String email, String password) async {
     final userStore = Provider.of<UserStore>(context, listen: false);
     try {
-      await userStore.signIn(email: 'a@b.com', password: '123456');
+      await userStore.loginWithEmailAndPassword(email, password);
+
       _gotoHome();
     } on Exception catch (e) {
       print(e);
@@ -46,7 +48,7 @@ class _SignInPageState extends State<SignInPage> {
   Future<void> _signInWithGoogle() async {
     final userStore = Provider.of<UserStore>(context, listen: false);
     try {
-      await userStore.signInWithGoogle();
+      await userStore.loginWithGoogle();
 
       _gotoHome();
     } on Exception catch (e) {

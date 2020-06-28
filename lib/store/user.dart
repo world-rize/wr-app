@@ -3,9 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/api/debug/test.dart';
-import 'package:wr_app/api/mock.dart';
 import 'package:wr_app/api/user/index.dart';
 import 'package:wr_app/model/membership.dart';
 import 'package:wr_app/model/phrase/phrase.dart';
@@ -13,61 +11,56 @@ import 'package:wr_app/model/user.dart';
 import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/ui/common/toast.dart';
 
+// TODO(someone): リファクタリング
+
 /// FireStore Auth
 final FirebaseAuth fbAuth = FirebaseAuth.instance;
 
 /// ユーザーデータストア
 class UserStore with ChangeNotifier {
+  /// ## firebase ログイン方法
+  /// - email & password
+  /// - google sign in
+  /// - Sign in With Apple
+  /// - mock(test)
+  /// ## FirebaseUser -> User
+
+  /// シングルトンインスタンス
+  static UserStore _cache;
+
   factory UserStore() {
-    return _cache;
+    return _cache ??= UserStore._internal();
   }
 
   UserStore._internal() {
-    InAppLogger.log('✨ UserStore._internal()');
+    init();
+  }
 
-    SharedPreferences.getInstance().then((prefs) {
-      _prefs = prefs;
-      InAppLogger.log('\t load SharedPreferences');
+  /// Firebase User
+  FirebaseUser _fbUser;
+
+  /// ユーザーデータ
+  User user;
+
+  /// 初期化
+  Future<void> init() async {
+    _configureAuthStateChanged();
+
+    InAppLogger.log('✨ init UserStore');
+  }
+
+  /// 自動ログイン
+  void _configureAuthStateChanged() {
+    fbAuth.onAuthStateChanged.listen((fbUser) {
+      if (fbUser != null) {
+        _setAuth(fbUser);
+      }
     });
   }
 
-  /// シングルトンインスタンス
-  static final UserStore _cache = UserStore._internal();
-
-  /// Shared prefs
-  static SharedPreferences _prefs;
-
-  /// Firebase User
-  FirebaseUser fbUser;
-
-  /// ユーザーデータ
-  User user = User(
-    membership: Membership.normal,
-    name: '',
-    point: 0,
-    age: 0,
-    email: '',
-    favorites: {},
-    testLimitCount: 3,
-    userId: '',
-    uuid: '',
-  );
-
-  /// ユーザーデータを習得します
-  Future<User> callReadUser() async {
-    InAppLogger.log('callReadUser()', type: 'user');
-
-    try {
-      final res = await readUser();
-      return res.user;
-    } on Exception catch (e) {
-      NotifyToast.error(e);
-      return null;
-    }
-  }
-
   /// get Google AuthCredential
-  Future<AuthCredential> getGoogleAuthCredential() async {
+  // TODO(any): refactoring
+  Future<AuthCredential> _getGoogleAuthCredential() async {
     final _googleSignIn = GoogleSignIn();
     // try google sign in
     var _user = _googleSignIn.currentUser;
@@ -76,8 +69,6 @@ class UserStore with ChangeNotifier {
     if (_user == null) {
       return null;
     }
-
-    print(_user.email);
 
     // google user -> credential
     final _gauth = await _user.authentication;
@@ -89,29 +80,21 @@ class UserStore with ChangeNotifier {
     return _credential;
   }
 
-  /// Sign in with google
-  /// see <https://qiita.com/unsoluble_sugar/items/95b16c01b456be19f9ac>
-  Future<void> signInWithGoogle() async {
-    final _credential = await getGoogleAuthCredential();
-    assert(_credential != null);
-
-    // credential -> firebase user
-    final signInResponse =
-        await fbAuth.signInWithCredential(_credential).catchError(print);
-
-    assert(signInResponse != null);
-
-    final functionResponse = await readUser().catchError(print);
-
-    assert(functionResponse != null);
-
-    InAppLogger.log(user.toJson().toString(), type: 'user');
-    user = functionResponse.user;
+  /// try to auto login. will be called when app started.
+  Future<bool> autoLogin() async {
+    final fbUser = await fbAuth.currentUser();
+    if (fbUser != null) {
+      _setAuth(fbUser);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /// Sign up with Google
+  // TODO(any): deprecated
   Future<void> signUpWithGoogle() async {
-    final _credential = await getGoogleAuthCredential();
+    final _credential = await _getGoogleAuthCredential();
     assert(_credential != null);
 
     // credential -> firebase user
@@ -136,47 +119,9 @@ class UserStore with ChangeNotifier {
     return;
   }
 
-  /// Sign up with Google
-  Future<void> signOutWithGoogle() async {
-    final _googleSignIn = GoogleSignIn();
-    // try google sign in
-    var _user = _googleSignIn.currentUser;
-    if (_user == null) {
-      return;
-    }
-    await _googleSignIn.signOut();
-    return;
-  }
-
-  /// モックでサインインする
-  // TODO: ログイン状態を保持
-  Future<void> signInWithMock({
-    @required String email,
-    @required String password,
-  }) async {
-    // auth = await _signInAuth(email: email, password: password);
-
-    // Logger.log('\t ✔ user sign in ${auth.uid}');
-
-    user = dummyUser();
-
-    InAppLogger.log('\t ✔ user fetched ${user.name}', type: 'user');
-
-    NotifyToast.success('ログインしました');
-
-    notifyListeners();
-  }
-
-  /// Firebase Auth にサインインしユーザーデータを取得する
-  Future<void> signIn({
-    @required String email,
-    @required String password,
-  }) async {
+  /// ユーザーデータを取得する
+  Future<void> signIn() async {
     try {
-      fbUser = await _signInAuth(email: email, password: password);
-
-      InAppLogger.log('\t ✔ user sign in ${fbUser.uid}');
-
       user = await callReadUser();
 
       InAppLogger.log('\t ✔ user fetched ${user.name}');
@@ -191,34 +136,100 @@ class UserStore with ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await signOutWithGoogle();
-    await fbAuth.signOut();
-    fbUser = null;
+    await _unauthorize();
     user = null;
+
     InAppLogger.log('\t ✔ user signed out', type: 'user');
   }
 
-  /// Firebase Auth にログイン
-  Future<FirebaseUser> _signInAuth({
-    @required String email,
-    @required String password,
-  }) async {
+  /// create firebase auth with email & password
+  Future<FirebaseUser> _createAuthWithEmailAndPassword(
+      String email, String password) async {
+    final _result = await fbAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return _result.user;
+  }
+
+  /// authorize with email & password
+  Future<FirebaseUser> _authorizeWithEmailAndPassword(
+      String email, String password) async {
     try {
       final _result = await fbAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // final _result = await _auth.signInAnonymously();
 
       return _result.user;
     } on Exception catch (e) {
       NotifyToast.error(e);
-      return null;
+      rethrow;
     }
+  }
+
+  /// authorize with google
+  Future<FirebaseUser> _authorizeWithGoogleSignIn() async {
+    final _credential = await _getGoogleAuthCredential();
+    assert(_credential != null);
+
+    // credential -> firebase user
+    final authResult =
+        await fbAuth.signInWithCredential(_credential).catchError(print);
+
+    assert(authResult != null);
+
+    return authResult.user;
+  }
+
+  /// authorize with sign in apple
+  Future<FirebaseUser> _authorizeWithSignInWithApple() async {
+    throw UnimplementedError();
+  }
+
+  /// unauthorize
+  Future<void> _unauthorize() async {
+    await fbAuth.signOut();
+    _fbUser = null;
+  }
+
+  void _setAuth(FirebaseUser user) {
+    _fbUser = user;
+
+    InAppLogger.log('set firebase auth ${user.email}');
+  }
+
+  /// メールアドレスとパスワードでログイン
+  Future<void> loginWithEmailAndPassword(String email, String password) async {
+    final auth = await _authorizeWithEmailAndPassword(email, password);
+    _setAuth(auth);
+
+    user = await callReadUser();
+  }
+
+  /// Googleでログイン
+  Future<void> loginWithGoogle() async {
+    final auth = await _authorizeWithGoogleSignIn();
+    _setAuth(auth);
+
+    user = await callReadUser();
+  }
+
+  /// メールアドレスとパスワードでサインアップ
+  Future<void> signUpWithEmailAndPassword(String email, String password) async {
+    final auth = await _createAuthWithEmailAndPassword(email, password);
+    _setAuth(auth);
+
+    user = await callReadUser();
   }
 
   /// テストAPIを呼ぶ
   Future<void> callTestAPI() async {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
     InAppLogger.log('callTestAPI');
 
     try {
@@ -232,15 +243,36 @@ class UserStore with ChangeNotifier {
     }
   }
 
+  /// ユーザーデータを習得します
+  Future<User> callReadUser() async {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
+    InAppLogger.log('callReadUser()', type: 'user');
+
+    try {
+      final res = await readUser();
+      return res.user;
+    } on Exception catch (e) {
+      NotifyToast.error(e);
+      return null;
+    }
+  }
+
   /// ユーザーを作成します
   Future<void> callCreateUser({
     @required String name,
     @required String email,
     @required int age,
   }) async {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
     try {
-      final uuid = fbUser.uid;
-      final userId = fbUser.uid;
+      final uuid = _fbUser.uid;
+      final userId = _fbUser.uid;
 
       InAppLogger.log(
           '\tcallCreateUser(uuid: $uuid, name: $name, email: $email, age: $age)');
@@ -260,10 +292,14 @@ class UserStore with ChangeNotifier {
   /// フレーズをお気に入りに登録します
   Future<void> callFavoritePhrase(
       {@required String phraseId, @required bool value}) {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
     InAppLogger.log('\tcallFavoritePhrase()');
 
     try {
-      favoritePhrase(uid: fbUser.uid, phraseId: phraseId, value: value)
+      favoritePhrase(uid: _fbUser.uid, phraseId: phraseId, value: value)
           .then((res) {
         NotifyToast.success(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
       });
@@ -281,18 +317,13 @@ class UserStore with ChangeNotifier {
     return user.favorites.containsKey(phrase.id) && user.favorites[phrase.id];
   }
 
-  /// 初回起動時か
-  bool get firstLaunch {
-    return _prefs?.getBool('first_launch') ?? true;
-  }
-
-  /// 初回起動時フラグをセットします
-  void setFirstLaunch({bool flag}) {
-    _prefs.setBool('first_launch', flag);
-  }
-
   /// 受講可能回数をリセット
+  // TODO(any): call api
   Future<void> resetTestLimitCount() async {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
     InAppLogger.log('\tresetTestLimitCount()');
 
     try {
@@ -309,10 +340,14 @@ class UserStore with ChangeNotifier {
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int point}) async {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
     InAppLogger.log('\tcallGetPoint()');
 
     try {
-      final data = await getPoint(uid: fbUser.uid, point: point);
+      final data = await getPoint(uid: _fbUser.uid, point: point);
 
       InAppLogger.log(data.toString());
 
@@ -328,6 +363,10 @@ class UserStore with ChangeNotifier {
 
   /// テストを受ける
   Future<void> callDoTest() async {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
     InAppLogger.log('\callDoTest()');
 
     try {
