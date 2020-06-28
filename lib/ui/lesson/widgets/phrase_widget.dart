@@ -13,11 +13,13 @@ class PhraseCard extends StatelessWidget {
     @required this.phrase,
     @required this.favorite,
     this.onTap,
+    this.onFavorite,
   });
 
   final Phrase phrase;
   final bool favorite;
   final Function onTap;
+  final Function onFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +48,15 @@ class PhraseCard extends StatelessWidget {
                 ],
               ).p_1(),
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 14, bottom: 14),
-              child: Icon(
-                favorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.redAccent,
-                size: 24,
+            GestureDetector(
+              onTap: onFavorite,
+              child: Padding(
+                padding: const EdgeInsets.only(right: 14, bottom: 14),
+                child: Icon(
+                  favorite ? Icons.favorite : Icons.favorite_border,
+                  color: Colors.redAccent,
+                  size: 24,
+                ),
               ),
             ),
           ],

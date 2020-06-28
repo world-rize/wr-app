@@ -19,7 +19,7 @@ class TestResultPage extends StatelessWidget {
 
   final TestStats stats;
 
-  /// 「ピースのカケラを取得」画面
+  /// 報酬獲得画面
   void _showRewardDialog(BuildContext context) {
     showCupertinoDialog(
       context: context,
@@ -28,8 +28,8 @@ class TestResultPage extends StatelessWidget {
         content: Column(
           children: <Widget>[
             Text(I.of(context).getPoints(stats.corrects)),
-            Text(I.of(context).getPiece),
-            Image.network('https://zettoku.up.seesaa.net/image/pazuru01.jpg'),
+//            Text(I.of(context).getPiece),
+//            Image.network('https://zettoku.up.seesaa.net/image/pazuru01.jpg'),
             GFButton(
               color: Colors.orange,
               text: I.of(context).close,

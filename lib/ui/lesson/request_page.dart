@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wr_app/api/feedback.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
@@ -13,21 +14,12 @@ class RequestPage extends StatefulWidget {
 }
 
 class _RequestPageState extends State<RequestPage> {
-  // String _requestType;
-  String _message;
-
-  // リクエストの種類
-//  static final List<String> requestTypes = [
-//    '新しいフレーズがほしい',
-//    'アプリの感想',
-//    'その他要望',
-//  ];
+  String _text;
 
   @override
   void initState() {
     super.initState();
-    // _requestType = requestTypes[0];
-    _message = '';
+    _text = '';
   }
 
   @override
@@ -52,8 +44,8 @@ class _RequestPageState extends State<RequestPage> {
           padding: const EdgeInsets.all(8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Padding(
+            children: [
+              const Padding(
                 padding: EdgeInsets.all(8),
                 child: Text(
                   'リクエストを送る',
@@ -61,13 +53,19 @@ class _RequestPageState extends State<RequestPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(8),
+                padding: const EdgeInsets.all(8),
                 child: ShadowedContainer(
                   child: Padding(
-                    padding: EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(12),
                     child: TextField(
                       maxLines: 20,
-                      decoration: InputDecoration.collapsed(hintText: hintText),
+                      decoration:
+                          const InputDecoration.collapsed(hintText: hintText),
+                      onSubmitted: (text) {
+                        setState(() {
+                          _text = text;
+                        });
+                      },
                     ),
                   ),
                 ),
@@ -80,9 +78,8 @@ class _RequestPageState extends State<RequestPage> {
         padding: const EdgeInsets.only(bottom: 20),
         child: PrimaryButton(
           label: const Text('送信'),
-          onPressed: () {
-            // TODO(someone): send email
-            print('$_message');
+          onPressed: () async {
+            await sendPhraseRequest(text: _text);
           },
         ),
       ),

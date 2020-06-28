@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/store/preferences.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
@@ -37,7 +38,7 @@ class _RootViewState extends State<RootView>
     _pageController = PageController();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final firstLaunch = UserStore().firstLaunch;
+      final firstLaunch = PreferencesStore().firstLaunch;
       print('first launch: $firstLaunch');
 
       // show on boarding modal

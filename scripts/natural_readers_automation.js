@@ -2,7 +2,7 @@
 // F12 Console に貼り付ける
 (async () => {
   // ex: 301-400 => page 4
-  let [begin, end] = [2301, 3000]
+  let [begin, end] = [3302, 4000]
   const sleep = async (s) => new Promise(resolve => setTimeout(resolve, s * 1000))
   const page = (i) => Math.floor((i - 1) / 100) + 1
   const next = async () => {
@@ -47,6 +47,5 @@
     await scrape(i)
   }
 })();
-
 // タイトル取得
-[...document.getElementsByClassName('name-test')].map(el => el.innerHTML.replace(/^\s+|\s+$/g, '')).join(',')
+// [...document.getElementsByClassName('name-test')].map(el => el.innerHTML.replace(/^\s+|\s+$/g, '')).join(',')

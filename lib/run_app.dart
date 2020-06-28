@@ -5,14 +5,16 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/build/flavor.dart';
-import 'package:wr_app/store/env.dart';
 import 'package:wr_app/store/masterdata.dart';
+import 'package:wr_app/store/system.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/app.dart';
 
 void runAppWithFlavor(final Flavor flavor) {
   Provider.debugCheckInvalidValueType = null;
+  WidgetsFlutterBinding.ensureInitialized();
 
+  // firebase analytics
   final analytics = FirebaseAnalytics();
   final observer = FirebaseAnalyticsObserver(analytics: analytics);
 
@@ -26,7 +28,7 @@ void runAppWithFlavor(final Flavor flavor) {
       // 環境変数
       ChangeNotifierProvider(
         create: (_) {
-          final store = EnvStore(flavor: flavor)..init();
+          final store = SystemStore(flavor: flavor)..init();
           return store;
         },
       ),
