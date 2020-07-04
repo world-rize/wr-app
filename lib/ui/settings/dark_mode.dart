@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:wr_app/store/env.dart';
+import 'package:wr_app/store/preferences.dart';
 
 /// 設定ページ
 class ThemeSettingsPage extends StatefulWidget {
@@ -14,31 +14,23 @@ class ThemeSettingsPage extends StatefulWidget {
 class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
   // account section
   SettingsSection darkModeSection() {
-    final envStore = Provider.of<EnvStore>(context);
+    final preferences = Provider.of<PreferencesStore>(context, listen: false);
 
     return SettingsSection(
       title: 'ダークモード',
       tiles: [
         SettingsTile.switchTile(
-          switchValue: envStore.followSystemTheme,
+          switchValue: preferences.followSystemTheme,
           title: '端末の設定に従う',
           leading: const Icon(Icons.people),
-          onToggle: (value) {
-            setState(() {
-              envStore.followSystemTheme = value;
-            });
-          },
+          onToggle: preferences.setFollowSystemMode,
         ),
-        if (!envStore.followSystemTheme)
+        if (!preferences.followSystemTheme)
           SettingsTile.switchTile(
-            switchValue: envStore.darkMode,
+            switchValue: preferences.darkMode,
             title: 'ダークモード',
             leading: const Icon(Icons.attach_money),
-            onToggle: (value) {
-              setState(() {
-                envStore.darkMode = value;
-              });
-            },
+            onToggle: preferences.setDarkMode,
           ),
       ],
     );

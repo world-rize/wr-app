@@ -26,6 +26,8 @@ def strip_brs(txt):
 
 
 def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
+    global verbose
+    
     def create_meta():
         return {
             'lessonId': lesson_id,
@@ -78,7 +80,7 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
         else:
             global verbose
             if verbose:
-                print(f'[Warn] {lesson_id} {phrase_id} title(ja) is empty')
+                print(f'[Warning] {lesson_id} {phrase_id} title(ja) is empty')
             title_ja = jas[1]
 
 
@@ -89,7 +91,7 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
                 break
         else:
             if verbose:
-                print(f'[Warn] {lesson_id} {phrase_id} title(en) is empty')
+                print(f'[Warning] {lesson_id} {phrase_id} title(en) is empty')
             title_en = ens[1]
 
         return {
@@ -136,16 +138,15 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
         # check voice
         kp_path = phrase_json['assets']['voice']['en-us']
         exist_voice = os.path.exists(f'{root}/{kp_path}')
+
+        
         if exist_voice:
             print(f'[Info] {lesson_id} {phrase_id} voice found')
-        else:
-            phrase_json['assets']['voice'] = {}
 
         return phrase_json
     except Exception as e:
-        global verbose
+        print(f'[Warning] {lesson_id} {phrase_id} invalid')
         if verbose:
-            print(f'[Warn] {lesson_id} {phrase_id} invalid')
             print(e)
         return None
 
@@ -153,11 +154,13 @@ def parse_txt(text):
     """
     """
     # split lessons
-    sep = '________________'
+    sep = '#'
     # lessons[0]: legends
     # lessons[1..]: lessons contents
     _, *lessons = text.split(sep)
     lessons = list(map(strip_brs, lessons))
+
+    assert(len(lessons) == 15)
 
     phrases_txt_list = []
     lessons_json = []
@@ -168,8 +171,10 @@ def parse_txt(text):
         header, *phrases = re.split(r'^\d+\.', lesson, flags=re.MULTILINE)
         phrases_txt_list.append(phrases)
         title = strip_brs(header)
+        # ex: 'Social Media' -> 'social'
         lesson_id = title.split(' ')[0].strip(string.punctuation).lower()
-        print(f'title: {title}, id: {lesson_id}')
+
+        print(f'# {title}({lesson_id}) {len(phrases)} Phrases')
     
         lesson_json = {
             'id': lesson_id,
@@ -200,7 +205,7 @@ def parse_txt(text):
 
 def generate(preview=False):
     # exported from google drive
-    lessons_txt_path = f'{root}/World RIZe Main Part Phrases.txt'
+    lessons_txt_path = f'{root}/phrases/v1.md'
     lessons_json_path = f'{root}/lessons.json'
     phrases_json_path  = f'{root}/phrases.json'
     force = '-f' in sys.argv
@@ -221,7 +226,7 @@ def generate(preview=False):
         return
 
     if not force and os.path.exists(lessons_json_path):
-        print(f'[Warn] {lessons_json_path} is already exists')
+        print(f'[Warning] {lessons_json_path} is already exists')
         return
 
     with open(lessons_json_path, 'w') as f:

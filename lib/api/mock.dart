@@ -1,12 +1,13 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-import 'package:wr_app/model/article.dart';
-import 'package:wr_app/model/assets.dart';
-import 'package:wr_app/model/category.dart';
-import 'package:wr_app/model/example.dart';
-import 'package:wr_app/model/lesson.dart';
-import 'package:wr_app/model/message.dart';
-import 'package:wr_app/model/phrase.dart';
-import 'package:wr_app/model/section.dart';
+import 'package:wr_app/model/column/article.dart';
+import 'package:wr_app/model/column/category.dart';
+import 'package:wr_app/model/membership.dart';
+import 'package:wr_app/model/phrase/assets.dart';
+import 'package:wr_app/model/phrase/example.dart';
+import 'package:wr_app/model/phrase/lesson.dart';
+import 'package:wr_app/model/phrase/message.dart';
+import 'package:wr_app/model/phrase/phrase.dart';
+import 'package:wr_app/model/phrase/section.dart';
 import 'package:wr_app/model/user.dart';
 
 /// ダミーのフレーズを返す
@@ -88,6 +89,7 @@ List<Section> dummySections() {
 /// ダミーユーザー
 User dummyUser() {
   return User(
+    membership: Membership.normal,
     uuid: 'test-test',
     userId: '0123-4567-89',
     email: 'hoge@example.com',
@@ -99,22 +101,13 @@ User dummyUser() {
   );
 }
 
-/// ダミーカテゴリ
-List<Category> dummyCategories(int size) => List.generate(
-      size,
-      (i) => Category(
-        title: 'Category $i',
-        thumbnailUrl: 'https://source.unsplash.com/category/nature',
-      ),
-    );
-
 Article dummyInAppArticle(int index) => Article.internal(
       id: '$index',
       title: '記事$index',
       thumbnailUrl: 'https://source.unsplash.com/category/nature',
       date: DateTime.now(),
       content: """
-      # Markdown Example
+# Markdown Example
 Markdown allows you to easily include formatted text, images, and even formatted Dart code in your app.
 
 ## Titles
@@ -212,10 +205,47 @@ Article dummyExternalArticle(int index) => Article.external(
       url: 'https://world-rize.com/',
     );
 
-/// ダミー記事
-List<Article> dummyArticles(int size) => List.generate(
-      size,
-      (index) => index % 2 == 0
-          ? dummyInAppArticle(index)
-          : dummyExternalArticle(index),
-    );
+/// マークダウンファイル
+String dummyRawArticle() => '''
+---
+title: Hello, world!
+category: article
+tags: [A, B, C]
+---
+
+# Hello World!
+This is an example.
+''';
+
+final List<Category> categories = [
+  Category(
+    id: 'online_lesson',
+    title: 'オンライン英会話',
+    thumbnailUrl: 'assets/thumbnails/english.jpg',
+  ),
+  Category(
+    id: 'article',
+    title: '記事',
+    thumbnailUrl: 'assets/thumbnails/article.jpg',
+  ),
+  Category(
+    id: 'listening',
+    title: 'Listening Practice',
+    thumbnailUrl: 'assets/thumbnails/listening.jpg',
+  ),
+  Category(
+    id: 'illust',
+    title: '絵付き漫画',
+    thumbnailUrl: 'assets/thumbnails/english.jpg',
+  ),
+  Category(
+    id: 'dish',
+    title: '世界の料理',
+    thumbnailUrl: 'assets/thumbnails/english.jpg',
+  ),
+  Category(
+    id: 'tips',
+    title: 'Random facts',
+    thumbnailUrl: 'assets/thumbnails/facts.png',
+  ),
+];

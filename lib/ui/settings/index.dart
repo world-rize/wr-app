@@ -7,17 +7,16 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/build/flavor.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/env.dart';
+import 'package:wr_app/model/membership.dart';
 import 'package:wr_app/store/masterdata.dart';
+import 'package:wr_app/store/system.dart';
 import 'package:wr_app/store/user.dart';
-import 'package:wr_app/ui/lesson/request_page.dart';
-import 'package:wr_app/ui/mypage/all_phrases_page.dart';
-import 'package:wr_app/ui/mypage/api_test_view.dart';
-import 'package:wr_app/ui/mypage/logger_view.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
 import 'package:wr_app/ui/settings/account_settings.dart';
+import 'package:wr_app/ui/settings/all_phrases_page.dart';
+import 'package:wr_app/ui/settings/api_test_view.dart';
 import 'package:wr_app/ui/settings/dark_mode.dart';
-import 'package:wr_app/ui/settings/shop.dart';
+import 'package:wr_app/ui/settings/logger_view.dart';
 
 /// 設定ページ
 class SettingsPage extends StatefulWidget {
@@ -42,22 +41,29 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
-          title: 'ポイント交換',
-          leading: const Icon(Icons.attach_money),
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => Shop()));
-          },
-        ),
-        SettingsTile(
           title: 'サインアウト',
           leading: const Icon(Icons.attach_file),
           onTap: () async {
             await userStore.signOut();
             await Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => OnBoardModal()));
+                .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
           },
         ),
+      ],
+    );
+  }
+
+  // notification
+  SettingsSection notificationSection() {
+    return SettingsSection(
+      title: '通知',
+      tiles: [
+        SettingsTile.switchTile(
+          switchValue: false,
+          title: '通知',
+          leading: const Icon(Icons.notifications),
+          onToggle: (value) {},
+        )
       ],
     );
   }
@@ -65,7 +71,7 @@ class _SettingsState extends State<SettingsPage> {
   // general
   SettingsSection generalSection() {
     return SettingsSection(
-      title: I.of(context).accountSection,
+      title: '一般',
       tiles: [
         SettingsTile(
           title: 'ダークモード',
@@ -79,8 +85,8 @@ class _SettingsState extends State<SettingsPage> {
           title: 'フィードバック',
           leading: const Icon(Icons.attach_money),
           onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => RequestPage()));
+//            Navigator.of(context)
+//                .push(MaterialPageRoute(builder: (_) => RequestPage()));
           },
         ),
       ],
@@ -89,7 +95,7 @@ class _SettingsState extends State<SettingsPage> {
 
   // about
   SettingsSection aboutSection() {
-    final envStore = Provider.of<EnvStore>(context);
+    final envStore = Provider.of<SystemStore>(context);
 
     return SettingsSection(
       title: I.of(context).otherSection,
@@ -156,14 +162,15 @@ class _SettingsState extends State<SettingsPage> {
 
   // debug menu
   SettingsSection debugSection() {
-    final envStore = Provider.of<EnvStore>(context);
+    final userStore = Provider.of<UserStore>(context);
+    final envStore = Provider.of<SystemStore>(context);
     final masterData = Provider.of<MasterDataStore>(context);
 
     return SettingsSection(
       title: 'Debug',
       tiles: [
         SettingsTile(
-          title: 'Flavor',
+          title: 'Flutter Flavor',
           subtitle: envStore.flavor.toShortString(),
         ),
         SettingsTile(
@@ -177,7 +184,7 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
-          title: 'Log',
+          title: 'InApp Log',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => LoggerView()));
@@ -189,6 +196,17 @@ class _SettingsState extends State<SettingsPage> {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => APITestView()));
           },
+        ),
+        SettingsTile.switchTile(
+          title: 'プレミアムプラン',
+          onToggle: (value) {
+            if (value) {
+              userStore.changePlan(Membership.pro);
+            } else {
+              userStore.changePlan(Membership.normal);
+            }
+          },
+          switchValue: userStore.user.membership == Membership.pro,
         ),
         SettingsTile.switchTile(
           title: 'Paint Size Enabled',
@@ -212,6 +230,7 @@ class _SettingsState extends State<SettingsPage> {
         sections: [
           accountSection(),
           generalSection(),
+          notificationSection(),
           aboutSection(),
           if (true) debugSection(),
         ],

@@ -1,9 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-
-import 'package:wr_app/model/message.dart';
-import 'package:wr_app/model/example.dart';
+import 'package:wr_app/model/phrase/example.dart';
+import 'package:wr_app/model/phrase/message.dart';
+import 'package:wr_app/ui/lesson/widgets/boldable_text.dart';
 
 /// フレーズ例
 class PhraseSampleView extends StatelessWidget {
@@ -18,45 +18,6 @@ class PhraseSampleView extends StatelessWidget {
   final Function(Message, int) onMessageTapped;
   final bool showTranslation;
   final bool showKeyphrase;
-
-  /// "()" で囲まれた部分を太字にします
-  /// 例 "abc(def)g" -> "abc<strong>def</strong>g"
-  Text _boldify(String text, TextStyle basicStyle, {bool hide = false}) {
-    final _children = <InlineSpan>[];
-    // not good code
-    text.splitMapJoin(RegExp(r'[\(（](.*)[\)）]'), onMatch: (match) {
-      // blinding
-      if (hide) {
-        _children.add(TextSpan(
-          text: ''.padLeft(text.length, '■'),
-          style: basicStyle.merge(TextStyle(
-            fontWeight: FontWeight.bold,
-            letterSpacing: -10,
-          )),
-        ));
-      } else {
-        _children.add(TextSpan(
-          text: match.group(1),
-          style: basicStyle.merge(TextStyle(
-            fontWeight: FontWeight.bold,
-          )),
-        ));
-      }
-
-      return '';
-    }, onNonMatch: (plain) {
-      _children.add(TextSpan(
-        text: plain,
-        style: basicStyle,
-      ));
-      return '';
-    });
-
-    return Text.rich(
-      TextSpan(children: _children),
-      softWrap: true,
-    );
-  }
 
   Widget _createMessageView(
     Message message,
@@ -82,14 +43,14 @@ class PhraseSampleView extends StatelessWidget {
               decoration: BoxDecoration(
                 color:
                     primary ? Colors.lightBlue.shade300 : Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(5),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: _boldify(
-                  message.text['en'],
-                  TextStyle(
-                    fontSize: 18,
+                child: BoldableText(
+                  text: message.text['en'],
+                  basicStyle: TextStyle(
+                    fontSize: 14,
                     fontWeight: FontWeight.w300,
                     color: primary ? Colors.white : Colors.black,
                   ),
@@ -117,10 +78,10 @@ class PhraseSampleView extends StatelessWidget {
                         horizontal: 10, vertical: 10),
                     // child: Text(conversation.japanese),
                     child: showTranslation
-                        ? _boldify(
-                            message.text['ja'],
-                            const TextStyle(
-                              fontSize: 14,
+                        ? BoldableText(
+                            text: message.text['ja'],
+                            basicStyle: const TextStyle(
+                              fontSize: 12,
                             ),
                           )
                         : const Text(''),

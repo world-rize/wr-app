@@ -2,15 +2,21 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/model/lesson.dart';
+import 'package:wr_app/model/phrase/lesson.dart';
 import 'package:wr_app/ui/widgets/locked_view.dart';
 
 class CarouselCell extends StatelessWidget {
-  const CarouselCell({this.lesson, this.index, this.onTap});
+  const CarouselCell({
+    @required this.lesson,
+    @required this.index,
+    @required this.onTap,
+    this.locked = false,
+  });
 
   final Lesson lesson;
   final int index;
   final Function onTap;
+  final bool locked;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +27,7 @@ class CarouselCell extends StatelessWidget {
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(5)),
         child: LockedView(
-          locked: false,
+          locked: locked,
           child: GestureDetector(
             onTap: onTap,
             child: Stack(

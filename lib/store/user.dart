@@ -1,90 +1,66 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wr_app/api/debug/test.dart';
-import 'package:wr_app/api/mock.dart';
-import 'package:wr_app/model/user.dart';
 import 'package:wr_app/api/user/index.dart';
+import 'package:wr_app/model/membership.dart';
+import 'package:wr_app/model/phrase/phrase.dart';
+import 'package:wr_app/model/user.dart';
 import 'package:wr_app/store/logger.dart';
+import 'package:wr_app/ui/common/toast.dart';
+
+// TODO(someone): リファクタリング
 
 /// FireStore Auth
 final FirebaseAuth fbAuth = FirebaseAuth.instance;
 
 /// ユーザーデータストア
 class UserStore with ChangeNotifier {
+  /// ## firebase ログイン方法
+  /// - email & password
+  /// - google sign in
+  /// - Sign in With Apple
+  /// - mock(test)
+  /// ## FirebaseUser -> User
+
+  /// シングルトンインスタンス
+  static UserStore _cache;
+
   factory UserStore() {
-    return _cache;
+    return _cache ??= UserStore._internal();
   }
 
   UserStore._internal() {
-    Logger.log('✨ UserStore._internal()');
+    init();
+  }
 
-    SharedPreferences.getInstance().then((prefs) {
-      _prefs = prefs;
-      Logger.log('\t load SharedPreferences');
+  /// Firebase User
+  FirebaseUser _fbUser;
+
+  /// ユーザーデータ
+  User user;
+
+  /// 初期化
+  Future<void> init() async {
+    _configureAuthStateChanged();
+
+    InAppLogger.log('✨ init UserStore');
+  }
+
+  /// 自動ログイン
+  void _configureAuthStateChanged() {
+    fbAuth.onAuthStateChanged.listen((fbUser) {
+      if (fbUser != null) {
+        _setAuth(fbUser);
+      }
     });
   }
 
-  /// シングルトンインスタンス
-  static final UserStore _cache = UserStore._internal();
-
-  /// Shared prefs
-  static SharedPreferences _prefs;
-
-  /// Firebase User
-  FirebaseUser fbUser;
-
-  /// ユーザーデータ
-  User user = User(
-      name: '',
-      point: 0,
-      age: 0,
-      email: '',
-      favorites: {},
-      testLimitCount: 3,
-      userId: '',
-      uuid: '');
-
-  /// 成功トーストを出す
-  void successToast(String message) {
-    Logger.log('\t ✔ $message');
-    Fluttertoast.showToast(
-      msg: message,
-      toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.lightGreen,
-    );
-  }
-
-  /// エラートーストを出す
-  void errorToast(Exception e) {
-    Logger.log('\t⚠ $e');
-    Fluttertoast.showToast(
-      msg: 'エラーが発生',
-      toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.redAccent,
-    );
-  }
-
-  /// ユーザーデータを習得します
-  Future<User> callReadUser() async {
-    Logger.log('callReadUser()');
-
-    try {
-      final res = await readUser();
-      return res.user;
-    } on Exception catch (e) {
-      errorToast(e);
-      return null;
-    }
-  }
-
   /// get Google AuthCredential
-  Future<AuthCredential> getGoogleAuthCredential() async {
+  // TODO(any): refactoring
+  Future<AuthCredential> _getGoogleAuthCredential() async {
     final _googleSignIn = GoogleSignIn();
     // try google sign in
     var _user = _googleSignIn.currentUser;
@@ -93,8 +69,6 @@ class UserStore with ChangeNotifier {
     if (_user == null) {
       return null;
     }
-
-    print(_user.email);
 
     // google user -> credential
     final _gauth = await _user.authentication;
@@ -106,29 +80,21 @@ class UserStore with ChangeNotifier {
     return _credential;
   }
 
-  /// Sign in with google
-  /// see <https://qiita.com/unsoluble_sugar/items/95b16c01b456be19f9ac>
-  Future<void> signInWithGoogle() async {
-    final _credential = await getGoogleAuthCredential();
-    assert(_credential != null);
-
-    // credential -> firebase user
-    final signInResponse =
-        await fbAuth.signInWithCredential(_credential).catchError(print);
-
-    assert(signInResponse != null);
-
-    final functionResponse = await readUser().catchError(print);
-
-    assert(functionResponse != null);
-
-    Logger.log(user.toJson().toString());
-    user = functionResponse.user;
+  /// try to auto login. will be called when app started.
+  Future<bool> autoLogin() async {
+    final fbUser = await fbAuth.currentUser();
+    if (fbUser != null) {
+      _setAuth(fbUser);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   /// Sign up with Google
+  // TODO(any): deprecated
   Future<void> signUpWithGoogle() async {
-    final _credential = await getGoogleAuthCredential();
+    final _credential = await _getGoogleAuthCredential();
     assert(_credential != null);
 
     // credential -> firebase user
@@ -147,109 +113,150 @@ class UserStore with ChangeNotifier {
 
     assert(functionResponse != null);
 
-    Logger.log(user.toJson().toString());
+    InAppLogger.log(user.toJson().toString(), type: 'user');
     user = functionResponse.user;
 
     return;
   }
 
-  /// Sign up with Google
-  Future<void> signOutWithGoogle() async {
-    final _googleSignIn = GoogleSignIn();
-    // try google sign in
-    var _user = _googleSignIn.currentUser;
-    if (_user == null) {
-      return;
-    }
-    await _googleSignIn.signOut();
-    return;
-  }
-
-  /// モックでサインインする
-  Future<void> signInWithMock({
-    @required String email,
-    @required String password,
-  }) async {
-    // auth = await _signInAuth(email: email, password: password);
-
-    // Logger.log('\t ✔ user sign in ${auth.uid}');
-
-    user = dummyUser();
-
-    Logger.log('\t ✔ user fetched ${user.name}');
-
-    successToast('ログインしました');
-
-    notifyListeners();
-  }
-
-  /// Firebase Auth にサインインしユーザーデータを取得する
-  Future<void> signIn({
-    @required String email,
-    @required String password,
-  }) async {
+  /// ユーザーデータを取得する
+  Future<void> signIn() async {
     try {
-      fbUser = await _signInAuth(email: email, password: password);
-
-      Logger.log('\t ✔ user sign in ${fbUser.uid}');
-
       user = await callReadUser();
 
-      Logger.log('\t ✔ user fetched ${user.name}');
+      InAppLogger.log('\t ✔ user fetched ${user.name}');
 
-      successToast('ログインしました');
+      NotifyToast.success('ログインしました');
 
       notifyListeners();
     } on Exception catch (e) {
       print(e);
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
   Future<void> signOut() async {
-    await signOutWithGoogle();
-    await fbAuth.signOut();
-    fbUser = null;
+    await _unauthorize();
     user = null;
-    Logger.log('\t ✔ user signed out');
+
+    InAppLogger.log('\t ✔ user signed out', type: 'user');
   }
 
-  /// Firebase Auth にログイン
-  Future<FirebaseUser> _signInAuth({
-    @required String email,
-    @required String password,
-  }) async {
+  /// create firebase auth with email & password
+  Future<FirebaseUser> _createAuthWithEmailAndPassword(
+      String email, String password) async {
+    final _result = await fbAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    return _result.user;
+  }
+
+  /// authorize with email & password
+  Future<FirebaseUser> _authorizeWithEmailAndPassword(
+      String email, String password) async {
     try {
       final _result = await fbAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // final _result = await _auth.signInAnonymously();
 
       return _result.user;
     } on Exception catch (e) {
-      errorToast(e);
-      return null;
+      NotifyToast.error(e);
+      rethrow;
     }
   }
 
-  /// ゲストユーザーかどうか
-  bool _isGuest() {
-    return fbUser.isAnonymous;
+  /// authorize with google
+  Future<FirebaseUser> _authorizeWithGoogleSignIn() async {
+    final _credential = await _getGoogleAuthCredential();
+    assert(_credential != null);
+
+    // credential -> firebase user
+    final authResult =
+        await fbAuth.signInWithCredential(_credential).catchError(print);
+
+    assert(authResult != null);
+
+    return authResult.user;
+  }
+
+  /// authorize with sign in apple
+  Future<FirebaseUser> _authorizeWithSignInWithApple() async {
+    throw UnimplementedError();
+  }
+
+  /// unauthorize
+  Future<void> _unauthorize() async {
+    await fbAuth.signOut();
+    _fbUser = null;
+  }
+
+  void _setAuth(FirebaseUser user) {
+    _fbUser = user;
+
+    InAppLogger.log('set firebase auth ${user.email}');
+  }
+
+  /// メールアドレスとパスワードでログイン
+  Future<void> loginWithEmailAndPassword(String email, String password) async {
+    final auth = await _authorizeWithEmailAndPassword(email, password);
+    _setAuth(auth);
+
+    user = await callReadUser();
+  }
+
+  /// Googleでログイン
+  Future<void> loginWithGoogle() async {
+    final auth = await _authorizeWithGoogleSignIn();
+    _setAuth(auth);
+
+    user = await callReadUser();
+  }
+
+  /// メールアドレスとパスワードでサインアップ
+  Future<void> signUpWithEmailAndPassword(String email, String password) async {
+    final auth = await _createAuthWithEmailAndPassword(email, password);
+    _setAuth(auth);
+
+    user = await callReadUser();
   }
 
   /// テストAPIを呼ぶ
   Future<void> callTestAPI() async {
-    Logger.log('callTestAPI');
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
+    InAppLogger.log('callTestAPI');
 
     try {
       final data = await test();
 
-      successToast('成功');
+      NotifyToast.success('成功');
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// ユーザーデータを習得します
+  Future<User> callReadUser() async {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
+    InAppLogger.log('callReadUser()', type: 'user');
+
+    try {
+      final res = await readUser();
+      return res.user;
+    } on Exception catch (e) {
+      NotifyToast.error(e);
+      return null;
     }
   }
 
@@ -259,92 +266,137 @@ class UserStore with ChangeNotifier {
     @required String email,
     @required int age,
   }) async {
-    try {
-      final uuid = fbUser.uid;
-      final userId = fbUser.uid;
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
 
-      Logger.log(
+    try {
+      final uuid = _fbUser.uid;
+      final userId = _fbUser.uid;
+
+      InAppLogger.log(
           '\tcallCreateUser(uuid: $uuid, name: $name, email: $email, age: $age)');
       final data = await createUser(
           uuid: uuid, userId: userId, name: name, email: email, age: age);
 
       user = data.user;
 
-      successToast('ユーザーを作成しました');
+      NotifyToast.success('ユーザーを作成しました');
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
   /// フレーズをお気に入りに登録します
   Future<void> callFavoritePhrase(
       {@required String phraseId, @required bool value}) {
-    Logger.log('\tcallFavoritePhrase()');
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
+    InAppLogger.log('\tcallFavoritePhrase()');
 
     try {
-      favoritePhrase(uid: fbUser.uid, phraseId: phraseId, value: value)
+      favoritePhrase(uid: _fbUser.uid, phraseId: phraseId, value: value)
           .then((res) {
-        successToast(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
+        NotifyToast.success(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
       });
 
       user.favorites[phraseId] = value;
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
-  /// 初回起動時か
-  bool get firstLaunch {
-    return _prefs?.getBool('first_launch') ?? true;
+  ///
+  bool favorited(Phrase phrase) {
+    return user.favorites.containsKey(phrase.id) && user.favorites[phrase.id];
   }
 
-  /// 初回起動時フラグをセットします
-  void setFirstLaunch({bool flag}) {
-    _prefs.setBool('first_launch', flag);
+  /// 受講可能回数をリセット
+  // TODO(any): call api
+  Future<void> resetTestLimitCount() async {
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
+    InAppLogger.log('\tresetTestLimitCount()');
+
+    try {
+      user.testLimitCount = 3;
+
+      InAppLogger.log('受講可能回数がリセットされました');
+      NotifyToast.success('受講可能回数がリセットされました');
+
+      notifyListeners();
+    } on Exception catch (e) {
+      NotifyToast.error(e);
+    }
   }
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int point}) async {
-    Logger.log('\tcallGetPoint()');
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
+    InAppLogger.log('\tcallGetPoint()');
 
     try {
-      final data = await getPoint(uid: fbUser.uid, point: point);
+      final data = await getPoint(uid: _fbUser.uid, point: point);
 
-      Logger.log(data.toString());
+      InAppLogger.log(data.toString());
 
-      successToast('$pointポイントゲットしました');
+      NotifyToast.success('$pointポイントゲットしました');
 
       user.point += point;
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
   /// テストを受ける
   Future<void> callDoTest() async {
-    Logger.log('\callDoTest()');
+    if (_fbUser == null) {
+      throw Exception('firebase not authorized');
+    }
+
+    InAppLogger.log('\callDoTest()');
 
     try {
       // await doTest();
 
-      Logger.log('success');
+      InAppLogger.log('success');
 
       user.testLimitCount--;
 
       notifyListeners();
     } on Exception catch (e) {
-      errorToast(e);
+      NotifyToast.error(e);
     }
   }
 
   /// 名前を取得
   String displayName() {
     return (user != null) ? user.name : '---';
+  }
+
+  bool get isPremium => user.membership == Membership.pro;
+
+  /// プランを変更
+  void changePlan(Membership membership) {
+    user.membership = membership;
+
+    InAppLogger.log('membership to be $membership');
+
+    NotifyToast.success('$membership');
+
+    notifyListeners();
   }
 }

@@ -199,6 +199,7 @@ class _AdmobBannerWidgetWithRouteState extends State<AdmobBannerWidgetWithRoute>
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Observerが一つじゃない場合、firstでいいのかどうか判断・変更する必要アリ
+    print(Navigator.of(context).widget.observers);
     _routeObserver = Navigator.of(context).widget.observers.first;
     _routeObserver.subscribe(this, ModalRoute.of(context));
   }

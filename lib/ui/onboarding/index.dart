@@ -1,59 +1,113 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:intro_slider/intro_slider.dart';
-import 'package:intro_slider/slide_object.dart';
-import 'package:wr_app/ui/onboarding/sign_in_view.dart';
-import 'package:wr_app/ui/onboarding/sign_up_view.dart';
+import 'package:wr_app/ui/onboarding/sign_in_page.dart';
+import 'package:wr_app/ui/onboarding/sign_up_page.dart';
 
-class OnBoardModal extends StatefulWidget {
-  @override
-  _OnBoardModalState createState() => _OnBoardModalState();
-}
-
-class _OnBoardModalState extends State<OnBoardModal> {
+/// ファーストページ
+class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const splashColor = Color(0xff56c0ea);
 
-    return IntroSlider(
-      slides: [
-        Slide(
-          backgroundColor: splashColor,
-          backgroundBlendMode: BlendMode.src,
-          widgetTitle: Text(
-            'Sign in',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+    final signUpField = Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: <Widget>[
+          const Center(
+            child: Text('初めての方はこちら'),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: FlatButton(
+              color: splashColor,
+              child: SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      '新しくアカウントを作成する',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => SignUpPage(),
+                ));
+              },
             ),
           ),
-          // pathImage: 'assets/icon/wr_icon.jpg',
-          centerWidget: IntrinsicHeight(
-            child: SignUpView(),
+        ],
+      ),
+    );
+
+    final signInField = Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: <Widget>[
+          const Center(
+            child: Text('既にアカウントを持っている方はこちら'),
           ),
-        ),
-        Slide(
-          backgroundColor: splashColor,
-          backgroundBlendMode: BlendMode.src,
-          widgetTitle: Text(
-            'Sign up',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: FlatButton(
+              color: splashColor,
+              child: SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(
+                      'ログイン',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => SignInPage(),
+                ));
+              },
             ),
           ),
-          // pathImage: 'assets/icon/wr_icon.jpg',
-          centerWidget: IntrinsicHeight(
-            child: SignInView(),
-          ),
+        ],
+      ),
+    );
+
+    return Scaffold(
+      body: Container(
+        color: splashColor,
+        child: Column(
+          children: <Widget>[
+            const Expanded(
+              flex: 1,
+              child: Center(
+                child: Placeholder(
+                  fallbackHeight: 300,
+                  fallbackWidth: 300,
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                color: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    const Spacer(),
+                    signUpField,
+                    signInField,
+                  ],
+                ),
+              ),
+            )
+          ],
         ),
-      ],
-      isShowSkipBtn: false,
-      isShowNextBtn: false,
-      isShowDoneBtn: false,
+      ),
     );
   }
 }

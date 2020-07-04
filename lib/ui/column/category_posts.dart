@@ -1,26 +1,78 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
-import 'package:wr_app/model/article.dart';
-import 'package:wr_app/model/category.dart';
-import 'package:wr_app/ui/column/article_view.dart';
+import 'package:wr_app/api/column/get_articles.dart';
+import 'package:wr_app/model/column/article.dart';
+import 'package:wr_app/model/column/category.dart';
+import 'package:wr_app/ui/column/article_overview.dart';
 
 /// カテゴリ内記事一覧
 class CategoryPosts extends StatelessWidget {
-  const CategoryPosts({
+  CategoryPosts({
     @required this.category,
-    @required this.articles,
     @required this.onTap,
   });
 
   final Category category;
-  final List<Article> articles;
   final Function(Article) onTap;
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
+
+    final articleNotFound = Center(
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: <Widget>[
+            Icon(
+              Icons.error,
+              color: Colors.grey,
+            ),
+            Text(
+              '記事がありません',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    // TODO(someone): caching
+    final articlesView = FutureBuilder<List<Article>>(
+      future: getArticles(category.id),
+      builder: (_, snapshot) {
+        return Stack(
+          children: <Widget>[
+//            if (!snapshot.hasData)
+//              Center(
+//                child: OverlayLoading(loading: !snapshot.hasData),
+//              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (snapshot.hasData && snapshot.data.isNotEmpty)
+                  ...snapshot.data
+                      .map(
+                        (article) => GestureDetector(
+                          onTap: () {
+                            onTap(article);
+                          },
+                          child: ArticleOverView(article: article),
+                        ),
+                      )
+                      .toList()
+                else
+                  articleNotFound,
+              ],
+            ),
+          ],
+        );
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -28,29 +80,7 @@ class CategoryPosts extends StatelessWidget {
         title: Text('${category.title}'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: GFTypography(
-                text: '${category.title}の記事一覧',
-                type: GFTypographyType.typo1,
-                dividerColor: GFColors.SUCCESS,
-              ),
-            ),
-            ...articles
-                .map(
-                  (article) => GestureDetector(
-                    onTap: () {
-                      onTap(article);
-                    },
-                    child: ArticleView(article: article),
-                  ),
-                )
-                .toList(),
-          ],
-        ),
+        child: articlesView,
       ),
     );
   }

@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:wr_app/model/phrase/section.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_section_row.dart';
-import 'package:wr_app/model/section.dart';
 
 /// テスト一覧画面
 ///
@@ -21,11 +21,14 @@ class LessonTab extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: sections
             .map(
-              (section) => SectionRow(
-                section: section,
-                onTap: () {
-                  onTap(section);
-                },
+              (section) => Padding(
+                padding: const EdgeInsets.all(8),
+                child: SectionRow(
+                  section: section,
+                  onTap: () {
+                    onTap(section);
+                  },
+                ),
               ),
             )
             .toList(),

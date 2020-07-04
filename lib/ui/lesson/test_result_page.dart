@@ -1,17 +1,15 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/user.dart';
-
 import 'package:wr_app/ui/lesson/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
-
-import 'package:wr_app/extension/padding_extension.dart';
 
 /// テスト結果画面
 ///
@@ -21,7 +19,7 @@ class TestResultPage extends StatelessWidget {
 
   final TestStats stats;
 
-  /// 「ピースのカケラを取得」画面
+  /// 報酬獲得画面
   void _showRewardDialog(BuildContext context) {
     showCupertinoDialog(
       context: context,
@@ -30,8 +28,8 @@ class TestResultPage extends StatelessWidget {
         content: Column(
           children: <Widget>[
             Text(I.of(context).getPoints(stats.corrects)),
-            Text(I.of(context).getPiece),
-            Image.network('https://zettoku.up.seesaa.net/image/pazuru01.jpg'),
+//            Text(I.of(context).getPiece),
+//            Image.network('https://zettoku.up.seesaa.net/image/pazuru01.jpg'),
             GFButton(
               color: Colors.orange,
               text: I.of(context).close,
@@ -41,9 +39,6 @@ class TestResultPage extends StatelessWidget {
               onPressed: () {
                 // pop history
                 Navigator.popUntil(context, (route) => route.isFirst);
-//                Navigator.of(context).push(
-//                  MaterialPageRoute(builder: (_) => SectionSelectPage()),
-//                );
               },
             )
           ],
@@ -74,9 +69,18 @@ class TestResultPage extends StatelessWidget {
             ).p_1(),
             Container(
               child: Column(
-                children: stats.section.phrases.map((phrase) {
-                  return phraseView(context, phrase).p_1();
-                }).toList(),
+                children: List.generate(
+                  stats.section.phrases.length,
+                  (i) => Stack(
+                    children: [
+                      PhraseCard(
+                        phrase: stats.section.phrases[i],
+                        favorite: useStore.favorited(stats.section.phrases[i]),
+                      ),
+                      Text('${stats.answers[i]}'),
+                    ],
+                  ).p_1(),
+                ),
               ),
             ),
           ],

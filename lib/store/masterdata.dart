@@ -1,13 +1,14 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'dart:convert';
+
 import 'package:collection/collection.dart';
-import 'package:wr_app/api/mock.dart';
 import 'package:flutter/foundation.dart';
-import 'package:wr_app/model/section.dart';
-import 'package:wr_app/model/lesson.dart';
-import 'package:wr_app/model/phrase.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:wr_app/api/mock.dart';
+import 'package:wr_app/model/phrase/lesson.dart';
+import 'package:wr_app/model/phrase/phrase.dart';
+import 'package:wr_app/model/phrase/section.dart';
 import 'package:wr_app/store/logger.dart';
 
 /// マスタデータを保持するストア(__シングルトン__)
@@ -21,13 +22,13 @@ class MasterDataStore with ChangeNotifier {
   /// ストアの初期化
   /// 一度しか呼ばれない
   MasterDataStore._internal() {
-    Logger.log('✨ MasterDataStore._internal()');
+    InAppLogger.log('✨ MasterDataStore._internal()');
 
     try {
       _loadPhrases();
     } on Exception catch (e) {
       print(e);
-      Logger.log('- Failed to init MasterDataStore');
+      InAppLogger.log('- Failed to init MasterDataStore');
     }
   }
 
@@ -41,8 +42,8 @@ class MasterDataStore with ChangeNotifier {
     const lessonsJsonPath = 'assets/lessons.json';
     const phrasesJsonPath = 'assets/phrases.json';
 
-    Logger.log('\t Lessons Json @ $lessonsJsonPath');
-    Logger.log('\t Phrases Json @ $phrasesJsonPath');
+    InAppLogger.log('\t Lessons Json @ $lessonsJsonPath');
+    InAppLogger.log('\t Phrases Json @ $phrasesJsonPath');
 
     // load lessons
     final lessons = await rootBundle
@@ -53,7 +54,7 @@ class MasterDataStore with ChangeNotifier {
             List.from(list).map((json) => Lesson.fromJson(json)).toList())
         .catchError((e) {
       print(e);
-      Logger.log(e.toString());
+      InAppLogger.log(e.toString());
     });
 
     // load phrases
@@ -65,7 +66,7 @@ class MasterDataStore with ChangeNotifier {
             List.from(list).map((json) => Phrase.fromJson(json)).toList())
         .catchError((e) {
       print(e);
-      Logger.log(e.toString());
+      InAppLogger.log(e.toString());
     });
 
     // mapping phrases
@@ -75,16 +76,16 @@ class MasterDataStore with ChangeNotifier {
     lessons.forEach((lesson) {
       if (phraseMap.containsKey(lesson.id)) {
         lesson.phrases = phraseMap[lesson.id];
-        Logger.log(
+        InAppLogger.log(
             '\t ${lesson.id}: ${phraseMap[lesson.id].length} phrases found');
       } else {
-        Logger.log('\t warn ${lesson.id} not found');
+        InAppLogger.log('\t warn ${lesson.id} not found');
       }
     });
 
     _lessons.addAll(lessons);
 
-    Logger.log('\t✨ ${_lessons.length} Lessons Loaded');
+    InAppLogger.log('\t✨ ${_lessons.length} Lessons Loaded');
 
     notifyListeners();
   }

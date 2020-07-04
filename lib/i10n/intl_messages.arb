@@ -1,6 +1,6 @@
 {
   "@@locale": "messages",
-  "@@last_modified": "2020-05-31T20:19:39.382777",
+  "@@last_modified": "2020-06-06T12:25:17.072365",
   "lessonStatus": "クリア[{count}/{all}]",
   "@lessonStatus": {
     "type": "text",

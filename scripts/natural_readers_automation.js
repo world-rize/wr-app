@@ -2,7 +2,7 @@
 // F12 Console に貼り付ける
 (async () => {
   // ex: 301-400 => page 4
-  let [begin, end] = [750, 1000]
+  let [begin, end] = [3302, 4000]
   const sleep = async (s) => new Promise(resolve => setTimeout(resolve, s * 1000))
   const page = (i) => Math.floor((i - 1) / 100) + 1
   const next = async () => {
@@ -21,9 +21,21 @@
     const row = document.getElementsByClassName('cell-name')[(i - 1) % 100]
 
     row.click()
-    await sleep(6)
+    await sleep(10)
+    
     // download
+    await new Promise(async resolve => {
+      while (true) {
+        const buttons = document.getElementsByClassName('mat-raised-button')
+        if (buttons[2]) {
+          resolve()
+        }
+        await sleep(1)
+      }
+    })
+
     document.getElementsByClassName('mat-raised-button')[2].click()
+
     await sleep(1)
     // download all as separate mp3
     document.getElementsByClassName('mat-menu-item ng-star-inserted')[1].click()
@@ -35,6 +47,5 @@
     await scrape(i)
   }
 })();
-
 // タイトル取得
-[...document.getElementsByClassName('name-test')].map(el => el.innerHTML.replace(/^\s+|\s+$/g, '')).join(',')
+// [...document.getElementsByClassName('name-test')].map(el => el.innerHTML.replace(/^\s+|\s+$/g, '')).join(',')
