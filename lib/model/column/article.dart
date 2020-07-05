@@ -1,4 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
+import 'package:contentful/contentful.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wr_app/model/column/article_type.dart';
@@ -7,74 +9,75 @@ part 'article.g.dart';
 
 /// 記事
 @JsonSerializable()
-class Article {
+class Article extends Entry<ArticleFields> {
   Article({
+    SystemFields sys,
+    ArticleFields fields,
+  }) : super(sys: sys, fields: fields);
+
+  Article.fromMock({String title, String content})
+      : super(
+          sys: null,
+          fields: ArticleFields(
+            id: 'aaa',
+            title: title,
+            subtitle: '',
+            category: '',
+            tags: const <String>[],
+            content: content,
+            createdat: DateTime.now(),
+            assets: const <Asset>[],
+          ),
+        );
+
+  static Article fromJson(Map<String, dynamic> json) => _$ArticleFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ArticleToJson(this);
+}
+
+/// 記事
+@JsonSerializable()
+class ArticleFields extends Equatable {
+  const ArticleFields({
     @required this.id,
-    @required this.type,
     @required this.title,
-    @required this.thumbnailUrl,
-    @required this.date,
+    @required this.subtitle,
+    @required this.category,
+    @required this.tags,
     @required this.content,
-    @required this.url,
-  });
+    @required this.createdat,
+    @required this.assets,
+  }) : super();
 
-  /// アプリ内で読める記事
-  Article.internal({
-    String id,
-    @required String title,
-    String thumbnailUrl,
-    DateTime date,
-    @required String content,
-  }) : this(
-          id: id,
-          type: ArticleType.inApp,
-          title: title,
-          thumbnailUrl: thumbnailUrl,
-          date: date,
-          content: content,
-          url: '',
-        );
-
-  /// 外部記事
-  Article.external({
-    String id,
-    String title,
-    String thumbnailUrl,
-    DateTime date,
-    String url,
-  }) : this(
-          id: id,
-          type: ArticleType.external,
-          title: title,
-          thumbnailUrl: thumbnailUrl,
-          date: date,
-          content: '',
-          url: url,
-        );
-
-  factory Article.fromJson(Map<String, dynamic> json) =>
-      _$ArticleFromJson(json);
+  factory ArticleFields.fromJson(Map<String, dynamic> json) =>
+      _$ArticleFieldsFromJson(json);
 
   /// id
   final String id;
 
-  /// type
-  final ArticleType type;
-
   /// タイトル
   final String title;
 
-  /// 投稿日時
-  final DateTime date;
+  /// サブタイトル
+  final String subtitle;
 
-  /// サムネ
-  final String thumbnailUrl;
+  /// カテゴリ
+  final String category;
+
+  /// タグ(,区切り)
+  final List<String> tags;
 
   /// 内容(マークダウンを想定?)
-  final String content;
+  final dynamic content;
+
+  /// 投稿日時
+  final DateTime createdat;
 
   /// 外部URL
-  final String url;
+  final List<Asset> assets;
 
-  Map<String, dynamic> toJson() => _$ArticleToJson(this);
+  Map<String, dynamic> toJson() => _$ArticleFieldsToJson(this);
+
+  @override
+  List<Object> get props => [title];
 }

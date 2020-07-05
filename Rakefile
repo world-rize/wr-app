@@ -18,6 +18,11 @@ task :dev do
   sh 'flutter run --flavor development'
 end
 
+desc 'open Xcode Workspace'
+task :xc do
+  sh 'open ios/Runner.xcworkspace'
+end
+
 desc 'コード生成'
 task :gen do
   puts '[Task gen]'

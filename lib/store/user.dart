@@ -11,7 +11,7 @@ import 'package:wr_app/model/user.dart';
 import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/ui/common/toast.dart';
 
-// TODO(someone): リファクタリング
+// TODO(someone): -> userRepository
 
 /// FireStore Auth
 final FirebaseAuth fbAuth = FirebaseAuth.instance;
@@ -29,22 +29,24 @@ class UserStore with ChangeNotifier {
   static UserStore _cache;
 
   factory UserStore() {
-    return _cache ??= UserStore._internal();
+    if (_cache == null) {
+      init();
+      _cache = UserStore._internal();
+    }
+    return _cache;
   }
 
-  UserStore._internal() {
-    init();
-  }
+  UserStore._internal();
 
   /// Firebase User
   FirebaseUser _fbUser;
 
   /// ユーザーデータ
-  User user;
+  User user = User.empty();
 
   /// 初期化
-  Future<void> init() async {
-    _configureAuthStateChanged();
+  static Future<void> init() async {
+    // _configureAuthStateChanged();
 
     InAppLogger.log('✨ init UserStore');
   }

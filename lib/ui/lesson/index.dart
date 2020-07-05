@@ -84,7 +84,11 @@ class LessonIndexPage extends StatelessWidget {
               ],
             )
           else
-            const Text('no favorites'),
+            const Padding(
+              padding: EdgeInsets.all(16),
+              child: Text('no favorites',
+                  style: TextStyle(fontSize: 20, color: Colors.grey)),
+            ),
 
           // New Coming Phrases Section
           const GFTypography(

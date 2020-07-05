@@ -2,8 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/api/feedback.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/store/system.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
@@ -24,6 +26,9 @@ class _RequestPageState extends State<RequestPage> {
 
   @override
   Widget build(BuildContext context) {
+    final systemStore = Provider.of<SystemStore>(context);
+    final address = systemStore.env;
+    print(address);
     final primaryColor = Theme.of(context).primaryColor;
     const hintText = '''
 (記入例)

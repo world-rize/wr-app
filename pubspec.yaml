@@ -30,6 +30,12 @@ dependencies:
 
   # contentful
   contentful: ^1.1.3
+  contentful_rich_text: ^0.1.2
+  equatable: ^1.2.0
+
+
+  # auth
+  apple_sign_in: ^0.1.0
 
   # ui
   fluttertoast: ^4.0.0

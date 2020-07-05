@@ -1,5 +1,4 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-import 'package:wr_app/model/column/article.dart';
 import 'package:wr_app/model/column/category.dart';
 import 'package:wr_app/model/membership.dart';
 import 'package:wr_app/model/phrase/assets.dart';
@@ -101,110 +100,6 @@ User dummyUser() {
   );
 }
 
-Article dummyInAppArticle(int index) => Article.internal(
-      id: '$index',
-      title: '記事$index',
-      thumbnailUrl: 'https://source.unsplash.com/category/nature',
-      date: DateTime.now(),
-      content: """
-# Markdown Example
-Markdown allows you to easily include formatted text, images, and even formatted Dart code in your app.
-
-## Titles
-
-Setext-style
-
-```
-This is an H1
-=============
-
-This is an H2
--------------
-```
-
-Atx-style
-
-```
-# This is an H1
-
-## This is an H2
-
-###### This is an H6
-```
-
-Select the valid headers:
-
-- [x] `# hello`
-- [ ] `#hello`
-
-## Links
-
-[Google's Homepage][Google]
-
-```
-[inline-style](https://www.google.com)
-
-[reference-style][Google]
-```
-
-## Images
-
-![Flutter logo](/dart-lang/site-shared/master/src/_assets/image/flutter/icon/64.png)
-
-## Tables
-
-|Syntax                                 |Result                               |
-|---------------------------------------|-------------------------------------|
-|`*italic 1*`                           |*italic 1*                           |
-|`_italic 2_`                           | _italic 2_                          |
-|`**bold 1**`                           |**bold 1**                           |
-|`__bold 2__`                           |__bold 2__                           |
-|`This is a ~~strikethrough~~`          |This is a ~~strikethrough~~          |
-|`***italic bold 1***`                  |***italic bold 1***                  |
-|`___italic bold 2___`                  |___italic bold 2___                  |
-|`***~~italic bold strikethrough 1~~***`|***~~italic bold strikethrough 1~~***|
-|`~~***italic bold strikethrough 2***~~`|~~***italic bold strikethrough 2***~~|
-
-## Styling
-Style text as _italic_, __bold__, ~~strikethrough~~, or `inline code`.
-
-- Use bulleted lists
-- To better clarify
-- Your points
-
-## Code blocks
-Formatted Dart code looks really pretty too:
-
-```
-void main() {
-  runApp(MaterialApp(
-    home: Scaffold(
-      body: Markdown(data: markdownData),
-    ),
-  ));
-}
-```
-
-## Markdown widget
-
-This is an example of how to create your own Markdown widget:
-
-    Markdown(data: 'Hello _world_!');
-
-Enjoy!
-
-[Google]: https://www.google.com/
-""",
-    );
-
-Article dummyExternalArticle(int index) => Article.external(
-      id: '$index',
-      title: '記事$index',
-      thumbnailUrl: 'https://source.unsplash.com/category/nature',
-      date: DateTime.now(),
-      url: 'https://world-rize.com/',
-    );
-
 /// マークダウンファイル
 String dummyRawArticle() => '''
 ---
@@ -217,6 +112,13 @@ tags: [A, B, C]
 This is an example.
 ''';
 
+/// # categories
+/// - online_lesson
+/// - article
+/// - random
+/// - listening
+/// - comics
+/// - cuisine
 final List<Category> categories = [
   Category(
     id: 'online_lesson',
@@ -225,8 +127,13 @@ final List<Category> categories = [
   ),
   Category(
     id: 'article',
-    title: '記事',
+    title: 'Articles',
     thumbnailUrl: 'assets/thumbnails/article.jpg',
+  ),
+  Category(
+    id: 'random',
+    title: 'Random facts',
+    thumbnailUrl: 'assets/thumbnails/facts.png',
   ),
   Category(
     id: 'listening',
@@ -234,18 +141,13 @@ final List<Category> categories = [
     thumbnailUrl: 'assets/thumbnails/listening.jpg',
   ),
   Category(
-    id: 'illust',
-    title: '絵付き漫画',
+    id: 'comics',
+    title: 'Comics',
     thumbnailUrl: 'assets/thumbnails/english.jpg',
   ),
   Category(
-    id: 'dish',
-    title: '世界の料理',
+    id: 'cuisine',
+    title: 'cuisine from around the world',
     thumbnailUrl: 'assets/thumbnails/english.jpg',
-  ),
-  Category(
-    id: 'tips',
-    title: 'Random facts',
-    thumbnailUrl: 'assets/thumbnails/facts.png',
   ),
 ];

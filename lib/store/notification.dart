@@ -21,29 +21,29 @@ class ReceivedNotification {
   });
 }
 
-class Notification {
+class AppNotifier {
   /// シングルトンインスタンス
-  static Notification _cache;
+  static AppNotifier _cache;
 
-  static const MethodChannel platform =
+  static const MethodChannel _platform =
       MethodChannel('crossingthestreams.io/resourceResolver');
 
-  factory Notification() {
-    return _cache ??= Notification._internal();
+  factory AppNotifier() {
+    return _cache ??= AppNotifier._internal();
   }
 
-  Notification._internal() {
-    init();
-  }
+  AppNotifier._internal() {
+    _requestIOSPermissions();
+    _configureDidRecieveLocalNotificationSubject();
+    _configureSelectNotificationSubject();
 
-  Future<void> init() async {
     InAppLogger.log('✨ init Notifier');
   }
 
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  NotificationAppLaunchDetails notificationAppLaunchDetails;
+  NotificationAppLaunchDetails _notificationAppLaunchDetails;
 
   /// notification stream
   final StreamController<ReceivedNotification>
@@ -55,7 +55,7 @@ class Notification {
       StreamController<String>();
 
   void _requestIOSPermissions() {
-    flutterLocalNotificationsPlugin
+    _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(alert: true, badge: true, sound: true);
@@ -86,7 +86,7 @@ class Notification {
     final platformChannelSpecifics =
         NotificationDetails(null, iOSPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin
+    await _flutterLocalNotificationsPlugin
         .show(0, title, body, platformChannelSpecifics, payload: payload);
   }
 
@@ -118,7 +118,7 @@ class Notification {
         IOSNotificationDetails(sound: 'slow_spring_board.aiff');
     var platformChannelSpecifics =
         NotificationDetails(null, iOSPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.schedule(
+    await _flutterLocalNotificationsPlugin.schedule(
         0,
         'scheduled title',
         'scheduled body',

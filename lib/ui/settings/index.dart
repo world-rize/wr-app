@@ -9,6 +9,7 @@ import 'package:wr_app/build/flavor.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/model/membership.dart';
 import 'package:wr_app/store/masterdata.dart';
+import 'package:wr_app/store/notification.dart';
 import 'package:wr_app/store/system.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
@@ -95,7 +96,7 @@ class _SettingsState extends State<SettingsPage> {
 
   // about
   SettingsSection aboutSection() {
-    final envStore = Provider.of<SystemStore>(context);
+    final system = Provider.of<SystemStore>(context);
 
     return SettingsSection(
       title: I.of(context).otherSection,
@@ -154,7 +155,7 @@ class _SettingsState extends State<SettingsPage> {
         ),
         SettingsTile(
           title: 'アプリバージョン',
-          subtitle: envStore.version,
+          subtitle: system.pubSpec.version,
         ),
       ],
     );
@@ -215,6 +216,16 @@ class _SettingsState extends State<SettingsPage> {
             debugPaintSizeEnabled = value;
           },
           switchValue: debugPaintSizeEnabled,
+        ),
+        SettingsTile(
+          title: 'notifier test',
+          onTap: () {
+            Provider.of<AppNotifier>(context, listen: false)
+              ..showNotification(
+                  title: 'WorldRIZe',
+                  body: 'notifier test',
+                  payload: 'success');
+          },
         )
       ],
     );
