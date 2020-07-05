@@ -10,12 +10,15 @@ import sys
 import os
 import glob
 import string
+import chalk
+from tqdm import tqdm
 
 pwd = os.path.dirname(os.path.abspath(__file__))
 root = f'{pwd}/../assets'
 # bold pettern
 bold_pattern = re.compile(r"[\(（](.*?)[\)）]")
 verbose = False
+white, yellow = chalk.Chalk('white'), chalk.Chalk('yellow')
 
 def strip_brs(txt):
     """
@@ -140,8 +143,8 @@ def phrase_txt2json(phrase_txt, lesson_id, phrase_id):
         exist_voice = os.path.exists(f'{root}/{kp_path}')
 
         
-        if exist_voice:
-            print(f'[Info] {lesson_id} {phrase_id} voice found')
+        # if exist_voice:
+        #     print(f'[Info] {lesson_id} {phrase_id} voice found')
 
         return phrase_json
     except Exception as e:
@@ -164,6 +167,9 @@ def parse_txt(text):
 
     phrases_txt_list = []
     lessons_json = []
+
+    print(f'{white("📚 Overview", bold=True)}')
+
     # parse lessons
     for lesson in lessons:
         # phrases[0]: title
@@ -174,7 +180,7 @@ def parse_txt(text):
         # ex: 'Social Media' -> 'social'
         lesson_id = title.split(' ')[0].strip(string.punctuation).lower()
 
-        print(f'# {title}({lesson_id}) {len(phrases)} Phrases')
+        print(f'  - {white(title, bold=True)}({lesson_id}) {yellow(len(phrases))} Phrases')
     
         lesson_json = {
             'id': lesson_id,
@@ -192,11 +198,15 @@ def parse_txt(text):
         lessons_json.append(lesson_json)
 
     phrases_json = []
+    pbar = tqdm(leave=True, total=sum(map(len, phrases_txt_list)))
     for lesson_json, phrases in zip(lessons_json, phrases_txt_list):
         for phrase_id, phrase in enumerate(phrases, start=1):
             phrase_json = phrase_txt2json(phrase, lesson_id=lesson_json['id'], phrase_id=phrase_id)
+
             if phrase_json is not None:
                 phrases_json.append(phrase_json)
+
+            pbar.update(1)
 
     print(f'{len(phrases_json)} / {sum(map(len, phrases_txt_list))} phrases successfully dumped.') 
 
@@ -212,10 +222,7 @@ def generate(preview=False):
     global verbose
     verbose = '-v' in sys.argv
 
-    if force:
-        print('force')
-    if verbose:
-        print('verbose')
+    print(f'{white("Phrase Convertor", bold=True)}')
 
     with open(lessons_txt_path) as f:
         text = f.read()
@@ -231,11 +238,11 @@ def generate(preview=False):
 
     with open(lessons_json_path, 'w') as f:
         print(json.dumps(lessons_json, ensure_ascii=False, indent=2), file=f)
-        print(f'[Generated] {lessons_json_path}')
+        print(f'✔  {yellow("Dump")} {lessons_json_path}')
 
     with open(phrases_json_path, 'w') as f:
         print(json.dumps(phrases_json, ensure_ascii=False, indent=2), file=f)
-        print(f'[Generated] {phrases_json_path}')
+        print(f'✔  {yellow("Dump")} {phrases_json_path}')
 
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@ from tqdm import tqdm
 
 # 1-100
 filenames = [
-    "Weather25豪KP,Weather25豪,Weather25英KP,Weather25英,Weather25米KP,Weather25米,House32豪KP,House32豪,House32英KP,House32英,House32米KP,House32米,House30豪KP,House30豪,House30英KP,House30英,House30米KP,House30米,School39豪,School39英KP,School39英,School39米KP,School39米,School36豪KP,School36豪,School36英KP,School36英,School36米KP,School36米,House29豪,House29英,House29米,Emotion43豪KP,Emotion43豪,Emotion43英KP,Emotion43英,Emotion43米KP,Emotion43米,Greeting41豪KP,Greeting41豪,Greeting英KP,greeting41英,Greeting41米KP,Greeting41米,Acting as a guide10豪,Acting as a guide10英,Acting as a guide10米,Emotion24豪,Emotion24英,Emotion24米,Business English25豪,Business English25英,Business English25米,Business English22豪KP,Business English22豪,Business English22英KP,Business English22英,Business English22米KP,Business English22米,Relationship22豪,Relationship22英,Relationship22米,Relationship15豪,Relationship15英,Relationship15米,Relationship3米,Relationship3豪,Relationship3英,Business English17豪,Business English17英,Business English17米,School47豪KP,School47英KP,School47米KP,Greeting32豪KP,Greeting32豪,Greeting32英KP,Greeting32英,Greeting32米KP,Greeting32米,Acting as a guide37豪KP,Acting as a guide37豪,Acting as a guide37英KP,Acting as a guide37英,Acting as a guide37米KP,Acting as a guide37米,Weather37英KP,Weather37米KP,Weather37豪KP,Cafe39豪,Cafe39英,Cafe39米,Weather16豪KP,Weather16豪,Weather16英KP,Weather16英,Weather16米KP,Weather16米,Weather2豪KP,Weather2英KP",
+    "Weather25豪KP,Weather25豪,Weather25英KP,Weather25英,Weather25米KP,Weather25米,House32豪KP,House32豪,House32英KP,House32英,House32米KP,House32米,House30豪KP,House30豪,House30英KP,House30英,House30米KP,House30米,School39豪,School39英KP,School39英,School39米KP,School39米,School36豪KP,School36豪,School36英KP,School36英,School36米KP,School36米,House29豪,House29英,House29米,Emotion43豪KP,Emotion43豪,Emotion43英KP,Emotion43英,Emotion43米KP,Emotion43米,Greeting41豪KP,Greeting41豪,Greeting41英KP,greeting41英,Greeting41米KP,Greeting41米,Acting as a guide10豪,Acting as a guide10英,Acting as a guide10米,Emotion24豪,Emotion24英,Emotion24米,Business English25豪,Business English25英,Business English25米,Business English22豪KP,Business English22豪,Business English22英KP,Business English22英,Business English22米KP,Business English22米,Relationship22豪,Relationship22英,Relationship22米,Relationship15豪,Relationship15英,Relationship15米,Relationship3米,Relationship3豪,Relationship3英,Business English17豪,Business English17英,Business English17米,School47豪KP,School47英KP,School47米KP,Greeting32豪KP,Greeting32豪,Greeting32英KP,Greeting32英,Greeting32米KP,Greeting32米,Acting as a guide37豪KP,Acting as a guide37豪,Acting as a guide37英KP,Acting as a guide37英,Acting as a guide37米KP,Acting as a guide37米,Weather37英KP,Weather37米KP,Weather37豪KP,Cafe39豪,Cafe39英,Cafe39米,Weather16豪KP,Weather16豪,Weather16英KP,Weather16英,Weather16米KP,Weather16米,Weather2豪KP,Weather2英KP",
     "Weather2米KP,Weather2英,Emotion42豪KP,Emotion42豪,Emotion42英KP,Emotion42英,Emotion42米KP,Emotion42米,Emotion41豪KP,Emotion41豪,Emotion41英KP,Emotion41英,Emotion41米KP,Emotion41米,Emotion40豪KP,Emotion40豪,Emotion40英KP,Emotion40英,Emotion40米KP,Emotion40米,Emotion39豪KP,Emotion39豪,Emotion39英KP,Emotion39英,Emotion39米KP,Emotion39米,Emotion38豪KP,Emotion38豪,Emotion38英KP,Emotion38英,Emotion38米KP,Emotion38米,Emotion37豪KP,Emotion37豪,Emotion37英KP,Emotion37英,Emotion37米KP,Emotion37米,Emotion36豪KP,Emotion36豪,Emotion36英KP,Emotion36英,Emotion36米KP,Emotion36米,Emotion35豪KP,Emotion35豪,Emotion35英KP,Emotion35英,Emotion35米KP,Emotion35米,Emotion34豪KP,Emotion34豪,Emotion34英KP,Emotion34英,Emotion34米KP,Emotion34米,Emotion33豪KP,Emotion33豪,Emotion33英KP,Emotion33英,Emotion33米KP,Emotion33米,Emotion32豪KP,Emotion32豪,Emotion32英KP,Emotion32英,Emotion32米KP,Emotion32米,Emotion31豪KP,Emotion31豪,Emotion31英KP,Emotion31英,Emotion31米KP,Emotion31米,Weather42豪KP,Weather42豪,Weather42英KP,Weather42英,Weather42米KP,Weather42米,Weather41豪KP,Weather41豪,Weather41英KP,Weather41英,Weather41米KP,Weather41米,Weather40豪KP,Weather40豪,Weather40英KP,Weather40英,Weather40米KP,Weather40米,Weather39豪KP,Weather39豪,Weather39英KP,Weather39米KP,Weather39米,Weather38豪KP,Weather38豪,Weather38英KP",
     "Weather38英,Weather38米KP,Weather38米,Weather37豪,Weather37英,Weather37米,Weather36豪KP,Weather36豪,Weather36英KP,Weather36英,Weather36米KP,Weather36米,Weather35豪KP,Weather35豪,Weather35英,Weather35米KP,Weather35米,Weather34豪KP,Weather34豪,Weather34英KP,Weather34英,Weather34米KP,Weather34米,Weather33豪KP,Weather33豪,Weather33英KP,Weather33英,Weather33米KP,Weather33米,Weather32豪KP,Weather32豪,Weather32英KP,Weather32英,Weather32米KP,Weather32米,Weather31豪KP,Weather31豪,Weather31英KP,Weather31英,Weather31米KP,Weather31米,Weather30豪KP,Weather30豪,Weather30英KP,Weather30英,Weather30米KP,Weather30米,Weather29豪KP,Weather29豪,Weather29英,Weather29米KP,Weather29米,Weather28豪KP,Weather28豪,Weather28英KP,Weather28英,Weather28米KP,Weather28米,Weather27豪KP,Weather27豪,Weather27英KP,Weather27英,Weather27米KP,Weather27米,Weather26豪KP,Weather26豪,Weather26英KP,Weather26英,Weather26米KP,Weather26米,Weather24豪KP,Weather24豪,Weather24英KP,Weather24英,Weather24米,Weather23豪KP,Weather23豪,Weather23英KP,Weather23英,Weather23米KP,Weather23米,Weather22豪KP,Weather22豪,Weather22英KP,Weather22英,Weather22米KP,Weather22米,Phonecall42豪KP,Phonecall42豪,Phonecall42英KP,Phonecall42英,Phonecall42米KP,Phonecall42米,Phonecall41豪KP,Phonecall41豪,Phonecall41英KP,Phonecall41英,Phonecall41米KP,Phonecall41米,Phonecall40豪KP",
     "Phonecall40豪,Phonecall40英KP,Phonecall40英,Phonecall40米KP,Phonecall40米,Phonecall39豪KP,Phonecall39豪,Phonecall39英KP,Phonecall39英,Phonecall39米KP,Phonecall39米,Phonecall38豪KP,Phonecall38豪,Phonecall38英KP,Phonecall38英,Phonecall38米KP,Phonecall38米,Phonecall37豪KP,Phonecall37豪,Phonecall37英KP,Phonecall37英,Phonecall37米KP,Phonecall37米,Phonecall36豪KP,Phonecall36豪,Phonecall36英KP,Phonecall36英,Phonecall36米KP,Phonecall36米,Phonecall35豪KP,Phonecall35豪,Phonecall35英KP,Phonecall35英,Phonecall35米KP,Phonecall35米,Phonecall34豪KP,Phonecall34豪,Phonecall34英KP,Phonecall34英,Phonecall34米KP,Phonecall34米,Phonecall33豪KP,Phonecall33豪,Phonecall33英KP,Phonecall33英,Phonecall33米KP,Phonecall33米,Phonecall32豪KP,Phonecall32豪,Phonecall32英KP,Phonecall32英,Phonecall32米KP,Phonecall32米,Phonecall31豪KP,Phonecall31豪,Phonecall31英KP,Phonecall31英,Phonecall31米KP,Phonecall31米,Phonecall30豪KP,Phonecall30豪,Phonecall30英KP,Phonecall30英,Phonecall30米KP,Phonecall30米,Phonecall29豪KP,Phonecall29豪,Phonecall29英KP,Phonecall29英,Phonecall29米KP,Phonecall29米,Phonecall28豪KP,Phonecall28豪,Phonecall28英KP,Phonecall28英,Phonecall28米KP,Phonecall28米,Phonecall27豪KP,Phonecall27豪,Phonecall27英KP,Phonecall27英,Phonecall27米KP,Phonecall27米,Phonecall26豪KP,Phonecall26豪,Phonecall26英KP,Phonecall26英,Phonecall26米KP,Phonecall26米,Phonecall25豪KP,Phonecall25豪,Phonecall25英KP,Phonecall25英,Phonecall25米KP,Phonecall25米,Phonecall24豪KP,Phonecall24豪,Phonecall24英KP,Phonecall24英,Phonecall24米KP",
@@ -54,34 +54,41 @@ filenames = [
 ]
 
 name_lesson_id_map = {
-  'business': 'business',
+  'business english': 'business',
   'school': 'school',
-  'guide': 'travelling',
+  'travelling': 'travelling',
   'house': 'house',
-  'relationship': 'social',
+  'social media': 'social',
+  'relationship': 'relationship',
+  'greetng': 'greeting',
   'greeting': 'greeting',
   'weather': 'weather',
   'shopping': 'shopping',
-  'phonecall': 'acting',
-  'english': 'aussie',
+  'phonecall': 'phone',
+  'acting as a guide': 'acting',
+  'acting as guide': 'acting',
+  'aussie slang': 'aussie',
   'emotion': 'emotions',
   'cafe': 'restaurant',
   'parttime': 'part-time',
+  'part-time job': 'part-time',
 }
 
 pwd = os.path.dirname(os.path.abspath(__file__))
-root = f'/{pwd}/../assets'
-zip_cnt = 0
-mp3_cnt = 0
+root = f'{pwd}/../assets'
+src_dir = f'{root}/raw'
+dst_dir = f'{root}/voice'
 
-extractor = re.compile(r"([a-zA-Z\-]+)(\d+)([英米豪])((?:KP)?)")
+extractor = re.compile(r"([a-zA-Z\-\s]+)(\d+)([英米豪])((?:KP)?)")
+
+
 def name_to_meta(name):
     # Weather25[英米豪](KP)?
     try:
         match = re.search(extractor, name)
         id_upper, phrase_id, locale_ja, kp = match.groups()
         # convert
-        kp = kp.lower()
+        kp = kp.strip().lower()
         locale = { '英': 'en-uk', '豪': 'en-au', '米': 'en-us' }[locale_ja]
         lesson_id = name_lesson_id_map[id_upper.lower()]
         if lesson_id is None:
@@ -94,67 +101,64 @@ def name_to_meta(name):
         return None
 
 
-def extract_mp3(zip_path, filename_list):
-    dir_name = os.path.dirname(zip_path)
-    for name, zip_path in zip(filename_list, zips):
-        meta = name_to_meta(name)
-        if not meta:
-            print(f'{name} is invalid name')
-            continue
+def zip_with_label():
+    entries = []
+    for cent in range(1, 4000, 100):
+        zips = glob(f'{src_dir}/{cent}-{cent+99}/*.zip')
+        zips.sort(key=os.path.getmtime)
 
-        lesson_id, phrase_id, locale, kp = meta
-
-        extract_file_name = zip_path.split('.')[0]
-        extract_path = f'{dir_name}/{extract_file_name}'
-
-        # 解凍
-        print(f'extract {os.path.basename(zip_path)} -> {name}')
-        with ZipFile(zip_path) as f:
-            f.extractall(extract_path)
-
-        # rename mp3 path
-        mp3s = glob(f'{extract_path}/*.mp3')
-        if len(mp3s) == 0:
-            print(f'warn {os.path.basename(extract_path)} is empty')
-            continue
-
-        for mp3path in mp3s:
-            # {dir_name}/Weather25豪KP/Weather2_2_.mp3
-            index = os.path.basename(mp3path).split('_')[1]
-            if kp != '':
-                index = kp
-            filename = f'{lesson_id}_{phrase_id}_{index}_{locale}.mp3'
-            dst_path = f'{dst_dir}/{filename}'
-
-            if not os.path.exists(dst_path):
-                # print(f'\t- {os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
-                os.rename(mp3path, dst_path)
-
-            else:
-                pass
-                # print(f'{os.path.basename(dst_path)} already exist')
-
+        for idx, path in enumerate(zips):
+            label = filenames[cent // 100].split(',')[idx]
+            entries.append((label, path))
+    
+    return entries
 
 if __name__ == '__main__':
-    # TODO
-    pass
-    dst_dir = f'{root}/voice'
     if not os.path.exists(dst_dir):
         os.makedirs(dst_dir)
 
-    for i in tqdm(range(1, 40, step=100)):
-        voice_100_dir = f'{root}/raw/{i}-{i+99}'
-        zips = glob(voice_100_dir)
-        zips.sort(key=os.path.getmtime, reverse=False)
-        
-        if not os.path.exists(voice_100_dir):
+    entries = zip_with_label()
+    stat = {
+        'zip_count': 0,
+        'mp3_count': 0,
+    }
+
+    pbar = tqdm(entries, leave=True)
+    
+    for label, path in pbar:
+        meta = name_to_meta(label)
+        if not meta:
+            print(f'{label} is invalid name')
             continue
 
-        if len(zips) != len(filenames[i // 100]):
-            print(f'need 100 zips')
+        lesson_id, phrase_id, locale, kp = meta
+        stat['zip_count'] += 1
+
+        # exist check
+        if len(glob(f'{dst_dir}/{lesson_id}_{phrase_id}_*.mp3')) > 0:
             continue
 
-        for zip_path in glob(f'{voice_100_dir}/*.zip'):
-            extract_mp3(f'{voice_100_dir}/*.zip', filenames[i // 100].split(','))
+        # 解凍
+        pbar.set_description(f'[extract] {os.path.basename(path)} -> {label}')
+        with ZipFile(path) as f:
+            f.extractall(src_dir)
 
-    print(f'🎉 {zip_cnt} zips {mp3_cnt} voices extracted')
+        # rename mp3 path
+        mp3s = glob(f'{src_dir}/*.mp3')
+        if len(mp3s) == 0:
+            print(f'warn {label} is empty')
+            continue
+
+        for mp3path in mp3s:
+            # {dir_name}/Weather2_2_.mp3
+            index = os.path.basename(mp3path).split('_')[1]
+            if kp != '':
+                index = kp
+            renamed = f'{dst_dir}/{lesson_id}_{phrase_id}_{index}_{locale}.mp3'
+
+            if not os.path.exists(renamed):
+                stat['mp3_count'] += 1
+                # pbar.set_description(f'\t- {os.path.basename(mp3path)} -> {os.path.basename(renamed)}')
+                os.rename(mp3path, renamed)
+
+    print(f'🎉 {stat["zip_count"]} zips {stat["mp3_count"]} voices updated')
