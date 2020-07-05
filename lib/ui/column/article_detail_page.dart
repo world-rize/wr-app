@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:contentful_rich_text/contentful_rich_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:wr_app/model/column/article.dart';
 
 /// 記事本文
@@ -21,7 +21,7 @@ class ArticleDetailPage extends StatelessWidget {
           width: double.infinity,
           height: 100,
           child: Image.network(
-            article.thumbnailUrl,
+            '',
             fit: BoxFit.cover,
           ),
         ),
@@ -30,7 +30,7 @@ class ArticleDetailPage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8),
             child: Text(
-              article.title,
+              article.fields.title,
               style: h1.apply(color: Colors.white),
             ),
           ),
@@ -41,7 +41,7 @@ class ArticleDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('${article.title}'),
+        title: Text('${article.fields.title}'),
       ),
       body: LayoutBuilder(builder: (_, c) {
         return SizedBox(
@@ -50,13 +50,20 @@ class ArticleDetailPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 headline,
-                Markdown(
-                  shrinkWrap: true,
-                  selectable: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  data: article.content,
-                  imageDirectory: 'https://raw.githubusercontent.com',
+
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ContentfulRichText(article.fields.content)
+                      .documentToWidgetTree,
                 ),
+
+//                Markdown(
+//                  shrinkWrap: true,
+//                  selectable: true,
+//                  physics: const NeverScrollableScrollPhysics(),
+//                  data: article.fields.content,
+//                  imageDirectory: 'https://raw.githubusercontent.com',
+//                ),
               ],
             ),
           ),

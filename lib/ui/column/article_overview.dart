@@ -1,9 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/model/column/article.dart';
-import 'package:wr_app/model/column/article_type.dart';
 import 'package:wr_app/ui/column/article_detail_page.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
@@ -17,17 +15,20 @@ class ArticleOverView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).primaryTextTheme;
 
+    print(article.fields.toJson()['assets']);
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: ShadowedContainer(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[
+            // TODO
             SizedBox(
               width: double.infinity,
               height: 150,
               child: Image.network(
-                article.thumbnailUrl,
+                '',
                 fit: BoxFit.cover,
               ),
             ),
@@ -49,46 +50,32 @@ class ArticleOverView extends StatelessWidget {
               title: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Text(
-                  article.title,
+                  article.fields.title,
                   style: theme.headline2,
                 ),
               ),
-              subtitle: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  article.content,
-                  maxLines: 3,
-                  style: theme.bodyText2,
-                ),
-              ),
+              subtitle: article.fields.subtitle != null
+                  ? Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        article.fields.subtitle,
+                        style: theme.headline4,
+                      ),
+                    )
+                  : null,
             ),
             ButtonBar(
               children: <Widget>[
-                if (article.type == ArticleType.inApp)
-                  FlatButton(
-                    child: const Text('続きを読む'),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ArticleDetailPage(article: article),
-                        ),
-                      );
-                    },
-                  )
-                else
-                  FlatButton(
-                    child: const Text('Webで開く'),
-                    onPressed: () async {
-                      const url = 'https://world-rize.com';
-                      if (await canLaunch(url)) {
-                        await launch(
-                          url,
-                          forceSafariVC: false,
-                          forceWebView: false,
-                        );
-                      }
-                    },
-                  ),
+                FlatButton(
+                  child: const Text('続きを読む'),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => ArticleDetailPage(article: article),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ],

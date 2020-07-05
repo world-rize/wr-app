@@ -6,7 +6,6 @@ import 'package:getflutter/components/typography/gf_typography.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/api/mock.dart';
 import 'package:wr_app/extension/padding_extension.dart';
-import 'package:wr_app/model/column/article_type.dart';
 import 'package:wr_app/ui/column/article_detail_page.dart';
 import 'package:wr_app/ui/column/category_posts.dart';
 import 'package:wr_app/ui/column/category_view.dart';
@@ -36,13 +35,11 @@ class ColumnIndexPage extends StatelessWidget {
                   builder: (_) => CategoryPosts(
                     category: category,
                     onTap: (article) {
-                      if (article.type == ArticleType.inApp) {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => ArticleDetailPage(article: article),
-                          ),
-                        );
-                      }
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => ArticleDetailPage(article: article),
+                        ),
+                      );
                     },
                   ),
                 ),

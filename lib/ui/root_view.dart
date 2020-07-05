@@ -38,7 +38,8 @@ class _RootViewState extends State<RootView>
     _pageController = PageController();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final firstLaunch = PreferencesStore().firstLaunch;
+      final firstLaunch =
+          Provider.of<PreferencesStore>(context, listen: false).firstLaunch;
       print('first launch: $firstLaunch');
 
       // show on boarding modal
@@ -66,7 +67,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          '${userStore.user.point} coins',
+          '${userStore.user?.point ?? '--'} coins',
           style: const TextStyle(color: Colors.white),
         ),
       ],

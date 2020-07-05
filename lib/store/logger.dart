@@ -2,7 +2,7 @@
 
 import 'package:wr_app/model/activity.dart';
 
-// TODO(someone): refactoring
+// アプリ内のログ
 class InAppLogger {
   const InAppLogger();
 

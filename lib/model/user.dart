@@ -24,6 +24,20 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
+  factory User.empty() {
+    return User(
+      uuid: '',
+      userId: '',
+      email: '',
+      age: 0,
+      name: '',
+      point: 0,
+      testLimitCount: 0,
+      favorites: {},
+      membership: Membership.normal,
+    );
+  }
+
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
   /// ユーザータイプ

@@ -6,6 +6,7 @@ import os
 import re
 from os.path import expanduser
 from zipfile import ZipFile
+from tqdm import tqdm
 
 # 1-100
 filenames = [
@@ -94,21 +95,7 @@ def name_to_meta(name):
 
 
 def extract_mp3(zip_path, filename_list):
-    global zip_cnt, mp3_cnt
     dir_name = os.path.dirname(zip_path)
-    dst_dir = f'{root}/voice'
-    if not os.path.exists(dst_dir):
-        os.makedirs(dst_dir)
-
-    zips = glob(zip_path)
-    zips.sort(key=os.path.getmtime, reverse=False)
-
-    if len(zips) != len(filename_list):
-        print(f'need 100 zips')
-        return
-
-    # rename
-    lesson_ids = set()
     for name, zip_path in zip(filename_list, zips):
         meta = name_to_meta(name)
         if not meta:
@@ -119,9 +106,6 @@ def extract_mp3(zip_path, filename_list):
 
         extract_file_name = zip_path.split('.')[0]
         extract_path = f'{dir_name}/{extract_file_name}'
-
-        # lesson id sampling
-        # lesson_ids.add(lesson_id)
 
         # 解凍
         print(f'extract {os.path.basename(zip_path)} -> {name}')
@@ -143,23 +127,34 @@ def extract_mp3(zip_path, filename_list):
             dst_path = f'{dst_dir}/{filename}'
 
             if not os.path.exists(dst_path):
-                print(f'\t- {os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
+                # print(f'\t- {os.path.basename(mp3path)} -> {os.path.basename(dst_path)}')
                 os.rename(mp3path, dst_path)
 
-                mp3_cnt += 1
             else:
-                print(f'{os.path.basename(dst_path)} already exist')
-
-        zip_cnt += 1
+                pass
+                # print(f'{os.path.basename(dst_path)} already exist')
 
 
 if __name__ == '__main__':
-    for i in range(1, 100 * len(filenames), 100):
+    # TODO
+    pass
+    dst_dir = f'{root}/voice'
+    if not os.path.exists(dst_dir):
+        os.makedirs(dst_dir)
+
+    for i in tqdm(range(1, 40, step=100)):
         voice_100_dir = f'{root}/raw/{i}-{i+99}'
+        zips = glob(voice_100_dir)
+        zips.sort(key=os.path.getmtime, reverse=False)
+        
         if not os.path.exists(voice_100_dir):
-            print(f'[Warn] {voice_100_dir} not found')
             continue
 
-        extract_mp3(f'{voice_100_dir}/*.zip', filenames[i // 100].split(','))
+        if len(zips) != len(filenames[i // 100]):
+            print(f'need 100 zips')
+            continue
 
-    print(f'[Success] {zip_cnt} zips {mp3_cnt} voices extracted')
+        for zip_path in glob(f'{voice_100_dir}/*.zip'):
+            extract_mp3(f'{voice_100_dir}/*.zip', filenames[i // 100].split(','))
+
+    print(f'🎉 {zip_cnt} zips {mp3_cnt} voices extracted')

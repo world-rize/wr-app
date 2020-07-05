@@ -83,14 +83,9 @@ class OnBoardingPage extends StatelessWidget {
         color: splashColor,
         child: Column(
           children: <Widget>[
-            const Expanded(
+            Expanded(
               flex: 1,
-              child: Center(
-                child: Placeholder(
-                  fallbackHeight: 300,
-                  fallbackWidth: 300,
-                ),
-              ),
+              child: Image.asset('assets/icon/top.jpg'),
             ),
             Expanded(
               flex: 1,

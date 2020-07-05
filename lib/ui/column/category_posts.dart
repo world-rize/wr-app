@@ -1,9 +1,10 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/api/column/get_articles.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/model/column/article.dart';
 import 'package:wr_app/model/column/category.dart';
+import 'package:wr_app/store/articles.dart';
 import 'package:wr_app/ui/column/article_overview.dart';
 
 /// カテゴリ内記事一覧
@@ -18,6 +19,7 @@ class CategoryPosts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final repo = Provider.of<ArticleStore>(context).repo;
     final primaryColor = Theme.of(context).primaryColor;
 
     final articleNotFound = Center(
@@ -43,7 +45,7 @@ class CategoryPosts extends StatelessWidget {
 
     // TODO(someone): caching
     final articlesView = FutureBuilder<List<Article>>(
-      future: getArticles(category.id),
+      future: repo.findByCategory(category.id),
       builder: (_, snapshot) {
         return Stack(
           children: <Widget>[
