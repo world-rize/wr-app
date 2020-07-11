@@ -2,7 +2,7 @@
 import 'dart:async';
 
 import 'package:cloud_functions/cloud_functions.dart';
-import 'package:wr_app/domain/user/user_api_dto.dart';
+import 'package:wr_app/domain/user/model/user_api_dto.dart';
 
 abstract class IUserRepository {
   Future<TestResponse> test(TestRequestDto req);

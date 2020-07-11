@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/article/article.dart';
 import 'package:wr_app/domain/article/category.dart';
+import 'package:wr_app/domain/article/model/article.dart';
 import 'package:wr_app/store/articles.dart';
 import 'package:wr_app/ui/column/article_overview.dart';
 

@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wr_app/domain/user/membership.dart';
-import 'package:wr_app/domain/user/user.dart';
+import 'package:wr_app/domain/user/model/membership.dart';
+import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/user_service.dart';
 import 'package:wr_app/store/logger.dart';
 import 'package:wr_app/ui/common/toast.dart';

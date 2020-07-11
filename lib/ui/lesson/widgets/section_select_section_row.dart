@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wr_app/domain/lesson/section.dart';
+import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 

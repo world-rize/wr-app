@@ -3,8 +3,8 @@
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
-import 'package:wr_app/domain/lesson/lesson.dart';
-import 'package:wr_app/domain/lesson/phrase.dart';
+import 'package:wr_app/domain/lesson/model/lesson.dart';
+import 'package:wr_app/domain/lesson/model/phrase.dart';
 
 /// セクション: フレーズの集まり
 class Section {

@@ -2,9 +2,9 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
-import 'package:wr_app/domain/user/membership.dart';
-import 'package:wr_app/domain/user/user.dart';
-import 'package:wr_app/domain/user/user_api_dto.dart';
+import 'package:wr_app/domain/user/model/membership.dart';
+import 'package:wr_app/domain/user/model/user.dart';
+import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 
 class UserService {

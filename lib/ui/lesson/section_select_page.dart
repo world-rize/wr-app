@@ -3,8 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/lesson/lesson.dart';
-import 'package:wr_app/domain/lesson/section.dart';
+import 'package:wr_app/domain/lesson/model/lesson.dart';
+import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/section_list_page.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';

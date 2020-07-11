@@ -1,11 +1,11 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:wr_app/domain/article/category.dart';
-import 'package:wr_app/domain/lesson/assets.dart';
-import 'package:wr_app/domain/lesson/lesson.dart';
-import 'package:wr_app/domain/lesson/message.dart';
-import 'package:wr_app/domain/lesson/phrase.dart';
-import 'package:wr_app/domain/lesson/section.dart';
-import 'package:wr_app/domain/user/membership.dart';
+import 'package:wr_app/domain/lesson/model/assets.dart';
+import 'package:wr_app/domain/lesson/model/lesson.dart';
+import 'package:wr_app/domain/lesson/model/message.dart';
+import 'package:wr_app/domain/lesson/model/phrase.dart';
+import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/model/phrase/example.dart';
 import 'package:wr_app/model/user.dart';
 

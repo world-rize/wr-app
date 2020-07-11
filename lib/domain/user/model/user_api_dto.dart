@@ -2,7 +2,7 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wr_app/domain/user/user.dart';
+import 'package:wr_app/domain/user/model/user.dart';
 
 part 'user_api_dto.g.dart';
 

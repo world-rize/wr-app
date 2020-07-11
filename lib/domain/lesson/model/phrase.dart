@@ -2,8 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wr_app/domain/lesson/assets.dart';
-import 'package:wr_app/domain/lesson/example.dart';
+import 'package:wr_app/domain/lesson/model/assets.dart';
+import 'package:wr_app/domain/lesson/model/example.dart';
 
 part 'phrase.g.dart';
 

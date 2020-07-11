@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/lesson/section.dart';
+import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/extension/collection_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/store/user.dart';

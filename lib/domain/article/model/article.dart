@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part './article.g.dart';
+part 'article.g.dart';
 
 /// 記事
 @JsonSerializable()
