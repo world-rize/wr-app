@@ -1,6 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:wr_app/model/activity.dart';
+import 'package:wr_app/domain/activity.dart';
 
 // アプリ内のログ
 class InAppLogger {

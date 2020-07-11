@@ -2,9 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wr_app/domain/lesson/phrase.dart';
 import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/extension/string_capitalization.dart';
-import 'package:wr_app/model/phrase/phrase.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// フレーズを表示するコンポーネント

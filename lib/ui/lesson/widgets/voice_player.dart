@@ -3,8 +3,8 @@
 import 'package:audioplayers/audio_cache.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:wr_app/model/phrase/message.dart';
-import 'package:wr_app/model/phrase/phrase.dart';
+import 'package:wr_app/domain/lesson/message.dart';
+import 'package:wr_app/domain/lesson/phrase.dart';
 
 class VoicePlayer with ChangeNotifier {
   VoicePlayer({@required this.phrase, @required this.onError}) {

@@ -2,7 +2,7 @@
 
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:data_classes/data_classes.dart';
-import 'package:wr_app/api/model/api.dart';
+import 'package:wr_app/domain/user/user_api_dto.dart';
 
 /// read user
 Future<ReadUserResponse> readUser() async {

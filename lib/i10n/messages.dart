@@ -1,6 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:intl/intl.dart';
-import 'package:wr_app/model/membership.dart';
+import 'package:wr_app/domain/user/membership.dart';
 
 // referenced https://github.com/mono0926/intl_sample/blob/master/lib/l10n/messages.dart
 mixin Messages {

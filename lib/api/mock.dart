@@ -1,12 +1,12 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-import 'package:wr_app/model/column/category.dart';
-import 'package:wr_app/model/membership.dart';
-import 'package:wr_app/model/phrase/assets.dart';
+import 'package:wr_app/domain/article/category.dart';
+import 'package:wr_app/domain/lesson/assets.dart';
+import 'package:wr_app/domain/lesson/lesson.dart';
+import 'package:wr_app/domain/lesson/message.dart';
+import 'package:wr_app/domain/lesson/phrase.dart';
+import 'package:wr_app/domain/lesson/section.dart';
+import 'package:wr_app/domain/user/membership.dart';
 import 'package:wr_app/model/phrase/example.dart';
-import 'package:wr_app/model/phrase/lesson.dart';
-import 'package:wr_app/model/phrase/message.dart';
-import 'package:wr_app/model/phrase/phrase.dart';
-import 'package:wr_app/model/phrase/section.dart';
 import 'package:wr_app/model/user.dart';
 
 /// ダミーのフレーズを返す

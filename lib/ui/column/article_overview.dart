@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/model/column/article.dart';
+import 'package:wr_app/domain/article/article.dart';
 import 'package:wr_app/ui/column/article_detail_page.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 

@@ -3,9 +3,8 @@ import 'package:contentful/contentful.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wr_app/model/column/article_type.dart';
 
-part 'article.g.dart';
+part './article.g.dart';
 
 /// 記事
 @JsonSerializable()

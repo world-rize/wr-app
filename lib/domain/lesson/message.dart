@@ -2,7 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wr_app/model/phrase/assets.dart';
+import 'package:wr_app/domain/lesson/assets.dart';
 
 part 'message.g.dart';
 

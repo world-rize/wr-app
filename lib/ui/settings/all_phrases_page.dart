@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/model/phrase/phrase.dart';
+import 'package:wr_app/domain/lesson/phrase.dart';
 import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 

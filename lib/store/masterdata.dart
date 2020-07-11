@@ -6,9 +6,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:wr_app/api/mock.dart';
-import 'package:wr_app/model/phrase/lesson.dart';
-import 'package:wr_app/model/phrase/phrase.dart';
-import 'package:wr_app/model/phrase/section.dart';
+import 'package:wr_app/domain/lesson/lesson.dart';
+import 'package:wr_app/domain/lesson/phrase.dart';
+import 'package:wr_app/domain/lesson/section.dart';
 import 'package:wr_app/store/logger.dart';
 
 /// マスタデータを保持するストア(__シングルトン__)

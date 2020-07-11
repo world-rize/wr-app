@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:contentful/client.dart';
-import 'package:wr_app/model/column/article.dart';
+import 'package:wr_app/domain/article/article.dart';
 
 class ArticleRepository {
   ArticleRepository(this.client);

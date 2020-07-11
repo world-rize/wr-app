@@ -2,8 +2,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:wr_app/domain/lesson/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/model/phrase/section.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// 各セクションのタイル
@@ -30,7 +30,8 @@ class SectionRow extends StatelessWidget {
           children: <Widget>[
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child: Text(
                   section.title,
                   style: style.headline.apply(color: Colors.black),

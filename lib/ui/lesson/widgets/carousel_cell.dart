@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:wr_app/domain/lesson/lesson.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/model/phrase/lesson.dart';
 import 'package:wr_app/ui/widgets/locked_view.dart';
 
 class CarouselCell extends StatelessWidget {

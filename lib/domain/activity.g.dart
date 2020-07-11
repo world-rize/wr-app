@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'activity.dart';
+part of '../domain/activity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

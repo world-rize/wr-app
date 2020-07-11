@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/model/phrase/section.dart';
+import 'package:wr_app/domain/lesson/section.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_section_row.dart';
 
 /// テスト一覧画面

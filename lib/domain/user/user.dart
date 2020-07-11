@@ -2,8 +2,9 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wr_app/model/activity.dart';
-import 'package:wr_app/model/membership.dart';
+import 'package:wr_app/domain/activity.dart';
+import 'package:wr_app/domain/lesson/phrase.dart';
+import 'package:wr_app/domain/user/membership.dart';
 
 part 'user.g.dart';
 
@@ -72,4 +73,11 @@ class User {
 
   /// ユーザーログ
   List<Activity> logs;
+
+  bool get isPremium => membership == Membership.pro;
+
+  ///
+  bool isFavoritePhrase(Phrase phrase) {
+    return favorites.containsKey(phrase.id) && favorites[phrase.id];
+  }
 }
