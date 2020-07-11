@@ -1,4 +1,9 @@
-# Docs
+# WorldRIZe
+![](https://img.shields.io/badge/version-α0.4.1-green)
+
+## Architecture Overview
+![](overview.svg)
+
 ## デザイン未完の画面
 - コラム > カテゴリ > 記事一覧
 - コラム > カテゴリ > 記事一覧 > 記事
@@ -18,3 +23,4 @@
 
 
 ## Functions
+(WIP)

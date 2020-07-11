@@ -1,21 +1,9 @@
-# 記事
-**Markdown with YAML front matter** を採用
+# 仕様
+## Lesson
+(WIP)
 
-## フロー
-- Markdownで記事を書く
-- ホームページ内のフォームでContentfulに送信
-- Webでもアプリ内でも見れる
+## Article
+(WIP)
 
-## 記事の例
-
-```md
----
-title: タイトル
-author: CEQUGZDRjVV0IqQ1Ww4PBNnxeaI2
----
-
-# Markdown Example
-Markdown allows you to easily include formatted text, images, and even formatted Dart code in your app.
-
-## Titles
-Setext-style
+## MyPage
+(WIP)
