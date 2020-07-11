@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wr_app/domain/lesson/model/assets.dart';
 import 'package:wr_app/domain/lesson/model/example.dart';
+import 'package:wr_app/domain/lesson/model/message.dart';
 
 part 'phrase.g.dart';
 
@@ -19,6 +20,52 @@ class Phrase {
   });
 
   factory Phrase.fromJson(Map<String, dynamic> json) => _$PhraseFromJson(json);
+
+  /// ダミーのフレーズを返す
+  factory Phrase.dummy(int index) {
+    final dummyAssets = Assets(voice: {
+      'en-us': 'voice_sample.mp3',
+      'en-uk': 'voice_sample.mp3',
+      'en-au': 'voice_sample.mp3',
+    });
+
+    return Phrase(
+        id: '0000',
+        title: {
+          'ja': 'いつ宿題提出するんだっけ？',
+          'en': 'When is the homework due?',
+        },
+        meta: {
+          'lessonId': 'Shcool',
+        },
+        example: Example(value: [
+          Message(
+            text: {
+              'ja': '宿題終わった?',
+              'en': 'Have you finished the English homework yet?',
+            },
+            assets: dummyAssets,
+          ),
+          Message(
+            text: {
+              'ja': 'いや、終わってないよ\n(いつ宿題提出するんだっけ？)',
+              'en': 'No I haven\'t.\n(When is the homework due?)',
+            },
+            assets: dummyAssets,
+          ),
+          Message(
+            text: {
+              'ja': '火曜日だよ',
+              'en': 'It\'s due next Tuesday.',
+            },
+            assets: dummyAssets,
+          ),
+        ]),
+        advice: {
+          'ja':
+              '“due”は「支払い期限のきた~」や「 満期の~」といった意味を持ちます。よって、”When is ~ due?”で「~の期限はいつだっけ？」となり、”When is the homework due?”を意訳すると「いつ宿題提出するんだっけ？」となります。',
+        });
+  }
 
   Map<String, dynamic> toJson() => _$PhraseToJson(this);
 

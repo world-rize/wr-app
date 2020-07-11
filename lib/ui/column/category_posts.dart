@@ -2,9 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/article/category.dart';
-import 'package:wr_app/domain/article/model/article.dart';
-import 'package:wr_app/store/articles.dart';
+import 'package:wr_app/domain/article/article_notifier.dart';
+import 'package:wr_app/domain/article/model.dart';
 import 'package:wr_app/ui/column/article_overview.dart';
 
 /// カテゴリ内記事一覧
@@ -14,12 +13,12 @@ class CategoryPosts extends StatelessWidget {
     @required this.onTap,
   });
 
-  final Category category;
+  final ArticleCategory category;
   final Function(Article) onTap;
 
   @override
   Widget build(BuildContext context) {
-    final repo = Provider.of<ArticleStore>(context).repo;
+    final notifier = Provider.of<ArticleNotifier>(context);
     final primaryColor = Theme.of(context).primaryColor;
 
     final articleNotFound = Center(
@@ -45,7 +44,7 @@ class CategoryPosts extends StatelessWidget {
 
     // TODO(someone): caching
     final articlesView = FutureBuilder<List<Article>>(
-      future: repo.findByCategory(category.id),
+      future: notifier.findByCategory(id: category.id),
       builder: (_, snapshot) {
         return Stack(
           children: <Widget>[

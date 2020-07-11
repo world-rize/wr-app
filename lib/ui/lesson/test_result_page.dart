@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
@@ -50,7 +50,7 @@ class TestResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final useStore = Provider.of<UserStore>(context);
+    final useStore = Provider.of<UserNotifier>(context);
     final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
     final resultText = I.of(context).testResult(true);
 
@@ -75,7 +75,8 @@ class TestResultPage extends StatelessWidget {
                     children: [
                       PhraseCard(
                         phrase: stats.section.phrases[i],
-                        favorite: useStore.favorited(stats.section.phrases[i]),
+                        favorite: useStore.user
+                            .isFavoritePhrase(stats.section.phrases[i]),
                       ),
                       Text('${stats.answers[i]}'),
                     ],

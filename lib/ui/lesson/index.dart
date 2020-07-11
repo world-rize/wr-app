@@ -5,20 +5,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/lesson/lesson_notifier.dart';
+import 'package:wr_app/domain/lesson/model.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
+import 'package:wr_app/extension/collection_extension.dart';
 import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/masterdata.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/favorite_page.dart';
 import 'package:wr_app/ui/lesson/request_page.dart';
-import 'package:wr_app/ui/lesson/widgets/lesson_select_carousel.dart';
+import 'package:wr_app/ui/lesson/section_select_page.dart';
+import 'package:wr_app/ui/lesson/widgets/carousel_cell.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
 /// `レッスン` ページのトップ
 ///
 class LessonIndexPage extends StatelessWidget {
   Future<void> _sendAnalyticsEvent(BuildContext context) async {
-    final userStore = Provider.of<UserStore>(context);
+    final userStore = Provider.of<UserNotifier>(context);
     if (userStore == null) {
       return;
     }
@@ -33,19 +36,8 @@ class LessonIndexPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserStore>(context);
-    final masterData = Provider.of<MasterDataStore>(context);
-
-    final favoritePhrase = masterData.allPhrases().firstWhere(
-        (phrase) =>
-            userStore.user.favorites.containsKey(phrase.id) &&
-            userStore.user.favorites[phrase.id],
-        orElse: () => null);
-
-    // TODO(someone): call api
-    final newComingPhrase = masterData
-        .allPhrases()
-        .firstWhere((phrase) => phrase.id.endsWith('5'), orElse: () => null);
+    final userStore = Provider.of<UserNotifier>(context);
+    final lessonNotifier = Provider.of<LessonNotifier>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -60,7 +52,25 @@ class LessonIndexPage extends StatelessWidget {
           Container(
             width: MediaQuery.of(context).size.width,
             height: 250,
-            child: LessonSelectCarousel(),
+            child: GFCarousel(
+              enableInfiniteScroll: false,
+              items: lessonNotifier.lessons
+                  .indexedMap(
+                    (index, lesson) => CarouselCell(
+                      lesson: lesson,
+                      index: index,
+                      locked: !userStore.user.isPremium && 3 <= index,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => SectionSelectPage(lesson: lesson),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
 
           const GFTypography(
@@ -69,26 +79,34 @@ class LessonIndexPage extends StatelessWidget {
             dividerColor: GFColors.DANGER,
           ),
 
-          if (favoritePhrase != null)
-            Column(
-              children: [
-                PhraseCard(
-                  phrase: favoritePhrase,
-                  favorite: userStore.favorited(favoritePhrase),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => FavoritePage()),
-                    );
-                  },
-                ),
-              ],
-            )
-          else
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('no favorites',
-                  style: TextStyle(fontSize: 20, color: Colors.grey)),
-            ),
+          FutureBuilder<List<Phrase>>(
+            future: lessonNotifier.favoritePhrases(),
+            builder: (_, res) {
+              if (!res.hasData || res.data.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'no favorites',
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                  ),
+                );
+              } else {
+                return Column(
+                  children: [
+                    PhraseCard(
+                      phrase: res.data.first,
+                      favorite: true,
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => FavoritePage()),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
 
           // New Coming Phrases Section
           const GFTypography(
@@ -97,22 +115,28 @@ class LessonIndexPage extends StatelessWidget {
             dividerColor: GFColors.SUCCESS,
           ),
 
-          if (newComingPhrase != null)
-            Column(
-              children: [
-                PhraseCard(
-                  phrase: newComingPhrase,
-                  favorite: userStore.favorited(newComingPhrase),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => FavoritePage()),
-                    );
-                  },
-                ),
-              ],
-            )
-          else
-            const Text('no newcomming'),
+          FutureBuilder<List<Phrase>>(
+              future: lessonNotifier.newComingPhrases(),
+              builder: (_, res) {
+                if (!res.hasData || res.data.isEmpty) {
+                  return const Text('no new coming phrases');
+                } else {
+                  final p = res.data.first;
+                  return Column(
+                    children: [
+                      PhraseCard(
+                        phrase: p,
+                        favorite: userStore.user.isFavoritePhrase(p),
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) => FavoritePage()),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                }
+              }),
 
           // Request Section
           const GFTypography(

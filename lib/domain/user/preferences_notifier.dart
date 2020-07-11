@@ -1,22 +1,21 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wr_app/store/logger.dart';
+import 'package:wr_app/util/logger.dart';
 
 /// アプリ内の設定等を保持
 ///
-class PreferencesStore extends ChangeNotifier {
+class PreferenceNotifier extends ChangeNotifier {
   /// シングルトンインスタンス
-  static PreferencesStore _cache;
+  static PreferenceNotifier _cache;
 
-  factory PreferencesStore({
+  factory PreferenceNotifier({
     @required SharedPreferences pref,
   }) {
-    return _cache ??= PreferencesStore._internal(pref: pref);
+    return _cache ??= PreferenceNotifier._internal(pref: pref);
   }
 
-  PreferencesStore._internal({@required this.pref}) {
+  PreferenceNotifier._internal({@required this.pref}) {
     InAppLogger.log('✨ init PreferencesStore');
   }
 

@@ -1,15 +1,42 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-class ArticleNotifier extends ChangeNotifier {
-  /// singleton
-  static ArticleStore _cache;
+import 'package:contentful/client.dart';
+import 'package:flutter/foundation.dart';
+import 'package:wr_app/domain/article/article_service.dart';
+import 'package:wr_app/domain/article/model.dart';
+import 'package:wr_app/util/logger.dart';
 
-  factory ArticleStore({@required Client client}) {
-    return _cache ??= ArticleStore._internal(client: client);
+class ArticleNotifier extends ChangeNotifier {
+  ArticleService _articleService;
+
+  Client _client;
+
+  /// singleton
+  static ArticleNotifier _cache;
+
+  factory ArticleNotifier({
+    @required ArticleService articleService,
+    @required Client client,
+  }) {
+    return _cache ??= ArticleNotifier._internal(articleService: articleService);
   }
 
-  ArticleStore._internal({@required Client client}) {
-    repo = ArticleRepository(client);
+  ArticleNotifier._internal({
+    @required ArticleService articleService,
+    @required Client client,
+  }) {
+    _articleService = articleService;
+    _client = client;
     InAppLogger.log('[ArticleStore] init');
+  }
+
+  Future<List<Article>> findByCategory({
+    @required String id,
+  }) {
+    return _articleService.findByCategory(client: _client, id: id);
+  }
+
+  List<ArticleCategory> getCategories() {
+    return _articleService.getCategories();
   }
 }

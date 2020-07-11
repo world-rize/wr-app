@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/store/preferences.dart';
-import 'package:wr_app/store/user.dart';
+import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/ui/common/toast.dart';
 import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
 import 'package:wr_app/ui/root_view.dart';
@@ -30,8 +30,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _signUpEmailAndPassword() async {
-    final preferences = Provider.of<PreferencesStore>(context, listen: false);
-    final userStore = Provider.of<UserStore>(context, listen: false);
+    final preferences = Provider.of<PreferenceNotifier>(context, listen: false);
+    final userStore = Provider.of<UserNotifier>(context, listen: false);
     print('email: $_email password: $_password');
 
     try {
@@ -54,8 +54,8 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _signUpWithGoogle() async {
-    final preferences = Provider.of<PreferencesStore>(context, listen: false);
-    final userStore = Provider.of<UserStore>(context, listen: false);
+    final preferences = Provider.of<PreferenceNotifier>(context, listen: false);
+    final userStore = Provider.of<UserNotifier>(context, listen: false);
     try {
       await userStore.signUpWithGoogle();
 

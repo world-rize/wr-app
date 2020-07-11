@@ -2,8 +2,8 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wr_app/domain/activity.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
+import 'package:wr_app/domain/system/model/activity.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 
 part 'user.g.dart';
@@ -36,6 +36,20 @@ class User {
       testLimitCount: 0,
       favorites: {},
       membership: Membership.normal,
+    );
+  }
+
+  factory User.dummy() {
+    return User(
+      membership: Membership.normal,
+      uuid: 'test-test',
+      userId: '0123-4567-89',
+      email: 'hoge@example.com',
+      age: 10,
+      name: 'テスト',
+      point: 100,
+      testLimitCount: 3,
+      favorites: {},
     );
   }
 

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/colors/gf_color.dart';
 import 'package:getflutter/components/typography/gf_typography.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:wr_app/api/mock.dart';
+import 'package:provider/provider.dart';
+import 'package:wr_app/domain/article/article_notifier.dart';
 import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/ui/column/article_detail_page.dart';
 import 'package:wr_app/ui/column/category_posts.dart';
@@ -17,6 +18,9 @@ import 'package:wr_app/ui/common/admob_widget.dart';
 class ColumnIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final notifier = Provider.of<ArticleNotifier>(context);
+    final categories = notifier.getCategories();
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

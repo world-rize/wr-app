@@ -6,12 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/lesson/lesson_notifier.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/extension/collection_extension.dart';
 import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/ui/lesson/test_result_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 
@@ -71,7 +71,7 @@ class TestPageState extends State<TestPage> {
   }
 
   /// 次の問題へ
-  // TODO: リファクタリング
+  // TODO: refactoring
   Future<void> _next(int answer) async {
     _answers.add(answer == _answerIndex);
 
@@ -101,17 +101,6 @@ class TestPageState extends State<TestPage> {
         _index++;
       });
     }
-  }
-
-  List<String> _randomSelections() {
-    final selections = Provider.of<MasterDataStore>(context)
-        .allPhrases()
-        .sample(4)
-        .map((phrase) => phrase.title['en'])
-        .toList();
-    _answerIndex = Random().nextInt(4);
-    selections[_answerIndex] = currentPhrase.title['en'];
-    return selections;
   }
 
   void _showConfirmDialog() {
@@ -160,6 +149,15 @@ class TestPageState extends State<TestPage> {
 //      ),
 //    );
 //  }
+
+  List<String> _randomSelections() {
+    final notifier = Provider.of<LessonNotifier>(context);
+    final selections =
+        notifier.phrases.sample(4).map((phrase) => phrase.title['en']).toList();
+    _answerIndex = Random().nextInt(4);
+    selections[_answerIndex] = currentPhrase.title['en'];
+    return selections;
+  }
 
   @override
   Widget build(BuildContext context) {

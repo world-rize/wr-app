@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/store/preferences.dart';
-import 'package:wr_app/store/user.dart';
+import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
 import 'package:wr_app/ui/root_view.dart';
 
@@ -20,7 +20,7 @@ class _SignInPageState extends State<SignInPage> {
   String _password;
 
   void _gotoHome() {
-    final preferences = Provider.of<PreferencesStore>(context, listen: false);
+    final preferences = Provider.of<PreferenceNotifier>(context, listen: false);
     // initial login
     preferences.setFirstLaunch(flag: false);
 
@@ -34,7 +34,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Future<void> _signInEmailAndPassword(String email, String password) async {
-    final userStore = Provider.of<UserStore>(context, listen: false);
+    final userStore = Provider.of<UserNotifier>(context, listen: false);
     try {
       await userStore.loginWithEmailAndPassword(email, password);
 
@@ -46,7 +46,7 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Future<void> _signInWithGoogle() async {
-    final userStore = Provider.of<UserStore>(context, listen: false);
+    final userStore = Provider.of<UserNotifier>(context, listen: false);
     try {
       await userStore.loginWithGoogle();
 

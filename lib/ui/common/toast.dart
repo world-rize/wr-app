@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:wr_app/store/logger.dart';
+import 'package:wr_app/util/logger.dart';
 
 class NotifyToast {
   /// 成功トーストを出す

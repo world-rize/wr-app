@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/lesson/lesson_notifier.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
-import 'package:wr_app/store/masterdata.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 class Voice {
@@ -29,9 +29,8 @@ class AllPhrasesPage extends StatefulWidget {
 
 class _AllPhrasesPageState extends State<AllPhrasesPage> {
   Future<List<Voice>> paths() async {
-    final masterData = Provider.of<MasterDataStore>(context);
-    final allPhrases = masterData.allPhrases();
-    final voices = await Future.wait(allPhrases.expand((phrase) {
+    final notifier = Provider.of<LessonNotifier>(context);
+    final voices = await Future.wait(notifier.phrases.expand((phrase) {
       return phrase.voicePaths().map((path) async {
         final exist = await existAssets('assets/$path');
         return Voice(path: 'assets/$path', title: '', exist: exist);

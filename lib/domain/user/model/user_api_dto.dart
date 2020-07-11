@@ -103,7 +103,7 @@ class GetPointRequestDto {
   });
 
   factory GetPointRequestDto.fromJson(Map<String, dynamic> json) =>
-      _$GetPointRequestDtoJson(json);
+      _$GetPointRequestDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$GetPointRequestDtoToJson(this);
 

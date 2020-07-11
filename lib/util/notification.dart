@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:wr_app/store/logger.dart';
+import 'package:wr_app/util/logger.dart';
 
 class ReceivedNotification {
   final int id;

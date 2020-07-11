@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:wr_app/store/user.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 
 /// 設定ページ
 class AccountSettingsPage extends StatefulWidget {
@@ -14,7 +14,7 @@ class AccountSettingsPage extends StatefulWidget {
 class _AccountSettingsPageState extends State<AccountSettingsPage> {
   // account section
   SettingsSection accountSection() {
-    final userStore = Provider.of<UserStore>(context);
+    final userStore = Provider.of<UserNotifier>(context);
 
     return SettingsSection(
       title: '基本情報',

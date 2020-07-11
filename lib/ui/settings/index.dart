@@ -5,19 +5,19 @@ import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wr_app/build/flavor.dart';
+import 'package:wr_app/domain/lesson/lesson_notifier.dart';
+import 'package:wr_app/domain/system/system_notifier.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/masterdata.dart';
-import 'package:wr_app/store/notification.dart';
-import 'package:wr_app/store/system.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/onboarding/index.dart';
 import 'package:wr_app/ui/settings/account_settings.dart';
 import 'package:wr_app/ui/settings/all_phrases_page.dart';
 import 'package:wr_app/ui/settings/api_test_view.dart';
 import 'package:wr_app/ui/settings/dark_mode.dart';
 import 'package:wr_app/ui/settings/logger_view.dart';
+import 'package:wr_app/util/flavor.dart';
+import 'package:wr_app/util/notification.dart';
 
 /// 設定ページ
 class SettingsPage extends StatefulWidget {
@@ -28,7 +28,7 @@ class SettingsPage extends StatefulWidget {
 class _SettingsState extends State<SettingsPage> {
   // account section
   SettingsSection accountSection() {
-    final userStore = Provider.of<UserStore>(context);
+    final userStore = Provider.of<UserNotifier>(context);
 
     return SettingsSection(
       title: I.of(context).accountSection,
@@ -96,7 +96,7 @@ class _SettingsState extends State<SettingsPage> {
 
   // about
   SettingsSection aboutSection() {
-    final system = Provider.of<SystemStore>(context);
+    final system = Provider.of<SystemNotifier>(context);
 
     return SettingsSection(
       title: I.of(context).otherSection,
@@ -163,9 +163,9 @@ class _SettingsState extends State<SettingsPage> {
 
   // debug menu
   SettingsSection debugSection() {
-    final userStore = Provider.of<UserStore>(context);
-    final envStore = Provider.of<SystemStore>(context);
-    final masterData = Provider.of<MasterDataStore>(context);
+    final userStore = Provider.of<UserNotifier>(context);
+    final envStore = Provider.of<SystemNotifier>(context);
+    final notifier = Provider.of<LessonNotifier>(context);
 
     return SettingsSection(
       title: 'Debug',
@@ -176,7 +176,7 @@ class _SettingsState extends State<SettingsPage> {
         ),
         SettingsTile(
           title: 'All Phrases',
-          subtitle: '${masterData.allPhrases().length} Phrases',
+          subtitle: '${notifier.phrases.length} Phrases',
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => AllPhrasesPage(

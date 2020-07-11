@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/mypage/friends_page.dart';
 import 'package:wr_app/ui/mypage/gift_page.dart';
 import 'package:wr_app/ui/mypage/upgrade_page.dart';
@@ -39,7 +39,7 @@ class MyPagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserStore>(context);
+    final userStore = Provider.of<UserNotifier>(context);
 
     final userInfo = Container(
       child: Row(
@@ -50,7 +50,7 @@ class MyPagePage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Text('${userStore.user.name} さん'),
-                if (userStore.isPremium)
+                if (userStore.user.isPremium)
                   const Padding(
                     padding: EdgeInsets.all(8),
                     child: GFBadge(

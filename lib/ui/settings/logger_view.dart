@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/store/logger.dart';
+import 'package:wr_app/util/logger.dart';
 
 class LoggerView extends StatelessWidget {
   @override

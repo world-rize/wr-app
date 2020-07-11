@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/extension/collection_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/phrase_detail_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 
@@ -70,7 +70,7 @@ class SectionListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserStore>(context);
+    final userStore = Provider.of<UserNotifier>(context);
     final primaryColor = Theme.of(context).primaryColor;
 
 //    final header = Padding(
@@ -101,7 +101,7 @@ class SectionListPage extends StatelessWidget {
             ...section.phrases.indexedMap((index, phrase) {
               return PhraseCard(
                 phrase: phrase,
-                favorite: userStore.favorited(phrase),
+                favorite: userStore.user.isFavoritePhrase(phrase),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(

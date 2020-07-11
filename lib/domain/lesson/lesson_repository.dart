@@ -4,12 +4,14 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
-import 'package:wr_app/store/logger.dart';
+import 'package:wr_app/util/logger.dart';
 
 abstract class ILessonRepository {
   Future<List<Lesson>> loadAllLessons();
+  Future<void> sendPhraseRequest({String text, String email});
 }
 
 class LessonRepository implements ILessonRepository {
@@ -61,5 +63,18 @@ class LessonRepository implements ILessonRepository {
     });
 
     return lessons;
+  }
+
+  @override
+  Future<void> sendPhraseRequest({String text, String email}) {
+    final request = Email(
+      body: text,
+      subject: 'WorldRIZe phrase request',
+      recipients: [email],
+      attachmentPaths: [],
+      isHTML: false,
+    );
+
+    return FlutterEmailSender.send(request);
   }
 }

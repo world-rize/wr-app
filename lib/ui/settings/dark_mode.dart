@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:wr_app/store/preferences.dart';
+import 'package:wr_app/domain/user/preferences_notifier.dart';
 
 /// 設定ページ
 class ThemeSettingsPage extends StatefulWidget {
@@ -14,7 +14,7 @@ class ThemeSettingsPage extends StatefulWidget {
 class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
   // account section
   SettingsSection darkModeSection() {
-    final preferences = Provider.of<PreferencesStore>(context, listen: false);
+    final preferences = Provider.of<PreferenceNotifier>(context, listen: false);
 
     return SettingsSection(
       title: 'ダークモード',

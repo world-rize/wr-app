@@ -3,10 +3,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/preferences.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/index.dart';
 import 'package:wr_app/ui/lesson/index.dart';
@@ -39,7 +39,7 @@ class _RootViewState extends State<RootView>
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final firstLaunch =
-          Provider.of<PreferencesStore>(context, listen: false).firstLaunch;
+          Provider.of<PreferenceNotifier>(context, listen: false).firstLaunch;
       print('first launch: $firstLaunch');
 
       // show on boarding modal
@@ -56,7 +56,7 @@ class _RootViewState extends State<RootView>
 
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserStore>(context);
+    final notifier = Provider.of<UserNotifier>(context);
     final primaryColor = Theme.of(context).primaryColor;
 
     final header = Row(
@@ -67,7 +67,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          '${userStore.user?.point ?? '--'} coins',
+          '${notifier.user?.point ?? '--'} coins',
           style: const TextStyle(color: Colors.white),
         ),
       ],

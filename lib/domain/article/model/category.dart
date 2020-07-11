@@ -7,15 +7,15 @@ part 'category.g.dart';
 
 /// 記事カテゴリ
 @JsonSerializable()
-class Category {
-  Category({
+class ArticleCategory {
+  ArticleCategory({
     @required this.id,
     @required this.title,
     @required this.thumbnailUrl,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) =>
-      _$CategoryFromJson(json);
+  factory ArticleCategory.fromJson(Map<String, dynamic> json) =>
+      _$ArticleCategoryFromJson(json);
 
   /// id
   final String id;
@@ -26,5 +26,5 @@ class Category {
   /// サムネ
   final String thumbnailUrl;
 
-  Map<String, dynamic> toJson() => _$CategoryToJson(this);
+  Map<String, dynamic> toJson() => _$ArticleCategoryToJson(this);
 }

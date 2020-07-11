@@ -3,9 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/api/feedback.dart';
+import 'package:wr_app/domain/lesson/lesson_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/system.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
@@ -26,9 +25,7 @@ class _RequestPageState extends State<RequestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final systemStore = Provider.of<SystemStore>(context);
-    final address = systemStore.env;
-    print(address);
+    final notifier = Provider.of<LessonNotifier>(context);
     final primaryColor = Theme.of(context).primaryColor;
     const hintText = '''
 (記入例)
@@ -84,7 +81,7 @@ class _RequestPageState extends State<RequestPage> {
         child: PrimaryButton(
           label: const Text('送信'),
           onPressed: () async {
-            await sendPhraseRequest(text: _text);
+            await notifier.sendPhraseRequest(text: _text);
           },
         ),
       ),
