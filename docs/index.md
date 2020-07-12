@@ -1,26 +1,28 @@
-# WorldRIZe
-![](https://img.shields.io/badge/version-α0.4.1-green)
+# WorldRIZe English
+[![Codemagic build status](https://api.codemagic.io/apps/5e78acb1064d84000c741bf5/5e78acb1064d84000c741bf4/status_badge.svg)](https://codemagic.io/apps/5e78acb1064d84000c741bf5/5e78acb1064d84000c741bf4/latest_build)
+![](https://img.shields.io/badge/version-α0.3.4-green)
 
-## Architecture Overview
+## 👀 Architecture Overview
+> TODO: brush up
+
 ![](overview.svg)
 
-## デザイン未完の画面
-- コラム > カテゴリ > 記事一覧
-- コラム > カテゴリ > 記事一覧 > 記事
-- マイページ > 友達紹介
-- マイページ > 有料版購入
-- マイページ > 交換
-- マイページ > ユーザー設定
-- 設定 > フィードバック
+## 👍 Get Started
+> TODO: asset downloading build script
+```bash
+rake all # download & build assets
+rake dev # build & launch app
+```
 
-## Client
-### Flavors
-種類 | ビルドモード | Flavor | Configuration名
-:--- | :--- | :--- | :---
-開発 | Debug | Development | Debug-Development
-テスト | Release | Staging | Release-Staging
-リリース | Release | Production | Release-Production
+## 📱 Client
+### 🎨 UI
+[Client views](view.md)
 
-
-## Functions
+## 🔥 Functions
 (WIP)
+
+## ⚙ CI/CD
+[CI/CD](cicd.md)
+
+## 📚 Contents
+[Contents](contents.md)
