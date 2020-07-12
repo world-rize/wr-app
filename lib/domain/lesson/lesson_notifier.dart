@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/foundation.dart';
+import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/lesson_service.dart';
-import 'package:wr_app/domain/lesson/model.dart';
 import 'package:wr_app/domain/user/user_service.dart';
 import 'package:wr_app/util/logger.dart';
 

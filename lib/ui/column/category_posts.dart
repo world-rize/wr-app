@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/article/article_notifier.dart';
-import 'package:wr_app/domain/article/model.dart';
+import 'package:wr_app/domain/article/index.dart';
 import 'package:wr_app/ui/column/article_overview.dart';
 
 /// カテゴリ内記事一覧

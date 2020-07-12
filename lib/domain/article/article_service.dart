@@ -3,7 +3,7 @@
 import 'package:contentful/client.dart';
 import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/article/article_repository.dart';
-import 'package:wr_app/domain/article/model.dart';
+import 'package:wr_app/domain/article/index.dart';
 
 class ArticleService {
   final ArticleRepository _articleRepository;

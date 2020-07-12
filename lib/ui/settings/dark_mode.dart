@@ -14,7 +14,7 @@ class ThemeSettingsPage extends StatefulWidget {
 class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
   // account section
   SettingsSection darkModeSection() {
-    final preferences = Provider.of<PreferenceNotifier>(context, listen: false);
+    final preferences = Provider.of<PreferenceNotifier>(context);
 
     return SettingsSection(
       title: 'ダークモード',

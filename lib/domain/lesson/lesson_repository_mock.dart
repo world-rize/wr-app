@@ -7,7 +7,7 @@ import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/util/logger.dart';
 
-class LessonRepository implements ILessonRepository {
+class LessonMockRepository implements ILessonRepository {
   // load all phrases from local JSON
   @override
   Future<List<Lesson>> loadAllLessons() async {

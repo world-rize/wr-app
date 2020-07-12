@@ -3,7 +3,7 @@
 import 'package:contentful/client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/article/article_service.dart';
-import 'package:wr_app/domain/article/model.dart';
+import 'package:wr_app/domain/article/index.dart';
 import 'package:wr_app/util/logger.dart';
 
 class ArticleNotifier extends ChangeNotifier {

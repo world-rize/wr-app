@@ -140,19 +140,19 @@ class MyPagePage extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: userInfo,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: gridMenus,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: settings,
-        ),
+      children: <Widget>[
+//        Padding(
+//          padding: const EdgeInsets.all(8),
+//          child: userInfo,
+//        ),
+//        Padding(
+//          padding: const EdgeInsets.all(8),
+//          child: gridMenus,
+//        ),
+//        Padding(
+//          padding: const EdgeInsets.all(8),
+//          child: settings,
+//        ),
       ],
     );
   }

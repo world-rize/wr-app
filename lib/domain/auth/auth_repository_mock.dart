@@ -1,21 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-
-abstract class IAuthRepository {
-  Future<FirebaseUser> signUpWithEmailAndPassword(
-      String email, String password);
-
-  Future<FirebaseUser> signInWithEmailAndPassword(
-      String email, String password);
-
-  Future<FirebaseUser> signInWithGoogleSignIn();
-
-  Future<FirebaseUser> signInWithSignInWithApple();
-
-  Future<void> signOut();
-}
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
+import 'package:wr_app/domain/auth/auth_repository.dart';
 
 /// ## firebase ログイン方法
 /// - email & password
@@ -23,15 +11,15 @@ abstract class IAuthRepository {
 /// - Sign in With Apple
 /// - mock(test)
 /// ## FirebaseUser -> User
-class AuthRepository implements IAuthRepository {
+class AuthMockRepository implements IAuthRepository {
   // TODO(some): anti pattern?
-  /// FireStore Auth
-  final FirebaseAuth fbAuth = FirebaseAuth.instance;
+  /// FireStore Mock Auth
+  final FirebaseAuth fbAuth = MockFirebaseAuth();
 
   /// get Google AuthCredential
   // TODO(any): refactoring
   Future<AuthCredential> _getGoogleAuthCredential() async {
-    final googleSignIn = GoogleSignIn();
+    final googleSignIn = MockGoogleSignIn();
     final signInAccount = await googleSignIn.signIn();
     final googleAuth = await signInAccount.authentication;
     final credential = GoogleAuthProvider.getCredential(
