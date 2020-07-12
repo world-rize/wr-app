@@ -3,9 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
-import 'package:wr_app/ui/lesson/widgets/boldable_text.dart';
+import 'package:wr_app/ui/widgets/boldable_text.dart';
 
-/// フレーズ例
+/// phrase example view
 class PhraseSampleView extends StatelessWidget {
   const PhraseSampleView({
     @required this.example,

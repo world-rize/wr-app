@@ -6,15 +6,13 @@ import 'package:getflutter/components/typography/gf_typography.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/article/article_notifier.dart';
-import 'package:wr_app/extension/padding_extension.dart';
-import 'package:wr_app/ui/column/article_detail_page.dart';
-import 'package:wr_app/ui/column/category_posts.dart';
-import 'package:wr_app/ui/column/category_view.dart';
-import 'package:wr_app/ui/common/admob_widget.dart';
+import 'package:wr_app/ui/column/pages/article_detail_page.dart';
+import 'package:wr_app/ui/column/pages/category_posts_page.dart';
+import 'package:wr_app/ui/column/widgets/category_view.dart';
+import 'package:wr_app/ui/widgets/admob_widget.dart';
+import 'package:wr_app/util/extension/padding_extension.dart';
 
-/// `コラム` ページのトップ
-///
-// TODO(anyone): fix
+/// Column > index
 class ColumnIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

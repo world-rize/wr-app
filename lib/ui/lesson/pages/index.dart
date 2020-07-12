@@ -8,17 +8,17 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/lesson_notifier.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
-import 'package:wr_app/extension/collection_extension.dart';
-import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/ui/lesson/favorite_page.dart';
-import 'package:wr_app/ui/lesson/request_page.dart';
-import 'package:wr_app/ui/lesson/section_select_page.dart';
+import 'package:wr_app/ui/lesson/pages/favorite_page.dart';
+import 'package:wr_app/ui/lesson/pages/request_page.dart';
+import 'package:wr_app/ui/lesson/pages/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/carousel_cell.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
+import 'package:wr_app/util/extension/collection_extension.dart';
+import 'package:wr_app/util/extension/padding_extension.dart';
 
-/// `レッスン` ページのトップ
-///
+/// Lesson > index
+/// - top page of lesson
 class LessonIndexPage extends StatelessWidget {
   Future<void> _sendAnalyticsEvent(BuildContext context) async {
     final userStore = Provider.of<UserNotifier>(context);

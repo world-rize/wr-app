@@ -5,9 +5,9 @@ import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/ui/mypage/friends_page.dart';
-import 'package:wr_app/ui/mypage/gift_page.dart';
-import 'package:wr_app/ui/mypage/upgrade_page.dart';
+import 'package:wr_app/ui/mypage/pages/friends_page.dart';
+import 'package:wr_app/ui/mypage/pages/gift_page.dart';
+import 'package:wr_app/ui/mypage/pages/upgrade_page.dart';
 
 class MyPagePage extends StatelessWidget {
   Widget _menuCell({

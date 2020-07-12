@@ -8,9 +8,8 @@ import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_section_row.dart';
 
-/// テスト一覧画面
-///
-/// 各テストに対応する [SectionRow] を列挙
+/// Lesson > index > lesson > sections
+/// - enumerate sections', tests' [SectionRow]
 class TestTab extends StatefulWidget {
   TestTab({@required this.sections, @required this.onTap});
 

@@ -35,7 +35,7 @@ mixin Messages {
 
   /// point
   String points(int point) => Intl.message(
-        '$point ポイント',
+        '$point coins',
         name: 'points',
         args: [point],
       );
@@ -103,14 +103,9 @@ mixin Messages {
       );
 
   String getPoints(int point) => Intl.message(
-        '$point ポイントGet!',
+        '$point coins Get!',
         name: 'getPoints',
         args: [point],
-      );
-
-  String get getPiece => Intl.message(
-        'ピースのカケラGet!',
-        name: 'getPiece',
       );
 
   String get close => Intl.message(

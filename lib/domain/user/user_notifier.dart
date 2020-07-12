@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/user_service.dart';
-import 'package:wr_app/ui/common/toast.dart';
+import 'package:wr_app/ui/widgets/toast.dart';
 import 'package:wr_app/util/logger.dart';
 
 /// ユーザーデータストア

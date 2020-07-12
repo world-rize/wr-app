@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wr_app/domain/lesson/lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
-import 'package:wr_app/ui/common/toast.dart';
+import 'package:wr_app/ui/widgets/toast.dart';
 import 'package:wr_app/util/logger.dart';
 
 class LessonService {

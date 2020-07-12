@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/article/article_notifier.dart';
 import 'package:wr_app/domain/article/index.dart';
-import 'package:wr_app/ui/column/article_overview.dart';
+import 'package:wr_app/ui/column/widgets/article_overview.dart';
 
-/// カテゴリ内記事一覧
+/// Column > index > category_posts
 class CategoryPosts extends StatelessWidget {
   CategoryPosts({
     @required this.category,

@@ -5,6 +5,7 @@ import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/locked_view.dart';
 
+/// lesson select crousel cell
 class CarouselCell extends StatelessWidget {
   const CarouselCell({
     @required this.lesson,

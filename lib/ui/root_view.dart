@@ -5,20 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/preferences_notifier.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
-import 'package:wr_app/extension/padding_extension.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/agency/index.dart';
-import 'package:wr_app/ui/column/index.dart';
-import 'package:wr_app/ui/lesson/index.dart';
+import 'package:wr_app/ui/column/pages/index.dart';
+import 'package:wr_app/ui/lesson/pages/index.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_search_iconbutton.dart';
-import 'package:wr_app/ui/mypage/index.dart';
-import 'package:wr_app/ui/onboarding/index.dart';
-import 'package:wr_app/ui/settings/index.dart';
+import 'package:wr_app/ui/mypage/pages/index.dart';
+import 'package:wr_app/ui/onboarding/pages/index.dart';
+import 'package:wr_app/ui/settings/pages/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
+import 'package:wr_app/util/extension/padding_extension.dart';
 
-/// 全ての画面のガワ
-///
-/// 検索ボックス等
+/// root view
 class RootView extends StatefulWidget {
   @override
   _RootViewState createState() => _RootViewState();
@@ -27,16 +25,19 @@ class RootView extends StatefulWidget {
 /// [RootView] state
 class _RootViewState extends State<RootView>
     with SingleTickerProviderStateMixin {
+  /// tab index
   int _index;
+
+  /// navbar controller
   PageController _pageController;
 
   @override
   void initState() {
     super.initState();
     _index = 0;
-    // init controller
     _pageController = PageController();
 
+    /// on first launch, show on-boarding page
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final firstLaunch =
           Provider.of<PreferenceNotifier>(context, listen: false).firstLaunch;
@@ -67,7 +68,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          '${notifier.user?.point ?? '--'} coins',
+          I.of(context).points(notifier.user?.point),
           style: const TextStyle(color: Colors.white),
         ),
       ],

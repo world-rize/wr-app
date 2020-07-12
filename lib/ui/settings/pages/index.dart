@@ -10,12 +10,12 @@ import 'package:wr_app/domain/system/system_notifier.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/ui/onboarding/index.dart';
-import 'package:wr_app/ui/settings/account_settings.dart';
-import 'package:wr_app/ui/settings/all_phrases_page.dart';
-import 'package:wr_app/ui/settings/api_test_view.dart';
-import 'package:wr_app/ui/settings/dark_mode.dart';
-import 'package:wr_app/ui/settings/logger_view.dart';
+import 'package:wr_app/ui/onboarding/pages/index.dart';
+import 'package:wr_app/ui/settings/pages/account_settings_page.dart';
+import 'package:wr_app/ui/settings/pages/all_phrases_page.dart';
+import 'package:wr_app/ui/settings/pages/api_test_page.dart';
+import 'package:wr_app/ui/settings/pages/dark_mode_page.dart';
+import 'package:wr_app/ui/settings/pages/inapp_log_page.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/notification.dart';
 
