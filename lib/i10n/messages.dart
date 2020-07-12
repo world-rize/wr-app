@@ -1,6 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:intl/intl.dart';
-import 'package:wr_app/model/membership.dart';
+import 'package:wr_app/domain/user/model/membership.dart';
 
 // referenced https://github.com/mono0926/intl_sample/blob/master/lib/l10n/messages.dart
 mixin Messages {
@@ -35,7 +35,7 @@ mixin Messages {
 
   /// point
   String points(int point) => Intl.message(
-        '$point ポイント',
+        '$point coins',
         name: 'points',
         args: [point],
       );
@@ -103,14 +103,9 @@ mixin Messages {
       );
 
   String getPoints(int point) => Intl.message(
-        '$point ポイントGet!',
+        '$point coins Get!',
         name: 'getPoints',
         args: [point],
-      );
-
-  String get getPiece => Intl.message(
-        'ピースのカケラGet!',
-        name: 'getPiece',
       );
 
   String get close => Intl.message(

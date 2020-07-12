@@ -1,17 +1,14 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/user/preferences_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/store/logger.dart';
-import 'package:wr_app/store/preferences.dart';
-import 'package:wr_app/store/system.dart';
-import 'package:wr_app/theme.dart';
 import 'package:wr_app/ui/root_view.dart';
+import 'package:wr_app/ui/theme.dart';
 
 /// root widget
 class WRApp extends StatefulWidget {
@@ -24,16 +21,10 @@ class WRAppState extends State<WRApp> {
   @override
   Widget build(BuildContext context) {
     final observer = Provider.of<FirebaseAnalyticsObserver>(context);
-    final envStore = Provider.of<SystemStore>(context);
-    final preferences = Provider.of<PreferencesStore>(context);
+    final preferences = Provider.of<PreferenceNotifier>(context);
     final themeMode = preferences.followSystemTheme
         ? ThemeMode.system
         : preferences.darkMode ? ThemeMode.dark : ThemeMode.light;
-
-    if (envStore?.env?.containsKey('ADMOB_APP_ID') ?? false) {
-      FirebaseAdMob.instance.initialize(appId: envStore?.env['ADMOB_APP_ID']);
-      InAppLogger.log('🔥 Admob Initialized');
-    }
 
     return MaterialApp(
       theme: WorldRizeLightTheme,

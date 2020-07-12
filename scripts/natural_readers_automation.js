@@ -2,7 +2,7 @@
 // F12 Console に貼り付ける
 (async () => {
   // ex: 301-400 => page 4
-  let [begin, end] = [3792, 4000]
+  let [begin, end] = [1501, 1600]
   const sleep = async (s) => new Promise(resolve => setTimeout(resolve, s * 1000))
   const page = (i) => Math.floor((i - 1) / 100) + 1
   const next = async () => {

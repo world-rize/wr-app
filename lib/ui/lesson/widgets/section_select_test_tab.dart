@@ -3,14 +3,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/model/phrase/section.dart';
-import 'package:wr_app/store/user.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_section_row.dart';
 
-/// テスト一覧画面
-///
-/// 各テストに対応する [SectionRow] を列挙
+/// Lesson > index > lesson > sections
+/// - enumerate sections', tests' [SectionRow]
 class TestTab extends StatefulWidget {
   TestTab({@required this.sections, @required this.onTap});
 
@@ -23,7 +22,7 @@ class TestTab extends StatefulWidget {
 
 class _TestTabState extends State<TestTab> {
   void _showConfirmTestDialog(Section section) {
-    final userStore = Provider.of<UserStore>(context, listen: false);
+    final userStore = Provider.of<UserNotifier>(context, listen: false);
 
     showCupertinoDialog(
       context: context,
@@ -67,7 +66,7 @@ class _TestTabState extends State<TestTab> {
   }
 
   _onTapTestSection(Section section) {
-    final userStore = Provider.of<UserStore>(context, listen: false);
+    final userStore = Provider.of<UserNotifier>(context, listen: false);
 
     if (userStore.user.testLimitCount == 0) {
       _showTestLimitAlertDialog();

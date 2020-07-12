@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/store/preferences.dart';
-import 'package:wr_app/store/user.dart';
+import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 
 /// 下部ボタン
@@ -12,9 +12,9 @@ class PhraseDetailButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final player = Provider.of<VoicePlayer>(context);
     // TODO(?): データに依存しない
-    final preferences = Provider.of<PreferencesStore>(context);
-    final userStore = Provider.of<UserStore>(context);
-    final favorite = userStore.favorited(player.phrase);
+    final preferences = Provider.of<PreferenceNotifier>(context);
+    final notifier = Provider.of<UserNotifier>(context);
+    final favorite = notifier.user.isFavoritePhrase(player.phrase);
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -45,7 +45,7 @@ class PhraseDetailButtons extends StatelessWidget {
                 color: Colors.redAccent,
               ),
               onPressed: () {
-                userStore.callFavoritePhrase(
+                notifier.favoritePhrase(
                     phraseId: player.phrase.id, value: !favorite);
               },
             ),
