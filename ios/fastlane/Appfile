@@ -1,7 +1,5 @@
-app_identifier "com.worldrize.wrApp" # The bundle identifier of your app
-apple_id "kamata1919@gmail.com" # Your Apple email address
-team_name "WorldRIZe"
-team_id ""
+app_identifier("com.worldrize.app") # The bundle identifier of your app
+apple_id("inf@world-rize.com") # Your Apple email address
 
 # For more information about the Appfile, see:
 #     https://docs.fastlane.tools/advanced/#appfile

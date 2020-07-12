@@ -1,0 +1,7 @@
+//
+// Debug-development.xcconfig
+//
+// Copyright © 2020 WorldRIZe. All rights reserved.
+
+#include "Debug.xcconfig"
+#include "development.xcconfig"

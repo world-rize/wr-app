@@ -1,33 +1,42 @@
-require 'fileutils'
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
 
-default_platform :ios
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
 
 platform :ios do
-  before_all do |lane, options|
-    if is_ci
-      ENV['MATCH_KEYCHAIN_NAME'] = 'TempKeychain'
-      ENV['MATCH_KEYCHAIN_PASSWORD'] = 'TempKeychainPassword'
-      create_temp_keychain
-    end
-  end
+  desc "Description of what the lane does"
+  lane :staging do
+    # add actions here: https://docs.fastlane.tools/actions
+    disable_automatic_code_signing(path: "Runner.xcodeproj")
 
-  lane :build do
-    match(readonly: is_ci)
-
-    automatic_code_signing(
-        code_sign_identity: "iPhone Distribution",
-        team_id: ENV["sigh_BUNDLE_IDENTIFIER_adhoc_team-id"],
-        profile_name: ENV["sigh_BUNDLE_IDENTIFIER_adhoc_profile-name"]
+    build_app(
+      scheme: "Staging",
+      workspace: "Runner.xcworkspace",
+      include_bitcode: true
     )
 
-    gym()
-  end
+    enable_automatic_code_signing(path: "Runner.xcodeproj")
 
-  private_lane :create_temp_keychain do
-    create_keychain(
-        name: ENV['MATCH_KEYCHAIN_NAME'],
-        password: ENV['MATCH_KEYCHAIN_PASSWORD'],
-        timeout: 1800
+    puts ENV['FB_TOKEN']
+
+    firebase_app_distribution(
+      app: "1:34380133980:ios:795c786ca8bf4735fc1899",
+      testers: "kamata1919@gmail.com",
+      release_notes: "Release from Fastlane",
+      ipa_path: "./build/Runner/Runner.ipa",
+      firebase_cli_token: ENV['FB_TOKEN']
     )
   end
 end

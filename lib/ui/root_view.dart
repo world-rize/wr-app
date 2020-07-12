@@ -2,19 +2,21 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flappy_search_bar/flappy_search_bar.dart';
-import 'package:wr_app/store/user.dart';
+import 'package:provider/provider.dart';
+import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/user/user_notifier.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/agency/index.dart';
-import 'package:wr_app/ui/column/index.dart';
-import 'package:wr_app/ui/lesson/index.dart';
-import 'package:wr_app/ui/mypage/index.dart';
+import 'package:wr_app/ui/column/pages/index.dart';
+import 'package:wr_app/ui/lesson/pages/index.dart';
+import 'package:wr_app/ui/lesson/widgets/phrase_search_iconbutton.dart';
+import 'package:wr_app/ui/mypage/pages/index.dart';
+import 'package:wr_app/ui/onboarding/pages/index.dart';
+import 'package:wr_app/ui/settings/pages/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
-import 'package:wr_app/ui/mypage/settings_page.dart';
-import 'package:wr_app/env.dart';
+import 'package:wr_app/util/extension/padding_extension.dart';
 
-/// 全ての画面のガワ
-///
-/// 検索ボックス等
+/// root view
 class RootView extends StatefulWidget {
   @override
   _RootViewState createState() => _RootViewState();
@@ -23,67 +25,112 @@ class RootView extends StatefulWidget {
 /// [RootView] state
 class _RootViewState extends State<RootView>
     with SingleTickerProviderStateMixin {
-  int _index = 0;
-  bool _isSearching = false;
-  SearchBarController _searchBarController;
+  /// tab index
+  int _index;
+
+  /// navbar controller
   PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    // init controller
+    _index = 0;
     _pageController = PageController();
-    _searchBarController = SearchBarController();
 
-    // login
-    UserStore().signIn();
+    /// on first launch, show on-boarding page
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final firstLaunch =
+          Provider.of<PreferenceNotifier>(context, listen: false).firstLaunch;
+      print('first launch: $firstLaunch');
+
+      // show on boarding modal
+      if (firstLaunch) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => OnBoardingPage(),
+            fullscreenDialog: true,
+          ),
+        );
+      }
+    });
   }
 
-  // TODO(wakame-tech): 検索バーを実装
-  Widget _createSearchBar() {
-    return Container(
-      height: 80,
-      child: SearchBar<String>(
-        searchBarController: _searchBarController,
-        onSearch: (q) => Future.value(<String>['aaa', 'bbb', 'ccc']),
-        onItemFound: (item, i) => Text(item),
-      ),
+  @override
+  Widget build(BuildContext context) {
+    final notifier = Provider.of<UserNotifier>(context);
+    final primaryColor = Theme.of(context).primaryColor;
+
+    final header = Row(
+      children: <Widget>[
+        Image.asset(
+          'assets/icon/wr_coin.png',
+          width: 30,
+          height: 30,
+        ).p_1(),
+        Text(
+          I.of(context).points(notifier.user?.point),
+          style: const TextStyle(color: Colors.white),
+        ),
+      ],
     );
-  }
 
-  /// WIP
-  void _stopSearch() {
-    print('stop search');
-    setState(() {
-      _isSearching = false;
-    });
-  }
+    final actions = <Widget>[
+      // phrase search
+      PhraseSearchIconButton(),
+      // settings
+      IconButton(
+        icon: const Icon(Icons.settings),
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (_) => SettingsPage(),
+            fullscreenDialog: true,
+          ));
+        },
+      )
+    ];
 
-  /// WIP
-  void _startSearch() {
-    print('start search');
-    setState(() {
-      _isSearching = true;
-    });
-  }
+    final navbar = BottomNavigationBar(
+      fixedColor: primaryColor,
+      type: BottomNavigationBarType.fixed,
+      onTap: (int index) {
+        _pageController.jumpToPage(index);
+//          _pageController.animateToPage(index,
+//              duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      },
+      currentIndex: _index,
+      items: [
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.create),
+          title: Text(I.of(context).bottomNavLesson),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.view_column),
+          title: Text(I.of(context).bottomNavColumn),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.airplanemode_active),
+          title: Text(I.of(context).bottomNavTravel),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.public),
+          title: Text(I.of(context).bottomNavAgency),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.person_outline),
+          title: Text(I.of(context).bottomNavMyPage),
+        ),
+      ],
+    );
 
-  /// メイン画面
-  Widget _tabView() {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${Env.appName} ${Env.version}'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => SettingsPage()));
-            },
-          )
-        ],
+        backgroundColor: primaryColor,
+        title: header,
+        actions: actions,
       ),
       body: PageView(
         controller: _pageController,
+        // physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (index) {
           setState(() {
             _index = index;
@@ -97,42 +144,7 @@ class _RootViewState extends State<RootView>
           MyPagePage(),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        fixedColor: Colors.blueAccent,
-        type: BottomNavigationBarType.fixed,
-        onTap: (int index) {
-          _pageController.animateToPage(index,
-              duration: const Duration(milliseconds: 300), curve: Curves.ease);
-        },
-        currentIndex: _index,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.create),
-            title: const Text('レッスン'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.view_column),
-            title: const Text('コラム'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.airplanemode_active),
-            title: const Text('旅行'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.public),
-            title: const Text('留学先紹介'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            title: const Text('マイページ'),
-          ),
-        ],
-      ),
+      bottomNavigationBar: navbar,
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _tabView();
   }
 }

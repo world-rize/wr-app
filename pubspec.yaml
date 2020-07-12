@@ -1,44 +1,110 @@
+
 name: wr_app
 description: WorldRIZe App
 authors:
-  - wakame-tech
-  - yoshiki301
-version: 0.1.0
+  - WorldRIZe
+version: 0.3.4
 repository: https://github.com/WorldRIZe/wr-app
 
 environment:
-  # sdk: ">=2.1.0 <3.0.0"
-  sdk: ">=2.3.0 <3.0.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+
+  # store, model
+  provider: ^4.0.2
+  data_classes: ^3.0.0
+  json_annotation: ^3.0.0
+  # TODO
+  # freezed_annotation:
+  # state_notifier: ^0.5.0
+
+  # firebase
   # DO NOT CHANGE VERSIONS
   # https://github.com/FirebaseExtended/flutterfire/issues/2084
   firebase_core: 0.4.4
   firebase_auth: 0.15.3
+  firebase_admob: ^0.9.3+2
+  firebase_analytics: ^1.0.4
+  cloud_functions: ^0.4.2+3
+  google_sign_in: ^4.4.6
+
+  # contentful
+  contentful: ^1.1.3
+  contentful_rich_text: ^0.1.2
+  equatable: ^1.2.0
+
+
+  # auth
+  apple_sign_in: ^0.1.0
+
+  # ui
+  fluttertoast: ^4.0.0
   cupertino_icons: ^0.1.2
-  flutter_swiper : ^1.1.5
+  flutter_swiper: ^1.1.5
   getflutter: ^1.0.10
-  provider: ^4.0.2
   flappy_search_bar: 1.4.1
-  # assets_audio_player: ^1.2.3
+  intro_slider: ^2.3.1
+  flutter_sliding_tutorial: ^0.1.0
+
+  # util
+  flutter_markdown: ^0.3.2
+  front_matter: ^1.1.0
+  flutter_svg: ^0.17.4
+  collection: ^1.14.11
+  flutter_email_sender: ^3.0.1
+  flutter_local_notifications: ^1.4.4+1
+
+  # native
+  url_launcher: ^5.4.10
   audioplayers: ^0.14.2
-  # story_view: ^0.11.2
   settings_ui: ^0.2.0
-  flutter_markdown: ^0.3.4
+  package_info: ^0.4.0+16
+  flutter_dotenv: ^2.0.1
+  shared_preferences: ^0.5.7+2
+  flutter_launcher_icons: ^0.7.4
+
+  # other
+  flutter_localizations:
+    sdk: flutter
+
+  firebase_auth_mocks: ^0.1.3
+  google_sign_in_mocks: ^0.1.0+2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # linter
   pedantic_mono: any
+  # task runner
+  build_runner: ^1.7.1
+  # generator
+  data_classes_generator: ^3.0.0
+  json_serializable: ^3.0.0
   flutter_native_splash: ^0.1.9
+  # i18n
+  intl_translation: any
+  # freezed: ^0.11.2
 
 flutter:
   uses-material-design: true
+  # https://flutter.dev/docs/development/ui/assets-and-images#specifying-assets
+  # サブディレクトリは明示的に指定しないといけない
   assets:
     - assets/
+    # 国旗アイコン https://www.smashingmagazine.com/2010/04/the-ultimate-free-web-designer-s-icon-set-750-icons-incl-psd-sources/
+    - assets/icon/
+    - assets/voice/
+    - assets/thumbnails/
+    - .env/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.jpg"
 
 flutter_native_splash:
-  color: "42a5f5"
-  image: assets/wr_icon.jpg
+  image: "assets/icon/icon.jpg"
+  color: "56C0EA"

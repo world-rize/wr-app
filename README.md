@@ -1,10 +1,18 @@
-# WR APP
+# WorldRIZe English
+[![Codemagic build status](https://api.codemagic.io/apps/5e78acb1064d84000c741bf5/5e78acb1064d84000c741bf4/status_badge.svg)](https://codemagic.io/apps/5e78acb1064d84000c741bf5/5e78acb1064d84000c741bf4/latest_build)
+![](https://img.shields.io/badge/version-α0.3.4-green)
 
-[タスクの作成](https://github.com/WorldRIZe/wr-app/issues/new?assignees=&labels=&template=---.md&title=)
+## 👀 Architecture Overview
+> TODO: brush up
 
-# Docs
-## 仕様等
-[仕様等](docs/arch.md)
+![](docs/overview.svg)
 
-## 開発について
-[開発について](docs/task.md)
+## 👍 Get Started(WIP)
+> TODO: asset downloading build script
+```bash
+rake all # download & build assets
+rake dev # build & launch app
+```
+
+## 📚 Docs
+[Docs](https://worldrize.github.io/wr-app)

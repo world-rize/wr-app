@@ -8,12 +8,15 @@
 .buildlog/
 .history
 .svn/
+.gradle/
 
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
 .idea/
+
+.vscode
 
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
@@ -32,6 +35,7 @@
 
 # Local Assets
 assets/
+!assets/*.jsonc
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -41,3 +45,5 @@ lib/generated_plugin_registrant.dart
 
 # Firebase service account
 /ios/Runner/GoogleService-Info.plist
+
+/.env/*
