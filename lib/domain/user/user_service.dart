@@ -83,7 +83,7 @@ class UserService {
   }
 
   /// upgrade to Pro or downgrade
-  Future<void> changePlan(Membership membership) {
+  Future<void> changePlan(Membership membership) async {
     // TODO: implement
   }
 

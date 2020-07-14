@@ -12,7 +12,7 @@ class ArticleService {
     @required ArticleRepository articleRepository,
   }) : _articleRepository = articleRepository;
 
-  Future<List<Article>> findByCategory({
+  Future<List<ArticleDigest>> findByCategory({
     @required Client client,
     @required String id,
   }) {

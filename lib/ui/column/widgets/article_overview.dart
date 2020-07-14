@@ -9,7 +9,7 @@ import 'package:wr_app/ui/widgets/shadowed_container.dart';
 class ArticleOverView extends StatelessWidget {
   const ArticleOverView({this.article});
 
-  final Article article;
+  final ArticleDigest article;
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +54,11 @@ class ArticleOverView extends StatelessWidget {
                   style: theme.headline2,
                 ),
               ),
-              subtitle: article.fields.subtitle != null
+              subtitle: article.fields.tags != null
                   ? Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
-                        article.fields.subtitle,
+                        article.fields.tags,
                         style: theme.headline4,
                       ),
                     )

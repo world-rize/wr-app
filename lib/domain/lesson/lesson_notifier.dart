@@ -19,7 +19,8 @@ class LessonNotifier with ChangeNotifier {
     @required LessonService lessonService,
     @required UserService userService,
   }) {
-    return _cache ??= LessonNotifier._internal(lessonService: lessonService);
+    return _cache ??= LessonNotifier._internal(
+        userService: userService, lessonService: lessonService);
   }
 
   LessonNotifier._internal({

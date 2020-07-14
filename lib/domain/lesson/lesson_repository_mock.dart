@@ -29,7 +29,7 @@ class LessonMockRepository implements ILessonRepository {
   }
 
   @override
-  Future<void> sendPhraseRequest({String text, String email}) {
+  Future<void> sendPhraseRequest({String text, String email}) async {
     InAppLogger.log(text);
   }
 }

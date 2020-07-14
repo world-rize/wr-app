@@ -18,7 +18,8 @@ class ArticleNotifier extends ChangeNotifier {
     @required ArticleService articleService,
     @required Client client,
   }) {
-    return _cache ??= ArticleNotifier._internal(articleService: articleService);
+    return _cache ??= ArticleNotifier._internal(
+        articleService: articleService, client: client);
   }
 
   ArticleNotifier._internal({
@@ -30,7 +31,7 @@ class ArticleNotifier extends ChangeNotifier {
     InAppLogger.log('[ArticleStore] init');
   }
 
-  Future<List<Article>> findByCategory({
+  Future<List<ArticleDigest>> findByCategory({
     @required String id,
   }) {
     return _articleService.findByCategory(client: _client, id: id);

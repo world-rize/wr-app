@@ -6,7 +6,6 @@ import 'package:getflutter/components/typography/gf_typography.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/article/article_notifier.dart';
-import 'package:wr_app/ui/column/pages/article_detail_page.dart';
 import 'package:wr_app/ui/column/pages/category_posts_page.dart';
 import 'package:wr_app/ui/column/widgets/category_view.dart';
 import 'package:wr_app/ui/widgets/admob_widget.dart';
@@ -34,16 +33,7 @@ class ColumnIndexPage extends StatelessWidget {
               category: category,
               onTap: (article) => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => CategoryPosts(
-                    category: category,
-                    onTap: (article) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => ArticleDetailPage(article: article),
-                        ),
-                      );
-                    },
-                  ),
+                  builder: (_) => CategoryPosts(category: category),
                 ),
               ),
             ),

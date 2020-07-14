@@ -15,7 +15,7 @@ end
 desc '開発'
 task :dev do
   puts '[Task dev]'
-  sh 'flutter run --flavor development'
+  sh 'flutter run --flavor development lib/main_development.dart'
 end
 
 desc 'open Xcode Workspace'
