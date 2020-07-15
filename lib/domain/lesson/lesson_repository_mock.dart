@@ -1,6 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'dart:async';
 
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/domain/lesson/lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/assets.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
@@ -31,5 +33,29 @@ class LessonMockRepository implements ILessonRepository {
   @override
   Future<void> sendPhraseRequest({String text, String email}) async {
     InAppLogger.log(text);
+  }
+
+  @override
+  bool getShowTranslation() {
+    final pref = GetIt.I<SharedPreferences>();
+    return pref.getBool('show_translation') ?? false;
+  }
+
+  @override
+  void setShowTranslation({bool value}) {
+    final pref = GetIt.I<SharedPreferences>();
+    pref.setBool('show_translation', value);
+  }
+
+  @override
+  bool getShowText() {
+    final pref = GetIt.I<SharedPreferences>();
+    return pref.getBool('show_text') ?? true;
+  }
+
+  @override
+  void setShowText({bool value}) {
+    final pref = GetIt.I<SharedPreferences>();
+    pref.setBool('show_text', value);
   }
 }

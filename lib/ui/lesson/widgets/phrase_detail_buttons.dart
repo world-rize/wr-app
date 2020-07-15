@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 
@@ -12,7 +12,7 @@ class PhraseDetailButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO(some): データに依存しない
     final player = Provider.of<VoicePlayer>(context);
-    final preferences = Provider.of<PreferenceNotifier>(context);
+    final lesson = Provider.of<LessonNotifier>(context);
     final notifier = Provider.of<UserNotifier>(context);
     final favorite = notifier.user.isFavoritePhrase(player.phrase);
 
@@ -28,11 +28,11 @@ class PhraseDetailButtons extends StatelessWidget {
               heroTag: 'Japanese',
               child: Icon(
                 Icons.message,
-                color: preferences.showTranslation()
+                color: lesson.getShowTranslation()
                     ? Colors.lightBlueAccent
                     : Colors.grey,
               ),
-              onPressed: preferences.toggleShowTranslation,
+              onPressed: lesson.toggleShowTranslation,
             ),
           ),
           // お気に入りボタン

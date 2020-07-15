@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 
@@ -10,8 +10,8 @@ class PhraseDetailSample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = Provider.of<VoicePlayer>(context);
-    final prefs = Provider.of<PreferenceNotifier>(context);
-    final showTranslation = prefs.showTranslation();
+    final lesson = Provider.of<LessonNotifier>(context);
+    final showTranslation = lesson.getShowTranslation();
 
     print('PhraseDetailSample: showTranslation: $showTranslation');
 

@@ -2,38 +2,31 @@
 
 import 'package:contentful/client.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:wr_app/domain/article/article_service.dart';
 import 'package:wr_app/domain/article/index.dart';
-import 'package:wr_app/util/logger.dart';
 
 class ArticleNotifier extends ChangeNotifier {
   ArticleService _articleService;
-
-  Client _client;
 
   /// singleton
   static ArticleNotifier _cache;
 
   factory ArticleNotifier({
     @required ArticleService articleService,
-    @required Client client,
   }) {
-    return _cache ??= ArticleNotifier._internal(
-        articleService: articleService, client: client);
+    return _cache ??= ArticleNotifier._internal(articleService: articleService);
   }
 
   ArticleNotifier._internal({
     @required ArticleService articleService,
-    @required Client client,
-  })  : _articleService = articleService,
-        _client = client {
-    InAppLogger.log('[ArticleStore] init');
-  }
+  }) : _articleService = articleService {}
 
   Future<List<ArticleDigest>> findByCategory({
     @required String id,
   }) {
-    return _articleService.findByCategory(client: _client, id: id);
+    final client = GetIt.I<Client>();
+    return _articleService.findByCategory(client: client, id: id);
   }
 
   List<ArticleCategory> getCategories() {

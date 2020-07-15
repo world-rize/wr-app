@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/agency/index.dart';
@@ -40,7 +40,7 @@ class _RootViewState extends State<RootView>
     /// on first launch, show on-boarding page
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final firstLaunch =
-          Provider.of<PreferenceNotifier>(context, listen: false).firstLaunch;
+          Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
       print('first launch: $firstLaunch');
 
       // show on boarding modal

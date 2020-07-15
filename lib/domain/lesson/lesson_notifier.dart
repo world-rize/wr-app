@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/lesson_service.dart';
 import 'package:wr_app/domain/user/user_service.dart';
-import 'package:wr_app/util/logger.dart';
 
 class LessonNotifier with ChangeNotifier {
   LessonService _lessonService;
@@ -28,8 +27,6 @@ class LessonNotifier with ChangeNotifier {
     @required UserService userService,
   })  : _lessonService = lessonService,
         _userService = userService {
-    InAppLogger.log('[ArticleStore] init');
-
     loadAllLessons();
   }
 
@@ -61,5 +58,17 @@ class LessonNotifier with ChangeNotifier {
 
   Future<void> sendPhraseRequest({@required String text}) {
     return _lessonService.sendPhraseRequest(text: text);
+  }
+
+  bool getShowTranslation() => _lessonService.getShowTranslation();
+
+  void toggleShowTranslation() {
+    _lessonService.toggleShowTranslation();
+    notifyListeners();
+  }
+
+  void toggleShowText() {
+    _lessonService.toggleShowText();
+    notifyListeners();
   }
 }

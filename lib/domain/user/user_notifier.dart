@@ -19,7 +19,6 @@ class UserNotifier with ChangeNotifier {
 
   factory UserNotifier({@required UserService service}) {
     if (_cache == null) {
-      InAppLogger.log('✨ init UserStore');
       _cache = UserNotifier._internal(service: service);
     }
     return _cache;

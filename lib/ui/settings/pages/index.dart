@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get_it/get_it.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -96,6 +98,7 @@ class _SettingsState extends State<SettingsPage> {
   // about
   SettingsSection aboutSection() {
     final system = Provider.of<SystemNotifier>(context);
+    final pubSpec = GetIt.I<PackageInfo>();
 
     return SettingsSection(
       title: I.of(context).otherSection,
@@ -154,7 +157,7 @@ class _SettingsState extends State<SettingsPage> {
         ),
         SettingsTile(
           title: 'アプリバージョン',
-          subtitle: system.pubSpec.version,
+          subtitle: pubSpec.version,
         ),
       ],
     );
@@ -224,8 +227,10 @@ class _SettingsState extends State<SettingsPage> {
           onTap: () {
             final systemNotifier =
                 Provider.of<SystemNotifier>(context, listen: false);
+            final pubSpec = GetIt.I<PackageInfo>();
             // ignore: cascade_invocations
-            systemNotifier.notify();
+            systemNotifier.notify(
+                title: pubSpec.appName, body: 'test', payload: 'ok');
           },
         )
       ],

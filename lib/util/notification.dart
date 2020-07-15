@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:wr_app/util/logger.dart';
 
 class ReceivedNotification {
   const ReceivedNotification({
@@ -64,8 +63,6 @@ class AppNotifier {
           badge: true,
           sound: true,
         );
-
-    InAppLogger.log('[Notificator] setup');
   }
 
   static const MethodChannel _platform =

@@ -37,4 +37,18 @@ class LessonService {
 
     InAppLogger.log('send phrase request', type: 'api');
   }
+
+  bool getShowTranslation() => _lessonRepository.getShowTranslation();
+
+  void toggleShowTranslation() {
+    final value = _lessonRepository.getShowTranslation();
+    _lessonRepository.setShowTranslation(value: !value);
+  }
+
+  bool getShowText() => _lessonRepository.getShowText();
+
+  void toggleShowText() {
+    final value = _lessonRepository.getShowText();
+    _lessonRepository.setShowText(value: !value);
+  }
 }
