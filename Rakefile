@@ -72,7 +72,7 @@ end
 desc 'テスト'
 task :test do
   puts '[Task test]'
-  sh 'flutter test'
+  sh 'flutter test --coverage'
   # TODO: server test
 end
 

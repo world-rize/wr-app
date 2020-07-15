@@ -15,7 +15,6 @@ import 'package:wr_app/ui/onboarding/pages/index.dart';
 import 'package:wr_app/ui/settings/pages/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
 import 'package:wr_app/util/extension/padding_extension.dart';
-import 'package:wr_app/util/flavor.dart';
 
 /// root view
 class RootView extends StatefulWidget {
@@ -41,12 +40,12 @@ class _RootViewState extends State<RootView>
     /// on first launch, show on-boarding page
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       // login (for debug)
-      final system = Provider.of<SystemNotifier>(context, listen: false);
-      final isDebug = system.flavor == Flavor.development;
-      if (isDebug) {
-        final userNotifier = Provider.of<UserNotifier>(context, listen: false);
-        userNotifier.signUpWithEmailAndPassword('a@b.com', '123456');
-      }
+//      final system = Provider.of<SystemNotifier>(context, listen: false);
+//      final isDebug = system.flavor == Flavor.development;
+//      if (isDebug) {
+//        final userNotifier = Provider.of<UserNotifier>(context, listen: false);
+//        userNotifier.loginWithEmailAndPassword('a@b.com', '123456');
+//      }
 
       final firstLaunch =
           Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();

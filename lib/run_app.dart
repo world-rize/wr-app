@@ -31,7 +31,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final analytics = GetIt.I<FirebaseAnalytics>();
   final analyticsObserver = FirebaseAnalyticsObserver(analytics: analytics);
 
-  const useMock = true;
+  const useMock = false;
 
   // repos
   final userRepository = useMock ? UserMockRepository() : UserRepository();
