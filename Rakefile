@@ -7,15 +7,25 @@ task :help do
   sh 'rake -T'
 end
 
-desc '全て'
-task :all do
-  Rake::Task[:help].invoke
+namespace :run do
+  desc 'Run App with Development'
+  task :dev do
+    sh 'flutter run --flavor development -t lib/main_development.dart'
+  end
+
+  desc 'Run App with Staging'
+  task :stg do
+    sh 'flutter run --flavor staging -t lib/main_staging.dart'
+  end
+
+  desc 'Run App with Production'
+  task :prod do
+    sh 'flutter run --flavor production -t lib/main_production.dart'
+  end
 end
 
-desc '開発'
-task :dev do
-  puts '[Task dev]'
-  sh 'flutter run --flavor development lib/main_development.dart'
+task :run do
+  Rake::Task['run:dev'].invoke
 end
 
 desc 'open Xcode Workspace'

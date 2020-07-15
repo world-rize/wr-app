@@ -55,7 +55,7 @@ dependencies:
   flutter_svg: ^0.17.4
   collection: ^1.14.11
   flutter_email_sender: ^3.0.1
-  flutter_local_notifications: ^1.4.4+1
+  flutter_local_notifications: ^1.4.4+2
 
   # native
   url_launcher: ^5.4.10
