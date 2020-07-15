@@ -14,6 +14,7 @@ import 'package:wr_app/ui/lesson/pages/request_page.dart';
 import 'package:wr_app/ui/lesson/pages/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/carousel_cell.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
+import 'package:wr_app/ui/widgets/header1.dart';
 import 'package:wr_app/util/extension/collection_extension.dart';
 import 'package:wr_app/util/extension/padding_extension.dart';
 
@@ -43,9 +44,8 @@ class LessonIndexPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          const GFTypography(
+          const Header1(
             text: 'Lesson',
-            type: GFTypographyType.typo1,
             dividerColor: GFColors.PRIMARY,
           ),
 
@@ -74,9 +74,8 @@ class LessonIndexPage extends StatelessWidget {
             ),
           ),
 
-          const GFTypography(
+          const Header1(
             text: 'Favorite',
-            type: GFTypographyType.typo1,
             dividerColor: GFColors.DANGER,
           ),
 
@@ -110,9 +109,8 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           // New Coming Phrases Section
-          const GFTypography(
+          const Header1(
             text: 'New coming phrases',
-            type: GFTypographyType.typo1,
             dividerColor: GFColors.SUCCESS,
           ),
 
@@ -153,9 +151,8 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           // Request Section
-          const GFTypography(
+          const Header1(
             text: 'Request',
-            type: GFTypographyType.typo1,
             dividerColor: GFColors.SECONDARY,
           ),
 

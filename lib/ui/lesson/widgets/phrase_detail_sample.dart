@@ -9,6 +9,7 @@ import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 class PhraseDetailSample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final player = Provider.of<VoicePlayer>(context);
     final lesson = Provider.of<LessonNotifier>(context);
     final showTranslation = lesson.getShowTranslation();
@@ -21,19 +22,20 @@ class PhraseDetailSample extends StatelessWidget {
             padding: const EdgeInsets.only(left: 12, top: 12),
             child: Text(
               '(${player.phrase.id})${player.phrase.title['en']}',
-              style: const TextStyle(
-                  fontSize: 20,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 20,
+                color: theme.accentColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
               player.phrase.title['ja'],
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
-                color: Colors.black38,
+                color: theme.accentColor,
               ),
             ),
           ),

@@ -23,7 +23,8 @@ class PhraseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final englishStyle = Theme.of(context).primaryTextTheme.bodyText1;
+    final theme = Theme.of(context);
+    final englishStyle = theme.primaryTextTheme.bodyText1;
     final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;
     // final existVoice = phrase.assets.voice.isEmpty;
 
