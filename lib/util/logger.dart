@@ -6,11 +6,13 @@ import 'package:wr_app/domain/system/model/activity.dart';
 class InAppLogger {
   const InAppLogger();
 
-  static List<Activity> logs = [];
+  static final List<Activity> _logs = [];
 
   static void log(String text, {String type = 'default'}) {
     final now = DateTime.now();
     print('[$type/$now] $text');
-    logs.add(Activity(uuid: '', type: type, text: text, date: now));
+    _logs.add(Activity(uuid: '', type: type, text: text, date: now));
   }
+
+  static List<Activity> getLogs() => _logs;
 }

@@ -25,9 +25,8 @@ class ArticleNotifier extends ChangeNotifier {
   ArticleNotifier._internal({
     @required ArticleService articleService,
     @required Client client,
-  }) {
-    _articleService = articleService;
-    _client = client;
+  })  : _articleService = articleService,
+        _client = client {
     InAppLogger.log('[ArticleStore] init');
   }
 

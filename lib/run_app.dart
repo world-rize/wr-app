@@ -1,5 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:async';
+
 import 'package:contentful/client.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -26,9 +28,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final analytics = FirebaseAnalytics();
   final analyticsObserver = FirebaseAnalyticsObserver(analytics: analytics);
   InAppLogger.log('🔥 FirebaseAnalytics Initialized');
-
-  // notification
-  // final notifier = AppNotifier();
 
   // pub spec
   final pubSpec = await PackageInfo.fromPlatform();
@@ -77,8 +76,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       // TODO(someone): create Analytics Store
       Provider.value(value: analytics),
       Provider.value(value: analyticsObserver),
-      // 通知
-      // Provider.value(value: notifier),
       // system
       Provider.value(
         value: SystemNotifier(

@@ -1,6 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
@@ -10,6 +9,7 @@ import 'package:wr_app/domain/lesson/lesson_notifier.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/lesson/pages/favorite_page.dart';
+import 'package:wr_app/ui/lesson/pages/newcoming_page.dart';
 import 'package:wr_app/ui/lesson/pages/request_page.dart';
 import 'package:wr_app/ui/lesson/pages/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/carousel_cell.dart';
@@ -20,19 +20,19 @@ import 'package:wr_app/util/extension/padding_extension.dart';
 /// Lesson > index
 /// - top page of lesson
 class LessonIndexPage extends StatelessWidget {
-  Future<void> _sendAnalyticsEvent(BuildContext context) async {
-    final userStore = Provider.of<UserNotifier>(context);
-    if (userStore == null) {
-      return;
-    }
-    final analytics = Provider.of<FirebaseAnalytics>(context);
-    await analytics.logEvent(
-      name: 'test_event',
-      parameters: {
-        'uid': userStore.user.uuid,
-      },
-    );
-  }
+//  Future<void> _sendAnalyticsEvent(BuildContext context) async {
+//    final userStore = Provider.of<UserNotifier>(context);
+//    if (userStore == null) {
+//      return;
+//    }
+//    final analytics = Provider.of<FirebaseAnalytics>(context);
+//    await analytics.logEvent(
+//      name: 'test_event',
+//      parameters: {
+//        'uid': userStore.user.uuid,
+//      },
+//    );
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +86,7 @@ class LessonIndexPage extends StatelessWidget {
                 return const Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                    'no favorites',
+                    'No favorites',
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
                 );
@@ -116,27 +116,34 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           FutureBuilder<List<Phrase>>(
-              future: lessonNotifier.newComingPhrases(),
-              builder: (_, res) {
-                if (!res.hasData || res.data.isEmpty) {
-                  return const Text('no new coming phrases');
-                } else {
-                  final p = res.data.first;
-                  return Column(
-                    children: [
-                      PhraseCard(
-                        phrase: p,
-                        favorite: userStore.user.isFavoritePhrase(p),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => FavoritePage()),
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                }
-              }),
+            future: lessonNotifier.newComingPhrases(),
+            builder: (_, res) {
+              if (!res.hasData || res.data.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'No new coming phrases',
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                  ),
+                );
+              } else {
+                final p = res.data.first;
+                return Column(
+                  children: [
+                    PhraseCard(
+                      phrase: p,
+                      favorite: userStore.user.isFavoritePhrase(p),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => NewComingPage()),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
 
           // Request Section
           const GFTypography(

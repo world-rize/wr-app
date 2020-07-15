@@ -14,14 +14,14 @@ class LessonMockRepository implements ILessonRepository {
     return List<Lesson>.generate(
       6,
       (i) => Lesson(
-        id: 'school.png$i',
+        id: 'Lesson $i',
         title: {
-          'ja': 'School vol.$i',
+          'ja': 'Lesson $i',
         },
         phrases: List.generate(100, (index) => Phrase.dummy(index)),
         assets: Assets(
           img: {
-            'thumbnail': 'https://source.unsplash.com/random/300x800',
+            'thumbnail': 'assets/thumbnails/business.png',
           },
         ),
       ),

@@ -9,10 +9,10 @@ import 'package:wr_app/ui/widgets/toast.dart';
 import 'package:wr_app/util/logger.dart';
 
 class LessonService {
-  final LessonRepository _lessonRepository;
+  final ILessonRepository _lessonRepository;
 
   const LessonService({
-    @required LessonRepository lessonRepository,
+    @required ILessonRepository lessonRepository,
   }) : _lessonRepository = lessonRepository;
 
   Future<List<Lesson>> loadPhrases() {

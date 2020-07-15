@@ -8,12 +8,12 @@ import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 
 class UserService {
-  final AuthRepository _authRepository;
-  final UserRepository _userRepository;
+  final IAuthRepository _authRepository;
+  final IUserRepository _userRepository;
 
   const UserService({
-    @required AuthRepository authRepository,
-    @required UserRepository userRepository,
+    @required IAuthRepository authRepository,
+    @required IUserRepository userRepository,
   })  : _userRepository = userRepository,
         _authRepository = authRepository;
 

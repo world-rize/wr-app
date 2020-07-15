@@ -218,6 +218,7 @@ class QuestionView extends StatelessWidget {
           flex: 5,
           child: PhraseSampleView(
             example: phrase.example,
+            showTranslation: true,
             showKeyphrase: false,
           ),
         ),

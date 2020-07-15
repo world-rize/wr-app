@@ -112,6 +112,11 @@ class SectionListPage extends StatelessWidget {
                     ),
                   );
                 },
+                onFavorite: () {
+                  final favorite = userStore.user.isFavoritePhrase(phrase);
+                  userStore.favoritePhrase(
+                      phraseId: phrase.id, value: !favorite);
+                },
               );
             }).toList(),
           ],

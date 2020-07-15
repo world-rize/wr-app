@@ -2,27 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 
-class PhraseDetailSample extends StatefulWidget {
-  const PhraseDetailSample({@required this.showTranslation});
-
-  final bool showTranslation;
-
-  @override
-  _PhraseDetailSampleState createState() =>
-      _PhraseDetailSampleState(showTranslation: showTranslation);
-}
-
-class _PhraseDetailSampleState extends State<PhraseDetailSample> {
-  _PhraseDetailSampleState({@required this.showTranslation});
-
-  final bool showTranslation;
-
+class PhraseDetailSample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final player = Provider.of<VoicePlayer>(context);
+    final prefs = Provider.of<PreferenceNotifier>(context);
+    final showTranslation = prefs.showTranslation();
+
+    print('PhraseDetailSample: showTranslation: $showTranslation');
+
     final header = Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

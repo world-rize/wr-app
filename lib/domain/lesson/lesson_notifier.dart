@@ -10,7 +10,7 @@ class LessonNotifier with ChangeNotifier {
   LessonService _lessonService;
   UserService _userService;
 
-  List<Lesson> _lessons;
+  List<Lesson> _lessons = [];
 
   /// singleton
   static LessonNotifier _cache;
@@ -26,10 +26,11 @@ class LessonNotifier with ChangeNotifier {
   LessonNotifier._internal({
     @required LessonService lessonService,
     @required UserService userService,
-  }) {
-    _lessonService = lessonService;
-    _userService = userService;
+  })  : _lessonService = lessonService,
+        _userService = userService {
     InAppLogger.log('[ArticleStore] init');
+
+    loadAllLessons();
   }
 
   Future<void> loadAllLessons() async {
@@ -39,7 +40,7 @@ class LessonNotifier with ChangeNotifier {
   List<Lesson> get lessons => _lessons;
 
   List<Phrase> phrasesWhere(bool Function(Phrase) filter) {
-    return _lessons.expand((lesson) => lesson.phrases).where(filter);
+    return _lessons.expand((lesson) => lesson.phrases).where(filter).toList();
   }
 
   List<Phrase> get phrases => phrasesWhere((_) => true);

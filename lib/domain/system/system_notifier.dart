@@ -5,14 +5,10 @@ import 'package:package_info/package_info.dart';
 import 'package:wr_app/domain/system/system_service.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/notification.dart';
 
 /// システム情報など
 class SystemNotifier with ChangeNotifier {
-  SystemService _systemService;
-
-  /// シングルトンインスタンス
-  static SystemNotifier _cache;
-
   factory SystemNotifier({
     @required SystemService systemService,
     @required Flavor flavor,
@@ -27,13 +23,26 @@ class SystemNotifier with ChangeNotifier {
     @required this.flavor,
     @required this.pubSpec,
   }) {
-    this._systemService = systemService;
+    _systemService = systemService;
+    _notificator.setup();
     InAppLogger.log('✨ init SystemStore');
   }
+
+  SystemService _systemService;
+
+  final _notificator = AppNotifier();
+
+  /// シングルトンインスタンス
+  static SystemNotifier _cache;
 
   /// flavor
   final Flavor flavor;
 
   /// pubspec
   final PackageInfo pubSpec;
+
+  Future<void> notify() {
+    return _systemService.notify(
+        notificator: _notificator, title: 'test', body: 'body', payload: 'ok');
+  }
 }

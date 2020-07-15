@@ -9,19 +9,14 @@ class ArticleMockRepository implements IArticleRepository {
   @override
   Future<List<ArticleDigest>> findByCategory(
       Client client, String category) async {
-    return List.generate(100, (index) {
-      final category = [
-        'online_lesson',
-        'article',
-        'random',
-        'listening',
-        'comics',
-        'cuisine'
-      ][index % 6];
+    await Future.delayed(const Duration(milliseconds: 1000));
+    return List.generate(10, (index) {
       return ArticleDigest.fromMock(
-          title: 'Article $category ${index ~/ 6}',
-          url: 'https://world-rize.com/working-in-hotel-in-sydney/',
-          summary: 'Article $category summary');
+        title: 'Article $category ${index ~/ 6}',
+        category: category,
+        url: 'https://world-rize.com/working-in-hotel-in-sydney/',
+        summary: 'Article $category summary',
+      );
     });
   }
 

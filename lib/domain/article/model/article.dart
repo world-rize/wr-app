@@ -10,20 +10,27 @@ part 'article.g.dart';
 @JsonSerializable()
 class ArticleDigest extends Entry<ArticleDigestFields> {
   ArticleDigest({
-    SystemFields sys,
-    ArticleDigestFields fields,
+    @required SystemFields sys,
+    @required ArticleDigestFields fields,
   }) : super(sys: sys, fields: fields);
 
-  ArticleDigest.fromMock(
-      {@required String title, @required String url, @required String summary})
-      : super(
-          sys: null,
+  ArticleDigest.fromMock({
+    @required String title,
+    @required String category,
+    @required String url,
+    @required String summary,
+  }) : super(
+          sys: SystemFields(),
           fields: ArticleDigestFields(
             title: title,
             url: url,
-            category: '',
+            category: category,
             tags: '',
-            thumbnail: null,
+            thumbnail: Asset(
+              fields: AssetFields(
+                file: AssetFile(url: 'https://source.unsplash.com/random'),
+              ),
+            ),
             summary: summary,
           ),
         );

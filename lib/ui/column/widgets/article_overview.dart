@@ -28,7 +28,7 @@ class ArticleOverView extends StatelessWidget {
               width: double.infinity,
               height: 150,
               child: Image.network(
-                '',
+                article.fields.thumbnail.fields.file.url,
                 fit: BoxFit.cover,
               ),
             ),

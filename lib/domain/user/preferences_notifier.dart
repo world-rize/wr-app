@@ -26,20 +26,23 @@ class PreferenceNotifier extends ChangeNotifier {
 
   void setFollowSystemMode(bool value) {
     pref.setBool('follow_system_theme', followSystemTheme);
+    notifyListeners();
     InAppLogger.log('follow_system_theme: $value');
   }
 
-  bool get showTranslation => pref?.getBool('show_transition') ?? false;
+  bool showTranslation() => pref?.getBool('show_translation') ?? false;
 
   void toggleShowTranslation() {
-    pref.setBool('show_transition', !showTranslation);
-    InAppLogger.log('show_transition: ${!showTranslation}');
+    pref.setBool('show_translation', !showTranslation());
+    notifyListeners();
+    InAppLogger.log('show_translation: ${!showTranslation()}');
   }
 
   bool get showText => pref?.getBool('show_text') ?? true;
 
   void toggleShowText() {
-    pref.setBool('show_text', showText);
+    pref.setBool('show_text', !showText);
+    notifyListeners();
     InAppLogger.log('show_text: ${!showText}');
   }
 
@@ -47,6 +50,7 @@ class PreferenceNotifier extends ChangeNotifier {
 
   void setDarkMode(bool value) {
     pref.setBool('dark_mode', value);
+    notifyListeners();
     InAppLogger.log('dark_mode: $value');
   }
 
@@ -56,6 +60,7 @@ class PreferenceNotifier extends ChangeNotifier {
   /// 初回起動時フラグをセットします
   void setFirstLaunch({bool flag}) {
     pref.setBool('first_launch', flag);
+    notifyListeners();
     InAppLogger.log('first_launch: $flag');
   }
 }

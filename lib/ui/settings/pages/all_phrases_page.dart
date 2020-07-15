@@ -38,7 +38,7 @@ class _AllPhrasesPageState extends State<AllPhrasesPage> {
     }));
     print('${voices.length} voices');
 
-    return voices.where((v) => v.exist);
+    return voices.where((v) => v.exist).toList();
   }
 
   @override

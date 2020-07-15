@@ -17,7 +17,6 @@ import 'package:wr_app/ui/settings/pages/api_test_page.dart';
 import 'package:wr_app/ui/settings/pages/dark_mode_page.dart';
 import 'package:wr_app/ui/settings/pages/inapp_log_page.dart';
 import 'package:wr_app/util/flavor.dart';
-import 'package:wr_app/util/notification.dart';
 
 /// 設定ページ
 class SettingsPage extends StatefulWidget {
@@ -178,10 +177,13 @@ class _SettingsState extends State<SettingsPage> {
           title: 'All Phrases',
           subtitle: '${notifier.phrases.length} Phrases',
           onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
+            Navigator.of(context).push(
+              MaterialPageRoute(
                 builder: (_) => AllPhrasesPage(
-                      filter: (phrase) => true,
-                    )));
+                  filter: (phrase) => true,
+                ),
+              ),
+            );
           },
         ),
         SettingsTile(
@@ -220,11 +222,10 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'notifier test',
           onTap: () {
-            Provider.of<AppNotifier>(context, listen: false)
-              ..showNotification(
-                  title: 'WorldRIZe',
-                  body: 'notifier test',
-                  payload: 'success');
+            final systemNotifier =
+                Provider.of<SystemNotifier>(context, listen: false);
+            // ignore: cascade_invocations
+            systemNotifier.notify();
           },
         )
       ],

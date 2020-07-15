@@ -10,8 +10,8 @@ import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 class PhraseDetailButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // TODO(some): データに依存しない
     final player = Provider.of<VoicePlayer>(context);
-    // TODO(?): データに依存しない
     final preferences = Provider.of<PreferenceNotifier>(context);
     final notifier = Provider.of<UserNotifier>(context);
     final favorite = notifier.user.isFavoritePhrase(player.phrase);
@@ -28,7 +28,7 @@ class PhraseDetailButtons extends StatelessWidget {
               heroTag: 'Japanese',
               child: Icon(
                 Icons.message,
-                color: preferences.showTranslation
+                color: preferences.showTranslation()
                     ? Colors.lightBlueAccent
                     : Colors.grey,
               ),
