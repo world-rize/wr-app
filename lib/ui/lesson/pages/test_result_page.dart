@@ -6,6 +6,7 @@ import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/ui/lesson/pages/section_list_page.dart';
 import 'package:wr_app/ui/lesson/pages/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
@@ -52,7 +53,7 @@ class TestResultPage extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
     final useStore = Provider.of<UserNotifier>(context);
     final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
-    final resultText = I.of(context).testResult(true);
+    final resultText = I.of(context).testResult(stats.corrects > 5);
 
     return Scaffold(
       appBar: AppBar(
@@ -71,15 +72,19 @@ class TestResultPage extends StatelessWidget {
               child: Column(
                 children: List.generate(
                   stats.section.phrases.length,
-                  (i) => Stack(
-                    children: [
-                      PhraseCard(
-                        phrase: stats.section.phrases[i],
-                        favorite: useStore.user
-                            .isFavoritePhrase(stats.section.phrases[i]),
-                      ),
-                      Text('${stats.answers[i]}'),
-                    ],
+                  (i) => PhraseCard(
+                    phrase: stats.section.phrases[i],
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => SectionDetailPage(
+                              section: stats.section, index: i),
+                        ),
+                      );
+                    },
+                    favorite: useStore
+                        .getUser()
+                        .isFavoritePhrase(stats.section.phrases[i]),
                   ).p_1(),
                 ),
               ),

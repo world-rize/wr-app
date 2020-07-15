@@ -55,7 +55,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       // Firebase Analytics
       Provider.value(value: analyticsObserver),
       // system
-      Provider.value(
+      ChangeNotifierProvider.value(
         value: SystemNotifier(systemService: systemService, flavor: flavor),
       ),
       // ユーザーデータ

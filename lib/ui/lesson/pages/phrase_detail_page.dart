@@ -8,7 +8,7 @@ import 'package:wr_app/ui/lesson/widgets/phrase_detail_advice.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_detail_buttons.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_detail_sample.dart';
 import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
-import 'package:wr_app/ui/widgets/toast.dart';
+import 'package:wr_app/util/toast.dart';
 
 /// Lesson > index > lesson > sections > phrase_detail_page
 /// - phrase detail page

@@ -64,6 +64,62 @@ class CreateUserResponseDto {
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
+class UpdateUserRequestDto {
+  UpdateUserRequestDto({
+    @required this.user,
+  });
+
+  factory UpdateUserRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$UpdateUserRequestDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateUserRequestDtoToJson(this);
+
+  User user;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class UpdateUserResponseDto {
+  UpdateUserResponseDto({
+    @required this.success,
+  });
+
+  factory UpdateUserResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$UpdateUserResponseDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdateUserResponseDtoToJson(this);
+
+  bool success;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class DeleteUserRequestDto {
+  DeleteUserRequestDto({
+    @required this.user,
+  });
+
+  factory DeleteUserRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$DeleteUserRequestDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeleteUserRequestDtoToJson(this);
+
+  User user;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class DeleteUserResponseDto {
+  DeleteUserResponseDto({
+    @required this.success,
+  });
+
+  factory DeleteUserResponseDto.fromJson(Map<String, dynamic> json) =>
+      _$DeleteUserResponseDtoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$DeleteUserResponseDtoToJson(this);
+
+  bool success;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class FavoritePhraseRequestDto {
   FavoritePhraseRequestDto({
     @required this.uid,

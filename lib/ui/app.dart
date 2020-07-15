@@ -22,14 +22,11 @@ class WRAppState extends State<WRApp> {
   Widget build(BuildContext context) {
     final observer = Provider.of<FirebaseAnalyticsObserver>(context);
     final system = Provider.of<SystemNotifier>(context);
-    final themeMode = system.getThemeMode();
-
-    print('theme: $themeMode');
 
     return MaterialApp(
       theme: WorldRizeLightTheme,
       darkTheme: WorldRizeDarkTheme,
-      themeMode: themeMode,
+      themeMode: system.getThemeMode(),
       navigatorObservers: <NavigatorObserver>[
         // route observer
         RouteObserver<PageRoute<dynamic>>(),

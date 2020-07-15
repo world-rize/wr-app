@@ -5,6 +5,132 @@ import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
 
+class MockIdTokenResult implements IdTokenResult {
+  @override
+  String get token => 'fake_token';
+
+  @override
+  // TODO: implement authTime
+  DateTime get authTime => throw UnimplementedError();
+
+  @override
+  // TODO: implement claims
+  Map get claims => throw UnimplementedError();
+
+  @override
+  // TODO: implement expirationTime
+  DateTime get expirationTime => throw UnimplementedError();
+
+  @override
+  // TODO: implement issuedAtTime
+  DateTime get issuedAtTime => throw UnimplementedError();
+
+  @override
+  // TODO: implement signInProvider
+  String get signInProvider => throw UnimplementedError();
+}
+
+class MockFirebaseUser implements FirebaseUser {
+  MockFirebaseUser();
+
+  @override
+  String get displayName => 'Hoge';
+
+  @override
+  String get uid => '1234-5678-90ab';
+
+  @override
+  Future<IdTokenResult> getIdToken({bool refresh = false}) async {
+    return Future.value(MockIdTokenResult());
+  }
+
+  @override
+  Future<void> updatePassword(String password) async {}
+
+  @override
+  Future<void> updateEmail(String email) async {}
+
+  @override
+  Future<void> delete() {
+    // TODO: implement delete
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement email
+  String get email => throw UnimplementedError();
+
+  @override
+  // TODO: implement isAnonymous
+  bool get isAnonymous => throw UnimplementedError();
+
+  @override
+  // TODO: implement isEmailVerified
+  bool get isEmailVerified => throw UnimplementedError();
+
+  @override
+  Future<AuthResult> linkWithCredential(AuthCredential credential) {
+    // TODO: implement linkWithCredential
+    throw UnimplementedError();
+  }
+
+  @override
+  // TODO: implement metadata
+  FirebaseUserMetadata get metadata => throw UnimplementedError();
+
+  @override
+  // TODO: implement phoneNumber
+  String get phoneNumber => throw UnimplementedError();
+
+  @override
+  // TODO: implement photoUrl
+  String get photoUrl => throw UnimplementedError();
+
+  @override
+  // TODO: implement providerData
+  List<UserInfo> get providerData => throw UnimplementedError();
+
+  @override
+  // TODO: implement providerId
+  String get providerId => throw UnimplementedError();
+
+  @override
+  Future<AuthResult> reauthenticateWithCredential(AuthCredential credential) {
+    // TODO: implement reauthenticateWithCredential
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> reload() {
+    // TODO: implement reload
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> sendEmailVerification() {
+    // TODO: implement sendEmailVerification
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> unlinkFromProvider(String provider) {
+    // TODO: implement unlinkFromProvider
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updatePhoneNumberCredential(AuthCredential credential) {
+    // TODO: implement updatePhoneNumberCredential
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<void> updateProfile(UserUpdateInfo userUpdateInfo) {
+    // TODO: implement updateProfile
+    throw UnimplementedError();
+  }
+}
+
 /// ## firebase ログイン方法
 /// - email & password
 /// - google sign in
@@ -33,46 +159,27 @@ class AuthMockRepository implements IAuthRepository {
   /// メールアドレスとパスワードでサインアップ
   @override
   Future<FirebaseUser> signUpWithEmailAndPassword(
-      String email, String password) {
-    return fbAuth
-        .createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-        .then((res) => res.user);
+      String email, String password) async {
+    return MockFirebaseUser();
   }
 
   /// sign in with email & password
   @override
   Future<FirebaseUser> signInWithEmailAndPassword(
-      String email, String password) {
-    return fbAuth
-        .signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-        .then((res) => res.user);
+      String email, String password) async {
+    return MockFirebaseUser();
   }
 
   /// sign in with google
   @override
   Future<FirebaseUser> signInWithGoogleSignIn() async {
-    final _credential = await _getGoogleAuthCredential();
-    assert(_credential != null);
-
-    // credential -> firebase user
-    final authResult =
-        await fbAuth.signInWithCredential(_credential).catchError(print);
-
-    assert(authResult != null);
-
-    return authResult.user;
+    return MockFirebaseUser();
   }
 
   /// sign in with sign in apple
   @override
   Future<FirebaseUser> signInWithSignInWithApple() async {
-    throw UnimplementedError();
+    return MockFirebaseUser();
   }
 
   /// sign out
@@ -80,4 +187,10 @@ class AuthMockRepository implements IAuthRepository {
   Future<void> signOut() {
     return fbAuth.signOut();
   }
+
+  @override
+  Future<void> updatePassword(String newPassword) async {}
+
+  @override
+  Future<void> updateEmail(String newEmail) async {}
 }

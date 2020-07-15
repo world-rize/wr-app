@@ -11,24 +11,6 @@ class ThemeSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final system = Provider.of<SystemNotifier>(context);
-    final darkModeSection = SettingsSection(
-      title: 'ダークモード',
-      tiles: [
-        SettingsTile.switchTile(
-          switchValue: system.getFollowSystemTheme(),
-          title: '端末の設定に従う',
-          leading: const Icon(Icons.people),
-          onToggle: (v) => system.setFollowSystemTheme(value: v),
-        ),
-        if (!system.getFollowSystemTheme())
-          SettingsTile.switchTile(
-            switchValue: system.getDarkMode(),
-            title: 'ダークモード',
-            leading: const Icon(Icons.attach_money),
-            onToggle: (v) => system.setDarkMode(value: v),
-          ),
-      ],
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +18,24 @@ class ThemeSettingsPage extends StatelessWidget {
       ),
       body: SettingsList(
         sections: [
-          darkModeSection,
+          SettingsSection(
+            title: 'ダークモード',
+            tiles: [
+              SettingsTile.switchTile(
+                switchValue: system.getFollowSystemTheme(),
+                title: '端末の設定に従う',
+                leading: const Icon(Icons.people),
+                onToggle: (v) => system.setFollowSystemTheme(value: v),
+              ),
+              if (!system.getFollowSystemTheme())
+                SettingsTile.switchTile(
+                  switchValue: system.getDarkMode(),
+                  title: 'ダークモード',
+                  leading: const Icon(Icons.attach_money),
+                  onToggle: (v) => system.setDarkMode(value: v),
+                ),
+            ],
+          ),
         ],
       ),
     );

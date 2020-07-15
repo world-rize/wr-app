@@ -22,6 +22,11 @@ class UserMockRepository implements IUserRepository {
   }
 
   @override
+  Future<UpdateUserResponseDto> updateUser(UpdateUserRequestDto req) async {
+    return UpdateUserResponseDto(success: true);
+  }
+
+  @override
   Future<FavoritePhraseResponseDto> favoritePhrase(
       FavoritePhraseRequestDto req) async {
     return FavoritePhraseResponseDto(success: true);
@@ -35,5 +40,10 @@ class UserMockRepository implements IUserRepository {
   @override
   Future<DoTestResponseDto> doTest(DoTestRequestDto req) async {
     return DoTestResponseDto(success: true);
+  }
+
+  @override
+  Future<DeleteUserResponseDto> deleteUser(DeleteUserRequestDto req) async {
+    return DeleteUserResponseDto(success: true);
   }
 }

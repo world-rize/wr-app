@@ -92,4 +92,19 @@ class UserService {
     return _userRepository
         .doTest(DoTestRequestDto(uid: user.uuid, sectionId: ''));
   }
+
+  /// update user
+  Future<void> updateUser({@required User user}) async {
+    await _userRepository.updateUser(UpdateUserRequestDto(user: user));
+  }
+
+  /// update password
+  Future<void> updatePassword({@required String newPassword}) {
+    return _authRepository.updatePassword(newPassword);
+  }
+
+  /// update email
+  Future<void> updateEmail({@required String newEmail}) async {
+    return _authRepository.updateEmail(newEmail);
+  }
 }

@@ -37,6 +37,7 @@ class LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userStore = Provider.of<UserNotifier>(context);
+    final user = userStore.getUser();
     final lessonNotifier = Provider.of<LessonNotifier>(context);
 
     return SingleChildScrollView(
@@ -59,7 +60,7 @@ class LessonIndexPage extends StatelessWidget {
                     (index, lesson) => CarouselCell(
                       lesson: lesson,
                       index: index,
-                      locked: !userStore.user.isPremium && 3 <= index,
+                      locked: !user.isPremium && 3 <= index,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -132,10 +133,16 @@ class LessonIndexPage extends StatelessWidget {
                   children: [
                     PhraseCard(
                       phrase: p,
-                      favorite: userStore.user.isFavoritePhrase(p),
+                      favorite: user.isFavoritePhrase(p),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => NewComingPage()),
+                        );
+                      },
+                      onFavorite: () {
+                        userStore.favoritePhrase(
+                          phraseId: p.id,
+                          value: !user.isFavoritePhrase(p),
                         );
                       },
                     ),

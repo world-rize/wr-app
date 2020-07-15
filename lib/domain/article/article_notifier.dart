@@ -20,7 +20,7 @@ class ArticleNotifier extends ChangeNotifier {
 
   ArticleNotifier._internal({
     @required ArticleService articleService,
-  }) : _articleService = articleService {}
+  }) : _articleService = articleService;
 
   Future<List<ArticleDigest>> findByCategory({
     @required String id,

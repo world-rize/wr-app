@@ -58,6 +58,6 @@ class SystemRepository implements ISystemRepository {
   @override
   bool getFirstLaunch() {
     final pref = GetIt.I<SharedPreferences>();
-    return pref.getBool('first_launch') ?? false;
+    return pref.getBool('first_launch') ?? true;
   }
 }

@@ -4,32 +4,31 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/user_service.dart';
-import 'package:wr_app/ui/widgets/toast.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/toast.dart';
 
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
   final UserService _userService;
 
   /// ユーザーデータ
-  User user = User.empty();
+  User _user = User.empty();
+
+  User getUser() => _user;
 
   /// singleton
   static UserNotifier _cache;
 
   factory UserNotifier({@required UserService service}) {
-    if (_cache == null) {
-      _cache = UserNotifier._internal(service: service);
-    }
-    return _cache;
+    return _cache ??= UserNotifier._internal(service: service);
   }
 
   UserNotifier._internal({@required UserService service})
       : _userService = service;
 
   Future<void> signUpWithGoogle() async {
-    user = await _userService.signUpWithGoogle();
-    InAppLogger.log(user.toJson().toString(), type: 'user');
+    _user = await _userService.signUpWithGoogle();
+    InAppLogger.log(_user.toJson().toString(), type: 'user');
   }
 
   Future<void> signOut() async {
@@ -39,25 +38,55 @@ class UserNotifier with ChangeNotifier {
 
   /// メールアドレスとパスワードでログイン
   Future<void> loginWithEmailAndPassword(String email, String password) async {
-    user = await _userService.signInWithEmailAndPassword(email, password);
+    _user = await _userService.signInWithEmailAndPassword(email, password);
     InAppLogger.log('✔ loginWithEmailAndPassword', type: 'user');
     notifyListeners();
   }
 
   /// Googleでログイン
   Future<void> loginWithGoogle() async {
-    user = await _userService.signUpWithGoogle();
+    _user = await _userService.signUpWithGoogle();
     InAppLogger.log('✔ loginWithGoogle', type: 'user');
     notifyListeners();
   }
 
   /// メールアドレスとパスワードでサインアップ
   Future<void> signUpWithEmailAndPassword(String email, String password) async {
-    user = await _userService.signUpWithEmailAndPassword(email, password);
+    _user = await _userService.signUpWithEmailAndPassword(email, password);
     InAppLogger.log('✔ signUpWithEmailAndPassword', type: 'user');
     notifyListeners();
+
+    NotifyToast.success('ログインしました');
   }
 
+  /// update Email
+  Future<void> setEmail({@required String email}) async {
+    _user.email = email;
+    await _userService.updateUser(user: _user);
+    await _userService.updateEmail(newEmail: email);
+    notifyListeners();
+
+    NotifyToast.success('Emailを変更しました');
+  }
+
+  /// update age
+  Future<void> setAge({@required int age}) async {
+    _user.age = age;
+    await _userService.updateUser(user: _user);
+    notifyListeners();
+
+    NotifyToast.success('ageを変更しました');
+  }
+
+  /// update password
+  Future<void> setPassword({@required String password}) async {
+    await _userService.updatePassword(newPassword: password);
+    notifyListeners();
+
+    NotifyToast.success('passwordを変更しました');
+  }
+
+  /// Test API
   Future<void> test() async {
     InAppLogger.log('callTestAPI()');
     await _userService.test();
@@ -71,12 +100,12 @@ class UserNotifier with ChangeNotifier {
   }) async {
     InAppLogger.log('favoritePhrase()');
 
-    user.favorites[phraseId] = value;
+    _user.favorites[phraseId] = value;
 
     notifyListeners();
 
-    final _res = await _userService
-        .favorite(user: user, phraseId: phraseId, value: value)
+    await _userService
+        .favorite(user: _user, phraseId: phraseId, value: value)
         .catchError(NotifyToast.error);
 
     NotifyToast.success(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
@@ -86,11 +115,10 @@ class UserNotifier with ChangeNotifier {
   Future<void> resetTestLimitCount() async {
     InAppLogger.log('resetTestLimitCount()');
 
-    user.testLimitCount = 3;
+    _user.testLimitCount = 3;
     notifyListeners();
 
-    final _res =
-        await _userService.resetTestCount().catchError(NotifyToast.error);
+    await _userService.resetTestCount().catchError(NotifyToast.error);
 
     InAppLogger.log('受講可能回数がリセットされました');
     NotifyToast.success('受講可能回数がリセットされました');
@@ -100,11 +128,11 @@ class UserNotifier with ChangeNotifier {
   Future<void> callGetPoint({@required int point}) async {
     InAppLogger.log('callGetPoint()');
 
-    final _res = await _userService
-        .getPoints(user: user, point: point)
+    await _userService
+        .getPoints(user: _user, point: point)
         .catchError(NotifyToast.error);
 
-    user.point += point;
+    _user.point += point;
     notifyListeners();
 
     NotifyToast.success('$pointポイントゲットしました');
@@ -114,21 +142,19 @@ class UserNotifier with ChangeNotifier {
   Future<void> doTest() async {
     InAppLogger.log('callDoTest()');
 
-    final _res =
-        await _userService.doTest(user: user).catchError(NotifyToast.error);
+    await _userService.doTest(user: _user).catchError(NotifyToast.error);
 
-    user.testLimitCount--;
+    _user.testLimitCount--;
     notifyListeners();
   }
 
   /// プランを変更
-  void changePlan(Membership membership) {
+  void changePlan(Membership membership) async {
     InAppLogger.log('changePlan()');
 
-    final _res =
-        _userService.changePlan(membership).catchError(NotifyToast.error);
+    await _userService.changePlan(membership).catchError(NotifyToast.error);
 
-    user.membership = membership;
+    _user.membership = membership;
     notifyListeners();
 
     InAppLogger.log('membership to be $membership');

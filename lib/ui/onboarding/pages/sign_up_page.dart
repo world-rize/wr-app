@@ -6,7 +6,7 @@ import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
 import 'package:wr_app/ui/root_view.dart';
-import 'package:wr_app/ui/widgets/toast.dart';
+import 'package:wr_app/util/toast.dart';
 
 class SignUpPage extends StatefulWidget {
   @override

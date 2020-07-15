@@ -13,8 +13,6 @@ class PhraseDetailSample extends StatelessWidget {
     final lesson = Provider.of<LessonNotifier>(context);
     final showTranslation = lesson.getShowTranslation();
 
-    print('PhraseDetailSample: showTranslation: $showTranslation');
-
     final header = Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

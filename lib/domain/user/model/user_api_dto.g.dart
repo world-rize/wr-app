@@ -71,6 +71,62 @@ Map<String, dynamic> _$CreateUserResponseDtoToJson(
       'user': instance.user?.toJson(),
     };
 
+UpdateUserRequestDto _$UpdateUserRequestDtoFromJson(Map json) {
+  return UpdateUserRequestDto(
+    user: json['user'] == null
+        ? null
+        : User.fromJson((json['user'] as Map)?.map(
+            (k, e) => MapEntry(k as String, e),
+          )),
+  );
+}
+
+Map<String, dynamic> _$UpdateUserRequestDtoToJson(
+        UpdateUserRequestDto instance) =>
+    <String, dynamic>{
+      'user': instance.user?.toJson(),
+    };
+
+UpdateUserResponseDto _$UpdateUserResponseDtoFromJson(Map json) {
+  return UpdateUserResponseDto(
+    success: json['success'] as bool,
+  );
+}
+
+Map<String, dynamic> _$UpdateUserResponseDtoToJson(
+        UpdateUserResponseDto instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+    };
+
+DeleteUserRequestDto _$DeleteUserRequestDtoFromJson(Map json) {
+  return DeleteUserRequestDto(
+    user: json['user'] == null
+        ? null
+        : User.fromJson((json['user'] as Map)?.map(
+            (k, e) => MapEntry(k as String, e),
+          )),
+  );
+}
+
+Map<String, dynamic> _$DeleteUserRequestDtoToJson(
+        DeleteUserRequestDto instance) =>
+    <String, dynamic>{
+      'user': instance.user?.toJson(),
+    };
+
+DeleteUserResponseDto _$DeleteUserResponseDtoFromJson(Map json) {
+  return DeleteUserResponseDto(
+    success: json['success'] as bool,
+  );
+}
+
+Map<String, dynamic> _$DeleteUserResponseDtoToJson(
+        DeleteUserResponseDto instance) =>
+    <String, dynamic>{
+      'success': instance.success,
+    };
+
 FavoritePhraseRequestDto _$FavoritePhraseRequestDtoFromJson(Map json) {
   return FavoritePhraseRequestDto(
     uid: json['uid'] as String,

@@ -14,7 +14,6 @@ import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/onboarding/pages/index.dart';
 import 'package:wr_app/ui/settings/pages/account_settings_page.dart';
-import 'package:wr_app/ui/settings/pages/all_phrases_page.dart';
 import 'package:wr_app/ui/settings/pages/api_test_page.dart';
 import 'package:wr_app/ui/settings/pages/dark_mode_page.dart';
 import 'package:wr_app/ui/settings/pages/inapp_log_page.dart';
@@ -176,19 +175,19 @@ class _SettingsState extends State<SettingsPage> {
           title: 'Flutter Flavor',
           subtitle: envStore.flavor.toShortString(),
         ),
-        SettingsTile(
-          title: 'All Phrases',
-          subtitle: '${notifier.phrases.length} Phrases',
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => AllPhrasesPage(
-                  filter: (phrase) => true,
-                ),
-              ),
-            );
-          },
-        ),
+//        SettingsTile(
+//          title: 'All Phrases',
+//          subtitle: '${notifier.phrases.length} Phrases',
+//          onTap: () {
+//            Navigator.of(context).push(
+//              MaterialPageRoute(
+//                builder: (_) => AllPhrasesPage(
+//                  filter: (phrase) => true,
+//                ),
+//              ),
+//            );
+//          },
+//        ),
         SettingsTile(
           title: 'InApp Log',
           onTap: () {
@@ -212,12 +211,11 @@ class _SettingsState extends State<SettingsPage> {
               userStore.changePlan(Membership.normal);
             }
           },
-          switchValue: userStore.user.membership == Membership.pro,
+          switchValue: userStore.getUser().isPremium,
         ),
         SettingsTile.switchTile(
           title: 'Paint Size Enabled',
           onToggle: (value) {
-            print(value);
             debugPaintSizeEnabled = value;
           },
           switchValue: debugPaintSizeEnabled,
