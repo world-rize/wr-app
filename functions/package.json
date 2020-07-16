@@ -6,7 +6,7 @@
     "serve": "npm run switch && npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "npm run switch && firebase deploy --only functions",
+    "deploy": "npm run switch && firebase deploy --runtime nodejs10 --only functions",
     "logs": "firebase functions:log",
     "test": "jest"
   },

@@ -25,7 +25,7 @@ export class UserRepository {
   }
 
   public async update(user: User): Promise<User> {
-    await this.users.doc(user.uuid).update(user)
+    await this.users.doc(user.uuid).set(user, { merge: true })
     return user
   }
 

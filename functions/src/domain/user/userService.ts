@@ -2,7 +2,7 @@
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
 import { User } from './model/user'
-import { CreateUserRequest } from './model/userApiDto'
+import { CreateUserRequest, UpdateUserRequest } from './model/userApiDto'
 import { UserRepository } from './userRepository'
 
 export class UserService {
@@ -12,11 +12,11 @@ export class UserService {
     this.repo = repo
   }
 
-  generateUser (req: CreateUserRequest): User {
+  generateUser (uuid: string, req: CreateUserRequest): User {
     return {
-      uuid: req.uuid,
+      uuid: uuid,
       name: req.name,
-      userId: req.userId,
+      userId: uuid,
       point: 0,
       testLimitCount: 3,
       favorites: {},
@@ -29,8 +29,12 @@ export class UserService {
     return this.repo.exists(uuid)
   }
 
-  async createUser(req: CreateUserRequest) {
-    const user = this.generateUser(req)
+  async updateUser(req: UpdateUserRequest): Promise<User> {
+    return this.repo.update(req.user)
+  }
+
+  async createUser(uuid: string, req: CreateUserRequest) {
+    const user = this.generateUser(uuid, req)
     return this.repo.create(user)
   }
 

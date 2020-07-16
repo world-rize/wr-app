@@ -9,9 +9,7 @@ export interface ReadUserResponse {
   user: User
 }
 export interface CreateUserRequest {
-  uuid: string
   name: string
-  userId: string
   email: string
   age: string
 }
@@ -19,6 +17,15 @@ export interface CreateUserRequest {
 export interface CreateUserResponse {
   user: User
 }
+
+export interface UpdateUserRequest {
+  user: User
+}
+
+export interface UpdateUserResponse {
+  user: User
+}
+
 export interface FavoritePhraseRequest {
   phraseId: string
   value: boolean
@@ -39,3 +46,8 @@ export interface GetPointResponse {
 export interface DoTestRequest {}
 
 export interface DoTestResponse {}
+
+export interface DeleteUserRequest {}
+export interface DeleteUserResponse {
+  success: boolean
+}

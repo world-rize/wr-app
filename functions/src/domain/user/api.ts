@@ -1,6 +1,7 @@
 /**
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
+import * as firebase from 'firebase-admin'
 import { UserService } from './userService'
 import { UserRepository } from './userRepository'
 import * as functions from 'firebase-functions'
@@ -61,20 +62,23 @@ export const createUser = async (req: Dto.CreateUserRequest, context: Context): 
     throw new functions.https.HttpsError('permission-denied', 'not authorized')
   }
 
-  console.log(`[createUser] uid: ${req.uuid}`)
+  // mapping uuid
+  const uuid = context.auth.uid
 
-  if (await userService.existUser(req.uuid)) {
+  console.log(`[createUser] uuid: ${uuid}`)
+
+  if (await userService.existUser(uuid)) {
     console.error('user already exist')
     throw new functions.https.HttpsError('already-exists', 'user already exist')
   }
 
-  const user = await userService.createUser(req)
+  const user = await userService.createUser(uuid, req)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to create user')
     })
 
-  console.log(`[createUser] uid: ${req.uuid} user created`)
+  console.log(`[createUser] uuid: ${uuid} user created`)
 
   return { user }
 }
@@ -146,5 +150,62 @@ export const getPoint = async (req: Dto.GetPointRequest, context: Context): Prom
  *  テストを受ける(TODO)
  */
 export const doTest = async (req: Dto.DoTestRequest, context: Context): Promise<Dto.DoTestResponse> => {
+  if (!context.auth) {
+    console.error('not authorized')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
+
   return {}
+}
+
+/**
+ * ユーザー更新
+ */
+export const updateUser = async (req: Dto.UpdateUserRequest, context: Context): Promise<Dto.UpdateUserResponse> => {
+  if (!context.auth) {
+    console.error('not authorized')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
+
+  const updatedUser = await userService.updateUser(req)
+    .catch (e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to update user')
+    })
+
+  console.log(`[deleteUser] uuid: ${updatedUser.uuid} user updated`)
+
+  return {
+    user: updatedUser
+  }
+}
+
+/**
+ * アカウントを削除する
+ */
+export const deleteUser = async (req: Dto.DeleteUserRequest, context: Context): Promise<Dto.DeleteUserResponse> => {
+  if (!context.auth) {
+    console.error('not authorized')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
+
+  const uuid = context.auth?.uid
+
+  await userService.delete(uuid)
+    .catch (e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to delete user')
+    })
+
+  await firebase.auth().deleteUser(uuid)
+    .catch (e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to delete account')
+    })
+
+  console.log(`[deleteUser] uuid: ${uuid} user deleted`)
+
+  return {
+    success: true
+  }
 }
