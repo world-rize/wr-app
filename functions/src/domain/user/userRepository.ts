@@ -2,7 +2,7 @@
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
 import { firestore } from 'firebase-admin'
-import { User } from './model'
+import { User } from './model/user'
 
 export class UserRepository {
   users: firestore.CollectionReference
@@ -33,5 +33,3 @@ export class UserRepository {
     await this.users.doc(uuid).delete()
   }
 }
-
-export const users = new UserRepository()
