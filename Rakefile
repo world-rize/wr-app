@@ -72,7 +72,14 @@ end
 desc 'テスト'
 task :test do
   puts '[Task test]'
+  # flutter unit test
   sh 'flutter test --coverage'
-  # TODO: server test
+
+  # TODO: flutter driver test
+  
+  # clound functions test
+  cd 'functions' do
+    sh 'yarn test'
+  end
 end
 

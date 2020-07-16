@@ -5,7 +5,8 @@ const serviceAccount = require('../../.env/credential.json')
 
 firebase.initializeApp(serviceAccount)
 const functions = firebase.functions()
-functions.useFunctionsEmulator('http://localhost:5000')
+// use local emulator
+// functions.useFunctionsEmulator('http://localhost:5000')
 
 describe('api health check', ()  => {
   test('test', async () => {
@@ -77,7 +78,7 @@ describe('api health check', ()  => {
       .then(ss => ss.data() as User)
 
     expect(user.favorites['9999']).toBe(true)
-  })
+  }, 10000)
 
   test('getPoint', async () => {
     // authorize
@@ -151,5 +152,5 @@ describe('api health check', ()  => {
     if (existUser) {
       await auth.user?.delete()
     }
-  })
+  }, 10000)
 })

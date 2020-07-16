@@ -2,11 +2,11 @@
   "name": "functions",
   "scripts": {
     "build": "tsc",
-    "switch": "n 10.16.0",
+    "switch": "n 10.20.1",
     "serve": "npm run switch && npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy": "npm run switch && firebase deploy --runtime nodejs10 --only functions",
+    "deploy": "npm run switch && firebase deploy --only functions",
     "logs": "firebase functions:log",
     "test": "jest"
   },
@@ -28,8 +28,8 @@
     "@types/express": "^4.17.7",
     "@types/jest": "^26.0.4",
     "firebase-functions-test": "^0.1.6",
-    "jest": "^26.1.0",
-    "ts-jest": "^26.1.2",
+    "jest": "26.1.0",
+    "ts-jest": "26.1.0",
     "typescript": "^3.2.2"
   },
   "jest": {
