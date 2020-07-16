@@ -5,7 +5,7 @@ import 'package:wr_app/domain/article/model/article.dart';
 import 'package:wr_app/domain/article/model/category.dart';
 
 abstract class IArticleRepository {
-  Future<List<Article>> findByCategory(Client client, String category);
+  Future<List<ArticleDigest>> findByCategory(Client client, String category);
 
   List<ArticleCategory> getCategories();
 }
@@ -45,11 +45,12 @@ final List<ArticleCategory> categories = <ArticleCategory>[
 
 class ArticleRepository implements IArticleRepository {
   @override
-  Future<List<Article>> findByCategory(Client client, String category) async {
-    final collection = await client.getEntries<Article>({
+  Future<List<ArticleDigest>> findByCategory(
+      Client client, String category) async {
+    final collection = await client.getEntries<ArticleDigest>({
       'content_type': 'article',
       'fields.category': category,
-    }, Article.fromJson);
+    }, ArticleDigest.fromJson);
 
     return collection.items;
   }

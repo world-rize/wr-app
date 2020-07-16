@@ -12,9 +12,9 @@ part 'phrase.g.dart';
 class Phrase {
   Phrase({
     @required this.id,
-    this.title,
-    this.assets,
-    this.meta,
+    @required this.title,
+    @required this.assets,
+    @required this.meta,
     @required this.advice,
     @required this.example,
   });
@@ -29,15 +29,18 @@ class Phrase {
       'en-au': 'voice_sample.mp3',
     });
 
+    final id = index.toString().padLeft(3, '0');
+
     return Phrase(
-        id: '0000',
+        id: id,
         title: {
-          'ja': 'いつ宿題提出するんだっけ？',
+          'ja': 'Dummy Phrase $id',
           'en': 'When is the homework due?',
         },
         meta: {
           'lessonId': 'Shcool',
         },
+        assets: dummyAssets,
         example: Example(value: [
           Message(
             text: {
@@ -69,6 +72,7 @@ class Phrase {
 
   Map<String, dynamic> toJson() => _$PhraseToJson(this);
 
+  /// return all voice paths
   List<String> voicePaths() {
     return [
       ...assets.voice.values.toList(),
@@ -76,6 +80,7 @@ class Phrase {
     ];
   }
 
+  /// 0 padded 4 digits number
   String id;
 
   /// タイトル

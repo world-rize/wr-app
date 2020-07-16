@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
 import 'package:wr_app/ui/root_view.dart';
@@ -20,9 +20,9 @@ class _SignInPageState extends State<SignInPage> {
   String _password;
 
   void _gotoHome() {
-    final preferences = Provider.of<PreferenceNotifier>(context, listen: false);
+    final system = Provider.of<SystemNotifier>(context, listen: false);
     // initial login
-    preferences.setFirstLaunch(flag: false);
+    system.setFirstLaunch(value: false);
 
     Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(

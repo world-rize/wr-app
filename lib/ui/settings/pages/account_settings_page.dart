@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
+import 'package:wr_app/ui/settings/pages/account_settings/mail_address_form_page.dart';
+import 'package:wr_app/ui/settings/pages/account_settings/password_form_page.dart';
 
 /// 設定ページ
 class AccountSettingsPage extends StatefulWidget {
@@ -15,29 +17,28 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   // account section
   SettingsSection accountSection() {
     final userStore = Provider.of<UserNotifier>(context);
+    final user = userStore.getUser();
 
     return SettingsSection(
       title: '基本情報',
       tiles: [
         SettingsTile(
           title: 'メールアドレス',
-          subtitle: userStore.user.email,
+          subtitle: user.email,
           leading: const Icon(Icons.people),
           onTap: () {
-            // TODO(high): Email form
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => MailAddressFormPage()));
           },
         ),
         SettingsTile(
           title: 'ユーザーID',
-          subtitle: userStore.user.userId,
+          subtitle: user.userId,
           leading: const Icon(Icons.attach_money),
-          onTap: () {
-            // TODO(high): user ID form
-          },
         ),
         SettingsTile(
           title: '年代',
-          subtitle: '${userStore.user.age} 代',
+          subtitle: '${user.age} 代',
           leading: const Icon(Icons.attach_money),
           onTap: () {
             // TODO(high): user ID form
@@ -47,7 +48,8 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
           title: 'パスワード変更',
           leading: const Icon(Icons.attach_money),
           onTap: () {
-            // TODO(high): form
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => PasswordFormPage()));
           },
         ),
       ],

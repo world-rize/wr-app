@@ -1,6 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/foundation.dart';
+import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'category.g.dart';

@@ -71,6 +71,7 @@ class SectionListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userStore = Provider.of<UserNotifier>(context);
+    final user = userStore.getUser();
     final primaryColor = Theme.of(context).primaryColor;
 
 //    final header = Padding(
@@ -101,7 +102,7 @@ class SectionListPage extends StatelessWidget {
             ...section.phrases.indexedMap((index, phrase) {
               return PhraseCard(
                 phrase: phrase,
-                favorite: userStore.user.isFavoritePhrase(phrase),
+                favorite: user.isFavoritePhrase(phrase),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -111,6 +112,11 @@ class SectionListPage extends StatelessWidget {
                       ),
                     ),
                   );
+                },
+                onFavorite: () {
+                  final favorite = user.isFavoritePhrase(phrase);
+                  userStore.favoritePhrase(
+                      phraseId: phrase.id, value: !favorite);
                 },
               );
             }).toList(),

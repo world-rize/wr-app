@@ -34,7 +34,7 @@ class SectionRow extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child: Text(
                   section.title,
-                  style: style.headline.apply(color: Colors.black),
+                  style: style.headline,
                 ),
               ),
             ),

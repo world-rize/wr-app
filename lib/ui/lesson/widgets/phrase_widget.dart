@@ -23,45 +23,65 @@ class PhraseCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final englishStyle = Theme.of(context).primaryTextTheme.bodyText1;
+    final theme = Theme.of(context);
+    final englishStyle = theme.primaryTextTheme.bodyText1;
     final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;
     // final existVoice = phrase.assets.voice.isEmpty;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: ShadowedContainer(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    phrase.title['en'].capitalize(),
-                    style: englishStyle,
-                  ).p(4),
-                  Text(
-                    phrase.title['ja'],
-                    style: japaneseStyle,
-                  ).p(4),
-                ],
-              ).p_1(),
-            ),
-            GestureDetector(
-              onTap: onFavorite,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 14, bottom: 14),
-                child: Icon(
-                  favorite ? Icons.favorite : Icons.favorite_border,
-                  color: Colors.redAccent,
-                  size: 24,
+    return Stack(
+      children: <Widget>[
+        InkWell(
+          onTap: onTap,
+          child: ShadowedContainer(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        phrase.title['en'].capitalize(),
+                        style: englishStyle,
+                      ).p(4),
+                      Text(
+                        phrase.title['ja'],
+                        style: japaneseStyle,
+                      ).p(4),
+                    ],
+                  ).p_1(),
                 ),
+//                GestureDetector(
+//                  onTap: onFavorite,
+//                  child: Padding(
+//                    padding: const EdgeInsets.only(right: 14, bottom: 14),
+//                    child: Icon(
+//                      favorite ? Icons.favorite : Icons.favorite_border,
+//                      color: Colors.redAccent,
+//                      size: 24,
+//                    ),
+//                  ),
+//                ),
+              ],
+            ),
+          ),
+        ).p_1(),
+        Positioned(
+          bottom: 10,
+          right: 10,
+          child: GestureDetector(
+            onTap: onFavorite,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 14, bottom: 14),
+              child: Icon(
+                favorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.redAccent,
+                size: 24,
               ),
             ),
-          ],
+          ),
         ),
-      ),
-    ).p_1();
+      ],
+    );
   }
 }

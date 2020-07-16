@@ -4,17 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/article/article_notifier.dart';
 import 'package:wr_app/domain/article/index.dart';
+import 'package:wr_app/ui/column/pages/article_webview_page.dart';
 import 'package:wr_app/ui/column/widgets/article_overview.dart';
 
 /// Column > index > category_posts
 class CategoryPosts extends StatelessWidget {
   CategoryPosts({
     @required this.category,
-    @required this.onTap,
   });
 
   final ArticleCategory category;
-  final Function(Article) onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class CategoryPosts extends StatelessWidget {
     );
 
     // TODO(someone): caching
-    final articlesView = FutureBuilder<List<Article>>(
+    final articlesView = FutureBuilder<List<ArticleDigest>>(
       future: notifier.findByCategory(id: category.id),
       builder: (_, snapshot) {
         return Stack(
@@ -60,7 +59,17 @@ class CategoryPosts extends StatelessWidget {
                       .map(
                         (article) => GestureDetector(
                           onTap: () {
-                            onTap(article);
+                            //    Navigator.of(context).push(
+                            //      MaterialPageRoute(
+                            //        builder: (_) => ArticleDetailPage(article: article),
+                            //      ),
+                            //    );
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    ArticleWebViewPage(article: article),
+                              ),
+                            ); // open webview
                           },
                           child: ArticleOverView(article: article),
                         ),

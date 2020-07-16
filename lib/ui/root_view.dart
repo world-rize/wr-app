@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/agency/index.dart';
@@ -39,8 +39,17 @@ class _RootViewState extends State<RootView>
 
     /// on first launch, show on-boarding page
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      // login (for debug)
+//      final system = Provider.of<SystemNotifier>(context, listen: false);
+//      final isDebug = system.flavor == Flavor.development;
+//      if (isDebug) {
+//        final userNotifier = Provider.of<UserNotifier>(context, listen: false);
+//        userNotifier.loginWithEmailAndPassword('a@b.com', '123456');
+//      }
+
       final firstLaunch =
-          Provider.of<PreferenceNotifier>(context, listen: false).firstLaunch;
+          Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
+
       print('first launch: $firstLaunch');
 
       // show on boarding modal
@@ -58,6 +67,7 @@ class _RootViewState extends State<RootView>
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<UserNotifier>(context);
+    final user = notifier.getUser();
     final primaryColor = Theme.of(context).primaryColor;
 
     final header = Row(
@@ -68,7 +78,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          I.of(context).points(notifier.user?.point),
+          I.of(context).points(notifier.getUser().point),
           style: const TextStyle(color: Colors.white),
         ),
       ],

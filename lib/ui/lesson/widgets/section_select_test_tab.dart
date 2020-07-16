@@ -22,13 +22,14 @@ class TestTab extends StatefulWidget {
 
 class _TestTabState extends State<TestTab> {
   void _showConfirmTestDialog(Section section) {
-    final userStore = Provider.of<UserNotifier>(context, listen: false);
+    final userNotifier = Provider.of<UserNotifier>(context, listen: false);
+    final user = userNotifier.getUser();
 
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
         title: Text(I.of(context).testConfirm(section.title)),
-        content: Text(I.of(context).testMessage(userStore.user.testLimitCount)),
+        content: Text(I.of(context).testMessage(user.testLimitCount)),
         actions: <Widget>[
           CupertinoButton(
             child: Text(I.of(context).no),
@@ -65,10 +66,11 @@ class _TestTabState extends State<TestTab> {
     );
   }
 
-  _onTapTestSection(Section section) {
-    final userStore = Provider.of<UserNotifier>(context, listen: false);
+  void _onTapTestSection(Section section) {
+    final userNotifier = Provider.of<UserNotifier>(context, listen: false);
+    final user = userNotifier.getUser();
 
-    if (userStore.user.testLimitCount == 0) {
+    if (user.testLimitCount == 0) {
       _showTestLimitAlertDialog();
     } else {
       _showConfirmTestDialog(section);

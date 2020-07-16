@@ -11,6 +11,10 @@ abstract class IUserRepository {
 
   Future<CreateUserResponseDto> createUser(CreateUserRequestDto req);
 
+  Future<UpdateUserResponseDto> updateUser(UpdateUserRequestDto req);
+
+  Future<DeleteUserResponseDto> deleteUser(DeleteUserRequestDto req);
+
   Future<FavoritePhraseResponseDto> favoritePhrase(
       FavoritePhraseRequestDto req);
 
@@ -49,6 +53,16 @@ class UserRepository implements IUserRepository {
 
     return callable.call(req).then((res) =>
         CreateUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
+  }
+
+  @override
+  Future<UpdateUserResponseDto> updateUser(UpdateUserRequestDto req) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<DeleteUserResponseDto> deleteUser(DeleteUserRequestDto req) async {
+    throw UnimplementedError();
   }
 
   @override

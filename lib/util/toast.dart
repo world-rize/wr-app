@@ -7,17 +7,17 @@ import 'package:wr_app/util/logger.dart';
 class NotifyToast {
   /// 成功トーストを出す
   static void success(String message) {
-    InAppLogger.log('\t ✔ $message');
+    InAppLogger.log('[SuccessToast] $message');
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.lightGreen,
+      backgroundColor: Colors.greenAccent,
     );
   }
 
   /// エラートーストを出す
   static void error(dynamic e) {
-    InAppLogger.log('\t⚠ $e');
+    InAppLogger.log('[ErrorToast] $e');
     Fluttertoast.showToast(
       msg: '$e',
       toastLength: Toast.LENGTH_LONG,

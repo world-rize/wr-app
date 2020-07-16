@@ -1,18 +1,18 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:contentful/client.dart';
-import 'package:data_classes/data_classes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/article/article_repository.dart';
 import 'package:wr_app/domain/article/index.dart';
 
 class ArticleService {
-  final ArticleRepository _articleRepository;
+  final IArticleRepository _articleRepository;
 
   const ArticleService({
-    @required ArticleRepository articleRepository,
+    @required IArticleRepository articleRepository,
   }) : _articleRepository = articleRepository;
 
-  Future<List<Article>> findByCategory({
+  Future<List<ArticleDigest>> findByCategory({
     @required Client client,
     @required String id,
   }) {

@@ -5,14 +5,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wr_app/domain/lesson/lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
-import 'package:wr_app/ui/widgets/toast.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/toast.dart';
 
 class LessonService {
-  final LessonRepository _lessonRepository;
+  final ILessonRepository _lessonRepository;
 
   const LessonService({
-    @required LessonRepository lessonRepository,
+    @required ILessonRepository lessonRepository,
   }) : _lessonRepository = lessonRepository;
 
   Future<List<Lesson>> loadPhrases() {
@@ -36,5 +36,19 @@ class LessonService {
         .catchError(NotifyToast.error);
 
     InAppLogger.log('send phrase request', type: 'api');
+  }
+
+  bool getShowTranslation() => _lessonRepository.getShowTranslation();
+
+  void toggleShowTranslation() {
+    final value = _lessonRepository.getShowTranslation();
+    _lessonRepository.setShowTranslation(value: !value);
+  }
+
+  bool getShowText() => _lessonRepository.getShowText();
+
+  void toggleShowText() {
+    final value = _lessonRepository.getShowText();
+    _lessonRepository.setShowText(value: !value);
   }
 }

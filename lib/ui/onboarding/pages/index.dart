@@ -8,6 +8,7 @@ import 'package:wr_app/ui/onboarding/pages/sign_up_page.dart';
 class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     const splashColor = Color(0xff56c0ea);
 
     final signUpField = Padding(
@@ -90,7 +91,7 @@ class OnBoardingPage extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Container(
-                color: Colors.white,
+                color: theme.backgroundColor,
                 child: Column(
                   children: <Widget>[
                     const Spacer(),

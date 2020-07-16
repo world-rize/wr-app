@@ -7,25 +7,17 @@ import 'package:wr_app/domain/article/model/category.dart';
 
 class ArticleMockRepository implements IArticleRepository {
   @override
-  Future<List<Article>> findByCategory(Client client, String category) async {
-    return <Article>[
-      Article.fromMock(title: 'Article1', content: '''
-# Hello, World
-hogehoge
-    '''),
-      Article.fromMock(title: 'Article2', content: '''
-# Hello, World
-hogehoge
-    '''),
-      Article.fromMock(title: 'Article3', content: '''
-# Hello, World
-hogehoge
-    '''),
-      Article.fromMock(title: 'Article4', content: '''
-# Hello, World
-hogehoge
-    '''),
-    ];
+  Future<List<ArticleDigest>> findByCategory(
+      Client client, String category) async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+    return List.generate(10, (index) {
+      return ArticleDigest.fromMock(
+        title: 'Article $category ${index ~/ 6}',
+        category: category,
+        url: 'https://world-rize.com/working-in-hotel-in-sydney/',
+        summary: 'Article $category summary',
+      );
+    });
   }
 
   @override
