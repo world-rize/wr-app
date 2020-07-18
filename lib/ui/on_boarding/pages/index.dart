@@ -15,8 +15,11 @@ class OnBoardingPage extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          const Center(
-            child: Text('初めての方はこちら'),
+          const Padding(
+            padding: EdgeInsets.all(8),
+            child: Center(
+              child: Text('初めての方はこちら'),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -49,8 +52,11 @@ class OnBoardingPage extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          const Center(
-            child: Text('既にアカウントを持っている方はこちら'),
+          const Padding(
+            padding: EdgeInsets.all(8),
+            child: Center(
+              child: Text('既にアカウントを持っている方はこちら'),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -79,22 +85,17 @@ class OnBoardingPage extends StatelessWidget {
       ),
     );
 
-    return Scaffold(
-      body: Container(
-        color: splashColor,
-        child: Column(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Image.asset('assets/icon/login.png'),
-            ),
-            Expanded(
-              flex: 1,
+            Image.asset('assets/icon/login.png'),
+            Flexible(
               child: Container(
                 color: theme.backgroundColor,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    const Spacer(),
                     signUpField,
                     signInField,
                   ],

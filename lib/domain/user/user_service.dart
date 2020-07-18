@@ -7,15 +7,17 @@ import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 
+// TODO(someone): Error handling
+// update api returns updated object
 class UserService {
-  final IAuthRepository _authRepository;
-  final IUserRepository _userRepository;
-
   const UserService({
     @required IAuthRepository authRepository,
     @required IUserRepository userRepository,
   })  : _userRepository = userRepository,
         _authRepository = authRepository;
+
+  final IAuthRepository _authRepository;
+  final IUserRepository _userRepository;
 
   /// sign up with Google
   Future<User> signUpWithGoogle() async {
@@ -55,56 +57,120 @@ class UserService {
   }
 
   /// フレーズをお気に入りに登録します
-  Future<void> favorite({
+  Future<User> favorite({
     @required User user,
     @required String phraseId,
     @required bool value,
-  }) {
-    // TODO: auth check
-    return _userRepository.favoritePhrase(FavoritePhraseRequestDto(
+  }) async {
+    final res = await _userRepository.favoritePhrase(FavoritePhraseRequestDto(
         uid: user.uuid, phraseId: phraseId, value: value));
+
+    if (!res.success) {
+      throw Exception('failed');
+    }
+
+    user.favorites[phraseId] = value;
+    return user;
   }
 
   /// 受講可能回数をリセット
-  Future<void> resetTestCount() {
-    // TODO: implement
-    throw UnimplementedError();
+  Future<User> resetTestCount({
+    @required User user,
+  }) async {
+    user.testLimitCount = 3;
+    final res =
+        await _userRepository.updateUser(UpdateUserRequestDto(user: user));
+
+    if (!res.success) {
+      throw Exception('failed');
+    }
+
+    return user;
   }
 
   /// ポイントを習得します
-  Future<void> getPoints({
+  Future<User> getPoints({
     @required User user,
     @required int point,
-  }) {
-    return _userRepository.getPoint(GetPointRequestDto(
+  }) async {
+    user.point += point;
+    final res = await _userRepository.getPoint(GetPointRequestDto(
       uid: user.uuid,
       point: point,
     ));
+
+    if (!res.success) {
+      throw Exception('failed');
+    }
+
+    return user;
+  }
+
+  Future<User> updateAge({@required User user, @required String age}) async {
+    user.age = age;
+    final res =
+        await _userRepository.updateUser(UpdateUserRequestDto(user: user));
+
+    if (!res.success) {
+      throw Exception('failed');
+    }
+
+    return user;
   }
 
   /// upgrade to Pro or downgrade
-  Future<void> changePlan(Membership membership) async {
-    // TODO: implement
+  Future<User> changePlan(
+      {@required User user, @required Membership membership}) async {
+    user.membership = membership;
+
+    final res =
+        await _userRepository.updateUser(UpdateUserRequestDto(user: user));
+
+    if (!res.success) {
+      throw Exception('failed');
+    }
+
+    return user;
   }
 
   /// do test
-  Future<void> doTest({@required User user}) {
-    return _userRepository
+  Future<User> doTest({@required User user}) async {
+    user.testLimitCount--;
+    final res = await _userRepository
         .doTest(DoTestRequestDto(uid: user.uuid, sectionId: ''));
+
+    if (!res.success) {
+      throw Exception('failed');
+    }
+
+    return user;
   }
 
   /// update user
-  Future<void> updateUser({@required User user}) async {
-    await _userRepository.updateUser(UpdateUserRequestDto(user: user));
+  Future<User> updateUser({@required User user}) async {
+    final res =
+        await _userRepository.updateUser(UpdateUserRequestDto(user: user));
+
+    if (!res.success) {
+      throw Exception('failed');
+    }
+
+    return user;
   }
 
   /// update password
-  Future<void> updatePassword({@required String newPassword}) {
-    return _authRepository.updatePassword(newPassword);
+  Future<void> updatePassword(
+      {@required String currentPassword, @required String newPassword}) {
+    return _authRepository.updatePassword(currentPassword, newPassword);
   }
 
   /// update email
-  Future<void> updateEmail({@required String newEmail}) async {
-    return _authRepository.updateEmail(newEmail);
+  Future<User> updateEmail(
+      {@required User user, @required String newEmail}) async {
+    user.email = newEmail;
+
+    await _authRepository.updateEmail(newEmail);
+
+    return user;
   }
 }

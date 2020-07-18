@@ -13,7 +13,14 @@ part 'user_api_dto.g.dart';
 // see https://stackoverflow.com/questions/58741971/casterror-type-internallinkedhashmapdynamic-dynamic-is-not-a-subtype-of
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
-class TestRequestDto {}
+class TestRequestDto {
+  factory TestRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$TestRequestDtoFromJson(json);
+
+  TestRequestDto() {}
+
+  Map<String, dynamic> toJson() => _$TestRequestDtoToJson(this);
+}
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class TestResponse {
@@ -30,7 +37,14 @@ class TestResponse {
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
-class ReadUserRequestDto {}
+class ReadUserRequestDto {
+  factory ReadUserRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$ReadUserRequestDtoFromJson(json);
+
+  ReadUserRequestDto() {}
+
+  Map<String, dynamic> toJson() => _$ReadUserRequestDtoToJson(this);
+}
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class ReadUserResponseDto {
@@ -47,7 +61,14 @@ class ReadUserResponseDto {
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
-class CreateUserRequestDto {}
+class CreateUserRequestDto {
+  factory CreateUserRequestDto.fromJson(Map<String, dynamic> json) =>
+      _$CreateUserRequestDtoFromJson(json);
+
+  CreateUserRequestDto() {}
+
+  Map<String, dynamic> toJson() => _$CreateUserRequestDtoToJson(this);
+}
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateUserResponseDto {

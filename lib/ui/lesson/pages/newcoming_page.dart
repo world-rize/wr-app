@@ -16,16 +16,12 @@ class NewComingPage extends StatelessWidget {
     return FutureBuilder<List<Phrase>>(
       future: notifier.newComingPhrases(),
       builder: (_, res) {
-        if (res.hasData) {
-          return SectionListPage(
-            section: Section(
-              title: 'new coming',
-              phrases: res.data,
-            ),
-          );
-        } else {
-          return const Text('loading');
-        }
+        return SectionListPage(
+          section: Section(
+            title: 'new coming',
+            phrases: res.hasData ? res.data : [],
+          ),
+        );
       },
     );
   }

@@ -21,9 +21,9 @@ class _SignInPageState extends State<SignInPage> {
   String _password;
 
   void _gotoHome() {
-    final system = Provider.of<SystemNotifier>(context, listen: false)
-      // initial login
-      ..setFirstLaunch(value: false);
+    Provider.of<SystemNotifier>(context, listen: false)
+        // initial login
+        .setFirstLaunch(value: false);
 
     Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(
@@ -35,27 +35,9 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Future<void> _signInEmailAndPassword(String email, String password) async {
-    final userStore = Provider.of<UserNotifier>(context, listen: false);
-    try {
-      await userStore.loginWithEmailAndPassword(email, password);
-
-      _gotoHome();
-    } on Exception catch (e) {
-      print(e);
-      return;
-    }
-  }
-
-  Future<void> _signInWithGoogle() async {
-    final userStore = Provider.of<UserNotifier>(context, listen: false);
-    try {
-      await userStore.loginWithGoogle();
-
-      _gotoHome();
-    } on Exception catch (e) {
-      print(e);
-      return;
-    }
+    final notifier = Provider.of<UserNotifier>(context, listen: false);
+    await notifier.loginWithEmailAndPassword(email, password);
+    _gotoHome();
   }
 
   @override
@@ -131,7 +113,7 @@ class _SignInPageState extends State<SignInPage> {
         padding: const EdgeInsets.all(8),
         child: RoundedButton(
           text: 'Sign in',
-          color: Colors.blueAccent,
+          color: splashColor,
           onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
@@ -163,7 +145,7 @@ class _SignInPageState extends State<SignInPage> {
             _signInEmailAndPassword('a@b.com', '123456');
           },
           text: 'Sign in by Test User(Debug)',
-          color: Colors.greenAccent,
+          color: Colors.grey,
         ),
       ),
     );
@@ -194,32 +176,30 @@ class _SignInPageState extends State<SignInPage> {
         title: const Text('Signin'),
       ),
       // TODO(someone): height = maxHeight - appBarHeight
-      body: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (_, constraints) => ConstrainedBox(
-            constraints:
-                BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-            child: Column(
-              children: <Widget>[
-                _signInForm.p_1(),
+      body: LayoutBuilder(
+        builder: (_, constraints) => ConstrainedBox(
+          constraints:
+              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            children: <Widget>[
+              _signInForm.p_1(),
 
-                const Spacer(),
+              const Spacer(),
 
-                // Sign Up
-                _signUpButton.p_1(),
+              // Sign Up
+              _signUpButton.p_1(),
 
-                const Divider(
-                  indent: 20,
-                  endIndent: 20,
-                  color: Colors.grey,
-                ),
+              const Divider(
+                indent: 20,
+                endIndent: 20,
+                color: Colors.grey,
+              ),
 
-                // Google Sign up
-                // _signInWithGoogleButton,
+              // Google Sign up
+              // _signInWithGoogleButton,
 
-                _signInByTestUser.p_1(),
-              ],
-            ),
+              _signInByTestUser.p_1(),
+            ],
           ),
         ),
       ),

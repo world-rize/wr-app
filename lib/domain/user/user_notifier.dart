@@ -12,7 +12,10 @@ class UserNotifier with ChangeNotifier {
   final UserService _userService;
 
   /// ユーザーデータ
-  User _user = User.empty();
+  User _user;
+
+  /// logged in?
+  bool get loggedIn => _user != null;
 
   User getUser() => _user;
 
@@ -61,26 +64,25 @@ class UserNotifier with ChangeNotifier {
 
   /// update Email
   Future<void> setEmail({@required String email}) async {
-    _user.email = email;
-    await _userService.updateUser(user: _user);
-    await _userService.updateEmail(newEmail: email);
+    _user = await _userService.updateEmail(user: _user, newEmail: email);
     notifyListeners();
 
     NotifyToast.success('Emailを変更しました');
   }
 
   /// update age
-  Future<void> setAge({@required int age}) async {
-    _user.age = age;
-    await _userService.updateUser(user: _user);
+  Future<void> setAge({@required String age}) async {
+    _user = await _userService.updateAge(user: _user, age: age);
     notifyListeners();
 
     NotifyToast.success('ageを変更しました');
   }
 
   /// update password
-  Future<void> setPassword({@required String password}) async {
-    await _userService.updatePassword(newPassword: password);
+  Future<void> setPassword(
+      {@required String currentPassword, @required String newPassword}) async {
+    await _userService.updatePassword(
+        currentPassword: currentPassword, newPassword: newPassword);
     notifyListeners();
 
     NotifyToast.success('passwordを変更しました');
@@ -98,27 +100,23 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
     @required bool value,
   }) async {
-    InAppLogger.log('favoritePhrase()');
-
+    // 仮反映
     _user.favorites[phraseId] = value;
-
     notifyListeners();
 
-    await _userService
-        .favorite(user: _user, phraseId: phraseId, value: value)
-        .catchError(NotifyToast.error);
+    // 本反映
+    _user = await _userService.favorite(
+        user: _user, phraseId: phraseId, value: value);
+    notifyListeners();
 
     NotifyToast.success(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
   }
 
   /// 受講可能回数をリセット
   Future<void> resetTestLimitCount() async {
-    InAppLogger.log('resetTestLimitCount()');
+    _user = await _userService.resetTestCount(user: _user);
 
-    _user.testLimitCount = 3;
     notifyListeners();
-
-    await _userService.resetTestCount().catchError(NotifyToast.error);
 
     InAppLogger.log('受講可能回数がリセットされました');
     NotifyToast.success('受講可能回数がリセットされました');
@@ -126,13 +124,7 @@ class UserNotifier with ChangeNotifier {
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int point}) async {
-    InAppLogger.log('callGetPoint()');
-
-    await _userService
-        .getPoints(user: _user, point: point)
-        .catchError(NotifyToast.error);
-
-    _user.point += point;
+    _user = await _userService.getPoints(user: _user, point: point);
     notifyListeners();
 
     NotifyToast.success('$pointポイントゲットしました');
@@ -140,21 +132,14 @@ class UserNotifier with ChangeNotifier {
 
   /// テストを受ける
   Future<void> doTest() async {
-    InAppLogger.log('callDoTest()');
-
-    await _userService.doTest(user: _user).catchError(NotifyToast.error);
-
-    _user.testLimitCount--;
+    _user = await _userService.doTest(user: _user);
     notifyListeners();
   }
 
   /// プランを変更
-  void changePlan(Membership membership) async {
-    InAppLogger.log('changePlan()');
+  Future<void> changePlan(Membership membership) async {
+    _user = await _userService.changePlan(user: _user, membership: membership);
 
-    await _userService.changePlan(membership).catchError(NotifyToast.error);
-
-    _user.membership = membership;
     notifyListeners();
 
     InAppLogger.log('membership to be $membership');

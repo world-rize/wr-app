@@ -59,9 +59,16 @@ Future<void> setupGlobalSingletons() async {
   InAppLogger.log('🔥 notificator Initialized');
 }
 
-/// initialize repositories, services
-List<ChangeNotifierProvider> setupNotifiers(Flavor flavor,
-    {bool useMock = false}) {
+/// runApp() with flavor
+Future<void> runAppWithFlavor(final Flavor flavor) async {
+  Provider.debugCheckInvalidValueType = null;
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await setupGlobalSingletons();
+
+  final analytics = GetIt.I<FirebaseAnalytics>();
+
+  const useMock = false;
   // repos
   final userRepository = useMock ? UserMockRepository() : UserRepository();
   final articleRepository =
@@ -78,46 +85,32 @@ List<ChangeNotifierProvider> setupNotifiers(Flavor flavor,
   final lessonService = LessonService(lessonRepository: lessonRepository);
   final systemService = SystemService(systemRepository: systemRepository);
 
-  return [
-    // system
-    ChangeNotifierProvider.value(
-      value: SystemNotifier(systemService: systemService, flavor: flavor),
-    ),
-    // ユーザーデータ
-    ChangeNotifierProvider.value(
-      value: UserNotifier(service: userService),
-    ),
-    // Lesson
-    ChangeNotifierProvider.value(
-      value: LessonNotifier(
-        userService: userService,
-        lessonService: lessonService,
-      ),
-    ),
-    // Article
-    ChangeNotifierProvider.value(
-      value: ArticleNotifier(articleService: articleService),
-    ),
-  ];
-}
-
-/// runApp() with flavor
-Future<void> runAppWithFlavor(final Flavor flavor) async {
-  Provider.debugCheckInvalidValueType = null;
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await setupGlobalSingletons();
-
-  final analytics = GetIt.I<FirebaseAnalytics>();
-  final analyticsObserver = FirebaseAnalyticsObserver(analytics: analytics);
-  final notifiers = setupNotifiers(flavor, useMock: false);
-
   // provide notifiers
   runApp(MultiProvider(
     providers: [
       // Firebase Analytics
-      Provider.value(value: analyticsObserver),
-      ...notifiers,
+      Provider.value(value: FirebaseAnalyticsObserver(analytics: analytics)),
+      // system
+      ChangeNotifierProvider.value(
+        value: SystemNotifier(systemService: systemService, flavor: flavor),
+      ),
+      // ユーザーデータ
+      ChangeNotifierProvider.value(
+        value: UserNotifier(service: userService),
+      ),
+      // Lesson
+      ChangeNotifierProvider.value(
+        value: LessonNotifier(
+          userService: userService,
+          lessonService: lessonService,
+        ),
+      ),
+      // Article
+      ChangeNotifierProvider.value(
+        value: ArticleNotifier(
+          articleService: articleService,
+        ),
+      ),
     ],
     child: WRApp(),
   ));

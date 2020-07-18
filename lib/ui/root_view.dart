@@ -39,21 +39,15 @@ class _RootViewState extends State<RootView>
 
     /// on first launch, show on-boarding page
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      // login (for debug)
-//      final system = Provider.of<SystemNotifier>(context, listen: false);
-//      final isDebug = system.flavor == Flavor.development;
-//      if (isDebug) {
-//        final userNotifier = Provider.of<UserNotifier>(context, listen: false);
-//        userNotifier.loginWithEmailAndPassword('a@b.com', '123456');
-//      }
-
+      final loggedIn =
+          Provider.of<UserNotifier>(context, listen: false).loggedIn;
       final firstLaunch =
           Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
 
-      print('first launch: $firstLaunch');
+      print('first launch: $firstLaunch, logged in: $loggedIn');
 
       // show on boarding modal
-      if (firstLaunch) {
+      if (firstLaunch || !loggedIn) {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => OnBoardingPage(),
@@ -69,6 +63,10 @@ class _RootViewState extends State<RootView>
     final notifier = Provider.of<UserNotifier>(context);
     final user = notifier.getUser();
     final primaryColor = Theme.of(context).primaryColor;
+
+    if (!notifier.loggedIn) {
+      return const Scaffold();
+    }
 
     final header = Row(
       children: <Widget>[

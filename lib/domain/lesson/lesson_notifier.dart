@@ -53,7 +53,7 @@ class LessonNotifier with ChangeNotifier {
 
   Future<List<Phrase>> newComingPhrases() async {
     // TODO
-    return phrasesWhere((p) => p.id.endsWith('5'));
+    return phrasesWhere((p) => int.parse(p.id) < 20);
   }
 
   Future<void> sendPhraseRequest({@required String text}) {
