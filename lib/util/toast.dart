@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:wr_app/util/logger.dart';
 
+/// Toast class for debug
 class NotifyToast {
-  /// 成功トーストを出す
+  /// show success toast
   static void success(String message) {
     InAppLogger.log('[SuccessToast] $message');
     Fluttertoast.showToast(
@@ -15,7 +16,7 @@ class NotifyToast {
     );
   }
 
-  /// エラートーストを出す
+  /// show error toast with error [e]
   static void error(dynamic e) {
     InAppLogger.log('[ErrorToast] $e');
     Fluttertoast.showToast(

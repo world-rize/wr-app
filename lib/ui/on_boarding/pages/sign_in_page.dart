@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
-import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/root_view.dart';
+import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -20,9 +21,9 @@ class _SignInPageState extends State<SignInPage> {
   String _password;
 
   void _gotoHome() {
-    final system = Provider.of<SystemNotifier>(context, listen: false);
-    // initial login
-    system.setFirstLaunch(value: false);
+    final system = Provider.of<SystemNotifier>(context, listen: false)
+      // initial login
+      ..setFirstLaunch(value: false);
 
     Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(
@@ -167,6 +168,26 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
 
+    final _signInForm = Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // Email
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: _emailField,
+          ),
+
+          // Password
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: _passwordField,
+          ),
+        ],
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: splashColor,
@@ -180,36 +201,12 @@ class _SignInPageState extends State<SignInPage> {
                 BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
             child: Column(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // Email
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: _emailField,
-                        ),
-
-                        // Password
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: _passwordField,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                _signInForm.p_1(),
 
                 const Spacer(),
 
                 // Sign Up
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: _signUpButton,
-                ),
+                _signUpButton.p_1(),
 
                 const Divider(
                   indent: 20,
@@ -220,10 +217,7 @@ class _SignInPageState extends State<SignInPage> {
                 // Google Sign up
                 // _signInWithGoogleButton,
 
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: _signInByTestUser,
-                ),
+                _signInByTestUser.p_1(),
               ],
             ),
           ),

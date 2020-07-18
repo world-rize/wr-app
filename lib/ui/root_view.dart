@@ -8,13 +8,13 @@ import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/pages/index.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/lesson/pages/index.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_search_iconbutton.dart';
 import 'package:wr_app/ui/mypage/pages/index.dart';
-import 'package:wr_app/ui/onboarding/pages/index.dart';
+import 'package:wr_app/ui/on_boarding/pages/index.dart';
 import 'package:wr_app/ui/settings/pages/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
-import 'package:wr_app/util/extension/padding_extension.dart';
 
 /// root view
 class RootView extends StatefulWidget {
@@ -78,7 +78,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          I.of(context).points(notifier.getUser().point),
+          I.of(context).points(user.point),
           style: const TextStyle(color: Colors.white),
         ),
       ],

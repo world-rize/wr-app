@@ -9,6 +9,7 @@ import 'package:wr_app/ui/mypage/pages/friends_page.dart';
 import 'package:wr_app/ui/mypage/pages/gift_page.dart';
 import 'package:wr_app/ui/mypage/pages/upgrade_page.dart';
 
+/// mypage > index
 class MyPagePage extends StatelessWidget {
   Widget _menuCell({
     @required String title,

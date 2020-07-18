@@ -22,62 +22,7 @@ import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
 
-Future<void> runAppWithFlavor(final Flavor flavor) async {
-  Provider.debugCheckInvalidValueType = null;
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await setupGlobalSingletons();
-
-  final analytics = GetIt.I<FirebaseAnalytics>();
-  final analyticsObserver = FirebaseAnalyticsObserver(analytics: analytics);
-
-  const useMock = false;
-
-  // repos
-  final userRepository = useMock ? UserMockRepository() : UserRepository();
-  final articleRepository =
-      useMock ? ArticleMockRepository() : ArticleRepository();
-  final lessonRepository =
-      useMock ? LessonMockRepository() : LessonRepository();
-  final authRepository = useMock ? AuthMockRepository() : AuthRepository();
-  final systemRepository = SystemRepository();
-
-  // services
-  final userService = UserService(
-      authRepository: authRepository, userRepository: userRepository);
-  final articleService = ArticleService(articleRepository: articleRepository);
-  final lessonService = LessonService(lessonRepository: lessonRepository);
-  final systemService = SystemService(systemRepository: systemRepository);
-
-  // アプリ全体にストアを Provide する
-  runApp(MultiProvider(
-    providers: [
-      // Firebase Analytics
-      Provider.value(value: analyticsObserver),
-      // system
-      ChangeNotifierProvider.value(
-        value: SystemNotifier(systemService: systemService, flavor: flavor),
-      ),
-      // ユーザーデータ
-      ChangeNotifierProvider.value(
-        value: UserNotifier(service: userService),
-      ),
-      // Lesson
-      ChangeNotifierProvider.value(
-        value: LessonNotifier(
-          userService: userService,
-          lessonService: lessonService,
-        ),
-      ),
-      // Article
-      ChangeNotifierProvider.value(
-        value: ArticleNotifier(articleService: articleService),
-      ),
-    ],
-    child: WRApp(),
-  ));
-}
-
+/// initialize singleton instances and inject to GetIt
 Future<void> setupGlobalSingletons() async {
   // load .env
   await DotEnv().load('.env/.env');
@@ -112,4 +57,68 @@ Future<void> setupGlobalSingletons() async {
   await notificator.setup();
   GetIt.I.registerSingleton<AppNotifier>(notificator);
   InAppLogger.log('🔥 notificator Initialized');
+}
+
+/// initialize repositories, services
+List<ChangeNotifierProvider> setupNotifiers(Flavor flavor,
+    {bool useMock = false}) {
+  // repos
+  final userRepository = useMock ? UserMockRepository() : UserRepository();
+  final articleRepository =
+      useMock ? ArticleMockRepository() : ArticleRepository();
+  final lessonRepository =
+      useMock ? LessonMockRepository() : LessonRepository();
+  final authRepository = useMock ? AuthMockRepository() : AuthRepository();
+  final systemRepository = SystemRepository();
+
+  // services
+  final userService = UserService(
+      authRepository: authRepository, userRepository: userRepository);
+  final articleService = ArticleService(articleRepository: articleRepository);
+  final lessonService = LessonService(lessonRepository: lessonRepository);
+  final systemService = SystemService(systemRepository: systemRepository);
+
+  return [
+    // system
+    ChangeNotifierProvider.value(
+      value: SystemNotifier(systemService: systemService, flavor: flavor),
+    ),
+    // ユーザーデータ
+    ChangeNotifierProvider.value(
+      value: UserNotifier(service: userService),
+    ),
+    // Lesson
+    ChangeNotifierProvider.value(
+      value: LessonNotifier(
+        userService: userService,
+        lessonService: lessonService,
+      ),
+    ),
+    // Article
+    ChangeNotifierProvider.value(
+      value: ArticleNotifier(articleService: articleService),
+    ),
+  ];
+}
+
+/// runApp() with flavor
+Future<void> runAppWithFlavor(final Flavor flavor) async {
+  Provider.debugCheckInvalidValueType = null;
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await setupGlobalSingletons();
+
+  final analytics = GetIt.I<FirebaseAnalytics>();
+  final analyticsObserver = FirebaseAnalyticsObserver(analytics: analytics);
+  final notifiers = setupNotifiers(flavor, useMock: false);
+
+  // provide notifiers
+  runApp(MultiProvider(
+    providers: [
+      // Firebase Analytics
+      Provider.value(value: analyticsObserver),
+      ...notifiers,
+    ],
+    child: WRApp(),
+  ));
 }

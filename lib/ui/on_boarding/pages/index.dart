@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/ui/onboarding/pages/sign_in_page.dart';
-import 'package:wr_app/ui/onboarding/pages/sign_up_page.dart';
+import 'package:wr_app/ui/on_boarding/pages/sign_in_page.dart';
+import 'package:wr_app/ui/on_boarding/pages/sign_up_page.dart';
 
 /// ファーストページ
 class OnBoardingPage extends StatelessWidget {
@@ -86,7 +86,7 @@ class OnBoardingPage extends StatelessWidget {
           children: <Widget>[
             Expanded(
               flex: 1,
-              child: Image.asset('assets/icon/top.jpg'),
+              child: Image.asset('assets/icon/login.png'),
             ),
             Expanded(
               flex: 1,

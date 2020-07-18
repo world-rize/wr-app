@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
+import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 class MailAddressFormPage extends StatefulWidget {
   @override

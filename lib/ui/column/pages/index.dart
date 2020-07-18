@@ -7,9 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/article/article_notifier.dart';
 import 'package:wr_app/ui/column/pages/category_posts_page.dart';
 import 'package:wr_app/ui/column/widgets/category_view.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/widgets/admob_widget.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
-import 'package:wr_app/util/extension/padding_extension.dart';
 
 /// Column > index
 class ColumnIndexPage extends StatelessWidget {
