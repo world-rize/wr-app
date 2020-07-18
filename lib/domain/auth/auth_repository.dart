@@ -14,7 +14,7 @@ abstract class IAuthRepository {
 
   Future<FirebaseUser> signInWithSignInWithApple();
 
-  Future<void> updatePassword(String newPassword);
+  Future<void> updatePassword(String currentPassword, String newPassword);
 
   Future<void> updateEmail(String email);
 
@@ -92,7 +92,8 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<void> updatePassword(String newPassword) async {
+  Future<void> updatePassword(
+      String currentPassword, String newPassword) async {
     final fbUser = await fbAuth.currentUser();
     if (fbUser == null) {
       throw Exception('firebase user is null');

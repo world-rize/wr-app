@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+/// mypage > index > GiftPage
 class GiftPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

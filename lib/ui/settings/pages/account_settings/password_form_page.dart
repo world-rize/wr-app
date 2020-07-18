@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
+import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 class PasswordFormPage extends StatefulWidget {
   @override
@@ -12,18 +12,19 @@ class PasswordFormPage extends StatefulWidget {
 
 class _PasswordFormPageState extends State<PasswordFormPage> {
   final _formKey = GlobalKey<FormState>();
-  bool _showPassword;
-  String _password;
+  bool _showPassword = false;
+  String _currentPassword = '';
+  String _newPassword = '';
 
   @override
   Widget build(BuildContext context) {
     final userNotifier = Provider.of<UserNotifier>(context);
 
-    final _passwordField = TextFormField(
+    final _currentPasswordField = TextFormField(
       obscureText: !_showPassword,
       onSaved: (password) {
         setState(() {
-          _password = password;
+          _currentPassword = password;
         });
       },
       validator: (text) {
@@ -48,11 +49,44 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
             });
           },
         ),
-        hintText: 'Password',
+        hintText: '現在のパスワード',
       ),
     );
 
-    final _signUpButton = SizedBox(
+    final _newPasswordField = TextFormField(
+      obscureText: !_showPassword,
+      onSaved: (password) {
+        setState(() {
+          _newPassword = password;
+        });
+      },
+      validator: (text) {
+        if (text.isEmpty) {
+          return 'do not empty';
+        }
+        return null;
+      },
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _showPassword ? Icons.remove_circle_outline : Icons.remove_red_eye,
+          ),
+          onPressed: () {
+            setState(() {
+              _showPassword = !_showPassword;
+            });
+          },
+        ),
+        hintText: '新しいパスワード',
+      ),
+    );
+
+    final _updatePasswordButton = SizedBox(
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -62,7 +96,10 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
           onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              userNotifier.setPassword(password: _password);
+              userNotifier.setPassword(
+                currentPassword: _currentPassword,
+                newPassword: _newPassword,
+              );
             }
           },
         ),
@@ -83,20 +120,21 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    // Email
                     Padding(
                       padding: const EdgeInsets.all(8),
-                      child: _passwordField,
+                      child: _currentPasswordField,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: _newPasswordField,
                     ),
                   ],
                 ),
               ),
             ),
-
-            // Sign Up
             Padding(
               padding: const EdgeInsets.all(8),
-              child: _signUpButton,
+              child: _updatePasswordButton,
             ),
           ],
         ),

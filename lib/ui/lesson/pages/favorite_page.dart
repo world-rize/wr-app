@@ -17,16 +17,12 @@ class FavoritePage extends StatelessWidget {
     return FutureBuilder<List<Phrase>>(
       future: notifier.favoritePhrases(),
       builder: (_, res) {
-        if (res.hasData) {
-          return SectionListPage(
-            section: Section(
-              title: 'favorite',
-              phrases: res.data,
-            ),
-          );
-        } else {
-          return const Text('loading');
-        }
+        return SectionListPage(
+          section: Section(
+            title: 'favorite',
+            phrases: res.hasData ? res.data : [],
+          ),
+        );
       },
     );
   }

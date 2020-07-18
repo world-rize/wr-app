@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+/// mypage > index > InformationPage
 class InformationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

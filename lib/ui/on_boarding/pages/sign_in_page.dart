@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
-import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/root_view.dart';
+import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -20,9 +21,9 @@ class _SignInPageState extends State<SignInPage> {
   String _password;
 
   void _gotoHome() {
-    final system = Provider.of<SystemNotifier>(context, listen: false);
-    // initial login
-    system.setFirstLaunch(value: false);
+    Provider.of<SystemNotifier>(context, listen: false)
+        // initial login
+        .setFirstLaunch(value: false);
 
     Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(
@@ -34,27 +35,9 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Future<void> _signInEmailAndPassword(String email, String password) async {
-    final userStore = Provider.of<UserNotifier>(context, listen: false);
-    try {
-      await userStore.loginWithEmailAndPassword(email, password);
-
-      _gotoHome();
-    } on Exception catch (e) {
-      print(e);
-      return;
-    }
-  }
-
-  Future<void> _signInWithGoogle() async {
-    final userStore = Provider.of<UserNotifier>(context, listen: false);
-    try {
-      await userStore.loginWithGoogle();
-
-      _gotoHome();
-    } on Exception catch (e) {
-      print(e);
-      return;
-    }
+    final notifier = Provider.of<UserNotifier>(context, listen: false);
+    await notifier.loginWithEmailAndPassword(email, password);
+    _gotoHome();
   }
 
   @override
@@ -130,7 +113,7 @@ class _SignInPageState extends State<SignInPage> {
         padding: const EdgeInsets.all(8),
         child: RoundedButton(
           text: 'Sign in',
-          color: Colors.blueAccent,
+          color: splashColor,
           onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
@@ -162,8 +145,28 @@ class _SignInPageState extends State<SignInPage> {
             _signInEmailAndPassword('a@b.com', '123456');
           },
           text: 'Sign in by Test User(Debug)',
-          color: Colors.greenAccent,
+          color: Colors.grey,
         ),
+      ),
+    );
+
+    final _signInForm = Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          // Email
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: _emailField,
+          ),
+
+          // Password
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: _passwordField,
+          ),
+        ],
       ),
     );
 
@@ -173,59 +176,30 @@ class _SignInPageState extends State<SignInPage> {
         title: const Text('Signin'),
       ),
       // TODO(someone): height = maxHeight - appBarHeight
-      body: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (_, constraints) => ConstrainedBox(
-            constraints:
-                BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // Email
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: _emailField,
-                        ),
+      body: LayoutBuilder(
+        builder: (_, constraints) => ConstrainedBox(
+          constraints:
+              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            children: <Widget>[
+              _signInForm.p_1(),
 
-                        // Password
-                        Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: _passwordField,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+              const Spacer(),
 
-                const Spacer(),
+              // Sign Up
+              _signUpButton.p_1(),
 
-                // Sign Up
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: _signUpButton,
-                ),
+              const Divider(
+                indent: 20,
+                endIndent: 20,
+                color: Colors.grey,
+              ),
 
-                const Divider(
-                  indent: 20,
-                  endIndent: 20,
-                  color: Colors.grey,
-                ),
+              // Google Sign up
+              // _signInWithGoogleButton,
 
-                // Google Sign up
-                // _signInWithGoogleButton,
-
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: _signInByTestUser,
-                ),
-              ],
-            ),
+              _signInByTestUser.p_1(),
+            ],
           ),
         ),
       ),

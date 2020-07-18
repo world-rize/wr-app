@@ -8,6 +8,7 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/lesson_notifier.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/lesson/pages/favorite_page.dart';
 import 'package:wr_app/ui/lesson/pages/newcoming_page.dart';
 import 'package:wr_app/ui/lesson/pages/request_page.dart';
@@ -15,8 +16,7 @@ import 'package:wr_app/ui/lesson/pages/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/carousel_cell.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
-import 'package:wr_app/util/extension/collection_extension.dart';
-import 'package:wr_app/util/extension/padding_extension.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// Lesson > index
 /// - top page of lesson

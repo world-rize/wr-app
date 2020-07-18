@@ -9,27 +9,22 @@ import 'messages.dart';
 import 'messages_all.dart';
 
 export 'messages.dart';
+// see <https://medium.com/flutter-jp/intl-beb5b9e8ee73>
 
-/// アプリでの文言はこれ経由で取得する
+/// i10n object
 class I with Messages {
-  /// 言語リソースを扱う
-  ///
-  /// localeは端末設定・アプリの指定を踏まえて最適なものが渡ってくる
+  /// locale
   static Future<I> load(Locale locale) async {
     final name = locale.countryCode == null || locale.countryCode.isEmpty
         ? locale.languageCode
         : locale.toString();
     final localeName = Intl.canonicalizedLocale(name);
 
-    // 言語リソース読み込み
     await initializeMessages(localeName);
-    // デフォルト言語を設定
     Intl.defaultLocale = localeName;
-    // 自身を返す
     return I();
   }
 
-  // Widgetツリーから自身を取り出す
   static I of(BuildContext context) {
     return Localizations.of<I>(context, I);
   }

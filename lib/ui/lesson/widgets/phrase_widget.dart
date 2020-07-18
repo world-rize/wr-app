@@ -3,9 +3,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
-import 'package:wr_app/util/extension/padding_extension.dart';
-import 'package:wr_app/util/extension/string_capitalization.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// phrase card view
 class PhraseCard extends StatelessWidget {

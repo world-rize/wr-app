@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+/// mypage > index > FriendsPage
 class FriendsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/ui/onboarding/pages/sign_in_page.dart';
-import 'package:wr_app/ui/onboarding/pages/sign_up_page.dart';
+import 'package:wr_app/ui/on_boarding/pages/sign_in_page.dart';
+import 'package:wr_app/ui/on_boarding/pages/sign_up_page.dart';
 
 /// ファーストページ
 class OnBoardingPage extends StatelessWidget {
@@ -15,8 +15,11 @@ class OnBoardingPage extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          const Center(
-            child: Text('初めての方はこちら'),
+          const Padding(
+            padding: EdgeInsets.all(8),
+            child: Center(
+              child: Text('初めての方はこちら'),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -49,8 +52,11 @@ class OnBoardingPage extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          const Center(
-            child: Text('既にアカウントを持っている方はこちら'),
+          const Padding(
+            padding: EdgeInsets.all(8),
+            child: Center(
+              child: Text('既にアカウントを持っている方はこちら'),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -79,22 +85,17 @@ class OnBoardingPage extends StatelessWidget {
       ),
     );
 
-    return Scaffold(
-      body: Container(
-        color: splashColor,
-        child: Column(
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
           children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Image.asset('assets/icon/top.jpg'),
-            ),
-            Expanded(
-              flex: 1,
+            Image.asset('assets/icon/login.png'),
+            Flexible(
               child: Container(
                 color: theme.backgroundColor,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
-                    const Spacer(),
                     signUpField,
                     signInField,
                   ],

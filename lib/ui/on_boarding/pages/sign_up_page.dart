@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
-import 'package:wr_app/ui/onboarding/widgets/rounded_button.dart';
 import 'package:wr_app/ui/root_view.dart';
+import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/toast.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -189,65 +189,63 @@ class _SignUpPageState extends State<SignUpPage> {
         backgroundColor: splashColor,
         title: const Text('Signup'),
       ),
-      body: SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // Email
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: _emailField,
-                      ),
+      body: ConstrainedBox(
+        constraints:
+            BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // Email
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      child: _emailField,
+                    ),
 
-                      // Password
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 8, horizontal: 16),
-                        child: _passwordField,
-                      ),
+                    // Password
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8, horizontal: 16),
+                      child: _passwordField,
+                    ),
 
-                      // Agree
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: _acceptTermsCheckbox,
-                      ),
-                    ],
-                  ),
+                    // Agree
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: _acceptTermsCheckbox,
+                    ),
+                  ],
                 ),
               ),
+            ),
 
-              const Spacer(),
+            const Spacer(),
 
-              // Sign Up
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: _signUpButton,
-              ),
+            // Sign Up
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: _signUpButton,
+            ),
 
-              // Or
-              const Divider(
-                indent: 20,
-                endIndent: 20,
-                color: Colors.grey,
-              ),
+            // Or
+            const Divider(
+              indent: 20,
+              endIndent: 20,
+              color: Colors.grey,
+            ),
 
-              // Google Sign up
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: _signUpWithGoogleButton,
-              ),
-            ],
-          ),
+            // Google Sign up
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: _signUpWithGoogleButton,
+            ),
+          ],
         ),
       ),
     );

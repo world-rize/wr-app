@@ -31,7 +31,7 @@ class UserRepository implements IUserRepository {
           ..timeout = const Duration(seconds: 10);
 
     // dynamic -> Map<String, dynamic> -> Response
-    return callable.call({}).then(
+    return callable.call(req.toJson()).then(
         (res) => TestResponse.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
@@ -41,7 +41,7 @@ class UserRepository implements IUserRepository {
         .getHttpsCallable(functionName: 'readUser')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req).then((res) =>
+    return callable.call(req.toJson()).then((res) =>
         ReadUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
@@ -51,18 +51,28 @@ class UserRepository implements IUserRepository {
         .getHttpsCallable(functionName: 'createUser')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req).then((res) =>
+    return callable.call(req.toJson()).then((res) =>
         CreateUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
   Future<UpdateUserResponseDto> updateUser(UpdateUserRequestDto req) async {
-    throw UnimplementedError();
+    final callable = CloudFunctions.instance
+        .getHttpsCallable(functionName: 'updateUser')
+          ..timeout = const Duration(seconds: 10);
+
+    return callable.call(req.toJson()).then((res) =>
+        UpdateUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
   Future<DeleteUserResponseDto> deleteUser(DeleteUserRequestDto req) async {
-    throw UnimplementedError();
+    final callable = CloudFunctions.instance
+        .getHttpsCallable(functionName: 'deleteUser')
+          ..timeout = const Duration(seconds: 10);
+
+    return callable.call(req.toJson()).then((res) =>
+        DeleteUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
@@ -72,8 +82,9 @@ class UserRepository implements IUserRepository {
         .getHttpsCallable(functionName: 'favoritePhrase')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req).then((res) => FavoritePhraseResponseDto.fromJson(
-        Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) =>
+        FavoritePhraseResponseDto.fromJson(
+            Map<String, dynamic>.from(res.data)));
   }
 
   @override
@@ -82,7 +93,7 @@ class UserRepository implements IUserRepository {
         .getHttpsCallable(functionName: 'getPoint')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req).then((res) =>
+    return callable.call(req.toJson()).then((res) =>
         GetPointResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
@@ -92,7 +103,7 @@ class UserRepository implements IUserRepository {
         .getHttpsCallable(functionName: 'doTest')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req).then((res) =>
+    return callable.call(req.toJson()).then((res) =>
         DoTestResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
   }
 }

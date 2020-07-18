@@ -11,7 +11,7 @@ User _$UserFromJson(Map json) {
     uuid: json['uuid'] as String,
     userId: json['userId'] as String,
     email: json['email'] as String,
-    age: json['age'] as int,
+    age: json['age'] as String,
     name: json['name'] as String,
     point: json['point'] as int,
     testLimitCount: json['testLimitCount'] as int,

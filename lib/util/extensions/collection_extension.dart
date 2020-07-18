@@ -3,6 +3,7 @@
 import 'dart:math';
 
 extension IndexedMap<T, E> on List<T> {
+  /// enumerate
   List<E> indexedMap<E>(E Function(int index, T item) function) {
     final list = <E>[];
     asMap().forEach((index, element) {
@@ -11,6 +12,7 @@ extension IndexedMap<T, E> on List<T> {
     return list;
   }
 
+  /// select random [count] elements from the list
   List<T> sample(int count) {
     final result = <T>[];
     for (var i = 0; i < count; i++) {

@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:wr_app/util/logger.dart';
 
 class ReceivedNotification {
   const ReceivedNotification({
@@ -26,7 +27,6 @@ final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
 
 NotificationAppLaunchDetails _notificationAppLaunchDetails;
 
-// Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
 final StreamController<ReceivedNotification>
     didReceiveLocalNotificationSubject =
     StreamController<ReceivedNotification>();
@@ -77,6 +77,7 @@ class AppNotifier {
 //  final StreamController<String> selectNotificationSubject =
 //      StreamController<String>();
 
+  /// only iOS, request permissions
   void requestIOSPermissions() {
     _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -84,33 +85,34 @@ class AppNotifier {
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
-  /// didReceiveLocalNotificationSubject を subscribe
-//  void _configureDidRecieveLocalNotificationSubject() {
-//    didReceiveLocalNotificationSubject.stream
-//        .listen((ReceivedNotification receivedNotification) async {
-//      InAppLogger.log('Hello', type: 'notice');
-//    });
-//  }
-//
-//  /// selectNotificationSubject を subscribe
-//  void _configureSelectNotificationSubject() {
-//    selectNotificationSubject.stream.listen((String payload) async {
-//      InAppLogger.log('payload: $payload', type: 'notice');
-//    });
-//  }
+  /// subscribe [didReceiveLocalNotificationSubject]
+  void _configureDidRecieveLocalNotificationSubject() {
+    didReceiveLocalNotificationSubject.stream
+        .listen((ReceivedNotification receivedNotification) async {
+      // TODO
+      InAppLogger.log('Hello', type: 'notice');
+    });
+  }
 
-  /// notification
+  /// show notification
   Future<void> showNotification({
     @required String title,
     @required String body,
     @required String payload,
   }) async {
-//    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
-//        'channel id', 'channel name', 'channel description',
-//        importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+    final androidPlatformChannelSpecifics = AndroidNotificationDetails(
+      'channel id',
+      'channel name',
+      'channel description',
+      importance: Importance.Max,
+      priority: Priority.High,
+      ticker: 'ticker',
+    );
     final iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    final platformChannelSpecifics =
-        NotificationDetails(null, iOSPlatformChannelSpecifics);
+    final platformChannelSpecifics = NotificationDetails(
+      androidPlatformChannelSpecifics,
+      iOSPlatformChannelSpecifics,
+    );
 
     await _flutterLocalNotificationsPlugin
         .show(0, title, body, platformChannelSpecifics, payload: payload);
