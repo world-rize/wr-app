@@ -1,0 +1,6 @@
+###
+POST https://www.getwoord.com/api/convert
+Content-Type: application/json
+Authorization: Bearer {{WOORD_ACCESS_KEY}}
+
+text=Hello+World&gender_voice=male&language=en_US

@@ -20,6 +20,11 @@ bold_pattern = re.compile(r"[\(（](.*?)[\)）]")
 verbose = False
 white, yellow = chalk.Chalk('white'), chalk.Chalk('yellow')
 
+# exported from google drive
+lessons_txt_path = f'{root}/phrases/v1.md'
+lessons_json_path = f'{root}/lessons.json'
+phrases_json_path  = f'{root}/phrases.json'
+
 def strip_brs(txt):
     """
     """
@@ -214,12 +219,8 @@ def parse_txt(text):
 
 
 def generate(preview=False):
-    # exported from google drive
-    lessons_txt_path = f'{root}/phrases/v1.md'
-    lessons_json_path = f'{root}/lessons.json'
-    phrases_json_path  = f'{root}/phrases.json'
+    global verbose, lessons_txt_path, lessons_json_path, phrases_json_path
     force = '-f' in sys.argv
-    global verbose
     verbose = '-v' in sys.argv
 
     print(f'{white("Phrase Convertor", bold=True)}')

@@ -75,7 +75,7 @@ name_lesson_id_map = {
 }
 
 pwd = os.path.dirname(os.path.abspath(__file__))
-root = f'{pwd}/../assets'
+root = f'{pwd}/../../assets'
 src_dir = f'{root}/raw'
 dst_dir = f'{root}/voice'
 
