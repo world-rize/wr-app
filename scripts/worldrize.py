@@ -229,11 +229,11 @@ class PhrasesParser(object):
 
 class Cli(object):
     def __init__(self):
-        self.root = pwd.parent / 'assets'
-        self.voices_path = self.root / 'voices'
-        self.lessons_txt_path = self.root / 'contents/phrases.md'
-        self.lessons_json_path = self.root / 'lessons.json'
-        self.phrases_json_path  = self.root / 'phrases.json'
+        self.assets_path = pwd.parent / 'assets'
+        self.voices_path = self.assets_path / 'voices'
+        self.lessons_txt_path = self.assets_path / 'contents/phrases.md'
+        self.lessons_json_path = self.assets_path / 'lessons.json'
+        self.phrases_json_path  = self.assets_path / 'phrases.json'
 
     def resources(self):
         """ Download thumbnails from Google Drive """

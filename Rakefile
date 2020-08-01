@@ -7,25 +7,19 @@ task :help do
   sh 'rake -T'
 end
 
-namespace :run do
-  desc 'Run App with Development'
-  task :dev do
-    sh 'flutter run --flavor development -t lib/main_development.dart'
-  end
-
-  desc 'Run App with Staging'
-  task :stg do
-    sh 'flutter run --flavor staging -t lib/main_staging.dart'
-  end
-
-  desc 'Run App with Production'
-  task :prod do
-    sh 'flutter run --flavor production -t lib/main_production.dart'
-  end
+desc 'Run App with Development'
+task :dev do
+  sh 'flutter run --flavor development -t lib/main_development.dart'
 end
 
-task :dev do
-  Rake::Task['run:dev'].invoke
+desc 'Run App with Staging'
+task :stg do
+  sh 'flutter run --flavor staging -t lib/main_staging.dart'
+end
+
+desc 'Run App with Production'
+task :prd do
+  sh 'flutter run --flavor production -t lib/main_production.dart'
 end
 
 desc 'open Xcode Workspace'
@@ -43,18 +37,6 @@ desc 'i10n生成'
 task :i10n do
   puts '[Task i10n]'
   sh 'sh scripts/i10n.sh'
-end
-
-desc 'フレーズ更新'
-task :phrases do
-  puts '[Task phrases]'
-  sh 'python scripts/convertor.py'
-end
-
-desc 'ボイス更新'
-task :voices => [:phrases] do
-  puts '[Task voices]'
-  sh 'python scripts/rename.py'
 end
 
 desc 'スプラッシュ画像更新'
@@ -76,6 +58,7 @@ task :test do
   sh 'flutter test --coverage'
 
   # TODO: flutter driver test
+  # TODO: codecov
   
   # clound functions test
   cd 'functions' do

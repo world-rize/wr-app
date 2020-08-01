@@ -37,13 +37,14 @@
 
 ## note
 - ❌ index
-- 
+- ❌ index > flash_card_edit_page
+- ❌ index > flash_card_page
 
 ## agency
 - ❌ index
 
 ## mypage
-- ✅ index
+- ❌ index
 - 🎨 index > gift_page
 - 🎨 index > info_page
 - 🎨 index > upgrade_page
@@ -59,5 +60,4 @@
 
 ## Change logs
 ### 2020/08/01
-- 追加: notes
-- 変更: 
+- WR英会話 仕様書に追従
