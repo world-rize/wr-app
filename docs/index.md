@@ -5,7 +5,7 @@
 ## 👀 Architecture Overview
 > TODO: brush up
 
-![](overview.svg)
+![](figs/overview.svg)
 
 ## 👍 Get Started
 > TODO: asset downloading build script
