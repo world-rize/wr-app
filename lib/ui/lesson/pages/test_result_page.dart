@@ -22,6 +22,8 @@ class TestResultPage extends StatelessWidget {
 
   /// 報酬獲得画面
   void _showRewardDialog(BuildContext context) {
+    final userNotifier = Provider.of<UserNotifier>(context, listen: false);
+
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
@@ -29,8 +31,6 @@ class TestResultPage extends StatelessWidget {
         content: Column(
           children: <Widget>[
             Text(I.of(context).getPoints(stats.corrects)),
-//            Text(I.of(context).getPiece),
-//            Image.network('https://zettoku.up.seesaa.net/image/pazuru01.jpg'),
             GFButton(
               color: Colors.orange,
               text: I.of(context).close,
@@ -51,7 +51,8 @@ class TestResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final useStore = Provider.of<UserNotifier>(context);
+    final userStore = Provider.of<UserNotifier>(context);
+    final user = userStore.getUser();
     final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
     final resultText = I.of(context).testResult(stats.corrects > 5);
 
@@ -73,6 +74,7 @@ class TestResultPage extends StatelessWidget {
                 children: List.generate(
                   stats.section.phrases.length,
                   (i) => PhraseCard(
+                    highlight: stats.answers[i] ? Colors.green : Colors.red,
                     phrase: stats.section.phrases[i],
                     onTap: () {
                       Navigator.of(context).push(
@@ -82,9 +84,14 @@ class TestResultPage extends StatelessWidget {
                         ),
                       );
                     },
-                    favorite: useStore
-                        .getUser()
-                        .isFavoritePhrase(stats.section.phrases[i]),
+                    favorite: user.isFavoritePhrase(stats.section.phrases[i]),
+                    onFavorite: () {
+                      final phrase = stats.section.phrases[i];
+                      userStore.favoritePhrase(
+                        phraseId: phrase.id,
+                        value: !user.isFavoritePhrase(phrase),
+                      );
+                    },
                   ).p_1(),
                 ),
               ),
@@ -103,7 +110,7 @@ class TestResultPage extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            useStore.callGetPoint(point: stats.corrects);
+            userStore.callGetPoint(point: stats.corrects);
             _showRewardDialog(context);
           },
         ),

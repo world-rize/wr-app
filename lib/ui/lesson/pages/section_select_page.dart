@@ -10,6 +10,8 @@ import 'package:wr_app/ui/lesson/pages/section_list_page.dart';
 import 'package:wr_app/ui/lesson/pages/test_page.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_lesson_tab.dart';
 import 'package:wr_app/ui/lesson/widgets/section_select_test_tab.dart';
+import 'package:wr_app/util/analytics.dart';
+import 'package:wr_app/util/toast.dart';
 
 /// セクション選択画面
 ///
@@ -74,21 +76,42 @@ class _SectionSelectPageState extends State<SectionSelectPage>
         children: [
           LessonTab(
             sections: sections,
-            onTap: (section) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (_) => SectionListPage(section: section)),
-              );
+            onTap: (Section section) {
+              try {
+                sendEvent(
+                  event: AnalyticsEvent.visitLesson,
+                  parameters: {'sectionTitle': section.title},
+                );
+
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (_) => SectionListPage(section: section)),
+                );
+              } on Exception catch (e) {
+                NotifyToast.error(e);
+              }
             },
           ),
           TestTab(
             sections: sections,
             onTap: (section) async {
-              await userStore.doTest();
-              Navigator.pop(context);
-              await Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => TestPage(section: section)),
-              );
+              try {
+                await userStore.doTest();
+
+                await sendEvent(
+                  event: AnalyticsEvent.doTest,
+                  parameters: {'sectionTitle': section.title},
+                );
+
+                Navigator.pop(context);
+
+                await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => TestPage(section: section)),
+                );
+              } on Exception catch (e) {
+                NotifyToast.error(e);
+                Navigator.pop(context);
+              }
             },
           ),
         ],
