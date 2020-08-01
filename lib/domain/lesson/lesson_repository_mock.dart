@@ -16,9 +16,9 @@ class LessonMockRepository implements ILessonRepository {
     return List<Lesson>.generate(
       6,
       (i) => Lesson(
-        id: 'Lesson $i',
+        id: 'Lesson$i',
         title: {
-          'ja': 'Lesson $i',
+          'ja': 'Lesson$i',
         },
         phrases: List.generate(100, (index) => Phrase.dummy(index)),
         assets: Assets(

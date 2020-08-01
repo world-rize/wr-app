@@ -183,14 +183,12 @@ Map<String, dynamic> _$GetPointResponseDtoToJson(
 DoTestRequestDto _$DoTestRequestDtoFromJson(Map json) {
   return DoTestRequestDto(
     uid: json['uid'] as String,
-    sectionId: json['sectionId'] as String,
   );
 }
 
 Map<String, dynamic> _$DoTestRequestDtoToJson(DoTestRequestDto instance) =>
     <String, dynamic>{
       'uid': instance.uid,
-      'sectionId': instance.sectionId,
     };
 
 DoTestResponseDto _$DoTestResponseDtoFromJson(Map json) {

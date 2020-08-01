@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/user_service.dart';
+import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
@@ -127,6 +128,10 @@ class UserNotifier with ChangeNotifier {
     _user = await _userService.getPoints(user: _user, point: point);
     notifyListeners();
 
+    await sendEvent(
+      event: AnalyticsEvent.pointGet,
+      parameters: {'point': point},
+    );
     NotifyToast.success('$pointポイントゲットしました');
   }
 
@@ -141,6 +146,9 @@ class UserNotifier with ChangeNotifier {
     _user = await _userService.changePlan(user: _user, membership: membership);
 
     notifyListeners();
+    if (membership == Membership.pro) {
+      await sendEvent(event: AnalyticsEvent.upGrade);
+    }
 
     InAppLogger.log('membership to be $membership');
     NotifyToast.success('$membership');

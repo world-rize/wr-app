@@ -13,6 +13,7 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/lesson/pages/test_result_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
+import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
 
 /// テストページ
@@ -91,6 +92,10 @@ class TestPageState extends State<TestPage> {
         corrects: _corrects,
         answers: _answers,
       );
+
+      await sendEvent(event: AnalyticsEvent.finishTest);
+
+      Navigator.of(context).pop();
 
       await Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TestResultPage(stats: stats)),
