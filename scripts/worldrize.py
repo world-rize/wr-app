@@ -1,16 +1,9 @@
 """
 WorldRIZe CLI
 """
-import os
-import re
-import json
+import os, re, json, shutil, requests, string
+import fire, chalk
 from pathlib import Path
-import chalk
-from tqdm import tqdm
-import shutil
-import requests
-import string
-import fire
 from dotenv import load_dotenv
 
 pwd = Path(__file__).resolve().parent
@@ -117,12 +110,16 @@ class PhrasesParser(object):
         self.verbose = verbose
         self.lessons = []
         self.phrases = []
+        self.phrase_id = 0
 
     def _parse_phrase(self, phrase_txt: str, lesson_id: str, phrase_id: str):
+        # unique phrase id
+        master_id = f'{lesson_id}_{phrase_id}'
+
         def create_assets(index: str):
             return {
                 'voice': { 
-                    locale: f'voice/{lesson_id}_{phrase_id}_{index}_{locale}.mp3' for locale in ['en-us', 'en-au', 'en-uk']
+                    locale: f'voices/{master_id}_{index}_{locale}.mp3' for locale in ['en-us', 'en-au', 'en-uk']
                 }
             }
 
@@ -151,7 +148,7 @@ class PhrasesParser(object):
                     title_ja = bold.group(1)
                     break
             else:
-                if self.verbose: error(f'Warning {lesson_id} {phrase_id} title(ja) is empty')
+                if self.verbose: error(f'Warning {master_id} title(ja) is empty')
                 title_ja = jas[1]
 
             for en in ens:
@@ -160,23 +157,23 @@ class PhrasesParser(object):
                     title_en = bold.group(1)
                     break
             else:
-                if self.verbose: error(f'Warning {lesson_id} {phrase_id} title(en) is empty')
+                if self.verbose: error(f'Warning {master_id} title(en) is empty')
                 title_en = ens[1]
 
             phrase_json = {
-                'id': str(phrase_id).zfill(4),
+                'id': master_id,
                 'title': {
                     'en': title_en,
                     'ja': title_ja,
                 },
                 'meta': {
                     'lessonId': lesson_id,
-                    'phraseId': str(phrase_id),
+                    'phraseId': phrase_id,
                 },
                 # key phrase
                 'assets': {
                     'voice': {
-                        locale: f'voice/{lesson_id}_{phrase_id}_kp_{locale}.mp3' for locale in ['en-us', 'en-au', 'en-uk']
+                        locale: f'voices/{master_id}_kp_{locale}.mp3' for locale in ['en-us', 'en-au', 'en-uk']
                     },
                 },
                 'advice': {
@@ -189,7 +186,7 @@ class PhrasesParser(object):
 
             self.phrases.append(phrase_json)
         except Exception as e:
-            error(f'Warning {lesson_id} {phrase_id} invalid')
+            error(f'Warning {master_id} invalid')
             error('\t', e)
 
     def _parse_lesson(self, lesson_txt: str):
@@ -233,8 +230,8 @@ class PhrasesParser(object):
 class Cli(object):
     def __init__(self):
         self.root = pwd.parent / 'assets'
-        self.voices_path = pwd / 'voices'
-        self.lessons_txt_path = self.root / 'phrases/v1.md'
+        self.voices_path = self.root / 'voices'
+        self.lessons_txt_path = self.root / 'contents/phrases.md'
         self.lessons_json_path = self.root / 'lessons.json'
         self.phrases_json_path  = self.root / 'phrases.json'
 
@@ -267,23 +264,53 @@ class Cli(object):
     def voices(self):
         """ Generate voices"""
         # read phrases.json
-        phrases_json_path = self.root / 'phrases.json'
-        if not phrases_json_path.exists():
+        if not self.phrases_json_path.exists():
             error('Lessons JSON File')
             exit()
         
-        with open(phrases_json_path, 'r') as j:
+        with self.phrases_json_path.open('r') as j:
             phrases = json.load(j)
         
-        for phrase in phrases:
+        for i, phrase in enumerate(phrases):
+            print(i, end=' ')
             generate_phrase_voices(phrase, out_dir=self.voices_path)
 
-    def info(self, verbose=False):
+    def info(self, verbose=True):
         """ Show infomation """
-        (success if self.lessons_txt_path.exists() else error)('Phrases Markdown File')
-        (success if self.lessons_json_path.exists() else error)('Lessons JSON File')
-        (success if self.phrases_json_path.exists() else error)('Phrases JSON File')
-        (success if self.voices_path.exists() else error)('Voices Dir')
+        if self.lessons_txt_path.exists():
+            success('Phrases Markdown File')
+        else:
+            error('Not Found Phrases Markdown File')
+
+        if self.lessons_json_path.exists():
+            success(f'Lessons JSON {self.lessons_json_path}')
+            if verbose:
+                with self.lessons_json_path.open('r') as j:
+                    lessons = json.load(j)
+                    info(f'{len(lessons)} Lessons found')
+                    for lesson in lessons:
+                        info(f'\t{lesson["id"]}')
+        else:
+            error(f'Lessons JSON Not Found {self.lessons_json_path}')
+
+        if self.phrases_json_path.exists():
+            success(f'Phrases JSON Found {self.phrases_json_path}')
+            if verbose:
+                with self.phrases_json_path.open('r') as j:
+                    phrases = json.load(j)
+                    info(f'{len(phrases)} Phrases found')
+                    for phrase in phrases:
+                        info(f'{phrase["id"].ljust(15)} {phrase["title"]["ja"]}')
+        else:
+            error(f'Phrases JSON Not Found {self.phrases_json_path}')
+ 
+        if self.voices_path.exists():
+            success(f'Voices Dir {self.voices_path}')
+            if verbose:
+                voices_count = len(list(self.voices_path.iterdir()))
+                success(f'{voices_count} Voices Found')
+        else:
+            error(f'Voices Dir Not Found {self.voices_path}')
 
 if __name__ == '__main__':
     fire.Fire(Cli)

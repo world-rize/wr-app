@@ -24,7 +24,7 @@ namespace :run do
   end
 end
 
-task :run do
+task :dev do
   Rake::Task['run:dev'].invoke
 end
 
