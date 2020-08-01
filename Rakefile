@@ -60,13 +60,13 @@ end
 desc 'スプラッシュ画像更新'
 task :splash do
   puts '[Task splash]'
-  sh 'flutter pub pub run flutter_native_splash:create'
+  sh 'flutter pub run flutter_native_splash:create'
 end
 
 desc 'アイコン更新'
 task :icon do
   puts '[Task icon]'
-  sh 'flutter packages pub run flutter_launcher_icons:main'
+  sh 'flutter pub run flutter_launcher_icons:main'
 end
 
 desc 'テスト'

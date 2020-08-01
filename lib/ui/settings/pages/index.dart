@@ -26,6 +26,12 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsPage> {
+  // static const platform = MethodChannel('sample/platform');
+
+//  Future<void> toOssLicense() {
+//    return platform.invokeMethod('toOssLicense', {});
+//  }
+
   // account section
   SettingsSection accountSection() {
     final userStore = Provider.of<UserNotifier>(context);
@@ -157,6 +163,20 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'アプリバージョン',
           subtitle: pubSpec.version,
+        ),
+        SettingsTile(
+          title: 'ライセンス',
+          onTap: () {
+            final pubSpec = GetIt.I<PackageInfo>();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => LicensePage(
+                  applicationName: pubSpec.appName,
+                  applicationVersion: pubSpec.version,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
