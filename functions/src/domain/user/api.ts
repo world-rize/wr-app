@@ -155,7 +155,18 @@ export const doTest = async (req: Dto.DoTestRequest, context: Context): Promise<
     throw new functions.https.HttpsError('permission-denied', 'not authorized')
   }
 
-  return {}
+  const uid = context.auth.uid
+  const success = await userService.doTest(uid)
+    .catch (e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to do test')
+    })
+
+  console.log(`[doTest] doTest uid: ${uid}`)
+
+  return {
+    success
+  }
 }
 
 /**
