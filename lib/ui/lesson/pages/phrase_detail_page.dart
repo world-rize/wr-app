@@ -19,8 +19,8 @@ class PhrasesDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<VoicePlayer>(
-      create: (_) => VoicePlayer(
+    return ChangeNotifierProvider<VoicePlayer>.value(
+      value: VoicePlayer(
         phrase: phrase,
         onError: NotifyToast.error,
       ),

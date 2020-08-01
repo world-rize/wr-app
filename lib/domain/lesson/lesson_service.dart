@@ -6,7 +6,6 @@ import 'package:wr_app/domain/lesson/lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/util/logger.dart';
-import 'package:wr_app/util/toast.dart';
 
 class LessonService {
   final ILessonRepository _lessonRepository;
@@ -31,9 +30,7 @@ class LessonService {
     @required String text,
   }) async {
     final email = DotEnv().env['FEEDBACK_MAIL_ADDRESS'];
-    await _lessonRepository
-        .sendPhraseRequest(email: email, text: text)
-        .catchError(NotifyToast.error);
+    await _lessonRepository.sendPhraseRequest(email: email, text: text);
 
     InAppLogger.log('send phrase request', type: 'api');
   }

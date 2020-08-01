@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/lesson_service.dart';
 import 'package:wr_app/domain/user/user_service.dart';
+import 'package:wr_app/util/toast.dart';
 
 class LessonNotifier with ChangeNotifier {
   LessonService _lessonService;
@@ -57,7 +58,9 @@ class LessonNotifier with ChangeNotifier {
   }
 
   Future<void> sendPhraseRequest({@required String text}) {
-    return _lessonService.sendPhraseRequest(text: text);
+    return _lessonService
+        .sendPhraseRequest(text: text)
+        .catchError(NotifyToast.error);
   }
 
   bool getShowTranslation() => _lessonService.getShowTranslation();

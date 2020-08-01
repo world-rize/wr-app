@@ -21,7 +21,7 @@ class PhraseDetailSample extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 12, top: 12),
             child: Text(
-              '(${player.phrase.id})${player.phrase.title['en']}',
+              player.phrase.title['en'],
               style: TextStyle(
                 fontSize: 20,
                 color: theme.accentColor,
