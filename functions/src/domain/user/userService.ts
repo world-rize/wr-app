@@ -68,4 +68,17 @@ export class UserService {
   async delete(uuid: string): Promise<void> {
     return await this.repo.remove(uuid)
   }
+
+  async doTest(uuid: string): Promise<boolean> {
+    const user = await this.repo.findById(uuid)
+    if (!user) {
+      throw 'User not found'
+    }
+    if (user.testLimitCount == 0) {
+      throw 'Daily test limit exceeded'
+    }
+    user.testLimitCount -= 1
+    await this.repo.update(user)
+    return true
+  }
 }

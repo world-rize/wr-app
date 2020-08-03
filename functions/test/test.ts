@@ -1,14 +1,17 @@
 import * as firebase from 'firebase'
-import { CreateUserRequest, TestRequest, ReadUserRequest, FavoritePhraseRequest, GetPointRequest, UpdateUserRequest, DeleteUserRequest } from '../src/domain/user/model/userApiDto'
+import { CreateUserRequest, TestRequest, ReadUserRequest, FavoritePhraseRequest, GetPointRequest, UpdateUserRequest, DeleteUserRequest, DoTestRequest } from '../src/domain/user/model/userApiDto'
 import { User } from '../src/domain/user/model/user'
 const serviceAccount = require('../../.env/credential.json')
 
 firebase.initializeApp(serviceAccount)
 const functions = firebase.functions()
 // use local emulator
-// functions.useFunctionsEmulator('http://localhost:5000')
+const isLocal = true
+if (isLocal) {
+  functions.useFunctionsEmulator('http://localhost:5000')
+}
 
-describe('api health check', ()  => {
+describe('api call', ()  => {
   test('test', async () => {
     const callable = functions.httpsCallable('test')
     const res = callable({} as TestRequest)
@@ -153,4 +156,47 @@ describe('api health check', ()  => {
       await auth.user?.delete()
     }
   }, 10000)
+
+  test('doTest(Success)', async () => {
+    // authorize
+    const auth = await firebase.auth().signInWithEmailAndPassword('a@b.com', '123456')
+    const userRef = firebase.firestore().collection('users').doc(auth.user?.uid)
+    await userRef.update({ testLimitCount: 3 } as Partial<User>)
+    const beforeUser = await userRef.get()
+      .then(ss => ss.data() as User)
+
+    const callable = functions.httpsCallable('doTest')
+    const data: DoTestRequest = {
+      uuid: beforeUser.uuid,
+    }
+    const res = callable(data)
+    await expect(res).resolves.toMatchObject({
+      data: {
+        success: true
+      }
+    })
+
+    const afterUser = await userRef.get()
+      .then(ss => ss.data() as User)
+
+    expect(afterUser.testLimitCount).toBe(beforeUser.testLimitCount - 1)
+  }, 100000)
+
+  test('doTest(Fail)', async () => {
+    // authorize
+    const auth = await firebase.auth().signInWithEmailAndPassword('a@b.com', '123456')
+    const userRef = firebase.firestore().collection('users').doc(auth.user?.uid)
+    const beforeUser = await userRef.get()
+      .then(ss => ss.data() as User)
+    await userRef.update({ testLimitCount: 0 } as Partial<User>)
+
+    const callable = functions.httpsCallable('doTest')
+    const data: DoTestRequest = {
+      uuid: beforeUser.uuid,
+    }
+    const res = callable(data)
+    await expect(res).rejects.toBeTruthy()
+
+    await userRef.update({ testLimitCount: 3 } as Partial<User>)
+  })
 })

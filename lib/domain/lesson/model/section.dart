@@ -17,7 +17,7 @@ class Section {
     final sections = <Section>[];
     for (var i = 0; i < lesson.phrases.length; i += 7) {
       sections.add(Section(
-        title: '${lesson.id} ${i ~/ 7 + 1}',
+        title: '#${i ~/ 7 + 1} ${lesson.id}',
         phrases:
             lesson.phrases.sublist(i, min(i + 7, lesson.phrases.length - 1)),
       ));

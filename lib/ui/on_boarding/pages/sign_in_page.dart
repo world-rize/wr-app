@@ -7,6 +7,7 @@ import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/root_view.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
+import 'package:wr_app/util/analytics.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -24,6 +25,8 @@ class _SignInPageState extends State<SignInPage> {
     Provider.of<SystemNotifier>(context, listen: false)
         // initial login
         .setFirstLaunch(value: false);
+
+    sendEvent(event: AnalyticsEvent.logIn);
 
     Navigator.popUntil(context, (route) => route.isFirst);
     Navigator.pushReplacement(
@@ -107,7 +110,7 @@ class _SignInPageState extends State<SignInPage> {
       ),
     );
 
-    final _signUpButton = SizedBox(
+    final _signInButton = SizedBox(
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -187,7 +190,7 @@ class _SignInPageState extends State<SignInPage> {
               const Spacer(),
 
               // Sign Up
-              _signUpButton.p_1(),
+              _signInButton.p_1(),
 
               const Divider(
                 indent: 20,

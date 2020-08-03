@@ -206,7 +206,6 @@ class GetPointResponseDto {
 class DoTestRequestDto {
   DoTestRequestDto({
     @required this.uid,
-    @required this.sectionId,
   });
 
   factory DoTestRequestDto.fromJson(Map<String, dynamic> json) =>
@@ -215,7 +214,6 @@ class DoTestRequestDto {
   Map<String, dynamic> toJson() => _$DoTestRequestDtoToJson(this);
 
   String uid;
-  String sectionId;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)

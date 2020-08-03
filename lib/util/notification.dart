@@ -34,7 +34,7 @@ final StreamController<ReceivedNotification>
 class AppNotifier {
   Future<void> setup() async {
     const initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+    AndroidInitializationSettings('@mipmap/ic_launcher');
     final initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,

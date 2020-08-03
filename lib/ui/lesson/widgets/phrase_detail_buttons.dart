@@ -10,7 +10,6 @@ import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
 class PhraseDetailButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // TODO(some): データに依存しない
     final player = Provider.of<VoicePlayer>(context);
     final lesson = Provider.of<LessonNotifier>(context);
     final notifier = Provider.of<UserNotifier>(context);
@@ -53,15 +52,16 @@ class PhraseDetailButtons extends StatelessWidget {
           // 再生ボタン
           Expanded(
             child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              heroTag: '3',
-              child: Icon(
-                player.isPlaying ? Icons.pause : Icons.play_arrow,
-                color: Colors.orangeAccent,
-                size: 40,
-              ),
-              onPressed: player.toggle,
-            ),
+                backgroundColor: Colors.white,
+                heroTag: '3',
+                child: Icon(
+                  player.isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: Colors.orangeAccent,
+                  size: 40,
+                ),
+                onPressed: () async {
+                  await player.toggle();
+                }),
           ),
           // 再生速度
           Expanded(

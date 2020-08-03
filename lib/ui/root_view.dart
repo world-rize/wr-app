@@ -116,7 +116,7 @@ class _RootViewState extends State<RootView>
           title: Text(I.of(context).bottomNavColumn),
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.airplanemode_active),
+          icon: const Icon(Icons.library_books),
           title: Text(I.of(context).bottomNavTravel),
         ),
         BottomNavigationBarItem(

@@ -2,30 +2,29 @@
 
 task :default => [:help]
 
+def confirm(q)
+  puts "#{q}? (y/n)"
+  return STDIN.gets.strip == 'y'
+end
+
 desc 'ヘルプ'
 task :help do
   sh 'rake -T'
 end
 
-namespace :run do
-  desc 'Run App with Development'
-  task :dev do
-    sh 'flutter run --flavor development -t lib/main_development.dart'
-  end
-
-  desc 'Run App with Staging'
-  task :stg do
-    sh 'flutter run --flavor staging -t lib/main_staging.dart'
-  end
-
-  desc 'Run App with Production'
-  task :prod do
-    sh 'flutter run --flavor production -t lib/main_production.dart'
-  end
+desc 'Run App with Development'
+task :dev do
+  sh 'flutter run --flavor development -t lib/main_development.dart'
 end
 
-task :run do
-  Rake::Task['run:dev'].invoke
+desc 'Run App with Staging'
+task :stg do
+  sh 'flutter run --flavor staging -t lib/main_staging.dart'
+end
+
+desc 'Run App with Production'
+task :prd do
+  sh 'flutter run --flavor production -t lib/main_production.dart'
 end
 
 desc 'open Xcode Workspace'
@@ -45,28 +44,21 @@ task :i10n do
   sh 'sh scripts/i10n.sh'
 end
 
-desc 'フレーズ更新'
-task :phrases do
-  puts '[Task phrases]'
-  sh 'python scripts/convertor.py'
-end
-
-desc 'ボイス更新'
-task :voices => [:phrases] do
-  puts '[Task voices]'
-  sh 'python scripts/rename.py'
-end
-
 desc 'スプラッシュ画像更新'
 task :splash do
   puts '[Task splash]'
-  sh 'flutter pub pub run flutter_native_splash:create'
+  sh 'flutter pub run flutter_native_splash:create'
 end
 
 desc 'アイコン更新'
 task :icon do
   puts '[Task icon]'
-  sh 'flutter packages pub run flutter_launcher_icons:main'
+  sh 'flutter pub run flutter_launcher_icons:main'
+end
+
+desc 'アセットダウンロード'
+task :assets => ['./assets/'] do
+  puts 'assets placed'
 end
 
 desc 'テスト'
@@ -76,6 +68,7 @@ task :test do
   sh 'flutter test --coverage'
 
   # TODO: flutter driver test
+  # TODO: codecov
   
   # clound functions test
   cd 'functions' do
@@ -83,3 +76,52 @@ task :test do
   end
 end
 
+# credentials
+file './assets/' do
+  abort if !confirm('Download \'./assets/\'')
+  sh 'curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG'
+  sh 'unzip -qq assets.zip'
+  sh 'rm -rf ./assets.zip ./__MACOSX'
+end
+
+file './.env/.env' do
+  abort if !confirm('Download \'./.env/.env\'')
+end
+
+# firebase server credential
+file './.env/credential.json' do
+  # TODO download secrets
+  puts 'download from Firebase console'
+end
+
+# firebase web client credential
+file './.env/worldrize-9248e-d680634159a0.json' do
+  # TODO download secrets
+  puts 'download from Firebase console'
+end
+
+# firebase android credential
+file './android/app/google-services.json' do
+  # TODO download secrets
+  puts 'download from Firebase console'
+end
+
+# firebase ios credential
+file './ios/Runner/GoogleService-Info.plist' do
+  puts 'download from Firebase console'
+end
+
+desc 'setup'
+task :setup => [
+  './assets/', 
+  './.env/.env',
+  './.env/credential.json',
+  './.env/worldrize-9248e-d680634159a0.json',
+  './android/app/google-services.json',
+  './ios/Runner/GoogleService-Info.plist',
+] do
+  Rake::Task[:gen].invoke
+  Rake::Task[:i10n].invoke
+  Rake::Task[:splash].invoke
+  Rake::Task[:icon].invoke
+end

@@ -82,7 +82,7 @@ mixin Messages {
       );
 
   String get testLimitAlertDetail => Intl.message(
-        'テストは1日に3回まで受講することができます(未実装)',
+        'テストは1日に3回まで受講することができます',
         name: 'testLimitAlertDetail',
       );
 

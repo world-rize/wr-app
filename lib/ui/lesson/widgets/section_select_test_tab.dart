@@ -87,7 +87,7 @@ class _TestTabState extends State<TestTab> {
             .map(
               (section) => Padding(
                 padding: const EdgeInsets.all(8),
-                child: SectionRow(
+                child: TestSectionRow(
                   section: section,
                   onTap: () {
                     _onTapTestSection(section);

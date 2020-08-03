@@ -22,6 +22,7 @@ if (flutterVersionName == null) {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
@@ -32,15 +33,15 @@ android {
     productFlavors {
         development {
             dimension "flavor-type"
-            applicationIdSuffix ".dev"
+            // applicationIdSuffix ".dev"
         }
         staging {
             dimension "flavor-type"
-            applicationIdSuffix ".stg"
+            // applicationIdSuffix ".stg"
         }
         production {
             dimension "flavor-type"
-            applicationIdSuffix ".prd"
+            // applicationIdSuffix ".prd"
         }
     }
 
@@ -81,9 +82,15 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.mikepenz:aboutlibraries:6.1.1"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // add the Firebase SDK for Google Analytics
+    implementation 'com.google.firebase:firebase-analytics:17.2.2'
+//    implementation 'com.google.gms:google-services:4.2.0'
+//    implementation 'com.google.firebase:firebase-ads:18.0.0'
 }
 
 // solution <https://qiita.com/noobar/items/f40fb0e30384020bfb09>

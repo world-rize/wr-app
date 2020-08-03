@@ -65,7 +65,7 @@ class UserService {
     final res = await _userRepository.favoritePhrase(FavoritePhraseRequestDto(
         uid: user.uuid, phraseId: phraseId, value: value));
 
-    if (!res.success) {
+    if (!(res?.success ?? false)) {
       throw Exception('failed');
     }
 
@@ -81,7 +81,7 @@ class UserService {
     final res =
         await _userRepository.updateUser(UpdateUserRequestDto(user: user));
 
-    if (!res.success) {
+    if (!(res?.success ?? false)) {
       throw Exception('failed');
     }
 
@@ -99,7 +99,7 @@ class UserService {
       point: point,
     ));
 
-    if (!res.success) {
+    if (!(res?.success ?? false)) {
       throw Exception('failed');
     }
 
@@ -111,7 +111,7 @@ class UserService {
     final res =
         await _userRepository.updateUser(UpdateUserRequestDto(user: user));
 
-    if (!res.success) {
+    if (!(res?.success ?? false)) {
       throw Exception('failed');
     }
 
@@ -126,7 +126,7 @@ class UserService {
     final res =
         await _userRepository.updateUser(UpdateUserRequestDto(user: user));
 
-    if (!res.success) {
+    if (!(res?.success ?? false)) {
       throw Exception('failed');
     }
 
@@ -136,10 +136,9 @@ class UserService {
   /// do test
   Future<User> doTest({@required User user}) async {
     user.testLimitCount--;
-    final res = await _userRepository
-        .doTest(DoTestRequestDto(uid: user.uuid, sectionId: ''));
+    final res = await _userRepository.doTest(DoTestRequestDto(uid: user.uuid));
 
-    if (!res.success) {
+    if (!(res?.success ?? false)) {
       throw Exception('failed');
     }
 
@@ -151,7 +150,7 @@ class UserService {
     final res =
         await _userRepository.updateUser(UpdateUserRequestDto(user: user));
 
-    if (!res.success) {
+    if (!(res?.success ?? false)) {
       throw Exception('failed');
     }
 

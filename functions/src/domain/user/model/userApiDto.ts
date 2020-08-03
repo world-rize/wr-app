@@ -44,8 +44,9 @@ export interface GetPointResponse {
   success: boolean
 }
 export interface DoTestRequest {}
-
-export interface DoTestResponse {}
+export interface DoTestResponse {
+  success: boolean
+}
 
 export interface DeleteUserRequest {}
 export interface DeleteUserResponse {

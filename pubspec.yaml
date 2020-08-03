@@ -28,7 +28,7 @@ dependencies:
   # https://github.com/FirebaseExtended/flutterfire/issues/2084
   firebase_core: 0.4.4
   firebase_auth: 0.15.3
-  firebase_admob: ^0.9.3+2
+  firebase_admob: ^0.9.3+4
   firebase_analytics: ^1.0.4
   cloud_functions: ^0.4.2+3
   google_sign_in: ^4.4.6
@@ -101,14 +101,15 @@ flutter:
     - assets/
     # 国旗アイコン https://www.smashingmagazine.com/2010/04/the-ultimate-free-web-designer-s-icon-set-750-icons-incl-psd-sources/
     - assets/icon/
-    - assets/voice/
+    - assets/voices/
     - assets/thumbnails/
     - .env/
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/icon.jpg"
+  image_path_android: "assets/icon/icon_circle.png"
+  image_path_ios: "assets/icon/icon.jpg"
 
 flutter_native_splash:
   image: "assets/icon/icon.jpg"
