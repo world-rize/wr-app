@@ -11,9 +11,11 @@ class ShadowedContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(

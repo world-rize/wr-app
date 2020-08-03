@@ -1,6 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
@@ -9,42 +8,44 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/lesson_notifier.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/lesson/pages/favorite_page.dart';
+import 'package:wr_app/ui/lesson/pages/newcoming_page.dart';
 import 'package:wr_app/ui/lesson/pages/request_page.dart';
 import 'package:wr_app/ui/lesson/pages/section_select_page.dart';
 import 'package:wr_app/ui/lesson/widgets/carousel_cell.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
-import 'package:wr_app/util/extension/collection_extension.dart';
-import 'package:wr_app/util/extension/padding_extension.dart';
+import 'package:wr_app/ui/widgets/header1.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// Lesson > index
 /// - top page of lesson
 class LessonIndexPage extends StatelessWidget {
-  Future<void> _sendAnalyticsEvent(BuildContext context) async {
-    final userStore = Provider.of<UserNotifier>(context);
-    if (userStore == null) {
-      return;
-    }
-    final analytics = Provider.of<FirebaseAnalytics>(context);
-    await analytics.logEvent(
-      name: 'test_event',
-      parameters: {
-        'uid': userStore.user.uuid,
-      },
-    );
-  }
+//  Future<void> _sendAnalyticsEvent(BuildContext context) async {
+//    final userStore = Provider.of<UserNotifier>(context);
+//    if (userStore == null) {
+//      return;
+//    }
+//    final analytics = Provider.of<FirebaseAnalytics>(context);
+//    await analytics.logEvent(
+//      name: 'test_event',
+//      parameters: {
+//        'uid': userStore.user.uuid,
+//      },
+//    );
+//  }
 
   @override
   Widget build(BuildContext context) {
     final userStore = Provider.of<UserNotifier>(context);
+    final user = userStore.getUser();
     final lessonNotifier = Provider.of<LessonNotifier>(context);
 
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          const GFTypography(
+          const Header1(
             text: 'Lesson',
-            type: GFTypographyType.typo1,
             dividerColor: GFColors.PRIMARY,
           ),
 
@@ -59,7 +60,7 @@ class LessonIndexPage extends StatelessWidget {
                     (index, lesson) => CarouselCell(
                       lesson: lesson,
                       index: index,
-                      locked: !userStore.user.isPremium && 3 <= index,
+                      locked: !user.isPremium && 3 <= index,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -73,9 +74,8 @@ class LessonIndexPage extends StatelessWidget {
             ),
           ),
 
-          const GFTypography(
+          const Header1(
             text: 'Favorite',
-            type: GFTypographyType.typo1,
             dividerColor: GFColors.DANGER,
           ),
 
@@ -86,7 +86,7 @@ class LessonIndexPage extends StatelessWidget {
                 return const Padding(
                   padding: EdgeInsets.all(16),
                   child: Text(
-                    'no favorites',
+                    'No favorites',
                     style: TextStyle(fontSize: 20, color: Colors.grey),
                   ),
                 );
@@ -109,39 +109,50 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           // New Coming Phrases Section
-          const GFTypography(
+          const Header1(
             text: 'New coming phrases',
-            type: GFTypographyType.typo1,
             dividerColor: GFColors.SUCCESS,
           ),
 
           FutureBuilder<List<Phrase>>(
-              future: lessonNotifier.newComingPhrases(),
-              builder: (_, res) {
-                if (!res.hasData || res.data.isEmpty) {
-                  return const Text('no new coming phrases');
-                } else {
-                  final p = res.data.first;
-                  return Column(
-                    children: [
-                      PhraseCard(
-                        phrase: p,
-                        favorite: userStore.user.isFavoritePhrase(p),
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(builder: (_) => FavoritePage()),
-                          );
-                        },
-                      ),
-                    ],
-                  );
-                }
-              }),
+            future: lessonNotifier.newComingPhrases(),
+            builder: (_, res) {
+              if (!res.hasData || res.data.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Text(
+                    'No new coming phrases',
+                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                  ),
+                );
+              } else {
+                final p = res.data.first;
+                return Column(
+                  children: [
+                    PhraseCard(
+                      phrase: p,
+                      favorite: user.isFavoritePhrase(p),
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => NewComingPage()),
+                        );
+                      },
+                      onFavorite: () {
+                        userStore.favoritePhrase(
+                          phraseId: p.id,
+                          value: !user.isFavoritePhrase(p),
+                        );
+                      },
+                    ),
+                  ],
+                );
+              }
+            },
+          ),
 
           // Request Section
-          const GFTypography(
+          const Header1(
             text: 'Request',
-            type: GFTypographyType.typo1,
             dividerColor: GFColors.SECONDARY,
           ),
 

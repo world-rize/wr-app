@@ -9,6 +9,7 @@ import 'package:wr_app/ui/mypage/pages/friends_page.dart';
 import 'package:wr_app/ui/mypage/pages/gift_page.dart';
 import 'package:wr_app/ui/mypage/pages/upgrade_page.dart';
 
+/// mypage > index
 class MyPagePage extends StatelessWidget {
   Widget _menuCell({
     @required String title,
@@ -49,8 +50,8 @@ class MyPagePage extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: Column(
               children: <Widget>[
-                Text('${userStore.user.name} さん'),
-                if (userStore.user.isPremium)
+                Text('${userStore.getUser().name} さん'),
+                if (userStore.getUser().isPremium)
                   const Padding(
                     padding: EdgeInsets.all(8),
                     child: GFBadge(
@@ -59,7 +60,7 @@ class MyPagePage extends StatelessWidget {
                       shape: GFBadgeShape.pills,
                     ),
                   ),
-                Text(userStore.user.email),
+                Text(userStore.getUser().email),
               ],
             ),
           ),
@@ -68,7 +69,7 @@ class MyPagePage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Icon(Icons.attach_money),
-                Text(I.of(context).points(userStore.user.point)),
+                Text(I.of(context).points(userStore.getUser().point)),
               ],
             ),
           )
@@ -141,18 +142,18 @@ class MyPagePage extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-//        Padding(
-//          padding: const EdgeInsets.all(8),
-//          child: userInfo,
-//        ),
-//        Padding(
-//          padding: const EdgeInsets.all(8),
-//          child: gridMenus,
-//        ),
-//        Padding(
-//          padding: const EdgeInsets.all(8),
-//          child: settings,
-//        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: userInfo,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: gridMenus,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: settings,
+        ),
       ],
     );
   }

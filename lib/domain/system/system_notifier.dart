@@ -1,39 +1,71 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/foundation.dart';
-import 'package:package_info/package_info.dart';
+import 'package:flutter/material.dart';
 import 'package:wr_app/domain/system/system_service.dart';
 import 'package:wr_app/util/flavor.dart';
-import 'package:wr_app/util/logger.dart';
 
 /// システム情報など
 class SystemNotifier with ChangeNotifier {
-  SystemService _systemService;
-
-  /// シングルトンインスタンス
-  static SystemNotifier _cache;
-
   factory SystemNotifier({
     @required SystemService systemService,
     @required Flavor flavor,
-    @required PackageInfo pubSpec,
   }) {
-    return _cache ??= SystemNotifier._internal(
-        systemService: systemService, flavor: flavor, pubSpec: pubSpec);
+    return _cache ??=
+        SystemNotifier._internal(systemService: systemService, flavor: flavor);
   }
 
   SystemNotifier._internal({
     @required SystemService systemService,
     @required this.flavor,
-    @required this.pubSpec,
   }) {
-    this._systemService = systemService;
-    InAppLogger.log('✨ init SystemStore');
+    _systemService = systemService;
   }
+
+  SystemService _systemService;
+
+  /// シングルトンインスタンス
+  static SystemNotifier _cache;
 
   /// flavor
   final Flavor flavor;
 
-  /// pubspec
-  final PackageInfo pubSpec;
+  ThemeMode getThemeMode() {
+    if (getFollowSystemTheme()) {
+      return ThemeMode.system;
+    } else if (getDarkMode()) {
+      return ThemeMode.dark;
+    } else {
+      return ThemeMode.light;
+    }
+  }
+
+  bool getDarkMode() => _systemService.getDarkMode();
+
+  void setDarkMode({bool value}) {
+    _systemService.setDarkMode(value: value);
+    notifyListeners();
+  }
+
+  bool getFollowSystemTheme() => _systemService.getFollowSystemTheme();
+
+  void setFollowSystemTheme({bool value}) {
+    _systemService.setFollowSystemTheme(value: value);
+    notifyListeners();
+  }
+
+  bool getFirstLaunch() => _systemService.getFirstLaunch();
+
+  void setFirstLaunch({bool value}) {
+    _systemService.setFirstLaunch(value: value);
+    notifyListeners();
+  }
+
+  Future<void> notify({
+    @required String title,
+    @required String body,
+    @required String payload,
+  }) {
+    return _systemService.notify(title: title, body: body, payload: payload);
+  }
 }

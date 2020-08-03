@@ -1,6 +1,0 @@
-GET https://cdn.contentful.com/spaces/{{WR_CONTENTFUL_SPACE_ID}}/entries
-Authorization: Bearer {{WR_CONTENTFUL_TOKEN}}
-
-{
-  "content_type": "Article"
-}

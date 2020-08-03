@@ -4,13 +4,13 @@ import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/lesson_service.dart';
 import 'package:wr_app/domain/user/user_service.dart';
-import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/toast.dart';
 
 class LessonNotifier with ChangeNotifier {
   LessonService _lessonService;
   UserService _userService;
 
-  List<Lesson> _lessons;
+  List<Lesson> _lessons = [];
 
   /// singleton
   static LessonNotifier _cache;
@@ -19,16 +19,16 @@ class LessonNotifier with ChangeNotifier {
     @required LessonService lessonService,
     @required UserService userService,
   }) {
-    return _cache ??= LessonNotifier._internal(lessonService: lessonService);
+    return _cache ??= LessonNotifier._internal(
+        userService: userService, lessonService: lessonService);
   }
 
   LessonNotifier._internal({
     @required LessonService lessonService,
     @required UserService userService,
-  }) {
-    _lessonService = lessonService;
-    _userService = userService;
-    InAppLogger.log('[ArticleStore] init');
+  })  : _lessonService = lessonService,
+        _userService = userService {
+    loadAllLessons();
   }
 
   Future<void> loadAllLessons() async {
@@ -38,7 +38,7 @@ class LessonNotifier with ChangeNotifier {
   List<Lesson> get lessons => _lessons;
 
   List<Phrase> phrasesWhere(bool Function(Phrase) filter) {
-    return _lessons.expand((lesson) => lesson.phrases).where(filter);
+    return _lessons.expand((lesson) => lesson.phrases).where(filter).toList();
   }
 
   List<Phrase> get phrases => phrasesWhere((_) => true);
@@ -54,10 +54,24 @@ class LessonNotifier with ChangeNotifier {
 
   Future<List<Phrase>> newComingPhrases() async {
     // TODO
-    return phrasesWhere((p) => p.id.endsWith('5'));
+    return phrasesWhere((p) => int.parse(p.id) < 20);
   }
 
   Future<void> sendPhraseRequest({@required String text}) {
-    return _lessonService.sendPhraseRequest(text: text);
+    return _lessonService
+        .sendPhraseRequest(text: text)
+        .catchError(NotifyToast.error);
+  }
+
+  bool getShowTranslation() => _lessonService.getShowTranslation();
+
+  void toggleShowTranslation() {
+    _lessonService.toggleShowTranslation();
+    notifyListeners();
+  }
+
+  void toggleShowText() {
+    _lessonService.toggleShowText();
+    notifyListeners();
   }
 }

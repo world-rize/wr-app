@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get_it/get_it.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,14 +12,12 @@ import 'package:wr_app/domain/system/system_notifier.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/ui/onboarding/pages/index.dart';
+import 'package:wr_app/ui/on_boarding/pages/index.dart';
 import 'package:wr_app/ui/settings/pages/account_settings_page.dart';
-import 'package:wr_app/ui/settings/pages/all_phrases_page.dart';
 import 'package:wr_app/ui/settings/pages/api_test_page.dart';
 import 'package:wr_app/ui/settings/pages/dark_mode_page.dart';
 import 'package:wr_app/ui/settings/pages/inapp_log_page.dart';
 import 'package:wr_app/util/flavor.dart';
-import 'package:wr_app/util/notification.dart';
 
 /// 設定ページ
 class SettingsPage extends StatefulWidget {
@@ -26,6 +26,12 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsPage> {
+  // static const platform = MethodChannel('sample/platform');
+
+//  Future<void> toOssLicense() {
+//    return platform.invokeMethod('toOssLicense', {});
+//  }
+
   // account section
   SettingsSection accountSection() {
     final userStore = Provider.of<UserNotifier>(context);
@@ -97,6 +103,7 @@ class _SettingsState extends State<SettingsPage> {
   // about
   SettingsSection aboutSection() {
     final system = Provider.of<SystemNotifier>(context);
+    final pubSpec = GetIt.I<PackageInfo>();
 
     return SettingsSection(
       title: I.of(context).otherSection,
@@ -155,7 +162,21 @@ class _SettingsState extends State<SettingsPage> {
         ),
         SettingsTile(
           title: 'アプリバージョン',
-          subtitle: system.pubSpec.version,
+          subtitle: pubSpec.version,
+        ),
+        SettingsTile(
+          title: 'ライセンス',
+          onTap: () {
+            final pubSpec = GetIt.I<PackageInfo>();
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => LicensePage(
+                  applicationName: pubSpec.appName,
+                  applicationVersion: pubSpec.version,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -174,16 +195,19 @@ class _SettingsState extends State<SettingsPage> {
           title: 'Flutter Flavor',
           subtitle: envStore.flavor.toShortString(),
         ),
-        SettingsTile(
-          title: 'All Phrases',
-          subtitle: '${notifier.phrases.length} Phrases',
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => AllPhrasesPage(
-                      filter: (phrase) => true,
-                    )));
-          },
-        ),
+//        SettingsTile(
+//          title: 'All Phrases',
+//          subtitle: '${notifier.phrases.length} Phrases',
+//          onTap: () {
+//            Navigator.of(context).push(
+//              MaterialPageRoute(
+//                builder: (_) => AllPhrasesPage(
+//                  filter: (phrase) => true,
+//                ),
+//              ),
+//            );
+//          },
+//        ),
         SettingsTile(
           title: 'InApp Log',
           onTap: () {
@@ -207,12 +231,11 @@ class _SettingsState extends State<SettingsPage> {
               userStore.changePlan(Membership.normal);
             }
           },
-          switchValue: userStore.user.membership == Membership.pro,
+          switchValue: userStore.getUser().isPremium,
         ),
         SettingsTile.switchTile(
           title: 'Paint Size Enabled',
           onToggle: (value) {
-            print(value);
             debugPaintSizeEnabled = value;
           },
           switchValue: debugPaintSizeEnabled,
@@ -220,11 +243,12 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'notifier test',
           onTap: () {
-            Provider.of<AppNotifier>(context, listen: false)
-              ..showNotification(
-                  title: 'WorldRIZe',
-                  body: 'notifier test',
-                  payload: 'success');
+            final systemNotifier =
+                Provider.of<SystemNotifier>(context, listen: false);
+            final pubSpec = GetIt.I<PackageInfo>();
+            // ignore: cascade_invocations
+            systemNotifier.notify(
+                title: pubSpec.appName, body: 'test', payload: 'ok');
           },
         )
       ],

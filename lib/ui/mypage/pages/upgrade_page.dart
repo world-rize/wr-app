@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 
+/// mypage > index > UpgradePage
 class UpgradePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

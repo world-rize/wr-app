@@ -1,6 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:contentful_rich_text/contentful_rich_text.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/article/model/article.dart';
 
@@ -8,7 +7,7 @@ import 'package:wr_app/domain/article/model/article.dart';
 class ArticleDetailPage extends StatelessWidget {
   const ArticleDetailPage({this.article});
 
-  final Article article;
+  final ArticleDigest article;
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +50,11 @@ class ArticleDetailPage extends StatelessWidget {
               children: <Widget>[
                 headline,
 
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: ContentfulRichText(article.fields.content)
-                      .documentToWidgetTree,
-                ),
+//                Padding(
+//                  padding: const EdgeInsets.all(8),
+//                  child: ContentfulRichText(article.fields.content)
+//                      .documentToWidgetTree,
+//                ),
 
 //                Markdown(
 //                  shrinkWrap: true,

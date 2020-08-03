@@ -10,7 +10,7 @@ class PhraseSampleView extends StatelessWidget {
   const PhraseSampleView({
     @required this.example,
     this.onMessageTapped,
-    this.showTranslation = true,
+    @required this.showTranslation,
     this.showKeyphrase = true,
   });
 

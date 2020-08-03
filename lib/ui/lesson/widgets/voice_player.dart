@@ -9,17 +9,25 @@ import 'package:wr_app/domain/lesson/model/phrase.dart';
 /// phrase detail voice player
 class VoicePlayer with ChangeNotifier {
   VoicePlayer({@required this.phrase, @required this.onError}) {
-    isPlaying = false;
     speed = 1.0;
     locale = _locales[0];
 
-    _player = AudioPlayer()
+    final _fixedPlayer = AudioPlayer()
       ..onPlayerStateChanged.listen((AudioPlayerState state) {
-        isPlaying = state == AudioPlayerState.PLAYING;
+        print(state);
+        notifyListeners();
       });
 
-    _cache = AudioCache(fixedPlayer: _player)
-      ..load(voicePath).catchError(onError);
+    _player = AudioCache(fixedPlayer: _fixedPlayer);
+
+    playKeyPhrase();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _player.fixedPlayer.stop();
+    _player.fixedPlayer.dispose();
   }
 
   /// voice playing speeds
@@ -35,7 +43,7 @@ class VoicePlayer with ChangeNotifier {
   final Function onError;
 
   /// voice is playing?
-  bool isPlaying;
+  bool get isPlaying => _player.fixedPlayer.state == AudioPlayerState.PLAYING;
 
   /// current playing speed
   double speed;
@@ -44,8 +52,7 @@ class VoicePlayer with ChangeNotifier {
   String locale;
 
   // Player
-  AudioPlayer _player;
-  AudioCache _cache;
+  AudioCache _player;
 
   /// return voice asset path
   String get voicePath {
@@ -54,28 +61,36 @@ class VoicePlayer with ChangeNotifier {
 
   /// play key phrase on entering the page
   void playKeyPhrase() {
-    throw UnimplementedError();
-  }
-
-  /// play voices
-  void play(Message message) {
-    _cache.play(message.assets.voice[locale]).catchError(onError);
+    _player.play(phrase.assets.voice[locale]).catchError(onError);
     notifyListeners();
   }
 
-  void toggle() {
-    if (!isPlaying) {
-      _cache.play(voicePath).catchError(onError);
-    } else {
-      _cache.fixedPlayer.stop();
-    }
-    notifyListeners();
+  Future<void> play(Message message) async {
+    await _player.play(message.assets.voice[locale]);
+  }
+
+  Future<void> playAll() async {
+    // dirty
+    await Future.forEach(phrase.example.value, (message) async {
+      await _player.load(message.assets.voice[locale]);
+      final d = await _player.fixedPlayer.getDuration();
+      await _player.play(message.assets.voice[locale]);
+      await Future.delayed(Duration(milliseconds: d + 500));
+    });
+  }
+
+  Future<void> pause() async {
+    await _player.fixedPlayer.pause();
+  }
+
+  Future<void> toggle() async {
+    await (!isPlaying ? playAll() : pause());
   }
 
   void toggleSpeed() {
     final _index = _playbackSpeeds.indexOf(speed);
     final _next = _playbackSpeeds[(_index + 1) % _playbackSpeeds.length];
-    _cache.fixedPlayer.setPlaybackRate(playbackRate: _next);
+    _player.fixedPlayer.setPlaybackRate(playbackRate: _next);
     speed = _next;
     notifyListeners();
   }

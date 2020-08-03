@@ -3,18 +3,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/preferences_notifier.dart';
+import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/user_notifier.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/agency/index.dart';
 import 'package:wr_app/ui/column/pages/index.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/lesson/pages/index.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_search_iconbutton.dart';
 import 'package:wr_app/ui/mypage/pages/index.dart';
-import 'package:wr_app/ui/onboarding/pages/index.dart';
+import 'package:wr_app/ui/on_boarding/pages/index.dart';
 import 'package:wr_app/ui/settings/pages/index.dart';
 import 'package:wr_app/ui/travel/index.dart';
-import 'package:wr_app/util/extension/padding_extension.dart';
 
 /// root view
 class RootView extends StatefulWidget {
@@ -39,12 +39,15 @@ class _RootViewState extends State<RootView>
 
     /// on first launch, show on-boarding page
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final loggedIn =
+          Provider.of<UserNotifier>(context, listen: false).loggedIn;
       final firstLaunch =
-          Provider.of<PreferenceNotifier>(context, listen: false).firstLaunch;
-      print('first launch: $firstLaunch');
+          Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
+
+      print('first launch: $firstLaunch, logged in: $loggedIn');
 
       // show on boarding modal
-      if (firstLaunch) {
+      if (firstLaunch || !loggedIn) {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => OnBoardingPage(),
@@ -58,7 +61,12 @@ class _RootViewState extends State<RootView>
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<UserNotifier>(context);
+    final user = notifier.getUser();
     final primaryColor = Theme.of(context).primaryColor;
+
+    if (!notifier.loggedIn) {
+      return const Scaffold();
+    }
 
     final header = Row(
       children: <Widget>[
@@ -68,7 +76,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          I.of(context).points(notifier.user?.point),
+          I.of(context).points(user.point),
           style: const TextStyle(color: Colors.white),
         ),
       ],
@@ -108,7 +116,7 @@ class _RootViewState extends State<RootView>
           title: Text(I.of(context).bottomNavColumn),
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.airplanemode_active),
+          icon: const Icon(Icons.library_books),
           title: Text(I.of(context).bottomNavTravel),
         ),
         BottomNavigationBarItem(

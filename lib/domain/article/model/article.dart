@@ -8,74 +8,71 @@ part 'article.g.dart';
 
 /// 記事
 @JsonSerializable()
-class Article extends Entry<ArticleFields> {
-  Article({
-    SystemFields sys,
-    ArticleFields fields,
+class ArticleDigest extends Entry<ArticleDigestFields> {
+  ArticleDigest({
+    @required SystemFields sys,
+    @required ArticleDigestFields fields,
   }) : super(sys: sys, fields: fields);
 
-  Article.fromMock({String title, String content})
-      : super(
-          sys: null,
-          fields: ArticleFields(
-            id: 'aaa',
+  ArticleDigest.fromMock({
+    @required String title,
+    @required String category,
+    @required String url,
+    @required String summary,
+  }) : super(
+          sys: SystemFields(),
+          fields: ArticleDigestFields(
             title: title,
-            subtitle: '',
-            category: '',
-            tags: const <String>[],
-            content: content,
-            createdat: DateTime.now(),
-            assets: const <Asset>[],
+            url: url,
+            category: category,
+            tags: '',
+            thumbnail: Asset(
+              fields: AssetFields(
+                file: AssetFile(url: 'https://source.unsplash.com/random'),
+              ),
+            ),
+            summary: summary,
           ),
         );
 
-  static Article fromJson(Map<String, dynamic> json) => _$ArticleFromJson(json);
+  static ArticleDigest fromJson(Map<String, dynamic> json) =>
+      _$ArticleDigestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ArticleToJson(this);
+  Map<String, dynamic> toJson() => _$ArticleDigestToJson(this);
 }
 
 /// 記事
 @JsonSerializable()
-class ArticleFields extends Equatable {
-  const ArticleFields({
-    @required this.id,
+class ArticleDigestFields extends Equatable {
+  const ArticleDigestFields({
     @required this.title,
-    @required this.subtitle,
+    @required this.url,
     @required this.category,
     @required this.tags,
-    @required this.content,
-    @required this.createdat,
-    @required this.assets,
+    @required this.thumbnail,
+    @required this.summary,
   }) : super();
 
-  factory ArticleFields.fromJson(Map<String, dynamic> json) =>
-      _$ArticleFieldsFromJson(json);
-
-  /// id
-  final String id;
+  factory ArticleDigestFields.fromJson(Map<String, dynamic> json) =>
+      _$ArticleDigestFieldsFromJson(json);
 
   /// タイトル
   final String title;
 
-  /// サブタイトル
-  final String subtitle;
+  /// URL
+  final String url;
 
   /// カテゴリ
   final String category;
 
   /// タグ(,区切り)
-  final List<String> tags;
+  final String tags;
 
-  /// 内容(マークダウンを想定?)
-  final dynamic content;
+  final Asset thumbnail;
 
-  /// 投稿日時
-  final DateTime createdat;
+  final String summary;
 
-  /// 外部URL
-  final List<Asset> assets;
-
-  Map<String, dynamic> toJson() => _$ArticleFieldsToJson(this);
+  Map<String, dynamic> toJson() => _$ArticleDigestFieldsToJson(this);
 
   @override
   List<Object> get props => [title];

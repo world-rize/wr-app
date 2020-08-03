@@ -1,9 +1,17 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-/// Flavor
+/// app flavors
 enum Flavor {
+  /// Development
+  ///
   development,
+
+  /// Staging
+  ///
   staging,
+
+  /// Production
+  ///
   production,
 }
 

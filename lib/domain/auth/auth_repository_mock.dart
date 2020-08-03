@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
+import 'package:wr_app/domain/auth/mock_firebase_user.dart';
 
 /// ## firebase ログイン方法
 /// - email & password
@@ -33,46 +34,27 @@ class AuthMockRepository implements IAuthRepository {
   /// メールアドレスとパスワードでサインアップ
   @override
   Future<FirebaseUser> signUpWithEmailAndPassword(
-      String email, String password) {
-    return fbAuth
-        .createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-        .then((res) => res.user);
+      String email, String password) async {
+    return MockFirebaseUser();
   }
 
   /// sign in with email & password
   @override
   Future<FirebaseUser> signInWithEmailAndPassword(
-      String email, String password) {
-    return fbAuth
-        .signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-        .then((res) => res.user);
+      String email, String password) async {
+    return MockFirebaseUser();
   }
 
   /// sign in with google
   @override
   Future<FirebaseUser> signInWithGoogleSignIn() async {
-    final _credential = await _getGoogleAuthCredential();
-    assert(_credential != null);
-
-    // credential -> firebase user
-    final authResult =
-        await fbAuth.signInWithCredential(_credential).catchError(print);
-
-    assert(authResult != null);
-
-    return authResult.user;
+    return MockFirebaseUser();
   }
 
   /// sign in with sign in apple
   @override
   Future<FirebaseUser> signInWithSignInWithApple() async {
-    throw UnimplementedError();
+    return MockFirebaseUser();
   }
 
   /// sign out
@@ -80,4 +62,11 @@ class AuthMockRepository implements IAuthRepository {
   Future<void> signOut() {
     return fbAuth.signOut();
   }
+
+  @override
+  Future<void> updatePassword(
+      String currentPassword, String newPassword) async {}
+
+  @override
+  Future<void> updateEmail(String newEmail) async {}
 }

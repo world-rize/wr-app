@@ -30,7 +30,7 @@ class User {
       uuid: '',
       userId: '',
       email: '',
-      age: 0,
+      age: '0',
       name: '',
       point: 0,
       testLimitCount: 0,
@@ -45,7 +45,7 @@ class User {
       uuid: 'test-test',
       userId: '0123-4567-89',
       email: 'hoge@example.com',
-      age: 10,
+      age: '10',
       name: 'テスト',
       point: 100,
       testLimitCount: 3,
@@ -68,7 +68,7 @@ class User {
   String email;
 
   /// age
-  int age;
+  String age;
 
   /// 名前
   String name;

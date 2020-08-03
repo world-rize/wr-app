@@ -10,10 +10,11 @@ import 'package:wr_app/domain/lesson/lesson_notifier.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/ui/extensions.dart';
 import 'package:wr_app/ui/lesson/pages/test_result_page.dart';
 import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
-import 'package:wr_app/util/extension/collection_extension.dart';
-import 'package:wr_app/util/extension/padding_extension.dart';
+import 'package:wr_app/util/analytics.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// テストページ
 ///
@@ -91,6 +92,10 @@ class TestPageState extends State<TestPage> {
         corrects: _corrects,
         answers: _answers,
       );
+
+      await sendEvent(event: AnalyticsEvent.finishTest);
+
+      Navigator.of(context).pop();
 
       await Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => TestResultPage(stats: stats)),
@@ -218,6 +223,7 @@ class QuestionView extends StatelessWidget {
           flex: 5,
           child: PhraseSampleView(
             example: phrase.example,
+            showTranslation: true,
             showKeyphrase: false,
           ),
         ),
