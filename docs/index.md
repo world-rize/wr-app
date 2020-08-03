@@ -1,8 +1,6 @@
 # WorldRIZe English
 [![Codemagic build status](https://api.codemagic.io/apps/5e78acb1064d84000c741bf5/5e78acb1064d84000c741bf4/status_badge.svg)]()
 
-![](figs/overview.svg)
-
 ## 🌴 Environments
 ### App
 - Android Studio 4.0
@@ -37,15 +35,18 @@ rake init # download & build assets
 rake dev # build & launch app
 ```
 
-## 📱 Client
+## 📚 Documents(WIP)
+[WR英会話 仕様書](https://docs.google.com/presentation/d/1Ah7lpa6Ici46kYndBFYTSzLDet39uR1AO9_nW7u72iI/edit?usp=sharing)
+
+### 📱 Client
 ### 🎨 UI
 [Client views](view.md)
 
-## 🔥 Functions
+### 🔥 Functions
 (WIP)
 
-## ⚙ CI/CD
+### ⚙ CI/CD
 [CI/CD](cicd.md)
 
-## 📚 Contents
+### 📚 Contents
 [Contents](contents.md)
