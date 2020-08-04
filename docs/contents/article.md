@@ -1,4 +1,4 @@
-# Article Contents
+# Article
 ## ArticlesDigest
 ホームページ内の記事の概要を表示し、
 クリックするとWebView内で記事を表示する

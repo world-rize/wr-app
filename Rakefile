@@ -76,6 +76,16 @@ task :test do
   end
 end
 
+desc 'ドキュメント'
+task :docs do
+  excludes = 'dart:async,dart:collection,dart:convert,dart:core,dart:developer,dart:io,dart:isolate,dart:math,dart:typed_data,dart:ui,dart:ffi,dart:html,dart:js,dart:js_util'
+  sh "FLUTTER_ROOT=~/flutter dartdoc --output docs/dartdoc --exclude \'#{excludes}\'"
+
+  cd 'functions' do
+    sh 'yarn docs'
+  end
+end
+
 # credentials
 file './assets/' do
   abort if !confirm('Download \'./assets/\'')

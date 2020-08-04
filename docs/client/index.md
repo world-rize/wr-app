@@ -1,4 +1,8 @@
 # 📱 Views
+## Dartdoc
+[Dartdoc](../dartdoc/index.html)
+
+## Status
 | emoji | status |
 |:--:|:--:|
 | ❌ | 未着手 |
@@ -8,12 +12,11 @@
 | 🔧 | 修正中 |
 | 💻 | デバッグ用画面 |
 
-## Status
 ## onboarding
 - ✅ index
-- 🔧 index > sign_in_page
-- 🔧 index > sign_up_page
-- 🎨 [index > accent_choice_page](./onboarding##)
+- 🔧 [index > sign_in_page](views/onboarding.md##サインイン)
+- 🔧 [index > sign_up_page](views/onboarding.md##サインアップ)
+- 🎨 [index > accent_choice_page](views/onboarding##アクセント選択画面)
 
 ## lesson
 - ✅ index
@@ -60,4 +63,4 @@
 
 ## Change logs
 ### 2020/08/01
-- WR英会話 仕様書に追従
+- [WR英会話 仕様書](../spec.pdf)に追従
