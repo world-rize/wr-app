@@ -80,7 +80,7 @@ class Phrase {
     ];
   }
 
-  /// 0 padded 4 digits number
+  /// e.g. "business-41"
   String id;
 
   /// タイトル

@@ -12,6 +12,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  dartdoc: ^0.32.1
 
   # store, model
   provider: ^4.0.2
