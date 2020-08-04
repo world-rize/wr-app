@@ -1,17 +1,16 @@
-# Functions API
-## User
-- [test](#test)
-- [readUser](#readUser)
-- [createUser](#createUser)
-- [favoritePhrase](#favoritePhrase)
-- [getPoint](#getPoint)
-- [doTest](#doTest)
+# User API
+- [test](##test)
+- [readUser](##readUser)
+- [createUser](##createUser)
+- [favoritePhrase](##favoritePhrase)
+- [getPoint](##getPoint)
+- [doTest](##doTest)
 
-### [WIP] test
+## test
 ```
 ```
 
-### [WIP] readUser
+## readUser
 ```ts
 interface ReadUserRequest {}
 interface ReadUserResponse {
@@ -19,7 +18,7 @@ interface ReadUserResponse {
 }
 ```
 
-### [WIP] createUser
+## createUser
 ```ts
 export interface CreateUserRequest {
   uuid: string
@@ -34,7 +33,7 @@ interface CreateUserResponse {
 }
 ```
 
-### [WIP] favoritePhrase
+## favoritePhrase
 ```ts
 interface FavoritePhraseRequest {
   phraseId: string
@@ -46,7 +45,7 @@ interface FavoritePhraseResponse {
 }
 ```
 
-### [WIP] getPoint
+## getPoint
 ```ts
 interface GetPointRequest {
   uuid: string
@@ -58,7 +57,7 @@ interface GetPointResponse {
 }
 ```
 
-### [WIP] doTest
+## doTest
 ```
 interface DoTestRequest {}
 interface DoTestResponse {}
