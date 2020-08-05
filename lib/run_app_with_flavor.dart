@@ -17,7 +17,7 @@ import 'package:wr_app/domain/auth/index.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/ui/app.dart';
+import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
@@ -70,20 +70,21 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   const useMock = false;
   // repos
-  final userRepository = useMock ? UserMockRepository() : UserRepository();
+  final userRepository =
+      useMock ? UserPersistenceMock() : UserPersistenceMock();
   final articleRepository =
       useMock ? ArticleMockRepository() : ArticleRepository();
   final lessonRepository =
-      useMock ? LessonMockRepository() : LessonRepository();
+      useMock ? LessonPersistenceMock() : LessonPersistence();
   final authRepository = useMock ? AuthMockRepository() : AuthRepository();
-  final systemRepository = SystemRepository();
+  final systemRepository = SystemPersistence();
 
   // services
   final userService = UserService(
-      authRepository: authRepository, userRepository: userRepository);
+      authPersistence: authRepository, userPersistence: userRepository);
   final articleService = ArticleService(articleRepository: articleRepository);
-  final lessonService = LessonService(lessonRepository: lessonRepository);
-  final systemService = SystemService(systemRepository: systemRepository);
+  final lessonService = LessonService(lessonPersistence: lessonRepository);
+  final systemService = SystemService(systemPersistence: systemRepository);
 
   // provide notifiers
   runApp(MultiProvider(
