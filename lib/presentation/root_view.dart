@@ -124,28 +124,63 @@ class _RootViewState extends State<RootView>
       ],
     );
 
+    final bottomRibbon = Container(
+      color: Colors.green,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: const [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                'XXX',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Icon(
+              Icons.chevron_right,
+              size: 24,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    );
+
+    final pageView = PageView(
+      controller: _pageController,
+      // physics: const NeverScrollableScrollPhysics(),
+      onPageChanged: (index) {
+        setState(() {
+          _index = index;
+        });
+      },
+      children: <Widget>[
+        LessonIndexPage(),
+        ColumnIndexPage(),
+        NotePage(),
+        AgencyIndexPage(),
+        MyPagePage(),
+      ],
+    );
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
         title: header,
         actions: actions,
       ),
-      body: PageView(
-        controller: _pageController,
-        // physics: const NeverScrollableScrollPhysics(),
-        onPageChanged: (index) {
-          setState(() {
-            _index = index;
-          });
-        },
-        children: <Widget>[
-          LessonIndexPage(),
-          ColumnIndexPage(),
-          NotePage(),
-          AgencyIndexPage(),
-          MyPagePage(),
-        ],
-      ),
+//      body: FooterLayout(
+//        body: pageView,
+//        footer: bottomRibbon,
+//      ),
+      body: pageView,
       bottomNavigationBar: navbar,
     );
   }
