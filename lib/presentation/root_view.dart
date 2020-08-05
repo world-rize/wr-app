@@ -111,7 +111,7 @@ class _RootViewState extends State<RootView>
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.library_books),
-          title: Text(I.of(context).bottomNavTravel),
+          title: Text(I.of(context).bottomNavNote),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.public),
@@ -141,7 +141,7 @@ class _RootViewState extends State<RootView>
         children: <Widget>[
           LessonIndexPage(),
           ColumnIndexPage(),
-          TravelPage(),
+          NotePage(),
           AgencyIndexPage(),
           MyPagePage(),
         ],

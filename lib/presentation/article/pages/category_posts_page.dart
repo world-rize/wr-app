@@ -48,36 +48,38 @@ class CategoryPosts extends StatelessWidget {
       builder: (_, snapshot) {
         return Stack(
           children: <Widget>[
-//            if (!snapshot.hasData)
-//              Center(
-//                child: OverlayLoading(loading: !snapshot.hasData),
-//              ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (snapshot.hasData && snapshot.data.isNotEmpty)
-                  ...snapshot.data
-                      .map(
-                        (article) => GestureDetector(
-                          onTap: () {
-                            //    Navigator.of(context).push(
-                            //      MaterialPageRoute(
-                            //        builder: (_) => ArticleDetailPage(article: article),
-                            //      ),
-                            //    );
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    ArticleWebViewPage(article: article),
-                              ),
-                            ); // open webview
-                          },
-                          child: ArticleOverView(article: article),
-                        ),
-                      )
-                      .toList()
+                if (snapshot.hasData)
+                  if (snapshot.data.isNotEmpty)
+                    ...snapshot.data
+                        .map(
+                          (article) => GestureDetector(
+                            onTap: () {
+                              //    Navigator.of(context).push(
+                              //      MaterialPageRoute(
+                              //        builder: (_) => ArticleDetailPage(article: article),
+                              //      ),
+                              //    );
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ArticleWebViewPage(article: article),
+                                ),
+                              ); // open webview
+                            },
+                            child: ArticleOverView(article: article),
+                          ),
+                        )
+                        .toList()
+                  else
+                    articleNotFound
                 else
-                  articleNotFound,
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
               ],
             ),
           ],

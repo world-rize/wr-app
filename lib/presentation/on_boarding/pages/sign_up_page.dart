@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/system/index.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/toast.dart';
-
-import '../notifier/on_boarding_notifier.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -30,15 +30,15 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _signUpEmailAndPassword() async {
-    final notifier = Provider.of<OnBoardingNotifier>(context, listen: false);
     print('email: $_email password: $_password');
 
     try {
-      await notifier
+      await Provider.of<UserNotifier>(context, listen: false)
           .signUpWithEmailAndPassword(_email, _password)
           .catchError(print);
 
-      notifier.setFirstLaunch(value: false);
+      Provider.of<SystemNotifier>(context, listen: false)
+          .setFirstLaunch(value: false);
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -53,11 +53,12 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Future<void> _signUpWithGoogle() async {
-    final notifier = Provider.of<OnBoardingNotifier>(context, listen: false);
     try {
-      await notifier.signUpWithGoogle();
+      await Provider.of<UserNotifier>(context, listen: false)
+          .signUpWithGoogle();
 
-      notifier.setFirstLaunch(value: false);
+      Provider.of<SystemNotifier>(context, listen: false)
+          .setFirstLaunch(value: false);
 
       await Navigator.pushReplacement(
         context,

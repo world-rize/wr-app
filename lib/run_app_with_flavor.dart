@@ -77,7 +77,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final userPersistence =
       useMock ? UserPersistenceMock() : UserPersistenceMock();
   final articlePersistence =
-      useMock ? ArticlePersistenceMock() : ArticlePersistence();
+      true ? ArticlePersistenceMock() : ArticlePersistence();
   final lessonPersistence =
       useMock ? LessonPersistenceMock() : LessonPersistence();
   final authPersistence = useMock ? AuthPersistence() : AuthPersistenceMock();

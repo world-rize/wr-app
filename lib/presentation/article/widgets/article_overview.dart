@@ -2,13 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/article/model/article.dart';
+import 'package:wr_app/presentation/article/pages/article_webview_page.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
-
-import '../pages/article_detail_page.dart';
 
 /// 記事見出し
 class ArticleOverView extends StatelessWidget {
-  const ArticleOverView({this.article});
+  const ArticleOverView({
+    @required this.article,
+  });
 
   final ArticleDigest article;
 
@@ -16,7 +17,7 @@ class ArticleOverView extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context).primaryTextTheme;
 
-    print(article.fields.toJson()['assets']);
+    print(article.fields.summary);
 
     return Padding(
       padding: const EdgeInsets.all(8),
@@ -59,8 +60,8 @@ class ArticleOverView extends StatelessWidget {
                   ? Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
-                        article.fields.tags,
-                        style: theme.headline4,
+                        article.fields.summary,
+                        style: theme.caption,
                       ),
                     )
                   : null,
@@ -72,7 +73,7 @@ class ArticleOverView extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => ArticleDetailPage(article: article),
+                        builder: (_) => ArticleWebViewPage(article: article),
                       ),
                     );
                   },

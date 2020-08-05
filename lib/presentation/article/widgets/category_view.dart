@@ -20,7 +20,7 @@ class CategoryView extends StatelessWidget {
           onTap(category);
         },
         child: Container(
-          constraints: const BoxConstraints.expand(height: 170),
+          constraints: const BoxConstraints.expand(height: 100),
           padding: const EdgeInsets.only(left: 16, bottom: 8, right: 16),
           decoration: BoxDecoration(
             image: DecorationImage(

@@ -3,12 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
-
-import '../notifier/on_boarding_notifier.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -39,8 +38,8 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Future<void> _signInEmailAndPassword(String email, String password) async {
-    final notifier = Provider.of<OnBoardingNotifier>(context, listen: false);
-    await notifier.loginWithEmailAndPassword(email, password);
+    await Provider.of<UserNotifier>(context, listen: false)
+        .loginWithEmailAndPassword(email, password);
     _gotoHome();
   }
 
