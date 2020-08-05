@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/article/index.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
-import 'package:wr_app/ui/column/pages/article_webview_page.dart';
-import 'package:wr_app/ui/column/widgets/article_overview.dart';
+
+import './article_webview_page.dart';
+import '../widgets/article_overview.dart';
 
 /// Column > index > category_posts
 class CategoryPosts extends StatelessWidget {

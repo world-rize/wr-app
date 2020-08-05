@@ -14,10 +14,10 @@ part 'user_api_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class TestRequestDto {
+  TestRequestDto();
+
   factory TestRequestDto.fromJson(Map<String, dynamic> json) =>
       _$TestRequestDtoFromJson(json);
-
-  TestRequestDto() {}
 
   Map<String, dynamic> toJson() => _$TestRequestDtoToJson(this);
 }
@@ -38,10 +38,10 @@ class TestResponse {
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class ReadUserRequestDto {
+  ReadUserRequestDto();
+
   factory ReadUserRequestDto.fromJson(Map<String, dynamic> json) =>
       _$ReadUserRequestDtoFromJson(json);
-
-  ReadUserRequestDto() {}
 
   Map<String, dynamic> toJson() => _$ReadUserRequestDtoToJson(this);
 }
@@ -62,10 +62,10 @@ class ReadUserResponseDto {
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateUserRequestDto {
+  CreateUserRequestDto();
+
   factory CreateUserRequestDto.fromJson(Map<String, dynamic> json) =>
       _$CreateUserRequestDtoFromJson(json);
-
-  CreateUserRequestDto() {}
 
   Map<String, dynamic> toJson() => _$CreateUserRequestDtoToJson(this);
 }

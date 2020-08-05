@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/article/model/article.dart';
-import 'package:wr_app/ui/column/pages/article_detail_page.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
+
+import '../pages/article_detail_page.dart';
 
 /// 記事見出し
 class ArticleOverView extends StatelessWidget {

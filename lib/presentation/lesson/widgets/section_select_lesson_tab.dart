@@ -2,7 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
-import 'package:wr_app/ui/lesson/widgets/section_select_section_row.dart';
+
+import '../widgets/section_select_section_row.dart';
 
 /// Lesson > index > lesson > sections
 ///

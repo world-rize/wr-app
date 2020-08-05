@@ -12,12 +12,16 @@ import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wr_app/domain/article/index.dart';
-import 'package:wr_app/domain/auth/index.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/infrastructure/article/article_persistence.dart';
+import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
+import 'package:wr_app/infrastructure/auth/article_persistence.dart';
+import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
+import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
+import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
@@ -70,23 +74,24 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   const useMock = false;
   // repos
-  final userRepository =
+  final userPersistence =
       useMock ? UserPersistenceMock() : UserPersistenceMock();
-  final articleRepository =
-      useMock ? ArticleMockRepository() : ArticleRepository();
-  final lessonRepository =
+  final articlePersistence =
+      useMock ? ArticlePersistenceMock() : ArticlePersistence();
+  final lessonPersistence =
       useMock ? LessonPersistenceMock() : LessonPersistence();
-  final authRepository = useMock ? AuthMockRepository() : AuthRepository();
+  final authPersistence = useMock ? AuthPersistence() : AuthPersistenceMock();
   final systemRepository = SystemPersistence();
 
   // services
   final userService = UserService(
-      authPersistence: authRepository, userPersistence: userRepository);
-  final articleService = ArticleService(articleRepository: articleRepository);
-  final lessonService = LessonService(lessonPersistence: lessonRepository);
+      authPersistence: authPersistence, userPersistence: userPersistence);
+  final articleService = ArticleService(articlePersistence: articlePersistence);
+  final lessonService = LessonService(lessonPersistence: lessonPersistence);
   final systemService = SystemService(systemPersistence: systemRepository);
 
   // provide notifiers
+  // TODO: 全部rootに注入するの良くない
   runApp(MultiProvider(
     providers: [
       // Firebase Analytics

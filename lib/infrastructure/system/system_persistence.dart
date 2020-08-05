@@ -2,9 +2,10 @@
 
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wr_app/domain/system/system_repository.dart';
 import 'package:wr_app/util/notification.dart';
 
-class SystemRepository implements ISystemRepository {
+class SystemPersistence implements SystemRepository {
   @override
   Future<void> notify({String title, String body, String payload}) {
     final notificator = GetIt.I<AppNotifier>();

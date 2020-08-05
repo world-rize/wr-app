@@ -3,7 +3,7 @@
 ```bash
 $ tree -d
 .
-├── domain
+├── domain # ドメイン層
 │   ├── article
 │   │   └── model
 │   ├── auth
@@ -14,27 +14,41 @@ $ tree -d
 │   └── user
 │       └── model
 ├── i10n
-├── ui
-│   ├── agency
-│   ├── column
-│   │   ├── pages
-│   │   └── widgets
-│   ├── extensions
+├── infrastructure # インフラストラクチャ層
+│   ├── article
+│   ├── auth
 │   ├── lesson
+│   ├── system
+│   └── user
+├── presentation # プレゼンテーション層
+│   ├── agency
+│   ├── article
+│   │   ├── notifier # notifier
+│   │   ├── pages # ページ
+│   │   └── widgets # 固有のウィジェット
+│   ├── lesson
+│   │   ├── notifier
 │   │   ├── pages
 │   │   └── widgets
 │   ├── mypage
 │   │   ├── pages
 │   │   └── widgets
 │   ├── on_boarding
+│   │   ├── notifier
 │   │   ├── pages
 │   │   └── widgets
 │   ├── settings
 │   │   ├── pages
 │   │   │   └── account_settings
 │   │   └── widgets
-│   ├── travel
+│   └── travel
+├── ui # 再利用可能なUIコンポーネント
 │   └── widgets
-└── util
+├── usecase # ユースケース
+└── util # ユーティリティ
     └── extensions
 ```
+
+### 参考
+- 今すぐ「レイヤードアーキテクチャ+DDD」を理解しよう。（golang） <https://qiita.com/tono-maron/items/345c433b86f74d314c8d>
+- Dart/Flutterでドメイン駆動設計（DDD）してみた - 導入編 <https://kabochapo.hateblo.jp/entry/2019/11/01/195130>

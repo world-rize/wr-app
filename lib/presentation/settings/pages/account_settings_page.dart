@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/settings/pages/account_settings/mail_address_form_page.dart';
-import 'package:wr_app/ui/settings/pages/account_settings/password_form_page.dart';
+
+import './account_settings/mail_address_form_page.dart';
+import './account_settings/password_form_page.dart';
 
 /// 設定ページ
 class AccountSettingsPage extends StatefulWidget {

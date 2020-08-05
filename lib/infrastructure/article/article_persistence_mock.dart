@@ -36,7 +36,7 @@ final List<ArticleCategory> categories = <ArticleCategory>[
   ),
 ];
 
-class ArticleMockPersistence implements ArticleRepository {
+class ArticlePersistenceMock implements ArticleRepository {
   @override
   Future<List<ArticleDigest>> findByCategory(
       Client client, String category) async {

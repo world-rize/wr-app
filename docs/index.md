@@ -14,7 +14,7 @@
 [Client views](client/index.md)
 
 ### 🔥 API
-[API](functions/index.md)
+[API](api/index.md)
 
 ### ⚙ CI/CD
 [CI/CD](other/cicd.md)

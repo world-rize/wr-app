@@ -12,7 +12,7 @@ import 'package:wr_app/infrastructure/auth/mock_firebase_user.dart';
 /// - Sign in With Apple
 /// - mock(test)
 /// ## FirebaseUser -> User
-class AuthMockRepository implements AuthRepository {
+class AuthPersistenceMock implements AuthRepository {
   // TODO(some): anti pattern?
   /// FireStore Mock Auth
   final FirebaseAuth fbAuth = MockFirebaseAuth();

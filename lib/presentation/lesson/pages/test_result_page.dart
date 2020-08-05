@@ -7,10 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/lesson/pages/section_list_page.dart';
-import 'package:wr_app/ui/lesson/pages/test_page.dart';
-import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
+
+import './section_list_page.dart';
+import './test_page.dart';
+import '../widgets/phrase_widget.dart';
 
 /// テスト結果画面
 ///

@@ -9,14 +9,15 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/lesson/pages/favorite_page.dart';
-import 'package:wr_app/ui/lesson/pages/newcoming_page.dart';
-import 'package:wr_app/ui/lesson/pages/request_page.dart';
-import 'package:wr_app/ui/lesson/pages/section_select_page.dart';
-import 'package:wr_app/ui/lesson/widgets/carousel_cell.dart';
-import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
 import 'package:wr_app/util/extensions.dart';
+
+import './favorite_page.dart';
+import './newcoming_page.dart';
+import './request_page.dart';
+import './section_select_page.dart';
+import '../widgets/carousel_cell.dart';
+import '../widgets/phrase_widget.dart';
 
 /// Lesson > index
 /// - top page of lesson

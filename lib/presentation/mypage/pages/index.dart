@@ -5,9 +5,10 @@ import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/mypage/pages/friends_page.dart';
-import 'package:wr_app/ui/mypage/pages/gift_page.dart';
-import 'package:wr_app/ui/mypage/pages/upgrade_page.dart';
+
+import './friends_page.dart';
+import './gift_page.dart';
+import './upgrade_page.dart';
 
 /// mypage > index
 class MyPagePage extends StatelessWidget {

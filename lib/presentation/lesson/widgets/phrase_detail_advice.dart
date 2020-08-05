@@ -3,7 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
+
+import '../notifier/voice_player.dart';
 
 /// ワンポイントアドバイス
 class PhraseDetailAdvice extends StatelessWidget {

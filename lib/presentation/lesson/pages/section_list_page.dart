@@ -5,9 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/lesson/pages/phrase_detail_page.dart';
-import 'package:wr_app/ui/lesson/widgets/phrase_widget.dart';
 import 'package:wr_app/util/extensions.dart';
+
+import './phrase_detail_page.dart';
+import '../widgets/phrase_widget.dart';
 
 class SectionDetailPage extends StatefulWidget {
   const SectionDetailPage({@required this.section, @required this.index});

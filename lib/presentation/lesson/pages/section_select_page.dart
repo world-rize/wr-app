@@ -6,12 +6,13 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/lesson/pages/section_list_page.dart';
-import 'package:wr_app/ui/lesson/pages/test_page.dart';
-import 'package:wr_app/ui/lesson/widgets/section_select_lesson_tab.dart';
-import 'package:wr_app/ui/lesson/widgets/section_select_test_tab.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/toast.dart';
+
+import './section_list_page.dart';
+import './test_page.dart';
+import '../widgets/section_select_lesson_tab.dart';
+import '../widgets/section_select_test_tab.dart';
 
 /// セクション選択画面
 ///

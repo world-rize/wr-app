@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/lesson/widgets/voice_player.dart';
+
+import '../notifier/voice_player.dart';
 
 /// 下部ボタン
 class PhraseDetailButtons extends StatelessWidget {

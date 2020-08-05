@@ -10,10 +10,11 @@ import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
-import 'package:wr_app/ui/lesson/pages/test_result_page.dart';
-import 'package:wr_app/ui/lesson/widgets/phrase_example.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
+
+import './test_result_page.dart';
+import '../widgets/phrase_example.dart';
 
 /// テストページ
 ///

@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
-import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
-import 'package:wr_app/ui/lesson/pages/section_list_page.dart';
+
+import './section_list_page.dart';
+import '../notifier/lesson_notifier.dart';
 
 /// Lesson > index > new coming
 class NewComingPage extends StatelessWidget {

@@ -5,16 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/index.dart';
+import 'package:wr_app/presentation/lesson/widgets/phrase_search_iconbutton.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/agency/index.dart';
-import 'package:wr_app/ui/column/pages/index.dart';
-import 'package:wr_app/ui/extensions.dart';
-import 'package:wr_app/ui/lesson/pages/index.dart';
-import 'package:wr_app/ui/lesson/widgets/phrase_search_iconbutton.dart';
-import 'package:wr_app/ui/mypage/pages/index.dart';
-import 'package:wr_app/ui/on_boarding/pages/index.dart';
-import 'package:wr_app/ui/settings/pages/index.dart';
-import 'package:wr_app/ui/travel/index.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// root view
 class RootView extends StatefulWidget {

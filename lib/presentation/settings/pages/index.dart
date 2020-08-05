@@ -7,17 +7,17 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
-import 'package:wr_app/presentation/system_notifier.dart';
+import 'package:wr_app/presentation/on_boarding/pages/index.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/on_boarding/pages/index.dart';
-import 'package:wr_app/ui/settings/pages/account_settings_page.dart';
-import 'package:wr_app/ui/settings/pages/api_test_page.dart';
-import 'package:wr_app/ui/settings/pages/dark_mode_page.dart';
-import 'package:wr_app/ui/settings/pages/inapp_log_page.dart';
 import 'package:wr_app/util/flavor.dart';
+
+import './account_settings_page.dart';
+import './api_test_page.dart';
+import './dark_mode_page.dart';
+import './inapp_log_page.dart';
 
 /// 設定ページ
 class SettingsPage extends StatefulWidget {
@@ -26,12 +26,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsPage> {
-  // static const platform = MethodChannel('sample/platform');
-
-//  Future<void> toOssLicense() {
-//    return platform.invokeMethod('toOssLicense', {});
-//  }
-
   // account section
   SettingsSection accountSection() {
     final userStore = Provider.of<UserNotifier>(context);
@@ -102,7 +96,6 @@ class _SettingsState extends State<SettingsPage> {
 
   // about
   SettingsSection aboutSection() {
-    final system = Provider.of<SystemNotifier>(context);
     final pubSpec = GetIt.I<PackageInfo>();
 
     return SettingsSection(
@@ -184,30 +177,13 @@ class _SettingsState extends State<SettingsPage> {
 
   // debug menu
   SettingsSection debugSection() {
-    final userStore = Provider.of<UserNotifier>(context);
-    final envStore = Provider.of<SystemNotifier>(context);
-    final notifier = Provider.of<LessonNotifier>(context);
-
     return SettingsSection(
       title: 'Debug',
       tiles: [
         SettingsTile(
           title: 'Flutter Flavor',
-          subtitle: envStore.flavor.toShortString(),
+          subtitle: Provider.of<SystemNotifier>(context).flavor.toShortString(),
         ),
-//        SettingsTile(
-//          title: 'All Phrases',
-//          subtitle: '${notifier.phrases.length} Phrases',
-//          onTap: () {
-//            Navigator.of(context).push(
-//              MaterialPageRoute(
-//                builder: (_) => AllPhrasesPage(
-//                  filter: (phrase) => true,
-//                ),
-//              ),
-//            );
-//          },
-//        ),
         SettingsTile(
           title: 'InApp Log',
           onTap: () {
@@ -226,12 +202,12 @@ class _SettingsState extends State<SettingsPage> {
           title: 'プレミアムプラン',
           onToggle: (value) {
             if (value) {
-              userStore.changePlan(Membership.pro);
+              Provider.of<UserNotifier>(context).changePlan(Membership.pro);
             } else {
-              userStore.changePlan(Membership.normal);
+              Provider.of<UserNotifier>(context).changePlan(Membership.normal);
             }
           },
-          switchValue: userStore.getUser().isPremium,
+          switchValue: Provider.of<UserNotifier>(context).getUser().isPremium,
         ),
         SettingsTile.switchTile(
           title: 'Paint Size Enabled',
@@ -243,12 +219,10 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'notifier test',
           onTap: () {
-            final systemNotifier =
-                Provider.of<SystemNotifier>(context, listen: false);
             final pubSpec = GetIt.I<PackageInfo>();
             // ignore: cascade_invocations
-            systemNotifier.notify(
-                title: pubSpec.appName, body: 'test', payload: 'ok');
+            Provider.of<SystemNotifier>(context)
+                .notify(title: pubSpec.appName, body: 'test', payload: 'ok');
           },
         )
       ],
