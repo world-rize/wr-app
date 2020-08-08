@@ -1,4 +1,14 @@
 # アーキテクチャ
+`レイヤードアーキテクチャ` もどきです.  
+ページ, ロジック, モデルを明確に分けています.  
+画面は `notifier`, `pages`, `widgets` に分けています.   
+```bash
+├── notifier # notifier
+├── pages # ページ
+└── widgets # 固有のウィジェット
+```
+余裕があったら `Atomic Design` ぽくしたい.
+
 ## フォルダ構成
 ```bash
 $ tree -d

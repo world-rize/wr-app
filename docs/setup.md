@@ -24,6 +24,9 @@ Firebaseにデプロイ
 - [n](https://github.com/tj/n) 2.1.12
 
 ### Services
+- Apple Developper
+- Firebaseの色々
+- App Store Connect
 - [codemagic](https://codemagic.io/start/)
   - アプリ用CI/CDサービス
 
@@ -52,5 +55,3 @@ rake init # download & build assets
 ```bash
 rake dev # build & launch app
 ```
-
-TODO: リリースのやり方書く
