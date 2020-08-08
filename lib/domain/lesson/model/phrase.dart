@@ -65,6 +65,7 @@ class Phrase {
           ),
         ]),
         advice: {
+          // ignore: lines_longer_than_80_chars
           'ja':
               '“due”は「支払い期限のきた~」や「 満期の~」といった意味を持ちます。よって、”When is ~ due?”で「~の期限はいつだっけ？」となり、”When is the homework due?”を意訳すると「いつ宿題提出するんだっけ？」となります。',
         });

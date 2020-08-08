@@ -145,9 +145,9 @@ mixin Messages {
         name: 'bottomNavColumn',
       );
 
-  String get bottomNavTravel => Intl.message(
-        'Travel',
-        name: 'bottomNavTravel',
+  String get bottomNavNote => Intl.message(
+        'Note',
+        name: 'bottomNavNote',
       );
 
   String get bottomNavAgency => Intl.message(
