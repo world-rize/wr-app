@@ -1,6 +1,6 @@
 import * as firebase from 'firebase'
-import { CreateUserRequest, TestRequest, ReadUserRequest, FavoritePhraseRequest, GetPointRequest, UpdateUserRequest, DeleteUserRequest, DoTestRequest } from '../src/domain/user/model/userApiDto'
-import { User } from '../src/domain/user/model/user'
+import { CreateUserRequest, TestRequest, ReadUserRequest, FavoritePhraseRequest, GetPointRequest, UpdateUserRequest, DeleteUserRequest, DoTestRequest } from '../src/user/model/userApiDto'
+import { User } from '../src/user/model/user'
 const serviceAccount = require('../../.env/credential.json')
 
 firebase.initializeApp(serviceAccount)
@@ -65,10 +65,15 @@ describe('api call', ()  => {
     const auth = await firebase.auth().signInWithEmailAndPassword('a@b.com', '123456')
     const userRef = firebase.firestore().collection('users').doc(auth.user?.uid)
 
+    const oldUser = (await userRef.get()).data() as User
+    const defaultFavoriteListId = Object.entries(oldUser.favorites)
+      .find(([_, list]) => list.isDefault)[0]
+
     const callable = functions.httpsCallable('favoritePhrase')
     const data: FavoritePhraseRequest = {
+      listId: defaultFavoriteListId,
       phraseId: '9999',
-      value: true,
+      favorite: true,
     }
     const res = callable(data)
     await expect(res).resolves.toMatchObject({
@@ -105,7 +110,7 @@ describe('api call', ()  => {
     const afterUser = await userRef.get()
       .then(ss => ss.data() as User)
 
-    expect(afterUser.point).toBe(beforeUser.point + 3)
+    expect(afterUser.points).toBe(beforeUser.points + 3)
   })
 
   test('updateUser', async () => {
@@ -119,7 +124,7 @@ describe('api call', ()  => {
     const data: UpdateUserRequest = {
       user: {
         ...beforeUser,
-        age: '20'
+        name: `${beforeUser.name}+`
       }
     }
     const res = callable(data)
@@ -132,7 +137,7 @@ describe('api call', ()  => {
     const afterUser = await userRef.get()
       .then(ss => ss.data() as User)
 
-    expect(afterUser.age).toBe('20')
+    expect(afterUser.name).toBe(`${beforeUser.name}+`)
   })
 
   test('deleteUser', async () => {
@@ -167,7 +172,7 @@ describe('api call', ()  => {
 
     const callable = functions.httpsCallable('doTest')
     const data: DoTestRequest = {
-      uuid: beforeUser.uuid,
+      sectionId: 'debug'
     }
     const res = callable(data)
     await expect(res).resolves.toMatchObject({
@@ -192,7 +197,7 @@ describe('api call', ()  => {
 
     const callable = functions.httpsCallable('doTest')
     const data: DoTestRequest = {
-      uuid: beforeUser.uuid,
+      sectionId: 'debug'
     }
     const res = callable(data)
     await expect(res).rejects.toBeTruthy()

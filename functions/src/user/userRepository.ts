@@ -20,8 +20,12 @@ export class UserRepository {
     return (await this.users.doc(uuid).get()).exists
   }
 
-  public async findById(uuid: string): Promise<User | null> {
-    return (await this.users.doc(uuid).get()).data() as User | null
+  public async findById(uuid: string): Promise<User> {
+    const data = (await this.users.doc(uuid).get()).data()
+    if (!data) {
+      throw 'user not found'
+    }
+    return data as User
   }
 
   public async update(user: User): Promise<User> {

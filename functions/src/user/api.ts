@@ -2,6 +2,7 @@
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
 import * as firebase from 'firebase-admin'
+import { validate } from 'class-validator'
 import { UserService } from './userService'
 import { UserRepository } from './userRepository'
 import * as functions from 'firebase-functions'
@@ -12,6 +13,16 @@ import * as Dto from './model/userApiDto'
 type Context = functions.https.CallableContext
 const userRepo = new UserRepository()
 const userService = new UserService(userRepo)
+
+const authorize = async (context: Context): Promise<string> => {
+  if (!context.auth) {
+    console.error('not authorized')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
+  return context.auth.uid
+}
+
+
 
 /**
  *  デバッグ用
@@ -28,19 +39,8 @@ export const test = async (req: Dto.TestRequest, context: Context): Promise<Dto.
  *  ユーザーを取得します
  */
 export const readUser = async (req: Dto.ReadUserRequest, context: Context): Promise<Dto.ReadUserResponse> => {
-  if (!context.auth) {
-    console.error('not authorized')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
-
-  const uid = context.auth.uid
+  const uid = await authorize(context)
   const user = await userService.readUser(uid)
-    .catch(e => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', e)
-    })
-
-  console.log(`[readUser] done`)
 
   if (!user) {
     console.error('user not found')
@@ -54,95 +54,82 @@ export const readUser = async (req: Dto.ReadUserRequest, context: Context): Prom
 
 /**
  *  ユーザーを作成します
- *  TODO: functions側でユーザー作成?
  */
 export const createUser = async (req: Dto.CreateUserRequest, context: Context): Promise<Dto.CreateUserResponse> => {
-  if (!context.auth) {
-    console.error('not authorized')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
+  const uid = await authorize(context)
+  console.log(`[createUser] uid: ${uid}`)
 
-  // mapping uuid
-  const uuid = context.auth.uid
+  // object -> class instance
+  req = Object.assign(new Dto.CreateUserRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error(e)
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
 
-  console.log(`[createUser] uuid: ${uuid}`)
-
-  if (await userService.existUser(uuid)) {
+  if (await userService.existUser(uid)) {
     console.error('user already exist')
     throw new functions.https.HttpsError('already-exists', 'user already exist')
   }
 
-  const user = await userService.createUser(uuid, req)
+  const user = await userService.createUser(uid, req)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to create user')
     })
 
-  console.log(`[createUser] uuid: ${uuid} user created`)
+  console.log(`[createUser] uuid: ${uid} user created`)
 
   return { user }
 }
 
 /**
- * 
+ * フレーズをお気に入りに追加する
  */
-export const favoritePhrase = async (data: Dto.FavoritePhraseRequest, context: Context): Promise<Dto.FavoritePhraseResponse> => {
-  if (!context.auth) {
-    console.error('not authorized')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
-  const uid = context.auth.uid
-  const phraseId: string = data.phraseId
-  const value: boolean = data.value
+export const favoritePhrase = async (req: Dto.FavoritePhraseRequest, context: Context): Promise<Dto.FavoritePhraseResponse> => {
+  const uid = await authorize(context)
 
-  console.log(`[favoritePhrase] uid: ${uid}, phraseId: ${phraseId}, value: ${value}`)
+  // object -> class instance
+  req = Object.assign(new Dto.FavoritePhraseRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error(e)
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
 
-  if (!phraseId || value === null) {
-    console.error('phraseId or value is invalid')
-    throw new functions.https.HttpsError('invalid-argument', 'phraseId or value is invalid')
-  }
-
-  const success = await userService.favoritePhrase(uid, phraseId, value)
+  await userService.favoritePhrase(uid, req.listId, req.phraseId, req.favorite)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to favorite phrase')
     })
 
-  console.log(`[favoritePhrase] favorited uid: ${uid}, phraseId: ${phraseId}, value: ${value}`)
-
   return {
-    success
+    success: true
   }
 }
+
 /**
  * ユーザーがポイントを獲得
  */
 export const getPoint = async (req: Dto.GetPointRequest, context: Context): Promise<Dto.GetPointResponse> => {
-  if (!context.auth) {
-    console.error('not authorized')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
+  const uid = await authorize(context)
+  req = Object.assign(new Dto.GetPointRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('point is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
 
-  const uid = context.auth.uid
-  const point = req.point
-
-  console.log(`[getPoint] uid: ${uid}, point: ${point}`)
-
-  if (!point || Number.isNaN(point)) {
-    console.error('point is invalid')
-    throw new functions.https.HttpsError('invalid-argument', 'point is invalid')
-  }
-
-  const success = await userService.getPoint(uid, point)
+  await userService.getPoint(uid, req.point)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to get point')
     })
 
-  console.log(`[getPoint] getPoint uid: ${uid}, point: ${point}`)
+  console.log(`[getPoint] getPoint uid: ${uid}, point: ${req.point}`)
 
   return {
-    success
+    success: true
   }
 }
 
@@ -150,13 +137,8 @@ export const getPoint = async (req: Dto.GetPointRequest, context: Context): Prom
  *  テストを受ける(TODO)
  */
 export const doTest = async (req: Dto.DoTestRequest, context: Context): Promise<Dto.DoTestResponse> => {
-  if (!context.auth) {
-    console.error('not authorized')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
-
-  const uid = context.auth.uid
-  const success = await userService.doTest(uid)
+  const uid = await authorize(context)
+  await userService.doTest(uid, req.sectionId)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to do test')
@@ -165,7 +147,7 @@ export const doTest = async (req: Dto.DoTestRequest, context: Context): Promise<
   console.log(`[doTest] doTest uid: ${uid}`)
 
   return {
-    success
+    success: true
   }
 }
 
@@ -173,10 +155,7 @@ export const doTest = async (req: Dto.DoTestRequest, context: Context): Promise<
  * ユーザー更新
  */
 export const updateUser = async (req: Dto.UpdateUserRequest, context: Context): Promise<Dto.UpdateUserResponse> => {
-  if (!context.auth) {
-    console.error('not authorized')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
+  await authorize(context)
 
   const updatedUser = await userService.updateUser(req)
     .catch (e => {
@@ -195,12 +174,7 @@ export const updateUser = async (req: Dto.UpdateUserRequest, context: Context): 
  * アカウントを削除する
  */
 export const deleteUser = async (req: Dto.DeleteUserRequest, context: Context): Promise<Dto.DeleteUserResponse> => {
-  if (!context.auth) {
-    console.error('not authorized')
-    throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  }
-
-  const uuid = context.auth?.uid
+  const uuid = await authorize(context)
 
   await userService.delete(uuid)
     .catch (e => {

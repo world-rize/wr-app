@@ -6,8 +6,7 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase)
-import * as userApi from './domain/user/api'
-
+import * as userApi from './user/api'
 export const test = functions.https.onCall(userApi.test)
 export const readUser = functions.https.onCall(userApi.readUser)
 export const createUser = functions.https.onCall(userApi.createUser)
