@@ -55,8 +55,14 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// メールアドレスとパスワードでサインアップ
-  Future<void> signUpWithEmailAndPassword(String email, String password) async {
-    _user = await _userService.signUpWithEmailAndPassword(email, password);
+  Future<void> signUpWithEmailAndPassword({
+    @required String email,
+    @required String password,
+    @required String age,
+    @required String name,
+  }) async {
+    _user = await _userService.signUpWithEmailAndPassword(
+        email: email, password: password, age: age, name: name);
     InAppLogger.log('✔ signUpWithEmailAndPassword', type: 'user');
     notifyListeners();
 
@@ -102,7 +108,18 @@ class UserNotifier with ChangeNotifier {
     @required bool value,
   }) async {
     // 仮反映
-    _user.favorites[phraseId] = value;
+    if (value) {
+      _user.favorites['default'].favoritePhraseIds[phraseId] =
+          FavoritePhraseDigest(
+        id: phraseId,
+        createdAt: DateTime.now(),
+      );
+    } else {
+      _user.favorites['default'].favoritePhraseIds.remove(phraseId);
+    }
+
+    print(_user.isFavoritePhrase(phraseId));
+
     notifyListeners();
 
     // 本反映
@@ -124,15 +141,15 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// ポイントを習得します
-  Future<void> callGetPoint({@required int point}) async {
-    _user = await _userService.getPoints(user: _user, point: point);
+  Future<void> callGetPoint({@required int points}) async {
+    _user = await _userService.getPoints(user: _user, points: points);
     notifyListeners();
 
     await sendEvent(
       event: AnalyticsEvent.pointGet,
-      parameters: {'point': point},
+      parameters: {'points': points},
     );
-    NotifyToast.success('$pointポイントゲットしました');
+    NotifyToast.success('$points ポイントゲットしました');
   }
 
   /// テストを受ける

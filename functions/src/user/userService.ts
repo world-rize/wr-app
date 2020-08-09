@@ -20,20 +20,15 @@ export class UserService {
    * @param req 
    */
   static generateInitialUser (uuid: string): User {
-    const defaultFavoriteGroupId = uuidv4()
-    const defaultPhrasesListId = uuidv4()
-
     return {
       schemaVersion: 'v1',
       uuid: uuid,
       name: '',
       userId: uuid,
       favorites: {
-        [defaultFavoriteGroupId]: UserService.generateFavoriteGroup(defaultFavoriteGroupId, 'お気に入り', true)
+        'default': UserService.generateFavoriteGroup('default', 'お気に入り', true)
       },
-      notes: {
-        [defaultPhrasesListId]: UserService.generatePhrasesList(defaultPhrasesListId, 'WorldRIZe Selection', true)
-      },
+      notes: {},
       activities: [
         {
           schemaVersion: 'v1',

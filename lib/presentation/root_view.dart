@@ -70,7 +70,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          I.of(context).points(user.point),
+          I.of(context).points(user.statistics.points),
           style: const TextStyle(color: Colors.white),
         ),
       ],
