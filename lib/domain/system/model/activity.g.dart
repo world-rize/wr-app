@@ -6,18 +6,15 @@ part of 'activity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Activity _$ActivityFromJson(Map<String, dynamic> json) {
-  return Activity(
-    text: json['text'] as String,
-    uuid: json['uuid'] as String,
-    type: json['type'] as String,
+UserActivity _$UserActivityFromJson(Map json) {
+  return UserActivity(
+    content: json['content'] as String,
     date: json['date'] == null ? null : DateTime.parse(json['date'] as String),
   );
 }
 
-Map<String, dynamic> _$ActivityToJson(Activity instance) => <String, dynamic>{
-      'uuid': instance.uuid,
+Map<String, dynamic> _$UserActivityToJson(UserActivity instance) =>
+    <String, dynamic>{
+      'content': instance.content,
       'date': instance.date?.toIso8601String(),
-      'type': instance.type,
-      'text': instance.text,
     };

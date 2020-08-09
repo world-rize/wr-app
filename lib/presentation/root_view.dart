@@ -110,7 +110,7 @@ class _RootViewState extends State<RootView>
           title: Text(I.of(context).bottomNavColumn),
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.library_books),
+          icon: const Icon(Icons.bookmark_border),
           title: Text(I.of(context).bottomNavNote),
         ),
         BottomNavigationBarItem(

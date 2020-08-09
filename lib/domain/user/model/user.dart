@@ -8,90 +8,232 @@ import 'package:wr_app/domain/user/model/membership.dart';
 
 part 'user.g.dart';
 
+/// 統計情報
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class UserStatistics {
+  UserStatistics({
+    @required this.testScores,
+    @required this.points,
+    @required this.testLimitCount,
+  });
+
+  factory UserStatistics.fromJson(Map<String, dynamic> json) =>
+      _$UserStatisticsFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserStatisticsToJson(this);
+
+  Map<String, String> testScores;
+
+  int points;
+
+  int testLimitCount;
+}
+
+/// ユーザー情報
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class UserAttributes {
+  UserAttributes({
+    this.age,
+    this.email,
+    this.membership,
+  });
+
+  factory UserAttributes.fromJson(Map<String, dynamic> json) =>
+      _$UserAttributesFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserAttributesToJson(this);
+
+  String age;
+
+  String email;
+
+  Membership membership;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class FavoritePhraseDigest {
+  FavoritePhraseDigest({
+    @required this.id,
+    @required this.createdAt,
+  });
+
+  factory FavoritePhraseDigest.fromJson(Map<String, dynamic> json) =>
+      _$FavoritePhraseDigestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FavoritePhraseDigestToJson(this);
+
+  String id;
+
+  DateTime createdAt;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class FavoritePhraseList {
+  FavoritePhraseList({
+    @required this.id,
+    @required this.title,
+    @required this.sortType,
+    @required this.isDefault,
+    @required this.favoritePhraseIds,
+  });
+
+  factory FavoritePhraseList.fromJson(Map<String, dynamic> json) =>
+      _$FavoritePhraseListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FavoritePhraseListToJson(this);
+
+  String id;
+
+  String title;
+
+  String sortType;
+
+  bool isDefault;
+
+  Map<String, FavoritePhraseDigest> favoritePhraseIds;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class PhraseList {
+  PhraseList({
+    @required this.id,
+    @required this.title,
+    @required this.sortType,
+    @required this.isDefault,
+    @required this.phrases,
+  });
+
+  factory PhraseList.fromJson(Map<String, dynamic> json) =>
+      _$PhraseListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PhraseListToJson(this);
+
+  String id;
+
+  String title;
+
+  String sortType;
+
+  bool isDefault;
+
+  Map<String, Phrase> phrases;
+}
+
 /// ユーザー
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class User {
   User({
     @required this.uuid,
-    @required this.userId,
-    @required this.email,
-    @required this.age,
     @required this.name,
-    @required this.point,
-    @required this.testLimitCount,
+    @required this.userId,
     @required this.favorites,
-    @required this.membership,
+    @required this.notes,
+    @required this.statistics,
+    @required this.activities,
+    @required this.attributes,
   });
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+
   factory User.empty() {
     return User(
       uuid: '',
-      userId: '',
-      email: '',
-      age: '0',
       name: '',
-      point: 0,
-      testLimitCount: 0,
-      favorites: {},
-      membership: Membership.normal,
+      userId: '',
+      favorites: {
+        'default': FavoritePhraseList(
+          id: 'default',
+          title: 'お気に入り',
+          sortType: '',
+          isDefault: true,
+          favoritePhraseIds: {},
+        ),
+      },
+      statistics: UserStatistics(
+        testScores: {},
+        points: 0,
+        testLimitCount: 0,
+      ),
+      attributes: UserAttributes(
+        age: '0',
+        email: 'hoge@example.com',
+        membership: Membership.normal,
+      ),
+      activities: [],
+      notes: {},
     );
   }
 
   factory User.dummy() {
     return User(
-      membership: Membership.normal,
-      uuid: 'test-test',
-      userId: '0123-4567-89',
-      email: 'hoge@example.com',
-      age: '10',
-      name: 'テスト',
-      point: 100,
-      testLimitCount: 3,
-      favorites: {},
+      uuid: 'uuid',
+      name: 'Dummy',
+      userId: '123-456-789',
+      favorites: {
+        'default': FavoritePhraseList(
+          id: 'default',
+          title: 'お気に入り',
+          sortType: '',
+          isDefault: true,
+          favoritePhraseIds: {
+            'debug': FavoritePhraseDigest(
+              id: 'debug',
+              createdAt: DateTime.now(),
+            ),
+          },
+        ),
+      },
+      statistics: UserStatistics(
+        testScores: {
+          'debug': '5',
+        },
+        points: 100,
+        testLimitCount: 3,
+      ),
+      attributes: UserAttributes(
+        age: '0',
+        email: 'hoge@example.com',
+        membership: Membership.normal,
+      ),
+      activities: [
+        UserActivity(
+          content: 'Dummy Activity',
+          date: DateTime.now(),
+        ),
+      ],
+      notes: {},
     );
   }
-
-  Map<String, dynamic> toJson() => _$UserToJson(this);
-
-  /// ユーザータイプ
-  Membership membership;
 
   /// uuid
   String uuid;
 
-  /// userId
-  String userId;
-
-  /// email
-  String email;
-
-  /// age
-  String age;
-
   /// 名前
   String name;
 
-  /// 所持ポイント
-  int point;
-
-  /// 本日のテスト可能回数
-  int testLimitCount;
+  /// userId
+  String userId;
 
   /// お気に入りフレーズ
-  Map<String, bool> favorites;
+  Map<String, FavoritePhraseList> favorites;
 
-  /// クリア済みのセクション
-  Map<String, bool> sectionStates;
+  /// オリジナルフレーズ
+  Map<String, PhraseList> notes;
 
-  /// ユーザーログ
-  List<Activity> logs;
+  /// 統計情報
+  UserStatistics statistics;
 
-  bool get isPremium => membership == Membership.pro;
+  /// 個人情報
+  UserAttributes attributes;
+
+  /// ユーザー活動
+  List<UserActivity> activities;
 
   ///
   bool isFavoritePhrase(Phrase phrase) {
-    return favorites.containsKey(phrase.id) && favorites[phrase.id];
+    return favorites.containsKey(phrase.id) &&
+        favorites['default'].favoritePhraseIds.containsKey(phrase.id);
   }
 }

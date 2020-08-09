@@ -46,6 +46,7 @@ export class UserService {
         testScores: {},
         testLimitCount: 3,
         points: 0,
+        memberShip: 'normal',
       },
       attributes: {
         schemaVersion: 'v1',

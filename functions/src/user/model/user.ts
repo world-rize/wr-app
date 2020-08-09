@@ -25,6 +25,11 @@ export interface UserStatistics {
   points: number
 
   /**
+   * メンバーシップ
+   */
+  memberShip: 'normal' | 'pro'
+
+  /**
    * テスト受講可能回数
    */
   testLimitCount: number

@@ -5,29 +5,19 @@ import 'package:json_annotation/json_annotation.dart';
 part 'activity.g.dart';
 
 /// アプリ内の活動(ポイントゲット, テストなど)
-@JsonSerializable()
-class Activity {
-  Activity({
-    @required this.text,
-    @required this.uuid,
-    @required this.type,
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class UserActivity {
+  UserActivity({
+    @required this.content,
     @required this.date,
   });
 
-  factory Activity.fromJson(Map<String, dynamic> json) =>
-      _$ActivityFromJson(json);
+  factory UserActivity.fromJson(Map<String, dynamic> json) =>
+      _$UserActivityFromJson(json);
 
-  /// uuid
-  final String uuid;
+  Map<String, dynamic> toJson() => _$UserActivityToJson(this);
 
-  /// date
-  final DateTime date;
+  String content;
 
-  /// type
-  final String type;
-
-  /// 内容
-  final String text;
-
-  Map<String, dynamic> toJson() => _$ActivityToJson(this);
+  DateTime date;
 }
