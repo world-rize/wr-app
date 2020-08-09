@@ -70,10 +70,7 @@ export interface FavoritePhraseResponse {
 
 export class GetPointRequest {
   @IsNotEmpty()
-  readonly uuid!: string
-
-  @IsNotEmpty()
-  readonly point!: number
+  readonly points!: number
 }
 
 export interface GetPointResponse {

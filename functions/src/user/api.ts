@@ -120,13 +120,13 @@ export const getPoint = async (req: Dto.GetPointRequest, context: Context): Prom
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  await userService.getPoint(uid, req.point)
+  await userService.getPoint(uid, req.points)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to get point')
+      throw new functions.https.HttpsError('internal', 'failed to get points')
     })
 
-  console.log(`[getPoint] getPoint uid: ${uid}, point: ${req.point}`)
+  console.log(`[getPoint] getPoint uid: ${uid}, point: ${req.points}`)
 
   return {
     success: true

@@ -100,10 +100,6 @@ export class UserService {
       throw `FavoriteList ${listId} not found`
     }
 
-    if (!user.favorites[listId].favoritePhraseIds[phraseId]) {
-      throw `FavoritePhraseDigest ${phraseId} not found`
-    }
-
     if (favorite) {
       user.favorites[listId].favoritePhraseIds[phraseId] = {
         id: phraseId,

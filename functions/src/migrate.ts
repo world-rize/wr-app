@@ -78,7 +78,7 @@ export class MigrationService {
  * テストユーザーを作成
  */
 export const createTestUser = async () => {
-  const testUserUuid = 'CEQUGZDRjVV0IqQ1Ww4PBNnxeaI2'
+  const testUserUuid = 'ua4YJOOZKcMV0Y2GduUI9g2p0em1'
   const testUser = UserService.generateInitialUser(testUserUuid)
   testUser.name = 'テスト'
   testUser.statistics.points = 9999
