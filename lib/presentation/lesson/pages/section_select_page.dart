@@ -95,9 +95,9 @@ class _SectionSelectPageState extends State<SectionSelectPage>
           ),
           TestTab(
             sections: sections,
-            onTap: (section) async {
+            onTap: (Section section) async {
               try {
-                await userStore.doTest();
+                await userStore.doTest(sectionId: section.title);
 
                 await sendEvent(
                   event: AnalyticsEvent.doTest,

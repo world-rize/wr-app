@@ -46,7 +46,7 @@ class PhraseDetailButtons extends StatelessWidget {
               ),
               onPressed: () {
                 notifier.favoritePhrase(
-                    phraseId: player.phrase.id, value: !favorite);
+                    phraseId: player.phrase.id, favorite: !favorite);
               },
             ),
           ),

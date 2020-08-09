@@ -105,29 +105,33 @@ class UserNotifier with ChangeNotifier {
   /// フレーズをお気に入りに登録します
   Future<void> favoritePhrase({
     @required String phraseId,
-    @required bool value,
+    @required bool favorite,
   }) async {
+    const listId = 'default';
+
     // 仮反映
-    if (value) {
-      _user.favorites['default'].favoritePhraseIds[phraseId] =
+    if (favorite) {
+      _user.favorites[listId].favoritePhraseIds[phraseId] =
           FavoritePhraseDigest(
         id: phraseId,
         createdAt: DateTime.now(),
       );
     } else {
-      _user.favorites['default'].favoritePhraseIds.remove(phraseId);
+      _user.favorites[listId].favoritePhraseIds.remove(phraseId);
     }
-
-    print(_user.isFavoritePhrase(phraseId));
 
     notifyListeners();
 
     // 本反映
     _user = await _userService.favorite(
-        user: _user, phraseId: phraseId, value: value);
+      user: _user,
+      listId: listId,
+      phraseId: phraseId,
+      favorite: favorite,
+    );
     notifyListeners();
 
-    NotifyToast.success(value ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
+    NotifyToast.success(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
   }
 
   /// 受講可能回数をリセット
@@ -153,8 +157,8 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// テストを受ける
-  Future<void> doTest() async {
-    _user = await _userService.doTest(user: _user);
+  Future<void> doTest({@required String sectionId}) async {
+    await _userService.doTest(user: _user, sectionId: sectionId);
     notifyListeners();
   }
 

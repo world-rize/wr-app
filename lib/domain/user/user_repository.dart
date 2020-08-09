@@ -1,22 +1,32 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 
 abstract class UserRepository {
-  Future<TestResponse> test(TestRequestDto req);
+  Future<void> test();
 
-  Future<ReadUserResponseDto> readUser(ReadUserRequestDto req);
+  Future<User> readUser();
 
-  Future<CreateUserResponseDto> createUser(CreateUserRequestDto req);
+  Future<User> createUser(CreateUserRequest req);
 
-  Future<UpdateUserResponseDto> updateUser(UpdateUserRequestDto req);
+  Future<User> updateUser(User user);
 
-  Future<DeleteUserResponseDto> deleteUser(DeleteUserRequestDto req);
+  Future<void> deleteUser();
 
-  Future<FavoritePhraseResponseDto> favoritePhrase(
-      FavoritePhraseRequestDto req);
+  Future<void> favoritePhrase(FavoritePhraseRequest req);
 
-  Future<GetPointResponseDto> getPoint(GetPointRequestDto req);
+  Future<void> getPoint(GetPointRequest req);
 
-  Future<DoTestResponseDto> doTest(DoTestRequestDto req);
+  Future<void> doTest(DoTestRequest req);
+
+  Future<void> createFavoriteList(CreateFavoriteListRequest req);
+
+  Future<void> deleteFavoriteList(DeleteFavoriteListRequest req);
+
+  Future<void> createPhrasesList(CreatePhrasesListRequest req);
+
+  Future<void> addPhraseToPhraseList(AddPhraseToPhraseListRequest req);
+
+  Future<void> sendTestResult(SendTestResultRequest req);
 }

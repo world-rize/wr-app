@@ -7,43 +7,70 @@ import 'package:wr_app/domain/user/user_repository.dart';
 
 class UserPersistenceMock implements UserRepository {
   @override
-  Future<TestResponse> test(TestRequestDto req) async {
-    return TestResponse(success: true);
+  Future<void> test() async {
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   @override
-  Future<ReadUserResponseDto> readUser(ReadUserRequestDto req) async {
-    return ReadUserResponseDto(user: User.dummy());
+  Future<User> readUser() async {
+    await Future.delayed(const Duration(seconds: 1));
+    return User.dummy();
   }
 
   @override
-  Future<CreateUserResponseDto> createUser(CreateUserRequestDto req) async {
-    return CreateUserResponseDto(user: User.dummy());
+  Future<User> createUser(CreateUserRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return User.dummy();
   }
 
   @override
-  Future<UpdateUserResponseDto> updateUser(UpdateUserRequestDto req) async {
-    return UpdateUserResponseDto(success: true);
+  Future<User> updateUser(User req) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return User.dummy();
   }
 
   @override
-  Future<FavoritePhraseResponseDto> favoritePhrase(
-      FavoritePhraseRequestDto req) async {
-    return FavoritePhraseResponseDto(success: true);
+  Future<void> deleteUser() async {
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   @override
-  Future<GetPointResponseDto> getPoint(GetPointRequestDto req) async {
-    return GetPointResponseDto(success: true);
+  Future<void> favoritePhrase(FavoritePhraseRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   @override
-  Future<DoTestResponseDto> doTest(DoTestRequestDto req) async {
-    return DoTestResponseDto(success: true);
+  Future<void> getPoint(GetPointRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
   }
 
   @override
-  Future<DeleteUserResponseDto> deleteUser(DeleteUserRequestDto req) async {
-    return DeleteUserResponseDto(success: true);
+  Future<void> doTest(DoTestRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
+  @override
+  Future<void> sendTestResult(SendTestResultRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
+  @override
+  Future<void> createFavoriteList(CreateFavoriteListRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
+  @override
+  Future<void> deleteFavoriteList(DeleteFavoriteListRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
+  @override
+  Future<void> createPhrasesList(CreatePhrasesListRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
+  }
+
+  @override
+  Future<void> addPhraseToPhraseList(AddPhraseToPhraseListRequest req) async {
+    await Future.delayed(const Duration(seconds: 1));
   }
 }

@@ -23,38 +23,36 @@ class UserService {
   Future<User> signUpWithGoogle() async {
     final res = await _authPersistence.signInWithGoogleSignIn();
 
-    final req = CreateUserRequestDto(
+    final req = CreateUserRequest(
       name: res.displayName,
       email: res.email,
       age: '0',
     );
 
-    final _res = await _userPersistence.createUser(req);
-    return _res.user;
+    return _userPersistence.createUser(req);
   }
 
   /// sign up with email & password
-  Future<User> signUpWithEmailAndPassword(
-      {@required String email,
-      @required String password,
-      @required String name,
-      @required String age}) async {
-    final req = CreateUserRequestDto(
+  Future<User> signUpWithEmailAndPassword({
+    @required String email,
+    @required String password,
+    @required String name,
+    @required String age,
+  }) async {
+    final req = CreateUserRequest(
       name: name,
       age: age,
       email: email,
     );
 
     await _authPersistence.signUpWithEmailAndPassword(email, password);
-    final _res = await _userPersistence.createUser(req);
-    return _res.user;
+    return _userPersistence.createUser(req);
   }
 
   /// sign in with email & password
   Future<User> signInWithEmailAndPassword(String email, String password) async {
     await _authPersistence.signInWithEmailAndPassword(email, password);
-    final _res = await _userPersistence.readUser(ReadUserRequestDto());
-    return _res.user;
+    return _userPersistence.readUser();
   }
 
   /// sign out
@@ -64,30 +62,26 @@ class UserService {
 
   /// call test api
   Future<void> test() async {
-    return _userPersistence.test(TestRequestDto());
+    return _userPersistence.test();
   }
 
   /// ユーザーデータを習得します
   Future<User> getUser() async {
-    final _res = await _userPersistence.readUser(ReadUserRequestDto());
-    return _res.user;
+    return _userPersistence.readUser();
   }
 
   /// フレーズをお気に入りに登録します
   Future<User> favorite({
     @required User user,
+    @required String listId,
     @required String phraseId,
-    @required bool value,
+    @required bool favorite,
   }) async {
-    final res = await _userPersistence.favoritePhrase(FavoritePhraseRequestDto(
-        uid: user.uuid, phraseId: phraseId, value: value));
+    final req = FavoritePhraseRequest(
+        listId: 'default', phraseId: phraseId, favorite: favorite);
+    await _userPersistence.favoritePhrase(req);
 
-    if (!(res?.success ?? false)) {
-      throw Exception('failed');
-    }
-
-    user.favorites['default'].favoritePhraseIds[phraseId] =
-        FavoritePhraseDigest(
+    user.favorites[listId].favoritePhraseIds[phraseId] = FavoritePhraseDigest(
       id: phraseId,
       createdAt: DateTime.now(),
     );
@@ -99,14 +93,7 @@ class UserService {
     @required User user,
   }) async {
     user.statistics.testLimitCount = 3;
-    final res =
-        await _userPersistence.updateUser(UpdateUserRequestDto(user: user));
-
-    if (!(res?.success ?? false)) {
-      throw Exception('failed');
-    }
-
-    return user;
+    return _userPersistence.updateUser(user);
   }
 
   /// ポイントを習得します
@@ -115,67 +102,40 @@ class UserService {
     @required int points,
   }) async {
     user.statistics.points += points;
-    final res = await _userPersistence.getPoint(GetPointRequestDto(
-      uid: user.uuid,
+    final req = GetPointRequest(
       points: points,
-    ));
-
-    if (!(res?.success ?? false)) {
-      throw Exception('failed');
-    }
-
+    );
+    final res = await _userPersistence.getPoint(req);
     return user;
   }
 
   Future<User> updateAge({@required User user, @required String age}) async {
     user.attributes.age = age;
-    final res =
-        await _userPersistence.updateUser(UpdateUserRequestDto(user: user));
 
-    if (!(res?.success ?? false)) {
-      throw Exception('failed');
-    }
-
-    return user;
+    return _userPersistence.updateUser(user);
   }
 
   /// upgrade to Pro or downgrade
-  Future<User> changePlan(
-      {@required User user, @required Membership membership}) async {
+  Future<User> changePlan({
+    @required User user,
+    @required Membership membership,
+  }) async {
     user.attributes.membership = membership;
-
-    final res =
-        await _userPersistence.updateUser(UpdateUserRequestDto(user: user));
-
-    if (!(res?.success ?? false)) {
-      throw Exception('failed');
-    }
-
-    return user;
+    return _userPersistence.updateUser(user);
   }
 
   /// do test
-  Future<User> doTest({@required User user}) async {
+  Future<void> doTest({
+    @required User user,
+    @required String sectionId,
+  }) async {
     user.statistics.testLimitCount--;
-    final res = await _userPersistence.doTest(DoTestRequestDto(uid: user.uuid));
-
-    if (!(res?.success ?? false)) {
-      throw Exception('failed');
-    }
-
-    return user;
+    return _userPersistence.doTest(DoTestRequest(sectionId: sectionId));
   }
 
   /// update user
   Future<User> updateUser({@required User user}) async {
-    final res =
-        await _userPersistence.updateUser(UpdateUserRequestDto(user: user));
-
-    if (!(res?.success ?? false)) {
-      throw Exception('failed');
-    }
-
-    return user;
+    return _userPersistence.updateUser(user);
   }
 
   /// update password
@@ -188,7 +148,7 @@ class UserService {
   Future<User> updateEmail(
       {@required User user, @required String newEmail}) async {
     user.attributes.email = newEmail;
-
+    await _userPersistence.updateUser(user);
     await _authPersistence.updateEmail(newEmail);
 
     return user;

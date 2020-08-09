@@ -155,7 +155,7 @@ export const updateUser = async (req: User, context: Context): Promise<User> => 
 /**
  * アカウントを削除する
  */
-export const deleteUser = async (req: string, context: Context) => {
+export const deleteUser = async (req: {}, context: Context) => {
   const uuid = await authorize(context)
 
   await userService.delete(uuid)

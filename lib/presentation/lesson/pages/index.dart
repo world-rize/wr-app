@@ -141,7 +141,7 @@ class LessonIndexPage extends StatelessWidget {
                       onFavorite: () {
                         userStore.favoritePhrase(
                           phraseId: p.id,
-                          value: !user.isFavoritePhrase(p.id),
+                          favorite: !user.isFavoritePhrase(p.id),
                         );
                       },
                     ),

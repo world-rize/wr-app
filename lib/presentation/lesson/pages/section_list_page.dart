@@ -117,7 +117,7 @@ class SectionListPage extends StatelessWidget {
                 onFavorite: () {
                   final favorite = user.isFavoritePhrase(phrase.id);
                   userStore.favoritePhrase(
-                      phraseId: phrase.id, value: !favorite);
+                      phraseId: phrase.id, favorite: !favorite);
                 },
               );
             }).toList(),

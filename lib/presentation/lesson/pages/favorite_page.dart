@@ -20,7 +20,8 @@ class FavoritePage extends StatelessWidget {
       builder: (_, res) {
         return SectionListPage(
           section: Section(
-            title: 'favorite',
+            id: 'favorite',
+            title: 'お気に入り',
             phrases: res.hasData ? res.data : [],
           ),
         );

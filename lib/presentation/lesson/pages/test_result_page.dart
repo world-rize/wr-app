@@ -91,7 +91,7 @@ class TestResultPage extends StatelessWidget {
                       final phrase = stats.section.phrases[i];
                       userStore.favoritePhrase(
                         phraseId: phrase.id,
-                        value: !user.isFavoritePhrase(phrase.id),
+                        favorite: !user.isFavoritePhrase(phrase.id),
                       );
                     },
                   ).p_1(),
