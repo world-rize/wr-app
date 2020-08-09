@@ -62,12 +62,22 @@ class ReadUserResponseDto {
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateUserRequestDto {
-  CreateUserRequestDto();
+  CreateUserRequestDto({
+    @required this.name,
+    @required this.email,
+    @required this.age,
+  });
 
   factory CreateUserRequestDto.fromJson(Map<String, dynamic> json) =>
       _$CreateUserRequestDtoFromJson(json);
 
   Map<String, dynamic> toJson() => _$CreateUserRequestDtoToJson(this);
+
+  String name;
+
+  String email;
+
+  String age;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -176,7 +186,7 @@ class FavoritePhraseResponseDto {
 class GetPointRequestDto {
   GetPointRequestDto({
     @required this.uid,
-    @required this.point,
+    @required this.points,
   });
 
   factory GetPointRequestDto.fromJson(Map<String, dynamic> json) =>
@@ -185,7 +195,7 @@ class GetPointRequestDto {
   Map<String, dynamic> toJson() => _$GetPointRequestDtoToJson(this);
 
   String uid;
-  int point;
+  int points;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)

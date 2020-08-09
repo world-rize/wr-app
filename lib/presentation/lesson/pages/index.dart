@@ -132,7 +132,7 @@ class LessonIndexPage extends StatelessWidget {
                   children: [
                     PhraseCard(
                       phrase: p,
-                      favorite: user.isFavoritePhrase(p),
+                      favorite: user.isFavoritePhrase(p.id),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => NewComingPage()),
@@ -141,7 +141,7 @@ class LessonIndexPage extends StatelessWidget {
                       onFavorite: () {
                         userStore.favoritePhrase(
                           phraseId: p.id,
-                          value: !user.isFavoritePhrase(p),
+                          value: !user.isFavoritePhrase(p.id),
                         );
                       },
                     ),

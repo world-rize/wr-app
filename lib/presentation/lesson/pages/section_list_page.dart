@@ -103,7 +103,7 @@ class SectionListPage extends StatelessWidget {
             ...section.phrases.indexedMap((index, phrase) {
               return PhraseCard(
                 phrase: phrase,
-                favorite: user.isFavoritePhrase(phrase),
+                favorite: user.isFavoritePhrase(phrase.id),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -115,7 +115,7 @@ class SectionListPage extends StatelessWidget {
                   );
                 },
                 onFavorite: () {
-                  final favorite = user.isFavoritePhrase(phrase);
+                  final favorite = user.isFavoritePhrase(phrase.id);
                   userStore.favoritePhrase(
                       phraseId: phrase.id, value: !favorite);
                 },

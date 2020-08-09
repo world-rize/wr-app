@@ -72,12 +72,17 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   final analytics = GetIt.I<FirebaseAnalytics>();
 
-  const useMock = false;
+  const useMock = true;
+
+  if (useMock) {
+    InAppLogger.log('❗ Using Mock');
+  }
+
   // repos
   final userPersistence =
       useMock ? UserPersistenceMock() : UserPersistenceMock();
   final articlePersistence =
-      true ? ArticlePersistenceMock() : ArticlePersistence();
+      useMock ? ArticlePersistenceMock() : ArticlePersistence();
   final lessonPersistence =
       useMock ? LessonPersistenceMock() : LessonPersistence();
   final authPersistence = useMock ? AuthPersistence() : AuthPersistenceMock();

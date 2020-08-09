@@ -5,6 +5,7 @@ import * as admin from 'firebase-admin'
 import { User } from './user/model/user'
 import { UserService } from './user/userService'
 import diffDefault from 'jest-diff'
+import { UserRepository } from './user/userRepository'
 const nqdm = require('nqdm')
 const colors = require('colors')
 
@@ -74,9 +75,23 @@ export class MigrationService {
 }
 
 /**
+ * テストユーザーを作成
+ */
+export const createTestUser = async () => {
+  const testUserUuid = 'CEQUGZDRjVV0IqQ1Ww4PBNnxeaI2'
+  const testUser = UserService.generateInitialUser(testUserUuid)
+  testUser.name = 'テスト'
+  testUser.statistics.points = 9999
+  testUser.attributes.age = '10'
+  testUser.attributes.email = 'a@b.com'
+  const repo = new UserRepository()
+  await repo.create(testUser)
+}
+
+/**
  * ユーザーのデータを無印からv1にマイグレーション
  */
-export const migrateUsersToV1 = () => {
+export const migrateUsersToV1 = async () => {
   if (!process.env['MIGRATE']) {
     console.warn('execute with "MIGRATE" environment variables')
     return
@@ -93,7 +108,7 @@ export const migrateUsersToV1 = () => {
   const batch = firestore.batch()
   const usersCollection = firestore.collection('users')
 
-  migrator.migrateAll<OldUserSchema, User>({
+  await migrator.migrateAll<OldUserSchema, User>({
     policy,
     oldItemsGetter: async () => {
       return Object.values((await usersCollection.get())
@@ -116,4 +131,6 @@ export const migrateUsersToV1 = () => {
   })
 }
 
-migrateUsersToV1()
+createTestUser()
+
+// migrateUsersToV1()

@@ -2,7 +2,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'activity.g.dart';
+part 'user_activity.g.dart';
 
 /// アプリ内の活動(ポイントゲット, テストなど)
 @JsonSerializable(explicitToJson: true, anyMap: true)

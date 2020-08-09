@@ -14,7 +14,7 @@ class PhraseDetailButtons extends StatelessWidget {
     final player = Provider.of<VoicePlayer>(context);
     final lesson = Provider.of<LessonNotifier>(context);
     final notifier = Provider.of<UserNotifier>(context);
-    final favorite = notifier.getUser().isFavoritePhrase(player.phrase);
+    final favorite = notifier.getUser().isFavoritePhrase(player.phrase.id);
 
     return Padding(
       padding: const EdgeInsets.all(12),

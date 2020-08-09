@@ -48,12 +48,20 @@ Map<String, dynamic> _$ReadUserResponseDtoToJson(
     };
 
 CreateUserRequestDto _$CreateUserRequestDtoFromJson(Map json) {
-  return CreateUserRequestDto();
+  return CreateUserRequestDto(
+    name: json['name'] as String,
+    email: json['email'] as String,
+    age: json['age'] as String,
+  );
 }
 
 Map<String, dynamic> _$CreateUserRequestDtoToJson(
         CreateUserRequestDto instance) =>
-    <String, dynamic>{};
+    <String, dynamic>{
+      'name': instance.name,
+      'email': instance.email,
+      'age': instance.age,
+    };
 
 CreateUserResponseDto _$CreateUserResponseDtoFromJson(Map json) {
   return CreateUserResponseDto(
@@ -158,14 +166,14 @@ Map<String, dynamic> _$FavoritePhraseResponseDtoToJson(
 GetPointRequestDto _$GetPointRequestDtoFromJson(Map json) {
   return GetPointRequestDto(
     uid: json['uid'] as String,
-    point: json['point'] as int,
+    points: json['points'] as int,
   );
 }
 
 Map<String, dynamic> _$GetPointRequestDtoToJson(GetPointRequestDto instance) =>
     <String, dynamic>{
       'uid': instance.uid,
-      'point': instance.point,
+      'points': instance.points,
     };
 
 GetPointResponseDto _$GetPointResponseDtoFromJson(Map json) {

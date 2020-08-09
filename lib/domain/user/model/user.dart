@@ -3,7 +3,7 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
-import 'package:wr_app/domain/system/model/activity.dart';
+import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 
 part 'user.g.dart';
@@ -231,9 +231,10 @@ class User {
   /// ユーザー活動
   List<UserActivity> activities;
 
+  bool get isPremium => attributes.membership == Membership.pro;
+
   ///
-  bool isFavoritePhrase(Phrase phrase) {
-    return favorites.containsKey(phrase.id) &&
-        favorites['default'].favoritePhraseIds.containsKey(phrase.id);
+  bool isFavoritePhrase(String phraseId) {
+    return favorites['default'].favoritePhraseIds.containsKey(phraseId);
   }
 }

@@ -43,7 +43,7 @@ class APITestView extends StatelessWidget {
                 leading: const Icon(Icons.attach_money),
                 onTap: () async {
                   await notifier
-                      .callGetPoint(point: 1)
+                      .callGetPoint(points: 1)
                       .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },

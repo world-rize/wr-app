@@ -85,12 +85,13 @@ class TestResultPage extends StatelessWidget {
                         ),
                       );
                     },
-                    favorite: user.isFavoritePhrase(stats.section.phrases[i]),
+                    favorite:
+                        user.isFavoritePhrase(stats.section.phrases[i].id),
                     onFavorite: () {
                       final phrase = stats.section.phrases[i];
                       userStore.favoritePhrase(
                         phraseId: phrase.id,
-                        value: !user.isFavoritePhrase(phrase),
+                        value: !user.isFavoritePhrase(phrase.id),
                       );
                     },
                   ).p_1(),
@@ -111,7 +112,7 @@ class TestResultPage extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            userStore.callGetPoint(point: stats.corrects);
+            userStore.callGetPoint(points: stats.corrects);
             _showRewardDialog(context);
           },
         ),

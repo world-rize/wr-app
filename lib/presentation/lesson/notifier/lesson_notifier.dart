@@ -49,7 +49,7 @@ class LessonNotifier with ChangeNotifier {
 
   Future<List<Phrase>> favoritePhrases() async {
     final _user = await _userService.getUser();
-    return phrasesWhere(_user.isFavoritePhrase);
+    return phrasesWhere((p) => _user.isFavoritePhrase(p.id));
   }
 
   Future<List<Phrase>> newComingPhrases() async {

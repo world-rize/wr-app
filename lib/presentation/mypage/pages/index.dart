@@ -61,7 +61,7 @@ class MyPagePage extends StatelessWidget {
                       shape: GFBadgeShape.pills,
                     ),
                   ),
-                Text(userStore.getUser().email),
+                Text(userStore.getUser().attributes.email),
               ],
             ),
           ),
@@ -70,7 +70,9 @@ class MyPagePage extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 Icon(Icons.attach_money),
-                Text(I.of(context).points(userStore.getUser().point)),
+                Text(I
+                    .of(context)
+                    .points(userStore.getUser().statistics.points)),
               ],
             ),
           )
