@@ -2,21 +2,12 @@
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
 import { IsNotEmpty, MaxLength, IsEmail } from 'class-validator'
-import { User } from './user'
+import { Phrase } from './phrase'
 
-export class TestRequest {}
-
-export interface TestResponse {
-  success: boolean
+export class DoTestRequest {
+  @IsNotEmpty()
+  readonly sectionId!: string
 }
-
-
-export class ReadUserRequest {}
-
-export interface ReadUserResponse {
-  user: User
-}
-
 
 export class CreateUserRequest {
   @MaxLength(12)
@@ -29,19 +20,6 @@ export class CreateUserRequest {
 
   @IsNotEmpty()
   readonly age!: string
-}
-
-export interface CreateUserResponse {
-  user: User
-}
-
-
-export class UpdateUserRequest {
-  user!: User
-}
-
-export interface UpdateUserResponse {
-  user: User
 }
 
 export class FavoritePhraseRequest {
@@ -64,27 +42,46 @@ export class FavoritePhraseRequest {
   readonly favorite!: boolean
 }
 
-export interface FavoritePhraseResponse {
-  success: boolean
-}
-
 export class GetPointRequest {
   @IsNotEmpty()
   readonly points!: number
 }
 
-export interface GetPointResponse {
-  success: boolean
+export class CreateFavoriteListRequest {
+  @IsNotEmpty()
+  readonly name!: string
 }
 
-export class DoTestRequest {
-  sectionId!: string
-}
-export interface DoTestResponse {
-  success: boolean
+export class DeleteFavoriteListRequest {
+  @IsNotEmpty()
+  readonly listId!: string
 }
 
-export class DeleteUserRequest {}
-export interface DeleteUserResponse {
-  success: boolean
+export class CreatePhrasesListRequest {
+  @IsNotEmpty()
+  readonly title!: string
+}
+
+export class AddPhraseToPhraseListRequest {
+  @IsNotEmpty()
+  readonly listId!: string
+
+  @IsNotEmpty()
+  readonly phrase!: Phrase
+}
+
+export class DeletePhraseRequest {
+  @IsNotEmpty()
+  readonly listId!: string
+
+  @IsNotEmpty()
+  readonly phraseId!: string
+}
+
+export class SendTestResultRequest {
+  @IsNotEmpty()
+  readonly sectionId!: string
+
+  @IsNotEmpty()
+  readonly score!: number
 }

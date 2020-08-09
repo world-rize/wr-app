@@ -3,7 +3,6 @@
  */
 import { User } from './model/user'
 import { v4 as uuidv4 } from 'uuid'
-import { CreateUserRequest, UpdateUserRequest } from './model/userApiDto'
 import { UserRepository } from './userRepository'
 import { FavoritePhraseList, PhraseList, Phrase } from './model/phrase'
 
@@ -26,7 +25,7 @@ export class UserService {
       name: '',
       userId: uuid,
       favorites: {
-        'default': UserService.generateFavoriteGroup('default', 'お気に入り', true)
+        'default': UserService.generateFavoriteList('default', 'お気に入り', true)
       },
       notes: {},
       activities: [
@@ -51,7 +50,7 @@ export class UserService {
     }
   }
 
-  static generateFavoriteGroup(listId: string, title: string, isDefault: boolean = false): FavoritePhraseList {
+  static generateFavoriteList(listId: string, title: string, isDefault: boolean = false): FavoritePhraseList {
     return {
       schemaVersion: 'v1',
       id: listId,
@@ -77,15 +76,15 @@ export class UserService {
     return this.repo.exists(uuid)
   }
 
-  async updateUser(req: UpdateUserRequest): Promise<User> {
-    return this.repo.update(req.user)
+  async updateUser(user: User): Promise<User> {
+    return this.repo.update(user)
   }
 
-  async createUser(uuid: string, req: CreateUserRequest) {
+  async createUser(uuid: string, name: string, email: string, age: string) {
     const user = UserService.generateInitialUser(uuid)
-    user.name = req.name
-    user.attributes.email = req.email
-    user.attributes.age = req.age
+    user.name = name
+    user.attributes.email = email
+    user.attributes.age = age
     return this.repo.create(user)
   }
 
@@ -112,26 +111,17 @@ export class UserService {
     await this.repo.update(user)
   }
 
-  async createFavoriteGroup(uuid: string, title: string) {
+  async createFavoriteList(uuid: string, title: string) {
     const user = await this.repo.findById(uuid)
     const listId = uuidv4()
 
-    user.favorites[listId] = UserService.generateFavoriteGroup(listId, title)
+    user.favorites[listId] = UserService.generateFavoriteList(listId, title)
     await this.repo.update(user)
   }
 
-  async deleteFavoriteGroup(uuid: string, listId: string) {
+  async deleteFavoriteList(uuid: string, listId: string) {
     const user = await this.repo.findById(uuid)
     delete user.favorites[listId]
-    await this.repo.update(user)
-  }
-
-  async addPhraseToFavoriteList(uuid: string, listId: string, phraseId: string) {
-    const user = await this.repo.findById(uuid)
-    user.favorites[listId].favoritePhraseIds[phraseId] = {
-      id: phraseId,
-      createdAt: new Date()
-    }
     await this.repo.update(user)
   }
 
@@ -146,7 +136,29 @@ export class UserService {
 
   async addPhraseToPhraseList(uuid: string, listId: string, phrase: Phrase) {
     const user = await this.repo.findById(uuid)
+
+    if (!user.notes[listId]) {
+      throw `Note ${listId} not found`
+    }
+
     user.notes[listId].phrases[phrase.id] = phrase
+    await this.repo.update(user)
+  }
+
+  async deletePhrase(uuid: string, listId: string, phraseId: string) {
+    const user = await this.repo.findById(uuid)
+
+    if (!user.notes[listId]) {
+      throw `Note ${listId} not found`
+    }
+
+    user.notes[listId].phrases[phraseId]
+    await this.repo.update(user)
+  }
+
+  async deletePhraseList(uuid: string, listId: string) {
+    const user = await this.repo.findById(uuid)
+    delete user.notes[listId]
     await this.repo.update(user)
   }
 
@@ -188,7 +200,7 @@ export class UserService {
     await this.repo.update(user)
   }
 
-  async SendScoreResult(uuid: string, sectionId: string, score: number) {
+  async SendTestResult(uuid: string, sectionId: string, score: number) {
     const user = await this.repo.findById(uuid)
 
     if (parseInt(user.statistics.testScores[sectionId] ?? '0') < score) {
