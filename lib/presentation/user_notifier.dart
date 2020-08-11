@@ -33,25 +33,26 @@ class UserNotifier with ChangeNotifier {
 
   Future<void> signUpWithGoogle() async {
     _user = await _userService.signUpWithGoogle();
-    InAppLogger.log(_user.toJson().toString(), type: 'user');
+    InAppLogger.debugJson(_user.toJson());
   }
 
   Future<void> signOut() async {
-    InAppLogger.log('✔ user signed out', type: 'user');
+    InAppLogger.info('✔ user signed out');
     return _userService.signOut();
   }
 
   /// メールアドレスとパスワードでログイン
   Future<void> loginWithEmailAndPassword(String email, String password) async {
     _user = await _userService.signInWithEmailAndPassword(email, password);
-    InAppLogger.log('✔ loginWithEmailAndPassword', type: 'user');
+    InAppLogger.info('✔ loginWithEmailAndPassword');
+    InAppLogger.debugJson(_user.toJson());
     notifyListeners();
   }
 
   /// Googleでログイン
   Future<void> loginWithGoogle() async {
     _user = await _userService.signUpWithGoogle();
-    InAppLogger.log('✔ loginWithGoogle', type: 'user');
+    InAppLogger.info('✔ loginWithGoogle');
     notifyListeners();
   }
 
@@ -64,7 +65,7 @@ class UserNotifier with ChangeNotifier {
   }) async {
     _user = await _userService.signUpWithEmailAndPassword(
         email: email, password: password, age: age, name: name);
-    InAppLogger.log('✔ signUpWithEmailAndPassword', type: 'user');
+    InAppLogger.info('✔ signUpWithEmailAndPassword');
     notifyListeners();
 
     NotifyToast.success('ログインしました');
@@ -98,7 +99,7 @@ class UserNotifier with ChangeNotifier {
 
   /// Test API
   Future<void> test() async {
-    InAppLogger.log('callTestAPI()');
+    InAppLogger.info('callTestAPI()');
     await _userService.test();
     notifyListeners();
   }
@@ -141,7 +142,7 @@ class UserNotifier with ChangeNotifier {
 
     notifyListeners();
 
-    InAppLogger.log('受講可能回数がリセットされました');
+    InAppLogger.info('受講可能回数がリセットされました');
     NotifyToast.success('受講可能回数がリセットされました');
   }
 
@@ -172,7 +173,7 @@ class UserNotifier with ChangeNotifier {
       await sendEvent(event: AnalyticsEvent.upGrade);
     }
 
-    InAppLogger.log('membership to be $membership');
+    InAppLogger.info('membership to be $membership');
     NotifyToast.success('$membership');
   }
 }

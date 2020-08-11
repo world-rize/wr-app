@@ -142,22 +142,24 @@ class MyPagePage extends StatelessWidget {
       fallbackHeight: 100,
     );
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: userInfo,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: gridMenus,
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: settings,
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: userInfo,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: gridMenus,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: settings,
+          ),
+        ],
+      ),
     );
   }
 }

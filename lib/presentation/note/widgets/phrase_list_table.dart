@@ -10,8 +10,125 @@ class PhraseListTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Placeholder(
-      fallbackHeight: 500,
+    final header = Row(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Row(
+            children: [
+              FlatButton.icon(
+                onPressed: () {},
+                color: Colors.transparent,
+                icon: Icon(
+                  Icons.folder_open,
+                  size: 40,
+                ),
+                label: Text(
+                  phraseList.title,
+                  style: TextStyle(fontSize: 24),
+                ),
+              )
+            ],
+          ),
+        ),
+        Spacer(),
+        Padding(
+          padding: const EdgeInsets.all(8).add(EdgeInsets.only(right: 8)),
+          child: FlatButton(
+            color: Colors.orange,
+            child: Text(
+              'Play',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {},
+          ),
+        )
+      ],
+    );
+
+    final phrasesTable = Table(
+        border: TableBorder.all(
+          color: Colors.grey,
+          width: 0.5,
+        ),
+        columnWidths: const {
+          0: FlexColumnWidth(1),
+          1: FlexColumnWidth(3),
+          2: FlexColumnWidth(3),
+        },
+        children: [
+          // header
+          const TableRow(
+            children: [
+              TableCell(
+                // empty widget
+                child: SizedBox.shrink(),
+              ),
+              TableCell(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Center(
+                    child: Text('日本語'),
+                  ),
+                ),
+              ),
+              TableCell(
+                child: Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Center(
+                    child: Text('英語'),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          ...phraseList.phrases.values.map((phrase) {
+            return TableRow(
+              children: [
+                TableCell(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.favorite_border,
+                          color: Colors.redAccent,
+                        ),
+                        onPressed: () {},
+                      ),
+                    ),
+                  ),
+                ),
+                TableCell(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(phrase.title['ja']),
+                    ),
+                  ),
+                ),
+                TableCell(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(phrase.title['en']),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
+        ]);
+
+    return Column(
+      children: [
+        header,
+        Padding(
+          padding: const EdgeInsets.all(8),
+          child: phrasesTable,
+        ),
+      ],
     );
   }
 }

@@ -9,6 +9,7 @@ import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_search_iconbutton.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 
 /// root view
 class RootView extends StatefulWidget {
@@ -25,31 +26,34 @@ class _RootViewState extends State<RootView>
   /// navbar controller
   PageController _pageController;
 
+  /// Check user status
+  void _checkUserStatus(Duration timestamp) {
+    // TODO: membership check
+    // on first launch, show on-boarding page
+    final loggedIn = Provider.of<UserNotifier>(context, listen: false).loggedIn;
+    final firstLaunch =
+        Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
+
+    InAppLogger.debug('first launch: $firstLaunch, logged in: $loggedIn');
+
+    // show on boarding modal
+    if (firstLaunch || !loggedIn) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => OnBoardingPage(),
+          fullscreenDialog: true,
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _index = 0;
     _pageController = PageController();
 
-    /// on first launch, show on-boarding page
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final loggedIn =
-          Provider.of<UserNotifier>(context, listen: false).loggedIn;
-      final firstLaunch =
-          Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
-
-      print('first launch: $firstLaunch, logged in: $loggedIn');
-
-      // show on boarding modal
-      if (firstLaunch || !loggedIn) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => OnBoardingPage(),
-            fullscreenDialog: true,
-          ),
-        );
-      }
-    });
+    WidgetsBinding.instance.addPostFrameCallback(_checkUserStatus);
   }
 
   @override

@@ -32,7 +32,7 @@ class LessonService {
     final email = DotEnv().env['FEEDBACK_MAIL_ADDRESS'];
     await _lessonPersistence.sendPhraseRequest(email: email, text: text);
 
-    InAppLogger.log('send phrase request', type: 'api');
+    InAppLogger.info('send phrase request');
   }
 
   bool getShowTranslation() => _lessonPersistence.getShowTranslation();

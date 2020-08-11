@@ -32,7 +32,7 @@ class LessonPersistenceMock implements LessonRepository {
 
   @override
   Future<void> sendPhraseRequest({String text, String email}) async {
-    InAppLogger.log(text);
+    InAppLogger.info(text);
   }
 
   @override
