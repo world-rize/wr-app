@@ -2,6 +2,9 @@
 import 'dart:async';
 
 import 'package:uuid/uuid.dart';
+import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
+import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
+import 'package:wr_app/domain/lesson/model/phrase_list.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';

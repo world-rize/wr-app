@@ -38,6 +38,12 @@ task :gen do
   sh 'flutter pub run build_runner build --delete-conflicting-outputs'
 end
 
+desc 'コード生成(watch)'
+task :watch do
+  puts '[Task watch]'
+  sh 'flutter pub run build_runner watch --delete-conflicting-outputs'
+end
+
 desc 'i10n生成'
 task :i10n do
   puts '[Task i10n]'
