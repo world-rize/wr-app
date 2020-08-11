@@ -95,6 +95,26 @@ Map<String, dynamic> _$CreatePhrasesListRequestToJson(
       'title': instance.title,
     };
 
+UpdatePhraseRequest _$UpdatePhraseRequestFromJson(Map json) {
+  return UpdatePhraseRequest(
+    listId: json['listId'] as String,
+    phraseId: json['phraseId'] as String,
+    phrase: json['phrase'] == null
+        ? null
+        : Phrase.fromJson((json['phrase'] as Map)?.map(
+            (k, e) => MapEntry(k as String, e),
+          )),
+  );
+}
+
+Map<String, dynamic> _$UpdatePhraseRequestToJson(
+        UpdatePhraseRequest instance) =>
+    <String, dynamic>{
+      'listId': instance.listId,
+      'phraseId': instance.phraseId,
+      'phrase': instance.phrase?.toJson(),
+    };
+
 AddPhraseToPhraseListRequest _$AddPhraseToPhraseListRequestFromJson(Map json) {
   return AddPhraseToPhraseListRequest(
     listId: json['listId'] as String,

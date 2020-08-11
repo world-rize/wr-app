@@ -8,6 +8,8 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_search_iconbutton.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/ui/widgets/animated_bottom_banner.dart';
+import 'package:wr_app/ui/widgets/footer_layout.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -66,6 +68,8 @@ class _RootViewState extends State<RootView>
       return const Scaffold();
     }
 
+    final bottomRibbon = AnimatedBottomBanner();
+
     final header = Row(
       children: <Widget>[
         Image.asset(
@@ -91,6 +95,13 @@ class _RootViewState extends State<RootView>
             builder: (_) => SettingsPage(),
             fullscreenDialog: true,
           ));
+        },
+      ),
+      // settings
+      IconButton(
+        icon: const Icon(Icons.send),
+        onPressed: () {
+          bottomRibbon.createState().animate();
         },
       )
     ];
@@ -128,35 +139,6 @@ class _RootViewState extends State<RootView>
       ],
     );
 
-    final bottomRibbon = Container(
-      color: Colors.green,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: const [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                'XXX',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Icon(
-              Icons.chevron_right,
-              size: 24,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
-    );
-
     final pageView = PageView(
       controller: _pageController,
       // physics: const NeverScrollableScrollPhysics(),
@@ -180,11 +162,10 @@ class _RootViewState extends State<RootView>
         title: header,
         actions: actions,
       ),
-//      body: FooterLayout(
-//        body: pageView,
-//        footer: bottomRibbon,
-//      ),
-      body: pageView,
+      body: FooterLayout(
+        body: pageView,
+        footer: bottomRibbon,
+      ),
       bottomNavigationBar: navbar,
     );
   }

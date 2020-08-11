@@ -51,6 +51,7 @@ dependencies:
   flappy_search_bar: 1.4.1
   intro_slider: ^2.3.1
   flutter_sliding_tutorial: ^0.1.0
+  flutter_sequence_animation: ^2.0.0
 
   # util
   flutter_markdown: ^0.3.2
@@ -92,7 +93,7 @@ dev_dependencies:
   flutter_native_splash: ^0.1.9
   # i18n
   intl_translation: any
-  # freezed: ^0.11.2
+  # freezed:
   test:
 
 flutter:

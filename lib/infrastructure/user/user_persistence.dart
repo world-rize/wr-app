@@ -146,4 +146,10 @@ class UserPersistence implements UserRepository {
         .call(req.toJson())
         .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
+
+  @override
+  Future<User> updatePhrase(UpdatePhraseRequest req) {
+    // TODO: implement updateFavoriteList
+    throw UnimplementedError();
+  }
 }

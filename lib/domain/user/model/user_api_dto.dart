@@ -121,6 +121,26 @@ class CreatePhrasesListRequest {
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
+class UpdatePhraseRequest {
+  UpdatePhraseRequest({
+    @required this.listId,
+    @required this.phraseId,
+    @required this.phrase,
+  });
+
+  factory UpdatePhraseRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpdatePhraseRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdatePhraseRequestToJson(this);
+
+  String listId;
+
+  String phraseId;
+
+  Phrase phrase;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class AddPhraseToPhraseListRequest {
   AddPhraseToPhraseListRequest({
     @required this.listId,

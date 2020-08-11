@@ -127,10 +127,28 @@ class UserPersistenceMock implements UserRepository {
   @override
   Future<User> addPhraseToPhraseList(AddPhraseToPhraseListRequest req) async {
     final user = _readUserMock();
-    if (user.notes.containsKey(req.listId)) {
+    if (!user.notes.containsKey(req.listId)) {
       throw Exception('Note ${req.listId} not found');
     }
+
     user.notes[req.listId].phrases.putIfAbsent(req.listId, () => req.phrase);
+    await Future.delayed(const Duration(seconds: 1));
+    return user;
+  }
+
+  @override
+  Future<User> updatePhrase(UpdatePhraseRequest req) async {
+    final user = _readUserMock();
+    if (!user.notes.containsKey(req.listId)) {
+      throw Exception('Note ${req.listId} not found');
+    }
+
+    if (!user.notes[req.listId].phrases.containsKey(req.phraseId)) {
+      throw Exception('Phrase ${req.phraseId} not found');
+    }
+
+    user.notes[req.listId].phrases[req.phraseId] = req.phrase;
+
     await Future.delayed(const Duration(seconds: 1));
     return user;
   }
