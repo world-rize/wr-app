@@ -1,7 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_sequence_animation/flutter_sequence_animation.dart';
 
 class AnimatedBottomBanner extends StatefulWidget {
   @override
@@ -11,49 +10,39 @@ class AnimatedBottomBanner extends StatefulWidget {
 class _AnimatedBottomBannerState extends State<AnimatedBottomBanner>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
-  SequenceAnimation _animation;
+  Animation<Offset> _position;
 
   @override
   void initState() {
     super.initState();
 
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    )..repeat(reverse: true);
-
-    _animation = SequenceAnimationBuilder()
-        .addAnimatable(
-          animatable: Tween<Offset>(
+    _animationController = AnimationController(vsync: this);
+    _position = TweenSequence([
+      TweenSequenceItem(
+          tween: Tween<Offset>(
             begin: const Offset(-1, 0),
             end: Offset.zero,
           ),
-          from: const Duration(milliseconds: 0),
-          to: const Duration(milliseconds: 1000),
-          curve: Curves.easeIn,
-          tag: 'offset',
-        )
-        .addAnimatable(
-          animatable: Tween<Offset>(
+          weight: 20),
+      TweenSequenceItem(
+          tween: Tween<Offset>(
             begin: Offset.zero,
             end: Offset.zero,
           ),
-          from: const Duration(milliseconds: 1000),
-          to: const Duration(milliseconds: 2000),
-          curve: Curves.easeIn,
-          tag: 'offset',
-        )
-        .addAnimatable(
-          animatable: Tween<Offset>(
-            begin: Offset.zero,
-            end: const Offset(1, 0),
-          ),
-          from: const Duration(milliseconds: 2000),
-          to: const Duration(milliseconds: 3000),
-          curve: Curves.easeIn,
-          tag: 'offset',
-        )
-        .animate(_animationController);
+          weight: 60),
+      TweenSequenceItem(
+        tween: Tween<Offset>(
+          begin: const Offset(1, 0),
+          end: Offset.zero,
+        ),
+        weight: 20,
+      ),
+    ]).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.2, 0.7, curve: Curves.ease),
+      ),
+    );
   }
 
   void animate() {
@@ -73,36 +62,38 @@ class _AnimatedBottomBannerState extends State<AnimatedBottomBanner>
       return SizedBox.shrink();
     }
 
-    return SlideTransition(
-      position: _animation['offset'].value,
-      child: Container(
-        color: Colors.green,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          children: const [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: Text(
-                  'XXX',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
+    final ribbon = Container(
+      color: Colors.green,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: const [
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                'XXX',
+                style: TextStyle(
+                  fontSize: 24,
+                  color: Colors.white,
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: Icon(
-                Icons.chevron_right,
-                size: 24,
-                color: Colors.white,
-              ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: Icon(
+              Icons.chevron_right,
+              size: 24,
+              color: Colors.white,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+
+    return SlideTransition(
+      position: _position,
+      child: ribbon,
     );
   }
 }

@@ -12,7 +12,7 @@ class NotifyToast {
     Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_LONG,
-      backgroundColor: Colors.greenAccent,
+      backgroundColor: Colors.green,
     );
   }
 

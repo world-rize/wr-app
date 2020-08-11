@@ -8,8 +8,6 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_search_iconbutton.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/ui/widgets/animated_bottom_banner.dart';
-import 'package:wr_app/ui/widgets/footer_layout.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -68,8 +66,6 @@ class _RootViewState extends State<RootView>
       return const Scaffold();
     }
 
-    final bottomRibbon = AnimatedBottomBanner();
-
     final header = Row(
       children: <Widget>[
         Image.asset(
@@ -97,13 +93,6 @@ class _RootViewState extends State<RootView>
           ));
         },
       ),
-      // settings
-      IconButton(
-        icon: const Icon(Icons.send),
-        onPressed: () {
-          bottomRibbon.createState().animate();
-        },
-      )
     ];
 
     final navbar = BottomNavigationBar(
@@ -162,10 +151,7 @@ class _RootViewState extends State<RootView>
         title: header,
         actions: actions,
       ),
-      body: FooterLayout(
-        body: pageView,
-        footer: bottomRibbon,
-      ),
+      body: pageView,
       bottomNavigationBar: navbar,
     );
   }
