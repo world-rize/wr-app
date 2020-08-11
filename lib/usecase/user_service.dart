@@ -2,13 +2,14 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
+import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 
-// TODO(someone): Error handling
-// update api returns updated object
+// TODO: Error handling
+// TODO: update api returns updated object
 class UserService {
   const UserService({
     @required AuthRepository authPersistence,
@@ -79,13 +80,7 @@ class UserService {
   }) async {
     final req = FavoritePhraseRequest(
         listId: 'default', phraseId: phraseId, favorite: favorite);
-    await _userPersistence.favoritePhrase(req);
-
-    user.favorites[listId].favoritePhraseIds[phraseId] = FavoritePhraseDigest(
-      id: phraseId,
-      createdAt: DateTime.now(),
-    );
-    return user;
+    return _userPersistence.favoritePhrase(req);
   }
 
   /// 受講可能回数をリセット
@@ -101,17 +96,14 @@ class UserService {
     @required User user,
     @required int points,
   }) async {
-    user.statistics.points += points;
     final req = GetPointRequest(
       points: points,
     );
-    final res = await _userPersistence.getPoint(req);
-    return user;
+    return _userPersistence.getPoint(req);
   }
 
   Future<User> updateAge({@required User user, @required String age}) async {
     user.attributes.age = age;
-
     return _userPersistence.updateUser(user);
   }
 
@@ -119,38 +111,84 @@ class UserService {
   Future<User> changePlan({
     @required User user,
     @required Membership membership,
-  }) async {
+  }) {
     user.attributes.membership = membership;
     return _userPersistence.updateUser(user);
   }
 
   /// do test
-  Future<void> doTest({
+  Future<User> doTest({
     @required User user,
     @required String sectionId,
-  }) async {
-    user.statistics.testLimitCount--;
+  }) {
     return _userPersistence.doTest(DoTestRequest(sectionId: sectionId));
   }
 
+  /// send result
+  Future<User> sendTestResult({
+    @required User user,
+    @required String sectionId,
+    @required int score,
+  }) {
+    return _userPersistence.sendTestResult(
+        SendTestResultRequest(sectionId: sectionId, score: score));
+  }
+
   /// update user
-  Future<User> updateUser({@required User user}) async {
+  Future<User> updateUser({@required User user}) {
     return _userPersistence.updateUser(user);
   }
 
   /// update password
-  Future<void> updatePassword(
-      {@required String currentPassword, @required String newPassword}) {
+  Future<void> updatePassword({
+    @required String currentPassword,
+    @required String newPassword,
+  }) {
     return _authPersistence.updatePassword(currentPassword, newPassword);
   }
 
   /// update email
-  Future<User> updateEmail(
-      {@required User user, @required String newEmail}) async {
+  Future<User> updateEmail({
+    @required User user,
+    @required String newEmail,
+  }) async {
     user.attributes.email = newEmail;
     await _userPersistence.updateUser(user);
     await _authPersistence.updateEmail(newEmail);
 
     return user;
+  }
+
+  /// create favorite list
+  Future<User> createFavoriteList({
+    @required String name,
+  }) {
+    final req = CreateFavoriteListRequest(name: name);
+    return _userPersistence.createFavoriteList(req);
+  }
+
+  /// delete favorite list
+  Future<User> deleteFavoriteList({
+    @required String listId,
+  }) async {
+    final req = DeleteFavoriteListRequest(listId: listId);
+    return _userPersistence.deleteFavoriteList(req);
+  }
+
+  /// create note
+  Future<User> createPhrasesList({
+    @required String title,
+  }) {
+    final req = CreatePhrasesListRequest(title: title);
+    return _userPersistence.createPhrasesList(req);
+  }
+
+  /// add phrase to note
+  Future<User> addPhraseToPhraseList({
+    @required String listId,
+    @required Phrase phrase,
+  }) {
+    final req = AddPhraseToPhraseListRequest(listId: listId, phrase: phrase);
+    return _userPersistence.addPhraseToPhraseList(req);
   }
 }

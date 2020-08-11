@@ -1,11 +1,24 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'dart:async';
 
+import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
 
 class UserPersistenceMock implements UserRepository {
+  /// get current user
+  User _readUserMock() {
+    final notifier = UserNotifier(
+      service: UserService(
+        authPersistence: AuthPersistenceMock(),
+        userPersistence: UserPersistenceMock(),
+      ),
+    );
+    return notifier.getUser();
+  }
+
   @override
   Future<void> test() async {
     await Future.delayed(const Duration(seconds: 1));
@@ -13,8 +26,9 @@ class UserPersistenceMock implements UserRepository {
 
   @override
   Future<User> readUser() async {
+    final user = _readUserMock();
     await Future.delayed(const Duration(seconds: 1));
-    return User.dummy();
+    return user;
   }
 
   @override
@@ -26,7 +40,7 @@ class UserPersistenceMock implements UserRepository {
   @override
   Future<User> updateUser(User req) async {
     await Future.delayed(const Duration(seconds: 1));
-    return User.dummy();
+    return req;
   }
 
   @override
@@ -35,42 +49,87 @@ class UserPersistenceMock implements UserRepository {
   }
 
   @override
-  Future<void> favoritePhrase(FavoritePhraseRequest req) async {
+  Future<User> favoritePhrase(FavoritePhraseRequest req) async {
+    final user = _readUserMock();
+    user.favorites[req.listId].favoritePhraseIds[req.phraseId] =
+        FavoritePhraseDigest(
+      id: req.phraseId,
+      createdAt: DateTime.now(),
+    );
     await Future.delayed(const Duration(seconds: 1));
+    return user;
   }
 
   @override
-  Future<void> getPoint(GetPointRequest req) async {
+  Future<User> getPoint(GetPointRequest req) async {
+    final user = _readUserMock();
+    user.statistics.points += req.points;
     await Future.delayed(const Duration(seconds: 1));
+    return user;
   }
 
   @override
-  Future<void> doTest(DoTestRequest req) async {
+  Future<User> doTest(DoTestRequest req) async {
+    final user = _readUserMock();
+    user.statistics.testLimitCount--;
     await Future.delayed(const Duration(seconds: 1));
+    return user;
   }
 
   @override
-  Future<void> sendTestResult(SendTestResultRequest req) async {
+  Future<User> sendTestResult(SendTestResultRequest req) async {
+    final user = _readUserMock();
+    user.statistics.testScores[req.sectionId] = req.score;
     await Future.delayed(const Duration(seconds: 1));
+    return user;
   }
 
   @override
-  Future<void> createFavoriteList(CreateFavoriteListRequest req) async {
+  Future<User> createFavoriteList(CreateFavoriteListRequest req) async {
+    final user = _readUserMock();
+    final listId = Uuid().v4();
+    user.favorites[listId] = FavoritePhraseList(
+      id: listId,
+      title: req.name,
+      isDefault: false,
+      sortType: '',
+      favoritePhraseIds: {},
+    );
     await Future.delayed(const Duration(seconds: 1));
+    return user;
   }
 
   @override
-  Future<void> deleteFavoriteList(DeleteFavoriteListRequest req) async {
+  Future<User> deleteFavoriteList(DeleteFavoriteListRequest req) async {
+    final user = _readUserMock();
+    user.favorites.remove(req.listId);
     await Future.delayed(const Duration(seconds: 1));
+    return user;
   }
 
   @override
-  Future<void> createPhrasesList(CreatePhrasesListRequest req) async {
+  Future<User> createPhrasesList(CreatePhrasesListRequest req) async {
+    final user = _readUserMock();
+    final listId = Uuid().v4();
+    user.notes[listId] = PhraseList(
+      id: listId,
+      title: req.title,
+      isDefault: false,
+      sortType: '',
+      phrases: {},
+    );
     await Future.delayed(const Duration(seconds: 1));
+    return user;
   }
 
   @override
-  Future<void> addPhraseToPhraseList(AddPhraseToPhraseListRequest req) async {
+  Future<User> addPhraseToPhraseList(AddPhraseToPhraseListRequest req) async {
+    final user = _readUserMock();
+    if (user.notes.containsKey(req.listId)) {
+      throw Exception('Note ${req.listId} not found');
+    }
+    user.notes[req.listId].phrases.putIfAbsent(req.listId, () => req.phrase);
     await Future.delayed(const Duration(seconds: 1));
+    return user;
   }
 }

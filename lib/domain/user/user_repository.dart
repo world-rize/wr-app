@@ -14,19 +14,19 @@ abstract class UserRepository {
 
   Future<void> deleteUser();
 
-  Future<void> favoritePhrase(FavoritePhraseRequest req);
+  Future<User> favoritePhrase(FavoritePhraseRequest req);
 
-  Future<void> getPoint(GetPointRequest req);
+  Future<User> getPoint(GetPointRequest req);
 
-  Future<void> doTest(DoTestRequest req);
+  Future<User> doTest(DoTestRequest req);
 
-  Future<void> createFavoriteList(CreateFavoriteListRequest req);
+  Future<User> createFavoriteList(CreateFavoriteListRequest req);
 
-  Future<void> deleteFavoriteList(DeleteFavoriteListRequest req);
+  Future<User> deleteFavoriteList(DeleteFavoriteListRequest req);
 
-  Future<void> createPhrasesList(CreatePhrasesListRequest req);
+  Future<User> createPhrasesList(CreatePhrasesListRequest req);
 
-  Future<void> addPhraseToPhraseList(AddPhraseToPhraseListRequest req);
+  Future<User> addPhraseToPhraseList(AddPhraseToPhraseListRequest req);
 
-  Future<void> sendTestResult(SendTestResultRequest req);
+  Future<User> sendTestResult(SendTestResultRequest req);
 }

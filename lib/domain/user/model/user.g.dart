@@ -9,7 +9,7 @@ part of 'user.dart';
 UserStatistics _$UserStatisticsFromJson(Map json) {
   return UserStatistics(
     testScores: (json['testScores'] as Map)?.map(
-      (k, e) => MapEntry(k as String, e as String),
+      (k, e) => MapEntry(k as String, e as int),
     ),
     points: json['points'] as int,
     testLimitCount: json['testLimitCount'] as int,

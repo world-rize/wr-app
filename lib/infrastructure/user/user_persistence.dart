@@ -49,83 +49,101 @@ class UserPersistence implements UserRepository {
   }
 
   @override
-  Future<void> deleteUser() async {
+  Future<User> deleteUser() async {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'deleteUser')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call();
+    return callable
+        .call()
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
-  Future<void> favoritePhrase(FavoritePhraseRequest req) {
+  Future<User> favoritePhrase(FavoritePhraseRequest req) {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'favoritePhrase')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req.toJson());
+    return callable
+        .call(req.toJson())
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
-  Future<void> getPoint(GetPointRequest req) {
+  Future<User> getPoint(GetPointRequest req) {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'getPoint')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req.toJson());
+    return callable
+        .call(req.toJson())
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
-  Future<void> doTest(DoTestRequest req) {
+  Future<User> doTest(DoTestRequest req) {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'doTest')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req.toJson());
+    return callable
+        .call(req.toJson())
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
-  Future<void> sendTestResult(SendTestResultRequest req) {
+  Future<User> sendTestResult(SendTestResultRequest req) {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'sendTestResult')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req.toJson());
+    return callable
+        .call(req.toJson())
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
-  Future<void> createFavoriteList(CreateFavoriteListRequest req) {
+  Future<User> createFavoriteList(CreateFavoriteListRequest req) {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'createFavoriteList')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req.toJson());
+    return callable
+        .call(req.toJson())
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
-  Future<void> deleteFavoriteList(DeleteFavoriteListRequest req) {
+  Future<User> deleteFavoriteList(DeleteFavoriteListRequest req) {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'deleteFavoriteList')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req.toJson());
+    return callable
+        .call(req.toJson())
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
-  Future<void> createPhrasesList(CreatePhrasesListRequest req) {
+  Future<User> createPhrasesList(CreatePhrasesListRequest req) {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'createPhrasesList')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req.toJson());
+    return callable
+        .call(req.toJson())
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 
   @override
-  Future<void> addPhraseToPhraseList(AddPhraseToPhraseListRequest req) {
+  Future<User> addPhraseToPhraseList(AddPhraseToPhraseListRequest req) {
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'addPhraseToPhraseList')
           ..timeout = const Duration(seconds: 10);
 
-    return callable.call(req.toJson());
+    return callable
+        .call(req.toJson())
+        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
   }
 }

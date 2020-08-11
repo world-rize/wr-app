@@ -72,7 +72,7 @@ export class UserService {
     }
   }
 
-  async existUser(uuid: string) {
+  async existUser(uuid: string): Promise<boolean> {
     return this.repo.exists(uuid)
   }
 
@@ -80,7 +80,7 @@ export class UserService {
     return this.repo.update(user)
   }
 
-  async createUser(uuid: string, name: string, email: string, age: string) {
+  async createUser(uuid: string, name: string, email: string, age: string): Promise<User> {
     const user = UserService.generateInitialUser(uuid)
     user.name = name
     user.attributes.email = email
@@ -92,7 +92,7 @@ export class UserService {
     return this.repo.findById(uuid)
   }
 
-  async favoritePhrase (uuid: string, listId: string, phraseId: string, favorite: boolean) {
+  async favoritePhrase (uuid: string, listId: string, phraseId: string, favorite: boolean): Promise<User> {
     const user = await this.repo.findById(uuid)
 
     if (!user.favorites[listId]) {
@@ -108,33 +108,33 @@ export class UserService {
       delete user.favorites[listId].favoritePhraseIds[phraseId]
     }
   
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 
-  async createFavoriteList(uuid: string, title: string) {
+  async createFavoriteList(uuid: string, title: string): Promise<User> {
     const user = await this.repo.findById(uuid)
     const listId = uuidv4()
 
     user.favorites[listId] = UserService.generateFavoriteList(listId, title)
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 
-  async deleteFavoriteList(uuid: string, listId: string) {
+  async deleteFavoriteList(uuid: string, listId: string): Promise<User> {
     const user = await this.repo.findById(uuid)
     delete user.favorites[listId]
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 
   // TODO: user -> notes 以下に移動
-  async createPhrasesList(uuid: string, title: string) {
+  async createPhrasesList(uuid: string, title: string): Promise<User> {
     const user = await this.repo.findById(uuid)
     const listId = uuidv4()
 
     user.notes[listId] = UserService.generatePhrasesList(listId, title)
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 
-  async addPhraseToPhraseList(uuid: string, listId: string, phrase: Phrase) {
+  async addPhraseToPhraseList(uuid: string, listId: string, phrase: Phrase): Promise<User> {
     const user = await this.repo.findById(uuid)
 
     if (!user.notes[listId]) {
@@ -142,27 +142,27 @@ export class UserService {
     }
 
     user.notes[listId].phrases[phrase.id] = phrase
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 
-  async deletePhrase(uuid: string, listId: string, phraseId: string) {
+  async deletePhrase(uuid: string, listId: string, phraseId: string): Promise<User> {
     const user = await this.repo.findById(uuid)
 
     if (!user.notes[listId]) {
       throw `Note ${listId} not found`
     }
 
-    user.notes[listId].phrases[phraseId]
-    await this.repo.update(user)
+    delete user.notes[listId].phrases[phraseId]
+    return this.repo.update(user)
   }
 
-  async deletePhraseList(uuid: string, listId: string) {
+  async deletePhraseList(uuid: string, listId: string): Promise<User> {
     const user = await this.repo.findById(uuid)
     delete user.notes[listId]
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 
-  async getPoint (uuid: string, points: number) {
+  async getPoint (uuid: string, points: number): Promise<User> {
     const user = await this.repo.findById(uuid)
 
     if (user.statistics.points + points < 0) {
@@ -176,14 +176,14 @@ export class UserService {
       date: new Date()
     })
 
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 
   async delete(uuid: string) {
     return await this.repo.remove(uuid)
   }
 
-  async doTest(uuid: string, sectionId: string) {
+  async doTest(uuid: string, sectionId: string): Promise<User> {
     const user = await this.repo.findById(uuid)
 
     if (user.statistics.testLimitCount == 0) {
@@ -197,14 +197,14 @@ export class UserService {
       date: new Date()
     })
 
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 
-  async SendTestResult(uuid: string, sectionId: string, score: number) {
+  async SendTestResult(uuid: string, sectionId: string, score: number): Promise<User> {
     const user = await this.repo.findById(uuid)
 
-    if (parseInt(user.statistics.testScores[sectionId] ?? '0') < score) {
-      user.statistics.testScores[sectionId] = `${score}`
+    if (user.statistics.testScores[sectionId] < score) {
+      user.statistics.testScores[sectionId] = score
     }
 
     user.activities.push({
@@ -213,6 +213,6 @@ export class UserService {
       date: new Date()
     })
 
-    await this.repo.update(user)
+    return this.repo.update(user)
   }
 }

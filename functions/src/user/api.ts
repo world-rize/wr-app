@@ -82,7 +82,7 @@ export const createUser = async (req: CreateUserRequest, context: Context): Prom
 /**
  * フレーズをお気に入りに追加する
  */
-export const favoritePhrase = async (req: FavoritePhraseRequest, context: Context) => {
+export const favoritePhrase = async (req: FavoritePhraseRequest, context: Context): Promise<User> => {
   const uid = await authorize(context)
 
   // object -> class instance
@@ -93,7 +93,7 @@ export const favoritePhrase = async (req: FavoritePhraseRequest, context: Contex
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  await userService.favoritePhrase(uid, req.listId, req.phraseId, req.favorite)
+  return userService.favoritePhrase(uid, req.listId, req.phraseId, req.favorite)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to favorite phrase')
@@ -103,7 +103,7 @@ export const favoritePhrase = async (req: FavoritePhraseRequest, context: Contex
 /**
  * ユーザーがポイントを獲得
  */
-export const getPoint = async (req: GetPointRequest, context: Context) => {
+export const getPoint = async (req: GetPointRequest, context: Context): Promise<User> => {
   const uid = await authorize(context)
   req = Object.assign(new GetPointRequest(), req)
   await validate(req)
@@ -112,27 +112,28 @@ export const getPoint = async (req: GetPointRequest, context: Context) => {
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  await userService.getPoint(uid, req.points)
+  console.log(`[getPoint] getPoint uid: ${uid}, point: ${req.points}`)
+
+  return userService.getPoint(uid, req.points)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to get points')
     })
-
-  console.log(`[getPoint] getPoint uid: ${uid}, point: ${req.points}`)
 }
 
 /**
  *  テストを受ける
  */
-export const doTest = async (req: DoTestRequest, context: Context) => {
+export const doTest = async (req: DoTestRequest, context: Context): Promise<User> => {
   const uid = await authorize(context)
-  await userService.doTest(uid, req.sectionId)
+
+  console.log(`[doTest] ${uid} doTest ${req.sectionId}`)
+
+  return userService.doTest(uid, req.sectionId)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to do test')
     })
-
-  console.log(`[doTest] ${uid} doTest ${req.sectionId}`)
 }
 
 /**
@@ -141,15 +142,13 @@ export const doTest = async (req: DoTestRequest, context: Context) => {
 export const updateUser = async (req: User, context: Context): Promise<User> => {
   await authorize(context)
 
-  const updatedUser = await userService.updateUser(req)
+  console.log(`[deleteUser] uuid: ${updatedUser.uuid} user updated`)
+
+  return = await userService.updateUser(req)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to update user')
     })
-
-  console.log(`[deleteUser] uuid: ${updatedUser.uuid} user updated`)
-
-  return updatedUser
 }
 
 /**
@@ -176,7 +175,7 @@ export const deleteUser = async (req: {}, context: Context) => {
 /**
  * お気に入りグループを作成
  */
-export const createFavoriteList = async (req: CreateFavoriteListRequest, context: Context) => {
+export const createFavoriteList = async (req: CreateFavoriteListRequest, context: Context): Promise<User> => {
   const uuid = await authorize(context)
 
   req = Object.assign(new CreateFavoriteListRequest(), req)
@@ -186,19 +185,19 @@ export const createFavoriteList = async (req: CreateFavoriteListRequest, context
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  await userService.createFavoriteList(uuid, req.name)
+  console.log(`[createFavoriteList] uuid: ${uuid} create favorite list ${req.name}`)
+
+  return userService.createFavoriteList(uuid, req.name)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to createFavoriteList')
     })
-
-  console.log(`[createFavoriteList] uuid: ${uuid} create favorite list ${req.name}`)
 }
 
 /**
  * お気に入りグループを削除
  */
-export const deleteFavoriteList = async (req: DeleteFavoriteListRequest, context: Context) => {
+export const deleteFavoriteList = async (req: DeleteFavoriteListRequest, context: Context): Promise<User> => {
   const uuid = await authorize(context)
 
   req = Object.assign(new DeleteFavoriteListRequest(), req)
@@ -208,19 +207,19 @@ export const deleteFavoriteList = async (req: DeleteFavoriteListRequest, context
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  await userService.deleteFavoriteList(uuid, req.listId)
+  console.log(`[deleteFavoriteList] uuid: ${uuid} delete favorite list ${req.listId}`)
+
+  return userService.deleteFavoriteList(uuid, req.listId)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to deleteFavoriteList')
     })
-
-  console.log(`[deleteFavoriteList] uuid: ${uuid} delete favorite list ${req.listId}`)
 }
 
 /**
  * フレーズリストを作成
  */
-export const createPhrasesList = async (req: CreatePhrasesListRequest, context: Context) => {
+export const createPhrasesList = async (req: CreatePhrasesListRequest, context: Context): Promise<User> => {
   const uuid = await authorize(context)
 
   req = Object.assign(new CreatePhrasesListRequest(), req)
@@ -230,19 +229,19 @@ export const createPhrasesList = async (req: CreatePhrasesListRequest, context: 
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  await userService.createPhrasesList(uuid, req.title)
+  console.log(`[createPhrasesList] uuid: ${uuid} create phrases list ${req.title}`)
+
+  return userService.createPhrasesList(uuid, req.title)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to deleteFavoriteList')
     })
-
-  console.log(`[createPhrasesList] uuid: ${uuid} create phrases list ${req.title}`)
 }
 
 /**
  * フレーズリストにフレーズを追加
  */
-export const addPhraseToPhraseList = async (req: AddPhraseToPhraseListRequest, context: Context) => {
+export const addPhraseToPhraseList = async (req: AddPhraseToPhraseListRequest, context: Context): Promise<User> => {
   const uuid = await authorize(context)
 
   req = Object.assign(new AddPhraseToPhraseListRequest(), req)
@@ -254,19 +253,19 @@ export const addPhraseToPhraseList = async (req: AddPhraseToPhraseListRequest, c
 
   // TODO: phrase validate
 
-  await userService.addPhraseToPhraseList(uuid, req.listId, req.phrase)
+  console.log(`[createPhrasesList] uuid: ${uuid} create phrase ${req.phrase.title} list ${req.listId}`)
+
+  return userService.addPhraseToPhraseList(uuid, req.listId, req.phrase)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to addPhraseToPhraseList')
     })
-
-  console.log(`[createPhrasesList] uuid: ${uuid} create phrase ${req.phrase.title} list ${req.listId}`)
 }
 
 /**
  * フレーズリストからフレーズを削除
  */
-export const deletePhraseList = async (req: DeletePhraseRequest, context: Context) => {
+export const deletePhraseList = async (req: DeletePhraseRequest, context: Context): Promise<User> => {
   const uuid = await authorize(context)
 
   req = Object.assign(new DeletePhraseRequest(), req)
@@ -278,19 +277,19 @@ export const deletePhraseList = async (req: DeletePhraseRequest, context: Contex
 
   // TODO: phrase validate
 
-  await userService.deletePhrase(uuid, req.listId, req.phraseId)
+  console.log(`[deletePhrase] uuid: ${uuid} delete ${req.phraseId} from note ${req.listId}`)
+
+  return userService.deletePhrase(uuid, req.listId, req.phraseId)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to deletePhraseList')
     })
-
-  console.log(`[deletePhrase] uuid: ${uuid} delete ${req.phraseId} from note ${req.listId}`)
 }
 
 /**
  * テスト結果を送信
  */
-export const sendTestResult  = async (req: SendTestResultRequest, context: Context) => {
+export const sendTestResult  = async (req: SendTestResultRequest, context: Context): Promise<User> => {
   const uuid = await authorize(context)
 
   req = Object.assign(new SendTestResultRequest(), req)
@@ -302,11 +301,11 @@ export const sendTestResult  = async (req: SendTestResultRequest, context: Conte
 
   // TODO: phrase validate
 
-  await userService.SendTestResult(uuid, req.sectionId, req.score)
+  console.log(`[deletePhrase] uuid: ${uuid} send ${req.sectionId} test score :${req.score}`)
+
+  return userService.SendTestResult(uuid, req.sectionId, req.score)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to sendTestResult')
     })
-
-  console.log(`[deletePhrase] uuid: ${uuid} send ${req.sectionId} test score :${req.score}`)
 }

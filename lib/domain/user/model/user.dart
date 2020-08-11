@@ -22,7 +22,7 @@ class UserStatistics {
 
   Map<String, dynamic> toJson() => _$UserStatisticsToJson(this);
 
-  Map<String, String> testScores;
+  Map<String, int> testScores;
 
   int points;
 
@@ -187,7 +187,7 @@ class User {
       },
       statistics: UserStatistics(
         testScores: {
-          'debug': '5',
+          'debug': 5,
         },
         points: 100,
         testLimitCount: 3,

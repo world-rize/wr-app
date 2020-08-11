@@ -17,7 +17,7 @@ export interface UserStatistics {
   /**
    * 各セクションの成績(key: section_id, value: score)
    */
-  testScores: Record<string, string>
+  testScores: Record<string, number>
 
   /**
    * ポイント
