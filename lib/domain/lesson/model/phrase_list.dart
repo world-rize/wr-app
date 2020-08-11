@@ -17,12 +17,12 @@ class PhraseList {
     @required this.phrases,
   });
 
-  factory PhraseList.dummy(String title, {bool isDefault = false}) {
+  factory PhraseList.dummy(String title, String listId,
+      {bool isDefault = false}) {
     final phrases = List.generate(10, (index) {
       final phrase = Phrase.dummy(index)..id = Uuid().v4();
       return phrase;
     });
-    final listId = Uuid().v4();
     return PhraseList(
       id: listId,
       title: title,

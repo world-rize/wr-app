@@ -20,7 +20,7 @@ class VoicePlayer with ChangeNotifier {
 
     _player = AudioCache(fixedPlayer: _fixedPlayer);
 
-    playKeyPhrase();
+    // playKeyPhrase();
   }
 
   @override

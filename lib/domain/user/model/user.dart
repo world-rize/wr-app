@@ -74,7 +74,9 @@ class User {
           date: DateTime.now(),
         ),
       ],
-      notes: {},
+      notes: {
+        'default': PhraseList.dummy('ノート1', 'default', isDefault: true),
+      },
     );
   }
 
@@ -103,10 +105,4 @@ class User {
   List<UserActivity> activities;
 
   bool get isPremium => attributes.membership == Membership.pro;
-
-  ///
-  bool isFavoritePhrase(String phraseId) {
-    // TODO: listId
-    return favorites['default'].favoritePhraseIds.containsKey(phraseId);
-  }
 }

@@ -39,12 +39,27 @@ class _SectionDetailPageState extends State<SectionDetailPage>
 
   @override
   Widget build(BuildContext context) {
+    final userNotifier = Provider.of<UserNotifier>(context);
+    final phraseId = section.phrases[index].id;
+    final existNotes = userNotifier.existPhraseInNotes(phraseId: phraseId);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           I.of(context).phraseDetailTitle,
           style: const TextStyle(color: Colors.white),
         ),
+        actions: [
+          IconButton(
+            icon: Icon(existNotes ? Icons.bookmark : Icons.bookmark_border),
+            onPressed: () {
+              userNotifier.addPhraseToPhraseList(
+                listId: 'default',
+                phrase: section.phrases[index],
+              );
+            },
+          ),
+        ],
       ),
       body: PageView(
         controller: _pageController,
@@ -71,8 +86,8 @@ class SectionListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserNotifier>(context);
-    final user = userStore.getUser();
+    final userNotifier = Provider.of<UserNotifier>(context);
+    final user = userNotifier.getUser();
     final primaryColor = Theme.of(context).primaryColor;
 
 //    final header = Padding(
@@ -103,7 +118,8 @@ class SectionListPage extends StatelessWidget {
             ...section.phrases.indexedMap((index, phrase) {
               return PhraseCard(
                 phrase: phrase,
-                favorite: user.isFavoritePhrase(phrase.id),
+                favorite:
+                    userNotifier.existPhraseInFavoriteList(phraseId: phrase.id),
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -115,8 +131,9 @@ class SectionListPage extends StatelessWidget {
                   );
                 },
                 onFavorite: () {
-                  final favorite = user.isFavoritePhrase(phrase.id);
-                  userStore.favoritePhrase(
+                  final favorite = userNotifier.existPhraseInFavoriteList(
+                      phraseId: phrase.id);
+                  userNotifier.favoritePhrase(
                       phraseId: phrase.id, favorite: !favorite);
                 },
               );

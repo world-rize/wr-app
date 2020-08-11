@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/toast.dart';
@@ -47,9 +48,9 @@ class LessonNotifier with ChangeNotifier {
     return _lessonService.getSectionsById(lessons: _lessons, id: id);
   }
 
-  Future<List<Phrase>> favoritePhrases() async {
-    final _user = await _userService.getUser();
-    return phrasesWhere((p) => _user.isFavoritePhrase(p.id));
+  Future<List<Phrase>> favoritePhrases(User user) async {
+    return phrases.where((phrase) => user.favorites.values
+        .any((list) => list.favoritePhraseIds.containsKey(phrase.id)));
   }
 
   Future<List<Phrase>> newComingPhrases() async {

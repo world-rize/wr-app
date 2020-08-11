@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
@@ -175,5 +176,85 @@ class UserNotifier with ChangeNotifier {
 
     InAppLogger.info('membership to be $membership');
     NotifyToast.success('$membership');
+  }
+
+  /// create favorite list
+  Future<void> createFavoriteList({
+    @required String name,
+  }) async {
+    _user = await _userService.createFavoriteList(name: name);
+
+    notifyListeners();
+
+    InAppLogger.info('createFavoriteList $name');
+    NotifyToast.success('createFavoriteList $name');
+  }
+
+  /// delete favorite list
+  Future<void> deleteFavoriteList({
+    @required String listId,
+  }) async {
+    _user = await _userService.deleteFavoriteList(listId: listId);
+
+    notifyListeners();
+
+    InAppLogger.info('deleteFavoriteList $listId');
+    NotifyToast.success('createFavoriteList $listId');
+  }
+
+  /// exist phrase in favorites
+  bool existPhraseInFavoriteList({
+    @required String phraseId,
+  }) {
+    return _user.favorites.values
+        .any((list) => list.favoritePhraseIds.containsKey(phraseId));
+  }
+
+  /// create note
+  Future<void> createPhrasesList({
+    @required String title,
+  }) async {
+    _user = await _userService.createFavoriteList(name: title);
+
+    notifyListeners();
+
+    InAppLogger.info('createPhrasesList $title');
+    NotifyToast.success('createPhrasesList $title');
+  }
+
+  /// add phrase
+  Future<void> addPhraseToPhraseList({
+    @required String listId,
+    @required Phrase phrase,
+  }) async {
+    _user = await _userService.addPhraseToPhraseList(
+        listId: listId, phrase: phrase);
+
+    notifyListeners();
+
+    InAppLogger.info('addPhraseToPhraseList ${phrase.id}');
+    NotifyToast.success('addPhraseToPhraseList ${phrase.id}');
+  }
+
+  /// update  phrase
+  Future<void> updatePhrase({
+    @required String listId,
+    @required String phraseId,
+    @required Phrase phrase,
+  }) async {
+    _user = await _userService.updatePhrase(
+        listId: listId, phraseId: phraseId, phrase: phrase);
+
+    notifyListeners();
+
+    InAppLogger.info('updatePhrase $listId $phraseId');
+    NotifyToast.success('updatePhrase $listId $phraseId');
+  }
+
+  /// exist phrase in notes
+  bool existPhraseInNotes({
+    @required String phraseId,
+  }) {
+    return _user.notes.values.any((list) => list.phrases.containsKey(phraseId));
   }
 }

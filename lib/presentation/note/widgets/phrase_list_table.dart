@@ -1,7 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase_list.dart';
+import 'package:wr_app/domain/user/index.dart';
 
 class PhraseListTable extends StatelessWidget {
   PhraseListTable({@required this.phraseList});
@@ -10,6 +12,8 @@ class PhraseListTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userNotifier = Provider.of<UserNotifier>(context);
+
     final header = Row(
       children: [
         Padding(
@@ -17,7 +21,9 @@ class PhraseListTable extends StatelessWidget {
           child: Row(
             children: [
               FlatButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  print(userNotifier.getUser().notes.keys.toList());
+                },
                 color: Colors.transparent,
                 icon: Icon(
                   Icons.folder_open,
@@ -84,6 +90,9 @@ class PhraseListTable extends StatelessWidget {
           ),
 
           ...phraseList.phrases.values.map((phrase) {
+            final favorited =
+                userNotifier.existPhraseInFavoriteList(phraseId: phrase.id);
+
             return TableRow(
               children: [
                 TableCell(
@@ -92,27 +101,40 @@ class PhraseListTable extends StatelessWidget {
                     child: Center(
                       child: IconButton(
                         icon: Icon(
-                          Icons.favorite_border,
+                          favorited ? Icons.favorite : Icons.favorite_border,
                           color: Colors.redAccent,
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          userNotifier.favoritePhrase(
+                              phraseId: phrase.id, favorite: !favorited);
+                        },
                       ),
                     ),
                   ),
                 ),
                 TableCell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(phrase.title['ja']),
+                  child: GestureDetector(
+                    onTap: () {
+                      print('edit jp');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Center(
+                        child: Text(phrase.title['ja']),
+                      ),
                     ),
                   ),
                 ),
                 TableCell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(phrase.title['en']),
+                  child: GestureDetector(
+                    onTap: () {
+                      print('edit en');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Center(
+                        child: Text(phrase.title['en']),
+                      ),
                     ),
                   ),
                 ),

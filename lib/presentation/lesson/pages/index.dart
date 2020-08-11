@@ -38,8 +38,8 @@ class LessonIndexPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserNotifier>(context);
-    final user = userStore.getUser();
+    final userNotifier = Provider.of<UserNotifier>(context);
+    final user = userNotifier.getUser();
     final lessonNotifier = Provider.of<LessonNotifier>(context);
 
     return SingleChildScrollView(
@@ -81,7 +81,7 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           FutureBuilder<List<Phrase>>(
-            future: lessonNotifier.favoritePhrases(),
+            future: lessonNotifier.favoritePhrases(user),
             builder: (_, res) {
               if (!res.hasData || res.data.isEmpty) {
                 return const Padding(
@@ -132,16 +132,18 @@ class LessonIndexPage extends StatelessWidget {
                   children: [
                     PhraseCard(
                       phrase: p,
-                      favorite: user.isFavoritePhrase(p.id),
+                      favorite: userNotifier.existPhraseInFavoriteList(
+                          phraseId: p.id),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => NewComingPage()),
                         );
                       },
                       onFavorite: () {
-                        userStore.favoritePhrase(
+                        userNotifier.favoritePhrase(
                           phraseId: p.id,
-                          favorite: !user.isFavoritePhrase(p.id),
+                          favorite: !userNotifier.existPhraseInFavoriteList(
+                              phraseId: p.id),
                         );
                       },
                     ),

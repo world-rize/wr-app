@@ -13,8 +13,9 @@ class PhraseDetailButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final player = Provider.of<VoicePlayer>(context);
     final lesson = Provider.of<LessonNotifier>(context);
-    final notifier = Provider.of<UserNotifier>(context);
-    final favorite = notifier.getUser().isFavoritePhrase(player.phrase.id);
+    final userNotifier = Provider.of<UserNotifier>(context);
+    final favorite =
+        userNotifier.existPhraseInFavoriteList(phraseId: player.phrase.id);
 
     return Padding(
       padding: const EdgeInsets.all(12),
@@ -45,7 +46,7 @@ class PhraseDetailButtons extends StatelessWidget {
                 color: Colors.redAccent,
               ),
               onPressed: () {
-                notifier.favoritePhrase(
+                userNotifier.favoritePhrase(
                     phraseId: player.phrase.id, favorite: !favorite);
               },
             ),

@@ -191,4 +191,15 @@ class UserService {
     final req = AddPhraseToPhraseListRequest(listId: listId, phrase: phrase);
     return _userPersistence.addPhraseToPhraseList(req);
   }
+
+  /// update phrase
+  Future<User> updatePhrase({
+    @required String listId,
+    @required String phraseId,
+    @required Phrase phrase,
+  }) {
+    final req =
+        UpdatePhraseRequest(listId: listId, phraseId: phraseId, phrase: phrase);
+    return _userPersistence.updatePhrase(req);
+  }
 }
