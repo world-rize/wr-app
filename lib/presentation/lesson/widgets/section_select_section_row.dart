@@ -21,8 +21,10 @@ class TestSectionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).primaryTextTheme;
+    final backgroundColor = Theme.of(context).backgroundColor;
 
     final sectionWidget = ShadowedContainer(
+      color: backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
@@ -33,13 +35,13 @@ class TestSectionRow extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child: Text(
                   section.title,
-                  style: style.headline,
+                  style: style.headline2,
                 ),
               ),
             ),
             Text(
               '0/${section.phrases.length}',
-              style: style.title.apply(color: Colors.redAccent),
+              style: style.bodyText1.apply(color: Colors.redAccent),
             ),
             const Padding(
               padding: EdgeInsets.only(right: 20),
@@ -76,8 +78,10 @@ class SectionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final style = Theme.of(context).primaryTextTheme;
+    final backgroundColor = Theme.of(context).backgroundColor;
 
     final sectionWidget = ShadowedContainer(
+      color: backgroundColor,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Row(
@@ -88,7 +92,7 @@ class SectionRow extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 child: Text(
                   section.title,
-                  style: style.headline,
+                  style: style.headline2,
                 ),
               ),
             ),

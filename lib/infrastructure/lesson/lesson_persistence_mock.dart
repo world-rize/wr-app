@@ -18,7 +18,8 @@ class LessonPersistenceMock implements LessonRepository {
       (i) => Lesson(
         id: 'Lesson$i',
         title: {
-          'ja': 'Lesson$i',
+          'ja': 'レッスン$i',
+          'en': 'Lesson$i',
         },
         phrases: List.generate(100, (index) => Phrase.dummy(index)),
         assets: Assets(

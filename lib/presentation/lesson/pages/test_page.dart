@@ -4,12 +4,12 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
+import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
 
@@ -244,8 +244,9 @@ class QuestionView extends StatelessWidget {
           onTap: () {
             onNext(index);
           },
-          child: GFListTile(
-            title: Padding(
+          child: ShadowedContainer(
+            color: Colors.lightBlueAccent,
+            child: Padding(
               padding: const EdgeInsets.all(2),
               child: Text(
                 selection[index],
@@ -255,7 +256,6 @@ class QuestionView extends StatelessWidget {
                 ),
               ),
             ),
-            color: Colors.lightBlueAccent,
           ),
         ).p(6);
       },

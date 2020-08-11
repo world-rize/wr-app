@@ -5,6 +5,7 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
+import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
 class LessonNotifier with ChangeNotifier {
@@ -34,6 +35,8 @@ class LessonNotifier with ChangeNotifier {
 
   Future<void> loadAllLessons() async {
     _lessons = await _lessonService.loadPhrases();
+    InAppLogger.info(
+        '📚 ${_lessons.length} Lessons, ${phrases.length} Phrases loaded');
   }
 
   List<Lesson> get lessons => _lessons;

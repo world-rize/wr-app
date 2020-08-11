@@ -87,18 +87,7 @@ class SectionListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userNotifier = Provider.of<UserNotifier>(context);
-    final user = userNotifier.getUser();
     final primaryColor = Theme.of(context).primaryColor;
-
-//    final header = Padding(
-//      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-//      child: GFListTile(
-//        avatar: Text(
-//          section.title,
-//          style: const TextStyle(color: Colors.black, fontSize: 24),
-//        ),
-//      ),
-//    );
 
     return Scaffold(
       appBar: AppBar(

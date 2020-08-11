@@ -16,12 +16,14 @@ class ArticleOverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).primaryTextTheme;
+    final backgroundColor = Theme.of(context).backgroundColor;
 
     print(article.fields.summary);
 
     return Padding(
       padding: const EdgeInsets.all(8),
       child: ShadowedContainer(
+        color: backgroundColor,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: <Widget>[

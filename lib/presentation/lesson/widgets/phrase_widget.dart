@@ -25,6 +25,7 @@ class PhraseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final backgroundColor = Theme.of(context).backgroundColor;
     final englishStyle = theme.primaryTextTheme.bodyText1;
     final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;
     // final existVoice = phrase.assets.voice.isEmpty;
@@ -44,6 +45,7 @@ class PhraseCard extends StatelessWidget {
                   )
                 : null,
             child: ShadowedContainer(
+              color: backgroundColor,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[

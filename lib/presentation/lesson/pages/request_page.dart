@@ -27,6 +27,7 @@ class _RequestPageState extends State<RequestPage> {
   Widget build(BuildContext context) {
     final notifier = Provider.of<LessonNotifier>(context);
     final primaryColor = Theme.of(context).primaryColor;
+    final backgroundColor = Theme.of(context).backgroundColor;
     const hintText = '''
 (記入例)
 「電気をつけっぱなしにしないで」はどうやって表現すれば良いですか？
@@ -57,6 +58,7 @@ class _RequestPageState extends State<RequestPage> {
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: ShadowedContainer(
+                  color: backgroundColor,
                   child: Padding(
                     padding: const EdgeInsets.all(12),
                     child: TextField(
