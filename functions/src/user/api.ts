@@ -16,12 +16,13 @@ const userRepo = new UserRepository()
 const userService = new UserService(userRepo)
 
 const authorize = async (context: Context): Promise<string> => {
-  // if (!context.auth) {
-  //   console.error('not authorized')
-  //   throw new functions.https.HttpsError('permission-denied', 'not authorized')
-  // }
-  // return context.auth.uid
-  return 'xrV7lr6TXOUuWYgW0M3CP8qYIWp1'
+  if (!context.auth) {
+    console.error('not authorized')
+    throw new functions.https.HttpsError('permission-denied', 'not authorized')
+  }
+  return context.auth.uid
+  // for debug
+  // return 'xrV7lr6TXOUuWYgW0M3CP8qYIWp1'
 }
 
 
