@@ -19,8 +19,8 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
     final userNotifier = Provider.of<UserNotifier>(context);
 
     final _emailField = TextFormField(
-      initialValue: userNotifier.getUser().email,
-      onSaved: (email) {
+      initialValue: userNotifier.getUser().attributes.email,
+      onChanged: (email) {
         setState(() {
           _email = email;
         });

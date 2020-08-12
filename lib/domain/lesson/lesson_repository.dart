@@ -6,6 +6,8 @@ abstract class LessonRepository {
   Future<List<Lesson>> loadAllLessons();
   Future<void> sendPhraseRequest({String text, String email});
 
+  Future<List<Phrase>> newComingPhrases();
+
   bool getShowTranslation();
   void setShowTranslation({bool value});
 

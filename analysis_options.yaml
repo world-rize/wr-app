@@ -8,7 +8,7 @@ analyzer:
     - '**/*.g.dart'
     - 'lib/i10n/*'
   errors:
-    todo: ignore
+    flutter_style_todos: ignore
   strong-mode:
     implicit-casts: true
     implicit-dynamic: true

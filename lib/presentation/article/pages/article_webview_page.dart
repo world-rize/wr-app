@@ -94,6 +94,7 @@ class _ArticleWebViewPageState extends State<ArticleWebViewPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             RaisedButton(
+              onPressed: null,
 //              onPressed: () async {
 //                await widget.browser.openFile(
 //                  assetFilePath: "assets/index.html",

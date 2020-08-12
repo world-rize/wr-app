@@ -9,90 +9,96 @@ import '../notifier/voice_player.dart';
 
 /// 下部ボタン
 class PhraseDetailButtons extends StatelessWidget {
+  PhraseDetailButtons({@required this.phrase});
+
+  final Phrase phrase;
+
   @override
   Widget build(BuildContext context) {
-    final player = Provider.of<VoicePlayer>(context);
-    final lesson = Provider.of<LessonNotifier>(context);
-    final notifier = Provider.of<UserNotifier>(context);
-    final favorite = notifier.getUser().isFavoritePhrase(player.phrase);
+    final voicePlayer = Provider.of<VoicePlayer>(context);
+    final lessonNotifier = Provider.of<LessonNotifier>(context);
+    final userNotifier = Provider.of<UserNotifier>(context);
+    final favorite =
+        userNotifier.existPhraseInFavoriteList(phraseId: phrase.id);
 
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            // 吹き出しボタン
-            child: FloatingActionButton(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Expanded(
+          // 吹き出しボタン
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            heroTag: 'visibility',
+            child: Icon(
+              Icons.message,
+              color: lessonNotifier.getShowTranslation()
+                  ? Colors.lightBlueAccent
+                  : Colors.grey,
+            ),
+            onPressed: lessonNotifier.toggleShowTranslation,
+          ),
+        ),
+        // お気に入りボタン
+        Expanded(
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            heroTag: 'favorite',
+            child: Icon(
+              favorite ? Icons.favorite : Icons.favorite_border,
+              color: Colors.redAccent,
+            ),
+            onPressed: () {
+              userNotifier.favoritePhrase(
+                  phraseId: phrase.id, favorite: !favorite);
+            },
+          ),
+        ),
+        // 再生ボタン
+        Expanded(
+          child: FloatingActionButton(
               backgroundColor: Colors.white,
-              heroTag: 'Japanese',
+              heroTag: 'play',
               child: Icon(
-                Icons.message,
-                color: lesson.getShowTranslation()
-                    ? Colors.lightBlueAccent
-                    : Colors.grey,
+                voicePlayer.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.orangeAccent,
+                size: 40,
               ),
-              onPressed: lesson.toggleShowTranslation,
-            ),
-          ),
-          // お気に入りボタン
-          Expanded(
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              heroTag: 'Favorite',
-              child: Icon(
-                favorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.redAccent,
+              onPressed: () async {
+                if (voicePlayer.isPlaying) {
+                  voicePlayer.pause();
+                } else {
+                  await voicePlayer.playAll(phrase: phrase);
+                }
+              }),
+        ),
+        // 再生速度
+        Expanded(
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            heroTag: 'speed',
+            child: Text(
+              voicePlayer.speed.toString(),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
               ),
-              onPressed: () {
-                notifier.favoritePhrase(
-                    phraseId: player.phrase.id, value: !favorite);
-              },
             ),
+            onPressed: voicePlayer.toggleSpeed,
           ),
-          // 再生ボタン
-          Expanded(
-            child: FloatingActionButton(
-                backgroundColor: Colors.white,
-                heroTag: '3',
-                child: Icon(
-                  player.isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: Colors.orangeAccent,
-                  size: 40,
-                ),
-                onPressed: () async {
-                  await player.toggle();
-                }),
-          ),
-          // 再生速度
-          Expanded(
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              heroTag: '4',
-              child: Text(
-                player.speed.toString(),
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                ),
-              ),
-              onPressed: player.toggleSpeed,
+        ),
+        // 発音
+        Expanded(
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            heroTag: 'locale',
+            child: Image.asset(
+              'assets/icon/locale_${voicePlayer.locale}.png',
             ),
+            onPressed: voicePlayer.toggleLocale,
           ),
-          // 発音
-          Expanded(
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              heroTag: 'Country',
-              child: Image.asset(
-                'assets/icon/locale_${player.locale}.png',
-              ),
-              onPressed: player.toggleLocale,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

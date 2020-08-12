@@ -1,9 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
-import 'package:getflutter/components/typography/gf_typography.dart';
-import 'package:getflutter/getflutter.dart';
 
 /// `留学先紹介` ページのトップ
 class AgencyIndexPage extends StatelessWidget {

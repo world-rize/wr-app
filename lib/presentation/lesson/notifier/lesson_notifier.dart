@@ -2,8 +2,10 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
+import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
 class LessonNotifier with ChangeNotifier {
@@ -33,6 +35,8 @@ class LessonNotifier with ChangeNotifier {
 
   Future<void> loadAllLessons() async {
     _lessons = await _lessonService.loadPhrases();
+    InAppLogger.info(
+        '📚 ${_lessons.length} Lessons, ${phrases.length} Phrases loaded');
   }
 
   List<Lesson> get lessons => _lessons;
@@ -47,14 +51,17 @@ class LessonNotifier with ChangeNotifier {
     return _lessonService.getSectionsById(lessons: _lessons, id: id);
   }
 
-  Future<List<Phrase>> favoritePhrases() async {
-    final _user = await _userService.getUser();
-    return phrasesWhere(_user.isFavoritePhrase);
+  Future<List<Phrase>> favoritePhrases(User user) async {
+    final favoritedPhraseIds = user.favorites.values
+        .expand((list) => list.favoritePhraseIds.keys)
+        .toSet()
+        .toList();
+
+    return phrasesWhere((p) => favoritedPhraseIds.contains(p.id));
   }
 
   Future<List<Phrase>> newComingPhrases() async {
-    // TODO
-    return phrasesWhere((p) => int.parse(p.id) < 20);
+    return _lessonService.newComingPhrases();
   }
 
   Future<void> sendPhraseRequest({@required String text}) {

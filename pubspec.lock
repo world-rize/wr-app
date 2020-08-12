@@ -445,6 +445,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.3"
+  flutter_sequence_animation:
+    dependency: "direct main"
+    description:
+      name: flutter_sequence_animation
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
   flutter_sliding_tutorial:
     dependency: "direct main"
     description:
@@ -1077,12 +1084,12 @@ packages:
     source: hosted
     version: "0.1.1+6"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.2.0"
   vector_math:
     dependency: transitive
     description:

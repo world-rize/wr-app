@@ -1,20 +1,77 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:wr_app/domain/system/model/activity.dart';
+import 'dart:convert';
+
+import 'package:intl/intl.dart';
+import 'package:wr_app/domain/system/model/user_activity.dart';
+
+class LogLevel {
+  static const DEBUG = 0;
+  static const INFO = 1;
+  static const WARN = 2;
+  static const ERROR = 3;
+
+  static String header(int level) {
+    return ['DEBUG', 'INFO', 'WARN', 'ERROR'][level];
+  }
+}
 
 // in-app logger
 class InAppLogger {
   const InAppLogger();
 
-  static final List<Activity> _logs = [];
+  static final List<UserActivity> _logs = [];
+  static const int logLevel = LogLevel.DEBUG;
 
-  /// log as a activity, [type] represent log category
-  static void log(String text, {String type = 'default'}) {
+  static void _log(int level, String content) {
     final now = DateTime.now();
-    print('[$type/$now] $text');
-    _logs.add(Activity(uuid: '', type: type, text: text, date: now));
+    final formatter = DateFormat('HH:mm:ss');
+    final timestamp = formatter.format(now);
+    final header = LogLevel.header(level);
+    final log = '[$timestamp][$header] $content';
+
+    _logs.add(UserActivity(
+      content: log,
+      date: now,
+    ));
+
+    if (logLevel <= level) {
+      print(log);
+    }
   }
 
+  static String prettify(Map<String, dynamic> json) {
+    final encoder = JsonEncoder.withIndent('  ');
+    return encoder.convert(json);
+  }
+
+  static void _logJson(int level, Map<String, dynamic> json) {
+    final now = DateTime.now();
+    final formatter = DateFormat('HH:mm:ss');
+    final timestamp = formatter.format(now);
+    final header = LogLevel.header(level);
+    final jsonString = prettify(json);
+
+    final log = '[$timestamp][$header] $jsonString';
+
+    _logs.add(UserActivity(
+      content: log,
+      date: now,
+    ));
+
+    if (logLevel <= level) {
+      print(log);
+    }
+  }
+
+  static void debug(String content) => _log(LogLevel.DEBUG, content);
+  static void debugJson(Map<String, dynamic> json) =>
+      _logJson(LogLevel.DEBUG, json);
+
+  static void info(String content) => _log(LogLevel.INFO, content);
+
+  static void error(dynamic error) => _log(LogLevel.ERROR, error.toString());
+
   /// log history
-  static List<Activity> getLogs() => _logs;
+  static List<UserActivity> getLogs() => _logs;
 }

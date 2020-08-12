@@ -33,7 +33,7 @@ class APITestView extends StatelessWidget {
                 leading: const Icon(Icons.favorite),
                 onTap: () async {
                   await notifier
-                      .favoritePhrase(phraseId: '0000', value: true)
+                      .favoritePhrase(phraseId: '0000', favorite: true)
                       .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },
@@ -43,7 +43,7 @@ class APITestView extends StatelessWidget {
                 leading: const Icon(Icons.attach_money),
                 onTap: () async {
                   await notifier
-                      .callGetPoint(point: 1)
+                      .callGetPoint(points: 1)
                       .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },
@@ -52,7 +52,9 @@ class APITestView extends StatelessWidget {
                 title: 'テストを受ける(未実装)',
                 leading: const Icon(Icons.title),
                 onTap: () async {
-                  await notifier.doTest().catchError(NotifyToast.error);
+                  await notifier
+                      .doTest(sectionId: 'debug')
+                      .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },
               ),

@@ -8,7 +8,7 @@ class FooterLayout extends StatelessWidget {
   const FooterLayout({
     Key key,
     @required this.body,
-    @required this.footer,
+    this.footer,
   }) : super(key: key);
 
   final Widget body;
@@ -16,19 +16,24 @@ class FooterLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomMultiChildLayout(
-      delegate: _FooterLayoutDelegate(MediaQuery.of(context).viewInsets),
-      children: <Widget>[
-        LayoutId(
-          id: _FooterLayout.body,
-          child: body,
-        ),
-        LayoutId(
-          id: _FooterLayout.footer,
-          child: footer,
-        ),
-      ],
-    );
+    if (footer == null) {
+      return body;
+    } else {
+      return CustomMultiChildLayout(
+        delegate: _FooterLayoutDelegate(MediaQuery.of(context).viewInsets),
+        children: <Widget>[
+          LayoutId(
+            id: _FooterLayout.body,
+            child: body,
+          ),
+          if (footer != null)
+            LayoutId(
+              id: _FooterLayout.footer,
+              child: footer,
+            ),
+        ],
+      );
+    }
   }
 }
 
@@ -45,6 +50,7 @@ class _FooterLayoutDelegate extends MultiChildLayoutDelegate {
   @override
   void performLayout(Size size) {
     size = Size(size.width, size.height + viewInsets.bottom);
+
     final footer =
         layoutChild(_FooterLayout.footer, BoxConstraints.loose(size));
 

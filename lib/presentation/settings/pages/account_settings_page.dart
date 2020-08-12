@@ -25,7 +25,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
       tiles: [
         SettingsTile(
           title: 'メールアドレス',
-          subtitle: user.email,
+          subtitle: user.attributes.email,
           leading: const Icon(Icons.people),
           onTap: () {
             Navigator.of(context)
@@ -39,7 +39,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         ),
         SettingsTile(
           title: '年代',
-          subtitle: '${user.age} 代',
+          subtitle: '${user.attributes.age} 代',
           leading: const Icon(Icons.attach_money),
           onTap: () {
             // TODO(high): user ID form

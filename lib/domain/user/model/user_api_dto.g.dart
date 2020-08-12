@@ -6,198 +6,157 @@ part of 'user_api_dto.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-TestRequestDto _$TestRequestDtoFromJson(Map json) {
-  return TestRequestDto();
-}
-
-Map<String, dynamic> _$TestRequestDtoToJson(TestRequestDto instance) =>
-    <String, dynamic>{};
-
-TestResponse _$TestResponseFromJson(Map json) {
-  return TestResponse(
-    success: json['success'] as bool,
+DoTestRequest _$DoTestRequestFromJson(Map json) {
+  return DoTestRequest(
+    sectionId: json['sectionId'] as String,
   );
 }
 
-Map<String, dynamic> _$TestResponseToJson(TestResponse instance) =>
+Map<String, dynamic> _$DoTestRequestToJson(DoTestRequest instance) =>
     <String, dynamic>{
-      'success': instance.success,
+      'sectionId': instance.sectionId,
     };
 
-ReadUserRequestDto _$ReadUserRequestDtoFromJson(Map json) {
-  return ReadUserRequestDto();
-}
-
-Map<String, dynamic> _$ReadUserRequestDtoToJson(ReadUserRequestDto instance) =>
-    <String, dynamic>{};
-
-ReadUserResponseDto _$ReadUserResponseDtoFromJson(Map json) {
-  return ReadUserResponseDto(
-    user: json['user'] == null
-        ? null
-        : User.fromJson((json['user'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+CreateUserRequest _$CreateUserRequestFromJson(Map json) {
+  return CreateUserRequest(
+    name: json['name'] as String,
+    email: json['email'] as String,
+    age: json['age'] as String,
   );
 }
 
-Map<String, dynamic> _$ReadUserResponseDtoToJson(
-        ReadUserResponseDto instance) =>
+Map<String, dynamic> _$CreateUserRequestToJson(CreateUserRequest instance) =>
     <String, dynamic>{
-      'user': instance.user?.toJson(),
+      'name': instance.name,
+      'email': instance.email,
+      'age': instance.age,
     };
 
-CreateUserRequestDto _$CreateUserRequestDtoFromJson(Map json) {
-  return CreateUserRequestDto();
-}
-
-Map<String, dynamic> _$CreateUserRequestDtoToJson(
-        CreateUserRequestDto instance) =>
-    <String, dynamic>{};
-
-CreateUserResponseDto _$CreateUserResponseDtoFromJson(Map json) {
-  return CreateUserResponseDto(
-    user: json['user'] == null
-        ? null
-        : User.fromJson((json['user'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
-  );
-}
-
-Map<String, dynamic> _$CreateUserResponseDtoToJson(
-        CreateUserResponseDto instance) =>
-    <String, dynamic>{
-      'user': instance.user?.toJson(),
-    };
-
-UpdateUserRequestDto _$UpdateUserRequestDtoFromJson(Map json) {
-  return UpdateUserRequestDto(
-    user: json['user'] == null
-        ? null
-        : User.fromJson((json['user'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
-  );
-}
-
-Map<String, dynamic> _$UpdateUserRequestDtoToJson(
-        UpdateUserRequestDto instance) =>
-    <String, dynamic>{
-      'user': instance.user?.toJson(),
-    };
-
-UpdateUserResponseDto _$UpdateUserResponseDtoFromJson(Map json) {
-  return UpdateUserResponseDto(
-    success: json['success'] as bool,
-  );
-}
-
-Map<String, dynamic> _$UpdateUserResponseDtoToJson(
-        UpdateUserResponseDto instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-    };
-
-DeleteUserRequestDto _$DeleteUserRequestDtoFromJson(Map json) {
-  return DeleteUserRequestDto(
-    user: json['user'] == null
-        ? null
-        : User.fromJson((json['user'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
-  );
-}
-
-Map<String, dynamic> _$DeleteUserRequestDtoToJson(
-        DeleteUserRequestDto instance) =>
-    <String, dynamic>{
-      'user': instance.user?.toJson(),
-    };
-
-DeleteUserResponseDto _$DeleteUserResponseDtoFromJson(Map json) {
-  return DeleteUserResponseDto(
-    success: json['success'] as bool,
-  );
-}
-
-Map<String, dynamic> _$DeleteUserResponseDtoToJson(
-        DeleteUserResponseDto instance) =>
-    <String, dynamic>{
-      'success': instance.success,
-    };
-
-FavoritePhraseRequestDto _$FavoritePhraseRequestDtoFromJson(Map json) {
-  return FavoritePhraseRequestDto(
-    uid: json['uid'] as String,
+FavoritePhraseRequest _$FavoritePhraseRequestFromJson(Map json) {
+  return FavoritePhraseRequest(
     phraseId: json['phraseId'] as String,
-    value: json['value'] as bool,
+    listId: json['listId'] as String,
+    favorite: json['favorite'] as bool,
   );
 }
 
-Map<String, dynamic> _$FavoritePhraseRequestDtoToJson(
-        FavoritePhraseRequestDto instance) =>
+Map<String, dynamic> _$FavoritePhraseRequestToJson(
+        FavoritePhraseRequest instance) =>
     <String, dynamic>{
-      'uid': instance.uid,
       'phraseId': instance.phraseId,
-      'value': instance.value,
+      'listId': instance.listId,
+      'favorite': instance.favorite,
     };
 
-FavoritePhraseResponseDto _$FavoritePhraseResponseDtoFromJson(Map json) {
-  return FavoritePhraseResponseDto(
-    success: json['success'] as bool,
+GetPointRequest _$GetPointRequestFromJson(Map json) {
+  return GetPointRequest(
+    points: json['points'] as int,
   );
 }
 
-Map<String, dynamic> _$FavoritePhraseResponseDtoToJson(
-        FavoritePhraseResponseDto instance) =>
+Map<String, dynamic> _$GetPointRequestToJson(GetPointRequest instance) =>
     <String, dynamic>{
-      'success': instance.success,
+      'points': instance.points,
     };
 
-GetPointRequestDto _$GetPointRequestDtoFromJson(Map json) {
-  return GetPointRequestDto(
-    uid: json['uid'] as String,
-    point: json['point'] as int,
+CreateFavoriteListRequest _$CreateFavoriteListRequestFromJson(Map json) {
+  return CreateFavoriteListRequest(
+    name: json['name'] as String,
   );
 }
 
-Map<String, dynamic> _$GetPointRequestDtoToJson(GetPointRequestDto instance) =>
+Map<String, dynamic> _$CreateFavoriteListRequestToJson(
+        CreateFavoriteListRequest instance) =>
     <String, dynamic>{
-      'uid': instance.uid,
-      'point': instance.point,
+      'name': instance.name,
     };
 
-GetPointResponseDto _$GetPointResponseDtoFromJson(Map json) {
-  return GetPointResponseDto(
-    success: json['success'] as bool,
+DeleteFavoriteListRequest _$DeleteFavoriteListRequestFromJson(Map json) {
+  return DeleteFavoriteListRequest(
+    listId: json['listId'] as String,
   );
 }
 
-Map<String, dynamic> _$GetPointResponseDtoToJson(
-        GetPointResponseDto instance) =>
+Map<String, dynamic> _$DeleteFavoriteListRequestToJson(
+        DeleteFavoriteListRequest instance) =>
     <String, dynamic>{
-      'success': instance.success,
+      'listId': instance.listId,
     };
 
-DoTestRequestDto _$DoTestRequestDtoFromJson(Map json) {
-  return DoTestRequestDto(
-    uid: json['uid'] as String,
+CreatePhrasesListRequest _$CreatePhrasesListRequestFromJson(Map json) {
+  return CreatePhrasesListRequest(
+    title: json['title'] as String,
   );
 }
 
-Map<String, dynamic> _$DoTestRequestDtoToJson(DoTestRequestDto instance) =>
+Map<String, dynamic> _$CreatePhrasesListRequestToJson(
+        CreatePhrasesListRequest instance) =>
     <String, dynamic>{
-      'uid': instance.uid,
+      'title': instance.title,
     };
 
-DoTestResponseDto _$DoTestResponseDtoFromJson(Map json) {
-  return DoTestResponseDto(
-    success: json['success'] as bool,
+UpdatePhraseRequest _$UpdatePhraseRequestFromJson(Map json) {
+  return UpdatePhraseRequest(
+    listId: json['listId'] as String,
+    phraseId: json['phraseId'] as String,
+    phrase: json['phrase'] == null
+        ? null
+        : Phrase.fromJson((json['phrase'] as Map)?.map(
+            (k, e) => MapEntry(k as String, e),
+          )),
   );
 }
 
-Map<String, dynamic> _$DoTestResponseDtoToJson(DoTestResponseDto instance) =>
+Map<String, dynamic> _$UpdatePhraseRequestToJson(
+        UpdatePhraseRequest instance) =>
     <String, dynamic>{
-      'success': instance.success,
+      'listId': instance.listId,
+      'phraseId': instance.phraseId,
+      'phrase': instance.phrase?.toJson(),
+    };
+
+AddPhraseToPhraseListRequest _$AddPhraseToPhraseListRequestFromJson(Map json) {
+  return AddPhraseToPhraseListRequest(
+    listId: json['listId'] as String,
+    phrase: json['phrase'] == null
+        ? null
+        : Phrase.fromJson((json['phrase'] as Map)?.map(
+            (k, e) => MapEntry(k as String, e),
+          )),
+  );
+}
+
+Map<String, dynamic> _$AddPhraseToPhraseListRequestToJson(
+        AddPhraseToPhraseListRequest instance) =>
+    <String, dynamic>{
+      'listId': instance.listId,
+      'phrase': instance.phrase?.toJson(),
+    };
+
+DeletePhraseRequest _$DeletePhraseRequestFromJson(Map json) {
+  return DeletePhraseRequest(
+    listId: json['listId'] as String,
+    phraseId: json['phraseId'] as String,
+  );
+}
+
+Map<String, dynamic> _$DeletePhraseRequestToJson(
+        DeletePhraseRequest instance) =>
+    <String, dynamic>{
+      'listId': instance.listId,
+      'phraseId': instance.phraseId,
+    };
+
+SendTestResultRequest _$SendTestResultRequestFromJson(Map json) {
+  return SendTestResultRequest(
+    sectionId: json['sectionId'] as String,
+    score: json['score'] as int,
+  );
+}
+
+Map<String, dynamic> _$SendTestResultRequestToJson(
+        SendTestResultRequest instance) =>
+    <String, dynamic>{
+      'sectionId': instance.sectionId,
+      'score': instance.score,
     };

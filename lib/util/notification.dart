@@ -34,7 +34,7 @@ final StreamController<ReceivedNotification>
 class AppNotifier {
   Future<void> setup() async {
     const initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     final initializationSettingsIOS = IOSInitializationSettings(
       requestAlertPermission: false,
       requestBadgePermission: false,
@@ -90,7 +90,7 @@ class AppNotifier {
     didReceiveLocalNotificationSubject.stream
         .listen((ReceivedNotification receivedNotification) async {
       // TODO
-      InAppLogger.log('Hello', type: 'notice');
+      InAppLogger.info('Hello');
     });
   }
 

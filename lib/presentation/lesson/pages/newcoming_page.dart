@@ -19,7 +19,8 @@ class NewComingPage extends StatelessWidget {
       builder: (_, res) {
         return SectionListPage(
           section: Section(
-            title: 'new coming',
+            id: 'newcoming',
+            title: '新着',
             phrases: res.hasData ? res.data : [],
           ),
         );

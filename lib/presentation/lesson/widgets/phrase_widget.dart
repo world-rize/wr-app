@@ -25,66 +25,73 @@ class PhraseCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final backgroundColor = Theme.of(context).backgroundColor;
     final englishStyle = theme.primaryTextTheme.bodyText1;
     final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;
-    // final existVoice = phrase.assets.voice.isEmpty;
+    final highlightDecoration = highlight != null
+        ? BoxDecoration(
+            color: Colors.grey,
+            gradient: LinearGradient(
+              stops: const [0.03, 0.03],
+              colors: [highlight, theme.canvasColor],
+            ),
+            borderRadius: const BorderRadius.all(Radius.circular(8)),
+          )
+        : null;
+
+    final card = ShadowedContainer(
+      color: backgroundColor,
+      child: Container(
+        decoration: highlightDecoration,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      phrase.title['en'].capitalize(),
+                      style: englishStyle,
+                    ).p(4),
+                    Text(
+                      phrase.title['ja'],
+                      style: japaneseStyle,
+                    ).p(4),
+                  ],
+                ).p_1(),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final overlay = Positioned(
+      bottom: 10,
+      right: 10,
+      child: GestureDetector(
+        onTap: onFavorite,
+        child: Padding(
+          padding: const EdgeInsets.only(right: 14, bottom: 14),
+          child: Icon(
+            favorite ? Icons.favorite : Icons.favorite_border,
+            color: Colors.redAccent,
+            size: 24,
+          ),
+        ),
+      ),
+    );
 
     return Stack(
       children: <Widget>[
         InkWell(
           onTap: onTap,
-          child: Container(
-            decoration: highlight != null
-                ? BoxDecoration(
-                    gradient: LinearGradient(
-                      stops: const [0.03, 0.03],
-                      colors: [highlight, theme.canvasColor],
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  )
-                : null,
-            child: ShadowedContainer(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            phrase.title['en'].capitalize(),
-                            style: englishStyle,
-                          ).p(4),
-                          Text(
-                            phrase.title['ja'],
-                            style: japaneseStyle,
-                          ).p(4),
-                        ],
-                      ).p_1(),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          child: card,
         ).p_1(),
-        Positioned(
-          bottom: 10,
-          right: 10,
-          child: GestureDetector(
-            onTap: onFavorite,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 14, bottom: 14),
-              child: Icon(
-                favorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.redAccent,
-                size: 24,
-              ),
-            ),
-          ),
-        ),
+        overlay,
       ],
     );
   }

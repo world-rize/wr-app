@@ -18,7 +18,8 @@ class LessonPersistenceMock implements LessonRepository {
       (i) => Lesson(
         id: 'Lesson$i',
         title: {
-          'ja': 'Lesson$i',
+          'ja': 'レッスン$i',
+          'en': 'Lesson$i',
         },
         phrases: List.generate(100, (index) => Phrase.dummy(index)),
         assets: Assets(
@@ -32,7 +33,7 @@ class LessonPersistenceMock implements LessonRepository {
 
   @override
   Future<void> sendPhraseRequest({String text, String email}) async {
-    InAppLogger.log(text);
+    InAppLogger.info(text);
   }
 
   @override
@@ -57,5 +58,10 @@ class LessonPersistenceMock implements LessonRepository {
   void setShowText({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool('show_text', value);
+  }
+
+  @override
+  Future<List<Phrase>> newComingPhrases() async {
+    return <Phrase>[];
   }
 }

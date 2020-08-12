@@ -54,8 +54,8 @@ class LessonPersistence implements LessonRepository {
     const lessonsJsonPath = 'assets/lessons.json';
     const phrasesJsonPath = 'assets/phrases.json';
 
-    InAppLogger.log('\t Lessons Json @ $lessonsJsonPath');
-    InAppLogger.log('\t Phrases Json @ $phrasesJsonPath');
+    InAppLogger.info('\t Lessons Json @ $lessonsJsonPath');
+    InAppLogger.info('\t Phrases Json @ $phrasesJsonPath');
 
     final lessons = await loadAllLessonsFromLocal(
       lessonsJsonPath: lessonsJsonPath,
@@ -64,7 +64,7 @@ class LessonPersistence implements LessonRepository {
 
     // inspect
     lessons.forEach((lesson) {
-      InAppLogger.log(
+      InAppLogger.info(
           '\t ${lesson.id}: ${lesson.phrases.length} phrases found');
     });
 
@@ -109,5 +109,10 @@ class LessonPersistence implements LessonRepository {
   void setShowText({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool('show_text', value);
+  }
+
+  @override
+  Future<List<Phrase>> newComingPhrases() async {
+    return <Phrase>[];
   }
 }

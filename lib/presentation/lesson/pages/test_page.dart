@@ -4,17 +4,16 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
+import 'package:wr_app/presentation/lesson/widgets/test_choices.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
 
 import './test_result_page.dart';
-import '../widgets/phrase_example.dart';
 
 /// テストページ
 ///
@@ -135,26 +134,6 @@ class TestPageState extends State<TestPage> {
     );
   }
 
-//  void _showQuestionResult({bool correct}) {
-//    showDialog(
-//      context: context,
-//      builder: (_) => Material(
-//        type: MaterialType.transparency,
-//        child: GestureDetector(
-//          behavior: HitTestBehavior.opaque,
-//          onTap: () {
-//            Navigator.pop(context);
-//          },
-//          child: Center(
-//            child: Image.network(correct
-//                ? 'https://4.bp.blogspot.com/-CUR5NlGuXkU/UsZuCrI78dI/AAAAAAAAc20/mMqQPb9bBI0/s800/mark_maru.png'
-//                : 'https://1.bp.blogspot.com/-eJGNGE4u8LA/UsZuCAMuehI/AAAAAAAAc2c/QQ5eBSC2Ey0/s800/mark_batsu.png'),
-//          ),
-//        ),
-//      ),
-//    );
-//  }
-
   List<String> _randomSelections() {
     final notifier = Provider.of<LessonNotifier>(context);
     final selections =
@@ -181,85 +160,12 @@ class TestPageState extends State<TestPage> {
           )
         ],
       ),
-      body: QuestionView(
+      body: TestChoices(
         index: _index,
         phrase: currentPhrase,
         selection: selection,
         onNext: _next,
       ),
-    );
-  }
-}
-
-// TODO(someone): 遷移アニメーション
-/// 問題画面
-///
-/// [phrase] と [selection] を表示し選択されたら [onNext] がコールバックされる
-class QuestionView extends StatelessWidget {
-  const QuestionView({
-    @required this.index,
-    @required this.phrase,
-    @required this.selection,
-    @required this.onNext,
-  });
-
-  /// index
-  final int index;
-
-  /// フレーズ
-  final Phrase phrase;
-
-  /// 選択肢
-  final List<String> selection;
-
-  /// コールバック
-  final void Function(int) onNext;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Flexible(
-          flex: 5,
-          child: PhraseSampleView(
-            example: phrase.example,
-            showTranslation: true,
-            showKeyphrase: false,
-          ),
-        ),
-        Flexible(
-          flex: 3,
-          child: _createSelection(),
-        ),
-      ],
-    );
-  }
-
-  /// 選択肢
-  Widget _createSelection() {
-    return ListView.builder(
-      // physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (_, index) {
-        return InkWell(
-          onTap: () {
-            onNext(index);
-          },
-          child: GFListTile(
-            title: Padding(
-              padding: const EdgeInsets.all(2),
-              child: Text(
-                selection[index],
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            color: Colors.lightBlueAccent,
-          ),
-        ).p(6);
-      },
-      itemCount: 4,
     );
   }
 }

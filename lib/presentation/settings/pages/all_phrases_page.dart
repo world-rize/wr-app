@@ -44,6 +44,7 @@ class _AllPhrasesPageState extends State<AllPhrasesPage> {
   @override
   Widget build(BuildContext context) {
     final voices = paths();
+    final backgroundColor = Theme.of(context).backgroundColor;
 
     return Scaffold(
       appBar: AppBar(
@@ -56,6 +57,7 @@ class _AllPhrasesPageState extends State<AllPhrasesPage> {
             itemBuilder: (_, i) => Padding(
               padding: const EdgeInsets.all(8),
               child: ShadowedContainer(
+                color: backgroundColor,
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Row(

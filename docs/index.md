@@ -7,6 +7,9 @@
 ## ❓ Development Guide
 [開発ガイドライン](./guide.md)
 
+# 🎉 Release Notes
+[リリースノート](./release-notes.md)
+
 ## 📚 Specs(WIP)
 - [WR英会話 仕様書](./spec.pdf)  
 - [UI Prototype - Figma](https://www.figma.com/file/Mtwf6S5PTGTE0ZoeAQ8OuY/english?node-id=0%3A1)

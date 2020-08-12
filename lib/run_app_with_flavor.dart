@@ -34,33 +34,33 @@ Future<void> setupGlobalSingletons() async {
   // firebase analytics
   final analytics = FirebaseAnalytics();
   GetIt.I.registerSingleton<FirebaseAnalytics>(analytics);
-  InAppLogger.log('🔥 FirebaseAnalytics Initialized');
+  InAppLogger.info('🔥 FirebaseAnalytics Initialized');
 
   // pub spec
   final pubSpec = await PackageInfo.fromPlatform();
   GetIt.I.registerSingleton<PackageInfo>(pubSpec);
-  InAppLogger.log('📄 Load pubspec.yml');
+  InAppLogger.info('📄 Load pubspec.yml');
 
   // shared preferences
   final pref = await SharedPreferences.getInstance();
   GetIt.I.registerSingleton<SharedPreferences>(pref);
-  InAppLogger.log('🔥 SharedPreferences Initialized');
+  InAppLogger.info('🔥 SharedPreferences Initialized');
 
   // contentful client
   final env = DotEnv().env;
   final client = Client(env['CONTENTFUL_SPACE_ID'], env['CONTENTFUL_TOKEN']);
   GetIt.I.registerSingleton<Client>(client);
-  InAppLogger.log('🔥 Contentful Initialized');
+  InAppLogger.info('🔥 Contentful Initialized');
 
   // initialize admob
   await FirebaseAdMob.instance.initialize(appId: env['ADMOB_APP_ID']);
-  InAppLogger.log('🔥 Admob Initialized');
+  InAppLogger.info('🔥 Admob Initialized');
 
   // notificator
   final notificator = AppNotifier();
   await notificator.setup();
   GetIt.I.registerSingleton<AppNotifier>(notificator);
-  InAppLogger.log('🔥 notificator Initialized');
+  InAppLogger.info('🔥 notificator Initialized');
 }
 
 /// runApp() with flavor
@@ -73,11 +73,17 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final analytics = GetIt.I<FirebaseAnalytics>();
 
   const useMock = false;
+
+  useCloudFunctionsEmulator();
+
+  if (useMock) {
+    InAppLogger.info('❗ Using Mock');
+  }
+
   // repos
-  final userPersistence =
-      useMock ? UserPersistenceMock() : UserPersistenceMock();
+  final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
   final articlePersistence =
-      true ? ArticlePersistenceMock() : ArticlePersistence();
+      useMock ? ArticlePersistenceMock() : ArticlePersistence();
   final lessonPersistence =
       useMock ? LessonPersistenceMock() : LessonPersistence();
   final authPersistence = useMock ? AuthPersistence() : AuthPersistenceMock();

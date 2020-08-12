@@ -9,6 +9,7 @@ import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_search_iconbutton.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 
 /// root view
 class RootView extends StatefulWidget {
@@ -25,42 +26,46 @@ class _RootViewState extends State<RootView>
   /// navbar controller
   PageController _pageController;
 
+  /// Check user status
+  void _checkUserStatus(Duration timestamp) {
+    // TODO: membership check
+    // on first launch, show on-boarding page
+    final loggedIn = Provider.of<UserNotifier>(context, listen: false).loggedIn;
+    final firstLaunch =
+        Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
+
+    InAppLogger.debug('first launch: $firstLaunch, logged in: $loggedIn');
+
+    // show on boarding modal
+    if (firstLaunch || !loggedIn) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => OnBoardingPage(),
+          fullscreenDialog: true,
+        ),
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _index = 0;
     _pageController = PageController();
 
-    /// on first launch, show on-boarding page
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final loggedIn =
-          Provider.of<UserNotifier>(context, listen: false).loggedIn;
-      final firstLaunch =
-          Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
-
-      print('first launch: $firstLaunch, logged in: $loggedIn');
-
-      // show on boarding modal
-      if (firstLaunch || !loggedIn) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => OnBoardingPage(),
-            fullscreenDialog: true,
-          ),
-        );
-      }
-    });
+    WidgetsBinding.instance.addPostFrameCallback(_checkUserStatus);
   }
 
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<UserNotifier>(context);
-    final user = notifier.getUser();
     final primaryColor = Theme.of(context).primaryColor;
 
     if (!notifier.loggedIn) {
       return const Scaffold();
     }
+
+    final user = notifier.getUser();
 
     final header = Row(
       children: <Widget>[
@@ -70,7 +75,7 @@ class _RootViewState extends State<RootView>
           height: 30,
         ).p_1(),
         Text(
-          I.of(context).points(user.point),
+          I.of(context).points(user.statistics.points),
           style: const TextStyle(color: Colors.white),
         ),
       ],
@@ -88,7 +93,7 @@ class _RootViewState extends State<RootView>
             fullscreenDialog: true,
           ));
         },
-      )
+      ),
     ];
 
     final navbar = BottomNavigationBar(
@@ -110,7 +115,7 @@ class _RootViewState extends State<RootView>
           title: Text(I.of(context).bottomNavColumn),
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.library_books),
+          icon: const Icon(Icons.bookmark_border),
           title: Text(I.of(context).bottomNavNote),
         ),
         BottomNavigationBarItem(
@@ -122,35 +127,6 @@ class _RootViewState extends State<RootView>
           title: Text(I.of(context).bottomNavMyPage),
         ),
       ],
-    );
-
-    final bottomRibbon = Container(
-      color: Colors.green,
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: const [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(8),
-              child: Text(
-                'XXX',
-                style: TextStyle(
-                  fontSize: 24,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Icon(
-              Icons.chevron_right,
-              size: 24,
-              color: Colors.white,
-            ),
-          ),
-        ],
-      ),
     );
 
     final pageView = PageView(
@@ -176,10 +152,6 @@ class _RootViewState extends State<RootView>
         title: header,
         actions: actions,
       ),
-//      body: FooterLayout(
-//        body: pageView,
-//        footer: bottomRibbon,
-//      ),
       body: pageView,
       bottomNavigationBar: navbar,
     );

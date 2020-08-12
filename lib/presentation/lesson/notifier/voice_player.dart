@@ -5,30 +5,27 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
+import 'package:wr_app/util/logger.dart';
 
 /// phrase detail voice player
 class VoicePlayer with ChangeNotifier {
-  VoicePlayer({@required this.phrase, @required this.onError}) {
+  factory VoicePlayer({@required onError}) {
+    return _cache ??= VoicePlayer._internal(onError: onError);
+  }
+
+  VoicePlayer._internal({@required onError}) {
+    InAppLogger.debug('VoicePlayer._internal()');
+    _fixedPlayer = AudioPlayer();
+    _player = AudioCache(fixedPlayer: _fixedPlayer);
+    isPlaying = false;
     speed = 1.0;
     locale = _locales[0];
-
-    final _fixedPlayer = AudioPlayer()
-      ..onPlayerStateChanged.listen((AudioPlayerState state) {
-        print(state);
-        notifyListeners();
-      });
-
-    _player = AudioCache(fixedPlayer: _fixedPlayer);
-
-    playKeyPhrase();
+    _fixedPlayer.onPlayerStateChanged.listen(onStateChanged);
+    _fixedPlayer.onPlayerError.listen(onError);
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _player.fixedPlayer.stop();
-    _player.fixedPlayer.dispose();
-  }
+  /// singleton
+  static VoicePlayer _cache;
 
   /// voice playing speeds
   static final List<double> _playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
@@ -36,14 +33,15 @@ class VoicePlayer with ChangeNotifier {
   /// voice pronunciations
   static final List<String> _locales = ['en-us', 'en-uk', 'en-au'];
 
-  /// target phrase
-  final Phrase phrase;
+  AudioPlayer _fixedPlayer;
+  AudioCache _player;
 
   /// on error callback
-  final Function onError;
+  Function onError;
 
   /// voice is playing?
-  bool get isPlaying => _player.fixedPlayer.state == AudioPlayerState.PLAYING;
+  // bool get isPlaying => _player.fixedPlayer.state == AudioPlayerState.PLAYING;
+  bool isPlaying;
 
   /// current playing speed
   double speed;
@@ -51,40 +49,75 @@ class VoicePlayer with ChangeNotifier {
   /// current pronunciation
   String locale;
 
-  // Player
-  AudioCache _player;
+  /// play queue(TODO)
+  List<String> queue;
 
-  /// return voice asset path
-  String get voicePath {
-    return phrase.assets.voice[locale] ?? 'voice_sample.mp3';
+  @override
+  void dispose() {
+    print('dispose');
+    _player.fixedPlayer.dispose();
+    _cache.dispose();
+    super.dispose();
   }
 
-  /// play key phrase on entering the page
-  void playKeyPhrase() {
-    _player.play(phrase.assets.voice[locale]).catchError(onError);
+  void onStateChanged(AudioPlayerState state) {
+    if (state == AudioPlayerState.COMPLETED) {
+      isPlaying = false;
+    }
+    print(state);
     notifyListeners();
   }
 
-  Future<void> play(Message message) async {
-    await _player.play(message.assets.voice[locale]);
+  /// play key phrase on entering the page
+  Future<void> playKeyPhrase({@required Phrase phrase}) async {
+    if (!phrase.assets.voice.containsKey(locale)) {
+      throw Exception('locale $locale not found');
+    }
+
+    await _player.play(phrase.assets.voice[locale]);
+    isPlaying = true;
+    notifyListeners();
   }
 
-  Future<void> playAll() async {
-    // dirty
+  /// play a message
+  Future<void> play(Message message) async {
+    if (!message.assets.voice.containsKey(locale)) {
+      throw Exception('locale $locale not found');
+    }
+    await _player.play(message.assets.voice[locale]);
+    isPlaying = true;
+    notifyListeners();
+  }
+
+  /// resume
+  void resume() {
+    _player.fixedPlayer.resume();
+    isPlaying = true;
+    notifyListeners();
+  }
+
+  /// stop
+  void pause() {
+    _player.fixedPlayer.pause();
+    isPlaying = false;
+    notifyListeners();
+  }
+
+  /// play all messages
+  Future<void> playAll({@required Phrase phrase}) async {
+    // TODO: 途中でストップされるとバグる
+    // 先に _player.load() 必要
+    isPlaying = true;
+    notifyListeners();
     await Future.forEach(phrase.example.value, (message) async {
       await _player.load(message.assets.voice[locale]);
       final d = await _player.fixedPlayer.getDuration();
       await _player.play(message.assets.voice[locale]);
+      print(d);
       await Future.delayed(Duration(milliseconds: d + 500));
     });
-  }
-
-  Future<void> pause() async {
-    await _player.fixedPlayer.pause();
-  }
-
-  Future<void> toggle() async {
-    await (!isPlaying ? playAll() : pause());
+    isPlaying = false;
+    notifyListeners();
   }
 
   void toggleSpeed() {

@@ -52,10 +52,8 @@ class TestResultPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final userStore = Provider.of<UserNotifier>(context);
-    final user = userStore.getUser();
+    final userNotifier = Provider.of<UserNotifier>(context);
     final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
-    final resultText = I.of(context).testResult(stats.corrects > 5);
 
     return Scaffold(
       appBar: AppBar(
@@ -67,7 +65,7 @@ class TestResultPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              '$scoreText$resultText',
+              scoreText,
               style: const TextStyle(fontSize: 20),
             ).p_1(),
             Container(
@@ -85,12 +83,14 @@ class TestResultPage extends StatelessWidget {
                         ),
                       );
                     },
-                    favorite: user.isFavoritePhrase(stats.section.phrases[i]),
+                    favorite: userNotifier.existPhraseInFavoriteList(
+                        phraseId: stats.section.phrases[i].id),
                     onFavorite: () {
                       final phrase = stats.section.phrases[i];
-                      userStore.favoritePhrase(
+                      userNotifier.favoritePhrase(
                         phraseId: phrase.id,
-                        value: !user.isFavoritePhrase(phrase),
+                        favorite: !userNotifier.existPhraseInFavoriteList(
+                            phraseId: phrase.id),
                       );
                     },
                   ).p_1(),
@@ -111,7 +111,10 @@ class TestResultPage extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            userStore.callGetPoint(point: stats.corrects);
+            userNotifier
+              ..sendTestScore(
+                  sectionId: stats.section.id, score: stats.corrects)
+              ..callGetPoint(points: stats.corrects);
             _showRewardDialog(context);
           },
         ),
