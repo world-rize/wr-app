@@ -61,7 +61,6 @@ class _SectionDetailPageState extends State<SectionDetailPage>
 
     return ChangeNotifierProvider<VoicePlayer>.value(
       value: VoicePlayer(
-        phrase: phrase,
         onError: NotifyToast.error,
       ),
       child: Scaffold(
@@ -87,7 +86,7 @@ class _SectionDetailPageState extends State<SectionDetailPage>
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: SizedBox(
             width: double.infinity,
-            child: PhraseDetailButtons(),
+            child: PhraseDetailButtons(phrase: phrase),
           ),
         ),
       ),

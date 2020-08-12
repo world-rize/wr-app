@@ -1,16 +1,16 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
-
-import '../notifier/voice_player.dart';
 
 /// ワンポイントアドバイス
 class PhraseDetailAdvice extends StatelessWidget {
+  PhraseDetailAdvice({@required this.text});
+
+  String text;
+
   @override
   Widget build(BuildContext context) {
-    final player = Provider.of<VoicePlayer>(context);
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Card(
@@ -27,7 +27,7 @@ class PhraseDetailAdvice extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Text(player.phrase.advice['ja']),
+              child: Text(text),
             ),
           ],
         ),

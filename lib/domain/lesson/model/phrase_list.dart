@@ -19,10 +19,7 @@ class PhraseList {
 
   factory PhraseList.dummy(String title, String listId,
       {bool isDefault = false}) {
-    final phrases = List.generate(10, (index) {
-      final phrase = Phrase.dummy(index)..id = Uuid().v4();
-      return phrase;
-    });
+    final phrases = List.generate(10, (index) => Phrase.note(Uuid().v4()));
     return PhraseList(
       id: listId,
       title: title,

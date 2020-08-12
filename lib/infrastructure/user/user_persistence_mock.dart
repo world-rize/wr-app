@@ -85,7 +85,9 @@ class UserPersistenceMock implements UserRepository {
   @override
   Future<User> sendTestResult(SendTestResultRequest req) async {
     final user = _readUserMock();
-    user.statistics.testScores[req.sectionId] = req.score;
+    if (user.statistics.testScores[req.sectionId] ?? 0 < req.score) {
+      user.statistics.testScores[req.sectionId] = req.score;
+    }
     await Future.delayed(const Duration(seconds: 1));
     return user;
   }

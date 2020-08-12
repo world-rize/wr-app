@@ -9,13 +9,17 @@ import '../notifier/voice_player.dart';
 
 /// 下部ボタン
 class PhraseDetailButtons extends StatelessWidget {
+  PhraseDetailButtons({@required this.phrase});
+
+  final Phrase phrase;
+
   @override
   Widget build(BuildContext context) {
-    final player = Provider.of<VoicePlayer>(context);
-    final lesson = Provider.of<LessonNotifier>(context);
+    final voicePlayer = Provider.of<VoicePlayer>(context);
+    final lessonNotifier = Provider.of<LessonNotifier>(context);
     final userNotifier = Provider.of<UserNotifier>(context);
     final favorite =
-        userNotifier.existPhraseInFavoriteList(phraseId: player.phrase.id);
+        userNotifier.existPhraseInFavoriteList(phraseId: phrase.id);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -27,11 +31,11 @@ class PhraseDetailButtons extends StatelessWidget {
             heroTag: 'visibility',
             child: Icon(
               Icons.message,
-              color: lesson.getShowTranslation()
+              color: lessonNotifier.getShowTranslation()
                   ? Colors.lightBlueAccent
                   : Colors.grey,
             ),
-            onPressed: lesson.toggleShowTranslation,
+            onPressed: lessonNotifier.toggleShowTranslation,
           ),
         ),
         // お気に入りボタン
@@ -45,7 +49,7 @@ class PhraseDetailButtons extends StatelessWidget {
             ),
             onPressed: () {
               userNotifier.favoritePhrase(
-                  phraseId: player.phrase.id, favorite: !favorite);
+                  phraseId: phrase.id, favorite: !favorite);
             },
           ),
         ),
@@ -55,12 +59,16 @@ class PhraseDetailButtons extends StatelessWidget {
               backgroundColor: Colors.white,
               heroTag: 'play',
               child: Icon(
-                player.isPlaying ? Icons.pause : Icons.play_arrow,
+                voicePlayer.isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.orangeAccent,
                 size: 40,
               ),
               onPressed: () async {
-                await player.toggle();
+                if (voicePlayer.isPlaying) {
+                  voicePlayer.pause();
+                } else {
+                  await voicePlayer.playAll(phrase: phrase);
+                }
               }),
         ),
         // 再生速度
@@ -69,14 +77,14 @@ class PhraseDetailButtons extends StatelessWidget {
             backgroundColor: Colors.white,
             heroTag: 'speed',
             child: Text(
-              player.speed.toString(),
+              voicePlayer.speed.toString(),
               style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.blue,
               ),
             ),
-            onPressed: player.toggleSpeed,
+            onPressed: voicePlayer.toggleSpeed,
           ),
         ),
         // 発音
@@ -85,9 +93,9 @@ class PhraseDetailButtons extends StatelessWidget {
             backgroundColor: Colors.white,
             heroTag: 'locale',
             child: Image.asset(
-              'assets/icon/locale_${player.locale}.png',
+              'assets/icon/locale_${voicePlayer.locale}.png',
             ),
-            onPressed: player.toggleLocale,
+            onPressed: voicePlayer.toggleLocale,
           ),
         ),
       ],

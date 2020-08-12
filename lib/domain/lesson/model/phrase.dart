@@ -21,6 +21,21 @@ class Phrase {
 
   factory Phrase.fromJson(Map<String, dynamic> json) => _$PhraseFromJson(json);
 
+  /// minimum dummy
+  factory Phrase.note(String uuid) {
+    return Phrase(
+      id: uuid,
+      title: {
+        'ja': 'フレーズ $uuid',
+        'en': 'Phrase $uuid',
+      },
+      meta: {},
+      assets: Assets.empty(),
+      example: null,
+      advice: {},
+    );
+  }
+
   /// ダミーのフレーズを返す
   factory Phrase.dummy(int index) {
     final dummyAssets = Assets(voice: {

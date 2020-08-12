@@ -7,6 +7,9 @@ part 'assets.g.dart';
 @JsonSerializable()
 class Assets {
   Assets({this.voice, this.img});
+
+  factory Assets.empty() => Assets(voice: {}, img: {});
+
   factory Assets.fromJson(Map<String, dynamic> json) => _$AssetsFromJson(json);
 
   Map<String, dynamic> toJson() => _$AssetsToJson(this);

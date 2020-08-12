@@ -140,11 +140,11 @@ export const doTest = async (req: DoTestRequest, context: Context): Promise<User
  * ユーザー更新
  */
 export const updateUser = async (req: User, context: Context): Promise<User> => {
-  await authorize(context)
+  const uuid = await authorize(context)
 
-  console.log(`[deleteUser] uuid: ${updatedUser.uuid} user updated`)
+  console.log(`[deleteUser] uuid: ${uuid} user updated`)
 
-  return = await userService.updateUser(req)
+  return await userService.updateUser(req)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to update user')

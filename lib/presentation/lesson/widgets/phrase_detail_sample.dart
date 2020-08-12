@@ -8,12 +8,16 @@ import '../notifier/voice_player.dart';
 import '../widgets/phrase_example.dart';
 
 class PhraseDetailSample extends StatelessWidget {
+  PhraseDetailSample({@required this.phrase});
+
+  final Phrase phrase;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final player = Provider.of<VoicePlayer>(context);
-    final lesson = Provider.of<LessonNotifier>(context);
-    final showTranslation = lesson.getShowTranslation();
+    final voicePlayer = Provider.of<VoicePlayer>(context);
+    final lessonNotifier = Provider.of<LessonNotifier>(context);
+    final showTranslation = lessonNotifier.getShowTranslation();
 
     final header = Container(
       child: Column(
@@ -22,7 +26,7 @@ class PhraseDetailSample extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 12, top: 12),
             child: Text(
-              player.phrase.title['en'],
+              phrase.title['en'],
               style: TextStyle(
                 fontSize: 20,
                 color: theme.accentColor,
@@ -33,7 +37,7 @@ class PhraseDetailSample extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
-              player.phrase.title['ja'],
+              phrase.title['ja'],
               style: TextStyle(
                 fontSize: 16,
                 color: theme.accentColor,
@@ -52,10 +56,10 @@ class PhraseDetailSample extends StatelessWidget {
           children: <Widget>[
             header,
             PhraseSampleView(
-              example: player.phrase.example,
+              example: phrase.example,
               showTranslation: showTranslation,
               onMessageTapped: (message, index) {
-                player.play(message);
+                voicePlayer.play(message);
               },
             ),
           ],

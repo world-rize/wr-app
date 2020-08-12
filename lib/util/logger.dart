@@ -40,14 +40,17 @@ class InAppLogger {
     }
   }
 
+  static String prettify(Map<String, dynamic> json) {
+    final encoder = JsonEncoder.withIndent('  ');
+    return encoder.convert(json);
+  }
+
   static void _logJson(int level, Map<String, dynamic> json) {
     final now = DateTime.now();
     final formatter = DateFormat('HH:mm:ss');
     final timestamp = formatter.format(now);
     final header = LogLevel.header(level);
-
-    final encoder = JsonEncoder.withIndent('  ');
-    final jsonString = encoder.convert(json);
+    final jsonString = prettify(json);
 
     final log = '[$timestamp][$header] $jsonString';
 
