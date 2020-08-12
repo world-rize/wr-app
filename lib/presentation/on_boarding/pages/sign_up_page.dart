@@ -1,11 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wr_app/domain/system/index.dart';
+import 'package:wr_app/presentation/on_boarding/pages/locale_choice_page.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_up_form.dart';
-import 'package:wr_app/presentation/root_view.dart';
-import 'package:wr_app/util/analytics.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -19,22 +16,6 @@ class _SignUpPageState extends State<SignUpPage> {
   void initState() {
     super.initState();
     _isLoading = false;
-  }
-
-  void _gotoHome() {
-    Provider.of<SystemNotifier>(context, listen: false)
-        // initial login
-        .setFirstLaunch(value: false);
-
-    sendEvent(event: AnalyticsEvent.logIn);
-
-    Navigator.popUntil(context, (route) => route.isFirst);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => RootView(),
-      ),
-    );
   }
 
   @override
@@ -66,7 +47,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 setState(() {
                   _isLoading = false;
                 });
-                _gotoHome();
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => LocaleChoicePage()));
               },
             ),
           ],

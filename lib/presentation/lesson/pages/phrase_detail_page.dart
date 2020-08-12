@@ -8,7 +8,6 @@ import 'package:wr_app/util/toast.dart';
 
 import '../notifier/voice_player.dart';
 import '../widgets/phrase_detail_advice.dart';
-import '../widgets/phrase_detail_buttons.dart';
 import '../widgets/phrase_detail_sample.dart';
 
 /// Lesson > index > lesson > sections > phrase_detail_page
@@ -30,7 +29,6 @@ class PhrasesDetailPage extends StatelessWidget {
           children: <Widget>[
             PhraseDetailSample(),
             PhraseDetailAdvice(),
-            PhraseDetailButtons(),
           ],
         ),
       ),

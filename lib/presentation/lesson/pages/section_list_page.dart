@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
+import 'package:wr_app/presentation/lesson/widgets/phrase_detail_buttons.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/toast.dart';
 
 import './phrase_detail_page.dart';
 import '../widgets/phrase_widget.dart';
@@ -25,7 +28,10 @@ class SectionDetailPage extends StatefulWidget {
 
 class _SectionDetailPageState extends State<SectionDetailPage>
     with SingleTickerProviderStateMixin {
-  _SectionDetailPageState({@required this.section, @required this.index});
+  _SectionDetailPageState({
+    @required this.section,
+    @required this.index,
+  });
 
   final Section section;
   PageController _pageController;
@@ -40,37 +46,50 @@ class _SectionDetailPageState extends State<SectionDetailPage>
   @override
   Widget build(BuildContext context) {
     final userNotifier = Provider.of<UserNotifier>(context);
-    final phraseId = section.phrases[index].id;
-    final existNotes = userNotifier.existPhraseInNotes(phraseId: phraseId);
+    final phrase = section.phrases[index];
+    final existNotes = userNotifier.existPhraseInNotes(phraseId: phrase.id);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          I.of(context).phraseDetailTitle,
-          style: const TextStyle(color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(existNotes ? Icons.bookmark : Icons.bookmark_border),
-            onPressed: () {
-              userNotifier.addPhraseToPhraseList(
-                listId: 'default',
-                phrase: section.phrases[index],
-              );
-            },
-          ),
-        ],
+    final _addNotesButton = IconButton(
+      icon: Icon(existNotes ? Icons.bookmark : Icons.bookmark_border),
+      onPressed: () {
+        userNotifier.addPhraseToPhraseList(
+          listId: 'default',
+          phrase: section.phrases[index],
+        );
+      },
+    );
+
+    return ChangeNotifierProvider<VoicePlayer>.value(
+      value: VoicePlayer(
+        phrase: phrase,
+        onError: NotifyToast.error,
       ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            index = index;
-          });
-        },
-        children: section.phrases
-            .map((phrase) => PhrasesDetailPage(phrase: phrase))
-            .toList(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            I.of(context).phraseDetailTitle,
+            style: const TextStyle(color: Colors.white),
+          ),
+          actions: [_addNotesButton],
+        ),
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (i) {
+            setState(() => index = i);
+          },
+          children: section.phrases
+              .map((phrase) => PhrasesDetailPage(phrase: phrase))
+              .toList(),
+        ),
+        // controller
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+          child: SizedBox(
+            width: double.infinity,
+            child: PhraseDetailButtons(),
+          ),
+        ),
       ),
     );
   }

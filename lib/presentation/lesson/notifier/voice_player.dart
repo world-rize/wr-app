@@ -8,33 +8,38 @@ import 'package:wr_app/domain/lesson/model/phrase.dart';
 
 /// phrase detail voice player
 class VoicePlayer with ChangeNotifier {
-  VoicePlayer({@required this.phrase, @required this.onError}) {
+  VoicePlayer({
+    @required this.phrase,
+    @required this.onError,
+  }) {
     speed = 1.0;
     locale = _locales[0];
 
-    final _fixedPlayer = AudioPlayer()
-      ..onPlayerStateChanged.listen((AudioPlayerState state) {
-        print(state);
-        notifyListeners();
-      });
+    print(phrase.id);
 
-    _player = AudioCache(fixedPlayer: _fixedPlayer);
+    _fixedPlayer.onPlayerStateChanged.listen((AudioPlayerState state) {
+      print(state);
+      notifyListeners();
+    });
 
     // playKeyPhrase();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _player.fixedPlayer.stop();
-    _player.fixedPlayer.dispose();
-  }
+  static final AudioPlayer _fixedPlayer = AudioPlayer();
+  static final AudioCache _player = AudioCache(fixedPlayer: _fixedPlayer);
 
   /// voice playing speeds
   static final List<double> _playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
 
   /// voice pronunciations
   static final List<String> _locales = ['en-us', 'en-uk', 'en-au'];
+
+  @override
+  void dispose() {
+    _player.fixedPlayer.stop();
+    _player.fixedPlayer.dispose();
+    super.dispose();
+  }
 
   /// target phrase
   final Phrase phrase;
@@ -50,9 +55,6 @@ class VoicePlayer with ChangeNotifier {
 
   /// current pronunciation
   String locale;
-
-  // Player
-  AudioCache _player;
 
   /// return voice asset path
   String get voicePath {

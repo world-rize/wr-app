@@ -17,83 +17,80 @@ class PhraseDetailButtons extends StatelessWidget {
     final favorite =
         userNotifier.existPhraseInFavoriteList(phraseId: player.phrase.id);
 
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            // 吹き出しボタン
-            child: FloatingActionButton(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Expanded(
+          // 吹き出しボタン
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            heroTag: 'visibility',
+            child: Icon(
+              Icons.message,
+              color: lesson.getShowTranslation()
+                  ? Colors.lightBlueAccent
+                  : Colors.grey,
+            ),
+            onPressed: lesson.toggleShowTranslation,
+          ),
+        ),
+        // お気に入りボタン
+        Expanded(
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            heroTag: 'favorite',
+            child: Icon(
+              favorite ? Icons.favorite : Icons.favorite_border,
+              color: Colors.redAccent,
+            ),
+            onPressed: () {
+              userNotifier.favoritePhrase(
+                  phraseId: player.phrase.id, favorite: !favorite);
+            },
+          ),
+        ),
+        // 再生ボタン
+        Expanded(
+          child: FloatingActionButton(
               backgroundColor: Colors.white,
-              heroTag: 'Japanese',
+              heroTag: 'play',
               child: Icon(
-                Icons.message,
-                color: lesson.getShowTranslation()
-                    ? Colors.lightBlueAccent
-                    : Colors.grey,
+                player.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.orangeAccent,
+                size: 40,
               ),
-              onPressed: lesson.toggleShowTranslation,
-            ),
-          ),
-          // お気に入りボタン
-          Expanded(
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              heroTag: 'Favorite',
-              child: Icon(
-                favorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.redAccent,
+              onPressed: () async {
+                await player.toggle();
+              }),
+        ),
+        // 再生速度
+        Expanded(
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            heroTag: 'speed',
+            child: Text(
+              player.speed.toString(),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
               ),
-              onPressed: () {
-                userNotifier.favoritePhrase(
-                    phraseId: player.phrase.id, favorite: !favorite);
-              },
             ),
+            onPressed: player.toggleSpeed,
           ),
-          // 再生ボタン
-          Expanded(
-            child: FloatingActionButton(
-                backgroundColor: Colors.white,
-                heroTag: '3',
-                child: Icon(
-                  player.isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: Colors.orangeAccent,
-                  size: 40,
-                ),
-                onPressed: () async {
-                  await player.toggle();
-                }),
-          ),
-          // 再生速度
-          Expanded(
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              heroTag: '4',
-              child: Text(
-                player.speed.toString(),
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.blue,
-                ),
-              ),
-              onPressed: player.toggleSpeed,
+        ),
+        // 発音
+        Expanded(
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            heroTag: 'locale',
+            child: Image.asset(
+              'assets/icon/locale_${player.locale}.png',
             ),
+            onPressed: player.toggleLocale,
           ),
-          // 発音
-          Expanded(
-            child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              heroTag: 'Country',
-              child: Image.asset(
-                'assets/icon/locale_${player.locale}.png',
-              ),
-              onPressed: player.toggleLocale,
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
