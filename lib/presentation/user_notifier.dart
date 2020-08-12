@@ -20,7 +20,12 @@ class UserNotifier with ChangeNotifier {
   /// logged in?
   bool get loggedIn => _user != null;
 
-  User getUser() => _user;
+  User getUser() {
+    if (_user == null) {
+      throw Exception('user is null');
+    }
+    return _user;
+  }
 
   /// singleton
   static UserNotifier _cache;
@@ -45,6 +50,7 @@ class UserNotifier with ChangeNotifier {
   /// メールアドレスとパスワードでログイン
   Future<void> loginWithEmailAndPassword(String email, String password) async {
     _user = await _userService.signInWithEmailAndPassword(email, password);
+
     InAppLogger.info('✔ loginWithEmailAndPassword');
     InAppLogger.debugJson(_user.toJson());
     notifyListeners();
@@ -64,12 +70,17 @@ class UserNotifier with ChangeNotifier {
     @required String age,
     @required String name,
   }) async {
-    _user = await _userService.signUpWithEmailAndPassword(
-        email: email, password: password, age: age, name: name);
-    InAppLogger.info('✔ signUpWithEmailAndPassword');
-    notifyListeners();
+    try {
+      _user = await _userService.signUpWithEmailAndPassword(
+          email: email, password: password, age: age, name: name);
+      InAppLogger.info('✔ signUpWithEmailAndPassword');
+      notifyListeners();
 
-    NotifyToast.success('ログインしました');
+      NotifyToast.success('ログインしました');
+    } catch (e) {
+      print(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// update Email

@@ -74,6 +74,8 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   const useMock = false;
 
+  useCloudFunctionsEmulator();
+
   if (useMock) {
     InAppLogger.info('❗ Using Mock');
   }

@@ -5,6 +5,13 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/util/logger.dart';
+
+void useCloudFunctionsEmulator() {
+  const origin = 'http://localhost:5001';
+  CloudFunctions.instance.useFunctionsEmulator(origin: origin);
+  InAppLogger.info('🔖 Using Functions emulator @ $origin');
+}
 
 class UserPersistence implements UserRepository {
   @override
@@ -34,7 +41,12 @@ class UserPersistence implements UserRepository {
 
     return callable
         .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+        .then((res) {
+          print(res.data.toString());
+          return res;
+        })
+        .then((res) => Map<String, dynamic>.from(res.data))
+        .then((res) => User.fromJson(res));
   }
 
   @override

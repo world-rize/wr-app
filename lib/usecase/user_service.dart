@@ -7,6 +7,7 @@ import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/util/logger.dart';
 
 // TODO: Error handling
 // TODO: update api returns updated object
@@ -47,13 +48,27 @@ class UserService {
     );
 
     await _authPersistence.signUpWithEmailAndPassword(email, password);
-    return _userPersistence.createUser(req);
+
+    InAppLogger.debug('_authPersistence.signUpWithEmailAndPassword()');
+
+    final user = await _userPersistence.createUser(req);
+
+    InAppLogger.debug('_userPersistence.createUser()');
+
+    return user;
   }
 
   /// sign in with email & password
   Future<User> signInWithEmailAndPassword(String email, String password) async {
     await _authPersistence.signInWithEmailAndPassword(email, password);
-    return _userPersistence.readUser();
+
+    InAppLogger.debug('_authPersistence.signInWithEmailAndPassword()');
+
+    final user = await _userPersistence.readUser();
+
+    InAppLogger.debug('_userPersistence.readUser()');
+
+    return user;
   }
 
   /// sign out
@@ -67,7 +82,7 @@ class UserService {
   }
 
   /// ユーザーデータを習得します
-  Future<User> getUser() async {
+  Future<User> readUser() async {
     return _userPersistence.readUser();
   }
 

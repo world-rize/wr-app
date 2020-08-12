@@ -59,12 +59,13 @@ class _RootViewState extends State<RootView>
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<UserNotifier>(context);
-    final user = notifier.getUser();
     final primaryColor = Theme.of(context).primaryColor;
 
     if (!notifier.loggedIn) {
       return const Scaffold();
     }
+
+    final user = notifier.getUser();
 
     final header = Row(
       children: <Widget>[
