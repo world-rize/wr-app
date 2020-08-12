@@ -12,6 +12,11 @@ task :help do
   sh 'rake -T'
 end
 
+desc 'Firebase Emulators'
+task :emu do
+  sh 'GOOGLE_APPLICATION_CREDENTIALS="`pwd`/.env/worldrize-9248e-d680634159a0.json" firebase emulators:start '
+end
+
 desc 'Run App with Development'
 task :dev do
   sh 'flutter run --flavor development -t lib/main_development.dart'

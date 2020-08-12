@@ -44,8 +44,8 @@ mixin Messages {
   String memberStatus(Membership membership) => Intl.select(
         membership,
         {
-          Membership.normal: '無料',
-          Membership.pro: 'プレミアム',
+          Membership.normal: 'FREE',
+          Membership.pro: 'PRO',
         },
         name: 'memberStatus',
         args: [membership],

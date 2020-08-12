@@ -2,6 +2,7 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
@@ -47,5 +48,9 @@ class LessonService {
   void toggleShowText() {
     final value = _lessonPersistence.getShowText();
     _lessonPersistence.setShowText(value: !value);
+  }
+
+  Future<List<Phrase>> newComingPhrases() {
+    return _lessonPersistence.newComingPhrases();
   }
 }

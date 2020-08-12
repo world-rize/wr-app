@@ -28,9 +28,10 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'readUser')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call()
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call().then((res) {
+      print(res.data['activities']);
+      return res;
+    }).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -39,14 +40,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'createUser')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) {
-          print(res.data.toString());
-          return res;
-        })
-        .then((res) => Map<String, dynamic>.from(res.data))
-        .then((res) => User.fromJson(res));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -55,9 +49,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'updateUser')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -66,9 +58,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'deleteUser')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call()
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call().then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -77,9 +67,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'favoritePhrase')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -88,9 +76,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'getPoint')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -99,9 +85,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'doTest')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -110,9 +94,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'sendTestResult')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -121,9 +103,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'createFavoriteList')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -132,9 +112,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'deleteFavoriteList')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -143,9 +121,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'createPhrasesList')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override
@@ -154,9 +130,7 @@ class UserPersistence implements UserRepository {
         .getHttpsCallable(functionName: 'addPhraseToPhraseList')
           ..timeout = const Duration(seconds: 10);
 
-    return callable
-        .call(req.toJson())
-        .then((res) => User.fromJson(Map<String, dynamic>.from(res.data)));
+    return callable.call(req.toJson()).then((res) => User.fromJson(res.data));
   }
 
   @override

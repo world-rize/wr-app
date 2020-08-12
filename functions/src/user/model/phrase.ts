@@ -83,7 +83,7 @@ export interface FavoritePhraseDigest {
   /**
    * お気に入りした日時
    */
-  createdAt: Date
+  createdAt: string
 }
 
 /**

@@ -70,6 +70,8 @@ class InAppLogger {
 
   static void info(String content) => _log(LogLevel.INFO, content);
 
+  static void error(dynamic error) => _log(LogLevel.ERROR, error.toString());
+
   /// log history
   static List<UserActivity> getLogs() => _logs;
 }

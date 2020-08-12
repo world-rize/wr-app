@@ -49,18 +49,28 @@ class UserNotifier with ChangeNotifier {
 
   /// メールアドレスとパスワードでログイン
   Future<void> loginWithEmailAndPassword(String email, String password) async {
-    _user = await _userService.signInWithEmailAndPassword(email, password);
+    try {
+      _user = await _userService.signInWithEmailAndPassword(email, password);
 
-    InAppLogger.info('✔ loginWithEmailAndPassword');
-    InAppLogger.debugJson(_user.toJson());
-    notifyListeners();
+      InAppLogger.info('✔ loginWithEmailAndPassword');
+      InAppLogger.debugJson(_user.toJson());
+      notifyListeners();
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// Googleでログイン
   Future<void> loginWithGoogle() async {
-    _user = await _userService.signUpWithGoogle();
-    InAppLogger.info('✔ loginWithGoogle');
-    notifyListeners();
+    try {
+      _user = await _userService.signUpWithGoogle();
+      InAppLogger.info('✔ loginWithGoogle');
+      notifyListeners();
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// メールアドレスとパスワードでサインアップ
@@ -78,42 +88,63 @@ class UserNotifier with ChangeNotifier {
 
       NotifyToast.success('ログインしました');
     } catch (e) {
-      print(e);
+      InAppLogger.error(e);
       NotifyToast.error(e);
     }
   }
 
   /// update Email
   Future<void> setEmail({@required String email}) async {
-    _user = await _userService.updateEmail(user: _user, newEmail: email);
-    notifyListeners();
+    try {
+      _user = await _userService.updateEmail(user: _user, newEmail: email);
+      notifyListeners();
 
-    NotifyToast.success('Emailを変更しました');
+      NotifyToast.success('Emailを変更しました');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// update age
   Future<void> setAge({@required String age}) async {
-    _user = await _userService.updateAge(user: _user, age: age);
-    notifyListeners();
+    try {
+      _user = await _userService.updateAge(user: _user, age: age);
+      notifyListeners();
 
-    NotifyToast.success('ageを変更しました');
+      NotifyToast.success('ageを変更しました');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// update password
   Future<void> setPassword(
       {@required String currentPassword, @required String newPassword}) async {
-    await _userService.updatePassword(
-        currentPassword: currentPassword, newPassword: newPassword);
-    notifyListeners();
+    try {
+      await _userService.updatePassword(
+          currentPassword: currentPassword, newPassword: newPassword);
+      notifyListeners();
 
-    NotifyToast.success('passwordを変更しました');
+      NotifyToast.success('passwordを変更しました');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// Test API
   Future<void> test() async {
     InAppLogger.info('callTestAPI()');
-    await _userService.test();
-    notifyListeners();
+
+    try {
+      await _userService.test();
+      notifyListeners();
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// フレーズをお気に入りに登録します
@@ -123,111 +154,152 @@ class UserNotifier with ChangeNotifier {
   }) async {
     const listId = 'default';
 
-    // 仮反映
-    if (favorite) {
-      _user.favorites[listId].favoritePhraseIds[phraseId] =
-          FavoritePhraseDigest(
-        id: phraseId,
-        createdAt: DateTime.now(),
+    try {
+      // 仮反映
+      if (favorite) {
+        _user.favorites[listId].favoritePhraseIds[phraseId] =
+            FavoritePhraseDigest(
+          id: phraseId,
+          createdAt: DateTime.now(),
+        );
+      } else {
+        _user.favorites[listId].favoritePhraseIds.remove(phraseId);
+      }
+
+      notifyListeners();
+
+      // 本反映
+      _user = await _userService.favorite(
+        user: _user,
+        listId: listId,
+        phraseId: phraseId,
+        favorite: favorite,
       );
-    } else {
-      _user.favorites[listId].favoritePhraseIds.remove(phraseId);
+      notifyListeners();
+
+      NotifyToast.success(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
     }
-
-    notifyListeners();
-
-    // 本反映
-    _user = await _userService.favorite(
-      user: _user,
-      listId: listId,
-      phraseId: phraseId,
-      favorite: favorite,
-    );
-    notifyListeners();
-
-    NotifyToast.success(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
   }
 
   /// 受講可能回数をリセット
   Future<void> resetTestLimitCount() async {
-    _user = await _userService.resetTestCount(user: _user);
+    try {
+      _user = await _userService.resetTestCount(user: _user);
 
-    notifyListeners();
+      notifyListeners();
 
-    InAppLogger.info('受講可能回数がリセットされました');
-    NotifyToast.success('受講可能回数がリセットされました');
+      InAppLogger.info('受講可能回数がリセットされました');
+      NotifyToast.success('受講可能回数がリセットされました');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int points}) async {
-    _user = await _userService.getPoints(user: _user, points: points);
-    notifyListeners();
+    try {
+      _user = await _userService.getPoints(user: _user, points: points);
+      notifyListeners();
 
-    await sendEvent(
-      event: AnalyticsEvent.pointGet,
-      parameters: {'points': points},
-    );
-    NotifyToast.success('$points ポイントゲットしました');
+      await sendEvent(
+        event: AnalyticsEvent.pointGet,
+        parameters: {'points': points},
+      );
+      NotifyToast.success('$points ポイントゲットしました');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// テストを受ける
   Future<void> doTest({@required String sectionId}) async {
-    _user = await _userService.doTest(user: _user, sectionId: sectionId);
-    notifyListeners();
+    try {
+      _user = await _userService.doTest(user: _user, sectionId: sectionId);
+      notifyListeners();
 
-    await sendEvent(
-      event: AnalyticsEvent.doTest,
-      parameters: {'sectionId': sectionId},
-    );
+      await sendEvent(
+        event: AnalyticsEvent.doTest,
+        parameters: {'sectionId': sectionId},
+      );
 
-    InAppLogger.info('doTest');
+      InAppLogger.info('doTest');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// テスト結果
   Future<void> sendTestScore(
       {@required String sectionId, @required int score}) async {
-    _user = await _userService.sendTestResult(
-        user: _user, sectionId: sectionId, score: score);
-    notifyListeners();
+    try {
+      _user = await _userService.sendTestResult(
+          user: _user, sectionId: sectionId, score: score);
+      notifyListeners();
 
-    InAppLogger.info('sendTestScore');
+      InAppLogger.info('sendTestScore');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// プランを変更
   Future<void> changePlan(Membership membership) async {
-    _user = await _userService.changePlan(user: _user, membership: membership);
+    try {
+      _user =
+          await _userService.changePlan(user: _user, membership: membership);
 
-    notifyListeners();
-    if (membership == Membership.pro) {
-      await sendEvent(event: AnalyticsEvent.upGrade);
+      notifyListeners();
+      if (membership == Membership.pro) {
+        await sendEvent(event: AnalyticsEvent.upGrade);
+      }
+
+      InAppLogger.info('membership to be $membership');
+      NotifyToast.success('$membership');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
     }
-
-    InAppLogger.info('membership to be $membership');
-    NotifyToast.success('$membership');
   }
 
   /// create favorite list
   Future<void> createFavoriteList({
     @required String name,
   }) async {
-    _user = await _userService.createFavoriteList(name: name);
+    try {
+      _user = await _userService.createFavoriteList(name: name);
 
-    notifyListeners();
+      notifyListeners();
 
-    InAppLogger.info('createFavoriteList $name');
-    NotifyToast.success('createFavoriteList $name');
+      InAppLogger.info('createFavoriteList $name');
+      NotifyToast.success('createFavoriteList $name');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// delete favorite list
   Future<void> deleteFavoriteList({
     @required String listId,
   }) async {
-    _user = await _userService.deleteFavoriteList(listId: listId);
+    try {
+      _user = await _userService.deleteFavoriteList(listId: listId);
 
-    notifyListeners();
+      notifyListeners();
 
-    InAppLogger.info('deleteFavoriteList $listId');
-    NotifyToast.success('createFavoriteList $listId');
+      InAppLogger.info('deleteFavoriteList $listId');
+      NotifyToast.success('createFavoriteList $listId');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// exist phrase in favorites
@@ -242,12 +314,17 @@ class UserNotifier with ChangeNotifier {
   Future<void> createPhrasesList({
     @required String title,
   }) async {
-    _user = await _userService.createFavoriteList(name: title);
+    try {
+      _user = await _userService.createFavoriteList(name: title);
 
-    notifyListeners();
+      notifyListeners();
 
-    InAppLogger.info('createPhrasesList $title');
-    NotifyToast.success('createPhrasesList $title');
+      InAppLogger.info('createPhrasesList $title');
+      NotifyToast.success('createPhrasesList $title');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// add phrase
@@ -255,13 +332,18 @@ class UserNotifier with ChangeNotifier {
     @required String listId,
     @required Phrase phrase,
   }) async {
-    _user = await _userService.addPhraseToPhraseList(
-        listId: listId, phrase: phrase);
+    try {
+      _user = await _userService.addPhraseToPhraseList(
+          listId: listId, phrase: phrase);
 
-    notifyListeners();
+      notifyListeners();
 
-    InAppLogger.info('addPhraseToPhraseList ${phrase.id}');
-    NotifyToast.success('addPhraseToPhraseList ${phrase.id}');
+      InAppLogger.info('addPhraseToPhraseList ${phrase.id}');
+      NotifyToast.success('addPhraseToPhraseList ${phrase.id}');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// update  phrase
@@ -270,13 +352,18 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
     @required Phrase phrase,
   }) async {
-    _user = await _userService.updatePhrase(
-        listId: listId, phraseId: phraseId, phrase: phrase);
+    try {
+      _user = await _userService.updatePhrase(
+          listId: listId, phraseId: phraseId, phrase: phrase);
 
-    notifyListeners();
+      notifyListeners();
 
-    InAppLogger.info('updatePhrase $listId $phraseId');
-    NotifyToast.success('updatePhrase $listId $phraseId');
+      InAppLogger.info('updatePhrase $listId $phraseId');
+      NotifyToast.success('updatePhrase $listId $phraseId');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   /// exist phrase in notes

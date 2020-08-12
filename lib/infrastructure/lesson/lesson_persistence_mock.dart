@@ -59,4 +59,9 @@ class LessonPersistenceMock implements LessonRepository {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool('show_text', value);
   }
+
+  @override
+  Future<List<Phrase>> newComingPhrases() async {
+    return <Phrase>[];
+  }
 }

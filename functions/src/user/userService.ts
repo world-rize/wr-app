@@ -27,12 +27,14 @@ export class UserService {
       favorites: {
         'default': UserService.generateFavoriteList('default', 'お気に入り', true)
       },
-      notes: {},
+      notes: {
+        'default': UserService.generatePhrasesList('default', 'ノート', true)
+      },
       activities: [
         {
           schemaVersion: 'v1',
           content: 'ユーザーを作成しました',
-          date: new Date(),
+          date: new Date().toISOString(),
         }
       ],
       statistics:  {
@@ -40,12 +42,12 @@ export class UserService {
         testScores: {},
         testLimitCount: 3,
         points: 0,
-        memberShip: 'normal',
       },
       attributes: {
         schemaVersion: 'v1',
         email: '',
         age: '',
+        memberShip: 'normal',
       }
     }
   }
@@ -102,7 +104,7 @@ export class UserService {
     if (favorite) {
       user.favorites[listId].favoritePhraseIds[phraseId] = {
         id: phraseId,
-        createdAt: new Date()
+        createdAt: new Date().toISOString(),
       }
     } else {
       delete user.favorites[listId].favoritePhraseIds[phraseId]
@@ -173,7 +175,7 @@ export class UserService {
     user.activities.push({
       schemaVersion: 'v1',
       content: `${points} ポイント獲得`,
-      date: new Date()
+      date: new Date().toISOString(),
     })
 
     return this.repo.update(user)
@@ -194,7 +196,7 @@ export class UserService {
     user.activities.push({
       schemaVersion: 'v1',
       content: `${sectionId} のテストを受ける`,
-      date: new Date()
+      date: new Date().toISOString(),
     })
 
     return this.repo.update(user)
@@ -210,7 +212,7 @@ export class UserService {
     user.activities.push({
       schemaVersion: 'v1',
       content: `${sectionId} のテストで ${score} 点を獲得`,
-      date: new Date()
+      date: new Date().toISOString(),
     })
 
     return this.repo.update(user)

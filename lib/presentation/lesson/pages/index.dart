@@ -11,6 +11,7 @@ import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 
 import './favorite_page.dart';
 import './newcoming_page.dart';
@@ -41,6 +42,8 @@ class LessonIndexPage extends StatelessWidget {
     final userNotifier = Provider.of<UserNotifier>(context);
     final user = userNotifier.getUser();
     final lessonNotifier = Provider.of<LessonNotifier>(context);
+
+    InAppLogger.debugJson(user.favorites['default'].toJson());
 
     return SingleChildScrollView(
       child: Column(

@@ -10,13 +10,21 @@ import 'package:wr_app/presentation/note/widgets/phrase_list_table.dart';
 class NotePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final userNotifier = Provider.of<UserNotifier>(context);
     final phraseList = userNotifier.getUser().notes['default'];
 
     return SingleChildScrollView(
       child: Column(
         children: [
-          PhraseListTable(phraseList: phraseList),
+          if (phraseList == null)
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Text('ノートがまだありません',
+                  style: theme.textTheme.headline5.apply(color: Colors.grey)),
+            )
+          else
+            PhraseListTable(phraseList: phraseList)
         ],
       ),
     );

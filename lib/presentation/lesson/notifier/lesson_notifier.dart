@@ -52,13 +52,16 @@ class LessonNotifier with ChangeNotifier {
   }
 
   Future<List<Phrase>> favoritePhrases(User user) async {
-    return phrases.where((phrase) => user.favorites.values
-        .any((list) => list.favoritePhraseIds.containsKey(phrase.id)));
+    final favoritedPhraseIds = user.favorites.values
+        .expand((list) => list.favoritePhraseIds.keys)
+        .toSet()
+        .toList();
+
+    return phrasesWhere((p) => favoritedPhraseIds.contains(p.id));
   }
 
   Future<List<Phrase>> newComingPhrases() async {
-    // TODO
-    return phrasesWhere((p) => int.parse(p.id) < 20);
+    return _lessonService.newComingPhrases();
   }
 
   Future<void> sendPhraseRequest({@required String text}) {

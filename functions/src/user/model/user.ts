@@ -6,7 +6,7 @@ import { FavoritePhraseList, PhraseList } from './phrase'
 export interface UserActivity {
   schemaVersion: 'v1'
   content: string
-  date: Date
+  date: string
 }
 
 /**
@@ -25,11 +25,6 @@ export interface UserStatistics {
   points: number
 
   /**
-   * メンバーシップ
-   */
-  memberShip: 'normal' | 'pro'
-
-  /**
    * テスト受講可能回数
    */
   testLimitCount: number
@@ -41,6 +36,11 @@ export interface UserAttributes {
   age: string
 
   email: string
+
+  /**
+   * メンバーシップ
+   */
+  memberShip: 'normal' | 'pro'
 }
 
 export interface User {

@@ -24,11 +24,14 @@ class ArchivedListPage extends StatelessWidget {
             Text('statistics'),
             Text(InAppLogger.prettify(user.statistics.toJson())),
             Text('favorites'),
-            ...List.from(user.favorites.values)
+            ...user.favorites.values
                 .map((list) => Text(InAppLogger.prettify(list.toJson()))),
             Text('notes'),
-            ...List.from(user.notes.values)
+            ...user.notes.values
                 .map((list) => Text(InAppLogger.prettify(list.toJson()))),
+            Text('activities'),
+            ...user.activities.map(
+                (activity) => Text(InAppLogger.prettify(activity.toJson())))
           ],
         ),
       ),
