@@ -2,7 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// 各テストセクションのタイル
@@ -22,6 +24,11 @@ class TestSectionRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = Theme.of(context).primaryTextTheme;
     final backgroundColor = Theme.of(context).backgroundColor;
+    final currentScore = Provider.of<UserNotifier>(context)
+            .getUser()
+            .statistics
+            .testScores[section.id] ??
+        0;
 
     final sectionWidget = ShadowedContainer(
       color: backgroundColor,
@@ -40,7 +47,7 @@ class TestSectionRow extends StatelessWidget {
               ),
             ),
             Text(
-              '0/${section.phrases.length}',
+              '$currentScore/${section.phrases.length}',
               style: style.bodyText1.apply(color: Colors.redAccent),
             ),
             const Padding(

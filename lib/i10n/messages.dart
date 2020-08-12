@@ -119,16 +119,6 @@ mixin Messages {
         args: [questions, corrects],
       );
 
-  String testResult(bool success) => Intl.select(
-        success,
-        {
-          true: 'テストに合格！',
-          false: 'テストに不合格...',
-        },
-        name: 'testResult',
-        args: [success],
-      );
-
   String get next => Intl.message(
         '次へ',
         name: 'next',

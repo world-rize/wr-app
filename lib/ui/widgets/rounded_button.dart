@@ -18,6 +18,7 @@ class RoundedButton extends StatelessWidget {
     return FlatButton(
       onPressed: onTap,
       color: color,
+      disabledColor: Colors.black,
       shape: StadiumBorder(
         side: BorderSide(
           color: color,

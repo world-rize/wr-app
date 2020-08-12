@@ -2,54 +2,65 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
-import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
 
 class SignInForm extends StatefulWidget {
-  SignInForm({this.onSubmit});
+  SignInForm({@required this.onSubmit, @required this.onSuccess});
 
-  Function(String, String) onSubmit;
+  Function onSubmit;
+
+  Function onSuccess;
 
   @override
-  _SignInFormState createState() => _SignInFormState();
+  _SignInFormState createState() =>
+      _SignInFormState(onSubmit: onSubmit, onSuccess: onSuccess);
 }
 
 class _SignInFormState extends State<SignInForm> {
-  final _formKey = GlobalKey<FormState>();
+  _SignInFormState({@required this.onSubmit, @required this.onSuccess});
+
+  Function onSubmit;
+
+  Function onSuccess;
 
   bool _showPassword;
+
   String _email;
+
   String _password;
 
-  void _gotoHome() {
-    Provider.of<SystemNotifier>(context, listen: false)
-        // initial login
-        .setFirstLaunch(value: false);
+  final _formKey = GlobalKey<FormState>();
 
-    sendEvent(event: AnalyticsEvent.logIn);
-
-    Navigator.popUntil(context, (route) => route.isFirst);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => RootView(),
-      ),
-    );
+  bool _isValid() {
+    return _email.isNotEmpty && _password.isNotEmpty;
   }
 
-  Future<void> _signInEmailAndPassword(String email, String password) async {
+  Future<void> _signIn() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+
+    _formKey.currentState.save();
+
+    onSubmit();
     await Provider.of<UserNotifier>(context, listen: false)
-        .loginWithEmailAndPassword(email, password);
-    _gotoHome();
+        .loginWithEmailAndPassword(_email, _password);
+    onSuccess();
+  }
+
+  Future<void> _signInByTestUser() async {
+    onSubmit();
+    await Provider.of<UserNotifier>(context, listen: false)
+        .loginWithEmailAndPassword('a@b.com', '123456');
+    onSuccess();
   }
 
   Future<void> _signInWithGoogle() async {
+    onSubmit();
     await Provider.of<UserNotifier>(context, listen: false).loginWithGoogle();
-    _gotoHome();
+    onSuccess();
   }
 
   @override
@@ -65,10 +76,8 @@ class _SignInFormState extends State<SignInForm> {
     const splashColor = Color(0xff56c0ea);
 
     final _emailField = TextFormField(
-      onSaved: (email) {
-        setState(() {
-          _email = email;
-        });
+      onChanged: (email) {
+        setState(() => _email = email);
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -88,7 +97,7 @@ class _SignInFormState extends State<SignInForm> {
 
     final _passwordField = TextFormField(
       obscureText: !_showPassword,
-      onSaved: (password) {
+      onChanged: (password) {
         setState(() {
           _password = password;
         });
@@ -126,12 +135,7 @@ class _SignInFormState extends State<SignInForm> {
         child: RoundedButton(
           text: 'Sign in',
           color: splashColor,
-          onTap: () {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
-              _signInEmailAndPassword(_email, _password);
-            }
-          },
+          onTap: !_isValid() ? null : _signIn,
         ),
       ),
     );
@@ -150,14 +154,12 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
 
-    final _signInByTestUser = SizedBox(
+    final _signInByTestUserButton = SizedBox(
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: RoundedButton(
-          onTap: () {
-            _signInEmailAndPassword('a@b.com', '123456');
-          },
+          onTap: _signInByTestUser,
           text: 'Sign in by Test User(Debug)',
           color: Colors.grey,
         ),
@@ -193,7 +195,7 @@ class _SignInFormState extends State<SignInForm> {
           // Google Sign in
           _signInWithGoogleButton,
 
-          _signInByTestUser.p_1(),
+          _signInByTestUserButton.p_1(),
         ],
       ),
     );

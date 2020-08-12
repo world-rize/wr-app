@@ -54,7 +54,6 @@ class TestResultPage extends StatelessWidget {
     final primaryColor = Theme.of(context).primaryColor;
     final userNotifier = Provider.of<UserNotifier>(context);
     final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
-    final resultText = I.of(context).testResult(stats.corrects > 5);
 
     return Scaffold(
       appBar: AppBar(
@@ -66,7 +65,7 @@ class TestResultPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              '$scoreText$resultText',
+              scoreText,
               style: const TextStyle(fontSize: 20),
             ).p_1(),
             Container(
@@ -112,7 +111,10 @@ class TestResultPage extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            userNotifier.callGetPoint(points: stats.corrects);
+            userNotifier
+              ..sendTestScore(
+                  sectionId: stats.section.id, score: stats.corrects)
+              ..callGetPoint(points: stats.corrects);
             _showRewardDialog(context);
           },
         ),

@@ -20,7 +20,7 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
 
     final _emailField = TextFormField(
       initialValue: userNotifier.getUser().attributes.email,
-      onSaved: (email) {
+      onChanged: (email) {
         setState(() {
           _email = email;
         });

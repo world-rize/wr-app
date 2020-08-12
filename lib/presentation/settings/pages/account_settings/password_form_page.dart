@@ -22,7 +22,7 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
 
     final _currentPasswordField = TextFormField(
       obscureText: !_showPassword,
-      onSaved: (password) {
+      onChanged: (password) {
         setState(() {
           _currentPassword = password;
         });
@@ -55,10 +55,8 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
 
     final _newPasswordField = TextFormField(
       obscureText: !_showPassword,
-      onSaved: (password) {
-        setState(() {
-          _newPassword = password;
-        });
+      onChanged: (password) {
+        setState(() => _newPassword = password);
       },
       validator: (text) {
         if (text.isEmpty) {

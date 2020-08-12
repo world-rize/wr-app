@@ -161,8 +161,25 @@ class UserNotifier with ChangeNotifier {
 
   /// テストを受ける
   Future<void> doTest({@required String sectionId}) async {
-    await _userService.doTest(user: _user, sectionId: sectionId);
+    _user = await _userService.doTest(user: _user, sectionId: sectionId);
     notifyListeners();
+
+    await sendEvent(
+      event: AnalyticsEvent.doTest,
+      parameters: {'sectionId': sectionId},
+    );
+
+    InAppLogger.info('doTest');
+  }
+
+  /// テスト結果
+  Future<void> sendTestScore(
+      {@required String sectionId, @required int score}) async {
+    _user = await _userService.sendTestResult(
+        user: _user, sectionId: sectionId, score: score);
+    notifyListeners();
+
+    InAppLogger.info('sendTestScore');
   }
 
   /// プランを変更

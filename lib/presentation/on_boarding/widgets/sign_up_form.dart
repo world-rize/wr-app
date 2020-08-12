@@ -9,12 +9,25 @@ import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/toast.dart';
 
 class SignUpForm extends StatefulWidget {
+  SignUpForm({@required this.onSubmit, @required this.onSuccess});
+
+  Function onSubmit;
+
+  Function onSuccess;
+
   @override
-  _SignUpFormState createState() => _SignUpFormState();
+  _SignUpFormState createState() =>
+      _SignUpFormState(onSubmit: onSubmit, onSuccess: onSuccess);
 }
 
 class _SignUpFormState extends State<SignUpForm> {
+  _SignUpFormState({@required this.onSubmit, @required this.onSuccess});
+
   final _formKey = GlobalKey<FormState>();
+
+  Function onSubmit;
+
+  Function onSuccess;
 
   bool _agree;
 
@@ -43,21 +56,53 @@ class _SignUpFormState extends State<SignUpForm> {
   }
 
   bool _isValid() {
-    print('$_email, $_password, $_confirmationPassword');
-    return _email != '' && _password == _confirmationPassword;
+    return _name.isNotEmpty &&
+        _email.isNotEmpty &&
+        _password.isNotEmpty &&
+        _password.length >= 6 &&
+        _confirmationPassword.isNotEmpty &&
+        _agree &&
+        _password == _confirmationPassword;
   }
 
-  Future<void> _signIn(String email, String password, String name) async {
-    print('$email $password $name');
+  /// call when SignUp button tapped.
+  Future<void> _signUp() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+
+    _formKey.currentState.save();
 
     try {
       await Provider.of<UserNotifier>(context, listen: false)
           .signUpWithEmailAndPassword(
-              email: email, password: password, name: name, age: '')
+              email: _email, password: _password, name: _name, age: '')
           .catchError(print);
 
       Provider.of<SystemNotifier>(context, listen: false)
           .setFirstLaunch(value: false);
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RootView(),
+        ),
+      );
+    } on Exception catch (e) {
+      print(e);
+      NotifyToast.error(e);
+      return;
+    }
+  }
+
+  /// call when SignUpWithGoogle button tapped.
+  Future<void> _signUpWithGoogle() async {
+    try {
+      await Provider.of<UserNotifier>(context, listen: false)
+          .signUpWithGoogle();
+
+      Provider.of<SystemNotifier>(context, listen: false)
+          .setFirstLaunch(value: false);
+
       await Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -76,10 +121,8 @@ class _SignUpFormState extends State<SignUpForm> {
     const splashColor = Color(0xff56c0ea);
 
     final _nameField = TextFormField(
-      onSaved: (name) {
-        setState(() {
-          _name = name;
-        });
+      onChanged: (name) {
+        setState(() => _name = name);
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -98,10 +141,8 @@ class _SignUpFormState extends State<SignUpForm> {
     );
 
     final _emailField = TextFormField(
-      onSaved: (email) {
-        setState(() {
-          _email = email;
-        });
+      onChanged: (email) {
+        setState(() => _email = email);
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -121,10 +162,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
     final _passwordField = TextFormField(
       obscureText: !_showPassword,
-      onSaved: (password) {
-        setState(() {
-          _password = password;
-        });
+      onChanged: (password) {
+        setState(() => _password = password);
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -138,9 +177,7 @@ class _SignUpFormState extends State<SignUpForm> {
             _showPassword ? Icons.remove_circle_outline : Icons.remove_red_eye,
           ),
           onPressed: () {
-            setState(() {
-              _showPassword = !_showPassword;
-            });
+            setState(() => _showPassword = !_showPassword);
           },
         ),
         border: const UnderlineInputBorder(
@@ -154,10 +191,8 @@ class _SignUpFormState extends State<SignUpForm> {
 
     final _confirmationPasswordField = TextFormField(
       obscureText: !_showConfirmationPassword,
-      onSaved: (text) {
-        setState(() {
-          _confirmationPassword = text;
-        });
+      onChanged: (text) {
+        setState(() => _confirmationPassword = text);
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -195,16 +230,8 @@ class _SignUpFormState extends State<SignUpForm> {
         value: _agree,
         activeColor: Colors.blue,
         title: const Text('利用規約に同意します'),
-//        subtitle: !_agree
-//            ? const Text(
-//                'required',
-//                style: TextStyle(color: Colors.red),
-//              )
-//            : null,
         onChanged: (value) {
-          setState(() {
-            _agree = value;
-          });
+          setState(() => _agree = value);
         },
       ),
     );
@@ -216,14 +243,7 @@ class _SignUpFormState extends State<SignUpForm> {
         child: RoundedButton(
           text: 'Sign up',
           color: splashColor,
-          onTap: !_isValid()
-              ? null
-              : () {
-                  if (_formKey.currentState.validate()) {
-                    _formKey.currentState.save();
-                    _signIn(_email, _password, _name);
-                  }
-                },
+          onTap: !_isValid() ? null : _signUp,
         ),
       ),
     );
@@ -235,26 +255,7 @@ class _SignUpFormState extends State<SignUpForm> {
         child: RoundedButton(
           text: 'Sign up with Google',
           color: Colors.redAccent,
-          onTap: () async {
-            try {
-              await Provider.of<UserNotifier>(context, listen: false)
-                  .signUpWithGoogle();
-
-              Provider.of<SystemNotifier>(context, listen: false)
-                  .setFirstLaunch(value: false);
-
-              await Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RootView(),
-                ),
-              );
-            } on Exception catch (e) {
-              print(e);
-              NotifyToast.error(e);
-              return;
-            }
-          },
+          onTap: _signUpWithGoogle,
         ),
       ),
     );
