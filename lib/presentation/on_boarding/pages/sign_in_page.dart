@@ -48,32 +48,34 @@ class _SignInPageState extends State<SignInPage> {
         title: const Text('Signin'),
       ),
       // TODO(someone): height = maxHeight - appBarHeight
-      body: LayoutBuilder(
-        builder: (_, constraints) => ConstrainedBox(
-          constraints:
-              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-          child: Column(
-            children: <Widget>[
-              if (_isLoading)
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: CircularProgressIndicator(),
-                ),
-              SignInForm(
-                onSubmit: () {
-                  setState(() {
-                    _isLoading = true;
-                  });
-                },
-                onSuccess: () {
-                  setState(() {
-                    _isLoading = false;
-                  });
-                  _gotoHome();
-                },
-              ).p_1(),
-              const Spacer(),
-            ],
+      body: SingleChildScrollView(
+        child: LayoutBuilder(
+          builder: (_, constraints) => ConstrainedBox(
+            constraints:
+                BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+            child: Column(
+              children: <Widget>[
+                if (_isLoading)
+                  const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: CircularProgressIndicator(),
+                  ),
+                SignInForm(
+                  onSubmit: () {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                  },
+                  onSuccess: () {
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    _gotoHome();
+                  },
+                ).p_1(),
+                const Spacer(),
+              ],
+            ),
           ),
         ),
       ),

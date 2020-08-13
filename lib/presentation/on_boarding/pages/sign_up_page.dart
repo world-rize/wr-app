@@ -27,31 +27,33 @@ class _SignUpPageState extends State<SignUpPage> {
         backgroundColor: splashColor,
         title: const Text('サインアップ'),
       ),
-      body: ConstrainedBox(
-        constraints:
-            BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-        child: Column(
-          children: <Widget>[
-            if (_isLoading)
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: CircularProgressIndicator(),
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints:
+              BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
+          child: Column(
+            children: <Widget>[
+              if (_isLoading)
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: CircularProgressIndicator(),
+                ),
+              SignUpForm(
+                onSubmit: () {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                },
+                onSuccess: () {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => LocaleChoicePage()));
+                },
               ),
-            SignUpForm(
-              onSubmit: () {
-                setState(() {
-                  _isLoading = true;
-                });
-              },
-              onSuccess: () {
-                setState(() {
-                  _isLoading = false;
-                });
-                Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => LocaleChoicePage()));
-              },
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

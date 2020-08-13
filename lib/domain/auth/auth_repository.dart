@@ -1,5 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthRepository {
@@ -11,7 +12,8 @@ abstract class AuthRepository {
 
   Future<FirebaseUser> signInWithGoogleSignIn();
 
-  Future<FirebaseUser> signInWithSignInWithApple();
+  Future<FirebaseUser> signInWithSignInWithApple(
+      {List<Scope> scopes = const []});
 
   Future<void> updatePassword(String currentPassword, String newPassword);
 
