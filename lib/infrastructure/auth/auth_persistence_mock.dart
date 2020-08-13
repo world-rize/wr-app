@@ -1,5 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
@@ -53,7 +54,8 @@ class AuthPersistenceMock implements AuthRepository {
 
   /// sign in with sign in apple
   @override
-  Future<FirebaseUser> signInWithSignInWithApple() async {
+  Future<FirebaseUser> signInWithSignInWithApple(
+      {List<Scope> scopes = const []}) async {
     return MockFirebaseUser();
   }
 

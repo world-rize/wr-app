@@ -1,11 +1,14 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:apple_sign_in/apple_sign_in.dart' as siwa;
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
+import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/toast.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -116,9 +119,32 @@ class _SignUpFormState extends State<SignUpForm> {
     }
   }
 
+  /// call when SignUpWithSignInWithApple button tapped.
+  Future<void> _signUpWithSignInWithApple() async {
+    try {
+      await Provider.of<UserNotifier>(context, listen: false)
+          .signUpWithSignInWithApple();
+
+      Provider.of<SystemNotifier>(context, listen: false)
+          .setFirstLaunch(value: false);
+
+      await Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RootView(),
+        ),
+      );
+    } on Exception catch (e) {
+      print(e);
+      NotifyToast.error(e);
+      return;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     const splashColor = Color(0xff56c0ea);
+    final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
 
     final _nameField = TextFormField(
       onChanged: (name) {
@@ -260,6 +286,17 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
     );
 
+    final _signInWithAppleButton = SizedBox(
+      width: double.infinity,
+      child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: siwa.AppleSignInButton(
+            style: siwa.ButtonStyle.black,
+            type: siwa.ButtonType.signIn,
+            onPressed: _signUpWithSignInWithApple,
+          )),
+    );
+
     return Form(
       key: _formKey,
       child: Column(
@@ -313,6 +350,13 @@ class _SignUpFormState extends State<SignUpForm> {
             padding: const EdgeInsets.all(8),
             child: _signUpWithGoogleButton,
           ),
+
+          // Sign up with SIWA
+          if (appleSignInAvailable.isAvailable)
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: _signInWithAppleButton,
+            ),
         ],
       ),
     );

@@ -1,9 +1,13 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:apple_sign_in/apple_sign_in.dart';
+import 'package:apple_sign_in/apple_sign_in.dart' as siwa;
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
+import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/extensions.dart';
 
 class SignInForm extends StatefulWidget {
@@ -63,6 +67,13 @@ class _SignInFormState extends State<SignInForm> {
     onSuccess();
   }
 
+  Future<void> _signInWithApple() async {
+    onSubmit();
+    await Provider.of<UserNotifier>(context, listen: false)
+        .signInWithSignInWithApple();
+    onSuccess();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -74,6 +85,7 @@ class _SignInFormState extends State<SignInForm> {
   @override
   Widget build(BuildContext context) {
     const splashColor = Color(0xff56c0ea);
+    final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
 
     final _emailField = TextFormField(
       onChanged: (email) {
@@ -154,6 +166,17 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
 
+    final _signInWithAppleButton = SizedBox(
+      width: double.infinity,
+      child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: AppleSignInButton(
+            style: siwa.ButtonStyle.black,
+            type: siwa.ButtonType.signIn,
+            onPressed: _signInWithApple,
+          )),
+    );
+
     final _signInByTestUserButton = SizedBox(
       width: double.infinity,
       child: Padding(
@@ -161,7 +184,7 @@ class _SignInFormState extends State<SignInForm> {
         child: RoundedButton(
           onTap: _signInByTestUser,
           text: 'Sign in by Test User(Debug)',
-          color: Colors.grey,
+          color: Colors.green,
         ),
       ),
     );
@@ -194,6 +217,8 @@ class _SignInFormState extends State<SignInForm> {
 
           // Google Sign in
           _signInWithGoogleButton,
+
+          if (appleSignInAvailable.isAvailable) _signInWithAppleButton,
 
           _signInByTestUserButton.p_1(),
         ],

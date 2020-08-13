@@ -58,11 +58,44 @@ class UserService {
     return user;
   }
 
+  /// sign up with SIWA
+  Future<User> signUpWithSignInWithApple() async {
+    final fbUser = await _authPersistence.signInWithSignInWithApple();
+
+    InAppLogger.debug('_authPersistence.signInWithSignInWithApple()');
+
+    // TODO: fbUSer.displayName will be null
+    final req = CreateUserRequest(
+      name: fbUser.displayName ?? '',
+      age: '0',
+      email: fbUser.email ?? '',
+    );
+
+    final user = await _userPersistence.createUser(req);
+
+    InAppLogger.debug('_userPersistence.readUser()');
+
+    return user;
+  }
+
   /// sign in with email & password
   Future<User> signInWithEmailAndPassword(String email, String password) async {
     await _authPersistence.signInWithEmailAndPassword(email, password);
 
     InAppLogger.debug('_authPersistence.signInWithEmailAndPassword()');
+
+    final user = await _userPersistence.readUser();
+
+    InAppLogger.debug('_userPersistence.readUser()');
+
+    return user;
+  }
+
+  /// sign in with apple
+  Future<User> signInWithSignInWithApple() async {
+    await _authPersistence.signInWithSignInWithApple();
+
+    InAppLogger.debug('_authPersistence.signInWithSignInWithApple()');
 
     final user = await _userPersistence.readUser();
 

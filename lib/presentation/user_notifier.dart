@@ -38,8 +38,45 @@ class UserNotifier with ChangeNotifier {
       : _userService = service;
 
   Future<void> signUpWithGoogle() async {
-    _user = await _userService.signUpWithGoogle();
-    InAppLogger.debugJson(_user.toJson());
+    try {
+      _user = await _userService.signUpWithGoogle();
+      InAppLogger.debugJson(_user.toJson());
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// Sign in with SIWA
+  Future<void> signInWithSignInWithApple() async {
+    try {
+      _user = await _userService.signInWithSignInWithApple();
+      InAppLogger.debugJson(_user.toJson());
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// Sign up with SIWA
+  Future<void> signUpWithSignInWithApple() async {
+    try {
+      _user = await _userService.signUpWithSignInWithApple();
+      InAppLogger.debugJson(_user.toJson());
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  Future<void> signInWithApple() async {
+    try {
+      _user = await _userService.signInWithSignInWithApple();
+      InAppLogger.debugJson(_user.toJson());
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   Future<void> signOut() async {

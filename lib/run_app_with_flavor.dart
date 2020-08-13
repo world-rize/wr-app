@@ -17,11 +17,12 @@ import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/article/article_persistence.dart';
 import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
-import 'package:wr_app/infrastructure/auth/article_persistence.dart';
+import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/usecase/article_service.dart';
+import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
@@ -61,6 +62,11 @@ Future<void> setupGlobalSingletons() async {
   await notificator.setup();
   GetIt.I.registerSingleton<AppNotifier>(notificator);
   InAppLogger.info('🔥 notificator Initialized');
+
+  // sign in with apple
+  final appleSignInAvailable = await AppleSignInAvailable.check();
+  GetIt.I.registerSingleton<AppleSignInAvailable>(appleSignInAvailable);
+  InAppLogger.info('🔥 sign in with apple Initialized');
 }
 
 /// runApp() with flavor
@@ -74,7 +80,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   const useMock = false;
 
-  if (flavor == Flavor.development) {
+  if (useMock && flavor == Flavor.development) {
     useCloudFunctionsEmulator();
   }
 
@@ -88,7 +94,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       useMock ? ArticlePersistenceMock() : ArticlePersistence();
   final lessonPersistence =
       useMock ? LessonPersistenceMock() : LessonPersistence();
-  final authPersistence = useMock ? AuthPersistence() : AuthPersistenceMock();
+  final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
   final systemRepository = SystemPersistence();
 
   // services
