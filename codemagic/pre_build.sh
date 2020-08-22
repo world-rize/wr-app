@@ -24,6 +24,8 @@ cp "ios/Flutter/${CONFIGURATION}-${FLAVOR}.xcconfig" ios/Flutter/Release-product
 #   FIREBASE_IOS_CREDENTIAL: @ ./ios/Runner/GoogleService-Info.plist
 echo $FIREBASE_ANDROID_CREDENTIAL > ./android/app/google-services.json
 echo $FIREBASE_IOS_CREDENTIAL > ./ios/Runner/GoogleService-Info.plist
+mkdir ./.env
+echo $DOTENV > ./.env/.env
 
 # Download assets
 curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG
