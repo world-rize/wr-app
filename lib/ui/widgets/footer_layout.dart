@@ -49,14 +49,14 @@ class _FooterLayoutDelegate extends MultiChildLayoutDelegate {
 
   @override
   void performLayout(Size size) {
-    size = Size(size.width, size.height + viewInsets.bottom);
+    final _size = Size(size.width, size.height + viewInsets.bottom);
 
     final footer =
-        layoutChild(_FooterLayout.footer, BoxConstraints.loose(size));
+        layoutChild(_FooterLayout.footer, BoxConstraints.loose(_size));
 
     final bodyConstraints = BoxConstraints.tightFor(
-      height: size.height - max(footer.height, viewInsets.bottom),
-      width: size.width,
+      height: _size.height - max(footer.height, viewInsets.bottom),
+      width: _size.width,
     );
 
     final body = layoutChild(_FooterLayout.body, bodyConstraints);

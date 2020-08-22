@@ -1,6 +1,6 @@
 # Copyright © 2020 WorldRIZe. All rights reserved.
 
-task :default => [:help]
+task :default => [:setup]
 
 def confirm(q)
   puts "#{q}? (y/n)"
@@ -14,7 +14,7 @@ end
 
 desc 'Firebase Emulators'
 task :emu do
-  sh 'GOOGLE_APPLICATION_CREDENTIALS="`pwd`/.env/worldrize-9248e-d680634159a0.json" firebase emulators:start '
+  sh 'firebase emulators:start '
 end
 
 desc 'Run App with Development'
@@ -67,11 +67,6 @@ task :icon do
   sh 'flutter pub run flutter_launcher_icons:main'
 end
 
-desc 'アセットダウンロード'
-task :assets => ['./assets/'] do
-  puts 'assets placed'
-end
-
 desc 'テスト'
 task :test do
   puts '[Task test]'
@@ -97,50 +92,71 @@ task :docs do
   end
 end
 
-# credentials
-file './assets/' do
-  abort if !confirm('Download \'./assets/\'')
-  sh 'curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG'
-  sh 'unzip -qq assets.zip'
-  sh 'rm -rf ./assets.zip ./__MACOSX'
+desc 'check keys'
+task :valid do
+  if !File.exist?('.env/.env')
+    puts 'Missing .env/.env'
+    abort
+  end
+
+  if !File.exist?('./.env/credential.json')
+    puts 'Missing ./.env/credential.json'
+    abort
+  end
+
+  if !File.exist?('./.env/worldrize-9248e-d680634159a0.json')
+    puts 'Missing ./.env/worldrize-9248e-d680634159a0.json'
+    abort
+  end
+
+  if !File.exist?('./android/app/google-services.json')
+    puts 'Missing ./android/app/google-services.json'
+    abort
+  end
+
+  if !File.exist?('./ios/Runner/GoogleService-Info.plist')
+    puts 'Missing ./ios/Runner/GoogleService-Info.plist'
+    abort
+  end
 end
 
-file './.env/.env' do
-  abort if !confirm('Download \'./.env/.env\'')
+desc 'set keys'
+task :key do
+  sh './setup.sh'
 end
 
-# firebase server credential
-file './.env/credential.json' do
-  # TODO download secrets
-  puts 'download from Firebase console'
-end
-
-# firebase web client credential
-file './.env/worldrize-9248e-d680634159a0.json' do
-  # TODO download secrets
-  puts 'download from Firebase console'
-end
-
-# firebase android credential
-file './android/app/google-services.json' do
-  # TODO download secrets
-  puts 'download from Firebase console'
-end
-
-# firebase ios credential
-file './ios/Runner/GoogleService-Info.plist' do
-  puts 'download from Firebase console'
+desc 'update assets'
+task :assets do
+  if !File.exist?('./assets')
+    # read ./.env/.env
+    # sh 'export $(cat ./.env/.env | grep -v ^# | xargs);'
+    sh 'curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG'
+    sh 'unzip -qq assets.zip'
+    sh 'rm -rf ./assets.zip ./__MACOSX'
+  end
 end
 
 desc 'setup'
-task :setup => [
-  './assets/', 
-  './.env/.env',
-  './.env/credential.json',
-  './.env/worldrize-9248e-d680634159a0.json',
-  './android/app/google-services.json',
-  './ios/Runner/GoogleService-Info.plist',
-] do
+task :setup do
+  puts '1. Set  Keys'
+  Rake::Task[:key].invoke
+  Rake::Task[:valid].invoke
+
+  puts '2. Download Assets'
+  Rake::Task[:assets].invoke
+
+  puts '3. Install'
+  cd 'ios' do
+    sh 'pod install'
+  end
+
+  sh 'flutter pub get'
+
+  cd 'functions' do
+    sh 'yarn'
+  end
+
+  puts '4. Generate'
   Rake::Task[:gen].invoke
   Rake::Task[:i10n].invoke
   Rake::Task[:splash].invoke
