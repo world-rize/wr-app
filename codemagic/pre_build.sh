@@ -26,6 +26,6 @@ echo $FIREBASE_ANDROID_CREDENTIAL > ./android/app/google-services.json
 echo $FIREBASE_IOS_CREDENTIAL > ./ios/Runner/GoogleService-Info.plist
 
 # Download assets
-sh 'curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG'
-sh 'unzip -qq assets.zip'
-sh 'rm -rf ./assets.zip ./__MACOSX'
+curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG
+unzip -qq assets.zip
+rm -rf ./assets.zip ./__MACOSX
