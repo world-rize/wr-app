@@ -28,6 +28,11 @@ export interface UserStatistics {
    * テスト受講可能回数
    */
   testLimitCount: number
+
+  /**
+   * 最終ログイン日時
+   */
+  lastLogin: string
 }
 
 export interface UserAttributes {
