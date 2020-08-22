@@ -2,6 +2,7 @@
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
 import { User } from './model/user'
+import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
 import { UserRepository } from './userRepository'
 import { FavoritePhraseList, PhraseList, Phrase } from './model/phrase'
@@ -34,7 +35,7 @@ export class UserService {
         {
           schemaVersion: 'v1',
           content: 'ユーザーを作成しました',
-          date: new Date().toISOString(),
+          date: moment().toISOString(),
         }
       ],
       statistics:  {
@@ -42,6 +43,7 @@ export class UserService {
         testScores: {},
         testLimitCount: 3,
         points: 0,
+        lastLogin: moment().toISOString(),
       },
       attributes: {
         schemaVersion: 'v1',
@@ -94,6 +96,24 @@ export class UserService {
     return this.repo.findById(uuid)
   }
 
+  async login(uuid: string): Promise<User> {
+    const user = await this.repo.findById(uuid)
+    if (user.statistics.lastLogin) {
+      const lastLogin = moment(user.statistics.lastLogin)
+      if (lastLogin.startOf('day') < moment()) {
+        user.statistics.testLimitCount = 3
+      }
+    }
+
+    user.activities.push({
+      schemaVersion: 'v1',
+      content: 'ログインしました',
+      date: moment().toISOString(),
+    })
+    user.statistics.lastLogin = moment().toISOString()
+    return this.repo.update(user);
+  }
+
   async favoritePhrase (uuid: string, listId: string, phraseId: string, favorite: boolean): Promise<User> {
     const user = await this.repo.findById(uuid)
 
@@ -104,7 +124,7 @@ export class UserService {
     if (favorite) {
       user.favorites[listId].favoritePhraseIds[phraseId] = {
         id: phraseId,
-        createdAt: new Date().toISOString(),
+        createdAt: moment().toISOString(),
       }
     } else {
       delete user.favorites[listId].favoritePhraseIds[phraseId]
@@ -175,7 +195,7 @@ export class UserService {
     user.activities.push({
       schemaVersion: 'v1',
       content: `${points} ポイント獲得`,
-      date: new Date().toISOString(),
+      date: moment().toISOString(),
     })
 
     return this.repo.update(user)
@@ -196,7 +216,7 @@ export class UserService {
     user.activities.push({
       schemaVersion: 'v1',
       content: `${sectionId} のテストを受ける`,
-      date: new Date().toISOString(),
+      date: moment().toISOString(),
     })
 
     return this.repo.update(user)
@@ -212,7 +232,7 @@ export class UserService {
     user.activities.push({
       schemaVersion: 'v1',
       content: `${sectionId} のテストで ${score} 点を獲得`,
-      date: new Date().toISOString(),
+      date: moment().toISOString(),
     })
 
     return this.repo.update(user)

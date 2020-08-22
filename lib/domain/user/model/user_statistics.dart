@@ -12,6 +12,7 @@ class UserStatistics {
     @required this.testScores,
     @required this.points,
     @required this.testLimitCount,
+    @required this.lastLogin,
   });
 
   factory UserStatistics.dummy() {
@@ -21,6 +22,7 @@ class UserStatistics {
       },
       points: 100,
       testLimitCount: 3,
+      lastLogin: '',
     );
   }
 
@@ -34,4 +36,6 @@ class UserStatistics {
   int points;
 
   int testLimitCount;
+
+  String lastLogin;
 }

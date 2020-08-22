@@ -48,3 +48,6 @@ GoogleService-Info.plist
 google-services.json
 
 /.env/*
+setup.sh
+
+.node-version

@@ -33,40 +33,12 @@ Firebaseにデプロイ
   - アプリ用CI/CDサービス
 
 ## 👍 Get Started
-### 1. `.env` をもらう
-- **.env file** @ `./.env/.env`
+### 1. `setup.sh` をもらう
+- **setup.sh** @ `./setup.sh`
 
-![](figs/env.png)
-
-### 2. Firebase credentials をダウンロード
-<https://support.google.com/firebase/answer/7015592?hl=ja>
-
-- **admin credentail** @ `./.env/credential.json`
-- **web credential** @ `./.env/worldrize-9248e-d680634159a0.json`
-- **android credential** `./android/app/google-services.json`
-- **ios credential** `./ios/Runner/GoogleService-Info.plist`
-
-Android, iOSのCredentialを配置する
-
-![](figs/ios_cred.png)
-
-![](figs/android.png)
-
-### 3. パッケージ
-```
-cd ios
-pod install
-```
-
-```
-flutter pub get
-```
-
-### 4. Init Script
-アセットとかがダウンロードされます
-
+### 2. Rake
 ```bash
-rake init # download & build assets
+rake
 ```
 
 ### 4. シミュレータ起動
