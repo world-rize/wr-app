@@ -18,3 +18,14 @@ echo "FLAVOR: ${FLAVOR}"
 
 # xcodebuid の際に決め打ちで -scheme Runner -config Release のオプションが与えられちゃってる件の対策
 cp "ios/Flutter/${CONFIGURATION}-${FLAVOR}.xcconfig" ios/Flutter/Release-production.xcconfigs
+
+# NOTE: codemagic の UI から以下の環境変数をセットすること
+#   FIREBASE_ANDROID_CREDENTIAL: @ ./android/app/google-services.json
+#   FIREBASE_IOS_CREDENTIAL: @ ./ios/Runner/GoogleService-Info.plist
+echo $FIREBASE_ANDROID_CREDENTIAL > ./android/app/google-services.json
+echo $FIREBASE_IOS_CREDENTIAL > ./ios/Runner/GoogleService-Info.plist
+
+# Download assets
+sh 'curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG'
+sh 'unzip -qq assets.zip'
+sh 'rm -rf ./assets.zip ./__MACOSX'
