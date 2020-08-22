@@ -47,6 +47,7 @@ class User {
         testScores: {},
         points: 0,
         testLimitCount: 0,
+        lastLogin: '',
       ),
       attributes: UserAttributes(
         age: '0',
