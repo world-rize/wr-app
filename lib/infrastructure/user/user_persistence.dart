@@ -7,8 +7,8 @@ import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
-void useCloudFunctionsEmulator() {
-  const origin = 'http://localhost:5001';
+void useCloudFunctionsEmulator(String port) {
+  final origin = 'http://localhost:$port';
   CloudFunctions.instance.useFunctionsEmulator(origin: origin);
   InAppLogger.info('🔖 Using Functions emulator @ $origin');
 }
@@ -32,6 +32,16 @@ class UserPersistence implements UserRepository {
       print(res.data['activities']);
       return res;
     }).then((res) => User.fromJson(res.data));
+  }
+
+  @override
+  Future<void> login() {
+    InAppLogger.debug('infra login');
+    final callable = CloudFunctions.instance
+        .getHttpsCallable(functionName: 'login')
+          ..timeout = const Duration(seconds: 10);
+
+    return callable.call();
   }
 
   @override

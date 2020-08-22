@@ -6,6 +6,8 @@ import 'package:wr_app/domain/user/model/user_api_dto.dart';
 abstract class UserRepository {
   Future<void> test();
 
+  Future<void> login();
+
   Future<User> readUser();
 
   Future<User> createUser(CreateUserRequest req);

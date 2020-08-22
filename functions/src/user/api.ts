@@ -51,6 +51,20 @@ export const readUser = async (req: {}, context: Context): Promise<User> => {
 }
 
 /**
+ * ログイン
+ */
+export const login = async (req: {}, context: Context) => {
+  const uid = await authorize(context)
+  await userService.login(uid)
+    .catch (e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to login')
+    })
+
+  console.log(`[login] done`)
+}
+
+/**
  *  ユーザーを作成します
  */
 export const createUser = async (req: CreateUserRequest, context: Context): Promise<User> => {

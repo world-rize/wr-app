@@ -25,8 +25,9 @@ class OnBoardingPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: FlatButton(
+              key: const Key('to_sign_up_button'),
               color: splashColor,
-              child: SizedBox(
+              child: const SizedBox(
                 width: double.infinity,
                 child: Center(
                   child: Padding(
@@ -62,8 +63,9 @@ class OnBoardingPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: FlatButton(
+              key: const Key('to_sign_in_button'),
               color: splashColor,
-              child: SizedBox(
+              child: const SizedBox(
                 width: double.infinity,
                 child: Center(
                   child: Padding(

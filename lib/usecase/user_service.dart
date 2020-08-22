@@ -10,7 +10,6 @@ import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
 // TODO: Error handling
-// TODO: update api returns updated object
 class UserService {
   const UserService({
     @required AuthRepository authPersistence,
@@ -24,6 +23,7 @@ class UserService {
   /// sign up with Google
   Future<User> signUpWithGoogle() async {
     final res = await _authPersistence.signInWithGoogleSignIn();
+    await _userPersistence.login();
 
     final req = CreateUserRequest(
       name: res.displayName,
@@ -82,9 +82,13 @@ class UserService {
   Future<User> signInWithEmailAndPassword(String email, String password) async {
     await _authPersistence.signInWithEmailAndPassword(email, password);
 
-    InAppLogger.debug('_authPersistence.signInWithEmailAndPassword()');
+    InAppLogger.debug('_userPersistence.readUser()');
 
     final user = await _userPersistence.readUser();
+
+    InAppLogger.debug('_userPersistence.login()');
+
+    await _userPersistence.login();
 
     InAppLogger.debug('_userPersistence.readUser()');
 
@@ -98,6 +102,7 @@ class UserService {
     InAppLogger.debug('_authPersistence.signInWithSignInWithApple()');
 
     final user = await _userPersistence.readUser();
+    await _userPersistence.login();
 
     InAppLogger.debug('_userPersistence.readUser()');
 

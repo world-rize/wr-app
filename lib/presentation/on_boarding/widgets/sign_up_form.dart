@@ -147,6 +147,7 @@ class _SignUpFormState extends State<SignUpForm> {
     final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
 
     final _nameField = TextFormField(
+      key: const Key('name'),
       onChanged: (name) {
         setState(() => _name = name);
       },
@@ -167,6 +168,7 @@ class _SignUpFormState extends State<SignUpForm> {
     );
 
     final _emailField = TextFormField(
+      key: const Key('email'),
       onChanged: (email) {
         setState(() => _email = email);
       },
@@ -187,6 +189,7 @@ class _SignUpFormState extends State<SignUpForm> {
     );
 
     final _passwordField = TextFormField(
+      key: Key('password'),
       obscureText: !_showPassword,
       onChanged: (password) {
         setState(() => _password = password);
@@ -216,6 +219,7 @@ class _SignUpFormState extends State<SignUpForm> {
     );
 
     final _confirmationPasswordField = TextFormField(
+      key: const Key('password_confirm'),
       obscureText: !_showConfirmationPassword,
       onChanged: (text) {
         setState(() => _confirmationPassword = text);
@@ -253,6 +257,7 @@ class _SignUpFormState extends State<SignUpForm> {
         border: Border.all(color: Colors.blueAccent),
       ),
       child: CheckboxListTile(
+        key: const Key('agree'),
         value: _agree,
         activeColor: Colors.blue,
         title: const Text('利用規約に同意します'),
@@ -267,6 +272,7 @@ class _SignUpFormState extends State<SignUpForm> {
       child: SizedBox(
         width: double.infinity,
         child: RoundedButton(
+          key: const Key('sign_up_button'),
           text: 'Sign up',
           color: splashColor,
           onTap: !_isValid() ? null : _signUp,

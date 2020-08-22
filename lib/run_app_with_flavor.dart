@@ -78,10 +78,12 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   final analytics = GetIt.I<FirebaseAnalytics>();
 
+  const useEmulator = true;
   const useMock = false;
 
-  if (useMock && flavor == Flavor.development) {
-    useCloudFunctionsEmulator();
+  if (useEmulator) {
+    InAppLogger.info('❗ Using Emulator');
+    useCloudFunctionsEmulator('5000');
   }
 
   if (useMock) {
