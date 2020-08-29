@@ -27,8 +27,8 @@ dependencies:
   # firebase
   # DO NOT CHANGE VERSIONS
   # https://github.com/FirebaseExtended/flutterfire/issues/2084
-  firebase_core: 0.4.4
-  firebase_auth: 0.15.3
+  firebase_core: ^0.4.4
+  firebase_auth: ^0.15.3
   firebase_admob: ^0.9.3+4
   firebase_analytics: ^1.0.4
   cloud_functions: ^0.4.2+3
