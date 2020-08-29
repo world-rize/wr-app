@@ -14,8 +14,11 @@ set -ex
 #   FIREBASE_IOS_CREDENTIAL: @ ./ios/Runner/GoogleService-Info.plist
 echo "${FIREBASE_ANDROID_CREDENTIAL}" > ./android/app/google-services.json
 echo "${FIREBASE_IOS_CREDENTIAL}" > ./ios/Runner/GoogleService-Info.plist
-mkdir ./.env
-echo $DOTENV > ./.env/.env
+mkdir -p secrets
+echo "${DOTENV}" > secrets/.env
+
+# read .env
+export $(egrep -v '^#' secrets/.env | xargs)
 
 # Download assets
 curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG
