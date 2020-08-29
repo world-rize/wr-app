@@ -4,7 +4,7 @@ description: WorldRIZe App
 authors:
   - WorldRIZe
 version: 0.5.0
-repository: https://github.com/WorldRIZe/wr-app
+repository: https://github.com/worldrize/wr-app
 
 environment:
   sdk: ">=2.9.0 <3.0.0"
