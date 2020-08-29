@@ -1,109 +1,37 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
-import 'dart:async';
 
-import 'package:cloud_functions/cloud_functions.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 
-abstract class IUserRepository {
-  Future<TestResponse> test(TestRequestDto req);
+abstract class UserRepository {
+  Future<void> test();
 
-  Future<ReadUserResponseDto> readUser(ReadUserRequestDto req);
+  Future<void> login();
 
-  Future<CreateUserResponseDto> createUser(CreateUserRequestDto req);
+  Future<User> readUser();
 
-  Future<UpdateUserResponseDto> updateUser(UpdateUserRequestDto req);
+  Future<User> createUser(CreateUserRequest req);
 
-  Future<DeleteUserResponseDto> deleteUser(DeleteUserRequestDto req);
+  Future<User> updateUser(User user);
 
-  Future<FavoritePhraseResponseDto> favoritePhrase(
-      FavoritePhraseRequestDto req);
+  Future<void> deleteUser();
 
-  Future<GetPointResponseDto> getPoint(GetPointRequestDto req);
+  Future<User> favoritePhrase(FavoritePhraseRequest req);
 
-  Future<DoTestResponseDto> doTest(DoTestRequestDto req);
-}
+  Future<User> getPoint(GetPointRequest req);
 
-class UserRepository implements IUserRepository {
-  @override
-  Future<TestResponse> test(TestRequestDto req) {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'test')
-          ..timeout = const Duration(seconds: 10);
+  Future<User> doTest(DoTestRequest req);
 
-    // dynamic -> Map<String, dynamic> -> Response
-    return callable.call(req.toJson()).then(
-        (res) => TestResponse.fromJson(Map<String, dynamic>.from(res.data)));
-  }
+  Future<User> sendTestResult(SendTestResultRequest req);
 
-  @override
-  Future<ReadUserResponseDto> readUser(ReadUserRequestDto req) {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'readUser')
-          ..timeout = const Duration(seconds: 10);
+  // TODO: updateUser で代替?
+  Future<User> createFavoriteList(CreateFavoriteListRequest req);
 
-    return callable.call(req.toJson()).then((res) =>
-        ReadUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
-  }
+  Future<User> updatePhrase(UpdatePhraseRequest req);
 
-  @override
-  Future<CreateUserResponseDto> createUser(CreateUserRequestDto req) {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'createUser')
-          ..timeout = const Duration(seconds: 10);
+  Future<User> deleteFavoriteList(DeleteFavoriteListRequest req);
 
-    return callable.call(req.toJson()).then((res) =>
-        CreateUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
-  }
+  Future<User> createPhrasesList(CreatePhrasesListRequest req);
 
-  @override
-  Future<UpdateUserResponseDto> updateUser(UpdateUserRequestDto req) async {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'updateUser')
-          ..timeout = const Duration(seconds: 10);
-
-    return callable.call(req.toJson()).then((res) =>
-        UpdateUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
-  }
-
-  @override
-  Future<DeleteUserResponseDto> deleteUser(DeleteUserRequestDto req) async {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'deleteUser')
-          ..timeout = const Duration(seconds: 10);
-
-    return callable.call(req.toJson()).then((res) =>
-        DeleteUserResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
-  }
-
-  @override
-  Future<FavoritePhraseResponseDto> favoritePhrase(
-      FavoritePhraseRequestDto req) {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'favoritePhrase')
-          ..timeout = const Duration(seconds: 10);
-
-    return callable.call(req.toJson()).then((res) =>
-        FavoritePhraseResponseDto.fromJson(
-            Map<String, dynamic>.from(res.data)));
-  }
-
-  @override
-  Future<GetPointResponseDto> getPoint(GetPointRequestDto req) {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'getPoint')
-          ..timeout = const Duration(seconds: 10);
-
-    return callable.call(req.toJson()).then((res) =>
-        GetPointResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
-  }
-
-  @override
-  Future<DoTestResponseDto> doTest(DoTestRequestDto req) {
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: 'doTest')
-          ..timeout = const Duration(seconds: 10);
-
-    return callable.call(req.toJson()).then((res) =>
-        DoTestResponseDto.fromJson(Map<String, dynamic>.from(res.data)));
-  }
+  Future<User> addPhraseToPhraseList(AddPhraseToPhraseListRequest req);
 }

@@ -4,6 +4,11 @@ include: package:pedantic_mono/analysis_options.yaml
 analyzer:
   enable-experiment:
     - extension-methods
+  exclude:
+    - '**/*.g.dart'
+    - 'lib/i10n/*'
+  errors:
+    flutter_style_todos: ignore
   strong-mode:
     implicit-casts: true
     implicit-dynamic: true

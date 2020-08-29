@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 class ShadowedContainer extends StatelessWidget {
   const ShadowedContainer({
     @required this.child,
+    @required this.color,
   });
 
   final Widget child;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {

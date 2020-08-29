@@ -21,6 +21,21 @@ class Phrase {
 
   factory Phrase.fromJson(Map<String, dynamic> json) => _$PhraseFromJson(json);
 
+  /// minimum dummy
+  factory Phrase.note(String uuid) {
+    return Phrase(
+      id: uuid,
+      title: {
+        'ja': 'フレーズ $uuid',
+        'en': 'Phrase $uuid',
+      },
+      meta: {},
+      assets: Assets.empty(),
+      example: null,
+      advice: {},
+    );
+  }
+
   /// ダミーのフレーズを返す
   factory Phrase.dummy(int index) {
     final dummyAssets = Assets(voice: {
@@ -65,6 +80,7 @@ class Phrase {
           ),
         ]),
         advice: {
+          // ignore: lines_longer_than_80_chars
           'ja':
               '“due”は「支払い期限のきた~」や「 満期の~」といった意味を持ちます。よって、”When is ~ due?”で「~の期限はいつだっけ？」となり、”When is the homework due?”を意訳すると「いつ宿題提出するんだっけ？」となります。',
         });

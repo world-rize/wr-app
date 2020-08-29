@@ -2,9 +2,12 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:wr_app/domain/lesson/model/phrase.dart';
-import 'package:wr_app/domain/system/model/activity.dart';
+import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
+import 'package:wr_app/domain/lesson/model/phrase_list.dart';
+import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
+import 'package:wr_app/domain/user/model/user_attributes.dart';
+import 'package:wr_app/domain/user/model/user_statistics.dart';
 
 part 'user.g.dart';
 
@@ -13,85 +16,94 @@ part 'user.g.dart';
 class User {
   User({
     @required this.uuid,
-    @required this.userId,
-    @required this.email,
-    @required this.age,
     @required this.name,
-    @required this.point,
-    @required this.testLimitCount,
+    @required this.userId,
     @required this.favorites,
-    @required this.membership,
+    @required this.notes,
+    @required this.statistics,
+    @required this.activities,
+    @required this.attributes,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
   factory User.empty() {
     return User(
       uuid: '',
-      userId: '',
-      email: '',
-      age: '0',
       name: '',
-      point: 0,
-      testLimitCount: 0,
-      favorites: {},
-      membership: Membership.normal,
+      userId: '',
+      favorites: {
+        'default': FavoritePhraseList(
+          id: 'default',
+          title: 'お気に入り',
+          sortType: '',
+          isDefault: true,
+          favoritePhraseIds: {},
+        ),
+      },
+      statistics: UserStatistics(
+        testScores: {},
+        points: 0,
+        testLimitCount: 0,
+        lastLogin: '',
+      ),
+      attributes: UserAttributes(
+        age: '0',
+        email: 'hoge@example.com',
+        membership: Membership.normal,
+      ),
+      activities: [],
+      notes: {},
     );
   }
 
   factory User.dummy() {
     return User(
-      membership: Membership.normal,
-      uuid: 'test-test',
-      userId: '0123-4567-89',
-      email: 'hoge@example.com',
-      age: '10',
-      name: 'テスト',
-      point: 100,
-      testLimitCount: 3,
-      favorites: {},
+      uuid: 'uuid',
+      name: 'Dummy',
+      userId: '123-456-789',
+      favorites: {
+        'default': FavoritePhraseList.dummy(),
+      },
+      statistics: UserStatistics.dummy(),
+      attributes: UserAttributes.dummy(),
+      activities: [
+        UserActivity(
+          content: 'Dummy Activity',
+          date: DateTime.now(),
+        ),
+      ],
+      notes: {
+        'default': PhraseList.dummy('ノート1', 'default', isDefault: true),
+      },
     );
   }
-
-  Map<String, dynamic> toJson() => _$UserToJson(this);
-
-  /// ユーザータイプ
-  Membership membership;
 
   /// uuid
   String uuid;
 
-  /// userId
-  String userId;
-
-  /// email
-  String email;
-
-  /// age
-  String age;
-
   /// 名前
   String name;
 
-  /// 所持ポイント
-  int point;
-
-  /// 本日のテスト可能回数
-  int testLimitCount;
+  /// userId
+  String userId;
 
   /// お気に入りフレーズ
-  Map<String, bool> favorites;
+  Map<String, FavoritePhraseList> favorites;
 
-  /// クリア済みのセクション
-  Map<String, bool> sectionStates;
+  /// オリジナルフレーズ
+  Map<String, PhraseList> notes;
 
-  /// ユーザーログ
-  List<Activity> logs;
+  /// 統計情報
+  UserStatistics statistics;
 
-  bool get isPremium => membership == Membership.pro;
+  /// 個人情報
+  UserAttributes attributes;
 
-  ///
-  bool isFavoritePhrase(Phrase phrase) {
-    return favorites.containsKey(phrase.id) && favorites[phrase.id];
-  }
+  /// ユーザー活動
+  List<UserActivity> activities;
+
+  bool get isPremium => attributes.membership == Membership.pro;
 }

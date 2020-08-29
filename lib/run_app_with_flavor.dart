@@ -12,12 +12,17 @@ import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wr_app/domain/article/index.dart';
-import 'package:wr_app/domain/auth/index.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/ui/app.dart';
+import 'package:wr_app/infrastructure/article/article_persistence.dart';
+import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
+import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
+import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
+import 'package:wr_app/presentation/app.dart';
+import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
+import 'package:wr_app/usecase/article_service.dart';
+import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
@@ -30,33 +35,38 @@ Future<void> setupGlobalSingletons() async {
   // firebase analytics
   final analytics = FirebaseAnalytics();
   GetIt.I.registerSingleton<FirebaseAnalytics>(analytics);
-  InAppLogger.log('🔥 FirebaseAnalytics Initialized');
+  InAppLogger.info('🔥 FirebaseAnalytics Initialized');
 
   // pub spec
   final pubSpec = await PackageInfo.fromPlatform();
   GetIt.I.registerSingleton<PackageInfo>(pubSpec);
-  InAppLogger.log('📄 Load pubspec.yml');
+  InAppLogger.info('📄 Load pubspec.yml');
 
   // shared preferences
   final pref = await SharedPreferences.getInstance();
   GetIt.I.registerSingleton<SharedPreferences>(pref);
-  InAppLogger.log('🔥 SharedPreferences Initialized');
+  InAppLogger.info('🔥 SharedPreferences Initialized');
 
   // contentful client
   final env = DotEnv().env;
   final client = Client(env['CONTENTFUL_SPACE_ID'], env['CONTENTFUL_TOKEN']);
   GetIt.I.registerSingleton<Client>(client);
-  InAppLogger.log('🔥 Contentful Initialized');
+  InAppLogger.info('🔥 Contentful Initialized');
 
   // initialize admob
   await FirebaseAdMob.instance.initialize(appId: env['ADMOB_APP_ID']);
-  InAppLogger.log('🔥 Admob Initialized');
+  InAppLogger.info('🔥 Admob Initialized');
 
   // notificator
   final notificator = AppNotifier();
   await notificator.setup();
   GetIt.I.registerSingleton<AppNotifier>(notificator);
-  InAppLogger.log('🔥 notificator Initialized');
+  InAppLogger.info('🔥 notificator Initialized');
+
+  // sign in with apple
+  final appleSignInAvailable = await AppleSignInAvailable.check();
+  GetIt.I.registerSingleton<AppleSignInAvailable>(appleSignInAvailable);
+  InAppLogger.info('🔥 sign in with apple Initialized');
 }
 
 /// runApp() with flavor
@@ -68,24 +78,36 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   final analytics = GetIt.I<FirebaseAnalytics>();
 
+  const useEmulator = true;
   const useMock = false;
+
+  if (useEmulator) {
+    InAppLogger.info('❗ Using Emulator');
+    useCloudFunctionsEmulator('5000');
+  }
+
+  if (useMock) {
+    InAppLogger.info('❗ Using Mock');
+  }
+
   // repos
-  final userRepository = useMock ? UserMockRepository() : UserRepository();
-  final articleRepository =
-      useMock ? ArticleMockRepository() : ArticleRepository();
-  final lessonRepository =
-      useMock ? LessonMockRepository() : LessonRepository();
-  final authRepository = useMock ? AuthMockRepository() : AuthRepository();
-  final systemRepository = SystemRepository();
+  final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
+  final articlePersistence =
+      useMock ? ArticlePersistenceMock() : ArticlePersistence();
+  final lessonPersistence =
+      useMock ? LessonPersistenceMock() : LessonPersistence();
+  final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
+  final systemRepository = SystemPersistence();
 
   // services
   final userService = UserService(
-      authRepository: authRepository, userRepository: userRepository);
-  final articleService = ArticleService(articleRepository: articleRepository);
-  final lessonService = LessonService(lessonRepository: lessonRepository);
-  final systemService = SystemService(systemRepository: systemRepository);
+      authPersistence: authPersistence, userPersistence: userPersistence);
+  final articleService = ArticleService(articlePersistence: articlePersistence);
+  final lessonService = LessonService(lessonPersistence: lessonPersistence);
+  final systemService = SystemService(systemPersistence: systemRepository);
 
   // provide notifiers
+  // TODO: 全部rootに注入するの良くない
   runApp(MultiProvider(
     providers: [
       // Firebase Analytics

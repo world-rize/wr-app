@@ -44,8 +44,8 @@ mixin Messages {
   String memberStatus(Membership membership) => Intl.select(
         membership,
         {
-          Membership.normal: '無料',
-          Membership.pro: 'プレミアム',
+          Membership.normal: 'FREE',
+          Membership.pro: 'PRO',
         },
         name: 'memberStatus',
         args: [membership],
@@ -119,16 +119,6 @@ mixin Messages {
         args: [questions, corrects],
       );
 
-  String testResult(bool success) => Intl.select(
-        success,
-        {
-          true: 'テストに合格！',
-          false: 'テストに不合格...',
-        },
-        name: 'testResult',
-        args: [success],
-      );
-
   String get next => Intl.message(
         '次へ',
         name: 'next',
@@ -145,9 +135,9 @@ mixin Messages {
         name: 'bottomNavColumn',
       );
 
-  String get bottomNavTravel => Intl.message(
-        'Travel',
-        name: 'bottomNavTravel',
+  String get bottomNavNote => Intl.message(
+        'Note',
+        name: 'bottomNavNote',
       );
 
   String get bottomNavAgency => Intl.message(

@@ -9,11 +9,12 @@ part 'lesson.g.dart';
 /// レッスン
 @JsonSerializable()
 class Lesson {
-  Lesson(
-      {@required this.id,
-      @required this.title,
-      @required this.phrases,
-      @required this.assets});
+  Lesson({
+    @required this.id,
+    @required this.title,
+    @required this.phrases,
+    @required this.assets,
+  });
 
   factory Lesson.fromJson(Map<String, dynamic> json) => _$LessonFromJson(json);
 
