@@ -47,7 +47,9 @@ lib/generated_plugin_registrant.dart
 GoogleService-Info.plist
 google-services.json
 
+# secrets
 /.env/*
+/secrets/*
 setup.sh
 
 .node-version
