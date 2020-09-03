@@ -10,15 +10,22 @@ export interface UserActivity {
   date: string
 }
 
+// テストの記録
+export interface TestResult {
+  sectionId: string
+  score: number
+  date: string
+}
+
 /**
  * 統計情報
  */
 export interface UserStatistics {
   schemaVersion: 'v1'
   /**
-   * 各セクションの成績(key: section_id, value: score)
+   * テストの成績
    */
-  testScores: Record<string, number>
+  testResults: TestResult[]
 
   /**
    * ポイント

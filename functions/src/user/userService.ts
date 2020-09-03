@@ -3,10 +3,12 @@
  */
 import { User } from './model/user'
 import moment from 'moment'
+import _ from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
 import { NoteService } from './noteService'
 import { UserRepository } from './userRepository'
 import { FavoritePhraseList } from './model/phrase'
+import { diffLinesRaw } from 'jest-diff'
 
 export class UserService {
   private readonly repo: UserRepository
@@ -41,7 +43,7 @@ export class UserService {
       ],
       statistics:  {
         schemaVersion: 'v1',
-        testScores: {},
+        testResults: [],
         testLimitCount: 3,
         points: 0,
         lastLogin: moment().toISOString(),
@@ -88,12 +90,18 @@ export class UserService {
 
   async login(uuid: string): Promise<User> {
     const user = await this.repo.findById(uuid)
+
+    // テスト受講可能回数回復
+    // TODO: これをseviceに
     if (user.statistics.lastLogin) {
       const lastLogin = moment(user.statistics.lastLogin)
       if (lastLogin.startOf('day') < moment()) {
         user.statistics.testLimitCount = 3
       }
     }
+
+    // 昨日テスト3回してなかったらstreakリセット
+
 
     user.activities.push({
       schemaVersion: 'v1',
@@ -175,12 +183,30 @@ export class UserService {
     return this.repo.update(user)
   }
 
-  async SendTestResult(uuid: string, sectionId: string, score: number): Promise<User> {
+  async checkTestStreaks(uuid: string): Promise<boolean> {
     const user = await this.repo.findById(uuid)
 
-    if (user.statistics.testScores[sectionId] < score) {
-      user.statistics.testScores[sectionId] = score
-    }
+    // 29日前の0時
+    const begin = moment().startOf('day').subtract(29, 'days')
+
+    // 過去30日間のstreakを調べる
+    const streaked = _(user.statistics.testResults)
+      .filter(result => moment(result.date).isAfter(begin))
+      .groupBy(result => moment(result.date).startOf('day'))
+      .values()
+      .every(d => d.length >= 3)
+    return streaked
+  }
+
+  async sendTestResult(uuid: string, sectionId: string, score: number): Promise<User> {
+    const user = await this.repo.findById(uuid)
+
+    // 記録追加
+    user.statistics.testResults.push({
+      sectionId,
+      score,
+      date: moment().toISOString(),
+    })
 
     user.activities.push({
       schemaVersion: 'v1',

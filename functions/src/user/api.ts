@@ -243,6 +243,14 @@ export const deleteFavoriteList = async (req: UserDto.DeleteFavoriteListRequest,
 }
 
 /**
+ *  30 days streakが続いているか
+ */
+export const checkTestStreaks = async (req: {}, context: Context): Promise<boolean> => {
+  const userId = await authorize(context)
+  return userService.checkTestStreaks(userId)
+}
+
+/**
  * テスト結果を送信
  */
 export const sendTestResult  = async (req: UserDto.SendTestResultRequest, context: Context): Promise<User> => {
@@ -259,7 +267,7 @@ export const sendTestResult  = async (req: UserDto.SendTestResultRequest, contex
 
   console.log(`[deletePhrase] userId: ${userId} send ${req.sectionId} test score :${req.score}`)
 
-  return userService.SendTestResult(userId, req.sectionId, req.score)
+  return userService.sendTestResult(userId, req.sectionId, req.score)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to sendTestResult')

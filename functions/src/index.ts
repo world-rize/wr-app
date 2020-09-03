@@ -17,6 +17,7 @@ export const deleteUser = functions.https.onCall(userApi.deleteUser)
 export const favoritePhrase = functions.https.onCall(userApi.favoritePhrase)
 export const getPoint = functions.https.onCall(userApi.getPoint)
 export const doTest = functions.https.onCall(userApi.doTest)
+export const checkTestStreaks = functions.https.onCall(userApi.checkTestStreaks)
 
 export const createFavoriteList = functions.https.onCall(userApi.createFavoriteList)
 export const deleteFavoriteList = functions.https.onCall(userApi.deleteFavoriteList)

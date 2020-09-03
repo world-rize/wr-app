@@ -53,6 +53,9 @@ interface GetPointResponse {
 }
 ```
 
+## checkTestStreaks
+テスト受講後毎回チェックし、30日間連続していたらtrueが返ってくる
+
 ## doTest
 ```
 interface DoTestRequest {}
