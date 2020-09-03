@@ -36,3 +36,4 @@ build/
 # assets
 Assets.xcassets/
 .env*
+Podfile.lock
