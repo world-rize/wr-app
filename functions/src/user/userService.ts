@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid'
 import { NoteService } from './noteService'
 import { UserRepository } from './userRepository'
 import { FavoritePhraseList } from './model/phrase'
-import { diffLinesRaw } from 'jest-diff'
 
 export class UserService {
   private readonly repo: UserRepository
@@ -194,6 +193,7 @@ export class UserService {
       .filter(result => moment(result.date).isAfter(begin))
       .groupBy(result => moment(result.date).startOf('day'))
       .values()
+      // 1日ごとのグループ
       .every(d => d.length >= 3)
     return streaked
   }
