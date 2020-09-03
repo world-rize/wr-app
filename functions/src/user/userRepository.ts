@@ -4,6 +4,7 @@
 import { firestore } from 'firebase-admin'
 import { User } from './model/user'
 
+
 export class UserRepository {
   users: firestore.CollectionReference
 

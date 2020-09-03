@@ -4,8 +4,9 @@
 import { User } from './model/user'
 import moment from 'moment'
 import { v4 as uuidv4 } from 'uuid'
+import { NoteService } from './noteService'
 import { UserRepository } from './userRepository'
-import { FavoritePhraseList, PhraseList, Phrase } from './model/phrase'
+import { FavoritePhraseList } from './model/phrase'
 
 export class UserService {
   private readonly repo: UserRepository
@@ -29,7 +30,7 @@ export class UserService {
         'default': UserService.generateFavoriteList('default', 'お気に入り', true)
       },
       notes: {
-        'default': UserService.generatePhrasesList('default', 'ノート', true)
+        'default': NoteService.generateNote('default', 'ノート', true)
       },
       activities: [
         {
@@ -62,17 +63,6 @@ export class UserService {
       title: title,
       sortType: 'createdAt-',
       favoritePhraseIds: {},
-    }
-  }
-
-  static generatePhrasesList(listId: string, title: string, isDefault: boolean = false): PhraseList {
-    return {
-      schemaVersion: 'v1',
-      id: listId,
-      isDefault: true,
-      title: title,
-      sortType: 'createdAt-',
-      phrases: {},
     }
   }
 
@@ -144,43 +134,6 @@ export class UserService {
   async deleteFavoriteList(uuid: string, listId: string): Promise<User> {
     const user = await this.repo.findById(uuid)
     delete user.favorites[listId]
-    return this.repo.update(user)
-  }
-
-  // TODO: user -> notes 以下に移動
-  async createPhrasesList(uuid: string, title: string): Promise<User> {
-    const user = await this.repo.findById(uuid)
-    const listId = uuidv4()
-
-    user.notes[listId] = UserService.generatePhrasesList(listId, title)
-    return this.repo.update(user)
-  }
-
-  async addPhraseToPhraseList(uuid: string, listId: string, phrase: Phrase): Promise<User> {
-    const user = await this.repo.findById(uuid)
-
-    if (!user.notes[listId]) {
-      throw `Note ${listId} not found`
-    }
-
-    user.notes[listId].phrases[phrase.id] = phrase
-    return this.repo.update(user)
-  }
-
-  async deletePhrase(uuid: string, listId: string, phraseId: string): Promise<User> {
-    const user = await this.repo.findById(uuid)
-
-    if (!user.notes[listId]) {
-      throw `Note ${listId} not found`
-    }
-
-    delete user.notes[listId].phrases[phraseId]
-    return this.repo.update(user)
-  }
-
-  async deletePhraseList(uuid: string, listId: string): Promise<User> {
-    const user = await this.repo.findById(uuid)
-    delete user.notes[listId]
     return this.repo.update(user)
   }
 

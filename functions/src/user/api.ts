@@ -4,16 +4,20 @@
 import * as firebase from 'firebase-admin'
 import { validate } from 'class-validator'
 import { UserService } from './userService'
+import { NoteService } from './noteService'
 import { UserRepository } from './userRepository'
 import * as functions from 'firebase-functions'
 import { User } from './model/user'
-import { CreateUserRequest, FavoritePhraseRequest, GetPointRequest, CreateFavoriteListRequest, DeleteFavoriteListRequest, CreatePhrasesListRequest, AddPhraseToPhraseListRequest, SendTestResultRequest, DeletePhraseRequest, DoTestRequest } from './model/userApiDto'
+import * as UserDto from './model/userApiDto'
+import * as NoteDto from './model/noteApiDto'
+import { Note } from './model/note'
 
 // onCall() has varify firebase tokens unlike onRequest()
 
 type Context = functions.https.CallableContext
 const userRepo = new UserRepository()
 const userService = new UserService(userRepo)
+const noteService = new NoteService(userRepo)
 
 const authorize = async (context: Context): Promise<string> => {
   if (!context.auth) {
@@ -67,12 +71,12 @@ export const login = async (req: {}, context: Context) => {
 /**
  *  ユーザーを作成します
  */
-export const createUser = async (req: CreateUserRequest, context: Context): Promise<User> => {
+export const createUser = async (req: UserDto.CreateUserRequest, context: Context): Promise<User> => {
   const uid = await authorize(context)
   console.log(`[createUser] uid: ${uid}`)
 
   // object -> class instance
-  req = Object.assign(new CreateUserRequest(), req)
+  req = Object.assign(new UserDto.CreateUserRequest(), req)
   await validate(req)
     .catch(e => {
       console.error(e)
@@ -90,7 +94,7 @@ export const createUser = async (req: CreateUserRequest, context: Context): Prom
       throw new functions.https.HttpsError('internal', 'failed to create user')
     })
 
-  console.log(`[createUser] uuid: ${uid} user created`)
+  console.log(`[createUser] userId: ${uid} user created`)
 
   return user
 }
@@ -98,11 +102,11 @@ export const createUser = async (req: CreateUserRequest, context: Context): Prom
 /**
  * フレーズをお気に入りに追加する
  */
-export const favoritePhrase = async (req: FavoritePhraseRequest, context: Context): Promise<User> => {
+export const favoritePhrase = async (req: UserDto.FavoritePhraseRequest, context: Context): Promise<User> => {
   const uid = await authorize(context)
 
   // object -> class instance
-  req = Object.assign(new FavoritePhraseRequest(), req)
+  req = Object.assign(new UserDto.FavoritePhraseRequest(), req)
   await validate(req)
     .catch(e => {
       console.error(e)
@@ -119,9 +123,9 @@ export const favoritePhrase = async (req: FavoritePhraseRequest, context: Contex
 /**
  * ユーザーがポイントを獲得
  */
-export const getPoint = async (req: GetPointRequest, context: Context): Promise<User> => {
+export const getPoint = async (req: UserDto.GetPointRequest, context: Context): Promise<User> => {
   const uid = await authorize(context)
-  req = Object.assign(new GetPointRequest(), req)
+  req = Object.assign(new UserDto.GetPointRequest(), req)
   await validate(req)
     .catch(e => {
       console.error('point is invalid')
@@ -140,8 +144,14 @@ export const getPoint = async (req: GetPointRequest, context: Context): Promise<
 /**
  *  テストを受ける
  */
-export const doTest = async (req: DoTestRequest, context: Context): Promise<User> => {
+export const doTest = async (req: UserDto.DoTestRequest, context: Context): Promise<User> => {
   const uid = await authorize(context)
+  req = Object.assign(new UserDto.GetPointRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('req is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
 
   console.log(`[doTest] ${uid} doTest ${req.sectionId}`)
 
@@ -156,9 +166,9 @@ export const doTest = async (req: DoTestRequest, context: Context): Promise<User
  * ユーザー更新
  */
 export const updateUser = async (req: User, context: Context): Promise<User> => {
-  const uuid = await authorize(context)
+  const userId = await authorize(context)
 
-  console.log(`[deleteUser] uuid: ${uuid} user updated`)
+  console.log(`[deleteUser] userId: ${userId} user updated`)
 
   return await userService.updateUser(req)
     .catch (e => {
@@ -171,39 +181,39 @@ export const updateUser = async (req: User, context: Context): Promise<User> => 
  * アカウントを削除する
  */
 export const deleteUser = async (req: {}, context: Context) => {
-  const uuid = await authorize(context)
+  const userId = await authorize(context)
 
-  await userService.delete(uuid)
+  await userService.delete(userId)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to delete user')
     })
 
-  await firebase.auth().deleteUser(uuid)
+  await firebase.auth().deleteUser(userId)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to delete account')
     })
 
-  console.log(`[deleteUser] uuid: ${uuid} user deleted`)
+  console.log(`[deleteUser] userId: ${userId} user deleted`)
 }
 
 /**
  * お気に入りグループを作成
  */
-export const createFavoriteList = async (req: CreateFavoriteListRequest, context: Context): Promise<User> => {
-  const uuid = await authorize(context)
+export const createFavoriteList = async (req: UserDto.CreateFavoriteListRequest, context: Context): Promise<User> => {
+  const userId = await authorize(context)
 
-  req = Object.assign(new CreateFavoriteListRequest(), req)
+  req = Object.assign(new UserDto.CreateFavoriteListRequest(), req)
   await validate(req)
     .catch(e => {
       console.error('CreateFavoriteListRequest is invalid')
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  console.log(`[createFavoriteList] uuid: ${uuid} create favorite list ${req.name}`)
+  console.log(`[createFavoriteList] userId: ${userId} create favorite list ${req.name}`)
 
-  return userService.createFavoriteList(uuid, req.name)
+  return userService.createFavoriteList(userId, req.name)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to createFavoriteList')
@@ -213,102 +223,32 @@ export const createFavoriteList = async (req: CreateFavoriteListRequest, context
 /**
  * お気に入りグループを削除
  */
-export const deleteFavoriteList = async (req: DeleteFavoriteListRequest, context: Context): Promise<User> => {
-  const uuid = await authorize(context)
+export const deleteFavoriteList = async (req: UserDto.DeleteFavoriteListRequest, context: Context): Promise<User> => {
+  const userId = await authorize(context)
 
-  req = Object.assign(new DeleteFavoriteListRequest(), req)
+  req = Object.assign(new UserDto.DeleteFavoriteListRequest(), req)
   await validate(req)
     .catch(e => {
       console.error('DeleteFavoriteListRequest is invalid')
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  console.log(`[deleteFavoriteList] uuid: ${uuid} delete favorite list ${req.listId}`)
+  console.log(`[deleteFavoriteList] userId: ${userId} delete favorite list ${req.listId}`)
 
-  return userService.deleteFavoriteList(uuid, req.listId)
+  return userService.deleteFavoriteList(userId, req.listId)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to deleteFavoriteList')
-    })
-}
-
-/**
- * フレーズリストを作成
- */
-export const createPhrasesList = async (req: CreatePhrasesListRequest, context: Context): Promise<User> => {
-  const uuid = await authorize(context)
-
-  req = Object.assign(new CreatePhrasesListRequest(), req)
-  await validate(req)
-    .catch(e => {
-      console.error('CreatePhrasesListRequest is invalid')
-      throw new functions.https.HttpsError('invalid-argument', e)
-    })
-
-  console.log(`[createPhrasesList] uuid: ${uuid} create phrases list ${req.title}`)
-
-  return userService.createPhrasesList(uuid, req.title)
-    .catch (e => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to deleteFavoriteList')
-    })
-}
-
-/**
- * フレーズリストにフレーズを追加
- */
-export const addPhraseToPhraseList = async (req: AddPhraseToPhraseListRequest, context: Context): Promise<User> => {
-  const uuid = await authorize(context)
-
-  req = Object.assign(new AddPhraseToPhraseListRequest(), req)
-  await validate(req)
-    .catch(e => {
-      console.error('AddPhraseToPhraseListRequest is invalid')
-      throw new functions.https.HttpsError('invalid-argument', e)
-    })
-
-  // TODO: phrase validate
-
-  console.log(`[createPhrasesList] uuid: ${uuid} create phrase ${req.phrase.title} list ${req.listId}`)
-
-  return userService.addPhraseToPhraseList(uuid, req.listId, req.phrase)
-    .catch (e => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to addPhraseToPhraseList')
-    })
-}
-
-/**
- * フレーズリストからフレーズを削除
- */
-export const deletePhraseList = async (req: DeletePhraseRequest, context: Context): Promise<User> => {
-  const uuid = await authorize(context)
-
-  req = Object.assign(new DeletePhraseRequest(), req)
-  await validate(req)
-    .catch(e => {
-      console.error('DeletePhraseRequest is invalid')
-      throw new functions.https.HttpsError('invalid-argument', e)
-    })
-
-  // TODO: phrase validate
-
-  console.log(`[deletePhrase] uuid: ${uuid} delete ${req.phraseId} from note ${req.listId}`)
-
-  return userService.deletePhrase(uuid, req.listId, req.phraseId)
-    .catch (e => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to deletePhraseList')
     })
 }
 
 /**
  * テスト結果を送信
  */
-export const sendTestResult  = async (req: SendTestResultRequest, context: Context): Promise<User> => {
-  const uuid = await authorize(context)
+export const sendTestResult  = async (req: UserDto.SendTestResultRequest, context: Context): Promise<User> => {
+  const userId = await authorize(context)
 
-  req = Object.assign(new SendTestResultRequest(), req)
+  req = Object.assign(new UserDto.SendTestResultRequest(), req)
   await validate(req)
     .catch(e => {
       console.error('SendTestResultRequest is invalid')
@@ -317,11 +257,138 @@ export const sendTestResult  = async (req: SendTestResultRequest, context: Conte
 
   // TODO: phrase validate
 
-  console.log(`[deletePhrase] uuid: ${uuid} send ${req.sectionId} test score :${req.score}`)
+  console.log(`[deletePhrase] userId: ${userId} send ${req.sectionId} test score :${req.score}`)
 
-  return userService.SendTestResult(uuid, req.sectionId, req.score)
+  return userService.SendTestResult(userId, req.sectionId, req.score)
     .catch (e => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to sendTestResult')
+    })
+  }
+
+// ノートを作成
+export const createNote = async (req: NoteDto.CreateNoteRequest, context: Context): Promise<Note> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new NoteDto.CreateNoteRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('CreateNoteRequest is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+  return noteService.createNote(userId, req.title)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to createNote')
+  })
+}
+
+// ノートのタイトルを変更
+export const updateNoteTitle = async (req: NoteDto.UpdateNoteTitleRequest, context: Context): Promise<Note> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new NoteDto.UpdateNoteTitleRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('UpdateNoteTitleRequest is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+  return noteService.updateNoteTitle(userId, req.noteId, req.title)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to updateNoteTitle')
+    })
+}
+
+// isDefaultを変更
+export const updateDefaultNote = async (req: NoteDto.UpdateDefaultNoteRequest, context: Context): Promise<Note> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new NoteDto.UpdateDefaultNoteRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('UpdateDefaultNoteRequest is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+  return noteService.updateDefaultNote(userId, req.noteId)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to updateDefaultNote')
+    })
+}
+
+// ノートを削除
+export const deleteNote = async (req: NoteDto.DeleteNoteRequest, context: Context): Promise<void> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new NoteDto.DeleteNoteRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('DeleteNoteRequest is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+  return noteService.deleteNote(userId, req.noteId)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to deleteNote')
+    })
+}
+
+// noteId: string, phrase: Phrase
+// ノートにフレーズを追加
+//
+export const addPhraseInNote = async (req: NoteDto.AddPhraseInNoteRequest, context: Context): Promise<Note> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new NoteDto.AddPhraseInNoteRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('AddPhraseToPhraseListRequest is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+
+  // TODO: phrase validate
+
+  console.log(`[createPhrasesList] userId: ${userId} create phrase ${req.phrase.title} note ${req.noteId}`)
+
+  return noteService.addPhraseInNote(userId, req.noteId, req.phrase)
+    .catch (e => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to addPhraseInNote')
+    })
+}
+// noteId: string, phraseId: string, phrase: Phrase
+// ノートのフレーズを更新
+export const updatePhraseInNote = async (req: NoteDto.UpdatePhraseInNoteRequest, context: Context): Promise<Note> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new NoteDto.UpdatePhraseInNoteRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('UpdatePhraseInNoteRequest is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+  return noteService.updatePhraseInNote(userId, req.noteId, req.phraseId, req.phrase)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to updatePharaseInNote')
+    })
+}
+
+// ## deletePhraseInNote(noteId: string, phraseId: string): void
+// ノートのフレーズを削除
+export const deletePhraseInNote = async (req: NoteDto.DeletePhraseInNote, context: Context): Promise<void> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new NoteDto.DeletePhraseInNote(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('DeletePhraseInNote is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+  return noteService.deletePhraseInNote(userId, req.noteId, req.phraseId)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to deletePharaseInNote')
     })
 }

@@ -2,7 +2,6 @@
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
 import { IsNotEmpty, MaxLength, IsEmail } from 'class-validator'
-import { Phrase } from './phrase'
 
 export class DoTestRequest {
   @IsNotEmpty()
@@ -55,19 +54,6 @@ export class CreateFavoriteListRequest {
 export class DeleteFavoriteListRequest {
   @IsNotEmpty()
   readonly listId!: string
-}
-
-export class CreatePhrasesListRequest {
-  @IsNotEmpty()
-  readonly title!: string
-}
-
-export class AddPhraseToPhraseListRequest {
-  @IsNotEmpty()
-  readonly listId!: string
-
-  @IsNotEmpty()
-  readonly phrase!: Phrase
 }
 
 export class DeletePhraseRequest {

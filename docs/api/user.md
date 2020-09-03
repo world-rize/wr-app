@@ -71,18 +71,18 @@ note: {
 }
 ```
 
-## createNote(userId: string, title: string): Note
+## createNote(title: string): Note
 ノートを作成
 3つ以上あったら作れない
 
-## updateNoteTitle(userId: string, noteId: string, title: string): Note
+## updateNoteTitle(noteId: string, title: string): Note
 ノートのタイトルを変更
 
-## updateDefaultNote(userId: string, noteId: string): Note
+## updateDefaultNote(noteId: string): Note
 isDefaultを変更
 元のdefaultノートのisDefaultをはずす
 
-## deleteNote(userId: string, noteId: string): void
+## deleteNote(noteId: string): void
 ノートを削除
 
 ## addPhraseInNote(noteId: string, phrase: Phrase): Note

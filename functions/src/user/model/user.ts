@@ -1,7 +1,8 @@
 /**
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
-import { FavoritePhraseList, PhraseList } from './phrase'
+import { Note } from './note'
+import { FavoritePhraseList } from './phrase'
 
 export interface UserActivity {
   schemaVersion: 'v1'
@@ -74,7 +75,7 @@ export interface User {
   /**
    * オリジナルフレーズ(key: listId, value: list)
    */
-  notes: Record<string, PhraseList>
+  notes: Record<string, Note>
 
   /**
    * 統計
