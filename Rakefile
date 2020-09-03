@@ -94,18 +94,18 @@ end
 
 desc 'check keys'
 task :valid do
-  if !File.exist?('.env/.env')
-    puts 'Missing .env/.env'
+  if !File.exist?('secrets/.env')
+    puts 'Missing secrets/.env'
     abort
   end
 
-  if !File.exist?('./.env/credential.json')
-    puts 'Missing ./.env/credential.json'
+  if !File.exist?('./secrets/credential.json')
+    puts 'Missing ./secrets/credential.json'
     abort
   end
 
-  if !File.exist?('./.env/worldrize-9248e-d680634159a0.json')
-    puts 'Missing ./.env/worldrize-9248e-d680634159a0.json'
+  if !File.exist?('./secrets/worldrize-9248e-d680634159a0.json')
+    puts 'Missing ./secrets/worldrize-9248e-d680634159a0.json'
     abort
   end
 
@@ -128,8 +128,8 @@ end
 desc 'update assets'
 task :assets do
   if !File.exist?('./assets')
-    # read ./.env/.env
-    # sh 'export $(cat ./.env/.env | grep -v ^# | xargs);'
+    # read ./secrets/.env
+    # sh 'export $(cat ./secrets/.env | grep -v ^# | xargs);'
     sh 'curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG'
     sh 'unzip -qq assets.zip'
     sh 'rm -rf ./assets.zip ./__MACOSX'

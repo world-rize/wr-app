@@ -30,7 +30,7 @@ import 'package:wr_app/util/notification.dart';
 /// initialize singleton instances and inject to GetIt
 Future<void> setupGlobalSingletons() async {
   // load .env
-  await DotEnv().load('.env/.env');
+  await DotEnv().load('secrets/.env');
 
   // firebase analytics
   final analytics = FirebaseAnalytics();

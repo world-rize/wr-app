@@ -7,7 +7,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 pwd = Path(__file__).resolve().parent
-env = pwd.parent / '.env/.env'
+env = pwd.parent / 'secrets/.env'
 load_dotenv(env)
 green, red = chalk.Chalk('green'), chalk.Chalk('red')
 
