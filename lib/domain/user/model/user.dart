@@ -76,7 +76,7 @@ class User {
         ),
       ],
       notes: {
-        'default': Note.dummy('ノート1', 'default', isDefault: true),
+        'default': Note.dummy('ノート1', isDefault: true),
       },
     );
   }

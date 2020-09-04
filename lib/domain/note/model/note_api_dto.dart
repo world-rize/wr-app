@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 
-part 'user_api_dto.g.dart';
+part 'note_api_dto.g.dart';
 
 // XXXRequestDto
 // XXXResponseDto

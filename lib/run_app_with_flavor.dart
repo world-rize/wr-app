@@ -19,9 +19,12 @@ import 'package:wr_app/infrastructure/article/article_persistence.dart';
 import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
+import 'package:wr_app/infrastructure/note/note_persistence.dart';
+import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/usecase/article_service.dart';
+import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
@@ -97,14 +100,16 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final lessonPersistence =
       useMock ? LessonPersistenceMock() : LessonPersistence();
   final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
-  final systemRepository = SystemPersistence();
+  final systemPersistence = SystemPersistence();
+  final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
 
   // services
   final userService = UserService(
       authPersistence: authPersistence, userPersistence: userPersistence);
   final articleService = ArticleService(articlePersistence: articlePersistence);
   final lessonService = LessonService(lessonPersistence: lessonPersistence);
-  final systemService = SystemService(systemPersistence: systemRepository);
+  final systemService = SystemService(systemPersistence: systemPersistence);
+  final noteService = NoteService(notePersistence: notePersistence);
 
   // provide notifiers
   // TODO: 全部rootに注入するの良くない
@@ -118,7 +123,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       ),
       // ユーザーデータ
       ChangeNotifierProvider.value(
-        value: UserNotifier(service: userService),
+        value: UserNotifier(userService: userService, noteService: noteService),
       ),
       // Lesson
       ChangeNotifierProvider.value(

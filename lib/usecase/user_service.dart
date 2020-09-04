@@ -2,7 +2,6 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
-import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
@@ -226,33 +225,5 @@ class UserService {
   }) async {
     final req = DeleteFavoriteListRequest(listId: listId);
     return _userPersistence.deleteFavoriteList(req);
-  }
-
-  /// create note
-  Future<User> createPhrasesList({
-    @required String title,
-  }) {
-    final req = CreatePhrasesListRequest(title: title);
-    return _userPersistence.createPhrasesList(req);
-  }
-
-  /// add phrase to note
-  Future<User> addPhraseToPhraseList({
-    @required String listId,
-    @required Phrase phrase,
-  }) {
-    final req = AddPhraseToPhraseListRequest(listId: listId, phrase: phrase);
-    return _userPersistence.addPhraseToPhraseList(req);
-  }
-
-  /// update phrase
-  Future<User> updatePhrase({
-    @required String listId,
-    @required String phraseId,
-    @required Phrase phrase,
-  }) {
-    final req =
-        UpdatePhraseRequest(listId: listId, phraseId: phraseId, phrase: phrase);
-    return _userPersistence.updatePhrase(req);
   }
 }

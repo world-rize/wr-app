@@ -5,6 +5,7 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
+import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
@@ -13,6 +14,7 @@ import 'package:wr_app/util/toast.dart';
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
   final UserService _userService;
+  final NoteService _noteService;
 
   /// ユーザーデータ
   User _user;
@@ -30,12 +32,21 @@ class UserNotifier with ChangeNotifier {
   /// singleton
   static UserNotifier _cache;
 
-  factory UserNotifier({@required UserService service}) {
-    return _cache ??= UserNotifier._internal(service: service);
+  factory UserNotifier({
+    @required UserService userService,
+    @required NoteService noteService,
+  }) {
+    return _cache ??= UserNotifier._internal(
+      userService: userService,
+      noteService: noteService,
+    );
   }
 
-  UserNotifier._internal({@required UserService service})
-      : _userService = service;
+  UserNotifier._internal({
+    @required UserService userService,
+    @required NoteService noteService,
+  })  : _userService = userService,
+        _noteService = noteService;
 
   Future<void> signUpWithGoogle() async {
     try {
@@ -365,13 +376,13 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// add phrase
-  Future<void> addPhraseToPhraseList({
-    @required String listId,
+  Future<void> addPhraseInNote({
+    @required String noteId,
     @required Phrase phrase,
   }) async {
     try {
-      _user = await _userService.addPhraseToPhraseList(
-          listId: listId, phrase: phrase);
+      _user.notes[noteId] =
+          await _noteService.addPhraseInNote(noteId: noteId, phrase: phrase);
 
       notifyListeners();
 
@@ -384,23 +395,31 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// update  phrase
-  Future<void> updatePhrase({
-    @required String listId,
+  Future<void> updatePhraseInNote({
+    @required String noteId,
     @required String phraseId,
     @required Phrase phrase,
   }) async {
     try {
-      _user = await _userService.updatePhrase(
-          listId: listId, phraseId: phraseId, phrase: phrase);
+      _user.notes[noteId] = await _noteService.updatePhraseInNote(
+          noteId: noteId, phraseId: phraseId, phrase: phrase);
 
       notifyListeners();
 
-      InAppLogger.info('updatePhrase $listId $phraseId');
-      NotifyToast.success('updatePhrase $listId $phraseId');
+      InAppLogger.info('updatePhraseInNote $noteId $phraseId');
+      NotifyToast.success('updatePhraseInNote $noteId $phraseId');
     } catch (e) {
       InAppLogger.error(e);
       NotifyToast.error(e);
     }
+  }
+
+  /// get highest score
+  int getHighestScore({
+    @required String sectionId,
+  }) {
+    // TODO
+    return 0;
   }
 
   /// exist phrase in notes

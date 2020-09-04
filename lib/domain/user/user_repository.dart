@@ -24,10 +24,7 @@ abstract class UserRepository {
 
   Future<User> sendTestResult(SendTestResultRequest req);
 
-  // TODO: updateUser で代替?
   Future<User> createFavoriteList(CreateFavoriteListRequest req);
-
-  Future<User> updatePhrase(UpdatePhraseRequest req);
 
   Future<User> deleteFavoriteList(DeleteFavoriteListRequest req);
 }

@@ -11,7 +11,7 @@ class TestResult {
     @required this.sectionId,
     @required this.score,
     @required this.date,
-  });
+  }) : assert(score >= 0);
 
   /// section id
   String sectionId;
