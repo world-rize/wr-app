@@ -2,13 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/lesson/model/phrase_list.dart';
+import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
 
 class PhraseListTable extends StatelessWidget {
   PhraseListTable({@required this.phraseList});
 
-  PhraseList phraseList;
+  Note phraseList;
 
   @override
   Widget build(BuildContext context) {
