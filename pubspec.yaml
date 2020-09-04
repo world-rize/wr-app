@@ -111,7 +111,7 @@ flutter:
     - assets/icon/
     - assets/voices/
     - assets/thumbnails/
-    - .env/
+    - secrets/
 
 flutter_icons:
   android: true
