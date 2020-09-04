@@ -27,6 +27,7 @@
     "firebase-firestorm": "^2.0.5",
     "firebase-functions": "^3.3.0",
     "jest-diff": "^26.2.0",
+    "lodash": "^4.17.20",
     "moment": "^2.27.0",
     "nqdm": "^2.0.2",
     "object-mapper": "^6.2.0",

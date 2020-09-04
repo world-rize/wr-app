@@ -116,34 +116,3 @@ export interface FavoritePhraseList {
    */
   favoritePhraseIds: Record<string, FavoritePhraseDigest>
 }
-
-/**
- * 任意のフレーズのリスト
- */
-export interface PhraseList {
-  schemaVersion: 'v1'
-  /**
-   * Id
-   */
-  id: string
-
-  /**
-   * グループ名
-   */
-  title: string
-
-  /**
-   * 並び替えタイプ
-   */
-  sortType: string
-
-  /**
-   * デフォルトか
-   */
-  isDefault: boolean
-
-  /**
-   * フレーズ(key: phraseId, value: phrase)
-   */
-  phrases: Record<string, Phrase>
-}

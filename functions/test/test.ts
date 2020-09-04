@@ -2,7 +2,7 @@ import * as firebase from 'firebase'
 import * as Dto from '../src/user/model/userApiDto'
 import { User } from '../src/user/model/user'
 import { UserService } from '../src/user/userService'
-const serviceAccount = require('../../.env/credential.json')
+const serviceAccount = require('../../secrets/credential.json')
 
 firebase.initializeApp(serviceAccount)
 const functions = firebase.functions()

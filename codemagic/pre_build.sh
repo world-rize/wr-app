@@ -19,8 +19,8 @@ echo $FIREBASE_IOS_CREDENTIAL > ./ios/Runner/GoogleService-Info.plist
 =======
 echo "${FIREBASE_ANDROID_CREDENTIAL}" > ./android/app/google-services.json
 echo "${FIREBASE_IOS_CREDENTIAL}" > ./ios/Runner/GoogleService-Info.plist
-mkdir ./.env
-echo $DOTENV > ./.env/.env
+mkdir ./secrets
+echo $DOTENV > ./secrets/.env
 >>>>>>> Stashed changes
 =======
 echo "${FIREBASE_ANDROID_CREDENTIAL}" > ./android/app/google-services.json
