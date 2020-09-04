@@ -30,8 +30,4 @@ abstract class UserRepository {
   Future<User> updatePhrase(UpdatePhraseRequest req);
 
   Future<User> deleteFavoriteList(DeleteFavoriteListRequest req);
-
-  Future<User> createPhrasesList(CreatePhrasesListRequest req);
-
-  Future<User> addPhraseToPhraseList(AddPhraseToPhraseListRequest req);
 }

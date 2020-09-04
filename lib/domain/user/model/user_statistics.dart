@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:wr_app/domain/lesson/model/test_result.dart';
 
 part 'user_statistics.g.dart';
 
@@ -9,7 +10,7 @@ part 'user_statistics.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class UserStatistics {
   UserStatistics({
-    @required this.testScores,
+    @required this.testResults,
     @required this.points,
     @required this.testLimitCount,
     @required this.lastLogin,
@@ -17,9 +18,7 @@ class UserStatistics {
 
   factory UserStatistics.dummy() {
     return UserStatistics(
-      testScores: {
-        'debug': 5,
-      },
+      testResults: <TestResult>[],
       points: 100,
       testLimitCount: 3,
       lastLogin: '',
@@ -31,7 +30,7 @@ class UserStatistics {
 
   Map<String, dynamic> toJson() => _$UserStatisticsToJson(this);
 
-  Map<String, int> testScores;
+  List<TestResult> testResults;
 
   int points;
 

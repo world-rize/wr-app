@@ -25,7 +25,7 @@ User _$UserFromJson(Map json) {
           k as String,
           e == null
               ? null
-              : PhraseList.fromJson((e as Map)?.map(
+              : Note.fromJson((e as Map)?.map(
                   (k, e) => MapEntry(k as String, e),
                 ))),
     ),
