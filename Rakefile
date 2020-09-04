@@ -96,8 +96,7 @@ desc 'update assets'
 task :assets do
   if !File.exist?('./assets')
     # read ./secrets/.env
-    # sh 'export $(cat ./secrets/.env | grep -v ^# | xargs);'
-    sh 'curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG'
+    sh 'export $(cat ./secrets/.env | grep -v ^# | xargs); curl gdrive.sh | bash -s $ASSETS_GDRIVE_ID'
     sh 'unzip -qq assets.zip'
     sh 'rm -rf ./assets.zip ./__MACOSX'
   end

@@ -12,27 +12,17 @@ set -ex
 # NOTE: codemagic の UI から以下の環境変数をセットすること
 #   FIREBASE_ANDROID_CREDENTIAL: @ ./android/app/google-services.json
 #   FIREBASE_IOS_CREDENTIAL: @ ./ios/Runner/GoogleService-Info.plist
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-echo $FIREBASE_ANDROID_CREDENTIAL > ./android/app/google-services.json
-echo $FIREBASE_IOS_CREDENTIAL > ./ios/Runner/GoogleService-Info.plist
-=======
+
 echo "${FIREBASE_ANDROID_CREDENTIAL}" > ./android/app/google-services.json
 echo "${FIREBASE_IOS_CREDENTIAL}" > ./ios/Runner/GoogleService-Info.plist
-mkdir ./secrets
-echo $DOTENV > ./secrets/.env
->>>>>>> Stashed changes
-=======
-echo "${FIREBASE_ANDROID_CREDENTIAL}" > ./android/app/google-services.json
-echo "${FIREBASE_IOS_CREDENTIAL}" > ./ios/Runner/GoogleService-Info.plist
-mkdir -p secrets
+mkdir secrets
 echo "${DOTENV}" > secrets/.env
+
 
 # read .env
 export $(egrep -v '^#' secrets/.env | xargs)
->>>>>>> 46cb3a4c33db2b9f5e65486e60eacf425544e47e
 
 # Download assets
-curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG
+curl gdrive.sh | bash -s ${ASSETS_GDRIVE_ID}
 unzip -qq assets.zip
 rm -rf ./assets.zip ./__MACOSX
