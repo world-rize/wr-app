@@ -5,11 +5,11 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 
-part 'phrase_list.g.dart';
+part 'note.g.dart';
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
-class PhraseList {
-  PhraseList({
+class Note {
+  Note({
     @required this.id,
     @required this.title,
     @required this.sortType,
@@ -17,11 +17,10 @@ class PhraseList {
     @required this.phrases,
   });
 
-  factory PhraseList.dummy(String title, String listId,
-      {bool isDefault = false}) {
+  factory Note.dummy(String title, {bool isDefault = false}) {
     final phrases = List.generate(10, (index) => Phrase.note(Uuid().v4()));
-    return PhraseList(
-      id: listId,
+    return Note(
+      id: Uuid().v4(),
       title: title,
       isDefault: isDefault,
       sortType: '',
@@ -29,10 +28,9 @@ class PhraseList {
     );
   }
 
-  factory PhraseList.fromJson(Map<String, dynamic> json) =>
-      _$PhraseListFromJson(json);
+  factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PhraseListToJson(this);
+  Map<String, dynamic> toJson() => _$NoteToJson(this);
 
   String id;
 

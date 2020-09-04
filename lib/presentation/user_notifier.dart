@@ -5,6 +5,7 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
+import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
@@ -13,6 +14,7 @@ import 'package:wr_app/util/toast.dart';
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
   final UserService _userService;
+  final NoteService _noteService;
 
   /// ユーザーデータ
   User _user;
@@ -30,12 +32,21 @@ class UserNotifier with ChangeNotifier {
   /// singleton
   static UserNotifier _cache;
 
-  factory UserNotifier({@required UserService service}) {
-    return _cache ??= UserNotifier._internal(service: service);
+  factory UserNotifier({
+    @required UserService userService,
+    @required NoteService noteService,
+  }) {
+    return _cache ??= UserNotifier._internal(
+      userService: userService,
+      noteService: noteService,
+    );
   }
 
-  UserNotifier._internal({@required UserService service})
-      : _userService = service;
+  UserNotifier._internal({
+    @required UserService userService,
+    @required NoteService noteService,
+  })  : _userService = userService,
+        _noteService = noteService;
 
   Future<void> signUpWithGoogle() async {
     try {
@@ -364,43 +375,12 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
-  /// add phrase
-  Future<void> addPhraseToPhraseList({
-    @required String listId,
-    @required Phrase phrase,
-  }) async {
-    try {
-      _user = await _userService.addPhraseToPhraseList(
-          listId: listId, phrase: phrase);
-
-      notifyListeners();
-
-      InAppLogger.info('addPhraseToPhraseList ${phrase.id}');
-      NotifyToast.success('addPhraseToPhraseList ${phrase.id}');
-    } catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    }
-  }
-
-  /// update  phrase
-  Future<void> updatePhrase({
-    @required String listId,
-    @required String phraseId,
-    @required Phrase phrase,
-  }) async {
-    try {
-      _user = await _userService.updatePhrase(
-          listId: listId, phraseId: phraseId, phrase: phrase);
-
-      notifyListeners();
-
-      InAppLogger.info('updatePhrase $listId $phraseId');
-      NotifyToast.success('updatePhrase $listId $phraseId');
-    } catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    }
+  /// get highest score
+  int getHighestScore({
+    @required String sectionId,
+  }) {
+    // TODO
+    return 0;
   }
 
   /// exist phrase in notes
@@ -408,5 +388,135 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
   }) {
     return _user.notes.values.any((list) => list.phrases.containsKey(phraseId));
+  }
+
+  /// create note
+  Future<void> createNote({
+    @required String title,
+  }) async {
+    try {
+      final note = await _noteService.createNote(title: title);
+      _user.notes[note.id] = note;
+
+      notifyListeners();
+
+      InAppLogger.info('createNote ${note.id}');
+      NotifyToast.success('createNote ${note.id}');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// update note title
+  Future<void> updateNoteTitle({
+    @required String noteId,
+    @required String title,
+  }) async {
+    try {
+      final note =
+          await _noteService.updateNoteTitle(noteId: noteId, title: title);
+      _user.notes[note.id] = note;
+
+      notifyListeners();
+
+      InAppLogger.info('updateNoteTitle ${note.id}');
+      NotifyToast.success('updateNoteTitle ${note.id}');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// update note isDefault
+  Future<void> updateDefaultNote({@required String noteId}) async {
+    try {
+      final note = await _noteService.updateDefaultNote(noteId: noteId);
+      _user.notes[note.id] = note;
+
+      notifyListeners();
+
+      InAppLogger.info('updateDefaultNote ${note.id}');
+      NotifyToast.success('updateDefaultNote ${note.id}');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// delete note
+  Future<void> deleteNote({@required String noteId}) async {
+    try {
+      await _noteService.deleteNote(noteId: noteId);
+      _user.notes.remove(noteId);
+
+      notifyListeners();
+
+      InAppLogger.info('updateDefaultNote ${noteId}');
+      NotifyToast.success('updateDefaultNote ${noteId}');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// add phrase
+  Future<void> addPhraseInNote({
+    @required String noteId,
+    @required Phrase phrase,
+  }) async {
+    try {
+      final note =
+          await _noteService.addPhraseInNote(noteId: noteId, phrase: phrase);
+      _user.notes[noteId] = note;
+
+      notifyListeners();
+
+      InAppLogger.info('addPhraseInNote ${noteId}');
+      NotifyToast.success('addPhraseInNote ${noteId}');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// update phrase
+  Future<void> updatePhraseInNote({
+    @required String noteId,
+    @required String phraseId,
+    @required Phrase phrase,
+  }) async {
+    try {
+      final note = await _noteService.updatePhraseInNote(
+        noteId: noteId,
+        phraseId: phraseId,
+        phrase: phrase,
+      );
+      _user.notes[note.id] = note;
+
+      notifyListeners();
+    } catch (e) {
+      InAppLogger.info('updatePhraseInNote ${noteId}');
+      NotifyToast.success('updatePhraseInNote ${noteId}');
+    }
+  }
+
+  /// delete phrase
+  Future<void> deletePhraseInNote({
+    @required String noteId,
+    @required String phraseId,
+  }) async {
+    try {
+      await _noteService.deletePhraseInNote(noteId: noteId, phraseId: phraseId);
+      _user.notes[noteId].phrases.remove(phraseId);
+
+      notifyListeners();
+
+      InAppLogger.info('deletePhraseInNote ${noteId}');
+      NotifyToast.success('deletePhraseInNote ${noteId}');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 }

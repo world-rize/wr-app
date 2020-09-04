@@ -1,11 +1,19 @@
 /**
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
-import { FavoritePhraseList, PhraseList } from './phrase'
+import { Note } from './note'
+import { FavoritePhraseList } from './phrase'
 
 export interface UserActivity {
   schemaVersion: 'v1'
   content: string
+  date: string
+}
+
+// テストの記録
+export interface TestResult {
+  sectionId: string
+  score: number
   date: string
 }
 
@@ -15,9 +23,9 @@ export interface UserActivity {
 export interface UserStatistics {
   schemaVersion: 'v1'
   /**
-   * 各セクションの成績(key: section_id, value: score)
+   * テストの成績
    */
-  testScores: Record<string, number>
+  testResults: TestResult[]
 
   /**
    * ポイント
@@ -74,7 +82,7 @@ export interface User {
   /**
    * オリジナルフレーズ(key: listId, value: list)
    */
-  notes: Record<string, PhraseList>
+  notes: Record<string, Note>
 
   /**
    * 統計
