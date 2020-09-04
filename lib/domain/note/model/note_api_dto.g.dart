@@ -8,14 +8,12 @@ part of 'note_api_dto.dart';
 
 CreateNoteRequest _$CreateNoteRequestFromJson(Map json) {
   return CreateNoteRequest(
-    userId: json['userId'] as String,
     title: json['title'] as String,
   );
 }
 
 Map<String, dynamic> _$CreateNoteRequestToJson(CreateNoteRequest instance) =>
     <String, dynamic>{
-      'userId': instance.userId,
       'title': instance.title,
     };
 

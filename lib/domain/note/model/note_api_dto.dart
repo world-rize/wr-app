@@ -16,18 +16,15 @@ part 'note_api_dto.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateNoteRequest {
   CreateNoteRequest({
-    @required this.userId,
     @required this.title,
   });
-
-  String userId;
-
-  String title;
 
   factory CreateNoteRequest.fromJson(Map<String, dynamic> json) =>
       _$CreateNoteRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$CreateNoteRequestToJson(this);
+
+  String title;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -37,14 +34,14 @@ class UpdateNoteTitleRequest {
     @required this.title,
   });
 
-  String noteId;
-
-  String title;
-
   factory UpdateNoteTitleRequest.fromJson(Map<String, dynamic> json) =>
       _$UpdateNoteTitleRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$UpdateNoteTitleRequestToJson(this);
+
+  String noteId;
+
+  String title;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -53,12 +50,12 @@ class UpdateDefaultNoteRequest {
     @required this.noteId,
   });
 
-  String noteId;
-
   factory UpdateDefaultNoteRequest.fromJson(Map<String, dynamic> json) =>
       _$UpdateDefaultNoteRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$UpdateDefaultNoteRequestToJson(this);
+
+  String noteId;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -67,12 +64,12 @@ class DeleteNoteRequest {
     @required this.noteId,
   });
 
-  String noteId;
-
   factory DeleteNoteRequest.fromJson(Map<String, dynamic> json) =>
       _$DeleteNoteRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$DeleteNoteRequestToJson(this);
+
+  String noteId;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -82,14 +79,14 @@ class AddPhraseInNoteRequest {
     @required this.phrase,
   });
 
-  String noteId;
-
-  Phrase phrase;
-
   factory AddPhraseInNoteRequest.fromJson(Map<String, dynamic> json) =>
       _$AddPhraseInNoteRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$AddPhraseInNoteRequestToJson(this);
+
+  String noteId;
+
+  Phrase phrase;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -100,16 +97,16 @@ class UpdatePhraseInNoteRequest {
     @required this.phrase,
   });
 
+  factory UpdatePhraseInNoteRequest.fromJson(Map<String, dynamic> json) =>
+      _$UpdatePhraseInNoteRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UpdatePhraseInNoteRequestToJson(this);
+
   String noteId;
 
   String phraseId;
 
   Phrase phrase;
-
-  factory UpdatePhraseInNoteRequest.fromJson(Map<String, dynamic> json) =>
-      _$UpdatePhraseInNoteRequestFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UpdatePhraseInNoteRequestToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -119,12 +116,12 @@ class DeletePhraseInNoteRequest {
     @required this.phraseId,
   });
 
-  String noteId;
-
-  String phraseId;
-
   factory DeletePhraseInNoteRequest.fromJson(Map<String, dynamic> json) =>
       _$DeletePhraseInNoteRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$DeletePhraseInNoteRequestToJson(this);
+
+  String noteId;
+
+  String phraseId;
 }
