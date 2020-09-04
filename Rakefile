@@ -14,7 +14,7 @@ end
 
 desc 'Firebase Emulators'
 task :emu do
-  sh 'firebase emulators:start '
+  sh 'firebase emulators:start --project wr-english-dev'
 end
 
 desc 'Run App with Development'
@@ -92,45 +92,11 @@ task :docs do
   end
 end
 
-desc 'check keys'
-task :valid do
-  if !File.exist?('secrets/.env')
-    puts 'Missing secrets/.env'
-    abort
-  end
-
-  if !File.exist?('./secrets/credential.json')
-    puts 'Missing ./secrets/credential.json'
-    abort
-  end
-
-  if !File.exist?('./secrets/worldrize-9248e-d680634159a0.json')
-    puts 'Missing ./secrets/worldrize-9248e-d680634159a0.json'
-    abort
-  end
-
-  if !File.exist?('./android/app/google-services.json')
-    puts 'Missing ./android/app/google-services.json'
-    abort
-  end
-
-  if !File.exist?('./ios/Runner/GoogleService-Info.plist')
-    puts 'Missing ./ios/Runner/GoogleService-Info.plist'
-    abort
-  end
-end
-
-desc 'set keys'
-task :key do
-  sh './setup.sh'
-end
-
 desc 'update assets'
 task :assets do
   if !File.exist?('./assets')
     # read ./secrets/.env
-    # sh 'export $(cat ./secrets/.env | grep -v ^# | xargs);'
-    sh 'curl gdrive.sh | bash -s 1V_VL81ddzQbr3dtbEBpGOx_RX0uz5CEG'
+    sh 'export $(cat ./secrets/.env | grep -v ^# | xargs); curl gdrive.sh | bash -s $ASSETS_GDRIVE_ID'
     sh 'unzip -qq assets.zip'
     sh 'rm -rf ./assets.zip ./__MACOSX'
   end
@@ -138,14 +104,10 @@ end
 
 desc 'setup'
 task :setup do
-  puts '1. Set  Keys'
-  Rake::Task[:key].invoke
-  Rake::Task[:valid].invoke
-
-  puts '2. Download Assets'
+  puts '1. Download Assets'
   Rake::Task[:assets].invoke
 
-  puts '3. Install'
+  puts '2. Install'
   cd 'ios' do
     sh 'pod install'
   end
@@ -156,7 +118,7 @@ task :setup do
     sh 'yarn'
   end
 
-  puts '4. Generate'
+  puts '3. Generate'
   Rake::Task[:gen].invoke
   Rake::Task[:i10n].invoke
   Rake::Task[:splash].invoke

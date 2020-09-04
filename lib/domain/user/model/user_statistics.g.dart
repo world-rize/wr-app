@@ -8,9 +8,13 @@ part of 'user_statistics.dart';
 
 UserStatistics _$UserStatisticsFromJson(Map json) {
   return UserStatistics(
-    testScores: (json['testScores'] as Map)?.map(
-      (k, e) => MapEntry(k as String, e as int),
-    ),
+    testResults: (json['testResults'] as List)
+        ?.map((e) => e == null
+            ? null
+            : TestResult.fromJson((e as Map)?.map(
+                (k, e) => MapEntry(k as String, e),
+              )))
+        ?.toList(),
     points: json['points'] as int,
     testLimitCount: json['testLimitCount'] as int,
     lastLogin: json['lastLogin'] as String,
@@ -19,7 +23,7 @@ UserStatistics _$UserStatisticsFromJson(Map json) {
 
 Map<String, dynamic> _$UserStatisticsToJson(UserStatistics instance) =>
     <String, dynamic>{
-      'testScores': instance.testScores,
+      'testResults': instance.testResults?.map((e) => e?.toJson())?.toList(),
       'points': instance.points,
       'testLimitCount': instance.testLimitCount,
       'lastLogin': instance.lastLogin,

@@ -33,8 +33,10 @@ Firebaseにデプロイ
   - アプリ用CI/CDサービス
 
 ## 👍 Get Started
-### 1. `setup.sh` をもらう
-- **setup.sh** @ `./setup.sh`
+### 1. 秘密情報をもらう
+- ./secrets/*
+- ./ios/Runner/GoogleService-Info.plist
+- ./android/app/google-services.json
 
 ### 2. Rake
 ```bash

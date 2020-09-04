@@ -52,8 +52,8 @@ class _SectionDetailPageState extends State<SectionDetailPage>
     final _addNotesButton = IconButton(
       icon: Icon(existNotes ? Icons.bookmark : Icons.bookmark_border),
       onPressed: () {
-        userNotifier.addPhraseToPhraseList(
-          listId: 'default',
+        userNotifier.addPhraseInNote(
+          noteId: 'default',
           phrase: section.phrases[index],
         );
       },

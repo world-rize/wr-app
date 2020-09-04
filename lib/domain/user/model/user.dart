@@ -3,7 +3,7 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
-import 'package:wr_app/domain/lesson/model/phrase_list.dart';
+import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user_attributes.dart';
@@ -44,7 +44,7 @@ class User {
         ),
       },
       statistics: UserStatistics(
-        testScores: {},
+        testResults: [],
         points: 0,
         testLimitCount: 0,
         lastLogin: '',
@@ -76,7 +76,7 @@ class User {
         ),
       ],
       notes: {
-        'default': PhraseList.dummy('ノート1', 'default', isDefault: true),
+        'default': Note.dummy('ノート1', isDefault: true),
       },
     );
   }
@@ -94,7 +94,7 @@ class User {
   Map<String, FavoritePhraseList> favorites;
 
   /// オリジナルフレーズ
-  Map<String, PhraseList> notes;
+  Map<String, Note> notes;
 
   /// 統計情報
   UserStatistics statistics;

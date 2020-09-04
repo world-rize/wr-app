@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'phrase_list.dart';
+part of 'note.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PhraseList _$PhraseListFromJson(Map json) {
-  return PhraseList(
+Note _$NoteFromJson(Map json) {
+  return Note(
     id: json['id'] as String,
     title: json['title'] as String,
     sortType: json['sortType'] as String,
@@ -24,8 +24,7 @@ PhraseList _$PhraseListFromJson(Map json) {
   );
 }
 
-Map<String, dynamic> _$PhraseListToJson(PhraseList instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'sortType': instance.sortType,
