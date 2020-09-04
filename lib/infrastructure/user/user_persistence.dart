@@ -24,6 +24,7 @@ class UserPersistence implements UserRepository {
 
   @override
   Future<User> readUser() {
+    print('hoge');
     final callable = CloudFunctions.instance
         .getHttpsCallable(functionName: 'readUser')
           ..timeout = const Duration(seconds: 10);

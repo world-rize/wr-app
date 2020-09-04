@@ -25,10 +25,7 @@ class TestSectionRow extends StatelessWidget {
     final style = Theme.of(context).primaryTextTheme;
     final backgroundColor = Theme.of(context).backgroundColor;
     final currentScore = Provider.of<UserNotifier>(context)
-            .getUser()
-            .statistics
-            .testScores[section.id] ??
-        0;
+        .getHighestScore(sectionId: section.id);
 
     final sectionWidget = ShadowedContainer(
       color: backgroundColor,
