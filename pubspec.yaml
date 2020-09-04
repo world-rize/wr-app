@@ -1,9 +1,9 @@
 
-name: wr_app
+name: WR英会話
 description: WorldRIZe App
 authors:
   - WorldRIZe
-version: 0.5.0
+version: 0.5.1+1
 repository: https://github.com/worldrize/wr-app
 
 environment:
