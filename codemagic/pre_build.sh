@@ -26,3 +26,5 @@ export $(egrep -v '^#' secrets/.env | xargs)
 curl gdrive.sh | bash -s ${ASSETS_GDRIVE_ID}
 unzip -qq assets.zip
 rm -rf ./assets.zip ./__MACOSX
+
+which agvtool
