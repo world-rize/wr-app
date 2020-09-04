@@ -1,6 +1,6 @@
 {
   "@@locale": "messages",
-  "@@last_modified": "2020-06-06T12:25:17.072365",
+  "@@last_modified": "2020-09-05T03:10:39.576161",
   "lessonStatus": "クリア[{count}/{all}]",
   "@lessonStatus": {
     "type": "text",
@@ -29,14 +29,14 @@
     "type": "text",
     "placeholders": {}
   },
-  "points": "{point} ポイント",
+  "points": "{point} coins",
   "@points": {
     "type": "text",
     "placeholders": {
       "point": {}
     }
   },
-  "memberStatus": "{membership,select, normal{通常会員です}premium{プレミアム会員です✨✨}}",
+  "memberStatus": "{membership,select, normal{FREE}pro{PRO}}",
   "@memberStatus": {
     "type": "text",
     "placeholders": {
@@ -65,12 +65,11 @@
     "type": "text",
     "placeholders": {}
   },
-  "testMessage": "本日のテスト残り{limit}回\n制限時間{time}秒",
+  "testMessage": "本日のテスト残り{limit}回",
   "@testMessage": {
     "type": "text",
     "placeholders": {
-      "limit": {},
-      "time": {}
+      "limit": {}
     }
   },
   "question": "{q}問目",
@@ -80,8 +79,23 @@
       "q": {}
     }
   },
+  "testLimitAlert": "本日はこれ以上テストを受講することはできません",
+  "@testLimitAlert": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "testLimitAlertDetail": "テストは1日に3回まで受講することができます",
+  "@testLimitAlertDetail": {
+    "type": "text",
+    "placeholders": {}
+  },
   "testInterrupt": "テストを中断しますか?",
   "@testInterrupt": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "testInterruptDetail": "テストを中断した場合このテストは0点となり、1日のテスト受講可能回数は1回分消費されます",
+  "@testInterruptDetail": {
     "type": "text",
     "placeholders": {}
   },
@@ -90,17 +104,12 @@
     "type": "text",
     "placeholders": {}
   },
-  "getPoints": "{point} ポイントGet!",
+  "getPoints": "{point} coins Get!",
   "@getPoints": {
     "type": "text",
     "placeholders": {
       "point": {}
     }
-  },
-  "getPiece": "ピースのカケラGet!",
-  "@getPiece": {
-    "type": "text",
-    "placeholders": {}
   },
   "close": "閉じる",
   "@close": {
@@ -113,13 +122,6 @@
     "placeholders": {
       "questions": {},
       "corrects": {}
-    }
-  },
-  "testResult": "{success,select, true{テストに合格！}false{テストに不合格...}}",
-  "@testResult": {
-    "type": "text",
-    "placeholders": {
-      "success": {}
     }
   },
   "next": "次へ",
@@ -137,8 +139,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "bottomNavTravel": "Travel",
-  "@bottomNavTravel": {
+  "bottomNavNote": "Note",
+  "@bottomNavNote": {
     "type": "text",
     "placeholders": {}
   },
