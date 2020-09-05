@@ -48,7 +48,7 @@ class MyPagePage extends StatelessWidget {
       children: [
         _menuCell(
           title: '友達紹介',
-          icon: 'assets/icon/mypage_friends.jpg',
+          icon: 'assets/icon/mypage_friends.png',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => FriendsPage()));
@@ -56,7 +56,7 @@ class MyPagePage extends StatelessWidget {
         ),
         _menuCell(
           title: 'アップグレード',
-          icon: 'assets/icon/mypage_upgrade.jpg',
+          icon: 'assets/icon/mypage_upgrade.png',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => UpgradePage()));
@@ -64,7 +64,7 @@ class MyPagePage extends StatelessWidget {
         ),
         _menuCell(
           title: '交換',
-          icon: 'assets/icon/mypage_gift.jpg',
+          icon: 'assets/icon/mypage_gift.png',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => GiftPage()));
@@ -72,7 +72,7 @@ class MyPagePage extends StatelessWidget {
         ),
         _menuCell(
           title: 'アクセント追加',
-          icon: 'assets/icon/mypage_locale.jpg',
+          icon: 'assets/icon/mypage_locale.png',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => LocalePage()));
@@ -80,7 +80,7 @@ class MyPagePage extends StatelessWidget {
         ),
         _menuCell(
           title: 'Archived List',
-          icon: 'assets/icon/mypage_archive.jpg',
+          icon: 'assets/icon/mypage_archive.png',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => ArchivedListPage()));
@@ -88,7 +88,7 @@ class MyPagePage extends StatelessWidget {
         ),
         _menuCell(
           title: 'お知らせ',
-          icon: 'assets/icon/mypage_info.jpg',
+          icon: 'assets/icon/mypage_info.png',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => InformationPage()));

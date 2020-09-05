@@ -10,10 +10,11 @@ class InformationPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('お知らせ'),
       ),
-      body: Column(
-        children: const [
-          Text('お知らせ'),
-        ],
+      body: const Center(
+        child: Text(
+          'お知らせはありません',
+          style: TextStyle(color: Colors.grey, fontSize: 24),
+        ),
       ),
     );
   }

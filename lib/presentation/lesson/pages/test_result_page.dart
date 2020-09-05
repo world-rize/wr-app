@@ -52,7 +52,7 @@ class TestResultPage extends StatelessWidget {
 
   /// アンケートを出す
   Future<void> _showQuestionnaireDialog(BuildContext context) {
-    final systemNotifier = Provider.of<SystemNotifier>(context);
+    final systemNotifier = Provider.of<SystemNotifier>(context, listen: false);
     final env = DotEnv().env;
     final questionnaireUrl = env['QUESTIONNAIRE_URL'];
     assert(questionnaireUrl != '');

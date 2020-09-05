@@ -58,6 +58,6 @@ class SystemPersistence implements SystemRepository {
   @override
   bool getQuestionnaireAnswered() {
     final pref = GetIt.I<SharedPreferences>();
-    return pref.getBool('questionnaire_answered') ?? true;
+    return pref.getBool('questionnaire_answered') ?? false;
   }
 }
