@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/note/widgets/note_card.dart';
+import 'package:wr_app/presentation/note/widgets/note_edit_dialog.dart';
 
 class NoteListPage extends StatelessWidget {
   @override
@@ -14,7 +15,18 @@ class NoteListPage extends StatelessWidget {
     final h6 = Theme.of(context).textTheme.headline6;
 
     void _showAddNoteDialog() {
-      //TODO
+      showDialog(
+        context: context,
+        builder: (context) => NoteEditDialog(
+          onSubmit: (note) {
+            // TODO
+            Navigator.pop(context);
+          },
+          onCancel: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
     }
 
     return Scaffold(

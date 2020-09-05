@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:sentry/io_client.dart';
+import 'package:wr_app/util/flavor.dart';
 
 bool get isInDebugMode {
   var inDebugMode = false;
@@ -22,19 +23,13 @@ Future<Null> sentryReportError(dynamic error, dynamic stackTrace) async {
   }
 
   print('Reportiawait sentry.capturing to Sentry.io...');
-  var _sentry = GetIt.I<SentryClient>();
-  print('hoge');
-  await _sentry.capture(
-    event: const Event(
-      level: SeverityLevel.info,
-      message: "loginHandler",
-      extra: {'email': 'hogehoge'},
+  final flavor = GetIt.I<Flavor>();
+  final response = await GetIt.I<SentryClient>().capture(
+    event: Event(
+      exception: error,
+      stackTrace: stackTrace,
+      environment: flavor.toShortString(),
     ),
-  );
-
-  final response = await GetIt.instance<SentryClient>().captureException(
-    exception: error,
-    stackTrace: stackTrace,
   );
 
   if (response.isSuccessful) {

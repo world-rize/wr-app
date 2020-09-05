@@ -8,7 +8,7 @@ import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
-import 'package:wr_app/presentation/note/widgets/add_phrase_form.dart';
+import 'package:wr_app/presentation/note/widgets/phrase_edit_dialog.dart';
 
 enum NoteMode {
   wordOnly,
@@ -43,12 +43,17 @@ class _NoteTableState extends State<NoteTable> {
   void _showPhraseEditDialog(NotePhrase phrase) {
     showDialog(
       context: context,
-      builder: (context) => AddPhraseDialog(
+      builder: (context) => PhraseEditDialog(
         phrase: phrase,
         onSubmit: (phrase) {
           final userNotifier = Provider.of<UserNotifier>(context, listen: false)
             ..updatePhraseInNote(
                 noteId: note.id, phraseId: phrase.id, phrase: phrase);
+          Navigator.pop(context);
+        },
+        onDelete: (phrase) {
+          final userNotifier = Provider.of<UserNotifier>(context, listen: false)
+            ..deletePhraseInNote(noteId: note.id, phraseId: phrase.id);
           Navigator.pop(context);
         },
         onCancel: () {

@@ -4,37 +4,48 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 
-class AddPhraseDialog extends StatefulWidget {
-  AddPhraseDialog(
-      {this.phrase, @required this.onSubmit, @required this.onCancel});
+class PhraseEditDialog extends StatefulWidget {
+  PhraseEditDialog({
+    this.phrase,
+    this.onDelete,
+    @required this.onSubmit,
+    @required this.onCancel,
+  });
 
   NotePhrase phrase;
   Function(NotePhrase) onSubmit;
+  Function(NotePhrase) onDelete;
   Function onCancel;
 
   @override
-  _AddPhraseDialogState createState() => _AddPhraseDialogState(
-        edittingPhrase: phrase,
+  _PhraseEditDialogState createState() => _PhraseEditDialogState(
+        editingPhrase: phrase,
         onSubmit: onSubmit,
+        onDelete: onDelete,
         onCancel: onCancel,
       );
 }
 
-class _AddPhraseDialogState extends State<AddPhraseDialog> {
-  _AddPhraseDialogState(
-      {this.edittingPhrase, @required this.onSubmit, @required this.onCancel});
+class _PhraseEditDialogState extends State<PhraseEditDialog> {
+  _PhraseEditDialogState({
+    this.editingPhrase,
+    @required this.onSubmit,
+    @required this.onDelete,
+    @required this.onCancel,
+  });
 
   String _word;
   String _translation;
-  NotePhrase edittingPhrase;
+  NotePhrase editingPhrase;
   Function(NotePhrase) onSubmit;
+  Function(NotePhrase) onDelete;
   Function onCancel;
 
   @override
   void initState() {
     super.initState();
-    _word = edittingPhrase?.word ?? '';
-    _translation = edittingPhrase?.translation ?? '';
+    _word = editingPhrase?.word ?? '';
+    _translation = editingPhrase?.translation ?? '';
   }
 
   @override
@@ -61,9 +72,9 @@ class _AddPhraseDialogState extends State<AddPhraseDialog> {
 
     final okButton = RaisedButton(
       child:
-          edittingPhrase != null ? const Text('Update') : const Text('Create'),
+          editingPhrase != null ? const Text('Update') : const Text('Create'),
       onPressed: () {
-        if (edittingPhrase == null) {
+        if (editingPhrase == null) {
           // create phrase
           final uuid = Uuid().v4();
           onSubmit(
@@ -78,14 +89,19 @@ class _AddPhraseDialogState extends State<AddPhraseDialog> {
           // update phrase
           onSubmit(
             NotePhrase(
-              id: edittingPhrase.id,
+              id: editingPhrase.id,
               word: _word,
               translation: _translation,
-              achieved: edittingPhrase.achieved,
+              achieved: editingPhrase.achieved,
             ),
           );
         }
       },
+    );
+
+    final deleteButton = RaisedButton(
+      child: const Text('Delete'),
+      onPressed: () => onDelete(editingPhrase),
     );
 
     final cancelButton = RaisedButton(
@@ -95,6 +111,7 @@ class _AddPhraseDialogState extends State<AddPhraseDialog> {
 
     final form = Form(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           wordField,
           translationField,
@@ -103,11 +120,12 @@ class _AddPhraseDialogState extends State<AddPhraseDialog> {
     );
 
     return AlertDialog(
-      title: edittingPhrase == null
+      title: editingPhrase == null
           ? const Text('New Phrase')
           : const Text('Edit Phrase'),
       content: form,
       actions: [
+        if (editingPhrase != null) deleteButton,
         cancelButton,
         okButton,
       ],

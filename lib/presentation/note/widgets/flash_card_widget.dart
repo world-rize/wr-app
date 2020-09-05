@@ -41,10 +41,13 @@ class _FlashCardState extends State<FlashCard> {
                 size: 40,
               ),
             ),
-            Column(
-              children: [
-                Text(_flipped ? 'うら' : 'おもて', style: h1),
-              ],
+            SizedBox(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Text(_flipped ? 'うら' : 'おもて', style: h1),
+                ],
+              ),
             ),
           ],
         ),

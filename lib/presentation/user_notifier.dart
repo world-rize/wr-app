@@ -9,7 +9,6 @@ import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
-import 'package:wr_app/util/sentry.dart';
 import 'package:wr_app/util/toast.dart';
 
 /// ユーザーデータストア
@@ -471,13 +470,11 @@ class UserNotifier with ChangeNotifier {
           await _noteService.addPhraseInNote(noteId: noteId, phrase: phrase);
       _user.notes[noteId] = note;
 
-      var r = 100 ~/ 0;
       notifyListeners();
 
       InAppLogger.info('addPhraseInNote ${noteId}');
       NotifyToast.success('addPhraseInNote ${noteId}');
     } catch (e) {
-      sentryReportError(e, null);
       InAppLogger.error(e);
       NotifyToast.error(e);
     }

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/presentation/note/widgets/add_phrase_form.dart';
 import 'package:wr_app/presentation/note/widgets/note_table.dart';
+import 'package:wr_app/presentation/note/widgets/phrase_edit_dialog.dart';
 
 /// `ノート` ページのトップ
 ///
@@ -26,7 +26,7 @@ class _NotePageState extends State<NotePage> {
   void _showAddPhraseDialog() {
     showDialog(
       context: context,
-      builder: (context) => AddPhraseDialog(
+      builder: (context) => PhraseEditDialog(
         onSubmit: (phrase) {
           final userNotifier =
               Provider.of<UserNotifier>(context, listen: false);
