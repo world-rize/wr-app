@@ -30,7 +30,9 @@ class LessonService {
   Future<void> sendPhraseRequest({
     @required String text,
   }) async {
-    final email = DotEnv().env['FEEDBACK_MAIL_ADDRESS'];
+    final env = DotEnv().env;
+    final email = env['REQUEST_MAIL_ADDRESS'];
+    assert(email != '');
     await _lessonPersistence.sendPhraseRequest(email: email, text: text);
 
     InAppLogger.info('send phrase request');

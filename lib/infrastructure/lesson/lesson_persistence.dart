@@ -73,9 +73,10 @@ class LessonPersistence implements LessonRepository {
 
   @override
   Future<void> sendPhraseRequest({
-    @required String text,
     @required String email,
+    @required String text,
   }) {
+    print('text $text');
     final request = Email(
       body: text,
       subject: 'WorldRIZe phrase request',
