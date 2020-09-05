@@ -40,7 +40,7 @@ class NotePhrase {
   /// achieved
   bool achieved;
 
-  factory NotePhrase.fromJson(Map<String, dynamic> json) =>
+  factory NotePhrase.fromJson(Map<dynamic, dynamic> json) =>
       _$NotePhraseFromJson(json);
 
   Map<String, dynamic> toJson() => _$NotePhraseToJson(this);

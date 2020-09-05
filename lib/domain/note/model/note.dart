@@ -3,7 +3,6 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 
 part 'note.g.dart';
@@ -30,7 +29,7 @@ class Note {
     );
   }
 
-  factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
+  factory Note.fromJson(Map<dynamic, dynamic> json) => _$NoteFromJson(json);
 
   Map<String, dynamic> toJson() => _$NoteToJson(this);
 

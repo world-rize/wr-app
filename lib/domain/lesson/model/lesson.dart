@@ -16,7 +16,7 @@ class Lesson {
     @required this.assets,
   });
 
-  factory Lesson.fromJson(Map<String, dynamic> json) => _$LessonFromJson(json);
+  factory Lesson.fromJson(Map<dynamic, dynamic> json) => _$LessonFromJson(json);
 
   Map<String, dynamic> toJson() => _$LessonToJson(this);
 
