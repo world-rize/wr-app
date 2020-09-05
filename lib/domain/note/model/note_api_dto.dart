@@ -142,7 +142,7 @@ class AchievePhraseInNoteRequest {
   bool achieve;
 
   factory AchievePhraseInNoteRequest.fromJson(Map<String, dynamic> json) =>
-      _$AchievePhraseInNoteFromJson(json);
+      _$AchievePhraseInNoteRequestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$AchievePhraseInNoteToJson(this);
+  Map<String, dynamic> toJson() => _$AchievePhraseInNoteRequestToJson(this);
 }
