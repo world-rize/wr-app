@@ -120,7 +120,7 @@ class PhraseListTable extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: Center(
-                        child: Text(phrase.title['ja']),
+                        child: Text(phrase.word),
                       ),
                     ),
                   ),
@@ -133,7 +133,7 @@ class PhraseListTable extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: Center(
-                        child: Text(phrase.title['en']),
+                        child: Text(phrase.translation),
                       ),
                     ),
                   ),

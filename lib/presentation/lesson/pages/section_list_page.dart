@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_detail_buttons.dart';
@@ -54,7 +55,7 @@ class _SectionDetailPageState extends State<SectionDetailPage>
       onPressed: () {
         userNotifier.addPhraseInNote(
           noteId: 'default',
-          phrase: section.phrases[index],
+          phrase: NotePhrase.fromPhrase(section.phrases[index]),
         );
       },
     );

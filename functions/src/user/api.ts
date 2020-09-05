@@ -415,4 +415,4 @@ export const achievePhraseInNote = async (req: NoteDto.AchievePhraseInNote, cont
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to achievePhraseInNote')
     })
-} 
+}

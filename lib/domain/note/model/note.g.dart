@@ -17,7 +17,7 @@ Note _$NoteFromJson(Map json) {
           k as String,
           e == null
               ? null
-              : Phrase.fromJson((e as Map)?.map(
+              : NotePhrase.fromJson((e as Map)?.map(
                   (k, e) => MapEntry(k as String, e),
                 ))),
     ),

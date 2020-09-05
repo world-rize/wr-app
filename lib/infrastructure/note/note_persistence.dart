@@ -68,4 +68,13 @@ class NotePersistence implements NoteRepository {
 
     return callable.call(req.toJson()).then((res) => Note.fromJson(res.data));
   }
+
+  @override
+  Future<void> achievePhraseInNote(AchievePhraseInNoteRequest req) {
+    final callable = CloudFunctions.instance
+        .getHttpsCallable(functionName: 'achievePhraseInNote')
+          ..timeout = const Duration(seconds: 10);
+
+    return callable.call(req.toJson());
+  }
 }
