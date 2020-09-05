@@ -2,7 +2,7 @@
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
 import { UserRepository } from './userRepository'
-import { Note } from './model/note'
+import { Note, NotePhrase } from './model/note'
 import { v4 as uuidv4 } from 'uuid'
 import { Phrase } from './model/phrase'
 
@@ -14,13 +14,30 @@ export class NoteService {
   }
 
   static generateNote(noteId: string, title: string, isDefault: boolean = false): Note {
+    const initialPhrases: Record<string, NotePhrase> = {
+      'p001': {
+        schemaVersion: 'v1',
+        id: 'p001',
+        word: 'Apple',
+        translation: 'りんご',
+        achieved: false,
+      },
+      'p002': {
+        schemaVersion: 'v1',
+        id: 'p002',
+        word: 'Banana',
+        translation: 'バナナ',
+        achieved: false,
+      }
+    }
+
     return {
       schemaVersion: 'v1',
       id: noteId,
       isDefault: true,
       title: title,
       sortType: 'createdAt-',
-      phrases: {},
+      phrases: initialPhrases,
     }
   }
 
@@ -77,7 +94,7 @@ export class NoteService {
     await this.repo.update(user)
   }
 
-  async addPhraseInNote(userId: string, noteId: string, phrase: Phrase): Promise<Note> {
+  async addPhraseInNote(userId: string, noteId: string, phrase: NotePhrase): Promise<Note> {
     const user = await this.repo.findById(userId)
 
     if (!user.notes[noteId]) {
@@ -89,7 +106,7 @@ export class NoteService {
     return user.notes[noteId]
   }
 
-  async updatePhraseInNote(userId: string, noteId: string, phraseId: string, phrase: Phrase): Promise<Note> {
+  async updatePhraseInNote(userId: string, noteId: string, phraseId: string, phrase: NotePhrase): Promise<Note> {
     const user = await this.repo.findById(userId)
 
     if (!user.notes[noteId]) {
@@ -113,6 +130,22 @@ export class NoteService {
     }
 
     delete user.notes[noteId].phrases[phraseId]
+    await this.repo.update(user)
+  }
+
+  async achievePhraseInNote(userId: string, noteId: string, phraseId: string, achieve: boolean): Promise<void> {
+    const user = await this.repo.findById(userId)
+
+    if (!user.notes[noteId]) {
+      throw `Note ${noteId} not found`
+    }
+
+    if(!user.notes[noteId].phrases[phraseId]) {
+      throw `Note ${noteId}/${phraseId} not found`
+    }
+
+    user.notes[noteId].phrases[phraseId].achieved = achieve
+
     await this.repo.update(user)
   }
 }

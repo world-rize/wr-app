@@ -357,7 +357,7 @@ export const addPhraseInNote = async (req: NoteDto.AddPhraseInNoteRequest, conte
 
   // TODO: phrase validate
 
-  console.log(`[createPhrasesList] userId: ${userId} create phrase ${req.phrase.title} note ${req.noteId}`)
+  console.log(`[createPhrasesList] userId: ${userId} create phrase ${req.phrase.word} note ${req.noteId}`)
 
   return noteService.addPhraseInNote(userId, req.noteId, req.phrase)
     .catch (e => {
@@ -400,3 +400,19 @@ export const deletePhraseInNote = async (req: NoteDto.DeletePhraseInNote, contex
       throw new functions.https.HttpsError('internal', 'failed to deletePharaseInNote')
     })
 }
+
+export const achievePhraseInNote = async (req: NoteDto.AchievePhraseInNote, context: Context): Promise<void> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new NoteDto.AchievePhraseInNote(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('AchievePhraseInNote is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+  return noteService.achievePhraseInNote(userId, req.noteId, req.phraseId, req.achieve)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to achievePhraseInNote')
+    })
+} 
