@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:collection/collection.dart';
 import 'package:data_classes/data_classes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get_it/get_it.dart';
@@ -53,7 +54,6 @@ class LessonPersistence implements LessonRepository {
   Future<List<Lesson>> loadAllLessons() async {
     const lessonsJsonPath = 'assets/lessons.json';
     const phrasesJsonPath = 'assets/phrases.json';
-
     InAppLogger.info('\t Lessons Json @ $lessonsJsonPath');
     InAppLogger.info('\t Phrases Json @ $phrasesJsonPath');
 
@@ -73,9 +73,10 @@ class LessonPersistence implements LessonRepository {
 
   @override
   Future<void> sendPhraseRequest({
-    @required String text,
     @required String email,
+    @required String text,
   }) {
+    print('text $text');
     final request = Email(
       body: text,
       subject: 'WorldRIZe phrase request',

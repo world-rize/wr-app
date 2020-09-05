@@ -12,7 +12,7 @@ part 'message.g.dart';
 class Message {
   Message({@required this.text, @required this.assets});
 
-  factory Message.fromJson(Map<String, dynamic> json) =>
+  factory Message.fromJson(Map<dynamic, dynamic> json) =>
       _$MessageFromJson(json);
 
   Map<String, dynamic> toJson() => _$MessageToJson(this);

@@ -24,7 +24,7 @@ class UserAttributes {
     );
   }
 
-  factory UserAttributes.fromJson(Map<String, dynamic> json) =>
+  factory UserAttributes.fromJson(Map<dynamic, dynamic> json) =>
       _$UserAttributesFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserAttributesToJson(this);

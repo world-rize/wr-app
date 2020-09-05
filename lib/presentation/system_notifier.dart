@@ -65,6 +65,16 @@ class SystemNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool getQuestionnaireAnswered() => _systemService.getQuestionnaireAnswered();
+
+  void setQuestionnaireAnswered({bool value}) {
+    _systemService.setQuestionnaireAnswered(value: value);
+
+    InAppLogger.info('getQuestionnaireAnswered -> $value');
+
+    notifyListeners();
+  }
+
   Future<void> notify({
     @required String title,
     @required String body,

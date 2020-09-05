@@ -25,7 +25,7 @@ class UserStatistics {
     );
   }
 
-  factory UserStatistics.fromJson(Map<String, dynamic> json) =>
+  factory UserStatistics.fromJson(Map<dynamic, dynamic> json) =>
       _$UserStatisticsFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserStatisticsToJson(this);

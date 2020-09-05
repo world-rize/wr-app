@@ -12,7 +12,7 @@ class FavoritePhraseDigest {
     @required this.createdAt,
   });
 
-  factory FavoritePhraseDigest.fromJson(Map<String, dynamic> json) =>
+  factory FavoritePhraseDigest.fromJson(Map<dynamic, dynamic> json) =>
       _$FavoritePhraseDigestFromJson(json);
 
   Map<String, dynamic> toJson() => _$FavoritePhraseDigestToJson(this);

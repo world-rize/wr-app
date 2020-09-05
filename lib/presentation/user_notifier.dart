@@ -1,8 +1,8 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/usecase/note_service.dart';
@@ -463,7 +463,7 @@ class UserNotifier with ChangeNotifier {
   /// add phrase
   Future<void> addPhraseInNote({
     @required String noteId,
-    @required Phrase phrase,
+    @required NotePhrase phrase,
   }) async {
     try {
       final note =
@@ -484,7 +484,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> updatePhraseInNote({
     @required String noteId,
     @required String phraseId,
-    @required Phrase phrase,
+    @required NotePhrase phrase,
   }) async {
     try {
       final note = await _noteService.updatePhraseInNote(
@@ -514,6 +514,27 @@ class UserNotifier with ChangeNotifier {
 
       InAppLogger.info('deletePhraseInNote ${noteId}');
       NotifyToast.success('deletePhraseInNote ${noteId}');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// achieve notePhrase
+  Future<void> achievePhraseInNote({
+    @required String noteId,
+    @required String phraseId,
+    @required bool achieve,
+  }) async {
+    try {
+      await _noteService.achievePhraseInNote(
+          noteId: noteId, phraseId: phraseId, achieve: achieve);
+      _user.notes[noteId].phrases[phraseId].achieved = achieve;
+
+      notifyListeners();
+
+      InAppLogger.info('achievePhraseInNote $noteId/$phraseId');
+      NotifyToast.success('achievePhraseInNote $noteId/$phraseId');
     } catch (e) {
       InAppLogger.error(e);
       NotifyToast.error(e);

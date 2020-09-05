@@ -14,7 +14,7 @@ class ArticleCategory {
     @required this.thumbnailUrl,
   });
 
-  factory ArticleCategory.fromJson(Map<String, dynamic> json) =>
+  factory ArticleCategory.fromJson(Map<dynamic, dynamic> json) =>
       _$ArticleCategoryFromJson(json);
 
   /// id

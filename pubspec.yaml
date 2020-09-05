@@ -52,6 +52,7 @@ dependencies:
   intro_slider: ^2.3.1
   flutter_sliding_tutorial: ^0.1.0
   flutter_sequence_animation: ^3.0.0
+  flutter_icons: ^1.1.0
 
   # util
   flutter_markdown: ^0.3.2
@@ -61,6 +62,7 @@ dependencies:
   flutter_email_sender: ^3.0.1
   flutter_local_notifications: ^1.4.4+2
   uuid: ^2.2.0
+  flutter_tts: ^1.2.7
 
   # native
   url_launcher: ^5.4.10
@@ -79,6 +81,7 @@ dependencies:
   google_sign_in_mocks: ^0.1.0+2
 
   flutter_inappwebview: ^4.0.0+4
+  sentry: ^3.0.0
 
 dev_dependencies:
   flutter_test:

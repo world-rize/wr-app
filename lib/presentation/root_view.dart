@@ -131,7 +131,7 @@ class _RootViewState extends State<RootView>
 
     final pageView = PageView(
       controller: _pageController,
-      // physics: const NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       onPageChanged: (index) {
         setState(() {
           _index = index;

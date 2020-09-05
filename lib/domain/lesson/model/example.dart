@@ -11,7 +11,7 @@ part 'example.g.dart';
 class Example {
   Example({@required this.value});
 
-  factory Example.fromJson(Map<String, dynamic> json) =>
+  factory Example.fromJson(Map<dynamic, dynamic> json) =>
       _$ExampleFromJson(json);
 
   Map<String, dynamic> toJson() => _$ExampleToJson(this);

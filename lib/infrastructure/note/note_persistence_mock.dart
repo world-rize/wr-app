@@ -82,4 +82,16 @@ class NotePersistenceMock implements NoteRepository {
   Future<Note> updateNoteTitle(UpdateNoteTitleRequest req) async {
     return Note.dummy(req.title);
   }
+
+  @override
+  Future<void> achievePhraseInNote(AchievePhraseInNoteRequest req) async {
+    final user = _readUserMock();
+    if (!user.notes.containsKey(req.noteId)) {
+      throw Exception('Note ${req.noteId} not found');
+    }
+
+    user.notes[req.noteId].phrases[req.phraseId].achieved = req.achieve;
+    await Future.delayed(const Duration(seconds: 1));
+    return user.notes[req.noteId];
+  }
 }

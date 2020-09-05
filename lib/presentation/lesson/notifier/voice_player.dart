@@ -86,6 +86,7 @@ class VoicePlayer with ChangeNotifier {
     }
     await _player.play(message.assets.voice[locale]);
     isPlaying = true;
+
     notifyListeners();
   }
 
@@ -105,7 +106,7 @@ class VoicePlayer with ChangeNotifier {
 
   /// play all messages
   Future<void> playAll({@required Phrase phrase}) async {
-    // TODO: 途中でストップされるとバグる
+    // TODO: 途中でストップされるとバグる -> Stream?
     // 先に _player.load() 必要
     isPlaying = true;
     notifyListeners();
