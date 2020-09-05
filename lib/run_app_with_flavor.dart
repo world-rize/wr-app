@@ -30,6 +30,7 @@ import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
+import 'package:wr_app/util/sentry.dart';
 
 /// initialize singleton instances and inject to GetIt
 Future<void> setupGlobalSingletons(Flavor flavor) async {
@@ -80,28 +81,7 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
   // TODO: 書く場所考える
   assert(env['SENTRY_DSN'] != '');
   final _sentry = SentryClient(dsn: env['SENTRY_DSN']);
-  print('sentry ${env["SENTRY_DSN"]}');
-  GetIt.I.registerSingleton<SentryClient>(_sentry);
   InAppLogger.info('🔥 sentry Initialized');
-  // FlutterError.onError = (details, {bool forceReport = false}) {
-  //   print('FlutterError.onError');
-  //   try {
-  //     final flavor = GetIt.instance<Flavor>();
-  //     final sentry = GetIt.instance<SentryClient>().capture(
-  //       event: Event(
-  //         exception: details.exception,
-  //         stackTrace: details.stack,
-  //         environment: flavor.toShortString(),
-  //       ),
-  //     );
-  //     // ignore: avoid_catches_without_on_clauses
-  //   } catch (e) {
-  //     print('Sending report to sentry.io failed: $e');
-  //   } finally {
-  //     // Also use Flutter's pretty error logging to the device's console.
-  //     FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
-  //   }
-  // };
 }
 
 /// runApp() with flavor
@@ -112,7 +92,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   final analytics = GetIt.I<FirebaseAnalytics>();
 
-  const useEmulator = true;
+  const useEmulator = false;
   const useMock = false;
 
   if (useEmulator) {
@@ -126,6 +106,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   if (useMock) {
     InAppLogger.info('❗ Using Mock');
   }
+  print('debug mode? $isInDebugMode');
 
   // repos
   final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
@@ -147,51 +128,56 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   // provide notifiers
   // TODO: 全部rootに注入するの良くない
-  runApp(
-    MultiProvider(
-      providers: [
-        // Firebase Analytics
-        Provider.value(value: FirebaseAnalyticsObserver(analytics: analytics)),
-        // system
-        ChangeNotifierProvider.value(
-          value: SystemNotifier(systemService: systemService, flavor: flavor),
-        ),
-        // ユーザーデータ
-        ChangeNotifierProvider.value(
-          value:
-              UserNotifier(userService: userService, noteService: noteService),
-        ),
-        // Lesson
-        ChangeNotifierProvider.value(
-          value: LessonNotifier(
-            userService: userService,
-            lessonService: lessonService,
+  await runZonedGuarded<Future<Null>>(() async {
+    runApp(
+      MultiProvider(
+        providers: [
+          // Firebase Analytics
+          Provider.value(
+              value: FirebaseAnalyticsObserver(analytics: analytics)),
+          // system
+          ChangeNotifierProvider.value(
+            value: SystemNotifier(systemService: systemService, flavor: flavor),
           ),
-        ),
-        // Article
-        ChangeNotifierProvider.value(
-          value: ArticleNotifier(
-            articleService: articleService,
+          // ユーザーデータ
+          ChangeNotifierProvider.value(
+            value: UserNotifier(
+                userService: userService, noteService: noteService),
           ),
+          // Lesson
+          ChangeNotifierProvider.value(
+            value: LessonNotifier(
+              userService: userService,
+              lessonService: lessonService,
+            ),
+          ),
+          // Article
+          ChangeNotifierProvider.value(
+            value: ArticleNotifier(
+              articleService: articleService,
+            ),
+          ),
+        ],
+        child: runZonedGuarded(
+          () => WRApp(),
+          (error, stackTrace) {
+            try {
+              print('called sentry');
+              final sentry = GetIt.instance<SentryClient>();
+              sentry.captureException(
+                exception: error,
+                stackTrace: stackTrace,
+              );
+              print('Error sent to sentry.io: $error');
+            } catch (e) {
+              print('Sending report to sentry.io failed: $e');
+              print('Original error: $error');
+            }
+          },
         ),
-      ],
-      child: runZonedGuarded(
-        () => WRApp(),
-        (error, stackTrace) {
-          try {
-            print('called sentry');
-            final sentry = GetIt.instance<SentryClient>();
-            sentry.captureException(
-              exception: error,
-              stackTrace: stackTrace,
-            );
-            print('Error sent to sentry.io: $error');
-          } catch (e) {
-            print('Sending report to sentry.io failed: $e');
-            print('Original error: $error');
-          }
-        },
       ),
-    ),
-  );
+    );
+  }, (error, stackTrace) async {
+    await sentryReportError(error, stackTrace);
+  });
 }
