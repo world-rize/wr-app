@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
+import 'package:wr_app/presentation/note/widgets/add_phrase_form.dart';
 
 enum NoteMode {
   wordOnly,
@@ -37,6 +39,24 @@ class _NoteTableState extends State<NoteTable> {
 
   Note note;
   NoteMode _mode;
+
+  void _showPhraseEditDialog(NotePhrase phrase) {
+    showDialog(
+      context: context,
+      builder: (context) => AddPhraseDialog(
+        phrase: phrase,
+        onSubmit: (phrase) {
+          final userNotifier = Provider.of<UserNotifier>(context, listen: false)
+            ..updatePhraseInNote(
+                noteId: note.id, phraseId: phrase.id, phrase: phrase);
+          Navigator.pop(context);
+        },
+        onCancel: () {
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -160,9 +180,6 @@ class _NoteTableState extends State<NoteTable> {
           ),
 
           ...phrases.map((phrase) {
-            final favorited =
-                userNotifier.existPhraseInFavoriteList(phraseId: phrase.id);
-
             return TableRow(
               children: [
                 TableCell(
@@ -171,22 +188,25 @@ class _NoteTableState extends State<NoteTable> {
                     child: Center(
                       child: IconButton(
                         icon: Icon(
-                          favorited ? Icons.favorite : Icons.favorite_border,
+                          phrase.achieved
+                              ? FontAwesome5.star
+                              : FontAwesome5.grin_stars,
                           color: Colors.redAccent,
                         ),
                         onPressed: () {
-                          userNotifier.favoritePhrase(
-                              phraseId: phrase.id, favorite: !favorited);
+                          userNotifier.achievePhraseInNote(
+                              noteId: note.id,
+                              phraseId: phrase.id,
+                              achieve: !phrase.achieved);
                         },
                       ),
                     ),
                   ),
                 ),
                 TableCell(
-                  child: GestureDetector(
+                  child: InkWell(
                     onTap: () {
-                      // TODO: 編集できるように
-                      print('edit jp');
+                      _showPhraseEditDialog(phrase);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8),
@@ -199,10 +219,9 @@ class _NoteTableState extends State<NoteTable> {
                   ),
                 ),
                 TableCell(
-                  child: GestureDetector(
+                  child: InkWell(
                     onTap: () {
-                      // TODO: 編集できるように
-                      print('edit en');
+                      _showPhraseEditDialog(phrase);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8),

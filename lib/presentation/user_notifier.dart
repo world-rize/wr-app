@@ -522,4 +522,25 @@ class UserNotifier with ChangeNotifier {
       NotifyToast.error(e);
     }
   }
+
+  /// achieve notePhrase
+  Future<void> achievePhraseInNote({
+    @required String noteId,
+    @required String phraseId,
+    @required bool achieve,
+  }) async {
+    try {
+      await _noteService.achievePhraseInNote(
+          noteId: noteId, phraseId: phraseId, achieve: achieve);
+      _user.notes[noteId].phrases[phraseId].achieved = achieve;
+
+      notifyListeners();
+
+      InAppLogger.info('achievePhraseInNote $noteId/$phraseId');
+      NotifyToast.success('achievePhraseInNote $noteId/$phraseId');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
 }

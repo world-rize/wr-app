@@ -21,12 +21,16 @@ Future<Null> sentryReportError(dynamic error, dynamic stackTrace) async {
     return;
   }
 
-  print('Reportiawait sentry.capture( ng to Sentry.io...');
- event: Event(
+  print('Reportiawait sentry.capturing to Sentry.io...');
+  var _sentry = GetIt.I<SentryClient>();
+  print('hoge');
+  await _sentry.capture(
+    event: const Event(
       level: SeverityLevel.info,
       message: "loginHandler",
-      extra: {'email': _email}),
-);
+      extra: {'email': 'hogehoge'},
+    ),
+  );
 
   final response = await GetIt.instance<SentryClient>().captureException(
     exception: error,

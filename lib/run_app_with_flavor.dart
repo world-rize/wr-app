@@ -81,6 +81,7 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
   // TODO: 書く場所考える
   assert(env['SENTRY_DSN'] != '');
   final _sentry = SentryClient(dsn: env['SENTRY_DSN']);
+  GetIt.I.registerSingleton<SentryClient>(_sentry);
   InAppLogger.info('🔥 sentry Initialized');
 }
 
@@ -128,7 +129,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   // provide notifiers
   // TODO: 全部rootに注入するの良くない
-  await runZonedGuarded<Future<Null>>(() async {
+  await runZonedGuarded<Future<void>>(() async {
     runApp(
       MultiProvider(
         providers: [
@@ -160,11 +161,11 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ],
         child: runZonedGuarded(
           () => WRApp(),
-          (error, stackTrace) {
+          (error, stackTrace) async {
             try {
               print('called sentry');
-              final sentry = GetIt.instance<SentryClient>();
-              sentry.captureException(
+              final sentry = GetIt.I<SentryClient>();
+              await sentry.captureException(
                 exception: error,
                 stackTrace: stackTrace,
               );
