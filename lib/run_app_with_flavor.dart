@@ -11,6 +11,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/system/index.dart';
@@ -31,9 +32,14 @@ import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
 
 /// initialize singleton instances and inject to GetIt
-Future<void> setupGlobalSingletons() async {
+Future<void> setupGlobalSingletons(Flavor flavor) async {
   // load .env
   await DotEnv().load('secrets/.env');
+  final env = DotEnv().env;
+
+  // flavor
+  GetIt.I.registerSingleton<Flavor>(flavor);
+  InAppLogger.info('⚙ Flavor $flavor');
 
   // firebase analytics
   final analytics = FirebaseAnalytics();
@@ -51,7 +57,6 @@ Future<void> setupGlobalSingletons() async {
   InAppLogger.info('🔥 SharedPreferences Initialized');
 
   // contentful client
-  final env = DotEnv().env;
   final client = Client(env['CONTENTFUL_SPACE_ID'], env['CONTENTFUL_TOKEN']);
   GetIt.I.registerSingleton<Client>(client);
   InAppLogger.info('🔥 Contentful Initialized');
@@ -70,14 +75,37 @@ Future<void> setupGlobalSingletons() async {
   final appleSignInAvailable = await AppleSignInAvailable.check();
   GetIt.I.registerSingleton<AppleSignInAvailable>(appleSignInAvailable);
   InAppLogger.info('🔥 sign in with apple Initialized');
+
+  // sentry client
+  // TODO: 書く場所考える
+  final _sentry = SentryClient(dsn: env['SENTRY_DSN']);
+  GetIt.I.registerSingleton<SentryClient>(_sentry);
+  InAppLogger.info('🔥 sentry Initialized');
+  FlutterError.onError = (details, {bool forceReport = false}) {
+    try {
+      final flavor = GetIt.instance<Flavor>();
+      final sentry = GetIt.instance<SentryClient>().capture(
+        event: Event(
+          exception: details.exception,
+          stackTrace: details.stack,
+          environment: flavor.toShortString(),
+        ),
+      );
+      // ignore: avoid_catches_without_on_clauses
+    } catch (e) {
+      print('Sending report to sentry.io failed: $e');
+    } finally {
+      // Also use Flutter's pretty error logging to the device's console.
+      FlutterError.dumpErrorToConsole(details, forceReport: forceReport);
+    }
+  };
 }
 
 /// runApp() with flavor
 Future<void> runAppWithFlavor(final Flavor flavor) async {
   Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
-
-  await setupGlobalSingletons();
+  await setupGlobalSingletons(flavor);
 
   final analytics = GetIt.I<FirebaseAnalytics>();
 

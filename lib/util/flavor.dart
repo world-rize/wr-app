@@ -16,6 +16,7 @@ enum Flavor {
 }
 
 extension FlavorExtension on Flavor {
+  // flavor名を返す
   String toShortString() {
     return toString().split('.').last;
   }
