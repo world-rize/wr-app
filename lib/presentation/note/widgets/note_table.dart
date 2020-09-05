@@ -5,6 +5,8 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
+import 'package:wr_app/presentation/note/pages/note_list_page.dart';
 
 enum NoteMode {
   wordOnly,
@@ -45,11 +47,28 @@ class _NoteTableState extends State<NoteTable> {
   @override
   Widget build(BuildContext context) {
     final userNotifier = Provider.of<UserNotifier>(context);
+    final h5 = Theme.of(context).textTheme.headline5;
+
+    final title = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => NoteListPage()));
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(note.title, style: h5),
+          ),
+        ),
+      ],
+    );
 
     final header = Row(
       children: [
         Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Row(
             children: [
               RaisedButton.icon(
@@ -59,16 +78,19 @@ class _NoteTableState extends State<NoteTable> {
                     _mode = NoteMode.values[(_mode.index + 1) % 3];
                   });
                 },
-                color: Colors.transparent,
-                icon: const Icon(
-                  AntDesign.retweet,
-                  size: 40,
+                color: Colors.white,
+                icon: const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    FontAwesome.language,
+                    size: 20,
+                  ),
                 ),
                 label: Text(
                   _mode.name,
-                  style: const TextStyle(fontSize: 24),
+                  style: const TextStyle(fontSize: 20),
                 ),
-                elevation: 2,
+                elevation: 5,
               )
             ],
           ),
@@ -78,15 +100,27 @@ class _NoteTableState extends State<NoteTable> {
           padding: const EdgeInsets.all(8).add(EdgeInsets.only(right: 8)),
           child: FlatButton(
             color: Colors.orange,
-            child: Text(
+            child: const Text(
               'Play',
               style: TextStyle(color: Colors.white),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => FlashCardPage(
+                    note: note,
+                  ),
+                ),
+              );
+            },
           ),
         )
       ],
     );
+
+    // TODO: 順番保持 -> array
+    final phrases = widget.note.phrases.values.toList()
+      ..sort((a, b) => a.id.compareTo(b.id));
 
     final phrasesTable = Table(
         border: TableBorder.all(
@@ -125,7 +159,7 @@ class _NoteTableState extends State<NoteTable> {
             ],
           ),
 
-          ...widget.note.phrases.values.map((phrase) {
+          ...phrases.map((phrase) {
             final favorited =
                 userNotifier.existPhraseInFavoriteList(phraseId: phrase.id);
 
@@ -187,6 +221,7 @@ class _NoteTableState extends State<NoteTable> {
 
     return Column(
       children: [
+        title,
         header,
         Padding(
           padding: const EdgeInsets.all(8),
