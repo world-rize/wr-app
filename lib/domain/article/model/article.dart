@@ -35,7 +35,7 @@ class ArticleDigest extends Entry<ArticleDigestFields> {
           ),
         );
 
-  static ArticleDigest fromJson(Map<String, dynamic> json) =>
+  static ArticleDigest fromJson(Map<dynamic, dynamic> json) =>
       _$ArticleDigestFromJson(json);
 
   Map<String, dynamic> toJson() => _$ArticleDigestToJson(this);
@@ -53,7 +53,7 @@ class ArticleDigestFields extends Equatable {
     @required this.summary,
   }) : super();
 
-  factory ArticleDigestFields.fromJson(Map<String, dynamic> json) =>
+  factory ArticleDigestFields.fromJson(Map<dynamic, dynamic> json) =>
       _$ArticleDigestFieldsFromJson(json);
 
   /// タイトル

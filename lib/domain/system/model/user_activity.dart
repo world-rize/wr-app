@@ -14,7 +14,7 @@ class UserActivity {
     @required this.date,
   });
 
-  factory UserActivity.fromJson(Map<String, dynamic> json) =>
+  factory UserActivity.fromJson(Map<dynamic, dynamic> json) =>
       _$UserActivityFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserActivityToJson(this);

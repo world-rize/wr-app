@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator'
-import { Phrase } from './phrase'
+import { NotePhrase } from './note'
 
 /**
  * Note Api
@@ -32,7 +32,7 @@ export class AddPhraseInNoteRequest {
   readonly noteId!: string
 
   @IsNotEmpty()
-  readonly phrase!: Phrase
+  readonly phrase!: NotePhrase
 }
 
 export class UpdatePhraseInNoteRequest {
@@ -43,7 +43,7 @@ export class UpdatePhraseInNoteRequest {
   readonly phraseId!: string
 
   @IsNotEmpty()
-  readonly phrase!: Phrase
+  readonly phrase!: NotePhrase
 }
 
 export class DeletePhraseInNote {
@@ -52,4 +52,15 @@ export class DeletePhraseInNote {
 
   @IsNotEmpty()
   readonly phraseId!: string
+}
+
+export class AchievePhraseInNote {
+  @IsNotEmpty()
+  readonly noteId!: string
+
+  @IsNotEmpty()
+  readonly phraseId!: string
+
+  @IsNotEmpty()
+  readonly achieve!: boolean
 }

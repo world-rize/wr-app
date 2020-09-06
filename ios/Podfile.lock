@@ -89,6 +89,8 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_tts (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
   - Google-Mobile-Ads-SDK (7.58.0):
@@ -183,6 +185,7 @@ DEPENDENCIES:
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
   - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - google_sign_in_web (from `.symlinks/plugins/google_sign_in_web/ios`)
@@ -250,6 +253,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_inappwebview/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_tts:
+    :path: ".symlinks/plugins/flutter_tts/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   google_sign_in:
@@ -306,6 +311,7 @@ SPEC CHECKSUMS:
   flutter_email_sender: f787522d0e82f50e5766c1213dbffff22fdcf009
   flutter_inappwebview: 69dfbac46157b336ffbec19ca6dfd4638c7bf189
   flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
+  flutter_tts: 0f492aab6accf87059b72354fcb4ba934304771d
   fluttertoast: b644586ef3b16f67fae9a1f8754cef6b2d6b634b
   Google-Mobile-Ads-SDK: 7052557293c75c676db55feb707ace9b790f32c1
   google_sign_in: 6bd214b9c154f881422f5fe27b66aaa7bbd580cc

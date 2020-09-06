@@ -5,5 +5,15 @@
   },
   "functions": {
     "predeploy": "npm --prefix \"$RESOURCE_DIR\" run build"
+  },
+  "emulators": {
+    "functions": {
+      "host": "0.0.0.0",
+      "port": "8888"
+    },
+    "firestore": {
+      "host": "0.0.0.0",
+      "port": "8080"
+    }
   }
 }

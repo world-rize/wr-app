@@ -49,6 +49,8 @@ google-services.json
 
 # secrets
 /secrets/*
+.env*
 setup.sh
+!/secrets.sample/*
 
 .node-version

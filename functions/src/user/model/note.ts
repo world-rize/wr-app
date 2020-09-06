@@ -4,6 +4,33 @@
 import { Phrase } from './phrase'
 
 /**
+ * ノートのフレーズのモデル
+ */
+export interface NotePhrase {
+  schemaVersion: 'v1'
+
+  /**
+   * id
+   */
+  id: string
+
+  /**
+   * 単語
+   */
+  word: string
+
+  /**
+   * 訳
+   */
+  translation: string
+
+  /**
+   * achieved
+   */
+  achieved: boolean
+}
+
+/**
  * 任意のフレーズのリスト
  */
 export interface Note {
@@ -29,7 +56,7 @@ export interface Note {
   isDefault: boolean
 
   /**
-   * フレーズ(key: phraseId, value: phrase)
+   * フレーズ(key: uuid, value: NotePhrase)
    */
-  phrases: Record<string, Phrase>
+  phrases: Record<string, NotePhrase>
 }

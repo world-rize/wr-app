@@ -7,8 +7,7 @@ import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
-void useCloudFunctionsEmulator(String port) {
-  final origin = 'http://localhost:$port';
+void useCloudFunctionsEmulator(String origin) {
   CloudFunctions.instance.useFunctionsEmulator(origin: origin);
   InAppLogger.info('🔖 Using Functions emulator @ $origin');
 }

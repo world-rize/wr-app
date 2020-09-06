@@ -19,7 +19,7 @@ class Phrase {
     @required this.example,
   });
 
-  factory Phrase.fromJson(Map<String, dynamic> json) => _$PhraseFromJson(json);
+  factory Phrase.fromJson(Map<dynamic, dynamic> json) => _$PhraseFromJson(json);
 
   /// minimum dummy
   factory Phrase.note(String uuid) {

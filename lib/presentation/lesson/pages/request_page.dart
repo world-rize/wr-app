@@ -65,7 +65,7 @@ class _RequestPageState extends State<RequestPage> {
                       maxLines: 20,
                       decoration:
                           const InputDecoration.collapsed(hintText: hintText),
-                      onSubmitted: (text) {
+                      onChanged: (text) {
                         setState(() {
                           _text = text;
                         });
@@ -82,9 +82,11 @@ class _RequestPageState extends State<RequestPage> {
         padding: const EdgeInsets.only(bottom: 20),
         child: PrimaryButton(
           label: const Text('送信'),
-          onPressed: () async {
-            await notifier.sendPhraseRequest(text: _text);
-          },
+          onPressed: _text == ''
+              ? null
+              : () async {
+                  await notifier.sendPhraseRequest(text: _text);
+                },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

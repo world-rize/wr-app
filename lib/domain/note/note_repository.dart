@@ -17,4 +17,6 @@ abstract class NoteRepository {
   Future<Note> updatePhraseInNote(UpdatePhraseInNoteRequest req);
 
   Future<void> deletePhraseInNote(DeletePhraseInNoteRequest req);
+
+  Future<void> achievePhraseInNote(AchievePhraseInNoteRequest req);
 }

@@ -4,6 +4,7 @@ import 'package:data_classes/data_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 
 part 'note_api_dto.g.dart';
 
@@ -86,7 +87,7 @@ class AddPhraseInNoteRequest {
 
   String noteId;
 
-  Phrase phrase;
+  NotePhrase phrase;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -106,7 +107,7 @@ class UpdatePhraseInNoteRequest {
 
   String phraseId;
 
-  Phrase phrase;
+  NotePhrase phrase;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
@@ -124,4 +125,24 @@ class DeletePhraseInNoteRequest {
   String noteId;
 
   String phraseId;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class AchievePhraseInNoteRequest {
+  AchievePhraseInNoteRequest({
+    @required this.noteId,
+    @required this.phraseId,
+    @required this.achieve,
+  });
+
+  String noteId;
+
+  String phraseId;
+
+  bool achieve;
+
+  factory AchievePhraseInNoteRequest.fromJson(Map<String, dynamic> json) =>
+      _$AchievePhraseInNoteRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AchievePhraseInNoteRequestToJson(this);
 }

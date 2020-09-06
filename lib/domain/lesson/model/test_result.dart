@@ -22,7 +22,7 @@ class TestResult {
   /// iso date
   String date;
 
-  factory TestResult.fromJson(Map<String, dynamic> json) =>
+  factory TestResult.fromJson(Map<dynamic, dynamic> json) =>
       _$TestResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$TestResultToJson(this);

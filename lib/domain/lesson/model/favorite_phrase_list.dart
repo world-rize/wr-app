@@ -31,7 +31,7 @@ class FavoritePhraseList {
     );
   }
 
-  factory FavoritePhraseList.fromJson(Map<String, dynamic> json) =>
+  factory FavoritePhraseList.fromJson(Map<dynamic, dynamic> json) =>
       _$FavoritePhraseListFromJson(json);
 
   Map<String, dynamic> toJson() => _$FavoritePhraseListToJson(this);
