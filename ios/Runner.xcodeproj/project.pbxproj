@@ -19,7 +19,7 @@
 		0B04743C242B1B1A00B74B4F /* Flutter.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 0B04742F242B1B1A00B74B4F /* Flutter.podspec */; };
 		0B04743D242B1B1A00B74B4F /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0B047430242B1B1A00B74B4F /* Release.xcconfig */; };
 		0B04743E242B1B1A00B74B4F /* Generated.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 0B047431242B1B1A00B74B4F /* Generated.xcconfig */; };
-		0B75695C2502AA25008D680C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B75695B2502AA25008D680C /* GoogleService-Info.plist */; };
+		0B7015AB250536D900C69409 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0B7015AA250536D900C69409 /* GoogleService-Info.plist */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		79AA216A2C0453D80E3C6B7F /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B2A1713AF50BCB5F2F08E4A3 /* Pods_Runner.framework */; };
@@ -54,7 +54,7 @@
 		0B04742F242B1B1A00B74B4F /* Flutter.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = Flutter.podspec; path = Flutter/Flutter.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		0B047430242B1B1A00B74B4F /* Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Release.xcconfig; path = Flutter/Release.xcconfig; sourceTree = "<group>"; };
 		0B047431242B1B1A00B74B4F /* Generated.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Generated.xcconfig; path = Flutter/Generated.xcconfig; sourceTree = "<group>"; };
-		0B75695B2502AA25008D680C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0B7015AA250536D900C69409 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0B7AEE71245CAEA500C3B031 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
 		0B7AEE72245CAEA500C3B031 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		0BB399BC24AB4422000F668F /* WR英会話.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "WR英会話.entitlements"; sourceTree = "<group>"; };
@@ -150,7 +150,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				0B75695B2502AA25008D680C /* GoogleService-Info.plist */,
+				0B7015AA250536D900C69409 /* GoogleService-Info.plist */,
 				0BB399BC24AB4422000F668F /* WR英会話.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -248,11 +248,11 @@
 				0B04743A242B1B1A00B74B4F /* Debug-development.xcconfig in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				0B047439242B1B1A00B74B4F /* flutter_export_environment.sh in Resources */,
-				0B75695C2502AA25008D680C /* GoogleService-Info.plist in Resources */,
 				0B047434242B1B1A00B74B4F /* Release-production.xcconfig in Resources */,
 				0B047435242B1B1A00B74B4F /* development.xcconfig in Resources */,
 				0B047438242B1B1A00B74B4F /* production.xcconfig in Resources */,
 				0B047432242B1B1A00B74B4F /* Release-staging.xcconfig in Resources */,
+				0B7015AB250536D900C69409 /* GoogleService-Info.plist in Resources */,
 				0B047436242B1B1A00B74B4F /* AppFrameworkInfo.plist in Resources */,
 				0B04743D242B1B1A00B74B4F /* Release.xcconfig in Resources */,
 			);
