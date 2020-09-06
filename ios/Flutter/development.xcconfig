@@ -5,5 +5,5 @@
 
 FLUTTER_FLAVOR=development
 FLUTTER_TARGET=lib/main_development.dart
-PRODUCT_BUNDLE_IDENTIFIER=com.worldrize.app //.dev
+PRODUCT_BUNDLE_IDENTIFIER=com.worldrize.app.dev
 DISPLAY_NAME=WR英会話-dev
