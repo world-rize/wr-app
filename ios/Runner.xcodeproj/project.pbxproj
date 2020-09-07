@@ -455,8 +455,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
-				PRODUCT_NAME = "WR英会話";
+				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.dev;
+				PRODUCT_NAME = "WR英会話-dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -539,8 +539,8 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
-				PRODUCT_NAME = "WR英会話";
+				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.stg;
+				PRODUCT_NAME = "WR英会話-stg";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
@@ -844,7 +844,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.development;
 				PRODUCT_NAME = "WR英会話";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
