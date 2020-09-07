@@ -49,6 +49,7 @@ google-services.json
 
 # secrets
 /secrets/*
+!/secrets/.env.sample
 .env*
 setup.sh
 !/secrets.sample/*
