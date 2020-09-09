@@ -13,6 +13,8 @@ void useCloudFunctionsEmulator(String origin) {
 }
 
 class UserPersistence implements UserRepository {
+  // TODO: rename XXXPhraseYYY -> XXXNotePhraseYYY?
+
   @override
   Future<void> test() async {
     final callable = CloudFunctions.instance
@@ -147,5 +149,11 @@ class UserPersistence implements UserRepository {
   Future<User> updatePhrase(UpdatePhraseRequest req) {
     // TODO: implement updateFavoriteList
     throw UnimplementedError();
+  }
+
+  @override
+  Future<User> readUserFromUserId(ReadUserFromUserIdRequest req) async {
+    // TODO: implement readUserFromUserId
+    return User.dummy()..userId = req.userId;
   }
 }

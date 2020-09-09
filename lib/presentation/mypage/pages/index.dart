@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/presentation/mypage/pages/archived_list_page.dart';
+import 'package:wr_app/presentation/mypage/pages/achieved_list_page.dart';
 import 'package:wr_app/presentation/mypage/pages/info_page.dart';
 import 'package:wr_app/presentation/mypage/pages/locale_page.dart';
 import 'package:wr_app/presentation/mypage/widgets/user_info.dart';
@@ -79,11 +79,11 @@ class MyPagePage extends StatelessWidget {
           },
         ),
         _createIconCell(
-          title: 'Archived List',
-          icon: 'assets/icon/mypage_archive.png',
+          title: 'Achieved List',
+          icon: 'assets/icon/mypage_achieved.png',
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => ArchivedListPage()));
+                .push(MaterialPageRoute(builder: (_) => AchievedListPage()));
           },
         ),
         _createIconCell(

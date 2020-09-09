@@ -226,4 +226,11 @@ class UserService {
     final req = DeleteFavoriteListRequest(listId: listId);
     return _userPersistence.deleteFavoriteList(req);
   }
+
+  /// search user from User ID
+  /// TODO: implement API
+  Future<User> searchUserFromUserId({@required String userId}) {
+    final req = ReadUserFromUserIdRequest(userId: userId);
+    return _userPersistence.readUserFromUserId(req);
+  }
 }

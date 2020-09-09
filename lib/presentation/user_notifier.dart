@@ -562,4 +562,15 @@ class UserNotifier with ChangeNotifier {
     }
     return i;
   }
+
+  /// search user from user id
+  Future<User> searchUserFromUserId({@required String userId}) {
+    try {
+      return _userService.searchUserFromUserId(userId: userId);
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+      return null;
+    }
+  }
 }
