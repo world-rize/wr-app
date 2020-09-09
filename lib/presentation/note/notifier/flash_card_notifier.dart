@@ -23,7 +23,7 @@ class FlashCardNotifier extends ChangeNotifier {
     note = note;
     notePhrases = note.phrases.entries.map((entry) => entry.value).toList();
     _nowPhraseIndex = 0;
-    _autoScroll = false;
+    _autoScroll = true;
     _voiceAccent = VoiceAccent.britishEnglish;
     _flutterTts = FlutterTts();
     _ttsState = TtsState.stopped;
@@ -86,9 +86,12 @@ class FlashCardNotifier extends ChangeNotifier {
     final completer = Completer<void>();
     final nowPhrase = notePhrases[_nowPhraseIndex];
 
-    // await _flutterTts.speak();
-    // _flutterTts.setCompletionHandler(completer.complete);
-    // await completer.future;
+    await _flutterTts.speak(nowPhrase.word);
+    _flutterTts.setCompletionHandler(completer.complete);
+    await completer.future;
+    await _flutterTts.speak(nowPhrase.translation);
+    _flutterTts.setCompletionHandler(completer.complete);
+    await completer.future;
   }
 
   Future<void> stop() async {
@@ -105,7 +108,8 @@ class FlashCardNotifier extends ChangeNotifier {
       duration: const Duration(seconds: 1),
       curve: Curves.ease,
     );
-    _nowPhraseIndex += 1;
+    _nowPhraseIndex += 1 % notePhrases.length;
+    notifyListeners();
   }
 
   Future<void> getLanguages() async {

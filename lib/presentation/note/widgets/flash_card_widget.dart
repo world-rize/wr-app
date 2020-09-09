@@ -85,7 +85,7 @@ class _FlashCardState extends State<FlashCard> {
       initialPage: flashCardNotifier.nowPhraseIndex,
     );
 
-    Provider.of<FlashCardNotifier>(context, listen: false).pageController =
+    Provider.of<FlashCardNotifier>(context).pageController =
         flashCard.pageController;
 
     return flashCard;

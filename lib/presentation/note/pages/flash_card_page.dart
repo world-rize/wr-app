@@ -15,7 +15,7 @@ class FlashCardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: Provider FlashCardNotifier
-    return Provider<FlashCardNotifier>(
+    return ChangeNotifierProvider<FlashCardNotifier>(
       create: (_) => FlashCardNotifier(note: note),
       child: Scaffold(
         appBar: AppBar(
