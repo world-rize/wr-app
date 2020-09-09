@@ -50,6 +50,7 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: do not empty validation
     final wordField = TextFormField(
       initialValue: _word,
       onChanged: (String tmpWord) {
@@ -70,7 +71,8 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
       decoration: const InputDecoration(labelText: '日本語'),
     );
 
-    final okButton = RaisedButton(
+    final okButton = FlatButton(
+      textColor: Colors.blueAccent,
       child:
           editingPhrase != null ? const Text('Update') : const Text('Create'),
       onPressed: () {
@@ -99,12 +101,14 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
       },
     );
 
-    final deleteButton = RaisedButton(
+    final deleteButton = FlatButton(
+      textColor: Colors.blueAccent,
       child: const Text('Delete'),
       onPressed: () => onDelete(editingPhrase),
     );
 
-    final cancelButton = RaisedButton(
+    final cancelButton = FlatButton(
+      textColor: Colors.blueAccent,
       child: const Text('Cancel'),
       onPressed: onCancel,
     );

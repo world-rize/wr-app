@@ -1,18 +1,18 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/presentation/mypage/pages/archived_list_page.dart';
+import 'package:wr_app/presentation/mypage/pages/achieved_list_page.dart';
 import 'package:wr_app/presentation/mypage/pages/info_page.dart';
 import 'package:wr_app/presentation/mypage/pages/locale_page.dart';
 import 'package:wr_app/presentation/mypage/widgets/user_info.dart';
 
 import './friends_page.dart';
-import './gift_page.dart';
+import './shop_page.dart';
 import './upgrade_page.dart';
 
 /// mypage > index
 class MyPagePage extends StatelessWidget {
-  Widget _menuCell({
+  Widget _createIconCell({
     @required String title,
     @required String icon,
     @required Function onTap,
@@ -46,7 +46,7 @@ class MyPagePage extends StatelessWidget {
       shrinkWrap: true,
       crossAxisCount: 3,
       children: [
-        _menuCell(
+        _createIconCell(
           title: '友達紹介',
           icon: 'assets/icon/mypage_friends.png',
           onTap: () {
@@ -54,7 +54,7 @@ class MyPagePage extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => FriendsPage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: 'アップグレード',
           icon: 'assets/icon/mypage_upgrade.png',
           onTap: () {
@@ -62,15 +62,15 @@ class MyPagePage extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => UpgradePage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: '交換',
           icon: 'assets/icon/mypage_gift.png',
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => GiftPage()));
+                .push(MaterialPageRoute(builder: (_) => ShopPage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: 'アクセント追加',
           icon: 'assets/icon/mypage_locale.png',
           onTap: () {
@@ -78,15 +78,15 @@ class MyPagePage extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => LocalePage()));
           },
         ),
-        _menuCell(
-          title: 'Archived List',
-          icon: 'assets/icon/mypage_archive.png',
+        _createIconCell(
+          title: 'Achieved List',
+          icon: 'assets/icon/mypage_achieved.png',
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => ArchivedListPage()));
+                .push(MaterialPageRoute(builder: (_) => AchievedListPage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: 'お知らせ',
           icon: 'assets/icon/mypage_info.png',
           onTap: () {

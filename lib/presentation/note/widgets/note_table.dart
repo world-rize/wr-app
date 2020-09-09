@@ -74,6 +74,7 @@ class _NoteTableState extends State<NoteTable> {
     final userNotifier = Provider.of<UserNotifier>(context);
     final h5 = Theme.of(context).textTheme.headline5;
 
+    // ノート名
     final title = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -83,62 +84,72 @@ class _NoteTableState extends State<NoteTable> {
                 .push(MaterialPageRoute(builder: (_) => NoteListPage()));
           },
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(note.title, style: h5),
+            padding: const EdgeInsets.all(8),
+            child: Row(
+              children: [
+                Text(note.title, style: h5),
+                Icon(Icons.keyboard_arrow_down),
+              ],
+            ),
           ),
         ),
       ],
+    );
+
+    // 上部ボタン
+    final bg = Theme.of(context).backgroundColor;
+    final switchHideButton = RaisedButton.icon(
+      onPressed: () {
+        // toggle mode
+        setState(() {
+          _mode = NoteMode.values[(_mode.index + 1) % 3];
+        });
+      },
+      color: bg,
+      icon: const Padding(
+        padding: EdgeInsets.all(8),
+        child: Icon(
+          FontAwesome.language,
+          size: 20,
+        ),
+      ),
+      label: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Text(
+          _mode.name,
+          style: const TextStyle(fontSize: 20),
+        ),
+      ),
+      elevation: 5,
+    );
+
+    final playButton = FlatButton(
+      color: Colors.orange,
+      child: const Text(
+        'Play',
+        style: TextStyle(color: Colors.white),
+      ),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => FlashCardPage(
+              note: note,
+            ),
+          ),
+        );
+      },
     );
 
     final header = Row(
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
-          child: Row(
-            children: [
-              RaisedButton.icon(
-                onPressed: () {
-                  // toggle mode
-                  setState(() {
-                    _mode = NoteMode.values[(_mode.index + 1) % 3];
-                  });
-                },
-                color: Colors.white,
-                icon: const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
-                    FontAwesome.language,
-                    size: 20,
-                  ),
-                ),
-                label: Text(
-                  _mode.name,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                elevation: 5,
-              )
-            ],
-          ),
+          child: switchHideButton,
         ),
-        Spacer(),
+        const Spacer(),
         Padding(
           padding: const EdgeInsets.all(8).add(EdgeInsets.only(right: 8)),
-          child: FlatButton(
-            color: Colors.orange,
-            child: const Text(
-              'Play',
-              style: TextStyle(color: Colors.white),
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => FlashCardPage(
-                    note: note,
-                  ),
-                ),
-              );
-            },
-          ),
+          child: playButton,
         )
       ],
     );
@@ -194,8 +205,8 @@ class _NoteTableState extends State<NoteTable> {
                       child: IconButton(
                         icon: Icon(
                           phrase.achieved
-                              ? FontAwesome5.star
-                              : FontAwesome5.grin_stars,
+                              ? Icons.favorite
+                              : Icons.favorite_border,
                           color: Colors.redAccent,
                         ),
                         onPressed: () {

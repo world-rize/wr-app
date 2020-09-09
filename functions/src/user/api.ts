@@ -416,3 +416,20 @@ export const achievePhraseInNote = async (req: NoteDto.AchievePhraseInNote, cont
       throw new functions.https.HttpsError('internal', 'failed to achievePhraseInNote')
     })
 }
+
+export const findUserByUserId = async(req: UserDto.FindUserByUserIdRequest, context: Context): Promise<User> => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new UserDto.FindUserByUserIdRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('FindUserByUserId is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+
+  return userService.findUserByUserId(userId, req.userId)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', 'failed to findUserByUserId')
+    })
+}

@@ -11,6 +11,7 @@ import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/on_boarding/pages/index.dart';
+import 'package:wr_app/presentation/settings/pages/notification_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/flavor.dart';
 
@@ -26,10 +27,37 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsPage> {
+  void _showSignOutConfirmDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('ログアウトする'),
+        content: const Text('本当にログアウトしますか？'),
+        actions: [
+          FlatButton(
+            child: const Text('Cancel'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          FlatButton(
+            child: const Text('Ok'),
+            onPressed: () async {
+              Navigator.pop(context);
+              final userNotifier =
+                  Provider.of<UserNotifier>(context, listen: false);
+              await userNotifier.signOut();
+              await Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
+            },
+          )
+        ],
+      ),
+    );
+  }
+
   // account section
   SettingsSection accountSection() {
-    final userStore = Provider.of<UserNotifier>(context);
-
     return SettingsSection(
       title: I.of(context).accountSection,
       tiles: [
@@ -45,26 +73,9 @@ class _SettingsState extends State<SettingsPage> {
           title: 'サインアウト',
           leading: const Icon(Icons.attach_file),
           onTap: () async {
-            await userStore.signOut();
-            await Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
+            _showSignOutConfirmDialog();
           },
         ),
-      ],
-    );
-  }
-
-  // notification
-  SettingsSection notificationSection() {
-    return SettingsSection(
-      title: '通知',
-      tiles: [
-        SettingsTile.switchTile(
-          switchValue: false,
-          title: '通知',
-          leading: const Icon(Icons.notifications),
-          onToggle: (value) {},
-        )
       ],
     );
   }
@@ -79,7 +90,7 @@ class _SettingsState extends State<SettingsPage> {
           leading: const Icon(Icons.attach_money),
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => ThemeSettingsPage()));
+                .push(MaterialPageRoute(builder: (_) => SettingsThemePage()));
           },
         ),
         SettingsTile(
@@ -88,6 +99,14 @@ class _SettingsState extends State<SettingsPage> {
           onTap: () {
 //            Navigator.of(context)
 //                .push(MaterialPageRoute(builder: (_) => RequestPage()));
+          },
+        ),
+        SettingsTile(
+          title: '通知',
+          leading: const Icon(Icons.notifications),
+          onTap: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => SettingsNotificationPage()));
           },
         ),
       ],
@@ -115,8 +134,48 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
+          title: 'WorldRIZe Twitter',
+          onTap: () async {
+            const url = 'https://world-rize.com';
+            if (await canLaunch(url)) {
+              await launch(
+                url,
+                forceSafariVC: false,
+                forceWebView: false,
+              );
+            }
+          },
+        ),
+        SettingsTile(
+          title: 'WorldRIZe Instagram',
+          onTap: () async {
+            const url = 'https://world-rize.com';
+            if (await canLaunch(url)) {
+              await launch(
+                url,
+                forceSafariVC: false,
+                forceWebView: false,
+              );
+            }
+          },
+        ),
+        SettingsTile(
           title: 'よくある質問',
           onTap: () async {
+            const url = 'https://world-rize.com';
+            if (await canLaunch(url)) {
+              await launch(
+                url,
+                forceSafariVC: false,
+                forceWebView: false,
+              );
+            }
+          },
+        ),
+        SettingsTile(
+          title: 'フィードバック',
+          onTap: () async {
+            // TODO: App Store Link
             const url = 'https://world-rize.com';
             if (await canLaunch(url)) {
               await launch(
@@ -231,6 +290,8 @@ class _SettingsState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final systemNotifier = Provider.of<SystemNotifier>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('設定'),
@@ -239,9 +300,9 @@ class _SettingsState extends State<SettingsPage> {
         sections: [
           accountSection(),
           generalSection(),
-          notificationSection(),
           aboutSection(),
-          if (true) debugSection(),
+          if (true || systemNotifier.flavor == Flavor.development)
+            debugSection(),
         ],
       ),
     );

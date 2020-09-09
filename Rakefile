@@ -75,7 +75,7 @@ task :test do
 
   # TODO: flutter driver test
   # TODO: codecov
-  
+
   # clound functions test
   cd 'functions' do
     sh 'yarn test'
@@ -92,20 +92,26 @@ task :docs do
   end
 end
 
-desc 'update assets'
-task :assets do
-  if !File.exist?('./assets')
-    # read ./secrets/.env
-    sh 'export $(cat ./secrets/.env | grep -v ^# | xargs); curl gdrive.sh | bash -s $ASSETS_GDRIVE_ID'
-    sh 'unzip -qq assets.zip'
-    sh 'rm -rf ./assets.zip ./__MACOSX'
+desc 'download assets'
+task :download_assets do
+   # read ./secrets/.env
+   sh 'export $(cat ./secrets/.env | grep -v ^# | xargs); curl gdrive.sh | bash -s $ASSETS_GDRIVE_ID'
+   sh 'unzip -qq assets.zip'
+   sh 'rm -rf ./assets.zip ./__MACOSX'
+end
+
+desc 'upload assets'
+task :upload_assets do
+  if File.exist?('./assets')
+    sh 'zip -r assets.zip assets'
+    sh 'echo "please upload assets.zip to google drive!!!"'
   end
 end
 
 desc 'setup'
 task :setup do
   puts '1. Download Assets'
-  Rake::Task[:assets].invoke
+  Rake::Task[:download_assets].invoke
 
   puts '2. Install'
   cd 'ios' do

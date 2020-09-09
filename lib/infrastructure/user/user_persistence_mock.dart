@@ -10,6 +10,7 @@ import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
 import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
+import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/usecase/note_service.dart';
 
 class UserPersistenceMock implements UserRepository {
@@ -19,6 +20,7 @@ class UserPersistenceMock implements UserRepository {
       userService: UserService(
         authPersistence: AuthPersistenceMock(),
         userPersistence: UserPersistenceMock(),
+        shopPersistence: ShopPersistenceMock(),
       ),
       noteService: NoteService(notePersistence: NotePersistenceMock()),
     );
@@ -128,5 +130,15 @@ class UserPersistenceMock implements UserRepository {
     user.favorites.remove(req.listId);
     await Future.delayed(const Duration(seconds: 1));
     return user;
+  }
+
+  @override
+  Future<User> findUserByUserId(FindUserByUserIdRequest req) async {
+    return User.dummy()..userId = req.userId;
+  }
+
+  @override
+  Future<bool> checkTestStreaks(CheckTestStreaksRequest req) async {
+    return false;
   }
 }

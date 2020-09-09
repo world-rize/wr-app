@@ -59,9 +59,7 @@ AddPhraseInNoteRequest _$AddPhraseInNoteRequestFromJson(Map json) {
     noteId: json['noteId'] as String,
     phrase: json['phrase'] == null
         ? null
-        : NotePhrase.fromJson((json['phrase'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+        : NotePhrase.fromJson(json['phrase'] as Map),
   );
 }
 
@@ -78,9 +76,7 @@ UpdatePhraseInNoteRequest _$UpdatePhraseInNoteRequestFromJson(Map json) {
     phraseId: json['phraseId'] as String,
     phrase: json['phrase'] == null
         ? null
-        : NotePhrase.fromJson((json['phrase'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+        : NotePhrase.fromJson(json['phrase'] as Map),
   );
 }
 

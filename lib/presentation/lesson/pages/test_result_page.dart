@@ -67,7 +67,6 @@ class TestResultPage extends StatelessWidget {
             child: const Text('答える'),
             onPressed: () async {
               systemNotifier.setQuestionnaireAnswered(value: true);
-              Navigator.pop(context);
               if (await canLaunch(questionnaireUrl)) {
                 await launch(
                   questionnaireUrl,
@@ -82,6 +81,45 @@ class TestResultPage extends StatelessWidget {
             onPressed: () {
               Navigator.pop(context);
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 30days challenge 達成
+  Future<void> _show30DaysChallengeAchievedDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: const Text('30Days Challenge達成'),
+        content: Column(
+          children: [
+            Center(
+              child: Text('Congratulations!'),
+            ),
+            Text('30 Days Challenge 達成'),
+            Row(
+              children: [
+                Image.asset('assets/mock.png'),
+                Image.asset('assets/mock.png'),
+                Image.asset('assets/mock.png'),
+              ],
+            ),
+            Text('30 Days Challenge 達成'),
+            PrimaryButton(
+              label: Text('追加するアクセントを選ぶ'),
+              onPressed: () {
+                // TODO: Go to "addAccentPage"
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoButton(
+            child: const Text('Ok'),
+            onPressed: () async {},
           ),
         ],
       ),
@@ -158,6 +196,12 @@ class TestResultPage extends StatelessWidget {
             await userNotifier.callGetPoint(points: stats.corrects);
             // show dialog
             await _showRewardDialog(context);
+
+            final is30DaysChallengeAchieved =
+                await userNotifier.checkTestStreaks();
+
+            if (true || is30DaysChallengeAchieved)
+              await _show30DaysChallengeAchievedDialog(context);
 
             // 最後のテストでアンケート誘導
             if (!systemNotifier.getQuestionnaireAnswered() &&
