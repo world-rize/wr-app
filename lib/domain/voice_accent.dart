@@ -3,4 +3,5 @@ enum VoiceAccent {
   britishEnglish,
   americanEnglish,
   indianEnglish,
+  australiaEnglish,
 }

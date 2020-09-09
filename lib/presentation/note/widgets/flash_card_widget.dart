@@ -17,8 +17,6 @@ class _FlashCardState extends State<FlashCard> {
   /// 裏側か
   bool _flipped;
 
-  PageController pageController;
-
   Widget _createFlashCardContainer(NotePhrase phrase) {
     final backgroundColor = Theme.of(context).backgroundColor;
     final body1 = Theme.of(context).primaryTextTheme.bodyText1;
@@ -84,10 +82,11 @@ class _FlashCardState extends State<FlashCard> {
       enableInfiniteScroll: false,
       // FIXME: phrasesに順番の概念がないので毎回ランダムになるリスト型にする必要がある
       items: note.phrases.values.map(_createFlashCardContainer).toList(),
-      initialPage: flashCardNotifier.nowCardIndex,
+      initialPage: flashCardNotifier.nowPhraseIndex,
     );
 
-    pageController = flashCard.pageController;
+    Provider.of<FlashCardNotifier>(context, listen: false).pageController =
+        flashCard.pageController;
 
     return flashCard;
   }

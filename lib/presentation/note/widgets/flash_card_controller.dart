@@ -23,11 +23,11 @@ class FlashCardController extends StatelessWidget {
             decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
             child: Column(
               children: [
-                const Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Placeholder(
-                    fallbackHeight: 80,
-                  ),
+                FloatingActionButton(
+                  onPressed: () async {
+                    final fn = context.read<FlashCardNotifier>();
+                    fn.play();
+                  },
                 ),
                 const Padding(
                   padding: EdgeInsets.all(8),
