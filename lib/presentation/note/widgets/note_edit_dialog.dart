@@ -46,12 +46,14 @@ class _NoteEditDialogState extends State<NoteEditDialog> {
       decoration: const InputDecoration(labelText: 'title'),
     );
 
-    final cancelButton = RaisedButton(
+    final cancelButton = FlatButton(
+      textColor: Colors.blueAccent,
       child: const Text('Cancel'),
       onPressed: onCancel,
     );
 
-    final okButton = RaisedButton(
+    final okButton = FlatButton(
+      textColor: Colors.blueAccent,
       child: const Text('Create'),
       onPressed: () {
         // create phrase

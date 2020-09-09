@@ -16,19 +16,19 @@ class FlashCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: Provider FlashCardNotifier
     return Provider<FlashCardNotifier>(
-      create: (_) => FlashCardNotifier(),
+      create: (_) => FlashCardNotifier(note: note),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('ノート名'),
+          title: Text(note.title),
         ),
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: FlashCard(),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8),
               child: FlashCardController(),
             ),
           ],
