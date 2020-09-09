@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/shop/model/shop_item.dart';
+import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/mypage/widgets/gift_item_card.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 
@@ -35,45 +37,9 @@ class ShopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final shopNotifier = Provider.of<ShopNotifier>(context);
     final userNotifier = Provider.of<UserNotifier>(context);
     final points = userNotifier.getUser().statistics.points;
-    final items = [
-      GiftItem(
-        id: '1',
-        title: 'Amazonカード 500ポイント',
-        description: 'Amazonで使えるギフトカード',
-        price: 5000,
-        available: true,
-      ),
-      GiftItem(
-        id: '2',
-        title: 'iTunesカード 500ポイント',
-        description: 'iTunesで使えるギフトカード',
-        price: 5000,
-        available: true,
-      ),
-      GiftItem(
-        id: '3',
-        title: 'フレーズアクセント(US)',
-        description: 'USアクセント',
-        price: 3000,
-        available: false,
-      ),
-      GiftItem(
-        id: '4',
-        title: 'フレーズアクセント(UK)',
-        description: 'USアクセント',
-        price: 3000,
-        available: true,
-      ),
-      GiftItem(
-        id: '5',
-        title: 'フレーズアクセント(IN)',
-        description: 'INアクセント',
-        price: 3000,
-        available: true,
-      ),
-    ];
 
     return Scaffold(
       appBar: AppBar(
@@ -101,19 +67,30 @@ class ShopPage extends StatelessWidget {
               padding: EdgeInsets.all(8),
               child: Text('交換できるもの'),
             ),
-            ...items
-                .map(
-                  (item) => Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: GiftItemCard(
-                      giftItem: item,
-                      onTap: () {
-                        _showPurchaseConfirmDialog(context, item);
-                      },
-                    ),
-                  ),
-                )
-                .toList(),
+            FutureBuilder(
+              future: shopNotifier.getShopItems(),
+              builder: (_, ss) {
+                if (!ss.hasData) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return Column(
+                    children: ss.data
+                        .map(
+                          (item) => Padding(
+                            padding: const EdgeInsets.all(4),
+                            child: GiftItemCard(
+                              giftItem: item,
+                              onTap: () {
+                                _showPurchaseConfirmDialog(context, item);
+                              },
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),
