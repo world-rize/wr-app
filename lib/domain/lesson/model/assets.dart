@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'assets.g.dart';
 
-/// レッスン
+/// Phraseに結びついている素材へのパスを表す
 @JsonSerializable()
 class Assets {
   Assets({this.voice, this.img});
@@ -14,9 +14,10 @@ class Assets {
 
   Map<String, dynamic> toJson() => _$AssetsToJson(this);
 
-  // 音声素材
+  /// 音声素材
+  /// e.g. "en-us": "voices/social_1_kp_en-us.mp3"
   Map<String, String> voice;
 
-  // 画像素材
+  /// 画像素材
   Map<String, String> img;
 }

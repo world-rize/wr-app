@@ -7,7 +7,6 @@ import 'package:wr_app/domain/lesson/model/assets.dart';
 part 'message.g.dart';
 
 /// フレーズ例中の会話一文
-/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469134> 参照
 @JsonSerializable()
 class Message {
   Message({@required this.text, @required this.assets});
@@ -17,10 +16,17 @@ class Message {
 
   Map<String, dynamic> toJson() => _$MessageToJson(this);
 
+  /// タイプ: Message固定
   @JsonKey(name: '@type')
   String type = 'Message';
 
+  /// フレーズとその訳
+  ///
+  /// ### 例
+  /// 'en': Are you going out tonight?
+  /// 'ja': 今夜遊びに行くの？
   Map<String, String> text;
 
+  /// 音声などのアセットのパス
   Assets assets;
 }

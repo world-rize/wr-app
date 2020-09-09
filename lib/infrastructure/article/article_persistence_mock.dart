@@ -42,7 +42,7 @@ class ArticlePersistenceMock implements ArticleRepository {
       Client client, String category) async {
     await Future.delayed(const Duration(milliseconds: 1000));
     return List.generate(10, (index) {
-      return ArticleDigest.fromMock(
+      return ArticleDigest.dummy(
         title: 'Article $category ${index ~/ 6}',
         category: category,
         url: 'https://world-rize.com/working-in-hotel-in-sydney/',
