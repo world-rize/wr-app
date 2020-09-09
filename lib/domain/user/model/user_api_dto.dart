@@ -204,3 +204,13 @@ class FindUserByUserIdRequest {
 
   String userId;
 }
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class CheckTestStreaksRequest {
+  CheckTestStreaksRequest();
+
+  factory CheckTestStreaksRequest.fromJson(Map<String, dynamic> json) =>
+      _$CheckTestStreaksRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CheckTestStreaksRequestToJson(this);
+}

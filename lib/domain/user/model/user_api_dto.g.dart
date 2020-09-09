@@ -166,3 +166,11 @@ Map<String, dynamic> _$FindUserByUserIdRequestToJson(
     <String, dynamic>{
       'userId': instance.userId,
     };
+
+CheckTestStreaksRequest _$CheckTestStreaksRequestFromJson(Map json) {
+  return CheckTestStreaksRequest();
+}
+
+Map<String, dynamic> _$CheckTestStreaksRequestToJson(
+        CheckTestStreaksRequest instance) =>
+    <String, dynamic>{};

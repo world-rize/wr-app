@@ -22,6 +22,8 @@ abstract class UserRepository {
 
   Future<User> doTest(DoTestRequest req);
 
+  Future<bool> checkTestStreaks(CheckTestStreaksRequest req);
+
   Future<User> sendTestResult(SendTestResultRequest req);
 
   Future<User> createFavoriteList(CreateFavoriteListRequest req);

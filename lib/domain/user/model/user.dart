@@ -106,6 +106,7 @@ class User {
   List<UserActivity> activities;
 
   /// TODO: 所持している発音
+  ///
   /// TODO: 初回起動
 
   bool get isPremium => attributes.membership == Membership.pro;

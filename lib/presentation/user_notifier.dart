@@ -16,6 +16,7 @@ import 'package:wr_app/util/toast.dart';
 
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
+  // TODO: エラーハンドリング
   final UserService _userService;
   final NoteService _noteService;
 
@@ -554,7 +555,7 @@ class UserNotifier with ChangeNotifier {
         .map((key, value) => MapEntry(key, value.length));
   }
 
-  /// calculates test streaks
+  /// calculates test 30days streaks
   int calcTestStreaks() {
     final heatMap = _calcHeatMap(_user.statistics.testResults);
     var i = 0;
@@ -564,6 +565,17 @@ class UserNotifier with ChangeNotifier {
       i++;
     }
     return i;
+  }
+
+  /// check test 30days streaks
+  Future<bool> checkTestStreaks() async {
+    try {
+      return _userService.checkTestStreaks();
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+      return false;
+    }
   }
 
   /// search user from user id

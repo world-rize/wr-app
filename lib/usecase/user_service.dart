@@ -2,6 +2,8 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
+import 'package:wr_app/domain/shop/model/shop_item.dart';
+import 'package:wr_app/domain/shop/shop_repository.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
@@ -13,11 +15,14 @@ class UserService {
   const UserService({
     @required AuthRepository authPersistence,
     @required UserRepository userPersistence,
+    @required ShopRepository shopPersistence,
   })  : _userPersistence = userPersistence,
-        _authPersistence = authPersistence;
+        _authPersistence = authPersistence,
+        _shopPersistence = shopPersistence;
 
   final AuthRepository _authPersistence;
   final UserRepository _userPersistence;
+  final ShopRepository _shopPersistence;
 
   /// sign up with Google
   Future<User> signUpWithGoogle() async {
@@ -232,5 +237,21 @@ class UserService {
   Future<User> searchUserFromUserId({@required String userId}) {
     final req = FindUserByUserIdRequest(userId: userId);
     return _userPersistence.findUserByUserId(req);
+  }
+
+  /// check test streaks
+  Future<bool> checkTestStreaks() {
+    final req = CheckTestStreaksRequest();
+    return _userPersistence.checkTestStreaks(req);
+  }
+
+  Future<List<GiftItem>> getShopItems() {
+    return _shopPersistence.shopItems();
+  }
+
+  Future<void> buyShopItem({
+    @required String itemId,
+  }) async {
+    return _shopPersistence.buyShopItem(itemId);
   }
 }
