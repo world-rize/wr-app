@@ -121,6 +121,7 @@ class FlashCardNotifier extends ChangeNotifier {
     _flutterTts.setCompletionHandler(completer.complete);
     await completer.future;
 
+    // TODO: autoScrollはさいごに到達したら最初に戻る変数なので修正する
     while (_autoScroll && !isStopped) {
       _nowPhraseIndex = _nowPhraseIndex + 1;
       await _pageController.animateToPage(
