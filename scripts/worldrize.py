@@ -7,9 +7,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 pwd = Path(__file__).resolve().parent
-env = pwd.parent / 'secrets/.env'
+env = pwd / '.env'
 load_dotenv(env)
 green, red = chalk.Chalk('green'), chalk.Chalk('red')
+
+def locales():
+    return ['en-us', 'en-au', 'en-uk', 'en-in']
 
 def success(*args):
     print(f'{green("✔")} ', *args)
@@ -29,7 +32,7 @@ def generate_phrase_voices(phrase: object, out_dir: Path):
     # kp, 1, 2, 3
     base_id = f'{phrase["meta"]["lessonId"]}_{phrase["meta"]["phraseId"]}'
     voices = []
-    for language in ['en-us', 'en-au', 'en-uk']:
+    for language in locales():
         path = out_dir / f'{base_id}_kp_{language}.mp3'
         voices.append({
             'path': path,
@@ -38,11 +41,12 @@ def generate_phrase_voices(phrase: object, out_dir: Path):
             'text': phrase['title']['en'],
         })
     for i, example in enumerate(phrase['example']['value'], start=1):
-        for language in ['en-us', 'en-au', 'en-uk']:
+        for language in locales():
             path = out_dir / f'{base_id}_{i}_{language}.mp3'
             voices.append({
                 'path': path,
-                'gender_voice': 'male' if i % 2 == 0 else 'female',
+                # 1, 3 -> male. 2 -> female
+                'gender_voice': 'male' if i % 2 == 1 else 'female',
                 'language': language,
                 'text': example['text']['en'],
             })
@@ -57,12 +61,13 @@ def generate_phrase_voices(phrase: object, out_dir: Path):
 def call_api(access_key: str, text: str, gender_voice: str, language: str, out_path: Path):
     """
     gender_voice: 'male' | 'female'
-    language: 'en-us' | 'en-uk' | 'en-au' -> 'en_US' | 'en_GB' | 'en_AU'
+    language: 'en-us' | 'en-uk' | 'en-au' | 'en-in' -> 'en_US' | 'en_GB' | 'en_AU' | 'en_IN'
     """
     language_map = {
         'en-us': 'en_US',
         'en-uk': 'en_GB',
         'en-au': 'en_AU',
+        'en-in': 'en_IN',
     }
     language = language_map[language]
     if language is None:
@@ -119,7 +124,7 @@ class PhrasesParser(object):
         def create_assets(index: str):
             return {
                 'voice': { 
-                    locale: f'voices/{master_id}_{index}_{locale}.mp3' for locale in ['en-us', 'en-au', 'en-uk']
+                    locale: f'voices/{master_id}_{index}_{locale}.mp3' for locale in ['en-us', 'en-au', 'en-uk', 'en-in']
                 }
             }
 
@@ -173,7 +178,7 @@ class PhrasesParser(object):
                 # key phrase
                 'assets': {
                     'voice': {
-                        locale: f'voices/{master_id}_kp_{locale}.mp3' for locale in ['en-us', 'en-au', 'en-uk']
+                        locale: f'voices/{master_id}_kp_{locale}.mp3' for locale in locales()
                     },
                 },
                 'advice': {
@@ -187,13 +192,14 @@ class PhrasesParser(object):
             self.phrases.append(phrase_json)
         except Exception as e:
             error(f'Warning {master_id} invalid')
-            error('\t', e)
+            # error('\t', e)
+            # print(content.split('\n'))
 
     def _parse_lesson(self, lesson_txt: str):
         lesson_txt = strip_brs(lesson_txt)
         # phrases[0]: title
         # phrases[1..]: phrases contents
-        header, *phrases = re.split(r'^\d+\.', lesson_txt, flags=re.MULTILINE)
+        header, *phrases = re.split(r'^\s*\d+\.', lesson_txt, flags=re.MULTILINE)
         title = strip_brs(header)
         # ex: 'Social Media' -> 'social'
         lesson_id = title.split(' ')[0].strip(string.punctuation).lower()
@@ -231,7 +237,7 @@ class Cli(object):
     def __init__(self):
         self.assets_path = pwd.parent / 'assets'
         self.voices_path = self.assets_path / 'voices'
-        self.lessons_txt_path = self.assets_path / 'contents/phrases.md'
+        self.lessons_txt_path = self.assets_path / 'contents/phrases_v2.md'
         self.lessons_json_path = self.assets_path / 'lessons.json'
         self.phrases_json_path  = self.assets_path / 'phrases.json'
 

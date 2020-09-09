@@ -190,3 +190,27 @@ class SendTestResultRequest {
 
   int score;
 }
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class FindUserByUserIdRequest {
+  FindUserByUserIdRequest({
+    @required this.userId,
+  });
+
+  factory FindUserByUserIdRequest.fromJson(Map<String, dynamic> json) =>
+      _$FindUserByUserIdRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$FindUserByUserIdRequestToJson(this);
+
+  String userId;
+}
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class CheckTestStreaksRequest {
+  CheckTestStreaksRequest();
+
+  factory CheckTestStreaksRequest.fromJson(Map<String, dynamic> json) =>
+      _$CheckTestStreaksRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CheckTestStreaksRequestToJson(this);
+}

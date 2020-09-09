@@ -1,9 +1,9 @@
 //
-// staging.xcconfig
+// Staging.xcconfig
 //
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 FLUTTER_FLAVOR=staging
-FLUTTER_TARGET=lib/main.dart
-PRODUCT_BUNDLE_IDENTIFIER=com.worldrize.app //.stg
+FLUTTER_TARGET=lib/main_staging.dart
+BUNDLE_IDENTIFIER=com.worldrize.app.stg
 DISPLAY_NAME=WR英会話-stg

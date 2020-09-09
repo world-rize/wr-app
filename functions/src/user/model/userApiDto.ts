@@ -71,3 +71,8 @@ export class SendTestResultRequest {
   @IsNotEmpty()
   readonly score!: number
 }
+
+export class FindUserByUserIdRequest {
+  @IsNotEmpty()
+  readonly userId!: string
+}

@@ -216,4 +216,8 @@ export class UserService {
 
     return this.repo.update(user)
   }
+
+  async findUserByUserId(uuid: string, userId: string): Promise<User> {
+    return this.repo.findByUserId(userId)
+  }
 }

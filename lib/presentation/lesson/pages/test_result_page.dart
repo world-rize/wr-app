@@ -2,8 +2,11 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
@@ -22,10 +25,8 @@ class TestResultPage extends StatelessWidget {
   final TestStats stats;
 
   /// 報酬獲得画面
-  void _showRewardDialog(BuildContext context) {
-    final userNotifier = Provider.of<UserNotifier>(context, listen: false);
-
-    showCupertinoDialog(
+  Future<void> _showRewardDialog(BuildContext context) {
+    return showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
         title: Text(I.of(context).testClear),
@@ -49,10 +50,87 @@ class TestResultPage extends StatelessWidget {
     );
   }
 
+  /// アンケートを出す
+  Future<void> _showQuestionnaireDialog(BuildContext context) {
+    final systemNotifier = Provider.of<SystemNotifier>(context, listen: false);
+    final env = DotEnv().env;
+    final questionnaireUrl = env['QUESTIONNAIRE_URL'];
+    assert(questionnaireUrl != '');
+
+    return showCupertinoDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: const Text('アンケートに答えてください'),
+        content: const Text('アンケートに答えてください'),
+        actions: <Widget>[
+          CupertinoButton(
+            child: const Text('答える'),
+            onPressed: () async {
+              systemNotifier.setQuestionnaireAnswered(value: true);
+              if (await canLaunch(questionnaireUrl)) {
+                await launch(
+                  questionnaireUrl,
+                  forceSafariVC: false,
+                  forceWebView: false,
+                );
+              }
+            },
+          ),
+          CupertinoButton(
+            child: const Text('後で'),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 30days challenge 達成
+  Future<void> _show30DaysChallengeAchievedDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: const Text('30Days Challenge達成'),
+        content: Column(
+          children: [
+            Center(
+              child: Text('Congratulations!'),
+            ),
+            Text('30 Days Challenge 達成'),
+            Row(
+              children: [
+                Image.asset('assets/mock.png'),
+                Image.asset('assets/mock.png'),
+                Image.asset('assets/mock.png'),
+              ],
+            ),
+            Text('30 Days Challenge 達成'),
+            PrimaryButton(
+              label: Text('追加するアクセントを選ぶ'),
+              onPressed: () {
+                // TODO: Go to "addAccentPage"
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
+        actions: <Widget>[
+          CupertinoButton(
+            child: const Text('Ok'),
+            onPressed: () async {},
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final userNotifier = Provider.of<UserNotifier>(context);
+    final systemNotifier = Provider.of<SystemNotifier>(context);
     final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
 
     return Scaffold(
@@ -110,12 +188,26 @@ class TestResultPage extends StatelessWidget {
               style: const TextStyle(fontSize: 20),
             ),
           ),
-          onPressed: () {
-            userNotifier
-              ..sendTestScore(
-                  sectionId: stats.section.id, score: stats.corrects)
-              ..callGetPoint(points: stats.corrects);
-            _showRewardDialog(context);
+          onPressed: () async {
+            // send score
+            await userNotifier.sendTestScore(
+                sectionId: stats.section.id, score: stats.corrects);
+            // get points
+            await userNotifier.callGetPoint(points: stats.corrects);
+            // show dialog
+            await _showRewardDialog(context);
+
+            final is30DaysChallengeAchieved =
+                await userNotifier.checkTestStreaks();
+
+            if (true || is30DaysChallengeAchieved)
+              await _show30DaysChallengeAchievedDialog(context);
+
+            // 最後のテストでアンケート誘導
+            if (!systemNotifier.getQuestionnaireAnswered() &&
+                userNotifier.getUser().statistics.testLimitCount == 0) {
+              await _showQuestionnaireDialog(context);
+            }
           },
         ),
       ),

@@ -59,9 +59,7 @@ AddPhraseInNoteRequest _$AddPhraseInNoteRequestFromJson(Map json) {
     noteId: json['noteId'] as String,
     phrase: json['phrase'] == null
         ? null
-        : Phrase.fromJson((json['phrase'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+        : NotePhrase.fromJson(json['phrase'] as Map),
   );
 }
 
@@ -78,9 +76,7 @@ UpdatePhraseInNoteRequest _$UpdatePhraseInNoteRequestFromJson(Map json) {
     phraseId: json['phraseId'] as String,
     phrase: json['phrase'] == null
         ? null
-        : Phrase.fromJson((json['phrase'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+        : NotePhrase.fromJson(json['phrase'] as Map),
   );
 }
 
@@ -104,4 +100,20 @@ Map<String, dynamic> _$DeletePhraseInNoteRequestToJson(
     <String, dynamic>{
       'noteId': instance.noteId,
       'phraseId': instance.phraseId,
+    };
+
+AchievePhraseInNoteRequest _$AchievePhraseInNoteRequestFromJson(Map json) {
+  return AchievePhraseInNoteRequest(
+    noteId: json['noteId'] as String,
+    phraseId: json['phraseId'] as String,
+    achieve: json['achieve'] as bool,
+  );
+}
+
+Map<String, dynamic> _$AchievePhraseInNoteRequestToJson(
+        AchievePhraseInNoteRequest instance) =>
+    <String, dynamic>{
+      'noteId': instance.noteId,
+      'phraseId': instance.phraseId,
+      'achieve': instance.achieve,
     };

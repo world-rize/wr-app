@@ -12,40 +12,22 @@ User _$UserFromJson(Map json) {
     name: json['name'] as String,
     userId: json['userId'] as String,
     favorites: (json['favorites'] as Map)?.map(
-      (k, e) => MapEntry(
-          k as String,
-          e == null
-              ? null
-              : FavoritePhraseList.fromJson((e as Map)?.map(
-                  (k, e) => MapEntry(k as String, e),
-                ))),
+      (k, e) => MapEntry(k as String,
+          e == null ? null : FavoritePhraseList.fromJson(e as Map)),
     ),
     notes: (json['notes'] as Map)?.map(
-      (k, e) => MapEntry(
-          k as String,
-          e == null
-              ? null
-              : Note.fromJson((e as Map)?.map(
-                  (k, e) => MapEntry(k as String, e),
-                ))),
+      (k, e) =>
+          MapEntry(k as String, e == null ? null : Note.fromJson(e as Map)),
     ),
     statistics: json['statistics'] == null
         ? null
-        : UserStatistics.fromJson((json['statistics'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+        : UserStatistics.fromJson(json['statistics'] as Map),
     activities: (json['activities'] as List)
-        ?.map((e) => e == null
-            ? null
-            : UserActivity.fromJson((e as Map)?.map(
-                (k, e) => MapEntry(k as String, e),
-              )))
+        ?.map((e) => e == null ? null : UserActivity.fromJson(e as Map))
         ?.toList(),
     attributes: json['attributes'] == null
         ? null
-        : UserAttributes.fromJson((json['attributes'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+        : UserAttributes.fromJson(json['attributes'] as Map),
   );
 }
 

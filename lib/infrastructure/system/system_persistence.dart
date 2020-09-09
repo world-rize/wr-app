@@ -48,4 +48,16 @@ class SystemPersistence implements SystemRepository {
     final pref = GetIt.I<SharedPreferences>();
     return pref.getBool('first_launch') ?? true;
   }
+
+  @override
+  void setQuestionnaireAnswered({bool value}) {
+    final pref = GetIt.I<SharedPreferences>();
+    pref.setBool('questionnaire_answered', value);
+  }
+
+  @override
+  bool getQuestionnaireAnswered() {
+    final pref = GetIt.I<SharedPreferences>();
+    return pref.getBool('questionnaire_answered') ?? false;
+  }
 }

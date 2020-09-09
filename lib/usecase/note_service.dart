@@ -1,9 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:data_classes/data_classes.dart';
-import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_api_dto.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/note/note_repository.dart';
 
 class NoteService {
@@ -40,7 +40,7 @@ class NoteService {
 
   Future<Note> addPhraseInNote({
     @required String noteId,
-    @required Phrase phrase,
+    @required NotePhrase phrase,
   }) {
     final req = AddPhraseInNoteRequest(noteId: noteId, phrase: phrase);
     return _notePersistence.addPhraseInNote(req);
@@ -49,7 +49,7 @@ class NoteService {
   Future<Note> updatePhraseInNote({
     @required String noteId,
     @required String phraseId,
-    @required Phrase phrase,
+    @required NotePhrase phrase,
   }) {
     final req = UpdatePhraseInNoteRequest(
         noteId: noteId, phraseId: phraseId, phrase: phrase);
@@ -62,5 +62,15 @@ class NoteService {
   }) {
     final req = DeletePhraseInNoteRequest(noteId: noteId, phraseId: phraseId);
     return _notePersistence.deletePhraseInNote(req);
+  }
+
+  Future<void> achievePhraseInNote({
+    @required String noteId,
+    @required String phraseId,
+    @required bool achieve,
+  }) {
+    final req = AchievePhraseInNoteRequest(
+        noteId: noteId, phraseId: phraseId, achieve: achieve);
+    return _notePersistence.achievePhraseInNote(req);
   }
 }

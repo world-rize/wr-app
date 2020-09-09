@@ -6,7 +6,10 @@ import 'package:wr_app/domain/lesson/model/phrase.dart';
 
 part 'lesson.g.dart';
 
-/// レッスン
+/// レッスンを表す
+///
+/// - レッスンはカテゴリ分けされたフレーズの集まり
+///
 @JsonSerializable()
 class Lesson {
   Lesson({
@@ -16,10 +19,11 @@ class Lesson {
     @required this.assets,
   });
 
-  factory Lesson.fromJson(Map<String, dynamic> json) => _$LessonFromJson(json);
+  factory Lesson.fromJson(Map<dynamic, dynamic> json) => _$LessonFromJson(json);
 
   Map<String, dynamic> toJson() => _$LessonToJson(this);
 
+  /// ID
   String id;
 
   /// タイトル

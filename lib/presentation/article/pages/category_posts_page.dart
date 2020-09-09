@@ -16,6 +16,27 @@ class CategoryPosts extends StatelessWidget {
 
   final ArticleCategory category;
 
+  List<Widget> _createPostsView(
+      BuildContext context, List<ArticleDigest> digests) {
+    print(digests.map((d) => d.toJson()));
+
+    return digests
+        .map(
+          (articleDigest) => GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) =>
+                      ArticleWebViewPage(articleDigest: articleDigest),
+                ),
+              );
+            },
+            child: ArticleOverView(articleDigest: articleDigest),
+          ),
+        )
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     final notifier = Provider.of<ArticleNotifier>(context);
@@ -25,7 +46,7 @@ class CategoryPosts extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
-          children: <Widget>[
+          children: const <Widget>[
             Icon(
               Icons.error,
               color: Colors.grey,
@@ -51,35 +72,16 @@ class CategoryPosts extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (snapshot.hasData)
-                  if (snapshot.data.isNotEmpty)
-                    ...snapshot.data
-                        .map(
-                          (article) => GestureDetector(
-                            onTap: () {
-                              //    Navigator.of(context).push(
-                              //      MaterialPageRoute(
-                              //        builder: (_) => ArticleDetailPage(article: article),
-                              //      ),
-                              //    );
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      ArticleWebViewPage(article: article),
-                                ),
-                              ); // open webview
-                            },
-                            child: ArticleOverView(article: article),
-                          ),
-                        )
-                        .toList()
-                  else
-                    articleNotFound
-                else
+                if (!snapshot.hasData)
+                  // Loading
                   const Padding(
                     padding: EdgeInsets.all(16),
                     child: Center(child: CircularProgressIndicator()),
-                  ),
+                  )
+                else if (snapshot.data == null || snapshot.data.isEmpty)
+                  articleNotFound
+                else
+                  ..._createPostsView(context, snapshot.data),
               ],
             ),
           ],

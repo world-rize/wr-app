@@ -26,6 +26,12 @@ class SystemService {
   void setFirstLaunch({bool value}) =>
       _systemPersistence.setFirstLaunch(value: value);
 
+  bool getQuestionnaireAnswered() =>
+      _systemPersistence.getQuestionnaireAnswered();
+
+  void setQuestionnaireAnswered({bool value}) =>
+      _systemPersistence.setQuestionnaireAnswered(value: value);
+
   Future<void> notify(
       {AppNotifier notificator, String title, String body, String payload}) {
     return _systemPersistence.notify(

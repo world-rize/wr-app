@@ -31,7 +31,7 @@ class VoicePlayer with ChangeNotifier {
   static final List<double> _playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
 
   /// voice pronunciations
-  static final List<String> _locales = ['en-us', 'en-uk', 'en-au'];
+  static final List<String> _locales = ['en-us', 'en-uk', 'en-au', 'en-in'];
 
   AudioPlayer _fixedPlayer;
   AudioCache _player;
@@ -86,6 +86,7 @@ class VoicePlayer with ChangeNotifier {
     }
     await _player.play(message.assets.voice[locale]);
     isPlaying = true;
+
     notifyListeners();
   }
 
@@ -105,7 +106,7 @@ class VoicePlayer with ChangeNotifier {
 
   /// play all messages
   Future<void> playAll({@required Phrase phrase}) async {
-    // TODO: 途中でストップされるとバグる
+    // TODO: 途中でストップされるとバグる -> Stream?
     // 先に _player.load() 必要
     isPlaying = true;
     notifyListeners();

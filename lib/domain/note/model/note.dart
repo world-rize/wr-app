@@ -3,10 +3,14 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 
 part 'note.g.dart';
 
+/// ノート
+///
+/// - 単語と訳(NotePhrase) のまとまり
+/// - 単語帳は並びかえられる
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class Note {
   Note({
@@ -18,17 +22,18 @@ class Note {
   });
 
   factory Note.dummy(String title, {bool isDefault = false}) {
-    final phrases = List.generate(10, (index) => Phrase.note(Uuid().v4()));
+    final phrases =
+        List.generate(10, (index) => NotePhrase.dummy(id: Uuid().v4()));
     return Note(
       id: Uuid().v4(),
       title: title,
       isDefault: isDefault,
       sortType: '',
-      phrases: Map<String, Phrase>.fromIterable(phrases, key: (p) => p.id),
+      phrases: Map<String, NotePhrase>.fromIterable(phrases, key: (p) => p.id),
     );
   }
 
-  factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
+  factory Note.fromJson(Map<dynamic, dynamic> json) => _$NoteFromJson(json);
 
   Map<String, dynamic> toJson() => _$NoteToJson(this);
 
@@ -40,5 +45,5 @@ class Note {
 
   bool isDefault;
 
-  Map<String, Phrase> phrases;
+  Map<String, NotePhrase> phrases;
 }

@@ -6,7 +6,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'article.g.dart';
 
-/// 記事
+/// 記事のプレビューを表す
+/// Contentfulから取得
 @JsonSerializable()
 class ArticleDigest extends Entry<ArticleDigestFields> {
   ArticleDigest({
@@ -14,7 +15,8 @@ class ArticleDigest extends Entry<ArticleDigestFields> {
     @required ArticleDigestFields fields,
   }) : super(sys: sys, fields: fields);
 
-  ArticleDigest.fromMock({
+  /// ダミーを作成
+  ArticleDigest.dummy({
     @required String title,
     @required String category,
     @required String url,
@@ -35,7 +37,7 @@ class ArticleDigest extends Entry<ArticleDigestFields> {
           ),
         );
 
-  static ArticleDigest fromJson(Map<String, dynamic> json) =>
+  static ArticleDigest fromJson(Map<dynamic, dynamic> json) =>
       _$ArticleDigestFromJson(json);
 
   Map<String, dynamic> toJson() => _$ArticleDigestToJson(this);
@@ -53,7 +55,7 @@ class ArticleDigestFields extends Equatable {
     @required this.summary,
   }) : super();
 
-  factory ArticleDigestFields.fromJson(Map<String, dynamic> json) =>
+  factory ArticleDigestFields.fromJson(Map<dynamic, dynamic> json) =>
       _$ArticleDigestFieldsFromJson(json);
 
   /// タイトル
@@ -68,8 +70,10 @@ class ArticleDigestFields extends Equatable {
   /// タグ(,区切り)
   final String tags;
 
+  /// サムネイル画像
   final Asset thumbnail;
 
+  /// 本文の最初の部分
   final String summary;
 
   Map<String, dynamic> toJson() => _$ArticleDigestFieldsToJson(this);

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/index.dart';
-import 'package:wr_app/presentation/lesson/widgets/phrase_search_iconbutton.dart';
+import 'package:wr_app/presentation/lesson/pages/anything_search_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
@@ -83,7 +83,17 @@ class _RootViewState extends State<RootView>
 
     final actions = <Widget>[
       // phrase search
-      PhraseSearchIconButton(),
+      if (_index == 0)
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => AnythingSearchPage(),
+              ),
+            );
+          },
+        ),
       // settings
       IconButton(
         icon: const Icon(Icons.settings),
@@ -96,7 +106,7 @@ class _RootViewState extends State<RootView>
       ),
     ];
 
-    final navbar = BottomNavigationBar(
+    final navBar = BottomNavigationBar(
       fixedColor: primaryColor,
       type: BottomNavigationBarType.fixed,
       onTap: (int index) {
@@ -131,7 +141,7 @@ class _RootViewState extends State<RootView>
 
     final pageView = PageView(
       controller: _pageController,
-      // physics: const NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       onPageChanged: (index) {
         setState(() {
           _index = index;
@@ -153,7 +163,7 @@ class _RootViewState extends State<RootView>
         actions: actions,
       ),
       body: pageView,
-      bottomNavigationBar: navbar,
+      bottomNavigationBar: navBar,
     );
   }
 }

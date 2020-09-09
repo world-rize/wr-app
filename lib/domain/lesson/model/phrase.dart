@@ -8,6 +8,9 @@ import 'package:wr_app/domain/lesson/model/message.dart';
 
 part 'phrase.g.dart';
 
+/// フレーズを表す
+///
+/// - フレーズはi18nされたタイトル
 @JsonSerializable()
 class Phrase {
   Phrase({
@@ -19,7 +22,7 @@ class Phrase {
     @required this.example,
   });
 
-  factory Phrase.fromJson(Map<String, dynamic> json) => _$PhraseFromJson(json);
+  factory Phrase.fromJson(Map<dynamic, dynamic> json) => _$PhraseFromJson(json);
 
   /// minimum dummy
   factory Phrase.note(String uuid) {

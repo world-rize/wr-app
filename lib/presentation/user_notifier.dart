@@ -1,8 +1,11 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:wr_app/domain/lesson/index.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
+import 'package:wr_app/domain/lesson/model/test_result.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/usecase/note_service.dart';
@@ -13,6 +16,7 @@ import 'package:wr_app/util/toast.dart';
 
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
+  // TODO: エラーハンドリング
   final UserService _userService;
   final NoteService _noteService;
 
@@ -463,7 +467,7 @@ class UserNotifier with ChangeNotifier {
   /// add phrase
   Future<void> addPhraseInNote({
     @required String noteId,
-    @required Phrase phrase,
+    @required NotePhrase phrase,
   }) async {
     try {
       final note =
@@ -484,7 +488,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> updatePhraseInNote({
     @required String noteId,
     @required String phraseId,
-    @required Phrase phrase,
+    @required NotePhrase phrase,
   }) async {
     try {
       final note = await _noteService.updatePhraseInNote(
@@ -507,16 +511,81 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
   }) async {
     try {
-      await _noteService.deletePhraseInNote(noteId: noteId, phraseId: phraseId);
+      await _noteService.deletePhraseInNote(
+        noteId: noteId,
+        phraseId: phraseId,
+      );
       _user.notes[noteId].phrases.remove(phraseId);
 
       notifyListeners();
 
-      InAppLogger.info('deletePhraseInNote ${noteId}');
-      NotifyToast.success('deletePhraseInNote ${noteId}');
+      InAppLogger.info('deletePhraseInNote $noteId/$phraseId');
+      NotifyToast.success('deletePhraseInNote $noteId/$phraseId');
     } catch (e) {
       InAppLogger.error(e);
       NotifyToast.error(e);
+    }
+  }
+
+  /// achieve notePhrase
+  Future<void> achievePhraseInNote({
+    @required String noteId,
+    @required String phraseId,
+    @required bool achieve,
+  }) async {
+    try {
+      await _noteService.achievePhraseInNote(
+          noteId: noteId, phraseId: phraseId, achieve: achieve);
+      _user.notes[noteId].phrases[phraseId].achieved = achieve;
+
+      notifyListeners();
+
+      InAppLogger.info('achievePhraseInNote $noteId/$phraseId');
+      NotifyToast.success('achievePhraseInNote $noteId/$phraseId');
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// calculates heatMap of testResult
+  Map<Jiffy, int> _calcHeatMap(List<TestResult> results) {
+    final dates = results.map((r) => Jiffy(r.date)..startOf(Units.DAY));
+    return groupBy(dates, (d) => d)
+        .map((key, value) => MapEntry(key, value.length));
+  }
+
+  /// calculates test 30days streaks
+  int calcTestStreaks() {
+    final heatMap = _calcHeatMap(_user.statistics.testResults);
+    var i = 0;
+    for (var day = Jiffy()..startOf(Units.DAY);
+        heatMap.containsKey(day);
+        day = day..subtract(days: 1)) {
+      i++;
+    }
+    return i;
+  }
+
+  /// check test 30days streaks
+  Future<bool> checkTestStreaks() async {
+    try {
+      return _userService.checkTestStreaks();
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+      return false;
+    }
+  }
+
+  /// search user from user id
+  Future<User> searchUserFromUserId({@required String userId}) {
+    try {
+      return _userService.searchUserFromUserId(userId: userId);
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+      return null;
     }
   }
 }

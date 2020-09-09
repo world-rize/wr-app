@@ -1,9 +1,9 @@
 //
-// production.xcconfig
+// Production.xcconfig
 //
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 FLUTTER_FLAVOR=production
 FLUTTER_TARGET=lib/main.dart
-PRODUCT_BUNDLE_IDENTIFIER=com.worldrize.app
+BUNDLE_IDENTIFIER=com.worldrize.app
 DISPLAY_NAME=WR英会話
