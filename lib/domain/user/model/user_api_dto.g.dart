@@ -155,14 +155,14 @@ Map<String, dynamic> _$SendTestResultRequestToJson(
       'score': instance.score,
     };
 
-ReadUserFromUserIdRequest _$ReadUserFromUserIdRequestFromJson(Map json) {
-  return ReadUserFromUserIdRequest(
+FindUserByUserIdRequest _$FindUserByUserIdRequestFromJson(Map json) {
+  return FindUserByUserIdRequest(
     userId: json['userId'] as String,
   );
 }
 
-Map<String, dynamic> _$ReadUserFromUserIdRequestToJson(
-        ReadUserFromUserIdRequest instance) =>
+Map<String, dynamic> _$FindUserByUserIdRequestToJson(
+        FindUserByUserIdRequest instance) =>
     <String, dynamic>{
       'userId': instance.userId,
     };

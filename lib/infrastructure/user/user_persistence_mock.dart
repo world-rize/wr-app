@@ -131,7 +131,7 @@ class UserPersistenceMock implements UserRepository {
   }
 
   @override
-  Future<User> readUserFromUserId(ReadUserFromUserIdRequest req) async {
+  Future<User> findUserByUserId(FindUserByUserIdRequest req) async {
     return User.dummy()..userId = req.userId;
   }
 }

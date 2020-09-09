@@ -230,7 +230,7 @@ class UserService {
   /// search user from User ID
   /// TODO: implement API
   Future<User> searchUserFromUserId({@required String userId}) {
-    final req = ReadUserFromUserIdRequest(userId: userId);
-    return _userPersistence.readUserFromUserId(req);
+    final req = FindUserByUserIdRequest(userId: userId);
+    return _userPersistence.findUserByUserId(req);
   }
 }

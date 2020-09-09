@@ -78,26 +78,8 @@ class UserPersistence implements UserRepository {
   }
 
   @override
-  Future<User> createPhrasesList(CreatePhrasesListRequest req) {
-    return callFunction('createPhrasesList', req.toJson())
-        .then((res) => User.fromJson(res.data));
-  }
-
-  @override
-  Future<User> addPhraseToPhraseList(AddPhraseToPhraseListRequest req) {
-    return callFunction('addPhraseToPhraseList', req.toJson())
-        .then((res) => User.fromJson(res.data));
-  }
-
-  @override
-  Future<User> updatePhrase(UpdatePhraseRequest req) {
-    // TODO: implement updateFavoriteList
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<User> readUserFromUserId(ReadUserFromUserIdRequest req) async {
-    // TODO: implement readUserFromUserId
-    return User.dummy()..userId = req.userId;
+  Future<User> findUserByUserId(FindUserByUserIdRequest req) async {
+    return callFunction('findUserByUserId', req.toJson())
+        .then((res) => res.data != null ? User.fromJson(res.data) : null);
   }
 }

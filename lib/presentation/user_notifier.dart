@@ -510,13 +510,16 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
   }) async {
     try {
-      await _noteService.deletePhraseInNote(noteId: noteId, phraseId: phraseId);
+      await _noteService.deletePhraseInNote(
+        noteId: noteId,
+        phraseId: phraseId,
+      );
       _user.notes[noteId].phrases.remove(phraseId);
 
       notifyListeners();
 
-      InAppLogger.info('deletePhraseInNote ${noteId}');
-      NotifyToast.success('deletePhraseInNote ${noteId}');
+      InAppLogger.info('deletePhraseInNote $noteId/$phraseId');
+      NotifyToast.success('deletePhraseInNote $noteId/$phraseId');
     } catch (e) {
       InAppLogger.error(e);
       NotifyToast.error(e);

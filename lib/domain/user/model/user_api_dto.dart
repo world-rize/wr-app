@@ -192,15 +192,15 @@ class SendTestResultRequest {
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
-class ReadUserFromUserIdRequest {
-  ReadUserFromUserIdRequest({
+class FindUserByUserIdRequest {
+  FindUserByUserIdRequest({
     @required this.userId,
   });
 
-  factory ReadUserFromUserIdRequest.fromJson(Map<String, dynamic> json) =>
-      _$ReadUserFromUserIdRequestFromJson(json);
+  factory FindUserByUserIdRequest.fromJson(Map<String, dynamic> json) =>
+      _$FindUserByUserIdRequestFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ReadUserFromUserIdRequestToJson(this);
+  Map<String, dynamic> toJson() => _$FindUserByUserIdRequestToJson(this);
 
   String userId;
 }

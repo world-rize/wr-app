@@ -11,11 +11,12 @@ void useCloudFunctionsEmulator(String origin) {
 }
 
 /// Cloud Functionの関数を呼び出す
-Future<R> callFunction<R>(String functionName, [dynamic arg = const {}]) {
+Future<HttpsCallableResult> callFunction(String functionName,
+    [dynamic arg = const {}]) {
   final callable = CloudFunctions(
     app: FirebaseApp.instance,
     region: 'asia-northeast1',
   ).getHttpsCallable(functionName: functionName)
     ..timeout = const Duration(seconds: 10);
-  return callable.call(arg).then((res) => res.data);
+  return callable.call(arg);
 }
