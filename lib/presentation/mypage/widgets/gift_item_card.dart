@@ -11,6 +11,7 @@ class GiftItem {
     @required this.title,
     @required this.description,
     @required this.price,
+    @required this.available,
   });
 
   /// id
@@ -24,6 +25,9 @@ class GiftItem {
 
   /// 価格
   int price;
+
+  /// 購入可能か
+  bool available;
 }
 
 /// 交換できるもののカード
@@ -76,9 +80,14 @@ class GiftItemCard extends StatelessWidget {
       ),
     );
 
-    return InkWell(
-      onTap: onTap,
-      child: card,
-    ).p_1();
+    return giftItem.available
+        ? InkWell(
+            onTap: onTap,
+            child: card,
+          ).p_1()
+        : Opacity(
+            opacity: 0.3,
+            child: card,
+          );
   }
 }

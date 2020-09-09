@@ -43,12 +43,35 @@ class ShopPage extends StatelessWidget {
         title: 'Amazonカード 500ポイント',
         description: 'Amazonで使えるギフトカード',
         price: 5000,
+        available: true,
       ),
       GiftItem(
-        id: '1',
+        id: '2',
         title: 'iTunesカード 500ポイント',
         description: 'iTunesで使えるギフトカード',
         price: 5000,
+        available: true,
+      ),
+      GiftItem(
+        id: '3',
+        title: 'フレーズアクセント(US)',
+        description: 'USアクセント',
+        price: 3000,
+        available: false,
+      ),
+      GiftItem(
+        id: '4',
+        title: 'フレーズアクセント(UK)',
+        description: 'USアクセント',
+        price: 3000,
+        available: true,
+      ),
+      GiftItem(
+        id: '5',
+        title: 'フレーズアクセント(IN)',
+        description: 'INアクセント',
+        price: 3000,
+        available: true,
       ),
     ];
 
@@ -56,41 +79,43 @@ class ShopPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('ショップ'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(8),
-            child: Text('保有しているコイン'),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('$points'),
-                const Text('WR coins'),
-              ],
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: Text('保有しているコイン'),
             ),
-          ),
-          const Padding(
-            padding: EdgeInsets.all(8),
-            child: Text('交換できるもの'),
-          ),
-          ...items
-              .map(
-                (item) => Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: GiftItemCard(
-                    giftItem: item,
-                    onTap: () {
-                      _showPurchaseConfirmDialog(context, item);
-                    },
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('$points'),
+                  const Text('WR coins'),
+                ],
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: Text('交換できるもの'),
+            ),
+            ...items
+                .map(
+                  (item) => Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: GiftItemCard(
+                      giftItem: item,
+                      onTap: () {
+                        _showPurchaseConfirmDialog(context, item);
+                      },
+                    ),
                   ),
-                ),
-              )
-              .toList(),
-        ],
+                )
+                .toList(),
+          ],
+        ),
       ),
     );
   }
