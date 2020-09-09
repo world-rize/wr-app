@@ -8,6 +8,9 @@ import 'package:wr_app/domain/lesson/model/message.dart';
 
 part 'phrase.g.dart';
 
+/// フレーズを表す
+///
+/// - フレーズはi18nされたタイトル
 @JsonSerializable()
 class Phrase {
   Phrase({

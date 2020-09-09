@@ -7,6 +7,10 @@ import 'package:wr_app/domain/note/model/note_phrase.dart';
 
 part 'note.g.dart';
 
+/// ノート
+///
+/// - 単語と訳(NotePhrase) のまとまり
+/// - 単語帳は並びかえられる
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class Note {
   Note({

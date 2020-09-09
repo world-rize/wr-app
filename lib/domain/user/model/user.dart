@@ -90,10 +90,10 @@ class User {
   /// userId
   String userId;
 
-  /// お気に入りフレーズ
+  /// お気に入りフレーズのリストのマップ
   Map<String, FavoritePhraseList> favorites;
 
-  /// オリジナルフレーズ
+  /// オリジナルフレーズ UUIDで一発でアクセスしたい
   Map<String, Note> notes;
 
   /// 統計情報
@@ -104,6 +104,10 @@ class User {
 
   /// ユーザー活動
   List<UserActivity> activities;
+
+  /// TODO: 所持している発音
+  ///
+  /// TODO: 初回起動
 
   bool get isPremium => attributes.membership == Membership.pro;
 }

@@ -31,7 +31,7 @@ class VoicePlayer with ChangeNotifier {
   static final List<double> _playbackSpeeds = [0.5, 0.75, 1.0, 1.25, 1.5];
 
   /// voice pronunciations
-  static final List<String> _locales = ['en-us', 'en-uk', 'en-au'];
+  static final List<String> _locales = ['en-us', 'en-uk', 'en-au', 'en-in'];
 
   AudioPlayer _fixedPlayer;
   AudioCache _player;

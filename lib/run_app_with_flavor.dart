@@ -22,11 +22,15 @@ import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
 import 'package:wr_app/infrastructure/note/note_persistence.dart';
 import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
+import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
+import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
+import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
+import 'package:wr_app/util/cloud_functions.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
@@ -118,10 +122,13 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
   final systemPersistence = SystemPersistence();
   final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
+  final shopPersistence = ShopPersistenceMock();
 
   // services
   final userService = UserService(
-      authPersistence: authPersistence, userPersistence: userPersistence);
+      authPersistence: authPersistence,
+      userPersistence: userPersistence,
+      shopPersistence: shopPersistence);
   final articleService = ArticleService(articlePersistence: articlePersistence);
   final lessonService = LessonService(lessonPersistence: lessonPersistence);
   final systemService = SystemService(systemPersistence: systemPersistence);
@@ -157,6 +164,10 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
             value: ArticleNotifier(
               articleService: articleService,
             ),
+          ),
+          ChangeNotifierProvider.value(value: NoteNotifier()),
+          ChangeNotifierProvider.value(
+            value: ShopNotifier(userService: userService),
           ),
         ],
         child: runZonedGuarded(

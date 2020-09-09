@@ -29,8 +29,18 @@ export class UserRepository {
     return data as User
   }
 
+  public async findByUserId(userId: string): Promise<User> {
+    const docs = await this.users
+      .where('userId', '==', userId)
+      .limit(1)
+      .get()
+    return docs[0]
+  }
+
   public async update(user: User): Promise<User> {
-    await this.users.doc(user.uuid).set(user, { merge: true })
+    // deleted property will not be deleted bacause of merging
+    await this.users.doc(user.uuid).set(user)
+    // await this.users.doc(user.uuid).set(user, { merge: true })
     return user
   }
 
