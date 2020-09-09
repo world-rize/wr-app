@@ -12,9 +12,16 @@ class FlashCardNotifier extends ChangeNotifier {
     _voiceAccent = _voiceAccent;
   }
 
+  /// 現在のカードのインデックス
   int _nowCardIndex;
+
+  /// 自動送りするか
   bool _autoScroll;
+
+  /// アクセント
   VoiceAccent _voiceAccent;
+
+  /// ノート
   Note note;
 
   int get nowCardIndex {

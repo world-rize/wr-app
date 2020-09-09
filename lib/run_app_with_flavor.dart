@@ -29,6 +29,7 @@ import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
+import 'package:wr_app/util/cloud_functions.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
