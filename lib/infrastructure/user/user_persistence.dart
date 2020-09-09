@@ -5,7 +5,6 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/util/cloud_functions.dart';
-import 'package:wr_app/util/logger.dart';
 
 class UserPersistence implements UserRepository {
   // TODO: rename XXXPhraseYYY -> XXXNotePhraseYYY?
@@ -17,10 +16,7 @@ class UserPersistence implements UserRepository {
 
   @override
   Future<User> readUser() {
-    return callFunction('readUser').then((res) {
-      InAppLogger.debugJson(res.data);
-      return res;
-    }).then((res) => User.fromJson(res.data));
+    return callFunction('readUser').then((res) => User.fromJson(res.data));
   }
 
   @override

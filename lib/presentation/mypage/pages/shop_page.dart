@@ -67,7 +67,7 @@ class ShopPage extends StatelessWidget {
               padding: EdgeInsets.all(8),
               child: Text('交換できるもの'),
             ),
-            FutureBuilder(
+            FutureBuilder<List<GiftItem>>(
               future: shopNotifier.getShopItems(),
               builder: (_, ss) {
                 if (!ss.hasData) {

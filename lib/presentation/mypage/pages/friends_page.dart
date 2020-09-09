@@ -14,7 +14,7 @@ class _FriendsPageState extends State<FriendsPage> {
   String _userId;
 
   Future _searchUserId(String userId) async {
-    final userNotifier = Provider.of<UserNotifier>(context);
+    final userNotifier = Provider.of<UserNotifier>(context, listen: false);
     final result = await userNotifier.searchUserFromUserId(userId: userId);
 
     if (result == null) {
