@@ -7,7 +7,7 @@ import 'package:wr_app/presentation/mypage/pages/locale_page.dart';
 import 'package:wr_app/presentation/mypage/widgets/user_info.dart';
 
 import './friends_page.dart';
-import './gift_page.dart';
+import './shop_page.dart';
 import './upgrade_page.dart';
 
 /// mypage > index
@@ -67,7 +67,7 @@ class MyPagePage extends StatelessWidget {
           icon: 'assets/icon/mypage_gift.png',
           onTap: () {
             Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => GiftPage()));
+                .push(MaterialPageRoute(builder: (_) => ShopPage()));
           },
         ),
         _menuCell(
