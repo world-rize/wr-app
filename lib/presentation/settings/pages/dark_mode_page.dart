@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/domain/system/index.dart';
 
-/// 設定ページ
-class ThemeSettingsPage extends StatelessWidget {
+/// テーマページ
+class SettingsThemePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final system = Provider.of<SystemNotifier>(context);
