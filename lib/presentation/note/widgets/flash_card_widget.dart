@@ -30,7 +30,7 @@ class _FlashCardState extends State<FlashCard> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: ShadowedContainer(
-          color: backgroundColor,
+          color: _flipped ? backgroundColor : Colors.white30,
           child: Padding(
             padding: const EdgeInsets.all(8),
             key: GlobalKey(),

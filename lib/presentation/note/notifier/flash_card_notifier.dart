@@ -6,7 +6,7 @@ import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/voice_accent.dart';
 
-enum TtsState { playing, stopped, paused, continued }
+enum TtsState { playing, stopped }
 
 const Map<VoiceAccent, String> _voiceAccentFlutterTtsMap = {
   VoiceAccent.japanese: 'jp-JP',
@@ -16,12 +16,16 @@ const Map<VoiceAccent, String> _voiceAccentFlutterTtsMap = {
   VoiceAccent.indianEnglish: 'en-IN',
 };
 
+/// フラッシュカードの操作
 class FlashCardNotifier extends ChangeNotifier {
   FlashCardNotifier({
     @required this.note,
   }) {
     note = note;
-    notePhrases = note.phrases.entries.map((entry) => entry.value).toList();
+    originalPhrases = [
+      ...note.phrases.entries.map((entry) => entry.value).toList()
+    ];
+    _isShuffled = false;
     _nowPhraseIndex = 0;
     _autoScroll = true;
     _voiceAccent = VoiceAccent.britishEnglish;
@@ -32,9 +36,14 @@ class FlashCardNotifier extends ChangeNotifier {
   Note note;
 
   /// 並び替えられる可能性がある
-  List<NotePhrase> notePhrases;
+  List<NotePhrase> originalPhrases;
+
+  List<NotePhrase> get notePhrases =>
+      _isShuffled ? ([...originalPhrases]..sort()) : originalPhrases;
+
   int _nowPhraseIndex;
   bool _autoScroll;
+  bool _isShuffled;
   VoiceAccent _voiceAccent;
   FlutterTts _flutterTts;
   final double _volume = 0.5;
@@ -42,7 +51,8 @@ class FlashCardNotifier extends ChangeNotifier {
   double _rate = 0.5;
   String _newVoiceText;
   TtsState _ttsState;
-  PageController pageController;
+
+  PageController _pageController;
 
   VoiceAccent get voiceAccent => _voiceAccent;
 
@@ -52,11 +62,21 @@ class FlashCardNotifier extends ChangeNotifier {
 
   get isStopped => _ttsState == TtsState.stopped;
 
+  get ttsState => _ttsState;
+
   // get isPaused => _ttsState == TtsState.paused;
 
   // get isContinued => _ttsState == TtsState.continued;
 
   int get nowPhraseIndex => _nowPhraseIndex;
+
+  set pageController(PageController pageController) {
+    _pageController = pageController;
+    _pageController.addListener(() {
+      _nowPhraseIndex = _pageController.page.round();
+      notifyListeners();
+    });
+  }
 
   Future<void> setVoiceAccent(VoiceAccent voiceAccent) async {
     _voiceAccent = voiceAccent;
@@ -81,10 +101,18 @@ class FlashCardNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void shuffled() {
+    _isShuffled = !_isShuffled;
+    notifyListeners();
+  }
+
   /// 音声を再生する
   Future<void> play() async {
+    _ttsState = TtsState.playing;
+
     final completer = Completer<void>();
     final nowPhrase = notePhrases[_nowPhraseIndex];
+    notifyListeners();
 
     await _flutterTts.speak(nowPhrase.word);
     _flutterTts.setCompletionHandler(completer.complete);
@@ -92,6 +120,20 @@ class FlashCardNotifier extends ChangeNotifier {
     await _flutterTts.speak(nowPhrase.translation);
     _flutterTts.setCompletionHandler(completer.complete);
     await completer.future;
+
+    while (_autoScroll && !isStopped) {
+      _nowPhraseIndex = _nowPhraseIndex + 1;
+      await _pageController.animateToPage(
+        _nowPhraseIndex % notePhrases.length,
+        duration: const Duration(seconds: 1),
+        curve: Curves.ease,
+      );
+      // player last
+      if (_nowPhraseIndex == notePhrases.length) {
+        await stop();
+      }
+    }
+    await stop();
   }
 
   Future<void> stop() async {
@@ -99,16 +141,6 @@ class FlashCardNotifier extends ChangeNotifier {
     if (result == 1) {
       _ttsState = TtsState.stopped;
     }
-    notifyListeners();
-  }
-
-  Future<void> nextPhrase() async {
-    await pageController.animateToPage(
-      _nowPhraseIndex + 1,
-      duration: const Duration(seconds: 1),
-      curve: Curves.ease,
-    );
-    _nowPhraseIndex += 1 % notePhrases.length;
     notifyListeners();
   }
 
