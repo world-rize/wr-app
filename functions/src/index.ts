@@ -18,6 +18,7 @@ export const favoritePhrase = functions.region('asia-northeast1').https.onCall(u
 export const getPoint = functions.region('asia-northeast1').https.onCall(userApi.getPoint)
 export const doTest = functions.region('asia-northeast1').https.onCall(userApi.doTest)
 export const checkTestStreaks = functions.region('asia-northeast1').https.onCall(userApi.checkTestStreaks)
+export const findUserByUserId = functions.region('asia-northeast1').https.onCall(userApi.findUserByUserId)
 
 export const createFavoriteList = functions.region('asia-northeast1').https.onCall(userApi.createFavoriteList)
 export const deleteFavoriteList = functions.region('asia-northeast1').https.onCall(userApi.deleteFavoriteList)
