@@ -1,8 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-
-// import 'package:getflutter/components/carousel/gf_carousel.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
@@ -15,13 +13,6 @@ import 'package:wr_app/ui/widgets/shadowed_container.dart';
 class FlashCard extends StatefulWidget {
   @override
   _FlashCardState createState() => _FlashCardState();
-}
-
-class Card {
-  Card(this.word, this.translation);
-
-  String word;
-  String translation;
 }
 
 class _FlashCardState extends State<FlashCard> {

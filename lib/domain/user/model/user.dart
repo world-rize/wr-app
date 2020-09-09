@@ -90,10 +90,10 @@ class User {
   /// userId
   String userId;
 
-  /// お気に入りフレーズ
+  /// お気に入りフレーズのリストのマップ
   Map<String, FavoritePhraseList> favorites;
 
-  /// オリジナルフレーズ
+  /// オリジナルフレーズ UUIDで一発でアクセスしたい
   Map<String, Note> notes;
 
   /// 統計情報

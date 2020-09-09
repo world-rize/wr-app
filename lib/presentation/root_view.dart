@@ -111,12 +111,12 @@ class _RootViewState extends State<RootView>
           title: Text(I.of(context).bottomNavLesson),
         ),
         BottomNavigationBarItem(
-          icon: const Icon(Icons.view_column),
-          title: Text(I.of(context).bottomNavColumn),
-        ),
-        BottomNavigationBarItem(
           icon: const Icon(Icons.bookmark_border),
           title: Text(I.of(context).bottomNavNote),
+        ),
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.view_column),
+          title: Text(I.of(context).bottomNavColumn),
         ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.public),
