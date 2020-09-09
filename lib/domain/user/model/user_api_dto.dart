@@ -190,3 +190,17 @@ class SendTestResultRequest {
 
   int score;
 }
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class ReadUserFromUserIdRequest {
+  ReadUserFromUserIdRequest({
+    @required this.userId,
+  });
+
+  factory ReadUserFromUserIdRequest.fromJson(Map<String, dynamic> json) =>
+      _$ReadUserFromUserIdRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReadUserFromUserIdRequestToJson(this);
+
+  String userId;
+}

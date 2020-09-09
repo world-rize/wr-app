@@ -99,11 +99,8 @@ UpdatePhraseRequest _$UpdatePhraseRequestFromJson(Map json) {
   return UpdatePhraseRequest(
     listId: json['listId'] as String,
     phraseId: json['phraseId'] as String,
-    phrase: json['phrase'] == null
-        ? null
-        : Phrase.fromJson((json['phrase'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+    phrase:
+        json['phrase'] == null ? null : Phrase.fromJson(json['phrase'] as Map),
   );
 }
 
@@ -118,11 +115,8 @@ Map<String, dynamic> _$UpdatePhraseRequestToJson(
 AddPhraseToPhraseListRequest _$AddPhraseToPhraseListRequestFromJson(Map json) {
   return AddPhraseToPhraseListRequest(
     listId: json['listId'] as String,
-    phrase: json['phrase'] == null
-        ? null
-        : Phrase.fromJson((json['phrase'] as Map)?.map(
-            (k, e) => MapEntry(k as String, e),
-          )),
+    phrase:
+        json['phrase'] == null ? null : Phrase.fromJson(json['phrase'] as Map),
   );
 }
 
@@ -159,4 +153,16 @@ Map<String, dynamic> _$SendTestResultRequestToJson(
     <String, dynamic>{
       'sectionId': instance.sectionId,
       'score': instance.score,
+    };
+
+ReadUserFromUserIdRequest _$ReadUserFromUserIdRequestFromJson(Map json) {
+  return ReadUserFromUserIdRequest(
+    userId: json['userId'] as String,
+  );
+}
+
+Map<String, dynamic> _$ReadUserFromUserIdRequestToJson(
+        ReadUserFromUserIdRequest instance) =>
+    <String, dynamic>{
+      'userId': instance.userId,
     };

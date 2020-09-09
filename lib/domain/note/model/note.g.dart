@@ -14,12 +14,7 @@ Note _$NoteFromJson(Map json) {
     isDefault: json['isDefault'] as bool,
     phrases: (json['phrases'] as Map)?.map(
       (k, e) => MapEntry(
-          k as String,
-          e == null
-              ? null
-              : NotePhrase.fromJson((e as Map)?.map(
-                  (k, e) => MapEntry(k as String, e),
-                ))),
+          k as String, e == null ? null : NotePhrase.fromJson(e as Map)),
     ),
   );
 }
