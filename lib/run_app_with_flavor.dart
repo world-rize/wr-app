@@ -24,6 +24,8 @@ import 'package:wr_app/infrastructure/note/note_persistence.dart';
 import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
+import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
+import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
@@ -158,6 +160,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
               articleService: articleService,
             ),
           ),
+          ChangeNotifierProvider.value(value: NoteNotifier()),
         ],
         child: runZonedGuarded(
           () => WRApp(),

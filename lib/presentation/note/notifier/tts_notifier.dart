@@ -36,6 +36,12 @@ class TTSNotifier with ChangeNotifier {
 
   get isContinued => _ttsState == TtsState.continued;
 
+  /// 倍率をわたす
+  void setPlaySpeed(double speed) {
+    _rate = 0.5 * speed;
+    notifyListeners();
+  }
+
   Future<void> play(String text) async {
     final completer = Completer<void>();
     await _flutterTts.speak(text);

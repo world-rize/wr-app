@@ -59,9 +59,7 @@ class NoteListPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => NotePage(
-                                note: note,
-                              ),
+                              builder: (_) => NotePage(),
                             ),
                           );
                         },
