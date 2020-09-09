@@ -67,7 +67,6 @@ class TestResultPage extends StatelessWidget {
             child: const Text('答える'),
             onPressed: () async {
               systemNotifier.setQuestionnaireAnswered(value: true);
-              Navigator.pop(context);
               if (await canLaunch(questionnaireUrl)) {
                 await launch(
                   questionnaireUrl,

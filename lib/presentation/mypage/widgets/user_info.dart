@@ -2,20 +2,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 
+/// ユーザーの情報
 class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userNotifier = Provider.of<UserNotifier>(context);
+    final streaks = userNotifier.calcTestStreaks();
     final theme = Theme.of(context);
     final user = userNotifier.getUser();
 
-    print(user.attributes.membership);
-
+    final streaksStatus = Text('streaks $streaks / 30');
     final badge = Padding(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       child: Chip(
         backgroundColor: user.isPremium ? Colors.blueAccent : Colors.grey,
         label: Text(
@@ -26,33 +28,41 @@ class UserInfo extends StatelessWidget {
     );
 
     return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  children: [
-                    Text('${user.name}', style: theme.textTheme.headline5),
-                    badge,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Text('${user.name}', style: theme.textTheme.headline5),
+                        badge,
+                      ],
+                    ),
+                    Text(user.attributes.email),
                   ],
                 ),
-                Text(user.attributes.email),
-              ],
-            ),
+              ),
+              const Spacer(),
+              Expanded(
+                child: Row(
+                  children: <Widget>[
+                    Icon(Icons.attach_money),
+                    Text(I.of(context).points(user.statistics.points)),
+                  ],
+                ),
+              )
+            ],
           ),
-          const Spacer(),
-          Expanded(
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.attach_money),
-                Text(I.of(context).points(user.statistics.points)),
-              ],
-            ),
-          )
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: streaksStatus,
+          ),
         ],
       ),
     );

@@ -12,7 +12,7 @@ import './upgrade_page.dart';
 
 /// mypage > index
 class MyPagePage extends StatelessWidget {
-  Widget _menuCell({
+  Widget _createIconCell({
     @required String title,
     @required String icon,
     @required Function onTap,
@@ -46,7 +46,7 @@ class MyPagePage extends StatelessWidget {
       shrinkWrap: true,
       crossAxisCount: 3,
       children: [
-        _menuCell(
+        _createIconCell(
           title: '友達紹介',
           icon: 'assets/icon/mypage_friends.png',
           onTap: () {
@@ -54,7 +54,7 @@ class MyPagePage extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => FriendsPage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: 'アップグレード',
           icon: 'assets/icon/mypage_upgrade.png',
           onTap: () {
@@ -62,7 +62,7 @@ class MyPagePage extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => UpgradePage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: '交換',
           icon: 'assets/icon/mypage_gift.png',
           onTap: () {
@@ -70,7 +70,7 @@ class MyPagePage extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => ShopPage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: 'アクセント追加',
           icon: 'assets/icon/mypage_locale.png',
           onTap: () {
@@ -78,7 +78,7 @@ class MyPagePage extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => LocalePage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: 'Archived List',
           icon: 'assets/icon/mypage_archive.png',
           onTap: () {
@@ -86,7 +86,7 @@ class MyPagePage extends StatelessWidget {
                 .push(MaterialPageRoute(builder: (_) => ArchivedListPage()));
           },
         ),
-        _menuCell(
+        _createIconCell(
           title: 'お知らせ',
           icon: 'assets/icon/mypage_info.png',
           onTap: () {

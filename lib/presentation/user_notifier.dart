@@ -1,7 +1,10 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
+import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
@@ -539,5 +542,24 @@ class UserNotifier with ChangeNotifier {
       InAppLogger.error(e);
       NotifyToast.error(e);
     }
+  }
+
+  /// calculates heatMap of testResult
+  Map<Jiffy, int> _calcHeatMap(List<TestResult> results) {
+    final dates = results.map((r) => Jiffy(r.date)..startOf(Units.DAY));
+    return groupBy(dates, (d) => d)
+        .map((key, value) => MapEntry(key, value.length));
+  }
+
+  /// calculates test streaks
+  int calcTestStreaks() {
+    final heatMap = _calcHeatMap(_user.statistics.testResults);
+    var i = 0;
+    for (var day = Jiffy()..startOf(Units.DAY);
+        heatMap.containsKey(day);
+        day = day..subtract(days: 1)) {
+      i++;
+    }
+    return i;
   }
 }
