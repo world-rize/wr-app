@@ -23,6 +23,7 @@ class User {
     @required this.statistics,
     @required this.activities,
     @required this.attributes,
+    @required this.items,
   });
 
   factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
@@ -56,6 +57,7 @@ class User {
       ),
       activities: [],
       notes: {},
+      items: {},
     );
   }
 
@@ -77,6 +79,10 @@ class User {
       ],
       notes: {
         'default': Note.dummy('ノート1', isDefault: true),
+      },
+      items: {
+        '3': 1,
+        '4': 1,
       },
     );
   }
@@ -105,9 +111,8 @@ class User {
   /// ユーザー活動
   List<UserActivity> activities;
 
-  /// TODO: 所持している発音
-  ///
-  /// TODO: 初回起動
+  /// 所持アイテム(key: item_id, value: amount)
+  Map<String, int> items;
 
   bool get isPremium => attributes.membership == Membership.pro;
 }

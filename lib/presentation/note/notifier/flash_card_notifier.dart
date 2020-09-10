@@ -22,34 +22,32 @@ class FlashCardNotifier extends ChangeNotifier {
     @required this.note,
   }) {
     note = note;
-    originalPhrases = [
-      ...note.phrases.entries.map((entry) => entry.value).toList()
+    originalNotePhrases = [
+      ...note.phrases.values,
     ];
-    _isShuffled = false;
+    notePhrases = [...originalNotePhrases];
     _nowPhraseIndex = 0;
-    _autoScroll = true;
-    _voiceAccent = VoiceAccent.britishEnglish;
+    _autoScroll = false;
+    _isShuffle = false;
+    _voiceAccent = VoiceAccent.americanEnglish;
     _flutterTts = FlutterTts();
     _ttsState = TtsState.stopped;
   }
 
   Note note;
 
-  /// 並び替えられる可能性がある
-  List<NotePhrase> originalPhrases;
-
-  List<NotePhrase> get notePhrases =>
-      _isShuffled ? ([...originalPhrases]..sort()) : originalPhrases;
+  /// 並び替えられる可能性があるので変更せずに持っておく
+  List<NotePhrase> originalNotePhrases;
+  List<NotePhrase> notePhrases;
 
   int _nowPhraseIndex;
   bool _autoScroll;
-  bool _isShuffled;
+  bool _isShuffle;
   VoiceAccent _voiceAccent;
   FlutterTts _flutterTts;
   final double _volume = 0.5;
   final double _pitch = 1;
   double _rate = 0.5;
-  String _newVoiceText;
   TtsState _ttsState;
 
   PageController _pageController;
@@ -58,11 +56,13 @@ class FlashCardNotifier extends ChangeNotifier {
 
   bool get autoScroll => _autoScroll;
 
-  get isPlaying => _ttsState == TtsState.playing;
+  bool get isPlaying => _ttsState == TtsState.playing;
 
-  get isStopped => _ttsState == TtsState.stopped;
+  bool get isStopped => _ttsState == TtsState.stopped;
 
-  get ttsState => _ttsState;
+  bool get isShuffle => _isShuffle;
+
+  TtsState get ttsState => _ttsState;
 
   // get isPaused => _ttsState == TtsState.paused;
 
@@ -101,47 +101,78 @@ class FlashCardNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  void shuffled() {
-    _isShuffled = !_isShuffled;
+  void activateShuffling() {
+    _isShuffle = true;
+    if (isStopped) {
+      print('shuffle!!!');
+      notePhrases.shuffle();
+    }
+    notifyListeners();
+  }
+
+  void deactivateShuffling() {
+    _isShuffle = false;
+    notePhrases = [...originalNotePhrases];
     notifyListeners();
   }
 
   /// 音声を再生する
+  /// completerを毎回セットする必要がある
   Future<void> play() async {
     _ttsState = TtsState.playing;
-
-    final completer = Completer<void>();
-    final nowPhrase = notePhrases[_nowPhraseIndex];
     notifyListeners();
 
-    await _flutterTts.speak(nowPhrase.word);
-    _flutterTts.setCompletionHandler(completer.complete);
-    await completer.future;
-    await _flutterTts.speak(nowPhrase.translation);
-    _flutterTts.setCompletionHandler(completer.complete);
-    await completer.future;
+    final nowPhrase = notePhrases[_nowPhraseIndex];
 
-    // TODO: autoScrollはさいごに到達したら最初に戻る変数なので修正する
-    while (_autoScroll && !isStopped) {
+    // wait play word
+    final completerWord = Completer<void>();
+    await _flutterTts.speak(nowPhrase.word);
+    _flutterTts.setCompletionHandler(completerWord.complete);
+    await completerWord.future;
+
+    // wait play translation
+    // TODO: 言語に対応していないと再生できない
+    await _flutterTts.speak(nowPhrase.translation);
+    final completerTranslation = Completer<void>();
+    _flutterTts.setCompletionHandler(completerTranslation.complete);
+    await completerTranslation.future;
+
+    while (_autoScroll) {
       _nowPhraseIndex = _nowPhraseIndex + 1;
       await _pageController.animateToPage(
         _nowPhraseIndex % notePhrases.length,
         duration: const Duration(seconds: 1),
         curve: Curves.ease,
       );
+      final nowPhrase = notePhrases[_nowPhraseIndex];
+
+      final completerWord = Completer<void>();
+      await _flutterTts.speak(nowPhrase.word);
+      _flutterTts.setCompletionHandler(completerWord.complete);
+      await completerWord.future;
+      await _flutterTts.speak(nowPhrase.translation);
+      final completerTranslation = Completer<void>();
+      _flutterTts.setCompletionHandler(completerTranslation.complete);
+      await completerTranslation.future;
+
       // player last
       if (_nowPhraseIndex == notePhrases.length) {
-        await stop();
+        _nowPhraseIndex = _nowPhraseIndex % notePhrases.length;
+        break;
       }
     }
-    await stop();
+    _ttsState = TtsState.stopped;
+    notifyListeners();
   }
 
   Future<void> stop() async {
+    print('stopping in');
     final result = await _flutterTts.stop();
-    if (result == 1) {
-      _ttsState = TtsState.stopped;
-    }
+    final completer = Completer<void>();
+    _flutterTts.setCompletionHandler(completer.complete);
+    await completer.future;
+    print('sapped in');
+    _ttsState = TtsState.stopped;
     notifyListeners();
   }
 

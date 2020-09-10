@@ -588,4 +588,19 @@ class UserNotifier with ChangeNotifier {
       return null;
     }
   }
+
+  /// purchase item
+  Future<void> purchaseItem({@required String itemId}) async {
+    try {
+      _user = await _userService.purchaseItem(user: _user, itemId: itemId);
+      await _userService.updateUser(user: _user);
+      notifyListeners();
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// TODO: purchase Amazon Gift
+  /// TODO: purchase iTunes Gift
 }

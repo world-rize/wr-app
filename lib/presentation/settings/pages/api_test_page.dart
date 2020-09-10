@@ -39,11 +39,11 @@ class APITestView extends StatelessWidget {
                 },
               ),
               SettingsTile(
-                title: '1ポイントゲット',
+                title: '10000ポイントゲット',
                 leading: const Icon(Icons.attach_money),
                 onTap: () async {
                   await notifier
-                      .callGetPoint(points: 1)
+                      .callGetPoint(points: 10000)
                       .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },

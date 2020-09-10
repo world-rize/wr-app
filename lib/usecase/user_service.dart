@@ -249,9 +249,21 @@ class UserService {
     return _shopPersistence.shopItems();
   }
 
-  Future<void> buyShopItem({
+  Future<User> purchaseItem({
+    @required User user,
     @required String itemId,
   }) async {
-    return _shopPersistence.buyShopItem(itemId);
+    final item = (await _shopPersistence.shopItems())
+        .firstWhere((item) => item.id == itemId);
+    if (item == null) {
+      return user;
+    }
+    user.items.putIfAbsent(item.id, () => 0);
+    user.items[item.id] += 1;
+    user.statistics.points -= item.price;
+
+    return user;
+//    final req = PurchaseItemRequest(itemId: itemId);
+//    return _userPersistence.purchaseItem(req);
   }
 }
