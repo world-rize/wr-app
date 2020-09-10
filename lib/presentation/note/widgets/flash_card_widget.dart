@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
+import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// NotePhrase を表示するウィジェット
@@ -18,6 +20,15 @@ class _FlashCardState extends State<FlashCard> {
   bool _flipped;
 
   Widget _createFlashCardContainer(NotePhrase phrase) {
+    final userNotifier = Provider.of<UserNotifier>(context);
+    final noteId = Provider.of<NoteNotifier>(context).nowSelectedNoteId;
+    final note = userNotifier.getUser().notes[noteId];
+    if (note == null) {
+      return const SizedBox.shrink();
+    }
+
+    final achieved =
+        note.phrases.values.map((phrase) => phrase.id).contains(phrase.id);
     final backgroundColor = Theme.of(context).backgroundColor;
     final body1 = Theme.of(context).primaryTextTheme.bodyText1;
 
@@ -50,8 +61,17 @@ class _FlashCardState extends State<FlashCard> {
                     right: 10,
                     bottom: 10,
                     child: IconButton(
-                      icon: const Icon(Icons.star),
-                      onPressed: () {},
+                      icon: Icon(
+                        achieved ? Icons.favorite : Icons.favorite_border,
+                        size: 24,
+                      ),
+                      onPressed: () {
+                        userNotifier.achievePhraseInNote(
+                          noteId: noteId,
+                          phraseId: phrase.id,
+                          achieve: !achieved,
+                        );
+                      },
                     ),
                   )
                 ],
@@ -81,7 +101,11 @@ class _FlashCardState extends State<FlashCard> {
       autoPlayInterval: const Duration(seconds: 3),
       enableInfiniteScroll: false,
       // FIXME: phrasesに順番の概念がないので毎回ランダムになるリスト型にする必要がある
-      items: note.phrases.values.map(_createFlashCardContainer).toList(),
+      items: context
+          .watch<FlashCardNotifier>()
+          .notePhrases
+          .map(_createFlashCardContainer)
+          .toList(),
       initialPage: flashCardNotifier.nowPhraseIndex,
     );
 

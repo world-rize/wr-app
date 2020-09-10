@@ -30,11 +30,11 @@ export class UserRepository {
   }
 
   public async findByUserId(userId: string): Promise<User> {
-    const docs = await this.users
+    const res = await this.users
       .where('userId', '==', userId)
       .limit(1)
       .get()
-    return docs[0]
+    return res.docs?.[0]?.data() as User ?? null
   }
 
   public async update(user: User): Promise<User> {

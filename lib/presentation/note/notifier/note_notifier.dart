@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class NoteNotifier extends ChangeNotifier {
-  String _nowSelectedNoteId;
+  String _nowSelectedNoteId = 'default';
 
   String get nowSelectedNoteId => _nowSelectedNoteId;
 

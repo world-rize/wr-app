@@ -11,7 +11,7 @@ class GiftItem {
     @required this.title,
     @required this.description,
     @required this.price,
-    @required this.available,
+    @required this.expendable,
   });
 
   /// id
@@ -26,6 +26,6 @@ class GiftItem {
   /// 価格
   int price;
 
-  /// 購入可能か
-  bool available;
+  /// 複数購入可能か
+  bool expendable;
 }

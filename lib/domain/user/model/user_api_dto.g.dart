@@ -174,3 +174,15 @@ CheckTestStreaksRequest _$CheckTestStreaksRequestFromJson(Map json) {
 Map<String, dynamic> _$CheckTestStreaksRequestToJson(
         CheckTestStreaksRequest instance) =>
     <String, dynamic>{};
+
+PurchaseItemRequest _$PurchaseItemRequestFromJson(Map json) {
+  return PurchaseItemRequest(
+    itemId: json['itemId'] as String,
+  );
+}
+
+Map<String, dynamic> _$PurchaseItemRequestToJson(
+        PurchaseItemRequest instance) =>
+    <String, dynamic>{
+      'itemId': instance.itemId,
+    };
