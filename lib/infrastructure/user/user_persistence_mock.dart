@@ -141,4 +141,12 @@ class UserPersistenceMock implements UserRepository {
   Future<bool> checkTestStreaks(CheckTestStreaksRequest req) async {
     return false;
   }
+
+  @override
+  Future<User> purchaseItem(PurchaseItemRequest req) async {
+    final user = _readUserMock();
+    user.items.putIfAbsent(req.itemId, () => 0);
+    user.items[req.itemId] = 1;
+    return user;
+  }
 }

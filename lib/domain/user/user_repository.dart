@@ -31,4 +31,6 @@ abstract class UserRepository {
   Future<User> deleteFavoriteList(DeleteFavoriteListRequest req);
 
   Future<User> findUserByUserId(FindUserByUserIdRequest req);
+
+  Future<User> purchaseItem(PurchaseItemRequest req);
 }

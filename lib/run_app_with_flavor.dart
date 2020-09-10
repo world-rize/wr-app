@@ -97,11 +97,11 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   final analytics = GetIt.I<FirebaseAnalytics>();
 
-  const useEmulator = false;
+  final env = DotEnv().env;
+  final useEmulator = env['USE_EMULATOR'].toLowerCase() == 'true';
   const useMock = false;
 
   if (useEmulator) {
-    final env = DotEnv().env;
     final origin = env['FUNCTIONS_EMULATOR_ORIGIN'];
     assert(origin != '');
     InAppLogger.info('❗ Using Emulator @ $origin');

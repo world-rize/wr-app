@@ -21,7 +21,7 @@ class AchievedListPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Achieved'),
+            const Text('Achieved'),
             ...user.notes.values
                 .expand((note) =>
                     note.phrases.values.where((phrase) => phrase.achieved))
