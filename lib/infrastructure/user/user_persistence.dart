@@ -79,8 +79,10 @@ class UserPersistence implements UserRepository {
 
   @override
   Future<User> findUserByUserId(FindUserByUserIdRequest req) async {
-    return callFunction('findUserByUserId', req.toJson())
-        .then((res) => res.data != null ? User.fromJson(res.data) : null);
+    return callFunction('findUserByUserId', req.toJson()).then((res) {
+      print(res.data);
+      return res;
+    }).then((res) => res.data != null ? User.fromJson(res.data) : null);
   }
 
   @override

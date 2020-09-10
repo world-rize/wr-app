@@ -97,7 +97,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   final analytics = GetIt.I<FirebaseAnalytics>();
 
-  const useEmulator = false;
+  const useEmulator = true;
   const useMock = false;
 
   if (useEmulator) {
