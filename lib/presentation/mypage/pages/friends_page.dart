@@ -22,7 +22,7 @@ class _FriendsPageState extends State<FriendsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Text('ゆーざーが見つかりませんでした'),
+            content: Text('ユーザーが見つかりませんでした'),
             actions: <Widget>[
               FlatButton(
                 child: Text('Ok'),
@@ -40,7 +40,7 @@ class _FriendsPageState extends State<FriendsPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            content: Text('Found ${result.name} さん'),
+            content: Text('${result.name} さんにポイントが送られました(嘘)'),
             actions: <Widget>[
               FlatButton(
                 child: Text('Ok'),
@@ -94,8 +94,12 @@ class _FriendsPageState extends State<FriendsPage> {
               '友人に紹介すると１度だけWRCoinがゲットできる！',
               style: h5,
             ),
-            Text('紹介相手が有料版を購入している場合のみWRCoinが付与されます。'),
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: Text('紹介相手が有料版を購入している場合のみWRCoinが付与されます。'),
+            ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   'あなたのID',
@@ -112,12 +116,7 @@ class _FriendsPageState extends State<FriendsPage> {
                 _searchUserIdField,
                 RaisedButton(
                   onPressed: () => _searchUserId(_userId),
-                  child: Text('検索'),
-                ),
-                Text('SNSでIDを共有する'),
-                Text(
-                  '11A22B',
-                  style: h5,
+                  child: const Text('検索'),
                 ),
               ],
             )

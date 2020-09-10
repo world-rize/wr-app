@@ -214,3 +214,17 @@ class CheckTestStreaksRequest {
 
   Map<String, dynamic> toJson() => _$CheckTestStreaksRequestToJson(this);
 }
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class PurchaseItemRequest {
+  PurchaseItemRequest({
+    @required this.itemId,
+  });
+
+  factory PurchaseItemRequest.fromJson(Map<String, dynamic> json) =>
+      _$PurchaseItemRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PurchaseItemRequestToJson(this);
+
+  String itemId;
+}

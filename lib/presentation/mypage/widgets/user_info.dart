@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 
 /// ユーザーの情報
@@ -14,6 +15,7 @@ class UserInfo extends StatelessWidget {
     final streaks = userNotifier.calcTestStreaks();
     final theme = Theme.of(context);
     final user = userNotifier.getUser();
+    final items = Provider.of<ShopNotifier>(context).getShopItems();
 
     final streaksStatus = Text('streaks $streaks / 30');
     final badge = Padding(
@@ -63,6 +65,9 @@ class UserInfo extends StatelessWidget {
             padding: const EdgeInsets.all(8),
             child: streaksStatus,
           ),
+          ...user.items.entries
+              .map((e) => Text('${e.key} ${e.value}こ'))
+              .toList(),
         ],
       ),
     );

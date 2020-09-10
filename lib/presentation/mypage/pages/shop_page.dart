@@ -26,8 +26,9 @@ class ShopPage extends StatelessWidget {
             child: const Text('Ok'),
             onPressed: () async {
               Navigator.pop(context);
-              // final userNotifier = Provider.of<UserNotifier>(context, listen: false);
-              // TODO: call purchase api
+              final userNotifier =
+                  Provider.of<UserNotifier>(context, listen: false);
+              await userNotifier.purchaseItem(itemId: item.id);
             },
           )
         ],
