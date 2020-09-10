@@ -90,4 +90,10 @@ class UserPersistence implements UserRepository {
     return callFunction('checkTestStreaks', req.toJson())
         .then((res) => res.data);
   }
+
+  @override
+  Future<User> purchaseItem(PurchaseItemRequest req) {
+    // TODO: implement API
+    // return callFunction('purchaseItem', req.toJson()).then((res) => res.data);
+  }
 }
