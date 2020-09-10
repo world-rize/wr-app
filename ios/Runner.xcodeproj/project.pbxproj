@@ -460,6 +460,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.dev;
 				PRODUCT_NAME = "WR英会話-dev";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.369807490628-jjiev31r4sqplu3vb0b2d8rfm7l6i29n";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -546,6 +547,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.stg;
 				PRODUCT_NAME = "WR英会話-stg";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.369807490628-b20ksmt7tkrcg0l9dqmuspo5jl3ovet1";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -631,6 +633,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
 				PRODUCT_NAME = "WR英会話";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.919718115383-f6co0r5ct5p12pa8bi93742k2oceupv6";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -715,6 +718,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
 				PRODUCT_NAME = "WR英会話";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.369807490628-jjiev31r4sqplu3vb0b2d8rfm7l6i29n";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -858,6 +862,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.development;
 				PRODUCT_NAME = "WR英会話";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.369807490628-jjiev31r4sqplu3vb0b2d8rfm7l6i29n";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -890,6 +895,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
 				PRODUCT_NAME = "WR英会話";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				REVERSED_CLIENT_ID = "com.googleusercontent.apps.919718115383-f6co0r5ct5p12pa8bi93742k2oceupv6";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
