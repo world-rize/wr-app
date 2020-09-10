@@ -217,7 +217,11 @@ export class UserService {
     return this.repo.update(user)
   }
 
-  async findUserByUserId(uuid: string, userId: string): Promise<User> {
-    return this.repo.findByUserId(userId)
+  async findUserByUserId(uuid: string, userId: string): Promise<User | null> {
+    const user = this.repo.findByUserId(userId)
+    if (!user || userId === uuid) {
+      return null
+    }
+    return user
   }
 }
