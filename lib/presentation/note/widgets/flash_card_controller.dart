@@ -11,36 +11,18 @@ import 'package:wr_app/ui/widgets/shadowed_container.dart';
 class FlashCardController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final loopButton = Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(3),
-          child: Center(
-            child: Text(
-              'loop',
-              style: TextStyle(
-                color: context.watch<FlashCardNotifier>().autoScroll
-                    ? Colors.black
-                    : Colors.grey,
-              ),
-            ),
-          ),
-        ),
-        InkWell(
-          child: Icon(
-            Ionicons.ios_sync,
-            color: context.watch<FlashCardNotifier>().autoScroll
-                ? Colors.black
-                : Colors.grey,
-            size: GFSize.MEDIUM,
-          ),
-          onTap: () async {
-            context.read<FlashCardNotifier>().toggleAutoScroll();
-            await HapticFeedback.lightImpact();
-          },
-        ),
-      ],
+    final loopButton = InkWell(
+      child: Icon(
+        Ionicons.ios_sync,
+        color: context.watch<FlashCardNotifier>().autoScroll
+            ? Colors.black
+            : Colors.grey,
+        size: GFSize.MEDIUM,
+      ),
+      onTap: () async {
+        context.read<FlashCardNotifier>().toggleAutoScroll();
+        await HapticFeedback.lightImpact();
+      },
     );
 
     final playButton = Row(
@@ -52,11 +34,11 @@ class FlashCardController extends StatelessWidget {
             await HapticFeedback.lightImpact();
             if (fn.isPlaying) {
               print('stopping');
-              fn.stop();
+              await fn.stop();
               print('stopped');
             } else if (fn.isStopped) {
               print('playing');
-              fn.play();
+              await fn.play();
               print('played');
             } else {
               throw Exception('unknown state ${fn.ttsState}');
@@ -67,7 +49,7 @@ class FlashCardController extends StatelessWidget {
                 ? Ionicons.ios_square
                 : Icons.play_arrow,
             color: context.watch<FlashCardNotifier>().isStopped
-                ? Colors.black54
+                ? Colors.black
                 : Colors.grey,
             size: 60,
           ),
@@ -75,16 +57,22 @@ class FlashCardController extends StatelessWidget {
       ],
     );
 
+    // TODO: providerなんもわからん
+    // watchをbuildのなかで呼べと言われた
+    final fnSB = context.watch<FlashCardNotifier>();
     final shuffleButton = InkWell(
       onTap: () {
-        context.read<FlashCardNotifier>().activateShuffling();
-        print('tapped');
         HapticFeedback.lightImpact();
+        if (context.read<FlashCardNotifier>().isShuffle) {
+          fnSB.deactivateShuffling();
+        } else {
+          fnSB.activateShuffling();
+        }
       },
       child: Icon(
         Ionicons.ios_shuffle,
         color: context.watch<FlashCardNotifier>().isShuffle
-            ? Colors.black54
+            ? Colors.black
             : Colors.grey,
         size: GFSize.MEDIUM,
       ),

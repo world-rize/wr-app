@@ -22,12 +22,13 @@ class FlashCardNotifier extends ChangeNotifier {
     @required this.note,
   }) {
     note = note;
-    originalPhrases = [
-      ...note.phrases.entries.map((entry) => entry.value).toList()
+    originalNotePhrases = [
+      ...note.phrases.values,
     ];
-    _isShuffle = false;
+    notePhrases = [...originalNotePhrases];
     _nowPhraseIndex = 0;
     _autoScroll = false;
+    _isShuffle = false;
     _voiceAccent = VoiceAccent.americanEnglish;
     _flutterTts = FlutterTts();
     _ttsState = TtsState.stopped;
@@ -36,9 +37,8 @@ class FlashCardNotifier extends ChangeNotifier {
   Note note;
 
   /// 並び替えられる可能性があるので変更せずに持っておく
-  List<NotePhrase> originalPhrases;
-
-  List<NotePhrase> get notePhrases => ([...originalPhrases]..sort());
+  List<NotePhrase> originalNotePhrases;
+  List<NotePhrase> notePhrases;
 
   int _nowPhraseIndex;
   bool _autoScroll;
@@ -48,7 +48,6 @@ class FlashCardNotifier extends ChangeNotifier {
   final double _volume = 0.5;
   final double _pitch = 1;
   double _rate = 0.5;
-  String _newVoiceText;
   TtsState _ttsState;
 
   PageController _pageController;
@@ -105,6 +104,7 @@ class FlashCardNotifier extends ChangeNotifier {
   void activateShuffling() {
     _isShuffle = true;
     if (isStopped) {
+      print('shuffle!!!');
       notePhrases.shuffle();
     }
     notifyListeners();
@@ -112,6 +112,7 @@ class FlashCardNotifier extends ChangeNotifier {
 
   void deactivateShuffling() {
     _isShuffle = false;
+    notePhrases = [...originalNotePhrases];
     notifyListeners();
   }
 
@@ -123,10 +124,14 @@ class FlashCardNotifier extends ChangeNotifier {
 
     final nowPhrase = notePhrases[_nowPhraseIndex];
 
+    // wait play word
     final completerWord = Completer<void>();
     await _flutterTts.speak(nowPhrase.word);
     _flutterTts.setCompletionHandler(completerWord.complete);
     await completerWord.future;
+
+    // wait play translation
+    // TODO: 言語に対応していないと再生できない
     await _flutterTts.speak(nowPhrase.translation);
     final completerTranslation = Completer<void>();
     _flutterTts.setCompletionHandler(completerTranslation.complete);
@@ -163,7 +168,6 @@ class FlashCardNotifier extends ChangeNotifier {
   Future<void> stop() async {
     print('stopping in');
     final result = await _flutterTts.stop();
-    print('sapped in');
     final completer = Completer<void>();
     _flutterTts.setCompletionHandler(completer.complete);
     await completer.future;
