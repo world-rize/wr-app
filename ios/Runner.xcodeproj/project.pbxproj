@@ -58,6 +58,7 @@
 		0B7AEE71245CAEA500C3B031 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
 		0B7AEE72245CAEA500C3B031 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		0BB399BC24AB4422000F668F /* WR英会話.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "WR英会話.entitlements"; sourceTree = "<group>"; };
+		0BEF8424250B510400181799 /* Runner copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Runner copy-Info.plist"; path = "/Users/kamata/Documents/Programming/wr_app/ios/Runner copy-Info.plist"; sourceTree = "<absolute>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
 		18D72F45EE6222572C4D9A4C /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
@@ -67,7 +68,7 @@
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7DCC412E29865B1E86AADC14 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
-		97C146EE1CF9000F007C117D /* Runner.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Runner.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		97C146EE1CF9000F007C117D /* WR英会話-dev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WR英会話-dev.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		97C146FB1CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -136,13 +137,14 @@
 				97C146EF1CF9000F007C117D /* Products */,
 				951E739F6324933AAAF13B19 /* Pods */,
 				72FF9A78C7156354A832B8DD /* Frameworks */,
+				0BEF8424250B510400181799 /* Runner copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
 		97C146EF1CF9000F007C117D /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				97C146EE1CF9000F007C117D /* Runner.app */,
+				97C146EE1CF9000F007C117D /* WR英会話-dev.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -195,7 +197,7 @@
 			);
 			name = Runner;
 			productName = Runner;
-			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
+			productReference = 97C146EE1CF9000F007C117D /* WR英会話-dev.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -459,7 +461,7 @@
 				);
 				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.dev;
-				PRODUCT_NAME = Runner;
+				PRODUCT_NAME = "$(DISPLAY_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REVERSED_CLIENT_ID = "com.googleusercontent.apps.369807490628-jjiev31r4sqplu3vb0b2d8rfm7l6i29n";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -547,7 +549,7 @@
 				);
 				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.stg;
-				PRODUCT_NAME = Runner;
+				PRODUCT_NAME = "$(DISPLAY_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REVERSED_CLIENT_ID = "com.googleusercontent.apps.369807490628-b20ksmt7tkrcg0l9dqmuspo5jl3ovet1";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -634,7 +636,7 @@
 				);
 				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
-				PRODUCT_NAME = Runner;
+				PRODUCT_NAME = "$(DISPLAY_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REVERSED_CLIENT_ID = "com.googleusercontent.apps.919718115383-f6co0r5ct5p12pa8bi93742k2oceupv6";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -720,7 +722,7 @@
 				);
 				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
-				PRODUCT_NAME = Runner;
+				PRODUCT_NAME = "$(DISPLAY_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REVERSED_CLIENT_ID = "com.googleusercontent.apps.369807490628-jjiev31r4sqplu3vb0b2d8rfm7l6i29n";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -865,7 +867,7 @@
 				);
 				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.dev;
-				PRODUCT_NAME = Runner;
+				PRODUCT_NAME = "$(DISPLAY_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REVERSED_CLIENT_ID = "com.googleusercontent.apps.369807490628-jjiev31r4sqplu3vb0b2d8rfm7l6i29n";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
@@ -899,7 +901,7 @@
 				);
 				MARKETING_VERSION = 0.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
-				PRODUCT_NAME = Runner;
+				PRODUCT_NAME = "$(DISPLAY_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				REVERSED_CLIENT_ID = "com.googleusercontent.apps.919718115383-f6co0r5ct5p12pa8bi93742k2oceupv6";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
