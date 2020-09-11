@@ -98,4 +98,9 @@ export interface User {
    * ユーザーの活動履歴(ポイント獲得等)
    */
   activities: UserActivity[]
+
+  /**
+    所持アイテム
+  */
+ items: Record<string, number>
 }

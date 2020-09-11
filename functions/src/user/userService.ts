@@ -52,7 +52,8 @@ export class UserService {
         email: '',
         age: '',
         memberShip: 'normal',
-      }
+      },
+      items: {},
     }
   }
 
