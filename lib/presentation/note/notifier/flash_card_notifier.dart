@@ -27,7 +27,7 @@ class FlashCardNotifier extends ChangeNotifier {
     ];
     notePhrases = [...originalNotePhrases];
     _nowPhraseIndex = 0;
-    _autoScroll = false;
+    _autoScroll = true;
     _isShuffle = false;
     _voiceAccent = VoiceAccent.americanEnglish;
     _flutterTts = FlutterTts();
@@ -167,13 +167,13 @@ class FlashCardNotifier extends ChangeNotifier {
 
   Future<void> stop() async {
     print('stopping in');
+    _ttsState = TtsState.stopped;
+    notifyListeners();
     final result = await _flutterTts.stop();
     final completer = Completer<void>();
     _flutterTts.setCompletionHandler(completer.complete);
     await completer.future;
     print('sapped in');
-    _ttsState = TtsState.stopped;
-    notifyListeners();
   }
 
   Future<void> getLanguages() async {

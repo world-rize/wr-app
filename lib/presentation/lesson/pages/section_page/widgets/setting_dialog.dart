@@ -2,6 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wr_app/domain/voice_accent.dart';
+import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
 import 'package:wr_app/presentation/note/widgets/national_flags.dart';
 import 'package:wr_app/presentation/note/widgets/pitch_slider.dart';
 
@@ -27,16 +30,23 @@ class PhraseDetailSettingsDialog extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8),
             child: NationalFlags(
-              locale: 'en-us',
-              locales: const ['en-us', 'en-uk', 'en-au', 'en-in'],
-              onChanged: (l) {},
+              locale: VoiceAccent.americanEnglish,
+              locales: const [
+                VoiceAccent.americanEnglish,
+                VoiceAccent.australiaEnglish,
+                VoiceAccent.britishEnglish,
+                VoiceAccent.indianEnglish,
+              ],
+              onChanged: (l) {
+                Provider.of<FlashCardNotifier>(context).setVoiceAccent(l);
+              },
             ),
           ),
         ],
       ),
       actions: [
         CupertinoDialogAction(
-          child: Text('OK'),
+          child: const Text('OK'),
           onPressed: () => Navigator.pop(context),
         ),
       ],
