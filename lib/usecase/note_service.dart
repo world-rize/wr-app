@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:data_classes/data_classes.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_api_dto.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
@@ -18,6 +19,18 @@ class NoteService {
   }) async {
     final req = CreateNoteRequest(title: title);
     return _notePersistence.createNote(req);
+  }
+
+  Note createDummyNote(String title, {bool isDefault = false}) {
+    final phrases =
+        List.generate(30, (index) => NotePhrase.dummy(id: Uuid().v4()));
+    return Note(
+      id: Uuid().v4(),
+      title: title,
+      isDefault: isDefault,
+      sortType: '',
+      phrases: Map<String, NotePhrase>.fromIterable(phrases, key: (p) => p.id),
+    );
   }
 
   Future<Note> updateNoteTitle({

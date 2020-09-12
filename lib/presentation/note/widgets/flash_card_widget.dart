@@ -92,8 +92,7 @@ class _FlashCardState extends State<FlashCard> {
 
   @override
   Widget build(BuildContext context) {
-    final flashCardNotifier = Provider.of<FlashCardNotifier>(context);
-    final note = flashCardNotifier.note;
+    final fn = Provider.of<FlashCardNotifier>(context);
 
     final flashCard = GFCarousel(
       viewportFraction: 0.9,
@@ -102,12 +101,8 @@ class _FlashCardState extends State<FlashCard> {
       autoPlayInterval: const Duration(seconds: 3),
       enableInfiniteScroll: false,
       // FIXME: phrasesに順番の概念がないので毎回ランダムになるリスト型にする必要がある
-      items: context
-          .watch<FlashCardNotifier>()
-          .notePhrases
-          .map(_createFlashCardContainer)
-          .toList(),
-      initialPage: flashCardNotifier.nowPhraseIndex,
+      items: fn.notePhrases.map(_createFlashCardContainer).toList(),
+      initialPage: fn.nowPhraseIndex,
     );
 
     Provider.of<FlashCardNotifier>(context).pageController =

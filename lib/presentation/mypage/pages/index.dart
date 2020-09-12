@@ -1,9 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/presentation/mypage/pages/achieved_list_page.dart';
 import 'package:wr_app/presentation/mypage/pages/info_page.dart';
-import 'package:wr_app/presentation/mypage/pages/locale_page.dart';
 import 'package:wr_app/presentation/mypage/widgets/user_info.dart';
 
 import './friends_page.dart';
@@ -44,7 +42,7 @@ class MyPagePage extends StatelessWidget {
     final gridMenus = GridView.count(
       // physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      crossAxisCount: 3,
+      crossAxisCount: 2,
       children: [
         _createIconCell(
           title: '友達紹介',
@@ -63,27 +61,11 @@ class MyPagePage extends StatelessWidget {
           },
         ),
         _createIconCell(
-          title: '交換',
+          title: 'ショップ',
           icon: 'assets/icon/mypage_gift.png',
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => ShopPage()));
-          },
-        ),
-        _createIconCell(
-          title: 'アクセント追加',
-          icon: 'assets/icon/mypage_locale.png',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => LocalePage()));
-          },
-        ),
-        _createIconCell(
-          title: 'Achieved List',
-          icon: 'assets/icon/mypage_achieved.png',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => AchievedListPage()));
           },
         ),
         _createIconCell(

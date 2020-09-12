@@ -22,10 +22,8 @@ class RoundedButton extends StatelessWidget {
       onPressed: onTap,
       color: color,
       disabledColor: Colors.grey,
-      shape: StadiumBorder(
-        side: BorderSide(
-          color: color,
-        ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(4.0)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),

@@ -18,18 +18,19 @@ class Note {
     @required this.title,
     @required this.sortType,
     @required this.isDefault,
-    @required this.phrases,
-  });
+    @required phrases,
+  }) {
+    _phrases = phrases;
+  }
 
   factory Note.dummy(String title, {bool isDefault = false}) {
-    final phrases =
-        List.generate(10, (index) => NotePhrase.dummy(id: Uuid().v4()));
+    final noteId = Uuid().v4();
     return Note(
-      id: Uuid().v4(),
+      id: noteId,
       title: title,
       isDefault: isDefault,
       sortType: '',
-      phrases: Map<String, NotePhrase>.fromIterable(phrases, key: (p) => p.id),
+      phrases: {},
     );
   }
 
@@ -45,5 +46,22 @@ class Note {
 
   bool isDefault;
 
-  Map<String, NotePhrase> phrases;
+  List<NotePhrase> _phrases;
+
+  bool _checkNotePhrasesLimit() {
+    return _phrases.length < 30;
+  }
+
+  Map<String, NotePhrase> get phrases {
+    return _phrases;
+  }
+
+  bool addPhrase(NotePhrase phrase) {
+    if (_checkNotePhrasesLimit()) {
+      _phrases[phrase.id] = phrase;
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

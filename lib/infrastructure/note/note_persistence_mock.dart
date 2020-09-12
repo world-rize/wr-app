@@ -77,7 +77,7 @@ class NotePersistenceMock implements NoteRepository {
 
   @override
   Future<Note> updateDefaultNote(UpdateDefaultNoteRequest req) async {
-    return Note.dummy('funny title');
+    return _readUserMock().notes[req.noteId]..isDefault = true;
   }
 
   @override

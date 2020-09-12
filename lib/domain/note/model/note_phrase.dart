@@ -2,6 +2,7 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 
 part 'note_phrase.g.dart';
@@ -24,6 +25,17 @@ class NotePhrase {
       id: phrase.id,
       word: phrase.title['en'],
       translation: phrase.title['ja'],
+      achieved: false,
+    );
+  }
+
+  /// wordとtranslationからNotePhraseを新しく作る
+  factory NotePhrase.create(String word, String translation) {
+    final uuid = Uuid().v4();
+    return NotePhrase(
+      id: uuid,
+      word: word,
+      translation: translation,
       achieved: false,
     );
   }

@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/language.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/index.dart';
@@ -75,18 +76,18 @@ class NoteTable extends StatelessWidget {
     );
 
     // TODO: 順番保持 -> array
+    // 見かけは30こ
     final phrases = note.phrases.values.toList()
       ..sort((a, b) => a.id.compareTo(b.id));
 
-    void _showPhraseEditDialog(NotePhrase phrase) {
+    void _showPhraseEditDialog(NotePhrase phrase, Language language) {
       final un = Provider.of<UserNotifier>(context, listen: false);
-
       showMaterialModalBottomSheet(
         context: context,
         builder: (BuildContext context, scrollController) => Container(
           child: PhraseEditDialog(
             phrase: phrase,
-            type:
+            language: language,
             onSubmit: (phrase) {
               un.updatePhraseInNote(
                 noteId: note.id,

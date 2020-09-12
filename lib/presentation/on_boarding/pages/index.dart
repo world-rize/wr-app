@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 import './sign_in_page.dart';
 import './sign_up_page.dart';
@@ -24,22 +25,11 @@ class OnBoardingPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: FlatButton(
+            child: RoundedButton(
               key: const Key('to_sign_up_button'),
               color: splashColor,
-              child: const SizedBox(
-                width: double.infinity,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      '新しくアカウントを作成する',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-              onPressed: () {
+              text: '新しくアカウントを作成する',
+              onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => SignUpPage(),
                 ));
@@ -62,22 +52,11 @@ class OnBoardingPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: FlatButton(
+            child: RoundedButton(
               key: const Key('to_sign_in_button'),
               color: splashColor,
-              child: const SizedBox(
-                width: double.infinity,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      'ログイン',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-              onPressed: () {
+              text: 'ログイン',
+              onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => SignInPage(),
                 ));

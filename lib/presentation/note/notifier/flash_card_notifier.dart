@@ -11,11 +11,11 @@ enum TtsState { playing, stopped }
 /// フラッシュカードの操作
 class FlashCardNotifier extends ChangeNotifier {
   FlashCardNotifier({
-    @required this.note,
+    @required Note note,
   }) {
-    note = note;
+    // からのフレーズは無視
     originalNotePhrases = [
-      ...note.phrases.values,
+      ...filterNotEmptyNotePhrases(note.phrases.values),
     ];
     notePhrases = [...originalNotePhrases];
     _nowPhraseIndex = 0;
@@ -25,8 +25,6 @@ class FlashCardNotifier extends ChangeNotifier {
     _flutterTts = FlutterTts();
     _ttsState = TtsState.stopped;
   }
-
-  Note note;
 
   /// 並び替えられる可能性があるので変更せずに持っておく
   List<NotePhrase> originalNotePhrases;
@@ -61,6 +59,12 @@ class FlashCardNotifier extends ChangeNotifier {
   // get isContinued => _ttsState == TtsState.continued;
 
   int get nowPhraseIndex => _nowPhraseIndex;
+
+  static Iterable<NotePhrase> filterNotEmptyNotePhrases(
+      Iterable<NotePhrase> phrases) {
+    return phrases
+        .where((phrase) => phrase.word == '' || phrase.translation == '');
+  }
 
   set pageController(PageController pageController) {
     _pageController = pageController;
