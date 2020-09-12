@@ -3,10 +3,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
+import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_example_messages_view.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
-
-import '../widgets/phrase_example.dart';
 
 // TODO(someone): 遷移アニメーション
 /// 問題画面
@@ -43,10 +42,8 @@ class _TestChoicesState extends State<TestChoices> {
       children: <Widget>[
         Flexible(
           flex: 5,
-          child: PhraseSampleView(
-            example: widget.phrase.example,
-            showTranslation: true,
-            showKeyphrase: false,
+          child: PhraseExampleCard(
+            phrase: widget.phrase,
           ),
         ),
         Flexible(

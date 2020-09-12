@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
-import 'package:wr_app/presentation/lesson/widgets/phrase_widget.dart';
+import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 
 class AnythingSearchPage extends StatefulWidget {
   @override

@@ -18,7 +18,7 @@ import './newcoming_page.dart';
 import './request_page.dart';
 import './section_select_page.dart';
 import '../widgets/carousel_cell.dart';
-import '../widgets/phrase_widget.dart';
+import '../widgets/phrase_card.dart';
 
 /// Lesson > index
 /// - top page of lesson

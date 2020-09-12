@@ -8,6 +8,14 @@ import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
+enum Visibility {
+  all,
+  // 英語
+  englishOnly,
+  // 日本語
+  japaneseOnly,
+}
+
 class LessonNotifier with ChangeNotifier {
   LessonService _lessonService;
   UserService _userService;

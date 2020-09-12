@@ -1,29 +1,32 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
+import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
 import 'package:wr_app/ui/widgets/boldable_text.dart';
+import 'package:wr_app/ui/widgets/shadowed_container.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// phrase example view
-class PhraseSampleView extends StatelessWidget {
-  const PhraseSampleView({
-    @required this.example,
-    this.onMessageTapped,
-    @required this.showTranslation,
-    this.showKeyphrase = true,
+class PhraseExampleCard extends StatelessWidget {
+  const PhraseExampleCard({
+    @required this.phrase,
   });
 
-  final Example example;
-  final Function(Message, int) onMessageTapped;
-  final bool showTranslation;
-  final bool showKeyphrase;
+  final Phrase phrase;
 
   Widget _createMessageView(
+    BuildContext context,
     Message message,
     int index, {
     bool primary = false,
   }) {
+    // TODO
+    final showKeyphrase = false;
+    final showTranslation = false;
+
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -33,9 +36,7 @@ class PhraseSampleView extends StatelessWidget {
           // 英語メッセージ
           GestureDetector(
             onTap: () {
-              if (onMessageTapped != null) {
-                onMessageTapped(message, index);
-              }
+              context.watch<VoicePlayer>().playMessages(messages: [message]);
             },
             child: Container(
               padding: const EdgeInsets.all(10),
@@ -97,13 +98,52 @@ class PhraseSampleView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: example.value
-          .asMap()
-          .map((i, message) =>
-              MapEntry(i, _createMessageView(message, i, primary: i % 2 == 1)))
-          .values
-          .toList(),
+    final theme = Theme.of(context);
+    final voicePlayer = Provider.of<VoicePlayer>(context);
+    final lessonNotifier = Provider.of<LessonNotifier>(context);
+    final showTranslation = lessonNotifier.getShowTranslation();
+
+    final header = Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 12, top: 12),
+            child: Text(
+              phrase.title['en'],
+              style: TextStyle(
+                fontSize: 20,
+                color: theme.accentColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 12),
+            child: Text(
+              phrase.title['ja'],
+              style: TextStyle(
+                fontSize: 16,
+                color: theme.accentColor,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    return ShadowedContainer(
+      color: theme.backgroundColor,
+      child: Column(children: [
+        // header
+        header,
+
+        // messages
+        ...phrase.example.value.indexedMap(
+          (i, message) =>
+              _createMessageView(context, message, i, primary: i.isOdd),
+        ),
+      ]),
     );
   }
 }
