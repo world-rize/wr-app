@@ -6,8 +6,10 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/voice_accent.dart';
 import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
 import 'package:wr_app/presentation/note/widgets/pitch_slider.dart';
+import 'package:wr_app/ui/widgets/locale_to_image.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 class FlashCardController extends StatelessWidget {
@@ -78,18 +80,50 @@ class FlashCardController extends StatelessWidget {
       ),
     );
 
-    final localButton = InkWell(
-      onTap: () {
-        HapticFeedback.lightImpact();
-        showMaterialModalBottomSheet(
-          expand: false,
-          context: context,
-          backgroundColor: Colors.transparent,
-          builder: (context, scrollController) =>
-              (scrollController: scrollController),
-        );
-      },
-    );
+    final localeButton = InkWell(
+        child: LocaleToImage(
+          voiceAccent: fnSB.voiceAccent,
+          height: 30,
+          width: 50,
+          fit: BoxFit.fill,
+        ),
+        onTap: () {
+          HapticFeedback.lightImpact();
+          showMaterialModalBottomSheet(
+            expand: false,
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (context, scrollController) => Material(
+              child: SafeArea(
+                top: false,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    VoiceAccent.americanEnglish,
+                    VoiceAccent.britishEnglish,
+                    VoiceAccent.australiaEnglish,
+                    VoiceAccent.indianEnglish
+                  ]
+                      .map((voiceAccent) => Flexible(
+                              child: ListTile(
+                            leading: LocaleToImage(
+                              voiceAccent: voiceAccent,
+                              height: 30,
+                              width: 40,
+                              fit: BoxFit.fill,
+                            ),
+                            onTap: () {
+                              fnSB.setVoiceAccent(voiceAccent);
+                              Navigator.of(context).pop();
+                            },
+                          )))
+                      .toList(),
+                ),
+              ),
+            ),
+          );
+        });
 
     final buttons = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -105,10 +139,15 @@ class FlashCardController extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: shuffleButton,
+          child: localeButton,
         ),
       ],
     );
+
+    final pitch =
+        Provider.of<FlashCardNotifier>(context, listen: false).playSpeed;
+
+    print(pitch);
 
     return ShadowedContainer(
       color: Colors.white30,
@@ -127,12 +166,11 @@ class FlashCardController extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: buttons,
               ),
-
               // pitch slider
               Padding(
                 padding: EdgeInsets.all(8),
                 child: PitchSlider(
-                  pitch: 1,
+                  pitch: pitch,
                   pitches: const [0.5, 0.75, 1.0, 1.5],
                   onChanged: (double p) {
                     Provider.of<FlashCardNotifier>(context, listen: false)

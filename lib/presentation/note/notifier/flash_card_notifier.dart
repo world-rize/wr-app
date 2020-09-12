@@ -8,14 +8,6 @@ import 'package:wr_app/domain/voice_accent.dart';
 
 enum TtsState { playing, stopped }
 
-const Map<VoiceAccent, String> _voiceAccentFlutterTtsMap = {
-  VoiceAccent.japanese: 'jp-JP',
-  VoiceAccent.americanEnglish: 'en-US',
-  VoiceAccent.australiaEnglish: 'en-AU',
-  VoiceAccent.britishEnglish: 'en-GB',
-  VoiceAccent.indianEnglish: 'en-IN',
-};
-
 /// フラッシュカードの操作
 class FlashCardNotifier extends ChangeNotifier {
   FlashCardNotifier({
@@ -80,7 +72,6 @@ class FlashCardNotifier extends ChangeNotifier {
 
   Future<void> setVoiceAccent(VoiceAccent voiceAccent) async {
     _voiceAccent = voiceAccent;
-    await _flutterTts.setLanguage(_voiceAccentFlutterTtsMap[voiceAccent]);
     notifyListeners();
   }
 
@@ -94,6 +85,8 @@ class FlashCardNotifier extends ChangeNotifier {
     _autoScroll = !_autoScroll;
     notifyListeners();
   }
+
+  double get playSpeed => _rate * 2;
 
   /// しゃべる倍率をわたす
   void setPlaySpeed(double speed) {
@@ -125,13 +118,15 @@ class FlashCardNotifier extends ChangeNotifier {
     final nowPhrase = notePhrases[_nowPhraseIndex];
 
     // wait play word
-    final completerWord = Completer<void>();
+    await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
     await _flutterTts.speak(nowPhrase.word);
+    final completerWord = Completer<void>();
     _flutterTts.setCompletionHandler(completerWord.complete);
     await completerWord.future;
 
     // wait play translation
     // TODO: 言語に対応していないと再生できない
+    await _flutterTts.setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
     await _flutterTts.speak(nowPhrase.translation);
     final completerTranslation = Completer<void>();
     _flutterTts.setCompletionHandler(completerTranslation.complete);
@@ -146,10 +141,14 @@ class FlashCardNotifier extends ChangeNotifier {
       );
       final nowPhrase = notePhrases[_nowPhraseIndex];
 
-      final completerWord = Completer<void>();
+      await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
       await _flutterTts.speak(nowPhrase.word);
+      final completerWord = Completer<void>();
       _flutterTts.setCompletionHandler(completerWord.complete);
       await completerWord.future;
+
+      await _flutterTts
+          .setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
       await _flutterTts.speak(nowPhrase.translation);
       final completerTranslation = Completer<void>();
       _flutterTts.setCompletionHandler(completerTranslation.complete);
@@ -178,5 +177,15 @@ class FlashCardNotifier extends ChangeNotifier {
 
   Future<void> getLanguages() async {
     (await _flutterTts.getLanguages).for_each(print);
+  }
+
+  String voiceAccentToTtsString(VoiceAccent va) {
+    return {
+      VoiceAccent.japanese: 'ja-JP',
+      VoiceAccent.americanEnglish: 'en-US',
+      VoiceAccent.australiaEnglish: 'en-AU',
+      VoiceAccent.britishEnglish: 'en-UK',
+      VoiceAccent.indianEnglish: 'en-IN',
+    }[va];
   }
 }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
@@ -35,9 +36,16 @@ class _SectionPageState extends State<SectionPage>
   int index;
 
   void _showPhraseDetailSettingsDialog(BuildContext context) {
-    showDialog(
+    showMaterialModalBottomSheet(
+      expand: false,
       context: context,
-      child: PhraseDetailSettingsDialog(),
+      backgroundColor: Colors.transparent,
+      builder: (context, scrollController) => Material(
+        child: SafeArea(
+          top: false,
+          child: PhraseDetailSettingsDialog(),
+        ),
+      ),
     );
   }
 
