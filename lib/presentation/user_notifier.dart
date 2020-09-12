@@ -609,6 +609,25 @@ class UserNotifier with ChangeNotifier {
     }
   }
 
+  Future<bool> isAlreadySignedIn() async {
+    try {
+      return _userService.isAlreadySignedIn();
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+      return false;
+    }
+  }
+
+  Future<void> sendPasswordResetEmail() async {
+    try {
+      _userService.sendPasswordResetEmail(_user.attributes.email);
+    } catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
   /// TODO: purchase Amazon Gift
   /// TODO: purchase iTunes Gift
 }

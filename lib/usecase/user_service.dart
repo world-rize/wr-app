@@ -266,4 +266,12 @@ class UserService {
 //    final req = PurchaseItemRequest(itemId: itemId);
 //    return _userPersistence.purchaseItem(req);
   }
+
+  Future<bool> isAlreadySignedIn() {
+    return _authPersistence.isAlreadySignedIn();
+  }
+
+  Future<void> sendPasswordResetEmail(String email) {
+    return _authPersistence.sendPasswordResetEmail(email);
+  }
 }
