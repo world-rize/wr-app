@@ -12,10 +12,9 @@ Note _$NoteFromJson(Map json) {
     title: json['title'] as String,
     sortType: json['sortType'] as String,
     isDefault: json['isDefault'] as bool,
-    phrases: (json['phrases'] as Map)?.map(
-      (k, e) => MapEntry(
-          k as String, e == null ? null : NotePhrase.fromJson(e as Map)),
-    ),
+    phrases: (json['phrases'] as List)
+        ?.map((e) => e == null ? null : NotePhrase.fromJson(e as Map))
+        ?.toList(),
   );
 }
 
@@ -24,5 +23,5 @@ Map<String, dynamic> _$NoteToJson(Note instance) => <String, dynamic>{
       'title': instance.title,
       'sortType': instance.sortType,
       'isDefault': instance.isDefault,
-      'phrases': instance.phrases?.map((k, e) => MapEntry(k, e?.toJson())),
+      'phrases': instance.phrases?.map((e) => e?.toJson())?.toList(),
     };

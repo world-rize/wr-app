@@ -18,7 +18,7 @@ class Note {
     @required this.title,
     @required this.sortType,
     @required this.isDefault,
-    @required phrases,
+    @required List<NotePhrase> phrases,
   }) {
     _phrases = phrases;
   }
@@ -30,7 +30,18 @@ class Note {
       title: title,
       isDefault: isDefault,
       sortType: '',
-      phrases: {},
+      phrases: [],
+    );
+  }
+
+  factory Note.empty(String title, {bool isDefault = false}) {
+    final noteId = Uuid().v4();
+    return Note(
+      id: noteId,
+      title: title,
+      isDefault: isDefault,
+      sortType: '',
+      phrases: List<NotePhrase>.filled(30, NotePhrase.create('', '')),
     );
   }
 
@@ -48,17 +59,41 @@ class Note {
 
   List<NotePhrase> _phrases;
 
-  bool _checkNotePhrasesLimit() {
+  List<NotePhrase> get phrases => [..._phrases];
+
+  bool _belowNotePhrasesLimit() {
     return _phrases.length < 30;
   }
 
-  Map<String, NotePhrase> get phrases {
-    return _phrases;
+  bool addPhrase(NotePhrase phrase) {
+    if (_belowNotePhrasesLimit()) {
+      _phrases.add(phrase);
+      return true;
+    } else {
+      return false;
+    }
   }
 
-  bool addPhrase(NotePhrase phrase) {
-    if (_checkNotePhrasesLimit()) {
-      _phrases[phrase.id] = phrase;
+  NotePhrase findByNotePhraseId(String id) {
+    return _phrases.firstWhere((element) => element.id == id, orElse: null);
+  }
+
+  bool updateNotePhrase(String id, NotePhrase phrase) {
+    final index = _phrases.indexWhere((element) => element.id == id);
+    if (index != -1) {
+      _phrases[index] = phrase;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool deleteNotePhrase(String id) {
+    final index = _phrases.indexWhere(
+      (element) => element.id == id,
+    );
+    if (index != -1) {
+      _phrases.removeAt(index);
       return true;
     } else {
       return false;

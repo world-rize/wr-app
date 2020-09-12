@@ -41,7 +41,7 @@ class User {
           title: 'お気に入り',
           sortType: '',
           isDefault: true,
-          favoritePhraseIds: {},
+          phrases: [],
         ),
       },
       statistics: UserStatistics(

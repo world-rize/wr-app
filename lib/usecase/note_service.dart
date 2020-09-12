@@ -29,7 +29,7 @@ class NoteService {
       title: title,
       isDefault: isDefault,
       sortType: '',
-      phrases: Map<String, NotePhrase>.fromIterable(phrases, key: (p) => p.id),
+      phrases: phrases,
     );
   }
 

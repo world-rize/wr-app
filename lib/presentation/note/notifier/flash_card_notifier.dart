@@ -15,7 +15,7 @@ class FlashCardNotifier extends ChangeNotifier {
   }) {
     // からのフレーズは無視
     originalNotePhrases = [
-      ...filterNotEmptyNotePhrases(note.phrases.values),
+      ...filterNotEmptyNotePhrases(note.phrases),
     ];
     notePhrases = [...originalNotePhrases];
     _nowPhraseIndex = 0;

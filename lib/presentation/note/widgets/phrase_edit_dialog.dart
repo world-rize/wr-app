@@ -96,7 +96,7 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
         if (editingPhrase == null) {
           onSubmit(
             NotePhrase.create(
-              word:
+              word: _word,
               translation: _translation,
             ),
           );

@@ -62,7 +62,7 @@ class _NoteEditDialogState extends State<NoteEditDialog> {
           Note(
             id: uuid,
             title: _title,
-            phrases: {},
+            phrases: [],
             sortType: 'createdAt+',
             isDefault: false,
           ),
