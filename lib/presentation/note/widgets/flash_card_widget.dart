@@ -29,6 +29,19 @@ class _FlashCardState extends State<FlashCard> {
 
     final achieved =
         note.phrases.values.map((phrase) => phrase.id).contains(phrase.id);
+    final achievedButton = IconButton(
+      icon: Icon(
+        achieved ? Icons.favorite : Icons.favorite_border,
+        size: 24,
+      ),
+      onPressed: () {
+        userNotifier.achievePhraseInNote(
+          noteId: noteId,
+          phraseId: phrase.id,
+          achieve: !achieved,
+        );
+      },
+    );
     final backgroundColor = Theme.of(context).backgroundColor;
     final body1 = Theme.of(context).primaryTextTheme.bodyText1;
 
@@ -60,19 +73,7 @@ class _FlashCardState extends State<FlashCard> {
                   Positioned(
                     right: 10,
                     bottom: 10,
-                    child: IconButton(
-                      icon: Icon(
-                        achieved ? Icons.favorite : Icons.favorite_border,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        userNotifier.achievePhraseInNote(
-                          noteId: noteId,
-                          phraseId: phrase.id,
-                          achieve: !achieved,
-                        );
-                      },
-                    ),
+                    child: achievedButton,
                   )
                 ],
               ),

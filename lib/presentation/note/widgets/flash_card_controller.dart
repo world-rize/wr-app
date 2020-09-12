@@ -6,6 +6,8 @@ import 'package:flutter_icons/flutter_icons.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
+import 'package:wr_app/presentation/note/widgets/national_flags.dart';
+import 'package:wr_app/presentation/note/widgets/pitch_slider.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 class FlashCardController extends StatelessWidget {
@@ -78,23 +80,6 @@ class FlashCardController extends StatelessWidget {
       ),
     );
 
-    final accentChoices = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: ['en-us', 'en-uk', 'en-au', 'en-in']
-          .map((locale) => Expanded(
-                flex: 1,
-                child: FlatButton(
-                  onPressed: () {
-                    print(locale);
-                  },
-                  child: Image.asset(
-                    'assets/icon/locale_$locale.png',
-                  ),
-                ),
-              ))
-          .toList(),
-    );
-
     final buttons = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -133,17 +118,23 @@ class FlashCardController extends StatelessWidget {
               ),
 
               // pitch slider
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8),
-                child: Placeholder(
-                  fallbackHeight: 50,
+                child: PitchSlider(
+                  pitch: 1.0,
+                  pitches: const [0.5, 0.75, 1.0, 1.5],
+                  onChanged: (p) {},
                 ),
               ),
 
               // accent
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: accentChoices,
+                child: NationalFlags(
+                  locale: 'en-us',
+                  locales: ['en-us', 'en-uk', 'en-au', 'en-in'],
+                  onChanged: (l) {},
+                ),
               ),
             ],
           ),
