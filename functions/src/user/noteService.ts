@@ -14,22 +14,22 @@ export class NoteService {
   }
 
   static generateNote(noteId: string, title: string, isDefault: boolean = false): Note {
-    const initialPhrases: Record<string, NotePhrase> = {
-      'p001': {
+    const initialPhrases: NotePhrase[] = [
+      {
         schemaVersion: 'v1',
         id: 'p001',
         word: 'Apple',
         translation: 'りんご',
         achieved: false,
       },
-      'p002': {
+      {
         schemaVersion: 'v1',
         id: 'p002',
         word: 'Banana',
         translation: 'バナナ',
         achieved: false,
       }
-    }
+    ]
 
     return {
       schemaVersion: 'v1',
@@ -101,7 +101,7 @@ export class NoteService {
       throw `Note ${noteId} not found`
     }
 
-    user.notes[noteId].phrases[phrase.id] = phrase
+    user.notes[noteId].phrases.push(phrase)
     await this.repo.update(user)
     return user.notes[noteId]
   }
@@ -113,11 +113,12 @@ export class NoteService {
       throw `Note ${noteId} not found`
     }
 
-    if (!user.notes[noteId].phrases[phraseId]) {
+    const index = user.notes[noteId].phrases.findIndex(p => p.id === phraseId)
+    if (index === -1) {
       throw `Phrase ${phraseId} not found`
     }
 
-    user.notes[noteId].phrases[phrase.id] = phrase
+    user.notes[noteId].phrases[index] = phrase
     await this.repo.update(user)
     return user.notes[noteId]
   }
@@ -129,7 +130,13 @@ export class NoteService {
       throw `Note ${noteId} not found`
     }
 
-    delete user.notes[noteId].phrases[phraseId]
+    const index = user.notes[noteId].phrases.findIndex(p => p.id === phraseId)
+
+    if (index === -1) {
+      throw `Note ${noteId}/${phraseId} not found`
+    }
+
+    delete user.notes[noteId].phrases[index]
     await this.repo.update(user)
   }
 
@@ -140,11 +147,12 @@ export class NoteService {
       throw `Note ${noteId} not found`
     }
 
-    if(!user.notes[noteId].phrases[phraseId]) {
+    const index = user.notes[noteId].phrases.findIndex(p => p.id === phraseId)
+    if(index === -1) {
       throw `Note ${noteId}/${phraseId} not found`
     }
 
-    user.notes[noteId].phrases[phraseId].achieved = achieve
+    user.notes[noteId].phrases[index].achieved = achieve
 
     await this.repo.update(user)
   }

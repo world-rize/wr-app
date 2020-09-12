@@ -64,7 +64,7 @@ export class UserService {
       isDefault: true,
       title: title,
       sortType: 'createdAt-',
-      favoritePhraseIds: {},
+      phrases: [],
     }
   }
 
@@ -114,18 +114,22 @@ export class UserService {
 
   async favoritePhrase (uuid: string, listId: string, phraseId: string, favorite: boolean): Promise<User> {
     const user = await this.repo.findById(uuid)
-
     if (!user.favorites[listId]) {
       throw `FavoriteList ${listId} not found`
     }
 
+    const index = user.favorites[listId].phrases.findIndex(p => p.id == phraseId)
+    if (index === -1) {
+      throw `FavoriteList ${listId}/${index} not found`
+    }
+
     if (favorite) {
-      user.favorites[listId].favoritePhraseIds[phraseId] = {
+      user.favorites[listId].phrases[index] = {
         id: phraseId,
         createdAt: moment().toISOString(),
       }
     } else {
-      delete user.favorites[listId].favoritePhraseIds[phraseId]
+      delete user.favorites[listId].phrases[index]
     }
   
     return this.repo.update(user)
