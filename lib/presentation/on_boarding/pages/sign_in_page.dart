@@ -51,12 +51,12 @@ class _SignInPageState extends State<SignInPage> {
       NotifyToast.success('ログインしました');
       await _gotoHome();
     } on Exception catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    } finally {
       setState(() {
         _isLoading = false;
       });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
     }
   }
 
@@ -73,12 +73,12 @@ class _SignInPageState extends State<SignInPage> {
       NotifyToast.success('ログインしました');
       await _gotoHome();
     } on Exception catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    } finally {
       setState(() {
         _isLoading = false;
       });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
     }
   }
 
@@ -95,12 +95,12 @@ class _SignInPageState extends State<SignInPage> {
       NotifyToast.success('ログインしました');
       await _gotoHome();
     } on Exception catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    } finally {
       setState(() {
         _isLoading = false;
       });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
     }
   }
 

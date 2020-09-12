@@ -14,9 +14,11 @@ class SignUpForm extends StatefulWidget {
     @required this.onSignUpWithGoogle,
   });
 
+  // email, password, name
   final Function(String, String, String) onSignUpWithEmailAndPassword;
-  final Function onSignUpWithGoogle;
-  final Function onSignUpWithApple;
+  // name
+  final Function(String) onSignUpWithGoogle;
+  final Function(String) onSignUpWithApple;
 
   @override
   _SignUpFormState createState() => _SignUpFormState();
@@ -52,6 +54,10 @@ class _SignUpFormState extends State<SignUpForm> {
         _confirmationPassword.isNotEmpty &&
         _agree &&
         _password == _confirmationPassword;
+  }
+
+  bool _isValidName() {
+    return _name.isNotEmpty && _agree;
   }
 
   @override
@@ -102,7 +108,7 @@ class _SignUpFormState extends State<SignUpForm> {
     );
 
     final _passwordField = TextFormField(
-      key: Key('password'),
+      key: const Key('password'),
       obscureText: !_showPassword,
       onChanged: (password) {
         setState(() => _password = password);
@@ -190,7 +196,6 @@ class _SignUpFormState extends State<SignUpForm> {
               if (!_formKey.currentState.validate()) {
                 return;
               }
-
               _formKey.currentState.save();
 
               widget.onSignUpWithEmailAndPassword(_email, _password, _name);
@@ -201,25 +206,31 @@ class _SignUpFormState extends State<SignUpForm> {
       key: const Key('sign_up_form_sign_up_with_google_button'),
       text: 'Sign up with Google',
       color: Colors.redAccent,
-      onTap: () {
-        if (!_agree) {
-          return;
-        }
+      onTap: !_isValidName()
+          ? null
+          : () {
+              if (!_isValidName()) {
+                return;
+              }
+              _formKey.currentState.save();
 
-        widget.onSignUpWithGoogle();
-      },
+              widget.onSignUpWithGoogle(_name);
+            },
     );
 
     final _signInWithAppleButton = siwa.AppleSignInButton(
       style: siwa.ButtonStyle.black,
       type: siwa.ButtonType.signIn,
-      onPressed: () {
-        if (!_agree) {
-          return;
-        }
+      onPressed: !_isValidName()
+          ? null
+          : () {
+              if (!_isValidName()) {
+                return;
+              }
+              _formKey.currentState.save();
 
-        widget.onSignUpWithApple();
-      },
+              widget.onSignUpWithApple(_name);
+            },
     );
 
     final _signUpByTestUserButton = RoundedButton(
@@ -267,7 +278,7 @@ class _SignUpFormState extends State<SignUpForm> {
           // Google Sign up
           _signUpWithGoogleButton.padding(),
 
-          // Sign up with SIWA
+          // Sign up with siwa
           if (appleSignInAvailable.isAvailable)
             _signInWithAppleButton.padding(),
 

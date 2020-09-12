@@ -268,6 +268,13 @@ class _SettingsState extends State<SettingsPage> {
           },
           switchValue: Provider.of<UserNotifier>(context).getUser().isPremium,
         ),
+        SettingsTile(
+          title: 'トップページへ移動',
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
+          },
+        ),
         SettingsTile.switchTile(
           title: 'Paint Size Enabled',
           onToggle: (value) {
@@ -283,7 +290,7 @@ class _SettingsState extends State<SettingsPage> {
             Provider.of<SystemNotifier>(context)
                 .notify(title: pubSpec.appName, body: 'test', payload: 'ok');
           },
-        )
+        ),
       ],
     );
   }

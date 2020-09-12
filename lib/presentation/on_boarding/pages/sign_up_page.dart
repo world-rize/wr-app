@@ -29,9 +29,11 @@ class _SignUpPageState extends State<SignUpPage> {
     Provider.of<SystemNotifier>(context, listen: false)
         .setFirstLaunch(value: false);
 
+    // login のみ
     sendEvent(event: AnalyticsEvent.logIn);
 
     Navigator.popUntil(context, (route) => route.isFirst);
+
     return Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -53,54 +55,54 @@ class _SignUpPageState extends State<SignUpPage> {
           email: email, password: password, name: name);
       await _gotoHome();
     } on Exception catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    } finally {
       setState(() {
         _isLoading = false;
       });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
     }
   }
 
   /// Google でサインアップ
-  Future<void> _signUpWithGoogle() async {
+  Future<void> _signUpWithGoogle(String name) async {
     setState(() {
       _isLoading = true;
     });
 
     try {
       final un = Provider.of<UserNotifier>(context, listen: false);
-      await un.signUpWithGoogle();
+      await un.signUpWithGoogle(name);
 
       await _gotoHome();
     } on Exception catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    } finally {
       setState(() {
         _isLoading = false;
       });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
     }
   }
 
   /// Apple でサインアップ
-  Future<void> _signUpWithApple() async {
+  Future<void> _signUpWithApple(String name) async {
     setState(() {
       _isLoading = true;
     });
 
     try {
       final un = Provider.of<UserNotifier>(context);
-      await un.signUpWithApple();
+      await un.signUpWithApple(name);
 
       await _gotoHome();
     } on Exception catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    } finally {
       setState(() {
         _isLoading = false;
       });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
     }
   }
 

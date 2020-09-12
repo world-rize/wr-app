@@ -16,7 +16,7 @@ import 'package:wr_app/util/toast.dart';
 
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
-  // TODO: エラーハンドリング, rethrow
+  // TODO: エラーハンドリング
   final UserService _userService;
   final NoteService _noteService;
 
@@ -52,52 +52,6 @@ class UserNotifier with ChangeNotifier {
   })  : _userService = userService,
         _noteService = noteService;
 
-  Future<void> signUpWithGoogle() async {
-    _user = await _userService.signUpWithGoogle();
-    notifyListeners();
-  }
-
-  /// Sign in with SIWA
-  Future<void> signInWithSignInWithApple() async {
-    _user = await _userService.signInWithSignInWithApple();
-    notifyListeners();
-  }
-
-  /// Sign up with SIWA
-  Future<void> signUpWithSignInWithApple() async {
-    _user = await _userService.signUpWithSignInWithApple();
-    notifyListeners();
-  }
-
-  Future<void> signInWithApple() async {
-    _user = await _userService.signInWithSignInWithApple();
-    notifyListeners();
-  }
-
-  Future<void> signUpWithApple() async {
-    _user = await _userService.signUpWithSignInWithApple();
-    notifyListeners();
-  }
-
-  Future<void> signOut() async {
-    InAppLogger.info('✔ user signed out');
-    return _userService.signOut();
-  }
-
-  /// メールアドレスとパスワードでログイン
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
-    _user = await _userService.signInWithEmailAndPassword(email, password);
-    InAppLogger.info('✔ signInWithEmailAndPassword');
-    notifyListeners();
-  }
-
-  /// Googleでログイン
-  Future<void> signInWithGoogle() async {
-    _user = await _userService.signUpWithGoogle();
-    InAppLogger.info('✔ signInWithGoogle');
-    notifyListeners();
-  }
-
   /// メールアドレスとパスワードでサインアップ
   Future<void> signUpWithEmailAndPassword({
     @required String email,
@@ -110,62 +64,79 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  /// Google Sign in でサインアップ
+  Future<void> signUpWithGoogle(String name) async {
+    _user = await _userService.signUpWithGoogle(name);
+    notifyListeners();
+  }
+
+  /// Sign up with SIWA
+  Future<void> signUpWithApple(String name) async {
+    _user = await _userService.signUpWithApple(name);
+    notifyListeners();
+  }
+
+  /// メールアドレスとパスワードでログイン
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    _user = await _userService.signInWithEmailAndPassword(email, password);
+    InAppLogger.info('✔ signInWithEmailAndPassword');
+    notifyListeners();
+  }
+
+  /// Googleでログイン
+  Future<void> signInWithGoogle() async {
+    _user = await _userService.signInWithGoogle();
+    InAppLogger.info('✔ signInWithGoogle');
+    notifyListeners();
+  }
+
+  /// Sign In With Apple でログイン
+  Future<void> signInWithApple() async {
+    _user = await _userService.signInWithApple();
+    notifyListeners();
+  }
+
+  Future<void> login() async {
+    await _userService.login();
+  }
+
+  Future<void> signOut() async {
+    InAppLogger.info('✔ user signed out');
+    return _userService.signOut();
+  }
+
   /// update Email
   Future<void> setEmail({@required String email}) async {
-    try {
-      _user = await _userService.updateEmail(user: _user, newEmail: email);
-      notifyListeners();
+    _user = await _userService.updateEmail(user: _user, newEmail: email);
+    notifyListeners();
 
-      NotifyToast.success('Emailを変更しました');
-    } catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-      rethrow;
-    }
+    NotifyToast.success('Emailを変更しました');
   }
 
   /// update age
   Future<void> setAge({@required String age}) async {
-    try {
-      _user = await _userService.updateAge(user: _user, age: age);
-      notifyListeners();
+    _user = await _userService.updateAge(user: _user, age: age);
+    notifyListeners();
 
-      NotifyToast.success('ageを変更しました');
-    } catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-      rethrow;
-    }
+    NotifyToast.success('ageを変更しました');
   }
 
   /// update password
   Future<void> setPassword(
       {@required String currentPassword, @required String newPassword}) async {
-    try {
-      await _userService.updatePassword(
-          currentPassword: currentPassword, newPassword: newPassword);
-      notifyListeners();
+    await _userService.updatePassword(
+        currentPassword: currentPassword, newPassword: newPassword);
+    notifyListeners();
 
-      NotifyToast.success('passwordを変更しました');
-    } catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-      rethrow;
-    }
+    NotifyToast.success('passwordを変更しました');
   }
 
   /// Test API
   Future<void> test() async {
     InAppLogger.info('callTestAPI()');
 
-    try {
-      await _userService.test();
-      notifyListeners();
-    } catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-      rethrow;
-    }
+    await _userService.test();
+    notifyListeners();
   }
 
   /// フレーズをお気に入りに登録します
