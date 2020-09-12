@@ -34,7 +34,7 @@ class VoicePlayer with ChangeNotifier {
     _player = AudioCache(fixedPlayer: _fixedPlayer);
     isPlaying = false;
     _speed = 1.0;
-    locale = _voiceAccentMP3AssetsName[VoiceAccent.americanEnglish];
+    locale = VoiceAccent.americanEnglish;
     _fixedPlayer.onPlayerStateChanged.listen(_onStateChanged);
     _fixedPlayer.onPlayerError.listen(onError);
   }
@@ -55,8 +55,10 @@ class VoicePlayer with ChangeNotifier {
   /// current playing speed
   double _speed;
 
+  double get speed => _speed;
+
   /// current pronunciation
-  String locale;
+  VoiceAccent locale;
 
   /// play queue(TODO)
   List<String> queue;
@@ -81,10 +83,11 @@ class VoicePlayer with ChangeNotifier {
     isPlaying = true;
     notifyListeners();
     await Future.forEach(messages, (message) async {
-      await _player.load(message.assets.voice[locale]);
+      final l = _voiceAccentMP3AssetsName[locale];
+
+      await _player.load(message.assets.voice[l]);
       final d = await _player.fixedPlayer.getDuration();
-      await _player.play(message.assets.voice[locale]);
-      print(d);
+      await _player.play(message.assets.voice[l]);
       await Future.delayed(Duration(milliseconds: d + 500));
     });
     isPlaying = false;
@@ -106,7 +109,7 @@ class VoicePlayer with ChangeNotifier {
 
   void setLocale(VoiceAccent voiceAccent) {
     assert(voiceAccent != VoiceAccent.japanese);
-    locale = _voiceAccentMP3AssetsName[voiceAccent];
+    locale = voiceAccent;
     notifyListeners();
   }
 }

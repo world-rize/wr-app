@@ -1,27 +1,18 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
 import 'package:wr_app/presentation/note/widgets/phrase_edit_dialog.dart';
 
-enum NoteMode {
-  wordOnly,
-  both,
-  translationOnly,
-}
-
-extension NoteModeMap on NoteMode {
-  String get name => ['英語', '両方', '日本語'][index];
-}
-
 /// ノートのフレーズを表示するテーブル
-class NoteTable extends StatefulWidget {
+class NoteTable extends StatelessWidget {
   NoteTable({
     @required this.note,
   });
@@ -29,49 +20,8 @@ class NoteTable extends StatefulWidget {
   Note note;
 
   @override
-  _NoteTableState createState() => _NoteTableState(note: note);
-}
-
-class _NoteTableState extends State<NoteTable> {
-  _NoteTableState({
-    @required this.note,
-  });
-
-  Note note;
-  NoteMode _mode;
-
-  void _showPhraseEditDialog(NotePhrase phrase) {
-    showDialog(
-      context: context,
-      builder: (context) => PhraseEditDialog(
-        phrase: phrase,
-        onSubmit: (phrase) {
-          final userNotifier = Provider.of<UserNotifier>(context, listen: false)
-            ..updatePhraseInNote(
-                noteId: note.id, phraseId: phrase.id, phrase: phrase);
-          Navigator.pop(context);
-        },
-        onDelete: (phrase) {
-          final userNotifier = Provider.of<UserNotifier>(context, listen: false)
-            ..deletePhraseInNote(noteId: note.id, phraseId: phrase.id);
-          Navigator.pop(context);
-        },
-        onCancel: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _mode = NoteMode.both;
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final userNotifier = Provider.of<UserNotifier>(context);
+    final un = Provider.of<UserNotifier>(context);
     final h5 = Theme.of(context).textTheme.headline5;
 
     // ノート名
@@ -96,33 +46,6 @@ class _NoteTableState extends State<NoteTable> {
       ],
     );
 
-    // 上部ボタン
-    final bg = Theme.of(context).backgroundColor;
-    final switchHideButton = RaisedButton.icon(
-      onPressed: () {
-        // toggle mode
-        setState(() {
-          _mode = NoteMode.values[(_mode.index + 1) % 3];
-        });
-      },
-      color: bg,
-      icon: const Padding(
-        padding: EdgeInsets.all(8),
-        child: Icon(
-          FontAwesome.language,
-          size: 20,
-        ),
-      ),
-      label: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Text(
-          _mode.name,
-          style: const TextStyle(fontSize: 20),
-        ),
-      ),
-      elevation: 5,
-    );
-
     final playButton = FlatButton(
       color: Colors.orange,
       child: const Text(
@@ -142,10 +65,7 @@ class _NoteTableState extends State<NoteTable> {
 
     final header = Row(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: switchHideButton,
-        ),
+        const Spacer(),
         const Spacer(),
         Padding(
           padding: const EdgeInsets.all(8).add(EdgeInsets.only(right: 8)),
@@ -155,8 +75,37 @@ class _NoteTableState extends State<NoteTable> {
     );
 
     // TODO: 順番保持 -> array
-    final phrases = widget.note.phrases.values.toList()
+    final phrases = note.phrases.values.toList()
       ..sort((a, b) => a.id.compareTo(b.id));
+
+    void _showPhraseEditDialog(NotePhrase phrase) {
+      final un = Provider.of<UserNotifier>(context, listen: false);
+
+      showMaterialModalBottomSheet(
+        context: context,
+        builder: (BuildContext context, scrollController) => Container(
+          child: PhraseEditDialog(
+            phrase: phrase,
+            type:
+            onSubmit: (phrase) {
+              un.updatePhraseInNote(
+                noteId: note.id,
+                phraseId: phrase.id,
+                phrase: phrase,
+              );
+              Navigator.pop(context);
+            },
+            onDelete: (phrase) {
+              un.deletePhraseInNote(noteId: note.id, phraseId: phrase.id);
+              Navigator.pop(context);
+            },
+            onCancel: () {
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      );
+    }
 
     final phrasesTable = Table(
         border: TableBorder.all(
@@ -170,25 +119,35 @@ class _NoteTableState extends State<NoteTable> {
         },
         children: [
           // header
-          const TableRow(
+          TableRow(
             children: [
-              TableCell(
+              const TableCell(
                 // empty widget
                 child: SizedBox.shrink(),
               ),
               TableCell(
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Center(
-                    child: Text('英語'),
+                child: GestureDetector(
+                  onTap: () {
+                    Provider.of<NoteNotifier>(context).toggleSeeJapanese();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Center(
+                      child: Text('Japanese'),
+                    ),
                   ),
                 ),
               ),
               TableCell(
-                child: Padding(
-                  padding: EdgeInsets.all(8),
-                  child: Center(
-                    child: Text('日本語'),
+                child: GestureDetector(
+                  onTap: () {
+                    Provider.of<NoteNotifier>(context).toggleSeeEnglish();
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(8),
+                    child: Center(
+                      child: Text('English'),
+                    ),
                   ),
                 ),
               ),
@@ -210,7 +169,7 @@ class _NoteTableState extends State<NoteTable> {
                           color: Colors.redAccent,
                         ),
                         onPressed: () {
-                          userNotifier.achievePhraseInNote(
+                          un.achievePhraseInNote(
                               noteId: note.id,
                               phraseId: phrase.id,
                               achieve: !phrase.achieved);
@@ -222,14 +181,15 @@ class _NoteTableState extends State<NoteTable> {
                 TableCell(
                   child: InkWell(
                     onTap: () {
-                      _showPhraseEditDialog(phrase);
+                      // _showPhraseEditDialog(phrase);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: Center(
-                        child: Text(_mode != NoteMode.translationOnly
-                            ? phrase.word
-                            : ''),
+                        child: Text(
+                            Provider.of<NoteNotifier>(context).canSeeJapanese
+                                ? phrase.translation
+                                : ''),
                       ),
                     ),
                   ),
@@ -237,14 +197,15 @@ class _NoteTableState extends State<NoteTable> {
                 TableCell(
                   child: InkWell(
                     onTap: () {
-                      _showPhraseEditDialog(phrase);
+                      // _showPhraseEditDialog(phrase);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8),
                       child: Center(
-                        child: Text(_mode != NoteMode.wordOnly
-                            ? phrase.translation
-                            : ''),
+                        child: Text(
+                            Provider.of<NoteNotifier>(context).canSeeEnglish
+                                ? phrase.word
+                                : ''),
                       ),
                     ),
                   ),

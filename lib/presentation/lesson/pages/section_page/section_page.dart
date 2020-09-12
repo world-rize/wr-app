@@ -71,10 +71,10 @@ class _SectionPageState extends State<SectionPage>
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: SizedBox(
         width: double.infinity,
-        child: FloatingActionButton(
+        child: FloatingActionButton.extended(
           backgroundColor: Colors.blue,
           heroTag: 'play',
-          child: Icon(
+          label: Icon(
             vp.isPlaying ? Icons.pause : Icons.play_arrow,
             color: Colors.white,
             size: 40,

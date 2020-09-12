@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
-import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/widgets/note_table.dart';
 import 'package:wr_app/presentation/note/widgets/phrase_edit_dialog.dart';
 
@@ -63,15 +62,6 @@ class NotePage extends StatelessWidget {
             .firstWhere((note) => note.id == noteNotifier.nowSelectedNoteId);
     // noteNotifier.nowSelectedNoteId = note.id;
 
-    return Scaffold(
-      body: _createNoteView(context, note),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showAddPhraseDialog(context, note);
-        },
-        child: const Icon(Icons.add),
-        backgroundColor: Colors.green,
-      ),
-    );
+    return Scaffold(body: _createNoteView(context, note));
   }
 }

@@ -1,9 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:wr_app/domain/voice_accent.dart';
-import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
 
 Map<VoiceAccent, String> _mapVoiceAccentString = {
   VoiceAccent.americanEnglish: 'en-us',
@@ -60,12 +58,9 @@ class NationalFlags extends StatelessWidget {
                   onChanged(l);
                 },
                 child: Container(
-                  decoration:
-                      Provider.of<FlashCardNotifier>(context, listen: false)
-                                  .voiceAccent ==
-                              l
-                          ? BoxDecoration(border: Border.all(width: 3))
-                          : null,
+                  decoration: locale == l
+                      ? BoxDecoration(border: Border.all(width: 3))
+                      : null,
                   child: _flagCard(l),
                 ),
               ))
