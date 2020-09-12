@@ -209,13 +209,14 @@ class UserNotifier with ChangeNotifier {
     try {
       // 仮反映
       if (favorite) {
-        _user.favorites[listId].favoritePhraseIds[phraseId] =
+        _user.favorites[listId].updatePhrase(
+            phraseId,
             FavoritePhraseDigest(
-          id: phraseId,
-          createdAt: DateTime.now(),
-        );
+              id: phraseId,
+              createdAt: DateTime.now(),
+            ));
       } else {
-        _user.favorites[listId].favoritePhraseIds.remove(phraseId);
+        _user.favorites[listId].deletePhrase(phraseId);
       }
 
       notifyListeners();
@@ -359,7 +360,7 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
   }) {
     return _user.favorites.values
-        .any((list) => list.favoritePhraseIds.containsKey(phraseId));
+        .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 
   /// create note
@@ -391,7 +392,8 @@ class UserNotifier with ChangeNotifier {
   bool existPhraseInNotes({
     @required String phraseId,
   }) {
-    return _user.notes.values.any((list) => list.phrases.containsKey(phraseId));
+    return _user.notes.values
+        .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 
   /// exist phrase in favorites
@@ -399,7 +401,7 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
   }) {
     return _user.favorites.values
-        .any((list) => list.favoritePhraseIds.containsKey(phraseId));
+        .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 
   /// create note
@@ -544,7 +546,10 @@ class UserNotifier with ChangeNotifier {
     try {
       await _noteService.achievePhraseInNote(
           noteId: noteId, phraseId: phraseId, achieve: achieve);
-      _user.notes[noteId].phrases[phraseId].achieved = achieve;
+
+      final phrase = _user.notes[noteId].findByNotePhraseId(phraseId)
+        ..achieved = achieve;
+      _user.notes[noteId].updateNotePhrase(phraseId, phrase);
 
       notifyListeners();
 

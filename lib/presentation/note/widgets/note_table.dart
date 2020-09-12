@@ -77,8 +77,7 @@ class NoteTable extends StatelessWidget {
 
     // TODO: 順番保持 -> array
     // 見かけは30こ
-    final phrases = note.phrases.values.toList()
-      ..sort((a, b) => a.id.compareTo(b.id));
+    final phrases = note.phrases..sort((a, b) => a.id.compareTo(b.id));
 
     void _showPhraseEditDialog(NotePhrase phrase, Language language) {
       final un = Provider.of<UserNotifier>(context, listen: false);

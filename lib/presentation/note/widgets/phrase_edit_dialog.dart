@@ -1,7 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/language.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 
@@ -94,22 +93,22 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
           editingPhrase != null ? const Text('Update') : const Text('Create'),
       onPressed: () {
         if (editingPhrase == null) {
-          onSubmit(
-            NotePhrase.create(
-              word: _word,
-              translation: _translation,
-            ),
-          );
+//          onSubmit(
+//            NotePhrase.create(
+//              word: _word,
+//              translation: _translation,
+//            ),
+//          );
         } else {
           // update phrase
-          onSubmit(
-            NotePhrase(
-              id: editingPhrase.id,
-              word: _word,
-              translation: _translation,
-              achieved: editingPhrase.achieved,
-            ),
-          );
+//          onSubmit(
+//            NotePhrase(
+//              id: editingPhrase.id,
+//              word: _word,
+//              translation: _translation,
+//              achieved: editingPhrase.achieved,
+//            ),
+//          );
         }
       },
     );
@@ -131,7 +130,7 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
         mainAxisSize: MainAxisSize.min,
         children: [
           //wordField,
-          translationField,
+          // translationField,
         ],
       ),
     );

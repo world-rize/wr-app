@@ -60,11 +60,9 @@ class LessonNotifier with ChangeNotifier {
   }
 
   Future<List<Phrase>> favoritePhrases(User user) async {
-    return user.favorites.values
-        .expand((element) => element.phrases
-        .where((element) => false);
-
-    return phrasesWhere((p) => favoritedPhraseIds.contains(p.id));
+    final favoriteIds =
+        user.favorites.values.expand((list) => list.phrases).map((p) => p.id);
+    return phrasesWhere((p) => favoriteIds.contains(p.id));
   }
 
   Future<List<Phrase>> newComingPhrases() async {

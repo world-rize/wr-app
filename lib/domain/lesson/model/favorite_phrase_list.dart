@@ -82,6 +82,16 @@ class FavoritePhraseList {
     return phrases.firstWhere((element) => element.id == id, orElse: null);
   }
 
+  bool updatePhrase(String id, FavoritePhraseDigest digest) {
+    final index = phrases.indexWhere((element) => element.id == id);
+    if (index != -1) {
+      phrases[index] = digest;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   bool deletePhrase(String id) {
     final index = phrases.indexWhere(
       (element) => element.id == id,

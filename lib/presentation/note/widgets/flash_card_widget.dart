@@ -28,7 +28,7 @@ class _FlashCardState extends State<FlashCard> {
     }
 
     final achieved =
-        note.phrases.values.map((phrase) => phrase.id).contains(phrase.id);
+        note.phrases.map((phrase) => phrase.id).contains(phrase.id);
     final achievedButton = IconButton(
       icon: Icon(
         achieved ? Icons.favorite : Icons.favorite_border,
