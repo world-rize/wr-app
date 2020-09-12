@@ -75,7 +75,7 @@ class _TestChoicesState extends State<TestChoices> {
               ),
             ),
           ),
-        ).p(6);
+        ).padding(6);
       },
       itemCount: 4,
     );

@@ -73,7 +73,7 @@ class _RootViewState extends State<RootView>
           'assets/icon/wr_coin.png',
           width: 30,
           height: 30,
-        ).p_1(),
+        ).padding(),
         Text(
           I.of(context).points(user.statistics.points),
           style: const TextStyle(color: Colors.white),

@@ -22,7 +22,8 @@ class ColumnIndexPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Header1(text: 'Column', dividerColor: GFColors.SUCCESS).p_1(),
+          const Header1(text: 'Column', dividerColor: GFColors.SUCCESS)
+              .padding(),
           // categories
           ...categories.map(
             (category) => CategoryView(

@@ -3,47 +3,33 @@
 import 'package:apple_sign_in/apple_sign_in.dart' as siwa;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
-import 'package:wr_app/domain/system/index.dart';
-import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/apple_signin.dart';
-import 'package:wr_app/util/toast.dart';
+import 'package:wr_app/util/extensions.dart';
 
 class SignUpForm extends StatefulWidget {
-  SignUpForm({@required this.onSubmit, @required this.onSuccess});
+  const SignUpForm({
+    @required this.onSignUpWithEmailAndPassword,
+    @required this.onSignUpWithApple,
+    @required this.onSignUpWithGoogle,
+  });
 
-  Function onSubmit;
-
-  Function onSuccess;
+  final Function(String, String, String) onSignUpWithEmailAndPassword;
+  final Function onSignUpWithGoogle;
+  final Function onSignUpWithApple;
 
   @override
-  _SignUpFormState createState() =>
-      _SignUpFormState(onSubmit: onSubmit, onSuccess: onSuccess);
+  _SignUpFormState createState() => _SignUpFormState();
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-  _SignUpFormState({@required this.onSubmit, @required this.onSuccess});
-
   final _formKey = GlobalKey<FormState>();
-
-  Function onSubmit;
-
-  Function onSuccess;
-
   bool _agree;
-
   bool _showPassword;
-
   bool _showConfirmationPassword;
-
   String _name;
-
   String _email;
-
   String _password;
-
   String _confirmationPassword;
 
   @override
@@ -68,79 +54,6 @@ class _SignUpFormState extends State<SignUpForm> {
         _password == _confirmationPassword;
   }
 
-  /// call when SignUp button tapped.
-  Future<void> _signUp() async {
-    if (!_formKey.currentState.validate()) {
-      return;
-    }
-
-    _formKey.currentState.save();
-
-    try {
-      await Provider.of<UserNotifier>(context, listen: false)
-          .signUpWithEmailAndPassword(
-              email: _email, password: _password, name: _name, age: '')
-          .catchError(print);
-
-      Provider.of<SystemNotifier>(context, listen: false)
-          .setFirstLaunch(value: false);
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RootView(),
-        ),
-      );
-    } on Exception catch (e) {
-      print(e);
-      NotifyToast.error(e);
-      return;
-    }
-  }
-
-  /// call when SignUpWithGoogle button tapped.
-  Future<void> _signUpWithGoogle() async {
-    try {
-      await Provider.of<UserNotifier>(context, listen: false)
-          .signUpWithGoogle();
-
-      Provider.of<SystemNotifier>(context, listen: false)
-          .setFirstLaunch(value: false);
-
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RootView(),
-        ),
-      );
-    } on Exception catch (e) {
-      print(e);
-      NotifyToast.error(e);
-      return;
-    }
-  }
-
-  /// call when SignUpWithSignInWithApple button tapped.
-  Future<void> _signUpWithSignInWithApple() async {
-    try {
-      await Provider.of<UserNotifier>(context, listen: false)
-          .signUpWithSignInWithApple();
-
-      Provider.of<SystemNotifier>(context, listen: false)
-          .setFirstLaunch(value: false);
-
-      await Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => RootView(),
-        ),
-      );
-    } on Exception catch (e) {
-      print(e);
-      NotifyToast.error(e);
-      return;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     const splashColor = Color(0xff56c0ea);
@@ -163,7 +76,7 @@ class _SignUpFormState extends State<SignUpForm> {
             color: Colors.grey,
           ),
         ),
-        hintText: '表示名',
+        hintText: '名前',
       ),
     );
 
@@ -214,7 +127,7 @@ class _SignUpFormState extends State<SignUpForm> {
             color: Colors.grey,
           ),
         ),
-        hintText: 'パスワード',
+        hintText: 'パスワード(6文字以上)',
       ),
     );
 
@@ -267,40 +180,55 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
     );
 
-    final _signUpButton = Padding(
-      padding: const EdgeInsets.all(8),
-      child: SizedBox(
-        width: double.infinity,
-        child: RoundedButton(
-          key: const Key('sign_up_button'),
-          text: 'Sign up',
-          color: splashColor,
-          onTap: !_isValid() ? null : _signUp,
-        ),
-      ),
+    final _signUpButton = RoundedButton(
+      key: const Key('sign_up_form_sign_up_button'),
+      text: 'Sign up',
+      color: splashColor,
+      onTap: !_isValid()
+          ? null
+          : () {
+              if (!_formKey.currentState.validate()) {
+                return;
+              }
+
+              _formKey.currentState.save();
+
+              widget.onSignUpWithEmailAndPassword(_email, _password, _name);
+            },
     );
 
-    final _signUpWithGoogleButton = Padding(
-      padding: const EdgeInsets.all(8),
-      child: SizedBox(
-        width: double.infinity,
-        child: RoundedButton(
-          text: 'Sign up with Google',
-          color: Colors.redAccent,
-          onTap: _signUpWithGoogle,
-        ),
-      ),
+    final _signUpWithGoogleButton = RoundedButton(
+      key: const Key('sign_up_form_sign_up_with_google_button'),
+      text: 'Sign up with Google',
+      color: Colors.redAccent,
+      onTap: () {
+        if (!_agree) {
+          return;
+        }
+
+        widget.onSignUpWithGoogle();
+      },
     );
 
-    final _signInWithAppleButton = SizedBox(
-      width: double.infinity,
-      child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: siwa.AppleSignInButton(
-            style: siwa.ButtonStyle.black,
-            type: siwa.ButtonType.signIn,
-            onPressed: _signUpWithSignInWithApple,
-          )),
+    final _signInWithAppleButton = siwa.AppleSignInButton(
+      style: siwa.ButtonStyle.black,
+      type: siwa.ButtonType.signIn,
+      onPressed: () {
+        if (!_agree) {
+          return;
+        }
+
+        widget.onSignUpWithApple();
+      },
+    );
+
+    final _signUpByTestUserButton = RoundedButton(
+      key: const Key('sign_up_form_sign_up_by_test_user_button'),
+      text: 'Test User',
+      color: Colors.white30,
+      onTap: () {
+        widget.onSignUpWithEmailAndPassword('a@b.com', '123456', 'てすと');
+      },
     );
 
     return Form(
@@ -309,40 +237,25 @@ class _SignUpFormState extends State<SignUpForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // Name
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: _nameField,
-          ),
+          _nameField.padding(),
 
           // Email
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: _emailField,
-          ),
+          _emailField.padding(),
 
           // Password
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: _passwordField,
-          ),
+          _passwordField.padding(),
 
           // Password Confirm
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            child: _confirmationPasswordField,
-          ),
+          _confirmationPasswordField.padding(),
 
           // Agree
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(8),
             child: _acceptTermsCheckbox,
           ),
 
           // Sign Up Button
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: _signUpButton,
-          ),
+          _signUpButton.padding(),
 
           // Or
           const Divider(
@@ -352,19 +265,16 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
 
           // Google Sign up
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: _signUpWithGoogleButton,
-          ),
+          _signUpWithGoogleButton.padding(),
 
           // Sign up with SIWA
           if (appleSignInAvailable.isAvailable)
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: _signInWithAppleButton,
-            ),
+            _signInWithAppleButton.padding(),
+
+          // test user
+          _signUpByTestUserButton.padding(),
         ],
       ),
-    );
+    ).padding();
   }
 }

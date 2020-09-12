@@ -178,9 +178,9 @@ class LessonIndexPage extends StatelessWidget {
                 child: Text(I.of(context).requestPhraseButton),
               ),
             ),
-          ).p_1(),
+          ).padding(),
         ],
-      ).p_1(),
+      ).padding(),
     );
   }
 }

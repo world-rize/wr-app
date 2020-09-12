@@ -145,7 +145,7 @@ class TestResultPage extends StatelessWidget {
             Text(
               scoreText,
               style: const TextStyle(fontSize: 20),
-            ).p_1(),
+            ).padding(),
             Container(
               child: Column(
                 children: List.generate(
@@ -171,12 +171,12 @@ class TestResultPage extends StatelessWidget {
                             phraseId: phrase.id),
                       );
                     },
-                  ).p_1(),
+                  ).padding(),
                 ),
               ),
             ),
           ],
-        ).p_1(),
+        ).padding(),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20),
