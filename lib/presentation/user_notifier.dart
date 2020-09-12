@@ -394,6 +394,14 @@ class UserNotifier with ChangeNotifier {
     return _user.notes.values.any((list) => list.phrases.containsKey(phraseId));
   }
 
+  /// exist phrase in favorites
+  bool existPhraseInFavorites({
+    @required String phraseId,
+  }) {
+    return _user.favorites.values
+        .any((list) => list.favoritePhraseIds.containsKey(phraseId));
+  }
+
   /// create note
   Future<void> createNote({
     @required String title,

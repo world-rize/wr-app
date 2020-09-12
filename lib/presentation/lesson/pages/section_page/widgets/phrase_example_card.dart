@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/boldable_text.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
@@ -17,13 +19,13 @@ class PhraseExampleCard extends StatelessWidget {
 
   final Phrase phrase;
 
-  Widget _createMessageView(
+  Widget _createMessageView({
     BuildContext context,
+    Function onPressed,
     Message message,
-    int index, {
+    int index,
     bool primary = false,
   }) {
-    // TODO
     final showKeyphrase = false;
     final showTranslation = false;
 
@@ -35,9 +37,7 @@ class PhraseExampleCard extends StatelessWidget {
         children: <Widget>[
           // 英語メッセージ
           GestureDetector(
-            onTap: () {
-              context.watch<VoicePlayer>().playMessages(messages: [message]);
-            },
+            onTap: onPressed,
             child: Container(
               padding: const EdgeInsets.all(10),
               width: 350,
@@ -99,34 +99,70 @@ class PhraseExampleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final voicePlayer = Provider.of<VoicePlayer>(context);
-    final lessonNotifier = Provider.of<LessonNotifier>(context);
-    final showTranslation = lessonNotifier.getShowTranslation();
+    final vp = Provider.of<VoicePlayer>(context);
+    final ln = Provider.of<LessonNotifier>(context);
+    final un = Provider.of<UserNotifier>(context);
+
+    final showTranslation = ln.getShowTranslation();
+
+    // TODO: phrase.id !== notePhrase.uuid
+    final existNotes = un.existPhraseInNotes(phraseId: phrase.id);
+    final favorited = un.existPhraseInFavoriteList(phraseId: phrase.id);
+
+    final _addNotesButton = IconButton(
+      icon: Icon(
+        un.existPhraseInNotes(phraseId: phrase.id)
+            ? Icons.bookmark
+            : Icons.bookmark_border,
+        color: Colors.grey,
+      ),
+      onPressed: () {
+        un.addPhraseInNote(
+            noteId: 'default', phrase: NotePhrase.fromPhrase(phrase));
+      },
+    );
+
+    final _favoriteButton = IconButton(
+        icon: Icon(
+          favorited ? Icons.favorite : Icons.favorite_border,
+          color: Colors.redAccent,
+        ),
+        onPressed: () {
+          un.favoritePhrase(phraseId: phrase.id, favorite: !favorited);
+        });
+
+    final _buttons = Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _addNotesButton,
+        _favoriteButton,
+      ],
+    );
 
     final header = Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 12, top: 12),
-            child: Text(
-              phrase.title['en'],
-              style: TextStyle(
-                fontSize: 20,
-                color: theme.accentColor,
-                fontWeight: FontWeight.bold,
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 12),
+                  child: Text(
+                    phrase.title['ja'],
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: theme.accentColor,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: Text(
-              phrase.title['ja'],
-              style: TextStyle(
-                fontSize: 16,
-                color: theme.accentColor,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _buttons,
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -140,8 +176,13 @@ class PhraseExampleCard extends StatelessWidget {
 
         // messages
         ...phrase.example.value.indexedMap(
-          (i, message) =>
-              _createMessageView(context, message, i, primary: i.isOdd),
+          (i, message) => _createMessageView(
+            context: context,
+            onPressed: () => vp.playMessages(messages: [message]),
+            message: message,
+            index: i,
+            primary: i.isOdd,
+          ),
         ),
       ]),
     );

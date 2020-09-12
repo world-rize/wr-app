@@ -3,9 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/toast.dart';
 
 import '../widgets/phrase_card.dart';
 
@@ -45,9 +47,14 @@ class SectionListPage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => SectionPage(
-                        section: section,
-                        index: index,
+                      builder: (_) => ChangeNotifierProvider<VoicePlayer>.value(
+                        value: VoicePlayer(
+                          onError: NotifyToast.error,
+                        ),
+                        child: SectionPage(
+                          section: section,
+                          index: index,
+                        ),
                       ),
                     ),
                   );

@@ -31,7 +31,7 @@ class VoicePlayer with ChangeNotifier {
   VoicePlayer._internal({@required onError}) {
     InAppLogger.debug('VoicePlayer._internal()');
     _fixedPlayer = AudioPlayer();
-    AudioCache(fixedPlayer: _fixedPlayer);
+    _player = AudioCache(fixedPlayer: _fixedPlayer);
     isPlaying = false;
     _speed = 1.0;
     locale = _voiceAccentMP3AssetsName[VoiceAccent.americanEnglish];
@@ -61,13 +61,13 @@ class VoicePlayer with ChangeNotifier {
   /// play queue(TODO)
   List<String> queue;
 
-  @override
-  void dispose() {
-    print('dispose');
-    _player.fixedPlayer.dispose();
-    _cache.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   print('dispose');
+  //   _player.fixedPlayer.dispose();
+  //   _cache.dispose();
+  //   super.dispose();
+  // }
 
   void _onStateChanged(AudioPlayerState state) {
     if (state == AudioPlayerState.COMPLETED) {

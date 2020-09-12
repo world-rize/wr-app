@@ -3,7 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
-import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_example_messages_view.dart';
+import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_example_card.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
 

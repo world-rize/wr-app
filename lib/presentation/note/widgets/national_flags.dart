@@ -16,23 +16,25 @@ class NationalFlags extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+//    final _flagCard = Image.asset(
+//      'assets/icon/locale_$locale.png',
+//    );
+    final _flagCard = Placeholder(
+      fallbackHeight: 30,
+      fallbackWidth: 40,
+    );
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: locales
-          .map((l) => Expanded(
-                flex: 1,
-                child: FlatButton(
-                  onPressed: () {
-                    onChanged(l);
-                  },
-                  child: Container(
-                    decoration: locale == l
-                        ? BoxDecoration(border: Border.all())
-                        : null,
-                    child: Image.asset(
-                      'assets/icon/locale_$locale.png',
-                    ),
-                  ),
+          .map((l) => GestureDetector(
+                onTap: () {
+                  onChanged(l);
+                },
+                child: Container(
+                  decoration:
+                      locale == l ? BoxDecoration(border: Border.all()) : null,
+                  child: _flagCard,
                 ),
               ))
           .toList(),
