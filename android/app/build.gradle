@@ -1,3 +1,5 @@
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -58,20 +60,45 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.worldrize.app"
-        minSdkVersion 17
+        minSdkVersion 21
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // <https://github.com/flutter/flutter/issues/47517>
         multiDexEnabled true
+
+        // <https://qiita.com/kasa_le/items/d23075d817f42e869778>
+        signingConfigs {
+            release {
+                // from codemagic env
+                if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
+                    storeFile file(System.getenv()["FCI_BUILD_DIR"] + "/keystore.jks")
+                    storePassword System.getenv()["FCI_KEYSTORE_PASSWORD"]
+                    keyAlias System.getenv()["FCI_KEY_ALIAS"]
+                    keyPassword System.getenv()["FCI_KEY_PASSWORD"]
+                }
+                // local
+                else if (keystorePropertiesFile.exists()) {
+                    def keystoreProperties = new Properties()
+                    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                    keyAlias keystoreProperties['keyAlias']
+                    keyPassword keystoreProperties['keyPassword']
+                    storeFile file(keystoreProperties['storeFile'])
+                    storePassword keystoreProperties['storePassword']
+                }
+            }
+        }
     }
 
     buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+        debug {
+            resValue "string", "app_name", "WR英会話-dev"
             signingConfig signingConfigs.debug
+        }
+        release {
+            resValue "string", "app_name", "WR英会話"
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
