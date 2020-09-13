@@ -10,7 +10,8 @@
     "logs": "firebase functions:log",
     "test": "jest -i --detectOpenHandles",
     "docs": "typedoc --out ../docs/typedoc src",
-    "migrate": "MIGRATE=true ts-node src/migrate.ts"
+    "emu": "yarn build && firebase emulators:start --project wr-english-dev",
+    "run:emu": "export FIRESTORE_EMULATOR_HOST=\"localhost:8080\"; MIGRATE=true ts-node"
   },
   "engines": {
     "node": "10"
