@@ -6,6 +6,8 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/ui/widgets/shadowed_container.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// ユーザーの情報
 class UserInfo extends StatelessWidget {
@@ -17,7 +19,6 @@ class UserInfo extends StatelessWidget {
     final user = userNotifier.getUser();
     final items = Provider.of<ShopNotifier>(context).getShopItems();
 
-    final streaksStatus = Text('streaks $streaks / 30');
     final badge = Padding(
       padding: const EdgeInsets.all(8),
       child: Chip(
@@ -29,7 +30,10 @@ class UserInfo extends StatelessWidget {
       ),
     );
 
-    return Container(
+    final bg = Theme.of(context).backgroundColor;
+
+    return ShadowedContainer(
+      color: bg,
       child: Column(
         children: [
           Row(
@@ -46,20 +50,34 @@ class UserInfo extends StatelessWidget {
                         badge,
                       ],
                     ),
-                    Text(user.attributes.email),
+                    Text(user.attributes.email,
+                        style: theme.textTheme.headline6
+                            .apply(color: Colors.grey)),
                   ],
                 ),
               ),
               const Spacer(),
             ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: streaksStatus,
-          ),
-          ...user.items.entries
-              .map((e) => Text('${e.key} ${e.value}こ'))
-              .toList(),
+
+          // streak
+//          StreakView().padding(),
+
+          Row(
+            children: [
+              ...user.items.entries
+                  .map(
+                    (e) => Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Container(
+                        color: Colors.grey[100],
+                        child: Text('${e.key} ${e.value}こ').padding(),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ],
+          ).padding(),
         ],
       ),
     );

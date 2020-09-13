@@ -5,7 +5,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
+import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
+import 'package:wr_app/util/toast.dart';
 
 class AnythingSearchPage extends StatefulWidget {
   @override
@@ -38,6 +42,8 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final un = Provider.of<UserNotifier>(context, listen: false);
+
     final _wordField = TextFormField(
       onChanged: (word) {
         setState(() => _word = word);
@@ -61,7 +67,7 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(16),
               child: _wordField,
             ),
             FutureBuilder<Iterable<Phrase>>(
@@ -77,8 +83,29 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
                             (phrase) => PhraseCard(
                               phrase: phrase,
                               favorite: false,
-                              onTap: () {},
-                              onFavorite: () {},
+                              onTap: () {
+                                // TODO: voice player SectionPageの中に
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => ChangeNotifierProvider<
+                                        VoicePlayer>.value(
+                                      value: VoicePlayer(
+                                        onError: NotifyToast.error,
+                                      ),
+                                      builder: (_, __) => SectionPage(
+                                        section: Section.fromPhrase(phrase),
+                                        index: 0,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              onFavorite: () {
+                                un.favoritePhrase(
+                                    phraseId: phrase.id,
+                                    favorite: un.existPhraseInFavoriteList(
+                                        phraseId: phrase.id));
+                              },
                             ),
                           )
                           .toList(),

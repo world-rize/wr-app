@@ -450,15 +450,15 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// calculates heatMap of testResult
-  Map<Jiffy, int> _calcHeatMap(List<TestResult> results) {
+  Map<DateTime, int> calcHeatMap(List<TestResult> results) {
     final dates = results.map((r) => Jiffy(r.date)..startOf(Units.DAY));
-    return groupBy(dates, (d) => d)
-        .map((key, value) => MapEntry(key, value.length));
+    return groupBy<Jiffy, Jiffy>(dates, (d) => d).map(
+        (key, value) => MapEntry<DateTime, int>(key.local(), value.length));
   }
 
   /// calculates test 30days streaks
   int calcTestStreaks() {
-    final heatMap = _calcHeatMap(_user.statistics.testResults);
+    final heatMap = calcHeatMap(_user.statistics.testResults);
     var i = 0;
     for (var day = Jiffy()..startOf(Units.DAY);
         heatMap.containsKey(day);

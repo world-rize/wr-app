@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
@@ -72,7 +73,7 @@ class _SettingsState extends State<SettingsPage> {
         ),
         SettingsTile(
           title: 'サインアウト',
-          leading: const Icon(Icons.attach_file),
+          leading: const Icon(FontAwesome5.eye),
           onTap: () async {
             _showSignOutConfirmDialog();
           },

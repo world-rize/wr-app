@@ -124,14 +124,17 @@ export class UserService {
     }
 
     const index = user.favorites[listId].phrases.findIndex(p => p.id == phraseId)
-    if (index === -1) {
-      throw new functions.https.HttpsError('not-found', `favorite list ${listId}/${index} not found`)
-    }
-
     if (favorite) {
-      user.favorites[listId].phrases[index] = {
-        id: phraseId,
-        createdAt: moment().toISOString(),
+      if (index === -1) {
+        user.favorites[listId].phrases.push({
+          id: phraseId,
+          createdAt: moment().toISOString(),
+        })
+      } else {
+        user.favorites[listId].phrases[index] = {
+          id: phraseId,
+          createdAt: moment().toISOString(),
+        }
       }
     } else {
       delete user.favorites[listId].phrases[index]
