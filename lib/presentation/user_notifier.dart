@@ -18,6 +18,7 @@ import 'package:wr_app/util/toast.dart';
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
   // TODO: エラーハンドリング
+  // TODO: いろいろとつらいのでイミュータブルにしたい
   final UserService _userService;
   final NoteService _noteService;
 

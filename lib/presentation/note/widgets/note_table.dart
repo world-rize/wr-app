@@ -37,65 +37,6 @@ class _NoteTableState extends State<NoteTable> {
     _isLoading = false;
   }
 
-  TableRow _createPhraseRow({
-    @required BuildContext context,
-    @required UserNotifier un,
-    @required NotePhrase phrase,
-  }) {
-    return TableRow(
-      children: [
-        TableCell(
-          child: Center(
-            child: IconButton(
-              icon: Icon(
-                phrase.achieved
-                    ? Icons.check_box
-                    : Icons.check_box_outline_blank,
-                color: Colors.green,
-              ),
-              onPressed: () {
-                un.achievePhraseInNote(
-                    noteId: widget.note.id,
-                    phraseId: phrase.id,
-                    achieve: !phrase.achieved);
-              },
-            ),
-          ).padding(),
-        ),
-        TableCell(
-          child: InkWell(
-            onTap: () {
-              // _showPhraseEditDialog(phrase);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: Text(Provider.of<NoteNotifier>(context).canSeeJapanese
-                    ? phrase.translation
-                    : ''),
-              ),
-            ),
-          ),
-        ),
-        TableCell(
-          child: InkWell(
-            onTap: () {
-              // _showPhraseEditDialog(phrase);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: Text(Provider.of<NoteNotifier>(context).canSeeEnglish
-                    ? phrase.word
-                    : ''),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   void _showDeleteNoteConfirmDialog() {
     final un = Provider.of<UserNotifier>(context, listen: false);
     final nn = Provider.of<NoteNotifier>(context, listen: false);
@@ -174,7 +115,7 @@ class _NoteTableState extends State<NoteTable> {
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context);
-    final nn = Provider.of<NoteNotifier>(context, listen: false);
+    final nn = Provider.of<NoteNotifier>(context);
     final h5 = Theme.of(context).textTheme.headline5;
 
     // ノート名
@@ -259,6 +200,88 @@ class _NoteTableState extends State<NoteTable> {
       ],
     );
 
+    TableRow _createPhraseRow({
+      @required NotePhrase phrase,
+    }) {
+      final nn = Provider.of<NoteNotifier>(context);
+
+      return TableRow(
+        children: [
+          TableCell(
+            child: Center(
+              child: IconButton(
+                icon: Icon(
+                  phrase.achieved
+                      ? Icons.check_box
+                      : Icons.check_box_outline_blank,
+                  color: Colors.green,
+                ),
+                onPressed: () {
+                  un.achievePhraseInNote(
+                      noteId: widget.note.id,
+                      phraseId: phrase.id,
+                      achieve: !phrase.achieved);
+                },
+              ),
+            ).padding(),
+          ),
+          TableCell(
+            child: !nn.canSeeJapanese
+                ? Container()
+                : Container(
+                    child: TextFormField(
+                      initialValue: phrase.translation,
+                      decoration: InputDecoration.collapsed(hintText: ''),
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      onChanged: (t) {
+                        phrase.translation = t;
+                      },
+                      onEditingComplete: () {
+                        try {
+                          print(phrase.translation);
+                          un.updatePhraseInNote(
+                              noteId: widget.note.id,
+                              phraseId: phrase.id,
+                              phrase: phrase);
+                        } on Exception catch (e) {
+                          InAppLogger.error(e);
+                        }
+                      },
+                    ).padding(),
+                  ),
+          ),
+          TableCell(
+            child: !nn.canSeeEnglish
+                ? Container()
+                : Container(
+                    child: TextFormField(
+                      initialValue: phrase.word,
+                      decoration: InputDecoration.collapsed(hintText: ''),
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      onChanged: (t) {
+                        phrase.word = t;
+                      },
+                      onEditingComplete: () {
+                        try {
+                          print(phrase.word);
+                          un.updatePhraseInNote(
+                              noteId: widget.note.id,
+                              phraseId: phrase.id,
+                              phrase: phrase);
+                        } on Exception catch (e) {
+                          InAppLogger.error(e);
+                        }
+                      },
+                    ).padding(),
+                  ),
+          ),
+        ],
+      );
+    }
+
+    // TODO: DataTableのほうがいい?
     final phrasesTable = Table(
       border: TableBorder.all(
         color: Colors.grey,
@@ -274,8 +297,7 @@ class _NoteTableState extends State<NoteTable> {
         _tableHeader,
 
         ...widget.note.phrases
-            .map((phrase) =>
-                _createPhraseRow(context: context, un: un, phrase: phrase))
+            .map((phrase) => _createPhraseRow(phrase: phrase))
             .toList(),
       ],
     );
