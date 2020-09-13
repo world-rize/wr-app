@@ -8,6 +8,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.0.0"
+  admob_flutter:
+    dependency: "direct main"
+    description:
+      name: admob_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.4"
   analyzer:
     dependency: transitive
     description:
@@ -577,6 +584,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+  heatmap_calendar:
+    dependency: "direct main"
+    description:
+      name: heatmap_calendar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.8"
   html:
     dependency: transitive
     description:
@@ -619,6 +633,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.13"
+  in_app_purchase:
+    dependency: "direct main"
+    description:
+      name: in_app_purchase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.4+8"
   intl:
     dependency: transitive
     description:
@@ -724,6 +745,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.1"
+  modal_bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: modal_bottom_sheet
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0+1"
   nested:
     dependency: transitive
     description:

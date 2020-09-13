@@ -3,6 +3,8 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+part 'shop_item.g.dart';
+
 /// 交換できるもの
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class GiftItem {
@@ -28,4 +30,9 @@ class GiftItem {
 
   /// 複数購入可能か
   bool expendable;
+
+  factory GiftItem.fromJson(Map<dynamic, dynamic> json) =>
+      _$GiftItemFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GiftItemToJson(this);
 }

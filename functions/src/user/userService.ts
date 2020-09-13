@@ -8,6 +8,10 @@ import { v4 as uuidv4 } from 'uuid'
 import { NoteService } from './noteService'
 import { UserRepository } from './userRepository'
 import { FavoritePhraseList } from './model/phrase'
+import { firestore } from 'firebase-admin'
+import shortid from 'shortid'
+import * as functions from 'firebase-functions'
+import { GiftItem } from './model/item'
 
 export class UserService {
   private readonly repo: UserRepository
@@ -26,7 +30,7 @@ export class UserService {
       schemaVersion: 'v1',
       uuid: uuid,
       name: '',
-      userId: uuid,
+      userId: shortid.generate(),
       favorites: {
         'default': UserService.generateFavoriteList('default', 'お気に入り', true)
       },
@@ -46,6 +50,7 @@ export class UserService {
         testLimitCount: 3,
         points: 0,
         lastLogin: moment().toISOString(),
+        isIntroducedFriend: false,
       },
       attributes: {
         schemaVersion: 'v1',
@@ -64,7 +69,7 @@ export class UserService {
       isDefault: true,
       title: title,
       sortType: 'createdAt-',
-      favoritePhraseIds: {},
+      phrases: [],
     }
   }
 
@@ -114,18 +119,25 @@ export class UserService {
 
   async favoritePhrase (uuid: string, listId: string, phraseId: string, favorite: boolean): Promise<User> {
     const user = await this.repo.findById(uuid)
-
     if (!user.favorites[listId]) {
-      throw `FavoriteList ${listId} not found`
+      throw new functions.https.HttpsError('not-found', `favorite list ${listId} not found`)
     }
 
+    const index = user.favorites[listId].phrases.findIndex(p => p.id == phraseId)
     if (favorite) {
-      user.favorites[listId].favoritePhraseIds[phraseId] = {
-        id: phraseId,
-        createdAt: moment().toISOString(),
+      if (index === -1) {
+        user.favorites[listId].phrases.push({
+          id: phraseId,
+          createdAt: moment().toISOString(),
+        })
+      } else {
+        user.favorites[listId].phrases[index] = {
+          id: phraseId,
+          createdAt: moment().toISOString(),
+        }
       }
     } else {
-      delete user.favorites[listId].favoritePhraseIds[phraseId]
+      delete user.favorites[listId].phrases[index]
     }
   
     return this.repo.update(user)
@@ -149,7 +161,7 @@ export class UserService {
     const user = await this.repo.findById(uuid)
 
     if (user.statistics.points + points < 0) {
-      throw 'Not enough points'
+      throw new functions.https.HttpsError('resource-exhausted', 'not enough points')
     }
 
     user.statistics.points += points
@@ -170,7 +182,7 @@ export class UserService {
     const user = await this.repo.findById(uuid)
 
     if (user.statistics.testLimitCount == 0) {
-      throw 'Daily test limit exceeded'
+      throw new functions.https.HttpsError('unavailable', 'daily test limit exceeded')
     }
 
     user.statistics.testLimitCount -= 1
@@ -218,11 +230,49 @@ export class UserService {
     return this.repo.update(user)
   }
 
-  async findUserByUserId(uuid: string, userId: string): Promise<User | null> {
-    const user = this.repo.findByUserId(userId)
-    if (!user || userId === uuid) {
-      return null
+  async findUserByUserId(userId: string): Promise<User> {
+    const user = await this.repo.findByUserId(userId)
+    if (!user) {
+      throw new functions.https.HttpsError('not-found', 'user not found')
     }
     return user
+  }
+
+  async introduceUser(uuid: string, introducedUserId: string): Promise<void> {
+    const introducer = await this.repo.findById(uuid)
+    if (!introducer) {
+      throw new functions.https.HttpsError('not-found', 'introducer not found')
+    }
+    const introducee = await this.repo.findByUserId(introducedUserId)
+    if (!introducee) {
+      throw new functions.https.HttpsError('not-found', 'introducee not found')
+    }
+
+    // pro plan ?
+    if (introducee.attributes.memberShip != 'pro') {
+      throw new functions.https.HttpsError('unavailable', 'introducee must be pro membership')
+    }
+
+    // already introduced ?
+    if (introducee.statistics.isIntroducedFriend) {
+      throw new functions.https.HttpsError('unavailable', 'introducee must be pro membership')
+    }
+
+    await firestore().runTransaction(async tx => {
+      // introducee -> +10000
+      // introducer -> +500
+      introducee.statistics.points += 10000
+      introducee.statistics.isIntroducedFriend = true
+      introducer.statistics.points += 500
+
+      tx.update(this.repo.users.doc(introducer.uuid), introducer)
+      tx.update(this.repo.users.doc(introducee.uuid), introducee)
+    })
+  }
+
+  // TODO: shop service
+  async getShopItems (): Promise<GiftItem[]> {
+    const shop = firestore().collection('shop')
+    return (await shop.get()).docs.map(d => d.data() as GiftItem)
   }
 }

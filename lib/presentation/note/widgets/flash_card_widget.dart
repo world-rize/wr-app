@@ -28,7 +28,20 @@ class _FlashCardState extends State<FlashCard> {
     }
 
     final achieved =
-        note.phrases.values.map((phrase) => phrase.id).contains(phrase.id);
+        note.phrases.map((phrase) => phrase.id).contains(phrase.id);
+    final achievedButton = IconButton(
+      icon: Icon(
+        achieved ? Icons.favorite : Icons.favorite_border,
+        size: 24,
+      ),
+      onPressed: () {
+        userNotifier.achievePhraseInNote(
+          noteId: noteId,
+          phraseId: phrase.id,
+          achieve: !achieved,
+        );
+      },
+    );
     final backgroundColor = Theme.of(context).backgroundColor;
     final body1 = Theme.of(context).primaryTextTheme.bodyText1;
 
@@ -60,19 +73,7 @@ class _FlashCardState extends State<FlashCard> {
                   Positioned(
                     right: 10,
                     bottom: 10,
-                    child: IconButton(
-                      icon: Icon(
-                        achieved ? Icons.favorite : Icons.favorite_border,
-                        size: 24,
-                      ),
-                      onPressed: () {
-                        userNotifier.achievePhraseInNote(
-                          noteId: noteId,
-                          phraseId: phrase.id,
-                          achieve: !achieved,
-                        );
-                      },
-                    ),
+                    child: achievedButton,
                   )
                 ],
               ),
@@ -91,8 +92,7 @@ class _FlashCardState extends State<FlashCard> {
 
   @override
   Widget build(BuildContext context) {
-    final flashCardNotifier = Provider.of<FlashCardNotifier>(context);
-    final note = flashCardNotifier.note;
+    final fn = Provider.of<FlashCardNotifier>(context);
 
     final flashCard = GFCarousel(
       viewportFraction: 0.9,
@@ -101,12 +101,8 @@ class _FlashCardState extends State<FlashCard> {
       autoPlayInterval: const Duration(seconds: 3),
       enableInfiniteScroll: false,
       // FIXME: phrasesに順番の概念がないので毎回ランダムになるリスト型にする必要がある
-      items: context
-          .watch<FlashCardNotifier>()
-          .notePhrases
-          .map(_createFlashCardContainer)
-          .toList(),
-      initialPage: flashCardNotifier.nowPhraseIndex,
+      items: fn.notePhrases.map(_createFlashCardContainer).toList(),
+      initialPage: fn.nowPhraseIndex,
     );
 
     Provider.of<FlashCardNotifier>(context).pageController =

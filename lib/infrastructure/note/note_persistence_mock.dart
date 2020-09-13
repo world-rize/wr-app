@@ -29,13 +29,7 @@ class NotePersistenceMock implements NoteRepository {
   Future<Note> createNote(CreateNoteRequest req) async {
     final user = _readUserMock();
     final listId = Uuid().v4();
-    user.notes[listId] = Note(
-      id: listId,
-      title: req.title,
-      isDefault: false,
-      sortType: '',
-      phrases: {},
-    );
+    user.notes[listId] = Note.empty(req.title);
     await Future.delayed(const Duration(seconds: 1));
     return user.notes[listId];
   }
@@ -50,11 +44,11 @@ class NotePersistenceMock implements NoteRepository {
       throw Exception('Note ${req.noteId} not found');
     }
 
-    if (!user.notes[req.noteId].phrases.containsKey(req.phraseId)) {
+    if (user.notes[req.noteId].findByNotePhraseId(req.phraseId) == null) {
       throw Exception('Phrase ${req.phraseId} not found');
     }
 
-    user.notes[req.noteId].phrases[req.phraseId] = req.phrase;
+    user.notes[req.noteId].updateNotePhrase(req.phraseId, req.phrase);
 
     await Future.delayed(const Duration(seconds: 1));
     return user.notes[req.noteId];
@@ -67,7 +61,9 @@ class NotePersistenceMock implements NoteRepository {
       throw Exception('Note ${req.noteId} not found');
     }
 
-    user.notes[req.noteId].phrases.putIfAbsent(req.phrase.id, () => req.phrase);
+    if (user.notes[req.noteId].addPhrase(req.phrase)) {
+      throw Exception('Phrase ${req.phrase.id} cant add');
+    }
     await Future.delayed(const Duration(seconds: 1));
     return user.notes[req.noteId];
   }
@@ -77,7 +73,7 @@ class NotePersistenceMock implements NoteRepository {
 
   @override
   Future<Note> updateDefaultNote(UpdateDefaultNoteRequest req) async {
-    return Note.dummy('funny title');
+    return _readUserMock().notes[req.noteId]..isDefault = true;
   }
 
   @override
@@ -92,7 +88,9 @@ class NotePersistenceMock implements NoteRepository {
       throw Exception('Note ${req.noteId} not found');
     }
 
-    user.notes[req.noteId].phrases[req.phraseId].achieved = req.achieve;
+    final notePhrase = user.notes[req.noteId].findByNotePhraseId(req.phraseId);
+    notePhrase.achieved = req.achieve;
+    user.notes[req.noteId].updateNotePhrase(req.phraseId, notePhrase);
     await Future.delayed(const Duration(seconds: 1));
     return user.notes[req.noteId];
   }

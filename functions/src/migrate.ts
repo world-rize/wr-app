@@ -6,10 +6,12 @@ import { User } from './user/model/user'
 import { UserService } from './user/userService'
 import diffDefault from 'jest-diff'
 import { UserRepository } from './user/userRepository'
+import firebase from 'firebase'
 const nqdm = require('nqdm')
 const colors = require('colors')
 
 admin.initializeApp({
+  projectId: 'wr-english-dev',
   credential: admin.credential.applicationDefault()
 })
 
@@ -74,18 +76,30 @@ export class MigrationService {
   }
 }
 
+const createDummyUser = async (name: string, email: string): Promise<User> => {
+  const user = await admin.auth().getUserByEmail(email)
+  if (!user) {
+    await admin.auth().createUser({ email, displayName: name })
+  }
+  
+  const testUser = UserService.generateInitialUser(user.uid)
+  testUser.name = name
+  testUser.statistics.points = 30000
+  testUser.attributes.memberShip = 'pro'
+  testUser.attributes.age = '10'
+  testUser.attributes.email = email
+  const repo = new UserRepository()
+  await repo.create(testUser)
+  console.log(`userId: ${testUser.userId} created`)
+  return testUser
+}
+
 /**
  * テストユーザーを作成
  */
-export const createTestUser = async () => {
-  const testUserUuid = 'ua4YJOOZKcMV0Y2GduUI9g2p0em1'
-  const testUser = UserService.generateInitialUser(testUserUuid)
-  testUser.name = 'テスト'
-  testUser.statistics.points = 9999
-  testUser.attributes.age = '10'
-  testUser.attributes.email = 'a@b.com'
-  const repo = new UserRepository()
-  await repo.create(testUser)
+const createDummyUsers = async () => {
+  await createDummyUser('てすと', 'a@b.com')
+  await createDummyUser('てすと2', 'c@d.com')
 }
 
 /**
@@ -131,6 +145,6 @@ export const migrateUsersToV1 = async () => {
   })
 }
 
-createTestUser()
+createDummyUsers()
 
 // migrateUsersToV1()

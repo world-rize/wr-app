@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+import 'package:wr_app/domain/language.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 
 class PhraseEditDialog extends StatefulWidget {
@@ -10,12 +10,14 @@ class PhraseEditDialog extends StatefulWidget {
     this.onDelete,
     @required this.onSubmit,
     @required this.onCancel,
+    @required this.language,
   });
 
   NotePhrase phrase;
   Function(NotePhrase) onSubmit;
   Function(NotePhrase) onDelete;
   Function onCancel;
+  Language language;
 
   @override
   _PhraseEditDialogState createState() => _PhraseEditDialogState(
@@ -23,6 +25,7 @@ class PhraseEditDialog extends StatefulWidget {
         onSubmit: onSubmit,
         onDelete: onDelete,
         onCancel: onCancel,
+        language: language,
       );
 }
 
@@ -32,44 +35,57 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
     @required this.onSubmit,
     @required this.onDelete,
     @required this.onCancel,
+    @required this.language,
   });
 
-  String _word;
-  String _translation;
   NotePhrase editingPhrase;
   Function(NotePhrase) onSubmit;
   Function(NotePhrase) onDelete;
   Function onCancel;
+  Language language;
+  String _tmpText;
 
   @override
   void initState() {
     super.initState();
-    _word = editingPhrase?.word ?? '';
-    _translation = editingPhrase?.translation ?? '';
+    switch (language) {
+      case Language.japanese:
+        _tmpText = editingPhrase?.translation ?? '';
+        break;
+      case Language.america:
+        _tmpText = editingPhrase?.word ?? '';
+        // TODO: Handle this case.
+        break;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: do not empty validation
-    final wordField = TextFormField(
-      initialValue: _word,
-      onChanged: (String tmpWord) {
-        setState(() {
-          _word = tmpWord;
-        });
-      },
-      decoration: const InputDecoration(labelText: 'english'),
-    );
-
-    final translationField = TextFormField(
-      initialValue: _translation,
-      onChanged: (String tmpTranslation) {
-        setState(() {
-          _translation = tmpTranslation;
-        });
-      },
-      decoration: const InputDecoration(labelText: '日本語'),
-    );
+    var textField;
+    switch (language) {
+      case Language.japanese:
+        textField = TextFormField(
+          initialValue: _tmpText,
+          onChanged: (String tmpText) {
+            setState(() {
+              _tmpText = tmpText;
+            });
+          },
+          decoration: const InputDecoration(labelText: 'japanese'),
+        );
+        break;
+      case Language.america:
+        textField = TextFormField(
+          initialValue: _tmpText,
+          onChanged: (String tmpText) {
+            setState(() {
+              _tmpText = tmpText;
+            });
+          },
+          decoration: const InputDecoration(labelText: 'english'),
+        );
+        break;
+    }
 
     final okButton = FlatButton(
       textColor: Colors.blueAccent,
@@ -77,26 +93,22 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
           editingPhrase != null ? const Text('Update') : const Text('Create'),
       onPressed: () {
         if (editingPhrase == null) {
-          // create phrase
-          final uuid = Uuid().v4();
-          onSubmit(
-            NotePhrase(
-              id: uuid,
-              word: _word,
-              translation: _translation,
-              achieved: false,
-            ),
-          );
+//          onSubmit(
+//            NotePhrase.create(
+//              word: _word,
+//              translation: _translation,
+//            ),
+//          );
         } else {
           // update phrase
-          onSubmit(
-            NotePhrase(
-              id: editingPhrase.id,
-              word: _word,
-              translation: _translation,
-              achieved: editingPhrase.achieved,
-            ),
-          );
+//          onSubmit(
+//            NotePhrase(
+//              id: editingPhrase.id,
+//              word: _word,
+//              translation: _translation,
+//              achieved: editingPhrase.achieved,
+//            ),
+//          );
         }
       },
     );
@@ -117,8 +129,8 @@ class _PhraseEditDialogState extends State<PhraseEditDialog> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          wordField,
-          translationField,
+          //wordField,
+          // translationField,
         ],
       ),
     );

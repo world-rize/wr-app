@@ -14,6 +14,7 @@ class UserStatistics {
     @required this.points,
     @required this.testLimitCount,
     @required this.lastLogin,
+    @required this.isIntroducedFriend,
   });
 
   factory UserStatistics.dummy() {
@@ -22,6 +23,7 @@ class UserStatistics {
       points: 100,
       testLimitCount: 3,
       lastLogin: '',
+      isIntroducedFriend: false,
     );
   }
 
@@ -37,4 +39,6 @@ class UserStatistics {
   int testLimitCount;
 
   String lastLogin;
+
+  bool isIntroducedFriend;
 }

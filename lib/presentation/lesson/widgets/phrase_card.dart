@@ -55,13 +55,13 @@ class PhraseCard extends StatelessWidget {
                     Text(
                       phrase.title['en'].capitalize(),
                       style: englishStyle,
-                    ).p(4),
+                    ).padding(4),
                     Text(
                       phrase.title['ja'],
                       style: japaneseStyle,
-                    ).p(4),
+                    ).padding(4),
                   ],
-                ).p_1(),
+                ).padding(),
               ),
             ),
           ],
@@ -90,7 +90,7 @@ class PhraseCard extends StatelessWidget {
         InkWell(
           onTap: onTap,
           child: card,
-        ).p_1(),
+        ).padding(),
         overlay,
       ],
     );

@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:sentry/io_client.dart';
 import 'package:wr_app/util/flavor.dart';
+import 'package:wr_app/util/logger.dart';
 
 bool get isInDebugMode {
   var inDebugMode = false;
@@ -11,7 +12,7 @@ bool get isInDebugMode {
 
 /// Reports [error] along with its [stackTrace] to Sentry.io.
 Future<Null> sentryReportError(dynamic error, dynamic stackTrace) async {
-  print('Caught error: $error');
+  InAppLogger.error(error);
 
   // Errors thrown in development mode are unlikely to be interesting. You can
   // check if you are running in dev mode using an assertion and omit sending
@@ -22,7 +23,7 @@ Future<Null> sentryReportError(dynamic error, dynamic stackTrace) async {
     return;
   }
 
-  print('Reportiawait sentry.capturing to Sentry.io...');
+  InAppLogger.info('Reportiawait sentry.capturing to Sentry.io...');
   final flavor = GetIt.I<Flavor>();
   final response = await GetIt.I<SentryClient>().capture(
     event: Event(
@@ -33,8 +34,8 @@ Future<Null> sentryReportError(dynamic error, dynamic stackTrace) async {
   );
 
   if (response.isSuccessful) {
-    print('Success! Event ID: ${response.eventId}');
+    InAppLogger.info('Success! Event ID: ${response.eventId}');
   } else {
-    print('Failed to report to Sentry.io: ${response.error}');
+    InAppLogger.error('Failed to report to Sentry.io: ${response.error}');
   }
 }

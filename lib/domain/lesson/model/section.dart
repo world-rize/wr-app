@@ -14,6 +14,14 @@ class Section {
     @required this.phrases,
   });
 
+  factory Section.fromPhrase(Phrase phrase) {
+    return Section(
+      id: phrase.id,
+      title: phrase.id,
+      phrases: [phrase],
+    );
+  }
+
   static List<Section> fromLesson(Lesson lesson) {
     final sections = <Section>[];
     for (var i = 0; i < lesson.phrases.length; i += 7) {

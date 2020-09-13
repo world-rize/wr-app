@@ -24,6 +24,14 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
       title: '基本情報',
       tiles: [
         SettingsTile(
+          title: '名前',
+          subtitle: user.name,
+          leading: const Icon(Icons.people),
+          onTap: () {
+            // TODO
+          },
+        ),
+        SettingsTile(
           title: 'メールアドレス',
           subtitle: user.attributes.email,
           leading: const Icon(Icons.people),

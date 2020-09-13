@@ -3,10 +3,10 @@
  */
 import { firestore } from 'firebase-admin'
 import { User } from './model/user'
-
+import * as functions from 'firebase-functions'
 
 export class UserRepository {
-  users: firestore.CollectionReference
+  public users: firestore.CollectionReference
 
   constructor() {
     this.users = firestore().collection('users')
@@ -24,7 +24,7 @@ export class UserRepository {
   public async findById(uuid: string): Promise<User> {
     const data = (await this.users.doc(uuid).get()).data()
     if (!data) {
-      throw 'user not found'
+      throw new functions.https.HttpsError('not-found', 'user not found')
     }
     return data as User
   }
@@ -34,7 +34,12 @@ export class UserRepository {
       .where('userId', '==', userId)
       .limit(1)
       .get()
-    return res.docs?.[0]?.data() as User ?? null
+
+    const user = res.docs?.[0]?.data() as User
+    if (!user) {
+      throw new functions.https.HttpsError('not-found', 'user not found')
+    }
+    return user
   }
 
   public async update(user: User): Promise<User> {

@@ -1,3 +1,13 @@
+## v0.6.1 Nightly Release(2020-09-13)
+- Andoird CI/CD
+- Admob設定
+- ノートAPI修正
+- ショップAPI追加
+- 各種リンク追加
+- 認証周り整理
+- Article変更, Agency削除
+- 友達紹介機能
+
 ## v0.6.0 Nightly Release(2020-09-11)
 - 環境分割, CI/CD, sentry
 - Figma整理

@@ -112,7 +112,7 @@ export interface FavoritePhraseList {
   isDefault: boolean
 
   /**
-   * フレーズ(key: phraseId, value: FavoritePhraseDigest)
+   * フレーズ
    */
-  favoritePhraseIds: Record<string, FavoritePhraseDigest>
+  phrases: FavoritePhraseDigest[]
 }

@@ -23,8 +23,8 @@ class AchievedListPage extends StatelessWidget {
           children: [
             const Text('Achieved'),
             ...user.notes.values
-                .expand((note) =>
-                    note.phrases.values.where((phrase) => phrase.achieved))
+                .expand(
+                    (note) => note.phrases.where((phrase) => phrase.achieved))
                 .map((phrase) => Text('${phrase.word} ${phrase.translation}'))
                 .toList(),
           ],

@@ -1,10 +1,10 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/presentation/mypage/pages/achieved_list_page.dart';
 import 'package:wr_app/presentation/mypage/pages/info_page.dart';
-import 'package:wr_app/presentation/mypage/pages/locale_page.dart';
 import 'package:wr_app/presentation/mypage/widgets/user_info.dart';
+import 'package:wr_app/ui/widgets/shadowed_container.dart';
+import 'package:wr_app/util/extensions.dart';
 
 import './friends_page.dart';
 import './shop_page.dart';
@@ -17,105 +17,91 @@ class MyPagePage extends StatelessWidget {
     @required String icon,
     @required Function onTap,
   }) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Image.asset(icon),
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Image.asset(icon),
+          ),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 14,
             ),
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        ],
+      ).padding(),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final gridMenus = GridView.count(
-      // physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      crossAxisCount: 3,
-      children: [
-        _createIconCell(
-          title: '友達紹介',
-          icon: 'assets/icon/mypage_friends.png',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => FriendsPage()));
-          },
-        ),
-        _createIconCell(
-          title: 'アップグレード',
-          icon: 'assets/icon/mypage_upgrade.png',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => UpgradePage()));
-          },
-        ),
-        _createIconCell(
-          title: '交換',
-          icon: 'assets/icon/mypage_gift.png',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => ShopPage()));
-          },
-        ),
-        _createIconCell(
-          title: 'アクセント追加',
-          icon: 'assets/icon/mypage_locale.png',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => LocalePage()));
-          },
-        ),
-        _createIconCell(
-          title: 'Achieved List',
-          icon: 'assets/icon/mypage_achieved.png',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => AchievedListPage()));
-          },
-        ),
-        _createIconCell(
-          title: 'お知らせ',
-          icon: 'assets/icon/mypage_info.png',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => InformationPage()));
-          },
-        ),
-      ],
+    final bg = Theme.of(context).backgroundColor;
+
+    final gridMenus = Container(
+      child: GridView.count(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        crossAxisCount: 2,
+        children: [
+          ShadowedContainer(
+            color: bg,
+            child: _createIconCell(
+              title: '友達紹介',
+              icon: 'assets/icon/mypage_friends.png',
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => FriendsPage()));
+              },
+            ),
+          ).padding(),
+          ShadowedContainer(
+            color: bg,
+            child: _createIconCell(
+              title: 'アップグレード',
+              icon: 'assets/icon/mypage_upgrade.png',
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => UpgradePage()));
+              },
+            ),
+          ).padding(),
+          ShadowedContainer(
+            color: bg,
+            child: _createIconCell(
+              title: 'ショップ',
+              icon: 'assets/icon/mypage_gift.png',
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => ShopPage()));
+              },
+            ),
+          ).padding(),
+          ShadowedContainer(
+            color: bg,
+            child: _createIconCell(
+              title: 'お知らせ',
+              icon: 'assets/icon/mypage_info.png',
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => InformationPage()));
+              },
+            ),
+          ).padding(),
+        ],
+      ),
     );
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: UserInfo(),
-          ),
-          const Divider(
-            indent: 20,
-            endIndent: 20,
-            color: Colors.grey,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: gridMenus,
-          ),
+          UserInfo().padding(),
+          gridMenus,
         ],
-      ),
+      ).padding(),
     );
   }
 }
