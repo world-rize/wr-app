@@ -10,6 +10,7 @@ import 'package:wr_app/presentation/extensions.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
+import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -18,7 +19,7 @@ import './newcoming_page.dart';
 import './request_page.dart';
 import './section_select_page.dart';
 import '../widgets/carousel_cell.dart';
-import '../widgets/phrase_widget.dart';
+import '../widgets/phrase_card.dart';
 
 /// Lesson > index
 /// - top page of lesson
@@ -123,7 +124,7 @@ class LessonIndexPage extends StatelessWidget {
             builder: (_, res) {
               if (!res.hasData || res.data.isEmpty) {
                 return const Padding(
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 8),
                   child: Text(
                     'No new coming phrases',
                     style: TextStyle(fontSize: 20, color: Colors.grey),
@@ -162,25 +163,26 @@ class LessonIndexPage extends StatelessWidget {
             dividerColor: GFColors.SECONDARY,
           ),
 
-          Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => RequestPage()),
-                );
-              },
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 90),
-                child: Text(I.of(context).requestPhraseButton),
+          ShadowedContainer(
+            color: Theme.of(context).backgroundColor,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 8),
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => RequestPage()),
+                  );
+                },
+                child: Center(
+                    child: Text(
+                  I.of(context).requestPhraseButton,
+                  style: Theme.of(context).textTheme.headline5,
+                )),
               ),
             ),
-          ).p_1(),
+          ),
         ],
-      ).p_1(),
+      ).padding(),
     );
   }
 }

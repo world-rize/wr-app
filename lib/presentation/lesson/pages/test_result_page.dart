@@ -6,15 +6,15 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wr_app/domain/lesson/model/test_stats.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
+import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 
-import './section_list_page.dart';
-import './test_page.dart';
-import '../widgets/phrase_widget.dart';
+import '../widgets/phrase_card.dart';
 
 /// テスト結果画面
 ///
@@ -145,7 +145,7 @@ class TestResultPage extends StatelessWidget {
             Text(
               scoreText,
               style: const TextStyle(fontSize: 20),
-            ).p_1(),
+            ).padding(),
             Container(
               child: Column(
                 children: List.generate(
@@ -156,8 +156,8 @@ class TestResultPage extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => SectionDetailPage(
-                              section: stats.section, index: i),
+                          builder: (_) =>
+                              SectionPage(section: stats.section, index: i),
                         ),
                       );
                     },
@@ -171,12 +171,12 @@ class TestResultPage extends StatelessWidget {
                             phraseId: phrase.id),
                       );
                     },
-                  ).p_1(),
+                  ).padding(),
                 ),
               ),
             ),
           ],
-        ).p_1(),
+        ).padding(),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20),

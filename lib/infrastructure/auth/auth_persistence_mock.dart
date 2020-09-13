@@ -71,4 +71,14 @@ class AuthPersistenceMock implements AuthRepository {
 
   @override
   Future<void> updateEmail(String newEmail) async {}
+
+  @override
+  Future<bool> isAlreadySignedIn() async {
+    return false;
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    // noop
+  }
 }

@@ -76,3 +76,11 @@ export class FindUserByUserIdRequest {
   @IsNotEmpty()
   readonly userId!: string
 }
+
+export class IntroduceFriendRequest {
+  /**
+   * 紹介してくれた人のユーザーID
+   */
+  @IsNotEmpty()
+  readonly introduceeUserId!: string
+}

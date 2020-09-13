@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/domain/lesson/model/test_stats.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/widgets/test_choices.dart';
@@ -25,20 +26,6 @@ class TestPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => TestPageState(section: section);
-}
-
-class TestStats {
-  TestStats({
-    @required this.section,
-    @required this.answers,
-    this.questions = 7,
-    this.corrects = 0,
-  });
-
-  Section section;
-  int questions;
-  int corrects;
-  List<bool> answers;
 }
 
 /// [TestPage] の State

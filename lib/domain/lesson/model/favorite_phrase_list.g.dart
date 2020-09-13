@@ -12,10 +12,9 @@ FavoritePhraseList _$FavoritePhraseListFromJson(Map json) {
     title: json['title'] as String,
     sortType: json['sortType'] as String,
     isDefault: json['isDefault'] as bool,
-    favoritePhraseIds: (json['favoritePhraseIds'] as Map)?.map(
-      (k, e) => MapEntry(k as String,
-          e == null ? null : FavoritePhraseDigest.fromJson(e as Map)),
-    ),
+    phrases: (json['phrases'] as List)
+        ?.map((e) => e == null ? null : FavoritePhraseDigest.fromJson(e as Map))
+        ?.toList(),
   );
 }
 
@@ -25,6 +24,5 @@ Map<String, dynamic> _$FavoritePhraseListToJson(FavoritePhraseList instance) =>
       'title': instance.title,
       'sortType': instance.sortType,
       'isDefault': instance.isDefault,
-      'favoritePhraseIds':
-          instance.favoritePhraseIds?.map((k, e) => MapEntry(k, e?.toJson())),
+      'phrases': instance.phrases?.map((e) => e?.toJson())?.toList(),
     };

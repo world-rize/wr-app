@@ -96,4 +96,9 @@ class UserPersistence implements UserRepository {
     // TODO: implement API
     // return callFunction('purchaseItem', req.toJson()).then((res) => res.data);
   }
+
+  @override
+  Future<void> introduceFriend(IntroduceFriendRequest req) {
+    return callFunction('introduceFriend', req.toJson());
+  }
 }

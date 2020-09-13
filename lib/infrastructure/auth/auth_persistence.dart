@@ -138,4 +138,14 @@ class AuthPersistence implements AuthRepository {
   Future<void> signOut() {
     return fbAuth.signOut();
   }
+
+  @override
+  Future<bool> isAlreadySignedIn() async {
+    return (await fbAuth.currentUser()) != null;
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    await fbAuth.sendPasswordResetEmail(email: email);
+  }
 }

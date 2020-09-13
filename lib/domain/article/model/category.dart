@@ -12,6 +12,7 @@ class ArticleCategory {
     @required this.id,
     @required this.title,
     @required this.thumbnailUrl,
+    @required this.url,
   });
 
   factory ArticleCategory.fromJson(Map<dynamic, dynamic> json) =>
@@ -25,6 +26,9 @@ class ArticleCategory {
 
   /// サムネ
   final String thumbnailUrl;
+
+  /// カテゴリURL
+  final String url;
 
   Map<String, dynamic> toJson() => _$ArticleCategoryToJson(this);
 }

@@ -186,3 +186,15 @@ Map<String, dynamic> _$PurchaseItemRequestToJson(
     <String, dynamic>{
       'itemId': instance.itemId,
     };
+
+IntroduceFriendRequest _$IntroduceFriendRequestFromJson(Map json) {
+  return IntroduceFriendRequest(
+    introduceeUserId: json['introduceeUserId'] as String,
+  );
+}
+
+Map<String, dynamic> _$IntroduceFriendRequestToJson(
+        IntroduceFriendRequest instance) =>
+    <String, dynamic>{
+      'introduceeUserId': instance.introduceeUserId,
+    };

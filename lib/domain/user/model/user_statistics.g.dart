@@ -14,6 +14,7 @@ UserStatistics _$UserStatisticsFromJson(Map json) {
     points: json['points'] as int,
     testLimitCount: json['testLimitCount'] as int,
     lastLogin: json['lastLogin'] as String,
+    isIntroducedFriend: json['isIntroducedFriend'] as bool,
   );
 }
 
@@ -23,4 +24,5 @@ Map<String, dynamic> _$UserStatisticsToJson(UserStatistics instance) =>
       'points': instance.points,
       'testLimitCount': instance.testLimitCount,
       'lastLogin': instance.lastLogin,
+      'isIntroducedFriend': instance.isIntroducedFriend,
     };

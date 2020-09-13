@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 
 part 'favorite_phrase_list.g.dart';
@@ -21,7 +22,7 @@ class FavoritePhraseList {
     @required this.title,
     @required this.sortType,
     @required this.isDefault,
-    @required this.favoritePhraseIds,
+    @required this.phrases,
   });
 
   /// ダミーを作成
@@ -31,12 +32,24 @@ class FavoritePhraseList {
       title: 'お気に入り',
       sortType: '',
       isDefault: true,
-      favoritePhraseIds: {
-        'debug': FavoritePhraseDigest(
+      phrases: [
+        FavoritePhraseDigest(
           id: 'debug',
           createdAt: DateTime.now(),
         ),
-      },
+      ],
+    );
+  }
+
+  /// 空の作成
+  factory FavoritePhraseList.empty(String title) {
+    final id = Uuid().v4();
+    return FavoritePhraseList(
+      id: id,
+      title: title,
+      sortType: '',
+      isDefault: false,
+      phrases: [],
     );
   }
 
@@ -59,6 +72,35 @@ class FavoritePhraseList {
   bool isDefault;
 
   /// フレーズ
-  // TODO: 並び替えができるようにリストで保持
-  Map<String, FavoritePhraseDigest> favoritePhraseIds;
+  List<FavoritePhraseDigest> phrases;
+
+  void addPhrase(FavoritePhraseDigest phrase) {
+    phrases.add(phrase);
+  }
+
+  FavoritePhraseDigest findByPhraseId(String id) {
+    return phrases.firstWhere((element) => element.id == id, orElse: null);
+  }
+
+  bool updatePhrase(String id, FavoritePhraseDigest digest) {
+    final index = phrases.indexWhere((element) => element.id == id);
+    if (index != -1) {
+      phrases[index] = digest;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool deletePhrase(String id) {
+    final index = phrases.indexWhere(
+      (element) => element.id == id,
+    );
+    if (index != -1) {
+      phrases.removeAt(index);
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

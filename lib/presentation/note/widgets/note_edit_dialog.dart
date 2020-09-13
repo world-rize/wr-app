@@ -1,8 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
-import 'package:wr_app/domain/note/model/note.dart';
 
 class NoteEditDialog extends StatefulWidget {
   NoteEditDialog({
@@ -10,22 +8,14 @@ class NoteEditDialog extends StatefulWidget {
     @required this.onCancel,
   });
 
-  Function(Note) onSubmit;
+  Function(String) onSubmit;
   Function onCancel;
 
   @override
-  _NoteEditDialogState createState() =>
-      _NoteEditDialogState(onCancel: onCancel, onSubmit: onSubmit);
+  _NoteEditDialogState createState() => _NoteEditDialogState();
 }
 
 class _NoteEditDialogState extends State<NoteEditDialog> {
-  _NoteEditDialogState({
-    @required this.onSubmit,
-    @required this.onCancel,
-  });
-
-  Function(Note) onSubmit;
-  Function onCancel;
   String _title;
 
   @override
@@ -49,24 +39,14 @@ class _NoteEditDialogState extends State<NoteEditDialog> {
     final cancelButton = FlatButton(
       textColor: Colors.blueAccent,
       child: const Text('Cancel'),
-      onPressed: onCancel,
+      onPressed: widget.onCancel,
     );
 
     final okButton = FlatButton(
       textColor: Colors.blueAccent,
       child: const Text('Create'),
       onPressed: () {
-        // create phrase
-        final uuid = Uuid().v4();
-        onSubmit(
-          Note(
-            id: uuid,
-            title: _title,
-            phrases: {},
-            sortType: 'createdAt+',
-            isDefault: false,
-          ),
-        );
+        widget.onSubmit(_title);
       },
     );
 

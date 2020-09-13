@@ -4,26 +4,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/voice_accent.dart';
 import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
+import 'package:wr_app/presentation/note/widgets/pitch_slider.dart';
+import 'package:wr_app/ui/widgets/locale_to_image.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 class FlashCardController extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final loopButton = InkWell(
-      child: Icon(
-        Ionicons.ios_sync,
-        color: context.watch<FlashCardNotifier>().autoScroll
-            ? Colors.black
-            : Colors.grey,
-        size: GFSize.MEDIUM,
-      ),
-      onTap: () async {
-        context.read<FlashCardNotifier>().toggleAutoScroll();
-        await HapticFeedback.lightImpact();
-      },
-    );
+    // final loopButton = InkWell(
+    //   child: Icon(
+    //     Ionicons.ios_sync,
+    //     color: context.watch<FlashCardNotifier>().autoScroll
+    //         ? Colors.black
+    //         : Colors.grey,
+    //     size: GFSize.MEDIUM,
+    //   ),
+    //   onTap: () async {
+    //     context.read<FlashCardNotifier>().toggleAutoScroll();
+    //     await HapticFeedback.lightImpact();
+    //   },
+    // );
 
     final playButton = Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -57,8 +61,6 @@ class FlashCardController extends StatelessWidget {
       ],
     );
 
-    // TODO: providerなんもわからん
-    // watchをbuildのなかで呼べと言われた
     final fnSB = context.watch<FlashCardNotifier>();
     final shuffleButton = InkWell(
       onTap: () {
@@ -78,22 +80,50 @@ class FlashCardController extends StatelessWidget {
       ),
     );
 
-    final accentChoices = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: ['en-us', 'en-uk', 'en-au', 'en-in']
-          .map((locale) => Expanded(
-                flex: 1,
-                child: FlatButton(
-                  onPressed: () {
-                    print(locale);
-                  },
-                  child: Image.asset(
-                    'assets/icon/locale_$locale.png',
-                  ),
+    final localeButton = InkWell(
+        child: LocaleToImage(
+          voiceAccent: fnSB.voiceAccent,
+          height: 30,
+          width: 50,
+          fit: BoxFit.fill,
+        ),
+        onTap: () {
+          HapticFeedback.lightImpact();
+          showMaterialModalBottomSheet(
+            expand: false,
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (context, scrollController) => Material(
+              child: SafeArea(
+                top: false,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    VoiceAccent.americanEnglish,
+                    VoiceAccent.britishEnglish,
+                    VoiceAccent.australiaEnglish,
+                    VoiceAccent.indianEnglish
+                  ]
+                      .map((voiceAccent) => Flexible(
+                              child: ListTile(
+                            leading: LocaleToImage(
+                              voiceAccent: voiceAccent,
+                              height: 30,
+                              width: 40,
+                              fit: BoxFit.fill,
+                            ),
+                            onTap: () {
+                              fnSB.setVoiceAccent(voiceAccent);
+                              Navigator.of(context).pop();
+                            },
+                          )))
+                      .toList(),
                 ),
-              ))
-          .toList(),
-    );
+              ),
+            ),
+          );
+        });
 
     final buttons = Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,7 +131,7 @@ class FlashCardController extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.all(8),
-          child: loopButton,
+          child: shuffleButton,
         ),
         Padding(
           padding: const EdgeInsets.all(8),
@@ -109,10 +139,15 @@ class FlashCardController extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.all(8),
-          child: shuffleButton,
+          child: localeButton,
         ),
       ],
     );
+
+    final pitch =
+        Provider.of<FlashCardNotifier>(context, listen: false).playSpeed;
+
+    print(pitch);
 
     return ShadowedContainer(
       color: Colors.white30,
@@ -131,20 +166,20 @@ class FlashCardController extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 child: buttons,
               ),
-
               // pitch slider
-              const Padding(
+              Padding(
                 padding: EdgeInsets.all(8),
-                child: Placeholder(
-                  fallbackHeight: 50,
+                child: PitchSlider(
+                  pitch: pitch,
+                  pitches: const [0.5, 0.75, 1.0, 1.5],
+                  onChanged: (double p) {
+                    Provider.of<FlashCardNotifier>(context, listen: false)
+                        .setPlaySpeed(p);
+                  },
                 ),
               ),
 
               // accent
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: accentChoices,
-              ),
             ],
           ),
         ),

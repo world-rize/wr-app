@@ -48,27 +48,27 @@ class GiftItemCard extends StatelessWidget {
                     Text(
                       giftItem.title,
                       style: englishStyle,
-                    ).p(4),
+                    ).padding(4),
                     if (gettable && !buyable)
                       Text(
                         'WRコインが不足しています',
                         style: englishStyle.apply(color: Colors.redAccent),
-                      ).p(4),
+                      ).padding(4),
                     if (alreadyPurchased)
                       Text(
                         'すでに持っています',
                         style: englishStyle.apply(color: Colors.redAccent),
-                      ).p(4),
+                      ).padding(4),
                     Text(
                       '${giftItem.price} コイン',
                       style: englishStyle.apply(color: Colors.redAccent),
-                    ).p(4),
+                    ).padding(4),
                     Text(
                       giftItem.description,
                       style: japaneseStyle,
-                    ).p(4),
+                    ).padding(4),
                   ],
-                ).p_1(),
+                ).padding(),
               ),
             ),
           ],
@@ -80,7 +80,7 @@ class GiftItemCard extends StatelessWidget {
         ? InkWell(
             onTap: onTap,
             child: card,
-          ).p_1()
+          ).padding()
         : Opacity(
             opacity: 0.3,
             child: card,

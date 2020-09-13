@@ -2,12 +2,14 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/lesson/pages/anything_search_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -27,10 +29,11 @@ class _RootViewState extends State<RootView>
   PageController _pageController;
 
   /// Check user status
-  void _checkUserStatus(Duration timestamp) {
+  Future<void> _checkUserStatus(Duration timestamp) async {
     // TODO: membership check
     // on first launch, show on-boarding page
-    final loggedIn = Provider.of<UserNotifier>(context, listen: false).loggedIn;
+    final loggedIn =
+        await Provider.of<UserNotifier>(context, listen: false).loggedIn;
     final firstLaunch =
         Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
 
@@ -38,7 +41,7 @@ class _RootViewState extends State<RootView>
 
     // show on boarding modal
     if (firstLaunch || !loggedIn) {
-      Navigator.of(context).push(
+      await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => OnBoardingPage(),
           fullscreenDialog: true,
@@ -58,14 +61,15 @@ class _RootViewState extends State<RootView>
 
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<UserNotifier>(context);
+    final env = GetIt.I<EnvKeys>();
+    final un = Provider.of<UserNotifier>(context);
     final primaryColor = Theme.of(context).primaryColor;
 
-    if (!notifier.loggedIn) {
+    if (!un.loggedIn) {
       return const Scaffold();
     }
 
-    final user = notifier.getUser();
+    final user = un.getUser();
 
     final header = Row(
       children: <Widget>[
@@ -73,7 +77,7 @@ class _RootViewState extends State<RootView>
           'assets/icon/wr_coin.png',
           width: 30,
           height: 30,
-        ).p_1(),
+        ).padding(),
         Text(
           I.of(context).points(user.statistics.points),
           style: const TextStyle(color: Colors.white),
@@ -128,10 +132,10 @@ class _RootViewState extends State<RootView>
           icon: const Icon(Icons.bookmark_border),
           title: Text(I.of(context).bottomNavNote),
         ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.public),
-          title: Text(I.of(context).bottomNavAgency),
-        ),
+//        BottomNavigationBarItem(
+//          icon: const Icon(Icons.public),
+//          title: Text(I.of(context).bottomNavAgency),
+//        ),
         BottomNavigationBarItem(
           icon: const Icon(Icons.person_outline),
           title: Text(I.of(context).bottomNavMyPage),
@@ -151,14 +155,14 @@ class _RootViewState extends State<RootView>
         LessonIndexPage(),
         ColumnIndexPage(),
         NotePage(),
-        AgencyIndexPage(),
+        // AgencyIndexPage(),
         MyPagePage(),
       ],
     );
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryColor,
+        backgroundColor: env.useEmulator ? Colors.redAccent : primaryColor,
         title: header,
         actions: actions,
       ),

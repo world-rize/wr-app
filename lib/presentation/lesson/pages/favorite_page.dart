@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
-import 'package:wr_app/presentation/lesson/widgets/phrase_widget.dart';
+import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
+import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
 
-import './section_list_page.dart';
 import '../notifier/lesson_notifier.dart';
 
 /// Lesson > index > favorites
@@ -45,7 +45,7 @@ class FavoritePage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => SectionDetailPage(
+                      builder: (_) => SectionPage(
                         section: section,
                         index: index,
                       ),

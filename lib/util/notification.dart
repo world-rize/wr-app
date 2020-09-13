@@ -31,7 +31,7 @@ final StreamController<ReceivedNotification>
     didReceiveLocalNotificationSubject =
     StreamController<ReceivedNotification>();
 
-class AppNotifier {
+class NotificationNotifier {
   Future<void> setup() async {
     const initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');

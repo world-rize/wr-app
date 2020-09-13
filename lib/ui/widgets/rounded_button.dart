@@ -17,23 +17,27 @@ class RoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return RaisedButton(
+      elevation: 10,
       key: key,
       onPressed: onTap,
       color: color,
       disabledColor: Colors.grey,
-      shape: StadiumBorder(
-        side: BorderSide(
-          color: color,
-        ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
+        child: SizedBox(
+          width: double.infinity,
+          child: Center(
+            child: Text(
+              text,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
           ),
         ),
       ),

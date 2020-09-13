@@ -8,7 +8,7 @@ import 'package:wr_app/util/notification.dart';
 class SystemPersistence implements SystemRepository {
   @override
   Future<void> notify({String title, String body, String payload}) {
-    final notificator = GetIt.I<AppNotifier>();
+    final notificator = GetIt.I<NotificationNotifier>();
     return notificator.showNotification(
         title: title, body: body, payload: payload);
   }

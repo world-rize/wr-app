@@ -3,10 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
+import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_in_form.dart';
 import 'package:wr_app/presentation/root_view.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/toast.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -16,7 +20,8 @@ class SignInPage extends StatefulWidget {
 class _SignInPageState extends State<SignInPage> {
   bool _isLoading;
 
-  void _gotoHome() {
+  /// ホームへ移動
+  Future<void> _gotoHome() {
     Provider.of<SystemNotifier>(context, listen: false)
         // initial login
         .setFirstLaunch(value: false);
@@ -24,12 +29,79 @@ class _SignInPageState extends State<SignInPage> {
     sendEvent(event: AnalyticsEvent.logIn);
 
     Navigator.popUntil(context, (route) => route.isFirst);
-    Navigator.pushReplacement(
+    return Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) => RootView(),
       ),
     );
+  }
+
+  /// Email & パスワードでログイン
+  Future<void> _signInWithEmailAndPassword(
+      String email, String password) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final un = Provider.of<UserNotifier>(context, listen: false);
+      await un.signInWithEmailAndPassword(email, password);
+
+      NotifyToast.success('ログインしました');
+      await _gotoHome();
+    } on Exception catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// Google でログイン
+  Future<void> _signInWithGoogle() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final un = Provider.of<UserNotifier>(context, listen: false);
+      await un.signInWithGoogle();
+
+      NotifyToast.success('ログインしました');
+      await _gotoHome();
+    } on Exception catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
+  /// Apple でログイン
+  Future<void> _signInWithApple() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final un = Provider.of<UserNotifier>(context, listen: false);
+      await un.signInWithApple();
+
+      NotifyToast.success('ログインしました');
+      await _gotoHome();
+    } on Exception catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
   }
 
   @override
@@ -45,37 +117,20 @@ class _SignInPageState extends State<SignInPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: splashColor,
-        title: const Text('Signin'),
+        title: const Text('SignIn'),
       ),
-      // TODO(someone): height = maxHeight - appBarHeight
-      body: SingleChildScrollView(
-        child: LayoutBuilder(
-          builder: (_, constraints) => ConstrainedBox(
-            constraints:
-                BoxConstraints(maxHeight: MediaQuery.of(context).size.height),
-            child: Column(
-              children: <Widget>[
-                if (_isLoading)
-                  const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: CircularProgressIndicator(),
-                  ),
-                SignInForm(
-                  onSubmit: () {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                  },
-                  onSuccess: () {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    _gotoHome();
-                  },
-                ).p_1(),
-                const Spacer(),
-              ],
-            ),
+      body: LoadingView(
+        loading: _isLoading,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              SignInForm(
+                onSignInWithEmailAndPassword: _signInWithEmailAndPassword,
+                onSignInWithGoogle: _signInWithGoogle,
+                onSignInWithApple: _signInWithApple,
+              ).padding(),
+            ],
           ),
         ),
       ),
