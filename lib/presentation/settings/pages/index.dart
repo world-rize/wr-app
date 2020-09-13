@@ -13,6 +13,7 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/on_boarding/pages/index.dart';
 import 'package:wr_app/presentation/settings/pages/notification_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/flavor.dart';
 
 import './account_settings_page.dart';
@@ -116,6 +117,7 @@ class _SettingsState extends State<SettingsPage> {
   // about
   SettingsSection aboutSection() {
     final pubSpec = GetIt.I<PackageInfo>();
+    final env = GetIt.I<EnvKeys>();
 
     return SettingsSection(
       title: I.of(context).otherSection,
@@ -123,10 +125,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'WorldRIZeホームページ',
           onTap: () async {
-            const url = 'https://world-rize.com';
-            if (await canLaunch(url)) {
+            if (await canLaunch(env.homePageUrl)) {
               await launch(
-                url,
+                env.homePageUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
@@ -136,10 +137,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'WorldRIZe Twitter',
           onTap: () async {
-            const url = 'https://world-rize.com';
-            if (await canLaunch(url)) {
+            if (await canLaunch(env.twitterUrl)) {
               await launch(
-                url,
+                env.twitterUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
@@ -149,10 +149,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'WorldRIZe Instagram',
           onTap: () async {
-            const url = 'https://world-rize.com';
-            if (await canLaunch(url)) {
+            if (await canLaunch(env.instagramUrl)) {
               await launch(
-                url,
+                env.instagramUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
@@ -162,10 +161,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'よくある質問',
           onTap: () async {
-            const url = 'https://world-rize.com';
-            if (await canLaunch(url)) {
+            if (await canLaunch(env.faqUrl)) {
               await launch(
-                url,
+                env.faqUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
@@ -175,11 +173,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'フィードバック',
           onTap: () async {
-            // TODO: App Store Link
-            const url = 'https://world-rize.com';
-            if (await canLaunch(url)) {
+            if (await canLaunch(env.contactUrl)) {
               await launch(
-                url,
+                env.contactUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
@@ -189,10 +185,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: '利用規約',
           onTap: () async {
-            const url = 'https://world-rize.com';
-            if (await canLaunch(url)) {
+            if (await canLaunch(env.termsOfServiceUtl)) {
               await launch(
-                url,
+                env.termsOfServiceUtl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
@@ -202,10 +197,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'プライバシーポリシー',
           onTap: () async {
-            const url = 'https://world-rize.com';
-            if (await canLaunch(url)) {
+            if (await canLaunch(env.privacyPolicyUrl)) {
               await launch(
-                url,
+                env.privacyPolicyUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );

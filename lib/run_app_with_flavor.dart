@@ -31,6 +31,7 @@ import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/cloud_functions.dart';
+import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
@@ -40,7 +41,11 @@ import 'package:wr_app/util/sentry.dart';
 Future<void> setupGlobalSingletons(Flavor flavor) async {
   // load .env
   await DotEnv().load('secrets/.env');
-  final env = DotEnv().env;
+  final env = EnvKeys.fromEnv(env: DotEnv().env);
+
+  // env keys
+  GetIt.I.registerSingleton<EnvKeys>(env);
+  InAppLogger.info('⚙ Env');
 
   // flavor
   GetIt.I.registerSingleton<Flavor>(flavor);
@@ -62,18 +67,18 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
   InAppLogger.info('🔥 SharedPreferences Initialized');
 
   // contentful client
-  final client = Client(env['CONTENTFUL_SPACE_ID'], env['CONTENTFUL_TOKEN']);
+  final client = Client(env.contentfulSpaceId, env.contentfulToken);
   GetIt.I.registerSingleton<Client>(client);
   InAppLogger.info('🔥 Contentful Initialized');
 
   // initialize admob
-  await FirebaseAdMob.instance.initialize(appId: env['ADMOB_APP_ID']);
+  await FirebaseAdMob.instance.initialize(appId: env.admobAppId);
   InAppLogger.info('🔥 Admob Initialized');
 
   // notificator
-  final notificator = AppNotifier();
+  final notificator = NotificationNotifier();
   await notificator.setup();
-  GetIt.I.registerSingleton<AppNotifier>(notificator);
+  GetIt.I.registerSingleton<NotificationNotifier>(notificator);
   InAppLogger.info('🔥 notificator Initialized');
 
   // sign in with apple
@@ -83,8 +88,7 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
 
   // sentry client
   // TODO: 書く場所考える
-  assert(env['SENTRY_DSN'] != '');
-  final _sentry = SentryClient(dsn: env['SENTRY_DSN']);
+  final _sentry = SentryClient(dsn: env.sentryDsn);
   GetIt.I.registerSingleton<SentryClient>(_sentry);
   InAppLogger.info('🔥 sentry Initialized');
 }
@@ -96,14 +100,12 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   await setupGlobalSingletons(flavor);
 
   final analytics = GetIt.I<FirebaseAnalytics>();
+  final env = GetIt.I<EnvKeys>();
 
-  final env = DotEnv().env;
-  final useEmulator = env['USE_EMULATOR'].toLowerCase() == 'true';
   const useMock = false;
 
-  if (useEmulator) {
-    final origin = env['FUNCTIONS_EMULATOR_ORIGIN'];
-    assert(origin != '');
+  if (env.useEmulator) {
+    final origin = env.functionsEmulatorOrigin;
     InAppLogger.info('❗ Using Emulator @ $origin');
     useCloudFunctionsEmulator(origin);
   }
