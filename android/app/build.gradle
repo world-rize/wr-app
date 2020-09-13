@@ -1,4 +1,7 @@
+// debug variant
 def keystorePropertiesFile = rootProject.file("keystore.properties")
+// release variant
+def keystoreReleasePropertiesFile = rootProject.file("keystore_release.properties")
 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
@@ -29,21 +32,36 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    signingConfigs {
+        release {
+            // もしかしたら動かないかも
+            def keystoreReleaseProperties = new Properties()
+            keystoreReleaseProperties.load(new FileInputStream(keystoreReleasePropertiesFile))
+            keyAlias keystoreReleaseProperties['keyAlias']
+            keyPassword keystoreReleaseProperties['keyPassword']
+            storeFile file(keystoreReleaseProperties['storeFile'])
+            storePassword keystoreReleaseProperties['storePassword']
+        }
+    }
+
     // flavors
     flavorDimensions "flavor-type"
 
     productFlavors {
         development {
             dimension "flavor-type"
-            // applicationIdSuffix ".dev"
+            applicationId "com.worldrize.app.dev"
+            resValue "string", "app_name", "WR英会話-dev"
         }
         staging {
             dimension "flavor-type"
-            // applicationIdSuffix ".stg"
+            applicationId "com.worldrize.app.stg"
+            resValue "string", "app_name", "WR英会話-stg"
         }
         production {
             dimension "flavor-type"
-            // applicationIdSuffix ".prd"
+            applicationId "com.worldrize.app"
+            resValue "string", "app_name", "WR英会話"
         }
     }
 
@@ -61,7 +79,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.worldrize.app"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -70,6 +88,15 @@ android {
 
         // <https://qiita.com/kasa_le/items/d23075d817f42e869778>
         signingConfigs {
+            debug {
+                // local
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
             release {
                 // from codemagic env
                 if (System.getenv()["CI"]) { // CI=true is exported by Codemagic
@@ -79,13 +106,13 @@ android {
                     keyPassword System.getenv()["FCI_KEY_PASSWORD"]
                 }
                 // local
-                else if (keystorePropertiesFile.exists()) {
-                    def keystoreProperties = new Properties()
-                    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-                    keyAlias keystoreProperties['keyAlias']
-                    keyPassword keystoreProperties['keyPassword']
-                    storeFile file(keystoreProperties['storeFile'])
-                    storePassword keystoreProperties['storePassword']
+                else if (keystoreReleasePropertiesFile.exists()) {
+                    def keystoreReleaseProperties = new Properties()
+                    keystoreReleaseProperties.load(new FileInputStream(keystoreReleasePropertiesFile))
+                    keyAlias keystoreReleaseProperties['keyAlias']
+                    keyPassword keystoreReleaseProperties['keyPassword']
+                    storeFile file(keystoreReleaseProperties['storeFile'])
+                    storePassword keystoreReleaseProperties['storePassword']
                 }
             }
         }
@@ -93,11 +120,9 @@ android {
 
     buildTypes {
         debug {
-            resValue "string", "app_name", "WR英会話-dev"
             signingConfig signingConfigs.debug
         }
         release {
-            resValue "string", "app_name", "WR英会話"
             signingConfig signingConfigs.release
         }
     }
@@ -119,8 +144,7 @@ dependencies {
 
     // add the Firebase SDK for Google Analytics
     implementation 'com.google.firebase:firebase-analytics:17.2.2'
-//    implementation 'com.google.gms:google-services:4.2.0'
-//    implementation 'com.google.firebase:firebase-ads:18.0.0'
+    implementation 'com.google.android.gms:play-services-ads:19.3.0'
 }
 
 // solution <https://qiita.com/noobar/items/f40fb0e30384020bfb09>
