@@ -27,3 +27,11 @@ unzip -qq assets.zip
 rm -rf ./assets.zip ./__MACOSX
 
 which agvtool
+
+# == work around of failing build with ==
+# A problem occurred evaluating root project 'cloud_functions_web'.
+# > Failed to apply plugin [id 'com.android.library']
+#    > Minimum supported Gradle version is 5.4.1. Current version is 4.10.2. 
+# 4.10.2 -> 5.4.1
+ls $FLUTTER_ROOT/.pub-cache
+sed -i -e 's/4.10.2/5.4.1/g' $FLUTTER_ROOT/.pub-cache/hosted/pub.dartlang.org/cloud_functions_web-1.1.0/android/gradle/wrapper/gradle-wrapper.properties
