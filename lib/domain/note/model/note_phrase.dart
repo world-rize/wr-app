@@ -29,6 +29,16 @@ class NotePhrase {
     );
   }
 
+  ///
+  factory NotePhrase.empty() {
+    return NotePhrase(
+      id: Uuid().v4(),
+      word: '',
+      translation: '',
+      achieved: false,
+    );
+  }
+
   /// wordとtranslationからNotePhraseを新しく作る
   factory NotePhrase.create(String word, String translation) {
     final uuid = Uuid().v4();

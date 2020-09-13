@@ -4,6 +4,7 @@ import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
+import 'package:wr_app/util/extensions.dart';
 
 part 'note.g.dart';
 
@@ -41,7 +42,7 @@ class Note {
       title: title,
       isDefault: isDefault,
       sortType: '',
-      phrases: List<NotePhrase>.filled(30, NotePhrase.create('', '')),
+      phrases: List<NotePhrase>.filled(30, NotePhrase.empty()),
     );
   }
 
@@ -59,7 +60,7 @@ class Note {
 
   List<NotePhrase> _phrases;
 
-  List<NotePhrase> get phrases => [..._phrases];
+  List<NotePhrase> get phrases => _phrases.filled(30, () => NotePhrase.empty());
 
   bool _belowNotePhrasesLimit() {
     return _phrases.length < 30;

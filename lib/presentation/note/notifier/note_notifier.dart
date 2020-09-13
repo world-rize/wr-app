@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
 class NoteNotifier extends ChangeNotifier {
+  /// 現在のノート
   String _nowSelectedNoteId = 'default';
+
+  /// 英語
   bool _canSeeEnglish = true;
+
+  /// 日本語
   bool _canSeeJapanese = true;
 
   String get nowSelectedNoteId => _nowSelectedNoteId;

@@ -11,6 +11,7 @@ import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
 import 'package:wr_app/presentation/note/widgets/phrase_edit_dialog.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// ノートのフレーズを表示するテーブル
 class NoteTable extends StatelessWidget {
@@ -20,9 +21,69 @@ class NoteTable extends StatelessWidget {
 
   Note note;
 
+  TableRow _createPhraseRow({
+    @required BuildContext context,
+    @required UserNotifier un,
+    @required NotePhrase phrase,
+  }) {
+    return TableRow(
+      children: [
+        TableCell(
+          child: Center(
+            child: IconButton(
+              icon: Icon(
+                phrase.achieved
+                    ? Icons.check_box
+                    : Icons.check_box_outline_blank,
+                color: Colors.green,
+              ),
+              onPressed: () {
+                un.achievePhraseInNote(
+                    noteId: note.id,
+                    phraseId: phrase.id,
+                    achieve: !phrase.achieved);
+              },
+            ),
+          ).padding(),
+        ),
+        TableCell(
+          child: InkWell(
+            onTap: () {
+              // _showPhraseEditDialog(phrase);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Center(
+                child: Text(Provider.of<NoteNotifier>(context).canSeeJapanese
+                    ? phrase.translation
+                    : ''),
+              ),
+            ),
+          ),
+        ),
+        TableCell(
+          child: InkWell(
+            onTap: () {
+              // _showPhraseEditDialog(phrase);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: Center(
+                child: Text(Provider.of<NoteNotifier>(context).canSeeEnglish
+                    ? phrase.word
+                    : ''),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context);
+    final nn = Provider.of<NoteNotifier>(context, listen: false);
     final h5 = Theme.of(context).textTheme.headline5;
 
     // ノート名
@@ -34,15 +95,12 @@ class NoteTable extends StatelessWidget {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => NoteListPage()));
           },
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Text(note.title, style: h5),
-                Icon(Icons.keyboard_arrow_down),
-              ],
-            ),
-          ),
+          child: Row(
+            children: [
+              Text(note.title, style: h5),
+              Icon(Icons.keyboard_arrow_down),
+            ],
+          ).padding(),
         ),
       ],
     );
@@ -64,6 +122,8 @@ class NoteTable extends StatelessWidget {
       },
     );
 
+    print(note.phrases.map((p) => p.id).join(', '));
+
     final header = Row(
       children: [
         const Spacer(),
@@ -74,10 +134,6 @@ class NoteTable extends StatelessWidget {
         )
       ],
     );
-
-    // TODO: 順番保持 -> array
-    // 見かけは30こ
-    final phrases = note.phrases..sort((a, b) => a.id.compareTo(b.id));
 
     void _showPhraseEditDialog(NotePhrase phrase, Language language) {
       final un = Provider.of<UserNotifier>(context, listen: false);
@@ -107,6 +163,41 @@ class NoteTable extends StatelessWidget {
       );
     }
 
+    final _tableHeader = TableRow(
+      children: [
+        const TableCell(
+          // empty widget
+          child: SizedBox.shrink(),
+        ),
+        TableCell(
+          child: GestureDetector(
+            onTap: () {
+              nn.toggleSeeJapanese();
+            },
+            child: Container(
+              color: nn.canSeeJapanese ? Colors.white : Colors.green,
+              child: const Center(
+                child: Text('Japanese'),
+              ).padding(),
+            ),
+          ),
+        ),
+        TableCell(
+          child: GestureDetector(
+            onTap: () {
+              nn.toggleSeeEnglish();
+            },
+            child: Container(
+              color: nn.canSeeEnglish ? Colors.white : Colors.green,
+              child: const Center(
+                child: Text('English'),
+              ).padding(),
+            ),
+          ),
+        ),
+      ],
+    );
+
     final phrasesTable = Table(
         border: TableBorder.all(
           color: Colors.grey,
@@ -119,100 +210,12 @@ class NoteTable extends StatelessWidget {
         },
         children: [
           // header
-          TableRow(
-            children: [
-              const TableCell(
-                // empty widget
-                child: SizedBox.shrink(),
-              ),
-              TableCell(
-                child: GestureDetector(
-                  onTap: () {
-                    Provider.of<NoteNotifier>(context).toggleSeeJapanese();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Center(
-                      child: Text('Japanese'),
-                    ),
-                  ),
-                ),
-              ),
-              TableCell(
-                child: GestureDetector(
-                  onTap: () {
-                    Provider.of<NoteNotifier>(context).toggleSeeEnglish();
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: Center(
-                      child: Text('English'),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          _tableHeader,
 
-          ...phrases.map((phrase) {
-            return TableRow(
-              children: [
-                TableCell(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: Center(
-                      child: IconButton(
-                        icon: Icon(
-                          phrase.achieved
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: Colors.redAccent,
-                        ),
-                        onPressed: () {
-                          un.achievePhraseInNote(
-                              noteId: note.id,
-                              phraseId: phrase.id,
-                              achieve: !phrase.achieved);
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-                TableCell(
-                  child: InkWell(
-                    onTap: () {
-                      // _showPhraseEditDialog(phrase);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Center(
-                        child: Text(
-                            Provider.of<NoteNotifier>(context).canSeeJapanese
-                                ? phrase.translation
-                                : ''),
-                      ),
-                    ),
-                  ),
-                ),
-                TableCell(
-                  child: InkWell(
-                    onTap: () {
-                      // _showPhraseEditDialog(phrase);
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: Center(
-                        child: Text(
-                            Provider.of<NoteNotifier>(context).canSeeEnglish
-                                ? phrase.word
-                                : ''),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }).toList(),
+          ...note.phrases
+              .map((phrase) =>
+                  _createPhraseRow(context: context, un: un, phrase: phrase))
+              .toList(),
         ]);
 
     return Column(

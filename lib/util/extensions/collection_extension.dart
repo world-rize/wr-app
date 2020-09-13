@@ -3,6 +3,13 @@
 import 'dart:math';
 
 extension IndexedMap<T, E> on List<T> {
+  /// filled to size
+  Iterable<T> filled(int length, Function empty) {
+    final c = this.length;
+    this.length = length;
+    return this..fillRange(c, length, empty());
+  }
+
   /// enumerate
   List<E> indexedMap<E>(E Function(int index, T item) function) {
     final list = <E>[];

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
+import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
@@ -415,6 +416,30 @@ class UserNotifier with ChangeNotifier {
 
     InAppLogger.info('achievePhraseInNote $noteId/$phraseId');
     NotifyToast.success('achievePhraseInNote $noteId/$phraseId');
+  }
+
+  Note getNoteById({@required String noteId}) {
+    if (noteId == 'achieved') {
+      return getAchievedNote();
+    }
+    return _user.notes.values
+        .firstWhere((note) => note.id == noteId, orElse: null);
+  }
+
+  /// achieved notes
+  Note getAchievedNote() {
+    final achievedPhrases = _user.notes.values
+        .expand((note) => note.phrases)
+        .where((phrase) => phrase.achieved)
+        .toList();
+
+    return Note(
+      id: 'achieved',
+      isDefault: false,
+      title: 'Achieved Note',
+      sortType: '',
+      phrases: achievedPhrases,
+    );
   }
 
   /// calculates heatMap of testResult
