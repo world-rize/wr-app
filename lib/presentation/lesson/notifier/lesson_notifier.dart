@@ -8,6 +8,14 @@ import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
+enum Visibility {
+  all,
+  // 英語
+  englishOnly,
+  // 日本語
+  japaneseOnly,
+}
+
 class LessonNotifier with ChangeNotifier {
   LessonService _lessonService;
   UserService _userService;
@@ -52,12 +60,9 @@ class LessonNotifier with ChangeNotifier {
   }
 
   Future<List<Phrase>> favoritePhrases(User user) async {
-    final favoritedPhraseIds = user.favorites.values
-        .expand((list) => list.favoritePhraseIds.keys)
-        .toSet()
-        .toList();
-
-    return phrasesWhere((p) => favoritedPhraseIds.contains(p.id));
+    final favoriteIds =
+        user.favorites.values.expand((list) => list.phrases).map((p) => p.id);
+    return phrasesWhere((p) => favoriteIds.contains(p.id));
   }
 
   Future<List<Phrase>> newComingPhrases() async {

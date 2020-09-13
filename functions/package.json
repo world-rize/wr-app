@@ -10,7 +10,8 @@
     "logs": "firebase functions:log",
     "test": "jest -i --detectOpenHandles",
     "docs": "typedoc --out ../docs/typedoc src",
-    "migrate": "MIGRATE=true ts-node src/migrate.ts"
+    "emu": "yarn build && firebase emulators:start --project wr-english-dev",
+    "run:emu": "export FIRESTORE_EMULATOR_HOST=\"localhost:8080\"; MIGRATE=true ts-node"
   },
   "engines": {
     "node": "10"
@@ -31,6 +32,7 @@
     "nqdm": "^2.0.2",
     "object-mapper": "^6.2.0",
     "reflect-metadata": "^0.1.13",
+    "shortid": "^2.2.15",
     "ts-node": "^8.10.2",
     "uuid": "^8.3.0"
   },

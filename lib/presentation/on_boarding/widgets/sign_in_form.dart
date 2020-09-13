@@ -4,74 +4,33 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as siwa;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/extensions.dart';
 
 class SignInForm extends StatefulWidget {
-  SignInForm({@required this.onSubmit, @required this.onSuccess});
+  const SignInForm({
+    @required this.onSignInWithEmailAndPassword,
+    @required this.onSignInWithApple,
+    @required this.onSignInWithGoogle,
+  });
 
-  Function onSubmit;
-
-  Function onSuccess;
+  final Function(String, String) onSignInWithEmailAndPassword;
+  final Function onSignInWithGoogle;
+  final Function onSignInWithApple;
 
   @override
-  _SignInFormState createState() =>
-      _SignInFormState(onSubmit: onSubmit, onSuccess: onSuccess);
+  _SignInFormState createState() => _SignInFormState();
 }
 
 class _SignInFormState extends State<SignInForm> {
-  _SignInFormState({@required this.onSubmit, @required this.onSuccess});
-
-  Function onSubmit;
-
-  Function onSuccess;
-
   bool _showPassword;
-
   String _email;
-
   String _password;
-
   final _formKey = GlobalKey<FormState>();
 
   bool _isValid() {
     return _email.isNotEmpty && _password.isNotEmpty;
-  }
-
-  Future<void> _signIn() async {
-    if (!_formKey.currentState.validate()) {
-      return;
-    }
-
-    _formKey.currentState.save();
-
-    onSubmit();
-    await Provider.of<UserNotifier>(context, listen: false)
-        .loginWithEmailAndPassword(_email, _password);
-    onSuccess();
-  }
-
-  Future<void> _signInByTestUser() async {
-    onSubmit();
-    await Provider.of<UserNotifier>(context, listen: false)
-        .loginWithEmailAndPassword('a@b.com', '123456');
-    onSuccess();
-  }
-
-  Future<void> _signInWithGoogle() async {
-    onSubmit();
-    await Provider.of<UserNotifier>(context, listen: false).loginWithGoogle();
-    onSuccess();
-  }
-
-  Future<void> _signInWithApple() async {
-    onSubmit();
-    await Provider.of<UserNotifier>(context, listen: false)
-        .signInWithSignInWithApple();
-    onSuccess();
   }
 
   @override
@@ -88,6 +47,7 @@ class _SignInFormState extends State<SignInForm> {
     final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
 
     final _emailField = TextFormField(
+      key: const Key('sign_in_form_email'),
       onChanged: (email) {
         setState(() => _email = email);
       },
@@ -108,6 +68,7 @@ class _SignInFormState extends State<SignInForm> {
     );
 
     final _passwordField = TextFormField(
+      key: const Key('sign_in_form_password'),
       obscureText: !_showPassword,
       onChanged: (password) {
         setState(() {
@@ -140,53 +101,45 @@ class _SignInFormState extends State<SignInForm> {
       ),
     );
 
-    final _signInButton = SizedBox(
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: RoundedButton(
-          text: 'Sign in',
-          color: splashColor,
-          onTap: !_isValid() ? null : _signIn,
-        ),
-      ),
+    final _signInButton = RoundedButton(
+      key: const Key('sign_in_form_sign_in_with_email_and_password'),
+      text: 'Sign in',
+      color: splashColor,
+      onTap: !_isValid()
+          ? null
+          : () {
+              if (!_formKey.currentState.validate()) {
+                return;
+              }
+              _formKey.currentState.save();
+              widget.onSignInWithEmailAndPassword(_email, _password);
+            },
     );
 
-    final _signInWithGoogleButton = SizedBox(
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: RoundedButton(
-          text: 'Googleでログイン',
-          color: Colors.redAccent,
-          onTap: () {
-            _signInWithGoogle();
-          },
-        ),
-      ),
+    final _signInWithGoogleButton = RoundedButton(
+      key: const Key('sign_in_form_sign_in_with_google'),
+      text: 'Googleでログイン',
+      color: Colors.redAccent,
+      onTap: () {
+        widget.onSignInWithGoogle();
+      },
     );
 
-    final _signInWithAppleButton = SizedBox(
-      width: double.infinity,
-      child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: AppleSignInButton(
-            style: siwa.ButtonStyle.black,
-            type: siwa.ButtonType.signIn,
-            onPressed: _signInWithApple,
-          )),
+    final _signInWithAppleButton = AppleSignInButton(
+      style: siwa.ButtonStyle.black,
+      type: siwa.ButtonType.signIn,
+      onPressed: () {
+        widget.onSignInWithApple();
+      },
     );
 
-    final _signInByTestUserButton = SizedBox(
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: RoundedButton(
-          onTap: _signInByTestUser,
-          text: 'Sign in by Test User(Debug)',
-          color: Colors.green,
-        ),
-      ),
+    final _signInByTestUserButton = RoundedButton(
+      key: const Key('sign_in_form_sign_in_by_test_user'),
+      text: 'Test User',
+      color: Colors.white30,
+      onTap: () {
+        widget.onSignInWithEmailAndPassword('a@b.com', '123456');
+      },
     );
 
     return Form(
@@ -195,19 +148,11 @@ class _SignInFormState extends State<SignInForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           // Email
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: _emailField,
-          ),
-
+          _emailField.padding(),
           // Password
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: _passwordField,
-          ),
-
+          _passwordField.padding(),
           // Sign Up
-          _signInButton.p_1(),
+          _signInButton.padding(),
 
           const Divider(
             indent: 20,
@@ -216,11 +161,12 @@ class _SignInFormState extends State<SignInForm> {
           ),
 
           // Google Sign in
-          _signInWithGoogleButton,
+          _signInWithGoogleButton.padding(),
 
-          if (appleSignInAvailable.isAvailable) _signInWithAppleButton,
+          if (appleSignInAvailable.isAvailable)
+            _signInWithAppleButton.padding(),
 
-          _signInByTestUserButton.p_1(),
+          _signInByTestUserButton.padding(),
         ],
       ),
     );

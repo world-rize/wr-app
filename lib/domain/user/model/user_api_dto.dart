@@ -228,3 +228,17 @@ class PurchaseItemRequest {
 
   String itemId;
 }
+
+@JsonSerializable(explicitToJson: true, anyMap: true)
+class IntroduceFriendRequest {
+  IntroduceFriendRequest({
+    @required this.introduceeUserId,
+  });
+
+  String introduceeUserId;
+
+  factory IntroduceFriendRequest.fromJson(Map<String, dynamic> json) =>
+      _$IntroduceFriendRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$IntroduceFriendRequestToJson(this);
+}

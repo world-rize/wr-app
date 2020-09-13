@@ -18,18 +18,30 @@ class Note {
     @required this.title,
     @required this.sortType,
     @required this.isDefault,
-    @required this.phrases,
-  });
+    @required List<NotePhrase> phrases,
+  }) {
+    _phrases = phrases;
+  }
 
   factory Note.dummy(String title, {bool isDefault = false}) {
-    final phrases =
-        List.generate(10, (index) => NotePhrase.dummy(id: Uuid().v4()));
+    final noteId = Uuid().v4();
     return Note(
-      id: Uuid().v4(),
+      id: noteId,
       title: title,
       isDefault: isDefault,
       sortType: '',
-      phrases: Map<String, NotePhrase>.fromIterable(phrases, key: (p) => p.id),
+      phrases: [],
+    );
+  }
+
+  factory Note.empty(String title, {bool isDefault = false}) {
+    final noteId = Uuid().v4();
+    return Note(
+      id: noteId,
+      title: title,
+      isDefault: isDefault,
+      sortType: '',
+      phrases: List<NotePhrase>.generate(30, (_) => NotePhrase.empty()),
     );
   }
 
@@ -45,5 +57,46 @@ class Note {
 
   bool isDefault;
 
-  Map<String, NotePhrase> phrases;
+  List<NotePhrase> _phrases;
+
+  List<NotePhrase> get phrases => _phrases;
+
+  bool _belowNotePhrasesLimit() {
+    return _phrases.length < 30;
+  }
+
+  bool addPhrase(NotePhrase phrase) {
+    if (_belowNotePhrasesLimit()) {
+      _phrases.add(phrase);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  NotePhrase findByNotePhraseId(String id) {
+    return _phrases.firstWhere((element) => element.id == id, orElse: null);
+  }
+
+  bool updateNotePhrase(String id, NotePhrase phrase) {
+    final index = _phrases.indexWhere((element) => element.id == id);
+    if (index != -1) {
+      _phrases[index] = phrase;
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool deleteNotePhrase(String id) {
+    final index = _phrases.indexWhere(
+      (element) => element.id == id,
+    );
+    if (index != -1) {
+      _phrases.removeAt(index);
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

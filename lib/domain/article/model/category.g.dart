@@ -11,6 +11,7 @@ ArticleCategory _$ArticleCategoryFromJson(Map<String, dynamic> json) {
     id: json['id'] as String,
     title: json['title'] as String,
     thumbnailUrl: json['thumbnailUrl'] as String,
+    url: json['url'] as String,
   );
 }
 
@@ -19,4 +20,5 @@ Map<String, dynamic> _$ArticleCategoryToJson(ArticleCategory instance) =>
       'id': instance.id,
       'title': instance.title,
       'thumbnailUrl': instance.thumbnailUrl,
+      'url': instance.url,
     };

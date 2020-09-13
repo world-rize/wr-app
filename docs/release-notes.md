@@ -1,3 +1,27 @@
+## v0.6.1 Nightly Release(2020-09-13)
+- Andoird CI/CD
+- Admob設定
+- ノートAPI修正
+- ショップAPI追加
+- 各種リンク追加
+- 認証周り整理
+- Article変更, Agency削除
+- 友達紹介機能
+
+## v0.6.0 Nightly Release(2020-09-11)
+- 環境分割, CI/CD, sentry
+- Figma整理
+- [#97] Sign in with Apple
+- Article WebView
+- [#104] 30 Days Challenge
+- [#109], [#92] テスト回数リセット
+- ショップ
+- ノート機能
+- アップグレード画面
+- 友達紹介画面
+- [#69] フレーズ検索
+- 大量の修正
+
 ## v0.5.0 Nightly Release(2020-08-12)
 - お気に入りグループ機能(APIのみ)
 - ノート機能(APIのみ)

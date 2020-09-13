@@ -8,33 +8,23 @@ import 'package:wr_app/domain/voice_accent.dart';
 
 enum TtsState { playing, stopped }
 
-const Map<VoiceAccent, String> _voiceAccentFlutterTtsMap = {
-  VoiceAccent.japanese: 'jp-JP',
-  VoiceAccent.americanEnglish: 'en-US',
-  VoiceAccent.australiaEnglish: 'en-AU',
-  VoiceAccent.britishEnglish: 'en-GB',
-  VoiceAccent.indianEnglish: 'en-IN',
-};
-
 /// フラッシュカードの操作
 class FlashCardNotifier extends ChangeNotifier {
   FlashCardNotifier({
-    @required this.note,
+    @required Note note,
   }) {
-    note = note;
+    // からのフレーズは無視
     originalNotePhrases = [
-      ...note.phrases.values,
+      ...filterNotEmptyNotePhrases(note.phrases),
     ];
     notePhrases = [...originalNotePhrases];
     _nowPhraseIndex = 0;
-    _autoScroll = false;
+    _autoScroll = true;
     _isShuffle = false;
     _voiceAccent = VoiceAccent.americanEnglish;
     _flutterTts = FlutterTts();
     _ttsState = TtsState.stopped;
   }
-
-  Note note;
 
   /// 並び替えられる可能性があるので変更せずに持っておく
   List<NotePhrase> originalNotePhrases;
@@ -70,6 +60,12 @@ class FlashCardNotifier extends ChangeNotifier {
 
   int get nowPhraseIndex => _nowPhraseIndex;
 
+  static Iterable<NotePhrase> filterNotEmptyNotePhrases(
+      Iterable<NotePhrase> phrases) {
+    return phrases
+        .where((phrase) => phrase.word == '' || phrase.translation == '');
+  }
+
   set pageController(PageController pageController) {
     _pageController = pageController;
     _pageController.addListener(() {
@@ -80,7 +76,6 @@ class FlashCardNotifier extends ChangeNotifier {
 
   Future<void> setVoiceAccent(VoiceAccent voiceAccent) async {
     _voiceAccent = voiceAccent;
-    await _flutterTts.setLanguage(_voiceAccentFlutterTtsMap[voiceAccent]);
     notifyListeners();
   }
 
@@ -94,6 +89,8 @@ class FlashCardNotifier extends ChangeNotifier {
     _autoScroll = !_autoScroll;
     notifyListeners();
   }
+
+  double get playSpeed => _rate * 2;
 
   /// しゃべる倍率をわたす
   void setPlaySpeed(double speed) {
@@ -125,13 +122,15 @@ class FlashCardNotifier extends ChangeNotifier {
     final nowPhrase = notePhrases[_nowPhraseIndex];
 
     // wait play word
-    final completerWord = Completer<void>();
+    await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
     await _flutterTts.speak(nowPhrase.word);
+    final completerWord = Completer<void>();
     _flutterTts.setCompletionHandler(completerWord.complete);
     await completerWord.future;
 
     // wait play translation
     // TODO: 言語に対応していないと再生できない
+    await _flutterTts.setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
     await _flutterTts.speak(nowPhrase.translation);
     final completerTranslation = Completer<void>();
     _flutterTts.setCompletionHandler(completerTranslation.complete);
@@ -146,10 +145,14 @@ class FlashCardNotifier extends ChangeNotifier {
       );
       final nowPhrase = notePhrases[_nowPhraseIndex];
 
-      final completerWord = Completer<void>();
+      await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
       await _flutterTts.speak(nowPhrase.word);
+      final completerWord = Completer<void>();
       _flutterTts.setCompletionHandler(completerWord.complete);
       await completerWord.future;
+
+      await _flutterTts
+          .setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
       await _flutterTts.speak(nowPhrase.translation);
       final completerTranslation = Completer<void>();
       _flutterTts.setCompletionHandler(completerTranslation.complete);
@@ -167,16 +170,26 @@ class FlashCardNotifier extends ChangeNotifier {
 
   Future<void> stop() async {
     print('stopping in');
+    _ttsState = TtsState.stopped;
+    notifyListeners();
     final result = await _flutterTts.stop();
     final completer = Completer<void>();
     _flutterTts.setCompletionHandler(completer.complete);
     await completer.future;
     print('sapped in');
-    _ttsState = TtsState.stopped;
-    notifyListeners();
   }
 
   Future<void> getLanguages() async {
     (await _flutterTts.getLanguages).for_each(print);
+  }
+
+  String voiceAccentToTtsString(VoiceAccent va) {
+    return {
+      VoiceAccent.japanese: 'ja-JP',
+      VoiceAccent.americanEnglish: 'en-US',
+      VoiceAccent.australiaEnglish: 'en-AU',
+      VoiceAccent.britishEnglish: 'en-UK',
+      VoiceAccent.indianEnglish: 'en-IN',
+    }[va];
   }
 }

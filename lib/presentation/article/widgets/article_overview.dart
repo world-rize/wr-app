@@ -31,7 +31,7 @@ class ArticleOverView extends StatelessWidget {
                 text: tag,
                 color: Colors.grey.shade500,
                 shape: GFBadgeShape.square,
-              ).p(4),
+              ).padding(4),
             )
             .toList(),
       ),

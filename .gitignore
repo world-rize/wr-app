@@ -49,8 +49,10 @@ google-services.json
 
 # secrets
 /secrets/*
-.env*
+*.env
 !/secrets/.env.sample
 setup.sh
+*.keystore
+keystore.properties
 
 .node-version

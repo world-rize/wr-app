@@ -25,6 +25,9 @@ export const deleteFavoriteList = functions.region('asia-northeast1').https.onCa
 
 export const sendTestResult = functions.region('asia-northeast1').https.onCall(userApi.sendTestResult)
 
+export const introduceFriend = functions.region('asia-northeast1').https.onCall(userApi.introduceFriend)
+export const getShopItems = functions.region('asia-northeast1').https.onCall(userApi.getShopItems)
+
 // note api
 export const createNote = functions.region('asia-northeast1').https.onCall(userApi.createNote)
 export const updateNoteTitle = functions.region('asia-northeast1').https.onCall(userApi.updateNoteTitle)

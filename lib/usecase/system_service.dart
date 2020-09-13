@@ -33,7 +33,10 @@ class SystemService {
       _systemPersistence.setQuestionnaireAnswered(value: value);
 
   Future<void> notify(
-      {AppNotifier notificator, String title, String body, String payload}) {
+      {NotificationNotifier notificator,
+      String title,
+      String body,
+      String payload}) {
     return _systemPersistence.notify(
         title: title, body: body, payload: payload);
   }

@@ -23,10 +23,13 @@ class FlashCardPage extends StatelessWidget {
         ),
         body: Column(
           children: [
+            const Spacer(),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.all(8),
               child: FlashCard(),
             ),
+            const Spacer(),
             Padding(
               padding: const EdgeInsets.all(8),
               child: FlashCardController(),

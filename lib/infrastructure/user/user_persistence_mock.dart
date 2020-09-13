@@ -64,13 +64,16 @@ class UserPersistenceMock implements UserRepository {
   Future<User> favoritePhrase(FavoritePhraseRequest req) async {
     final user = _readUserMock();
     if (req.favorite) {
-      user.favorites[req.listId].favoritePhraseIds[req.phraseId] =
-          FavoritePhraseDigest(
-        id: req.phraseId,
-        createdAt: DateTime.now(),
+      user.favorites[req.listId].addPhrase(
+        FavoritePhraseDigest(
+          id: req.phraseId,
+          createdAt: DateTime.now(),
+        ),
       );
     } else {
-      user.favorites[req.listId].favoritePhraseIds.remove(req.phraseId);
+      if (!user.favorites[req.listId].deletePhrase(req.phraseId)) {
+        throw Exception('Phrase ${req.phraseId} is not found');
+      }
     }
     await Future.delayed(const Duration(seconds: 1));
     return user;
@@ -118,7 +121,7 @@ class UserPersistenceMock implements UserRepository {
       title: req.name,
       isDefault: false,
       sortType: '',
-      favoritePhraseIds: {},
+      phrases: [],
     );
     await Future.delayed(const Duration(seconds: 1));
     return user;
@@ -148,5 +151,10 @@ class UserPersistenceMock implements UserRepository {
     user.items.putIfAbsent(req.itemId, () => 0);
     user.items[req.itemId] = 1;
     return user;
+  }
+
+  @override
+  Future<void> introduceFriend(IntroduceFriendRequest req) async {
+    return;
   }
 }

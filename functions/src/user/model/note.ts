@@ -56,7 +56,7 @@ export interface Note {
   isDefault: boolean
 
   /**
-   * フレーズ(key: uuid, value: NotePhrase)
+   * フレーズ
    */
-  phrases: Record<string, NotePhrase>
+  phrases: NotePhrase[]
 }

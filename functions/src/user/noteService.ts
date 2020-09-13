@@ -4,7 +4,8 @@
 import { UserRepository } from './userRepository'
 import { Note, NotePhrase } from './model/note'
 import { v4 as uuidv4 } from 'uuid'
-import { Phrase } from './model/phrase'
+import _ from 'lodash'
+import * as functions from 'firebase-functions'
 
 export class NoteService {
   private readonly repo: UserRepository
@@ -13,39 +14,39 @@ export class NoteService {
     this.repo = repo
   }
 
-  static generateNote(noteId: string, title: string, isDefault: boolean = false): Note {
-    const initialPhrases: Record<string, NotePhrase> = {
-      'p001': {
-        schemaVersion: 'v1',
-        id: 'p001',
-        word: 'Apple',
-        translation: 'りんご',
-        achieved: false,
-      },
-      'p002': {
-        schemaVersion: 'v1',
-        id: 'p002',
-        word: 'Banana',
-        translation: 'バナナ',
-        achieved: false,
-      }
-    }
-
+  static generateNotePhrase(): NotePhrase {
     return {
       schemaVersion: 'v1',
-      id: noteId,
-      isDefault: true,
-      title: title,
-      sortType: 'createdAt-',
-      phrases: initialPhrases,
+      id: uuidv4(),
+      word: '',
+      translation: '',
+      achieved: false,
     }
   }
 
-// ノートを作成
-// 3つ以上あったら作れない
-// 
+  static generateNote(noteId: string, title: string, isDefault: boolean = false): Note {
+    // 30 phrases
+    return {
+      schemaVersion: 'v1',
+      id: noteId,
+      isDefault: isDefault,
+      title: title,
+      sortType: 'createdAt-',
+      phrases: [...Array(30)].map(_ => NoteService.generateNotePhrase()),
+    }
+  }
+
+  // ノートを作成
   async createNote(userId: string, title: string): Promise<Note> {
     const user = await this.repo.findById(userId)
+
+    const userNoteLimit = 3 + (user.items['extra_note'] ?? 0)
+    const noteCount = Object.keys(user.notes).length
+    console.log(`limit: ${userNoteLimit}, notes: ${noteCount}`)
+    if (userNoteLimit <= noteCount) {
+      throw new functions.https.HttpsError('out-of-range', `note limit exceeded`)
+    }
+
     const noteId = uuidv4()
     const note = NoteService.generateNote(noteId, title)
 
@@ -58,7 +59,7 @@ export class NoteService {
     const user = await this.repo.findById(userId)
 
     if (!user.notes[noteId]) {
-      throw `Note ${noteId} not found`
+      throw new functions.https.HttpsError('not-found', `note ${noteId} not found`)
     }
 
     user.notes[noteId] = {
@@ -74,7 +75,7 @@ export class NoteService {
     const user = await this.repo.findById(userId)
 
     if (!user.notes[noteId]) {
-      throw `Note ${noteId} not found`
+      throw new functions.https.HttpsError('not-found', `note ${noteId} not found`)
     }
 
     for (const [_, note] of Object.entries(user.notes)) {
@@ -98,10 +99,10 @@ export class NoteService {
     const user = await this.repo.findById(userId)
 
     if (!user.notes[noteId]) {
-      throw `Note ${noteId} not found`
+      throw new functions.https.HttpsError('not-found', `note ${noteId}/ not found`)
     }
 
-    user.notes[noteId].phrases[phrase.id] = phrase
+    user.notes[noteId].phrases.push(phrase)
     await this.repo.update(user)
     return user.notes[noteId]
   }
@@ -110,14 +111,15 @@ export class NoteService {
     const user = await this.repo.findById(userId)
 
     if (!user.notes[noteId]) {
-      throw `Note ${noteId} not found`
+      throw new functions.https.HttpsError('not-found', `note ${noteId} not found`)
     }
 
-    if (!user.notes[noteId].phrases[phraseId]) {
-      throw `Phrase ${phraseId} not found`
+    const index = user.notes[noteId].phrases.findIndex(p => p.id === phraseId)
+    if (index === -1) {
+      throw new functions.https.HttpsError('not-found', `note ${noteId}/${phraseId} not found`)
     }
 
-    user.notes[noteId].phrases[phrase.id] = phrase
+    user.notes[noteId].phrases[index] = phrase
     await this.repo.update(user)
     return user.notes[noteId]
   }
@@ -126,10 +128,16 @@ export class NoteService {
     const user = await this.repo.findById(userId)
 
     if (!user.notes[noteId]) {
-      throw `Note ${noteId} not found`
+      throw new functions.https.HttpsError('not-found', `note ${noteId} not found`)
     }
 
-    delete user.notes[noteId].phrases[phraseId]
+    const index = user.notes[noteId].phrases.findIndex(p => p.id === phraseId)
+
+    if (index === -1) {
+      throw new functions.https.HttpsError('not-found', `note ${noteId}/${phraseId} not found`)
+    }
+
+    delete user.notes[noteId].phrases[index]
     await this.repo.update(user)
   }
 
@@ -137,14 +145,15 @@ export class NoteService {
     const user = await this.repo.findById(userId)
 
     if (!user.notes[noteId]) {
-      throw `Note ${noteId} not found`
+      throw new functions.https.HttpsError('not-found', `note ${noteId} not found`)
     }
 
-    if(!user.notes[noteId].phrases[phraseId]) {
-      throw `Note ${noteId}/${phraseId} not found`
+    const index = user.notes[noteId].phrases.findIndex(p => p.id === phraseId)
+    if(index === -1) {
+      throw new functions.https.HttpsError('not-found', `note ${noteId}/${phraseId} not found`)
     }
 
-    user.notes[noteId].phrases[phraseId].achieved = achieve
+    user.notes[noteId].phrases[index].achieved = achieve
 
     await this.repo.update(user)
   }
