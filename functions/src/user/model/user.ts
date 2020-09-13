@@ -41,6 +41,11 @@ export interface UserStatistics {
    * 最終ログイン日時
    */
   lastLogin: string
+
+  /**
+   * 友達紹介されたか
+   */
+  isIntroducedFriend: boolean
 }
 
 export interface UserAttributes {

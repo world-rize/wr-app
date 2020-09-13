@@ -11,6 +11,7 @@ import { User } from './model/user'
 import * as UserDto from './model/userApiDto'
 import * as NoteDto from './model/noteApiDto'
 import { Note } from './model/note'
+import { GiftItem } from './model/item'
 
 // onCall() has varify firebase tokens unlike onRequest()
 
@@ -417,6 +418,11 @@ export const achievePhraseInNote = async (req: NoteDto.AchievePhraseInNote, cont
     })
 }
 
+/**
+ * ユーザーを [userId] で検索します
+ * - ユーザーがみつかった場合は [User] を返し
+ * - 見つからなかった場合は not-found エラーを返します
+ */
 export const findUserByUserId = async(req: UserDto.FindUserByUserIdRequest, context: Context): Promise<User> => {
   const userId = await authorize(context)
 
@@ -430,6 +436,35 @@ export const findUserByUserId = async(req: UserDto.FindUserByUserIdRequest, cont
   return userService.findUserByUserId(userId, req.userId)
     .catch((e) => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to findUserByUserId')
+      throw new functions.https.HttpsError('not-found', `userId ${req.userId} not found`)
     })
+}
+
+/**
+ * 友人を紹介します
+ */
+export const introduceFriend = async (req: UserDto.IntroduceFriendRequest, context: Context) => {
+  const userId = await authorize(context)
+
+  req = Object.assign(new UserDto.IntroduceFriendRequest(), req)
+  await validate(req)
+    .catch(e => {
+      console.error('IntroduceFriendRequest is invalid')
+      throw new functions.https.HttpsError('invalid-argument', e)
+    })
+
+  return userService.introduceUser(userId, req.introduceeUserId)
+    .catch((e) => {
+      console.error(e)
+      throw new functions.https.HttpsError('internal', e)
+    })
+}
+
+/**
+ * アイテム
+ */
+export const getShopItems = async(req: {}, context: Context): Promise<GiftItem[]> => {
+  await authorize(context)
+
+  return userService.getShopItems()
 }

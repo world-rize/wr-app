@@ -10,6 +10,7 @@ const nqdm = require('nqdm')
 const colors = require('colors')
 
 admin.initializeApp({
+  projectId: 'wr-english-dev',
   credential: admin.credential.applicationDefault()
 })
 
