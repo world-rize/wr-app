@@ -97,7 +97,9 @@ class UserNotifier with ChangeNotifier {
   }
 
   Future<void> login() async {
+    _user = await _userService.readUser();
     await _userService.login();
+    notifyListeners();
   }
 
   Future<void> signOut() async {

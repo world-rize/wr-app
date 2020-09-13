@@ -1,10 +1,13 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:apple_sign_in/apple_sign_in.dart' as siwa;
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/apple_signin.dart';
+import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';
 
 class SignUpForm extends StatefulWidget {
@@ -62,6 +65,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
+    final env = GetIt.I<EnvKeys>();
     const splashColor = Color(0xff56c0ea);
     final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
 
@@ -179,7 +183,32 @@ class _SignUpFormState extends State<SignUpForm> {
         key: const Key('agree'),
         value: _agree,
         activeColor: Colors.blue,
-        title: const Text('利用規約に同意します'),
+        title: Text.rich(
+          // TODO: error
+          TextSpan(
+            text: '',
+            children: [
+              TextSpan(
+                text: '利用規約',
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () async {
+                    if (await canLaunch(env.privacyPolicyUrl)) {
+                      await launch(
+                        env.privacyPolicyUrl,
+                        forceSafariVC: false,
+                        forceWebView: false,
+                      );
+                    }
+                  },
+                style: const TextStyle(
+                  color: Colors.blue,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+              const TextSpan(text: 'に同意します'),
+            ],
+          ),
+        ),
         onChanged: (value) {
           setState(() => _agree = value);
         },

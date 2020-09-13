@@ -27,10 +27,11 @@ class _RootViewState extends State<RootView>
   PageController _pageController;
 
   /// Check user status
-  void _checkUserStatus(Duration timestamp) {
+  Future<void> _checkUserStatus(Duration timestamp) async {
     // TODO: membership check
     // on first launch, show on-boarding page
-    final loggedIn = Provider.of<UserNotifier>(context, listen: false).loggedIn;
+    final loggedIn =
+        await Provider.of<UserNotifier>(context, listen: false).loggedIn;
     final firstLaunch =
         Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
 
@@ -38,7 +39,7 @@ class _RootViewState extends State<RootView>
 
     // show on boarding modal
     if (firstLaunch || !loggedIn) {
-      Navigator.of(context).push(
+      await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => OnBoardingPage(),
           fullscreenDialog: true,
