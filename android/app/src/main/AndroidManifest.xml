@@ -41,6 +41,8 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-1382268650004997~1693942892"/>
+        <!--  定期購入アイテム作成のために、請求権限を追加 -->
+        <uses-permission android:name=“com.android.vending.BILLING” />
 
         <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="@string/default_notification_channel_id" />
     </application>
