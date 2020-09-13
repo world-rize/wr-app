@@ -433,7 +433,7 @@ export const findUserByUserId = async(req: UserDto.FindUserByUserIdRequest, cont
       throw new functions.https.HttpsError('invalid-argument', e)
     })
 
-  return userService.findUserByUserId(userId, req.userId)
+  return userService.findUserByUserId(req.userId)
     .catch((e) => {
       console.error(e)
       throw new functions.https.HttpsError('not-found', `userId ${req.userId} not found`)
@@ -466,5 +466,7 @@ export const introduceFriend = async (req: UserDto.IntroduceFriendRequest, conte
 export const getShopItems = async(req: {}, context: Context): Promise<GiftItem[]> => {
   await authorize(context)
 
-  return userService.getShopItems()
+  const a = await userService.getShopItems()
+  console.log(a)
+  return a
 }

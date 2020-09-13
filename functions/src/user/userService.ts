@@ -227,9 +227,9 @@ export class UserService {
     return this.repo.update(user)
   }
 
-  async findUserByUserId(uuid: string, userId: string): Promise<User> {
+  async findUserByUserId(userId: string): Promise<User> {
     const user = await this.repo.findByUserId(userId)
-    if (!user || userId === user.userId) {
+    if (!user) {
       throw new functions.https.HttpsError('not-found', 'user not found')
     }
     return user
