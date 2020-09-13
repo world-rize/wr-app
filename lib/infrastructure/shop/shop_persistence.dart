@@ -1,15 +1,21 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:flutter/material.dart';
+import 'package:wr_app/domain/shop/model/shop_item.dart';
+import 'package:wr_app/domain/shop/shop_repository.dart';
+import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/util/cloud_functions.dart';
 
-class XXX extends StatelessWidget {
+class ShopPersistenceMock implements ShopRepository {
+  // TODO: マスタデータとして管理(Firebaseとかで)
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(''),
-      ),
-      body: null,
-    );
+  Future<List<GiftItem>> shopItems() async {
+    return callFunction('getShopItems').then(
+        (res) => List.from(res.data).map((d) => GiftItem.fromJson(d)).toList());
+  }
+
+  @override
+  Future<User> buyShopItem(String itemId) {
+    // TODO: call buy item api
+    throw UnimplementedError();
   }
 }
