@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/language.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
@@ -15,6 +16,7 @@ class NotePage extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => PhraseEditDialog(
+        language: Language.america,
         onSubmit: (phrase) {
           Provider.of<UserNotifier>(context, listen: false)
               .addPhraseInNote(noteId: note.id, phrase: phrase);

@@ -5,12 +5,16 @@ import 'package:wr_app/domain/shop/shop_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/util/cloud_functions.dart';
 
-class ShopPersistenceMock implements ShopRepository {
-  // TODO: マスタデータとして管理(Firebaseとかで)
+class ShopPersistence implements ShopRepository {
   @override
   Future<List<GiftItem>> shopItems() async {
-    return callFunction('getShopItems').then(
-        (res) => List.from(res.data).map((d) => GiftItem.fromJson(d)).toList());
+    return callFunction('getShopItems').then((res) {
+      print(res.data);
+      final l = List.from(res.data);
+      print(l);
+      final ll = l.map((d) => GiftItem.fromJson(Map.from(d))).toList();
+      return ll;
+    });
   }
 
   @override

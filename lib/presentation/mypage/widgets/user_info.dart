@@ -51,14 +51,6 @@ class UserInfo extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Expanded(
-                child: Row(
-                  children: <Widget>[
-                    Icon(Icons.attach_money),
-                    Text(I.of(context).points(user.statistics.points)),
-                  ],
-                ),
-              )
             ],
           ),
           Padding(
