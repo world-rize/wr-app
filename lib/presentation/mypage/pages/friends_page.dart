@@ -20,11 +20,11 @@ class _FriendsPageState extends State<FriendsPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text('ユーザーが見つかりませんでした'),
+          content: const Text('ユーザーが見つかりませんでした'),
           actions: <Widget>[
             FlatButton(
-              child: Text('Ok'),
-              key: Key('Ok'),
+              child: const Text('ok'),
+              key: const Key('ok'),
               onPressed: () {
                 Navigator.pop(context);
               },

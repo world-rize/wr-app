@@ -10,17 +10,16 @@ import 'package:wr_app/util/extensions.dart';
 class NoteCard extends StatelessWidget {
   NoteCard({
     @required this.note,
-    this.achieved = false,
   });
 
   Note note;
-  bool achieved;
 
   @override
   Widget build(BuildContext context) {
     final nn = Provider.of<NoteNotifier>(context, listen: false);
     final titleStyle = Theme.of(context).primaryTextTheme.bodyText1;
     final subTitleStyle = Theme.of(context).primaryTextTheme.bodyText2;
+    final achieved = note.id == 'achieved';
 
     return InkWell(
       onTap: () {

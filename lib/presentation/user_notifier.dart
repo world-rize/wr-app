@@ -172,7 +172,7 @@ class UserNotifier with ChangeNotifier {
     );
     notifyListeners();
 
-    NotifyToast.success(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
+    InAppLogger.debug(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
   }
 
   /// 受講可能回数をリセット
@@ -181,8 +181,8 @@ class UserNotifier with ChangeNotifier {
 
     notifyListeners();
 
-    InAppLogger.info('受講可能回数がリセットされました');
-    NotifyToast.success('受講可能回数がリセットされました');
+    InAppLogger.debug('受講可能回数がリセットされました');
+    // NotifyToast.success('受講可能回数がリセットされました');
   }
 
   /// ポイントを習得します
@@ -194,7 +194,7 @@ class UserNotifier with ChangeNotifier {
       event: AnalyticsEvent.pointGet,
       parameters: {'points': points},
     );
-    NotifyToast.success('$points ポイントゲットしました');
+    InAppLogger.debug('$points ポイントゲットしました');
   }
 
   /// テストを受ける
@@ -230,7 +230,6 @@ class UserNotifier with ChangeNotifier {
     }
 
     InAppLogger.info('membership to be $membership');
-    NotifyToast.success('$membership');
   }
 
   /// create favorite list
@@ -242,7 +241,6 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     InAppLogger.info('createFavoriteList $name');
-    NotifyToast.success('createFavoriteList $name');
   }
 
   /// delete favorite list
@@ -254,7 +252,7 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     InAppLogger.info('deleteFavoriteList $listId');
-    NotifyToast.success('createFavoriteList $listId');
+    // NotifyToast.success('createFavoriteList $listId');
   }
 
   /// exist phrase in favorites
@@ -326,7 +324,7 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     InAppLogger.info('updateNoteTitle ${note.id}');
-    NotifyToast.success('updateNoteTitle ${note.id}');
+    // NotifyToast.success('updateNoteTitle ${note.id}');
   }
 
   /// update note isDefault
@@ -337,7 +335,7 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     InAppLogger.info('updateDefaultNote ${note.id}');
-    NotifyToast.success('updateDefaultNote ${note.id}');
+    // NotifyToast.success('updateDefaultNote ${note.id}');
   }
 
   /// delete note
@@ -348,7 +346,7 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     InAppLogger.info('updateDefaultNote ${noteId}');
-    NotifyToast.success('updateDefaultNote ${noteId}');
+    // NotifyToast.success('updateDefaultNote ${noteId}');
   }
 
   /// add phrase
@@ -363,7 +361,7 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     InAppLogger.info('addPhraseInNote ${noteId}');
-    NotifyToast.success('addPhraseInNote ${noteId}');
+    // NotifyToast.success('addPhraseInNote ${noteId}');
   }
 
   /// update phrase
@@ -396,7 +394,7 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     InAppLogger.info('deletePhraseInNote $noteId/$phraseId');
-    NotifyToast.success('deletePhraseInNote $noteId/$phraseId');
+    // NotifyToast.success('deletePhraseInNote $noteId/$phraseId');
   }
 
   /// achieve notePhrase
@@ -405,20 +403,28 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
     @required bool achieve,
   }) async {
-    await _noteService.achievePhraseInNote(
-        noteId: noteId, phraseId: phraseId, achieve: achieve);
-
+    // local
     final phrase = _user.notes[noteId].findByNotePhraseId(phraseId)
       ..achieved = achieve;
     _user.notes[noteId].updateNotePhrase(phraseId, phrase);
-
     notifyListeners();
 
-    InAppLogger.info('achievePhraseInNote $noteId/$phraseId');
-    NotifyToast.success('achievePhraseInNote $noteId/$phraseId');
+    await _noteService.achievePhraseInNote(
+        noteId: noteId, phraseId: phraseId, achieve: achieve);
+    notifyListeners();
+
+    InAppLogger.debug('achievePhraseInNote $noteId/$phraseId');
+    // NotifyToast.success('achievePhraseInNote $noteId/$phraseId');
   }
 
-  Note getNoteById({@required String noteId}) {
+  Note getNoteById({String noteId}) {
+    // ノートを削除した直後はnullになる
+    if (noteId == null) {
+      // default note
+      return _user.notes.values
+          .firstWhere((note) => note.isDefault, orElse: null);
+    }
+    // TODO: noteにisViewをもたせる
     if (noteId == 'achieved') {
       return getAchievedNote();
     }

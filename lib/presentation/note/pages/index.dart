@@ -8,7 +8,7 @@ import 'package:wr_app/presentation/note/widgets/note_table.dart';
 
 /// `ノート` ページのトップ
 ///
-class NotePage extends StatelessWidget {
+class NotePage extends StatefulWidget {
 //  void _showAddPhraseDialog(BuildContext context, Note note) {
 //    showDialog(
 //      context: context,
@@ -27,6 +27,19 @@ class NotePage extends StatelessWidget {
 //  }
 
   @override
+  _NotePageState createState() => _NotePageState();
+}
+
+class _NotePageState extends State<NotePage> {
+  ScrollController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = ScrollController();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // default note
     final un = Provider.of<UserNotifier>(context);
@@ -38,18 +51,33 @@ class NotePage extends StatelessWidget {
     final note = un.getNoteById(noteId: nn.nowSelectedNoteId);
 
     final _noteNotFoundView = Padding(
-      padding: const EdgeInsets.all(20),
-      child: Text(
-        'ノートがまだありません',
-        style: theme.textTheme.headline5.apply(color: Colors.grey),
+      padding: const EdgeInsets.all(8),
+      child: Center(
+        child: Text(
+          'ノートがありません',
+          style: theme.textTheme.headline5.apply(color: Colors.grey),
+        ),
       ),
     );
 
     return Scaffold(
       body: SingleChildScrollView(
+        controller: _controller,
         child: Column(
           children: [
-            if (note == null) _noteNotFoundView else NoteTable(note: note),
+            if (note == null)
+              _noteNotFoundView
+            else
+              NoteTable(
+                note: note,
+                onDeleted: () {
+                  _controller.animateTo(
+                    0,
+                    curve: Curves.easeOut,
+                    duration: const Duration(milliseconds: 500),
+                  );
+                },
+              ),
           ],
         ),
       ),

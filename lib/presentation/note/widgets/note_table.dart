@@ -12,14 +12,30 @@ import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
 import 'package:wr_app/presentation/note/widgets/phrase_edit_dialog.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 
 /// ノートのフレーズを表示するテーブル
-class NoteTable extends StatelessWidget {
+class NoteTable extends StatefulWidget {
   NoteTable({
     @required this.note,
+    @required this.onDeleted,
   });
 
   Note note;
+  Function onDeleted;
+
+  @override
+  _NoteTableState createState() => _NoteTableState();
+}
+
+class _NoteTableState extends State<NoteTable> {
+  bool _isLoading;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoading = false;
+  }
 
   TableRow _createPhraseRow({
     @required BuildContext context,
@@ -39,7 +55,7 @@ class NoteTable extends StatelessWidget {
               ),
               onPressed: () {
                 un.achievePhraseInNote(
-                    noteId: note.id,
+                    noteId: widget.note.id,
                     phraseId: phrase.id,
                     achieve: !phrase.achieved);
               },
@@ -80,6 +96,81 @@ class NoteTable extends StatelessWidget {
     );
   }
 
+  void _showDeleteNoteConfirmDialog() {
+    final un = Provider.of<UserNotifier>(context, listen: false);
+    final nn = Provider.of<NoteNotifier>(context, listen: false);
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text('ノート"${widget.note.title}"を削除してもよろしいですか？'),
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('キャンセル'),
+              key: const Key('cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: const Text('はい'),
+              key: const Key('ok'),
+              onPressed: () async {
+                try {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  await un.deleteNote(noteId: widget.note.id);
+                  nn.nowSelectedNoteId = null;
+
+                  Navigator.pop(context);
+
+                  widget.onDeleted();
+                } on Exception catch (e) {
+                  InAppLogger.error(e);
+                } finally {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showPhraseEditDialog(NotePhrase phrase, Language language) {
+    final un = Provider.of<UserNotifier>(context, listen: false);
+
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (BuildContext context, scrollController) => Container(
+        child: PhraseEditDialog(
+          phrase: phrase,
+          language: language,
+          onSubmit: (phrase) {
+            un.updatePhraseInNote(
+              noteId: widget.note.id,
+              phraseId: phrase.id,
+              phrase: phrase,
+            );
+            Navigator.pop(context);
+          },
+          onDelete: (phrase) {
+            un.deletePhraseInNote(noteId: widget.note.id, phraseId: phrase.id);
+            Navigator.pop(context);
+          },
+          onCancel: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context);
@@ -97,8 +188,8 @@ class NoteTable extends StatelessWidget {
           },
           child: Row(
             children: [
-              Text(note.title, style: h5),
-              Icon(Icons.keyboard_arrow_down),
+              Text(widget.note.title, style: h5),
+              const Icon(Icons.keyboard_arrow_down),
             ],
           ).padding(),
         ),
@@ -115,14 +206,12 @@ class NoteTable extends StatelessWidget {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => FlashCardPage(
-              note: note,
+              note: widget.note,
             ),
           ),
         );
       },
     );
-
-    print(note.phrases.map((p) => p.id).join(', '));
 
     final header = Row(
       children: [
@@ -134,34 +223,6 @@ class NoteTable extends StatelessWidget {
         )
       ],
     );
-
-    void _showPhraseEditDialog(NotePhrase phrase, Language language) {
-      final un = Provider.of<UserNotifier>(context, listen: false);
-      showMaterialModalBottomSheet(
-        context: context,
-        builder: (BuildContext context, scrollController) => Container(
-          child: PhraseEditDialog(
-            phrase: phrase,
-            language: language,
-            onSubmit: (phrase) {
-              un.updatePhraseInNote(
-                noteId: note.id,
-                phraseId: phrase.id,
-                phrase: phrase,
-              );
-              Navigator.pop(context);
-            },
-            onDelete: (phrase) {
-              un.deletePhraseInNote(noteId: note.id, phraseId: phrase.id);
-              Navigator.pop(context);
-            },
-            onCancel: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      );
-    }
 
     final _tableHeader = TableRow(
       children: [
@@ -199,33 +260,47 @@ class NoteTable extends StatelessWidget {
     );
 
     final phrasesTable = Table(
-        border: TableBorder.all(
-          color: Colors.grey,
-          width: 0.5,
-        ),
-        columnWidths: const {
-          0: FlexColumnWidth(1),
-          1: FlexColumnWidth(3),
-          2: FlexColumnWidth(3),
-        },
-        children: [
-          // header
-          _tableHeader,
+      border: TableBorder.all(
+        color: Colors.grey,
+        width: 0.5,
+      ),
+      columnWidths: const {
+        0: FlexColumnWidth(1),
+        1: FlexColumnWidth(3),
+        2: FlexColumnWidth(3),
+      },
+      children: [
+        // header
+        _tableHeader,
 
-          ...note.phrases
-              .map((phrase) =>
-                  _createPhraseRow(context: context, un: un, phrase: phrase))
-              .toList(),
-        ]);
+        ...widget.note.phrases
+            .map((phrase) =>
+                _createPhraseRow(context: context, un: un, phrase: phrase))
+            .toList(),
+      ],
+    );
+
+    final _deleteNoteButton = FlatButton(
+      child: Row(
+        children: [
+          Text('- ノートを削除', style: h5.apply(color: Colors.redAccent)),
+        ],
+      ),
+      onPressed: () {
+        _showDeleteNoteConfirmDialog();
+      },
+    );
 
     return Column(
       children: [
         title,
         header,
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: phrasesTable,
-        ),
+        phrasesTable.padding(),
+        if (!widget.note.isDefault && widget.note.id != 'achieved')
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: _deleteNoteButton,
+          ),
       ],
     );
   }
