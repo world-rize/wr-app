@@ -22,6 +22,7 @@ import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
 import 'package:wr_app/infrastructure/note/note_persistence.dart';
 import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
+import 'package:wr_app/infrastructure/shop/shop_persistence.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
@@ -124,7 +125,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
   final systemPersistence = SystemPersistence();
   final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
-  final shopPersistence = ShopPersistenceMock();
+  final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
 
   // services
   final userService = UserService(

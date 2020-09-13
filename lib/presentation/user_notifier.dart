@@ -461,6 +461,12 @@ class UserNotifier with ChangeNotifier {
     return _userService.sendPasswordResetEmail(_user.attributes.email);
   }
 
+  Future<void> introduceFriend({@required String introduceeId}) async {
+    await _userService.introduceFriend(introduceeUserId: introduceeId);
+    _user = await _userService.readUser();
+    notifyListeners();
+  }
+
   /// TODO: purchase Amazon Gift
   /// TODO: purchase iTunes Gift
 }

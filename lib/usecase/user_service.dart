@@ -278,10 +278,14 @@ class UserService {
     return _userPersistence.checkTestStreaks(req);
   }
 
+  /// ショップのアイテムを取得
+  // TODO: shopServiceを作成
   Future<List<GiftItem>> getShopItems() {
     return _shopPersistence.shopItems();
   }
 
+  /// アイテムを購入
+  // TODO: shopServiceを作成
   Future<User> purchaseItem({
     @required User user,
     @required String itemId,
@@ -300,11 +304,19 @@ class UserService {
 //    return _userPersistence.purchaseItem(req);
   }
 
+  /// サインイン済か判定
   Future<bool> isAlreadySignedIn() {
     return _authPersistence.isAlreadySignedIn();
   }
 
+  /// パスワードリセットメールを送る
   Future<void> sendPasswordResetEmail(String email) {
     return _authPersistence.sendPasswordResetEmail(email);
+  }
+
+  /// 友達紹介をする
+  Future<void> introduceFriend({@required String introduceeUserId}) {
+    final req = IntroduceFriendRequest(introduceeUserId: introduceeUserId);
+    return _userPersistence.introduceFriend(req);
   }
 }

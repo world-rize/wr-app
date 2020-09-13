@@ -152,4 +152,9 @@ class UserPersistenceMock implements UserRepository {
     user.items[req.itemId] = 1;
     return user;
   }
+
+  @override
+  Future<void> introduceFriend(IntroduceFriendRequest req) async {
+    return;
+  }
 }

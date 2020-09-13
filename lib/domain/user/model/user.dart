@@ -49,6 +49,7 @@ class User {
         points: 0,
         testLimitCount: 0,
         lastLogin: '',
+        isIntroducedFriend: false,
       ),
       attributes: UserAttributes(
         age: '0',

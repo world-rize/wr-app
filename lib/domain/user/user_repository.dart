@@ -33,4 +33,6 @@ abstract class UserRepository {
   Future<User> findUserByUserId(FindUserByUserIdRequest req);
 
   Future<User> purchaseItem(PurchaseItemRequest req);
+
+  Future<void> introduceFriend(IntroduceFriendRequest req);
 }
