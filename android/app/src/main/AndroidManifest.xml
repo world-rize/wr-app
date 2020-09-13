@@ -2,6 +2,8 @@
     package="com.worldrize.wr_app">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <!--  定期購入アイテム作成のために、請求権限を追加 -->
+    <uses-permission android:name="com.android.vending.BILLING" />
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -41,8 +43,6 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-1382268650004997~1693942892"/>
-        <!--  定期購入アイテム作成のために、請求権限を追加 -->
-        <uses-permission android:name=“com.android.vending.BILLING” />
 
         <meta-data android:name="com.google.firebase.messaging.default_notification_channel_id" android:value="@string/default_notification_channel_id" />
     </application>
