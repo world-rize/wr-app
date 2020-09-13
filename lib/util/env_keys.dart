@@ -1,11 +1,16 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class EnvKeys {
   final String contentfulSpaceId;
   final String contentfulToken;
-  final String admobAppId;
+  final String admobIosAppId;
+  final String admobAndroidAppId;
+  final String admobIosBannerAdUnitId;
+  final String admobAndroidBannerAdUnitId;
   final bool useEmulator;
   final String functionsEmulatorOrigin;
   final String sentryDsn;
@@ -23,7 +28,10 @@ class EnvKeys {
   EnvKeys({
     @required this.contentfulSpaceId,
     @required this.contentfulToken,
-    @required this.admobAppId,
+    @required this.admobIosAppId,
+    @required this.admobAndroidAppId,
+    @required this.admobIosBannerAdUnitId,
+    @required this.admobAndroidBannerAdUnitId,
     @required this.useEmulator,
     @required this.functionsEmulatorOrigin,
     @required this.sentryDsn,
@@ -44,7 +52,10 @@ class EnvKeys {
   }) {
     assert(env.containsKey('CONTENTFUL_SPACE_ID'));
     assert(env.containsKey('CONTENTFUL_TOKEN'));
-    assert(env.containsKey('ADMOB_APP_ID'));
+    assert(env.containsKey('ADMOB_IOS_APP_ID'));
+    assert(env.containsKey('ADMOB_ANDROID_APP_ID'));
+    assert(env.containsKey('ADMOB_IOS_BANNER_AD_UNIT_ID'));
+    assert(env.containsKey('ADMOB_ANDROID_BANNER_AD_UNIT_ID'));
     assert(env.containsKey('USE_EMULATOR'));
     assert(env.containsKey('FUNCTIONS_EMULATOR_ORIGIN'));
     assert(env.containsKey('SENTRY_DSN'));
@@ -62,8 +73,11 @@ class EnvKeys {
     return EnvKeys(
       contentfulSpaceId: env['CONTENTFUL_SPACE_ID'],
       contentfulToken: env['CONTENTFUL_TOKEN'],
-      admobAppId: env['ADMOB_APP_ID'],
-      useEmulator: env[''] == 'true',
+      admobIosAppId: env['ADMOB_IOS_APP_ID'],
+      admobAndroidAppId: env['ADMOB_ANDROID_APP_ID'],
+      admobIosBannerAdUnitId: env['ADMOB_IOS_BANNER_AD_UNIT_ID'],
+      admobAndroidBannerAdUnitId: env['ADMOB_ANDROID_BANNER_AD_UNIT_ID'],
+      useEmulator: env['USE_EMULATOR'] == 'true',
       functionsEmulatorOrigin: env['FUNCTIONS_EMULATOR_ORIGIN'],
       sentryDsn: env['SENTRY_DSN'],
       requestMailAddress: env['REQUEST_MAIL_ADDRESS'],
@@ -77,5 +91,23 @@ class EnvKeys {
       twitterUrl: env['TWITTER_URL'],
       instagramUrl: env['INSTA_URL'],
     );
+  }
+
+  String get admobAppId {
+    if (Platform.isIOS) {
+      return admobIosAppId;
+    } else if (Platform.isAndroid) {
+      return admobAndroidAppId;
+    }
+    return '';
+  }
+
+  String get admobBannerAdUnitId {
+    if (Platform.isIOS) {
+      return admobIosBannerAdUnitId;
+    } else if (Platform.isAndroid) {
+      return admobAndroidBannerAdUnitId;
+    }
+    return '';
   }
 }

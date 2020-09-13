@@ -1,4 +1,10 @@
 PODS:
+  - admob_flutter (0.3.4):
+    - Firebase/AdMob
+    - Firebase/Analytics
+    - FirebaseAnalytics (~> 6.1.3)
+    - Flutter
+    - Google-Mobile-Ads-SDK (~> 7.50)
   - AppAuth (1.3.0):
     - AppAuth/Core (= 1.3.0)
     - AppAuth/ExternalUserAgent (= 1.3.0)
@@ -17,6 +23,8 @@ PODS:
   - Firebase/AdMob (6.13.0):
     - Firebase/CoreOnly
     - Google-Mobile-Ads-SDK (~> 7.50)
+  - Firebase/Analytics (6.13.0):
+    - Firebase/Core
   - Firebase/Auth (6.13.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.4.0)
@@ -171,6 +179,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - admob_flutter (from `.symlinks/plugins/admob_flutter/ios`)
   - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
   - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
@@ -225,6 +234,8 @@ SPEC REPOS:
     - nanopb
 
 EXTERNAL SOURCES:
+  admob_flutter:
+    :path: ".symlinks/plugins/admob_flutter/ios"
   apple_sign_in:
     :path: ".symlinks/plugins/apple_sign_in/ios"
   audioplayers:
@@ -287,6 +298,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_web/ios"
 
 SPEC CHECKSUMS:
+  admob_flutter: 8033bcca85371a0554aa99d525a83a4770e679f0
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   audioplayers: 84f968cea3f2deab00ec4f8ff53358b3c0b3992c

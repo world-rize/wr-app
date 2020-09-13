@@ -2,8 +2,8 @@
 
 import 'dart:async';
 
+import 'package:admob_flutter/admob_flutter.dart';
 import 'package:contentful/client.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +72,7 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
   InAppLogger.info('🔥 Contentful Initialized');
 
   // initialize admob
-  await FirebaseAdMob.instance.initialize(appId: env.admobAppId);
+  await Admob.initialize(env.admobAppId);
   InAppLogger.info('🔥 Admob Initialized');
 
   // notificator
