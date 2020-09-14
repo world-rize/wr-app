@@ -30,10 +30,5 @@ export const getShopItems = functions.region('asia-northeast1').https.onCall(use
 
 // note api
 export const createNote = functions.region('asia-northeast1').https.onCall(userApi.createNote)
-export const updateNoteTitle = functions.region('asia-northeast1').https.onCall(userApi.updateNoteTitle)
-export const updateDefaultNote = functions.region('asia-northeast1').https.onCall(userApi.updateDefaultNote)
+export const updateNote = functions.region('asia-northeast1').https.onCall(userApi.updateNote)
 export const deleteNote = functions.region('asia-northeast1').https.onCall(userApi.deleteNote)
-export const addPhraseInNote = functions.region('asia-northeast1').https.onCall(userApi.addPhraseInNote)
-export const updatePhraseInNote = functions.region('asia-northeast1').https.onCall(userApi.updatePhraseInNote)
-export const deletePhraseInNote = functions.region('asia-northeast1').https.onCall(userApi.deletePhraseInNote)
-export const achievePhraseInNote = functions.region('asia-northeast1').https.onCall(userApi.achievePhraseInNote)
