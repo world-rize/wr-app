@@ -63,7 +63,7 @@ class FlashCardNotifier extends ChangeNotifier {
   static Iterable<NotePhrase> filterNotEmptyNotePhrases(
       Iterable<NotePhrase> phrases) {
     return phrases
-        .where((phrase) => phrase.word == '' || phrase.translation == '');
+        .where((phrase) => phrase.english == '' || phrase.japanese == '');
   }
 
   set pageController(PageController pageController) {
@@ -123,7 +123,7 @@ class FlashCardNotifier extends ChangeNotifier {
 
     // wait play word
     await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
-    await _flutterTts.speak(nowPhrase.word);
+    await _flutterTts.speak(nowPhrase.english);
     final completerWord = Completer<void>();
     _flutterTts.setCompletionHandler(completerWord.complete);
     await completerWord.future;
@@ -131,7 +131,7 @@ class FlashCardNotifier extends ChangeNotifier {
     // wait play translation
     // TODO: 言語に対応していないと再生できない
     await _flutterTts.setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
-    await _flutterTts.speak(nowPhrase.translation);
+    await _flutterTts.speak(nowPhrase.japanese);
     final completerTranslation = Completer<void>();
     _flutterTts.setCompletionHandler(completerTranslation.complete);
     await completerTranslation.future;
@@ -146,14 +146,14 @@ class FlashCardNotifier extends ChangeNotifier {
       final nowPhrase = notePhrases[_nowPhraseIndex];
 
       await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
-      await _flutterTts.speak(nowPhrase.word);
+      await _flutterTts.speak(nowPhrase.english);
       final completerWord = Completer<void>();
       _flutterTts.setCompletionHandler(completerWord.complete);
       await completerWord.future;
 
       await _flutterTts
           .setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
-      await _flutterTts.speak(nowPhrase.translation);
+      await _flutterTts.speak(nowPhrase.japanese);
       final completerTranslation = Completer<void>();
       _flutterTts.setCompletionHandler(completerTranslation.complete);
       await completerTranslation.future;

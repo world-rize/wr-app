@@ -35,11 +35,7 @@ class _FlashCardState extends State<FlashCard> {
         size: 24,
       ),
       onPressed: () {
-        userNotifier.achievePhraseInNote(
-          noteId: noteId,
-          phraseId: phrase.id,
-          achieve: !achieved,
-        );
+        userNotifier.achievePhrase(noteId: noteId, phraseId: phrase.id);
       },
     );
     final backgroundColor = Theme.of(context).backgroundColor;
@@ -66,7 +62,7 @@ class _FlashCardState extends State<FlashCard> {
                 children: [
                   Center(
                     child: Text(
-                      _flipped ? phrase.word : phrase.translation,
+                      _flipped ? phrase.english : phrase.japanese,
                       style: body1,
                     ),
                   ),

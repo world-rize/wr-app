@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
+/// NotePageの状態を管理する
 class NoteNotifier extends ChangeNotifier {
-  // TODO:
-  // achievedなノートも実体として持っておき
-  // achievedするとachievedノートに移動
-  // 最初からリストを30個もつのは面倒くさいので
-  // 最下部のカラムを空欄にしてそこを編集すると追加される感じに
+  factory NoteNotifier() {
+    return _cache ??= NoteNotifier._();
+  }
+
+  NoteNotifier._();
+
+  /// singleton
+  static NoteNotifier _cache;
 
   /// 現在のノート
   String _nowSelectedNoteId = 'default';

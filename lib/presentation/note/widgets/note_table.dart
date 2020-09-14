@@ -1,16 +1,13 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/language.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
-import 'package:wr_app/presentation/note/widgets/phrase_edit_dialog.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -80,35 +77,6 @@ class _NoteTableState extends State<NoteTable> {
           ],
         );
       },
-    );
-  }
-
-  void _showPhraseEditDialog(NotePhrase phrase, Language language) {
-    final un = Provider.of<UserNotifier>(context, listen: false);
-
-    showMaterialModalBottomSheet(
-      context: context,
-      builder: (BuildContext context, scrollController) => Container(
-        child: PhraseEditDialog(
-          phrase: phrase,
-          language: language,
-          onSubmit: (phrase) {
-            un.updatePhraseInNote(
-              noteId: widget.note.id,
-              phraseId: phrase.id,
-              phrase: phrase,
-            );
-            Navigator.pop(context);
-          },
-          onDelete: (phrase) {
-            un.deletePhraseInNote(noteId: widget.note.id, phraseId: phrase.id);
-            Navigator.pop(context);
-          },
-          onCancel: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
     );
   }
 
@@ -210,17 +178,15 @@ class _NoteTableState extends State<NoteTable> {
           TableCell(
             child: Center(
               child: IconButton(
-                icon: Icon(
-                  phrase.achieved
-                      ? Icons.check_box
-                      : Icons.check_box_outline_blank,
+                icon: const Icon(
+                  Icons.check_box,
                   color: Colors.green,
                 ),
                 onPressed: () {
-                  un.achievePhraseInNote(
-                      noteId: widget.note.id,
-                      phraseId: phrase.id,
-                      achieve: !phrase.achieved);
+                  un.achievePhrase(
+                    noteId: widget.note.id,
+                    phraseId: phrase.id,
+                  );
                 },
               ),
             ).padding(),
@@ -230,16 +196,16 @@ class _NoteTableState extends State<NoteTable> {
                 ? Container()
                 : Container(
                     child: TextFormField(
-                      initialValue: phrase.translation,
+                      initialValue: phrase.japanese,
                       decoration: InputDecoration.collapsed(hintText: ''),
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       onChanged: (t) {
-                        phrase.translation = t;
+                        phrase.japanese = t;
                       },
                       onEditingComplete: () {
                         try {
-                          print(phrase.translation);
+                          print(phrase.japanese);
                           un.updatePhraseInNote(
                               noteId: widget.note.id,
                               phraseId: phrase.id,
@@ -256,16 +222,16 @@ class _NoteTableState extends State<NoteTable> {
                 ? Container()
                 : Container(
                     child: TextFormField(
-                      initialValue: phrase.word,
+                      initialValue: phrase.english,
                       decoration: InputDecoration.collapsed(hintText: ''),
                       maxLines: null,
                       keyboardType: TextInputType.multiline,
                       onChanged: (t) {
-                        phrase.word = t;
+                        phrase.english = t;
                       },
                       onEditingComplete: () {
                         try {
-                          print(phrase.word);
+                          print(phrase.english);
                           un.updatePhraseInNote(
                               noteId: widget.note.id,
                               phraseId: phrase.id,
@@ -318,7 +284,7 @@ class _NoteTableState extends State<NoteTable> {
         title,
         header,
         phrasesTable.padding(),
-        if (!widget.note.isDefault && widget.note.id != 'achieved')
+        if (!widget.note.isDefaultNote && widget.note.id != 'achieved')
           Padding(
             padding: const EdgeInsets.all(8),
             child: _deleteNoteButton,

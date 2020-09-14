@@ -127,15 +127,15 @@ class _RootViewState extends State<RootView>
       ],
     );
 
-    final navBar = Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(5),
-          topRight: Radius.circular(5),
-        ),
+    final navBar = ClipRRect(
+      borderRadius: const BorderRadius.only(
+        topLeft: Radius.circular(20),
+        topRight: Radius.circular(20),
       ),
       child: BottomNavigationBar(
-        fixedColor: primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Colors.white.withOpacity(0.6),
+        selectedItemColor: Theme.of(context).accentIconTheme.color,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           _pageController.jumpToPage(index);
@@ -207,12 +207,17 @@ class _RootViewState extends State<RootView>
         ),
         preferredSize: Size(MediaQuery.of(context).size.width, 150),
       ),
-      // appBar: AppBar(
-      //   backgroundColor: env.useEmulator ? Colors.redAccent : primaryColor,
-      //   actions: actions,
-      // ),
-      body: pageView,
-      bottomNavigationBar: navBar,
+      body: Stack(
+        children: <Widget>[
+          pageView,
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: navBar,
+          ),
+        ],
+      ),
     );
   }
 }

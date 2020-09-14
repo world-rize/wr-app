@@ -104,7 +104,7 @@ class _NoteListPageState extends State<NoteListPage> {
 
               // achieved note
               NoteCard(
-                note: un.getAchievedNote(),
+                note: un.getUser().getAchievedNote(),
               ),
 
               ...notes.map((note) => NoteCard(note: note)).toList(),

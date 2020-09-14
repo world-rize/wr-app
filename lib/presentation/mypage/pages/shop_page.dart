@@ -5,11 +5,47 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/mypage/widgets/gift_item_card.dart';
+import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/util/logger.dart';
 
 /// ポイント交換
-class ShopPage extends StatelessWidget {
-  _showPurchaseConfirmDialog(BuildContext context, GiftItem item) {
+class ShopPage extends StatefulWidget {
+  @override
+  _ShopPageState createState() => _ShopPageState();
+}
+
+class _ShopPageState extends State<ShopPage> {
+  bool _isLoading;
+  List<GiftItem> _items = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoading = false;
+  }
+
+  Future _getShopItems() async {
+    final shopNotifier = Provider.of<ShopNotifier>(context, listen: false);
+
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      final items = await shopNotifier.getShopItems();
+      setState(() {
+        _items = items;
+      });
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  void _showPurchaseConfirmDialog(GiftItem item) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -26,9 +62,20 @@ class ShopPage extends StatelessWidget {
             child: const Text('Ok'),
             onPressed: () async {
               Navigator.pop(context);
-              final userNotifier =
-                  Provider.of<UserNotifier>(context, listen: false);
-              await userNotifier.purchaseItem(itemId: item.id);
+              try {
+                setState(() {
+                  _isLoading = true;
+                });
+                final userNotifier =
+                    Provider.of<UserNotifier>(context, listen: false);
+                await userNotifier.purchaseItem(itemId: item.id);
+              } on Exception catch (e) {
+                InAppLogger.error(e);
+              } finally {
+                setState(() {
+                  _isLoading = false;
+                });
+              }
             },
           )
         ],
@@ -38,61 +85,57 @@ class ShopPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shopNotifier = Provider.of<ShopNotifier>(context);
     final userNotifier = Provider.of<UserNotifier>(context);
     final points = userNotifier.getUser().statistics.points;
+    if (_items.isEmpty) {
+      _getShopItems();
+    }
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('ショップ'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: Text('保有しているコイン'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('$points'),
-                  const Text('WR coins'),
-                ],
+      body: LoadingView(
+        loading: _isLoading,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Padding(
+                padding: EdgeInsets.all(8),
+                child: Text('保有しているコイン'),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: Text('交換できるもの'),
-            ),
-            FutureBuilder<List<GiftItem>>(
-              future: shopNotifier.getShopItems(),
-              builder: (_, ss) {
-                if (!ss.hasData) {
-                  return const CircularProgressIndicator();
-                } else {
-                  return Column(
-                    children: ss.data
-                        .map(
-                          (item) => Padding(
-                            padding: const EdgeInsets.all(4),
-                            child: GiftItemCard(
-                              giftItem: item,
-                              onTap: () {
-                                _showPurchaseConfirmDialog(context, item);
-                              },
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  );
-                }
-              },
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('$points'),
+                    const Text('WR coins'),
+                  ],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8),
+                child: Text('交換できるもの'),
+              ),
+              Column(
+                children: _items
+                    .map(
+                      (item) => Padding(
+                        padding: const EdgeInsets.all(4),
+                        child: GiftItemCard(
+                          giftItem: item,
+                          onTap: () {
+                            _showPurchaseConfirmDialog(item);
+                          },
+                        ),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ],
+          ),
         ),
       ),
     );
