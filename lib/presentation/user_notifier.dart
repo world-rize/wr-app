@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
-import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
@@ -318,8 +317,13 @@ class UserNotifier with ChangeNotifier {
     @required String noteId,
     @required String title,
   }) async {
-    final note =
-        await _noteService.updateNoteTitle(noteId: noteId, title: title);
+    final note = _user.getNoteById(noteId: noteId).clone();
+    if (note == null) {
+      throw Exception('note not found');
+    }
+    note.title = title;
+
+    await _noteService.updateNote(note: note);
     _user.notes[note.id] = note;
 
     notifyListeners();
@@ -330,7 +334,16 @@ class UserNotifier with ChangeNotifier {
 
   /// update note isDefault
   Future<void> updateDefaultNote({@required String noteId}) async {
-    final note = await _noteService.updateDefaultNote(noteId: noteId);
+    final defaultNote = _user.getDefaultNote();
+    if (defaultNote != null) {
+      defaultNote.isDefaultNote = false;
+    }
+
+    final note = _user.getNoteById(noteId: noteId).clone();
+    note.isDefaultNote = true;
+
+    await _noteService.updateNote(note: defaultNote);
+    await _noteService.updateNote(note: note);
     _user.notes[note.id] = note;
 
     notifyListeners();
@@ -346,7 +359,7 @@ class UserNotifier with ChangeNotifier {
 
     notifyListeners();
 
-    InAppLogger.info('updateDefaultNote ${noteId}');
+    InAppLogger.info('updateDefaultNote $noteId');
     // NotifyToast.success('updateDefaultNote ${noteId}');
   }
 
@@ -355,13 +368,15 @@ class UserNotifier with ChangeNotifier {
     @required String noteId,
     @required NotePhrase phrase,
   }) async {
-    final note =
-        await _noteService.addPhraseInNote(noteId: noteId, phrase: phrase);
+    final note = _user.getNoteById(noteId: noteId).clone();
+    note.addPhrase(phrase);
+
+    await _noteService.updateNote(note: note);
     _user.notes[noteId] = note;
 
     notifyListeners();
 
-    InAppLogger.info('addPhraseInNote ${noteId}');
+    InAppLogger.info('addPhraseInNote $noteId');
     // NotifyToast.success('addPhraseInNote ${noteId}');
   }
 
@@ -371,82 +386,11 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
     @required NotePhrase phrase,
   }) async {
-    final note = await _noteService.updatePhraseInNote(
-      noteId: noteId,
-      phraseId: phraseId,
-      phrase: phrase,
-    );
+    final note = _user.getNoteById(noteId: noteId).clone();
+    await _noteService.updateNote(note: note);
     _user.notes[note.id] = note;
-
     notifyListeners();
-  }
-
-  /// delete phrase
-  Future<void> deletePhraseInNote({
-    @required String noteId,
-    @required String phraseId,
-  }) async {
-    await _noteService.deletePhraseInNote(
-      noteId: noteId,
-      phraseId: phraseId,
-    );
-    _user.notes[noteId].phrases.remove(phraseId);
-
-    notifyListeners();
-
-    InAppLogger.info('deletePhraseInNote $noteId/$phraseId');
-    // NotifyToast.success('deletePhraseInNote $noteId/$phraseId');
-  }
-
-  /// achieve notePhrase
-  Future<void> achievePhraseInNote({
-    @required String noteId,
-    @required String phraseId,
-    @required bool achieve,
-  }) async {
-    // local
-    final phrase = _user.notes[noteId].findByNotePhraseId(phraseId)
-      ..achieved = achieve;
-    _user.notes[noteId].updateNotePhrase(phraseId, phrase);
-    notifyListeners();
-
-    await _noteService.achievePhraseInNote(
-        noteId: noteId, phraseId: phraseId, achieve: achieve);
-    notifyListeners();
-
-    InAppLogger.debug('achievePhraseInNote $noteId/$phraseId');
-    // NotifyToast.success('achievePhraseInNote $noteId/$phraseId');
-  }
-
-  Note getNoteById({String noteId}) {
-    // ノートを削除した直後はnullになる
-    if (noteId == null) {
-      // default note
-      return _user.notes.values
-          .firstWhere((note) => note.isDefault, orElse: null);
-    }
-    // TODO: noteにisViewをもたせる
-    if (noteId == 'achieved') {
-      return getAchievedNote();
-    }
-    return _user.notes.values
-        .firstWhere((note) => note.id == noteId, orElse: null);
-  }
-
-  /// achieved notes
-  Note getAchievedNote() {
-    final achievedPhrases = _user.notes.values
-        .expand((note) => note.phrases)
-        .where((phrase) => phrase.achieved)
-        .toList();
-
-    return Note(
-      id: 'achieved',
-      isDefault: false,
-      title: 'Achieved Note',
-      sortType: '',
-      phrases: achievedPhrases,
-    );
+    InAppLogger.info('updatePhraseInNote $noteId');
   }
 
   /// calculates heatMap of testResult
@@ -482,6 +426,27 @@ class UserNotifier with ChangeNotifier {
   Future<void> purchaseItem({@required String itemId}) async {
     _user = await _userService.purchaseItem(user: _user, itemId: itemId);
     await _userService.updateUser(user: _user);
+    notifyListeners();
+  }
+
+  Future<void> achievePhrase({
+    @required String noteId,
+    @required String phraseId,
+  }) async {
+    // blank note
+    final note = _user.getNoteById(noteId: noteId);
+    final phrase = note.findByNotePhraseId(phraseId);
+    if (phrase == null) {
+      throw Exception('note phrase not found');
+    }
+    phrase
+      ..japanese = ''
+      ..english = '';
+    note.updateNotePhrase(phrase.id, phrase);
+
+    final addPhrase =
+        NotePhrase.create(english: phrase.english, japanese: phrase.japanese);
+    _user.getAchievedNote().addPhrase(addPhrase);
     notifyListeners();
   }
 

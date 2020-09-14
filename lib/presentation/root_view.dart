@@ -73,74 +73,99 @@ class _RootViewState extends State<RootView>
 
     final header = Row(
       children: <Widget>[
-        Image.asset(
-          'assets/icon/wr_coin.png',
-          width: 30,
-          height: 30,
-        ).padding(),
+        // points
+        Container(
+          padding: const EdgeInsets.only(left: 20),
+          child: Image.asset(
+            'assets/icon/wr_coin.png',
+            width: 30,
+            height: 30,
+          ).padding(),
+        ),
         Text(
           I.of(context).points(user.statistics.points),
           style: const TextStyle(color: Colors.white),
         ),
+        // test limit
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Icon(Icons.favorite, color: Colors.pinkAccent),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('${user.statistics.testLimitCount}',
+              style: Theme.of(context).textTheme.caption),
+        ),
+        const Spacer(),
+        if (_index == 0)
+          IconButton(
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => AnythingSearchPage(),
+                ),
+              );
+            },
+          ),
+        // settings
+        IconButton(
+          icon: const Icon(
+            Icons.settings,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => SettingsPage(),
+              fullscreenDialog: true,
+            ));
+          },
+        ),
       ],
     );
 
-    final actions = <Widget>[
-      // phrase search
-      if (_index == 0)
-        IconButton(
-          icon: const Icon(Icons.search),
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (_) => AnythingSearchPage(),
-              ),
-            );
-          },
+    final navBar = Container(
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(5),
+          topRight: Radius.circular(5),
         ),
-      // settings
-      IconButton(
-        icon: const Icon(Icons.settings),
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => SettingsPage(),
-            fullscreenDialog: true,
-          ));
-        },
       ),
-    ];
-
-    final navBar = BottomNavigationBar(
-      fixedColor: primaryColor,
-      type: BottomNavigationBarType.fixed,
-      onTap: (int index) {
-        _pageController.jumpToPage(index);
+      child: BottomNavigationBar(
+        fixedColor: primaryColor,
+        type: BottomNavigationBarType.fixed,
+        onTap: (int index) {
+          _pageController.jumpToPage(index);
 //          _pageController.animateToPage(index,
 //              duration: const Duration(milliseconds: 300), curve: Curves.ease);
-      },
-      currentIndex: _index,
-      items: [
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.create),
-          title: Text(I.of(context).bottomNavLesson),
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.view_column),
-          title: Text(I.of(context).bottomNavColumn),
-        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.bookmark_border),
-          title: Text(I.of(context).bottomNavNote),
-        ),
+        },
+        currentIndex: _index,
+        items: [
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.create),
+            title: Text(I.of(context).bottomNavLesson),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.view_column),
+            title: Text(I.of(context).bottomNavColumn),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.bookmark_border),
+            title: Text(I.of(context).bottomNavNote),
+          ),
 //        BottomNavigationBarItem(
 //          icon: const Icon(Icons.public),
 //          title: Text(I.of(context).bottomNavAgency),
 //        ),
-        BottomNavigationBarItem(
-          icon: const Icon(Icons.person_outline),
-          title: Text(I.of(context).bottomNavMyPage),
-        ),
-      ],
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.person_outline),
+            title: Text(I.of(context).bottomNavMyPage),
+          ),
+        ],
+      ),
     );
 
     final pageView = PageView(
@@ -161,11 +186,31 @@ class _RootViewState extends State<RootView>
     );
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: env.useEmulator ? Colors.redAccent : primaryColor,
-        title: header,
-        actions: actions,
+      appBar: PreferredSize(
+        child: Container(
+          //padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.all(20),
+          child: header,
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+              color: env.useEmulator ? Colors.redAccent : primaryColor,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey[500],
+                  blurRadius: 20,
+                  spreadRadius: 1,
+                )
+              ]),
+        ),
+        preferredSize: Size(MediaQuery.of(context).size.width, 150),
       ),
+      // appBar: AppBar(
+      //   backgroundColor: env.useEmulator ? Colors.redAccent : primaryColor,
+      //   actions: actions,
+      // ),
       body: pageView,
       bottomNavigationBar: navBar,
     );

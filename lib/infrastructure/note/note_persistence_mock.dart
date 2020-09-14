@@ -35,63 +35,12 @@ class NotePersistenceMock implements NoteRepository {
   }
 
   @override
-  Future<void> deletePhraseInNote(DeletePhraseInNoteRequest req) async {}
-
-  @override
-  Future<Note> updatePhraseInNote(UpdatePhraseInNoteRequest req) async {
-    final user = _readUserMock();
-    if (!user.notes.containsKey(req.noteId)) {
-      throw Exception('Note ${req.noteId} not found');
-    }
-
-    if (user.notes[req.noteId].findByNotePhraseId(req.phraseId) == null) {
-      throw Exception('Phrase ${req.phraseId} not found');
-    }
-
-    user.notes[req.noteId].updateNotePhrase(req.phraseId, req.phrase);
-
+  Future<void> deleteNote(DeleteNoteRequest req) async {
     await Future.delayed(const Duration(seconds: 1));
-    return user.notes[req.noteId];
   }
 
   @override
-  Future<Note> addPhraseInNote(AddPhraseInNoteRequest req) async {
-    final user = _readUserMock();
-    if (!user.notes.containsKey(req.noteId)) {
-      throw Exception('Note ${req.noteId} not found');
-    }
-
-    if (user.notes[req.noteId].addPhrase(req.phrase)) {
-      throw Exception('Phrase ${req.phrase.id} cant add');
-    }
-    await Future.delayed(const Duration(seconds: 1));
-    return user.notes[req.noteId];
-  }
-
-  @override
-  Future<void> deleteNote(DeleteNoteRequest req) async {}
-
-  @override
-  Future<Note> updateDefaultNote(UpdateDefaultNoteRequest req) async {
-    return _readUserMock().notes[req.noteId]..isDefault = true;
-  }
-
-  @override
-  Future<Note> updateNoteTitle(UpdateNoteTitleRequest req) async {
-    return Note.dummy(req.title);
-  }
-
-  @override
-  Future<void> achievePhraseInNote(AchievePhraseInNoteRequest req) async {
-    final user = _readUserMock();
-    if (!user.notes.containsKey(req.noteId)) {
-      throw Exception('Note ${req.noteId} not found');
-    }
-
-    final notePhrase = user.notes[req.noteId].findByNotePhraseId(req.phraseId);
-    notePhrase.achieved = req.achieve;
-    user.notes[req.noteId].updateNotePhrase(req.phraseId, notePhrase);
-    await Future.delayed(const Duration(seconds: 1));
-    return user.notes[req.noteId];
+  Future<Note> updateNote(UpdateNoteRequest req) {
+    return Future.delayed(const Duration(seconds: 1)).then((_) => req.note);
   }
 }

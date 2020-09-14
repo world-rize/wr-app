@@ -168,7 +168,9 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
               articleService: articleService,
             ),
           ),
-          ChangeNotifierProvider.value(value: NoteNotifier()),
+          ChangeNotifierProvider.value(
+            value: NoteNotifier(),
+          ),
           ChangeNotifierProvider.value(
             value: ShopNotifier(userService: userService),
           ),
