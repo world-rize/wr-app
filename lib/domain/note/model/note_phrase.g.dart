@@ -9,16 +9,16 @@ part of 'note_phrase.dart';
 NotePhrase _$NotePhraseFromJson(Map json) {
   return NotePhrase(
     id: json['id'] as String,
-    word: json['word'] as String,
-    translation: json['translation'] as String,
-    achieved: json['achieved'] as bool,
+    english: json['english'] as String,
+    japanese: json['japanese'] as String,
+    createdAt: json['createdAt'] as String,
   );
 }
 
 Map<String, dynamic> _$NotePhraseToJson(NotePhrase instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'word': instance.word,
-      'translation': instance.translation,
-      'achieved': instance.achieved,
+      'english': instance.english,
+      'japanese': instance.japanese,
+      'createdAt': instance.createdAt,
     };

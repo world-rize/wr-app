@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 class PasswordFormPage extends StatefulWidget {
@@ -18,7 +18,7 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userNotifier = Provider.of<UserNotifier>(context);
+    final an = context.watch<AuthNotifier>();
 
     final _currentPasswordField = TextFormField(
       obscureText: !_showPassword,
@@ -94,7 +94,7 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
           onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              userNotifier.setPassword(
+              an.setPassword(
                 currentPassword: _currentPassword,
                 newPassword: _newPassword,
               );

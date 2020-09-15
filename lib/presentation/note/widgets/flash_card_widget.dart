@@ -4,13 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
-import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
-import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// NotePhrase を表示するウィジェット
 class FlashCard extends StatefulWidget {
+  FlashCard({
+    @required this.noteId,
+    @required this.notePhrases,
+    @required this.onCardTap,
+  });
+
+  String noteId;
+  List<NotePhrase> notePhrases;
+  Function(NotePhrase) onCardTap;
+
   @override
   _FlashCardState createState() => _FlashCardState();
 }
@@ -19,27 +27,21 @@ class _FlashCardState extends State<FlashCard> {
   /// 裏側か
   bool _flipped;
 
-  Widget _createFlashCardContainer(NotePhrase phrase) {
-    final userNotifier = Provider.of<UserNotifier>(context);
-    final noteId = Provider.of<NoteNotifier>(context).nowSelectedNoteId;
-    final note = userNotifier.getUser().notes[noteId];
-    if (note == null) {
-      return const SizedBox.shrink();
-    }
+  @override
+  void initState() {
+    super.initState();
+    _flipped = false;
+  }
 
-    final achieved =
-        note.phrases.map((phrase) => phrase.id).contains(phrase.id);
+  Widget _createFlashCardContainer(NotePhrase phrase) {
     final achievedButton = IconButton(
-      icon: Icon(
-        achieved ? Icons.favorite : Icons.favorite_border,
+      icon: const Icon(
+        Icons.check_box,
         size: 24,
+        color: Colors.green,
       ),
       onPressed: () {
-        userNotifier.achievePhraseInNote(
-          noteId: noteId,
-          phraseId: phrase.id,
-          achieve: !achieved,
-        );
+        widget.onCardTap(phrase);
       },
     );
     final backgroundColor = Theme.of(context).backgroundColor;
@@ -54,7 +56,7 @@ class _FlashCardState extends State<FlashCard> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: ShadowedContainer(
-          color: _flipped ? backgroundColor : Colors.white30,
+          color: backgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(8),
             key: GlobalKey(),
@@ -66,15 +68,16 @@ class _FlashCardState extends State<FlashCard> {
                 children: [
                   Center(
                     child: Text(
-                      _flipped ? phrase.word : phrase.translation,
+                      _flipped ? phrase.english : phrase.japanese,
                       style: body1,
                     ),
                   ),
-                  Positioned(
-                    right: 10,
-                    bottom: 10,
-                    child: achievedButton,
-                  )
+                  if (!_flipped)
+                    Positioned(
+                      right: 10,
+                      bottom: 10,
+                      child: achievedButton,
+                    )
                 ],
               ),
             ),
@@ -82,12 +85,6 @@ class _FlashCardState extends State<FlashCard> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _flipped = false;
   }
 
   @override
@@ -100,7 +97,6 @@ class _FlashCardState extends State<FlashCard> {
       autoPlay: false,
       autoPlayInterval: const Duration(seconds: 3),
       enableInfiniteScroll: false,
-      // FIXME: phrasesに順番の概念がないので毎回ランダムになるリスト型にする必要がある
       items: fn.notePhrases.map(_createFlashCardContainer).toList(),
       initialPage: fn.nowPhraseIndex,
     );

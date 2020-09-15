@@ -6,17 +6,7 @@ import 'package:wr_app/domain/note/model/note_api_dto.dart';
 abstract class NoteRepository {
   Future<Note> createNote(CreateNoteRequest req);
 
-  Future<Note> updateNoteTitle(UpdateNoteTitleRequest req);
-
-  Future<Note> updateDefaultNote(UpdateDefaultNoteRequest req);
+  Future<Note> updateNote(UpdateNoteRequest req);
 
   Future<void> deleteNote(DeleteNoteRequest req);
-
-  Future<Note> addPhraseInNote(AddPhraseInNoteRequest req);
-
-  Future<Note> updatePhraseInNote(UpdatePhraseInNoteRequest req);
-
-  Future<void> deletePhraseInNote(DeletePhraseInNoteRequest req);
-
-  Future<void> achievePhraseInNote(AchievePhraseInNoteRequest req);
 }

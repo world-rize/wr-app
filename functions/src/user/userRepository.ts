@@ -42,9 +42,9 @@ export class UserRepository {
     return user
   }
 
-  public async update(user: User): Promise<User> {
+  public async update(user: User, merge: boolean = false): Promise<User> {
     // deleted property will not be deleted bacause of merging
-    await this.users.doc(user.uuid).set(user)
+    await this.users.doc(user.uuid).set(user, { merge })
     // await this.users.doc(user.uuid).set(user, { merge: true })
     return user
   }

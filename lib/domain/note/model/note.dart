@@ -1,5 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:convert';
+
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
@@ -17,31 +19,42 @@ class Note {
     @required this.id,
     @required this.title,
     @required this.sortType,
-    @required this.isDefault,
+    @required this.isDefaultNote,
+    @required this.isAchievedNote,
     @required List<NotePhrase> phrases,
   }) {
     _phrases = phrases;
   }
 
-  factory Note.dummy(String title, {bool isDefault = false}) {
+  factory Note.dummy(
+    String title, {
+    bool isDefaultNote = false,
+    bool isAchievedNote = false,
+  }) {
     final noteId = Uuid().v4();
     return Note(
       id: noteId,
       title: title,
-      isDefault: isDefault,
+      isDefaultNote: isDefaultNote,
+      isAchievedNote: isAchievedNote,
       sortType: '',
-      phrases: [],
+      phrases: List<NotePhrase>.generate(30, (_) => NotePhrase.create()),
     );
   }
 
-  factory Note.empty(String title, {bool isDefault = false}) {
+  factory Note.empty(
+    String title, {
+    bool isDefaultNote = false,
+    bool isAchievedNote = false,
+  }) {
     final noteId = Uuid().v4();
     return Note(
       id: noteId,
       title: title,
-      isDefault: isDefault,
+      isDefaultNote: isDefaultNote,
+      isAchievedNote: isAchievedNote,
       sortType: '',
-      phrases: List<NotePhrase>.generate(30, (_) => NotePhrase.empty()),
+      phrases: List<NotePhrase>.generate(30, (_) => NotePhrase.create()),
     );
   }
 
@@ -55,18 +68,22 @@ class Note {
 
   String sortType;
 
-  bool isDefault;
+  bool isDefaultNote, isAchievedNote;
 
   List<NotePhrase> _phrases;
 
   List<NotePhrase> get phrases => _phrases;
 
-  bool _belowNotePhrasesLimit() {
-    return _phrases.length < 30;
+  Note clone() {
+    final jsonString = json.encode(this);
+    final jsonResponse = json.decode(jsonString);
+    return Note.fromJson(jsonResponse as Map<String, dynamic>);
   }
 
+  /// achieved noteなら何個でもしまえる
+  /// そうでないならfalse
   bool addPhrase(NotePhrase phrase) {
-    if (_belowNotePhrasesLimit()) {
+    if (isAchievedNote) {
       _phrases.add(phrase);
       return true;
     } else {
@@ -74,26 +91,18 @@ class Note {
     }
   }
 
+  /// ないならnullを返す
   NotePhrase findByNotePhraseId(String id) {
-    return _phrases.firstWhere((element) => element.id == id, orElse: null);
+    return _phrases.firstWhere(
+      (element) => element.id == id,
+      orElse: () => null,
+    );
   }
 
   bool updateNotePhrase(String id, NotePhrase phrase) {
     final index = _phrases.indexWhere((element) => element.id == id);
     if (index != -1) {
       _phrases[index] = phrase;
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  bool deleteNotePhrase(String id) {
-    final index = _phrases.indexWhere(
-      (element) => element.id == id,
-    );
-    if (index != -1) {
-      _phrases.removeAt(index);
       return true;
     } else {
       return false;

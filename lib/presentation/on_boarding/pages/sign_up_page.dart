@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_up_form.dart';
 import 'package:wr_app/presentation/root_view.dart';
@@ -22,7 +23,7 @@ class _SignUpPageState extends State<SignUpPage> {
   /// ホームへ移動
   Future<void> _gotoHome() {
     // debug
-    final user = Provider.of<UserNotifier>(context, listen: false).getUser();
+    final user = Provider.of<UserNotifier>(context, listen: false).user;
     InAppLogger.debugJson(user.toJson());
 
     // initial login
@@ -50,8 +51,8 @@ class _SignUpPageState extends State<SignUpPage> {
     });
 
     try {
-      final un = Provider.of<UserNotifier>(context, listen: false);
-      await un.signUpWithEmailAndPassword(
+      final an = context.read<AuthNotifier>();
+      await an.signUpWithEmailAndPassword(
           email: email, password: password, name: name);
       await _gotoHome();
     } on Exception catch (e) {
@@ -71,8 +72,8 @@ class _SignUpPageState extends State<SignUpPage> {
     });
 
     try {
-      final un = Provider.of<UserNotifier>(context, listen: false);
-      await un.signUpWithGoogle(name);
+      final an = context.read<AuthNotifier>();
+      await an.signUpWithGoogle(name);
 
       await _gotoHome();
     } on Exception catch (e) {
@@ -92,8 +93,8 @@ class _SignUpPageState extends State<SignUpPage> {
     });
 
     try {
-      final un = Provider.of<UserNotifier>(context);
-      await un.signUpWithApple(name);
+      final an = context.read<AuthNotifier>();
+      await an.signUpWithApple(name);
 
       await _gotoHome();
     } on Exception catch (e) {

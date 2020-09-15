@@ -17,30 +17,15 @@ Map<String, dynamic> _$CreateNoteRequestToJson(CreateNoteRequest instance) =>
       'title': instance.title,
     };
 
-UpdateNoteTitleRequest _$UpdateNoteTitleRequestFromJson(Map json) {
-  return UpdateNoteTitleRequest(
-    noteId: json['noteId'] as String,
-    title: json['title'] as String,
+UpdateNoteRequest _$UpdateNoteRequestFromJson(Map json) {
+  return UpdateNoteRequest(
+    note: json['note'] == null ? null : Note.fromJson(json['note'] as Map),
   );
 }
 
-Map<String, dynamic> _$UpdateNoteTitleRequestToJson(
-        UpdateNoteTitleRequest instance) =>
+Map<String, dynamic> _$UpdateNoteRequestToJson(UpdateNoteRequest instance) =>
     <String, dynamic>{
-      'noteId': instance.noteId,
-      'title': instance.title,
-    };
-
-UpdateDefaultNoteRequest _$UpdateDefaultNoteRequestFromJson(Map json) {
-  return UpdateDefaultNoteRequest(
-    noteId: json['noteId'] as String,
-  );
-}
-
-Map<String, dynamic> _$UpdateDefaultNoteRequestToJson(
-        UpdateDefaultNoteRequest instance) =>
-    <String, dynamic>{
-      'noteId': instance.noteId,
+      'note': instance.note?.toJson(),
     };
 
 DeleteNoteRequest _$DeleteNoteRequestFromJson(Map json) {
@@ -52,68 +37,4 @@ DeleteNoteRequest _$DeleteNoteRequestFromJson(Map json) {
 Map<String, dynamic> _$DeleteNoteRequestToJson(DeleteNoteRequest instance) =>
     <String, dynamic>{
       'noteId': instance.noteId,
-    };
-
-AddPhraseInNoteRequest _$AddPhraseInNoteRequestFromJson(Map json) {
-  return AddPhraseInNoteRequest(
-    noteId: json['noteId'] as String,
-    phrase: json['phrase'] == null
-        ? null
-        : NotePhrase.fromJson(json['phrase'] as Map),
-  );
-}
-
-Map<String, dynamic> _$AddPhraseInNoteRequestToJson(
-        AddPhraseInNoteRequest instance) =>
-    <String, dynamic>{
-      'noteId': instance.noteId,
-      'phrase': instance.phrase?.toJson(),
-    };
-
-UpdatePhraseInNoteRequest _$UpdatePhraseInNoteRequestFromJson(Map json) {
-  return UpdatePhraseInNoteRequest(
-    noteId: json['noteId'] as String,
-    phraseId: json['phraseId'] as String,
-    phrase: json['phrase'] == null
-        ? null
-        : NotePhrase.fromJson(json['phrase'] as Map),
-  );
-}
-
-Map<String, dynamic> _$UpdatePhraseInNoteRequestToJson(
-        UpdatePhraseInNoteRequest instance) =>
-    <String, dynamic>{
-      'noteId': instance.noteId,
-      'phraseId': instance.phraseId,
-      'phrase': instance.phrase?.toJson(),
-    };
-
-DeletePhraseInNoteRequest _$DeletePhraseInNoteRequestFromJson(Map json) {
-  return DeletePhraseInNoteRequest(
-    noteId: json['noteId'] as String,
-    phraseId: json['phraseId'] as String,
-  );
-}
-
-Map<String, dynamic> _$DeletePhraseInNoteRequestToJson(
-        DeletePhraseInNoteRequest instance) =>
-    <String, dynamic>{
-      'noteId': instance.noteId,
-      'phraseId': instance.phraseId,
-    };
-
-AchievePhraseInNoteRequest _$AchievePhraseInNoteRequestFromJson(Map json) {
-  return AchievePhraseInNoteRequest(
-    noteId: json['noteId'] as String,
-    phraseId: json['phraseId'] as String,
-    achieve: json['achieve'] as bool,
-  );
-}
-
-Map<String, dynamic> _$AchievePhraseInNoteRequestToJson(
-        AchievePhraseInNoteRequest instance) =>
-    <String, dynamic>{
-      'noteId': instance.noteId,
-      'phraseId': instance.phraseId,
-      'achieve': instance.achieve,
     };

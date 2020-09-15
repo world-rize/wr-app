@@ -285,48 +285,39 @@ export const createNote = async (req: NoteDto.CreateNoteRequest, context: Contex
       console.error('CreateNoteRequest is invalid')
       throw new functions.https.HttpsError('invalid-argument', e)
     })
-  return noteService.createNote(userId, req.title)
+  return noteService.createNote(userId, req.note)
     .catch((e) => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to createNote')
   })
 }
 
-// ノートのタイトルを変更
-export const updateNoteTitle = async (req: NoteDto.UpdateNoteTitleRequest, context: Context): Promise<Note> => {
+/**
+ * ノートを更新
+ * @param req
+ * @param context
+ */
+export const updateNote = async (req: NoteDto.UpdateNoteRequest, context: Context): Promise<Note> => {
   const userId = await authorize(context)
 
-  req = Object.assign(new NoteDto.UpdateNoteTitleRequest(), req)
+  req = Object.assign(new NoteDto.UpdateNoteRequest(), req)
   await validate(req)
     .catch(e => {
-      console.error('UpdateNoteTitleRequest is invalid')
+      console.error('UpdateNoteRequest is invalid')
       throw new functions.https.HttpsError('invalid-argument', e)
     })
-  return noteService.updateNoteTitle(userId, req.noteId, req.title)
+  return noteService.updateNote(userId, req.note)
     .catch((e) => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to updateNoteTitle')
+      throw new functions.https.HttpsError('internal', 'failed to updateNote')
     })
 }
 
-// isDefaultを変更
-export const updateDefaultNote = async (req: NoteDto.UpdateDefaultNoteRequest, context: Context): Promise<Note> => {
-  const userId = await authorize(context)
-
-  req = Object.assign(new NoteDto.UpdateDefaultNoteRequest(), req)
-  await validate(req)
-    .catch(e => {
-      console.error('UpdateDefaultNoteRequest is invalid')
-      throw new functions.https.HttpsError('invalid-argument', e)
-    })
-  return noteService.updateDefaultNote(userId, req.noteId)
-    .catch((e) => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to updateDefaultNote')
-    })
-}
-
-// ノートを削除
+/**
+ * ノートを削除
+ * @param req
+ * @param context
+ */
 export const deleteNote = async (req: NoteDto.DeleteNoteRequest, context: Context): Promise<void> => {
   const userId = await authorize(context)
 
@@ -340,81 +331,6 @@ export const deleteNote = async (req: NoteDto.DeleteNoteRequest, context: Contex
     .catch((e) => {
       console.error(e)
       throw new functions.https.HttpsError('internal', 'failed to deleteNote')
-    })
-}
-
-// noteId: string, phrase: Phrase
-// ノートにフレーズを追加
-//
-export const addPhraseInNote = async (req: NoteDto.AddPhraseInNoteRequest, context: Context): Promise<Note> => {
-  const userId = await authorize(context)
-
-  req = Object.assign(new NoteDto.AddPhraseInNoteRequest(), req)
-  await validate(req)
-    .catch(e => {
-      console.error('AddPhraseToPhraseListRequest is invalid')
-      throw new functions.https.HttpsError('invalid-argument', e)
-    })
-
-  // TODO: phrase validate
-
-  console.log(`[createPhrasesList] userId: ${userId} create phrase ${req.phrase.word} note ${req.noteId}`)
-
-  return noteService.addPhraseInNote(userId, req.noteId, req.phrase)
-    .catch (e => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to addPhraseInNote')
-    })
-}
-// noteId: string, phraseId: string, phrase: Phrase
-// ノートのフレーズを更新
-export const updatePhraseInNote = async (req: NoteDto.UpdatePhraseInNoteRequest, context: Context): Promise<Note> => {
-  const userId = await authorize(context)
-
-  req = Object.assign(new NoteDto.UpdatePhraseInNoteRequest(), req)
-  await validate(req)
-    .catch(e => {
-      console.error('UpdatePhraseInNoteRequest is invalid')
-      throw new functions.https.HttpsError('invalid-argument', e)
-    })
-  return noteService.updatePhraseInNote(userId, req.noteId, req.phraseId, req.phrase)
-    .catch((e) => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to updatePharaseInNote')
-    })
-}
-
-// ## deletePhraseInNote(noteId: string, phraseId: string): void
-// ノートのフレーズを削除
-export const deletePhraseInNote = async (req: NoteDto.DeletePhraseInNote, context: Context): Promise<void> => {
-  const userId = await authorize(context)
-
-  req = Object.assign(new NoteDto.DeletePhraseInNote(), req)
-  await validate(req)
-    .catch(e => {
-      console.error('DeletePhraseInNote is invalid')
-      throw new functions.https.HttpsError('invalid-argument', e)
-    })
-  return noteService.deletePhraseInNote(userId, req.noteId, req.phraseId)
-    .catch((e) => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to deletePharaseInNote')
-    })
-}
-
-export const achievePhraseInNote = async (req: NoteDto.AchievePhraseInNote, context: Context): Promise<void> => {
-  const userId = await authorize(context)
-
-  req = Object.assign(new NoteDto.AchievePhraseInNote(), req)
-  await validate(req)
-    .catch(e => {
-      console.error('AchievePhraseInNote is invalid')
-      throw new functions.https.HttpsError('invalid-argument', e)
-    })
-  return noteService.achievePhraseInNote(userId, req.noteId, req.phraseId, req.achieve)
-    .catch((e) => {
-      console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to achievePhraseInNote')
     })
 }
 

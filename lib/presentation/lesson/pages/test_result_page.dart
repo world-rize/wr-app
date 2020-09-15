@@ -205,7 +205,7 @@ class TestResultPage extends StatelessWidget {
 
             // 最後のテストでアンケート誘導
             if (!systemNotifier.getQuestionnaireAnswered() &&
-                userNotifier.getUser().statistics.testLimitCount == 0) {
+                userNotifier.user.statistics.testLimitCount == 0) {
               await _showQuestionnaireDialog(context);
             }
           },

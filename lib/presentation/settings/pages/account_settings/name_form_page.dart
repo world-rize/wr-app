@@ -2,27 +2,27 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/presentation/auth_notifier.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
-class MailAddressFormPage extends StatefulWidget {
+class NameFormPage extends StatefulWidget {
   @override
-  _MailAddressFormPageState createState() => _MailAddressFormPageState();
+  _NameFormPageState createState() => _NameFormPageState();
 }
 
-class _MailAddressFormPageState extends State<MailAddressFormPage> {
+class _NameFormPageState extends State<NameFormPage> {
   final _formKey = GlobalKey<FormState>();
-  String _email = '';
+  String _name = '';
 
   @override
   Widget build(BuildContext context) {
-    final an = context.watch<AuthNotifier>();
+    final un = context.watch<UserNotifier>();
 
     final _emailField = TextFormField(
-      initialValue: an.user.attributes.email,
-      onChanged: (email) {
+      initialValue: un.user.name,
+      onChanged: (name) {
         setState(() {
-          _email = email;
+          _name = name;
         });
       },
       validator: (text) {
@@ -37,11 +37,11 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
             color: Colors.grey,
           ),
         ),
-        hintText: 'Email',
+        hintText: 'なまえ',
       ),
     );
 
-    final _signUpButton = SizedBox(
+    final _setNameButton = SizedBox(
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -51,7 +51,7 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
           onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              an.setEmail(email: _email);
+              un.setName(name: _name);
             }
           },
         ),
@@ -60,7 +60,7 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('メールアドレスを変更'),
+        title: const Text('名前の変更'),
       ),
       body: Container(
         child: Column(
@@ -85,7 +85,7 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
             // Sign Up
             Padding(
               padding: const EdgeInsets.all(8),
-              child: _signUpButton,
+              child: _setNameButton,
             ),
           ],
         ),

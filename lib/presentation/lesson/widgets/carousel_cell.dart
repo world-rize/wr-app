@@ -54,13 +54,23 @@ class CarouselCell extends StatelessWidget {
                 Center(
                   child: Padding(
                     padding: const EdgeInsets.all(20),
-                    child: Text(
-                      lesson.title['ja'],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ...lesson.title['ja'].split(',').map(
+                              (title) => Center(
+                                child: Text(
+                                  title,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                      ],
                     ),
                   ),
                 ),

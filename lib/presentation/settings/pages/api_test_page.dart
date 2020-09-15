@@ -3,13 +3,22 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
+import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
+import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
+import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/toast.dart';
 
 class APITestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<UserNotifier>(context);
+    final an = context.watch<AuthNotifier>();
+    final un = context.watch<UserNotifier>();
+    final ln = context.watch<LessonNotifier>();
+    final nn = context.watch<NoteNotifier>();
+    final sn = context.watch<ShopNotifier>();
 
     return Scaffold(
       appBar: AppBar(
@@ -18,21 +27,26 @@ class APITestView extends StatelessWidget {
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: 'API',
+            title: 'Auth',
             tiles: [
               SettingsTile(
-                title: 'テスト',
-                leading: const Icon(Icons.info),
+                title: 'お気に入りに登録',
                 onTap: () async {
-                  await notifier.test().catchError(NotifyToast.error);
+                  await un
+                      .favoritePhrase(phraseId: '0000', favorite: true)
+                      .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },
               ),
+            ],
+          ),
+          SettingsSection(
+            title: 'User',
+            tiles: [
               SettingsTile(
                 title: 'お気に入りに登録',
-                leading: const Icon(Icons.favorite),
                 onTap: () async {
-                  await notifier
+                  await un
                       .favoritePhrase(phraseId: '0000', favorite: true)
                       .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
@@ -40,19 +54,18 @@ class APITestView extends StatelessWidget {
               ),
               SettingsTile(
                 title: '10000ポイントゲット',
-                leading: const Icon(Icons.attach_money),
                 onTap: () async {
-                  await notifier
+                  await un
                       .callGetPoint(points: 10000)
                       .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },
               ),
               SettingsTile(
-                title: 'テストを受ける(未実装)',
+                title: 'テストを受ける',
                 leading: const Icon(Icons.title),
                 onTap: () async {
-                  await notifier
+                  await un
                       .doTest(sectionId: 'debug')
                       .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
@@ -60,10 +73,32 @@ class APITestView extends StatelessWidget {
               ),
               SettingsTile(
                 title: '受講可能回数をリセット',
-                leading: const Icon(Icons.access_alarm),
                 onTap: () async {
-                  await notifier
-                      .resetTestLimitCount()
+                  await un.resetTestLimitCount().catchError(NotifyToast.error);
+                  NotifyToast.success('成功');
+                },
+              ),
+              SettingsTile.switchTile(
+                title: 'プレミアムプラン',
+                onToggle: (value) {
+                  if (value) {
+                    un.changePlan(Membership.pro);
+                  } else {
+                    un.changePlan(Membership.normal);
+                  }
+                },
+                switchValue: un.user.isPremium,
+              ),
+            ],
+          ),
+          SettingsSection(
+            title: 'Lesson',
+            tiles: [
+              SettingsTile(
+                title: 'お気に入りに登録',
+                onTap: () async {
+                  await un
+                      .favoritePhrase(phraseId: '0000', favorite: true)
                       .catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },

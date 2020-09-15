@@ -4,10 +4,6 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 
 abstract class UserRepository {
-  Future<void> test();
-
-  Future<void> login();
-
   Future<User> readUser();
 
   Future<User> createUser(CreateUserRequest req);
@@ -31,8 +27,6 @@ abstract class UserRepository {
   Future<User> deleteFavoriteList(DeleteFavoriteListRequest req);
 
   Future<User> findUserByUserId(FindUserByUserIdRequest req);
-
-  Future<User> purchaseItem(PurchaseItemRequest req);
 
   Future<void> introduceFriend(IntroduceFriendRequest req);
 }

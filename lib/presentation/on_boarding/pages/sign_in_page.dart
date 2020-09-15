@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_in_form.dart';
 import 'package:wr_app/presentation/root_view.dart';
-import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
@@ -45,8 +45,8 @@ class _SignInPageState extends State<SignInPage> {
     });
 
     try {
-      final un = Provider.of<UserNotifier>(context, listen: false);
-      await un.signInWithEmailAndPassword(email, password);
+      final an = context.read<AuthNotifier>();
+      await an.signInWithEmailAndPassword(email, password);
 
       NotifyToast.success('ログインしました');
       await _gotoHome();
@@ -67,8 +67,8 @@ class _SignInPageState extends State<SignInPage> {
     });
 
     try {
-      final un = Provider.of<UserNotifier>(context, listen: false);
-      await un.signInWithGoogle();
+      final an = context.read<AuthNotifier>();
+      await an.signInWithGoogle();
 
       NotifyToast.success('ログインしました');
       await _gotoHome();
@@ -89,7 +89,7 @@ class _SignInPageState extends State<SignInPage> {
     });
 
     try {
-      final un = Provider.of<UserNotifier>(context, listen: false);
+      final un = context.read<AuthNotifier>();
       await un.signInWithApple();
 
       NotifyToast.success('ログインしました');

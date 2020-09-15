@@ -1,18 +1,34 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/language.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
-import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
-import 'package:wr_app/presentation/note/widgets/phrase_edit_dialog.dart';
+import 'package:wr_app/presentation/note/widgets/note_table_edit_phrase.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
+
+class Debouncer {
+  final int milliseconds;
+  VoidCallback action;
+  Timer _timer;
+
+  Debouncer({this.milliseconds});
+
+  run(VoidCallback action) {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+}
 
 /// ノートのフレーズを表示するテーブル
 class NoteTable extends StatefulWidget {
@@ -31,15 +47,34 @@ class NoteTable extends StatefulWidget {
 class _NoteTableState extends State<NoteTable> {
   bool _isLoading;
 
+  // save every 3000ms
+  final Debouncer _debouncer = Debouncer(milliseconds: 3000);
+
   @override
   void initState() {
     super.initState();
     _isLoading = false;
   }
 
+  Future _saveNote() async {
+    try {
+      final nn = context.read<NoteNotifier>();
+      await nn.updateNote(note: widget.note);
+      InAppLogger.debug('save note');
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _saveNote();
+    InAppLogger.debug('note table dispose');
+  }
+
   void _showDeleteNoteConfirmDialog() {
-    final un = Provider.of<UserNotifier>(context, listen: false);
-    final nn = Provider.of<NoteNotifier>(context, listen: false);
+    final nn = context.read<NoteNotifier>();
 
     showDialog(
       context: context,
@@ -62,7 +97,7 @@ class _NoteTableState extends State<NoteTable> {
                   setState(() {
                     _isLoading = true;
                   });
-                  await un.deleteNote(noteId: widget.note.id);
+                  await nn.deleteNote(noteId: widget.note.id);
                   nn.nowSelectedNoteId = null;
 
                   Navigator.pop(context);
@@ -83,38 +118,10 @@ class _NoteTableState extends State<NoteTable> {
     );
   }
 
-  void _showPhraseEditDialog(NotePhrase phrase, Language language) {
-    final un = Provider.of<UserNotifier>(context, listen: false);
-
-    showMaterialModalBottomSheet(
-      context: context,
-      builder: (BuildContext context, scrollController) => Container(
-        child: PhraseEditDialog(
-          phrase: phrase,
-          language: language,
-          onSubmit: (phrase) {
-            un.updatePhraseInNote(
-              noteId: widget.note.id,
-              phraseId: phrase.id,
-              phrase: phrase,
-            );
-            Navigator.pop(context);
-          },
-          onDelete: (phrase) {
-            un.deletePhraseInNote(noteId: widget.note.id, phraseId: phrase.id);
-            Navigator.pop(context);
-          },
-          onCancel: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-    );
-  }
+  void _showEditPhraseSheet(NotePhrase notePhrase, Language language) {}
 
   @override
   Widget build(BuildContext context) {
-    final un = Provider.of<UserNotifier>(context);
     final nn = Provider.of<NoteNotifier>(context);
     final h5 = Theme.of(context).textTheme.headline5;
 
@@ -146,9 +153,7 @@ class _NoteTableState extends State<NoteTable> {
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => FlashCardPage(
-              note: widget.note,
-            ),
+            builder: (_) => FlashCardPage(),
           ),
         );
       },
@@ -210,17 +215,15 @@ class _NoteTableState extends State<NoteTable> {
           TableCell(
             child: Center(
               child: IconButton(
-                icon: Icon(
-                  phrase.achieved
-                      ? Icons.check_box
-                      : Icons.check_box_outline_blank,
+                icon: const Icon(
+                  Icons.check_box,
                   color: Colors.green,
                 ),
                 onPressed: () {
-                  un.achievePhraseInNote(
-                      noteId: widget.note.id,
-                      phraseId: phrase.id,
-                      achieve: !phrase.achieved);
+                  nn.achievePhrase(
+                    noteId: widget.note.id,
+                    phraseId: phrase.id,
+                  );
                 },
               ),
             ).padding(),
@@ -228,53 +231,71 @@ class _NoteTableState extends State<NoteTable> {
           TableCell(
             child: !nn.canSeeJapanese
                 ? Container()
-                : Container(
-                    child: TextFormField(
-                      initialValue: phrase.translation,
-                      decoration: InputDecoration.collapsed(hintText: ''),
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      onChanged: (t) {
-                        phrase.translation = t;
-                      },
-                      onEditingComplete: () {
-                        try {
-                          print(phrase.translation);
-                          un.updatePhraseInNote(
-                              noteId: widget.note.id,
+                : GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        expand: false,
+                        context: context,
+                        builder: (BuildContext context, _) => EditPhrase(
+                          language: Language.japanese,
+                          notePhrase: phrase,
+                          onSubmit: (String text) {
+                            final nn = Provider.of<NoteNotifier>(
+                              context,
+                              listen: false,
+                            );
+                            phrase.japanese = text;
+                            nn.updatePhraseInNote(
+                              noteId: nn.nowSelectedNoteId,
                               phraseId: phrase.id,
-                              phrase: phrase);
-                        } on Exception catch (e) {
-                          InAppLogger.error(e);
-                        }
-                      },
-                    ).padding(),
+                              phrase: phrase,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Center(
+                        child: Text('${phrase.japanese}').padding(),
+                      ).padding(),
+                    ),
                   ),
           ),
           TableCell(
             child: !nn.canSeeEnglish
                 ? Container()
-                : Container(
-                    child: TextFormField(
-                      initialValue: phrase.word,
-                      decoration: InputDecoration.collapsed(hintText: ''),
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      onChanged: (t) {
-                        phrase.word = t;
-                      },
-                      onEditingComplete: () {
-                        try {
-                          print(phrase.word);
-                          un.updatePhraseInNote(
-                              noteId: widget.note.id,
+                : GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        expand: false,
+                        context: context,
+                        builder: (BuildContext context, _) => EditPhrase(
+                          language: Language.america,
+                          notePhrase: phrase,
+                          onSubmit: (String text) {
+                            final nn = Provider.of<NoteNotifier>(
+                              context,
+                              listen: false,
+                            );
+                            phrase.english = text;
+                            nn.updatePhraseInNote(
+                              noteId: nn.nowSelectedNoteId,
                               phraseId: phrase.id,
-                              phrase: phrase);
-                        } on Exception catch (e) {
-                          InAppLogger.error(e);
-                        }
-                      },
-                    ).padding(),
+                              phrase: phrase,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Center(
+                        child: Text('${phrase.english}').padding(),
+                      ).padding(),
+                    ),
                   ),
           ),
         ],
@@ -318,7 +339,7 @@ class _NoteTableState extends State<NoteTable> {
         title,
         header,
         phrasesTable.padding(),
-        if (!widget.note.isDefault && widget.note.id != 'achieved')
+        if (!widget.note.isDefaultNote && !widget.note.isAchievedNote)
           Padding(
             padding: const EdgeInsets.all(8),
             child: _deleteNoteButton,

@@ -1,9 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:data_classes/data_classes.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wr_app/domain/lesson/index.dart';
 
 part 'note_phrase.g.dart';
 
@@ -11,42 +11,28 @@ part 'note_phrase.g.dart';
 class NotePhrase {
   NotePhrase({
     @required this.id,
-    @required this.word,
-    @required this.translation,
-    @required this.achieved,
+    @required this.english,
+    @required this.japanese,
+    @required this.createdAt,
   });
 
   factory NotePhrase.dummy({@required String id}) {
-    return NotePhrase(id: id, word: id, translation: id, achieved: false);
-  }
-
-  factory NotePhrase.fromPhrase(Phrase phrase) {
     return NotePhrase(
-      id: phrase.id,
-      word: phrase.title['en'],
-      translation: phrase.title['ja'],
-      achieved: false,
-    );
-  }
-
-  ///
-  factory NotePhrase.empty() {
-    return NotePhrase(
-      id: Uuid().v4(),
-      word: '',
-      translation: '',
-      achieved: false,
+      id: id,
+      japanese: 'こんにちは',
+      english: 'Hello',
+      createdAt: DateTime.now().toIso8601String(),
     );
   }
 
   /// wordとtranslationからNotePhraseを新しく作る
-  factory NotePhrase.create(String word, String translation) {
+  factory NotePhrase.create({String english = '', String japanese = ''}) {
     final uuid = Uuid().v4();
     return NotePhrase(
       id: uuid,
-      word: word,
-      translation: translation,
-      achieved: false,
+      english: english,
+      japanese: japanese,
+      createdAt: DateTime.now().toIso8601String(),
     );
   }
 
@@ -54,13 +40,14 @@ class NotePhrase {
   String id;
 
   /// 単語
-  String word;
+  String english;
 
   /// 訳
-  String translation;
+  String japanese;
 
-  /// achieved
-  bool achieved;
+  /// 作成日時
+  //  TODO: DateTimeに
+  String createdAt;
 
   factory NotePhrase.fromJson(Map<dynamic, dynamic> json) =>
       _$NotePhraseFromJson(json);

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 // TODO(high): implement
 final ThemeData WorldRizeLightTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: Colors.blueAccent.shade200,
+  primaryColor: const Color(0xff56c0ea),
   accentColor: Colors.black,
   backgroundColor: Colors.white,
   primaryTextTheme: const TextTheme(
@@ -34,8 +34,8 @@ final ThemeData WorldRizeLightTheme = ThemeData(
 
 final ThemeData WorldRizeDarkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: Colors.blueAccent.shade200,
-  accentColor: Colors.white,
+  primaryColor: const Color(0xff56c0ea),
+  accentColor: Colors.black,
   backgroundColor: Colors.black45,
   primaryTextTheme: const TextTheme(
     headline1: TextStyle(
