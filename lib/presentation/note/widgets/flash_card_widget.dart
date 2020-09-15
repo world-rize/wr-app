@@ -7,6 +7,7 @@ import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
+import 'package:wr_app/util/logger.dart';
 
 /// NotePhrase を表示するウィジェット
 class FlashCard extends StatefulWidget {
@@ -18,19 +19,24 @@ class _FlashCardState extends State<FlashCard> {
   /// 裏側か
   bool _flipped;
 
+  @override
+  void initState() {
+    super.initState();
+    _flipped = false;
+  }
+
   Widget _createFlashCardContainer(NotePhrase phrase) {
-    final nn = context.read<NoteNotifier>();
+    final nn = context.watch<NoteNotifier>();
     final currentNote = nn.currentNote;
     if (currentNote == null) {
       return const SizedBox.shrink();
     }
 
-    final achieved =
-        currentNote.phrases.map((phrase) => phrase.id).contains(phrase.id);
     final achievedButton = IconButton(
-      icon: Icon(
-        achieved ? Icons.favorite : Icons.favorite_border,
+      icon: const Icon(
+        Icons.check_box,
         size: 24,
+        color: Colors.green,
       ),
       onPressed: () {
         nn.achievePhrase(noteId: currentNote.id, phraseId: phrase.id);
@@ -48,7 +54,7 @@ class _FlashCardState extends State<FlashCard> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: ShadowedContainer(
-          color: _flipped ? backgroundColor : Colors.white30,
+          color: backgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(8),
             key: GlobalKey(),
@@ -64,11 +70,12 @@ class _FlashCardState extends State<FlashCard> {
                       style: body1,
                     ),
                   ),
-                  Positioned(
-                    right: 10,
-                    bottom: 10,
-                    child: achievedButton,
-                  )
+                  if (!_flipped)
+                    Positioned(
+                      right: 10,
+                      bottom: 10,
+                      child: achievedButton,
+                    )
                 ],
               ),
             ),
@@ -79,14 +86,11 @@ class _FlashCardState extends State<FlashCard> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _flipped = false;
-  }
-
-  @override
   Widget build(BuildContext context) {
     final fn = Provider.of<FlashCardNotifier>(context);
+    final phrases = fn.notePhrases;
+    InAppLogger.debug(
+        phrases.map((p) => '(${p.japanese} -> ${p.english}').join(', '));
 
     final flashCard = GFCarousel(
       viewportFraction: 0.9,
@@ -94,8 +98,7 @@ class _FlashCardState extends State<FlashCard> {
       autoPlay: false,
       autoPlayInterval: const Duration(seconds: 3),
       enableInfiniteScroll: false,
-      // FIXME: phrasesに順番の概念がないので毎回ランダムになるリスト型にする必要がある
-      items: fn.notePhrases.map(_createFlashCardContainer).toList(),
+      items: phrases.map(_createFlashCardContainer).toList(),
       initialPage: fn.nowPhraseIndex,
     );
 

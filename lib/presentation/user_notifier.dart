@@ -24,6 +24,8 @@ class UserNotifier with ChangeNotifier {
   /// singleton
   static UserNotifier _cache;
 
+  bool signedIn = false;
+
   factory UserNotifier({
     @required UserService userService,
   }) {
@@ -39,6 +41,7 @@ class UserNotifier with ChangeNotifier {
   /// ユーザーデータを取得
   Future<void> fetchUser() async {
     _user = await _userService.readUser();
+    signedIn = true;
     notifyListeners();
   }
 

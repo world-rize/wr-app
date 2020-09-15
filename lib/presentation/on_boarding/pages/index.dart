@@ -1,49 +1,17 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wr_app/presentation/auth_notifier.dart';
-import 'package:wr_app/presentation/root_view.dart';
-import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
-import 'package:wr_app/util/logger.dart';
-import 'package:wr_app/util/toast.dart';
 
 import './sign_in_page.dart';
 import './sign_up_page.dart';
 
 /// ファーストページ
 class OnBoardingPage extends StatelessWidget {
-  // 自動でサインイン
-  Future<void> _autoSignIn(BuildContext context) async {
-    try {
-      final an = context.read<AuthNotifier>();
-      final un = context.read<UserNotifier>();
-      final isAlreadySignIn = await an.isAlreadySignedIn();
-
-      if (isAlreadySignIn) {
-        await un.fetchUser();
-        await an.login();
-
-        Navigator.popUntil(context, (route) => route.isFirst);
-        return Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RootView(),
-          ),
-        );
-      }
-    } on Exception catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     const splashColor = Color(0xff56c0ea);
-    _autoSignIn(context);
 
     final signUpField = Padding(
       padding: const EdgeInsets.all(8),

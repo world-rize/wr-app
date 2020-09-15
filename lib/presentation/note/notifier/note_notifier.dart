@@ -21,6 +21,10 @@ class NoteNotifier extends ChangeNotifier {
 
   User _user = User.empty();
   User get user => _user;
+  set user(User user) {
+    _user = user;
+    notifyListeners();
+  }
 
   /// 現在のノート
   String _nowSelectedNoteId = 'default';
@@ -94,23 +98,15 @@ class NoteNotifier extends ChangeNotifier {
   }
 
   /// update note title
-  Future<void> updateNoteTitle({
-    @required String noteId,
-    @required String title,
+  Future<void> updateNote({
+    @required Note note,
   }) async {
-    final note = _user.getNoteById(noteId: noteId).clone();
-    if (note == null) {
-      throw Exception('note not found');
-    }
-    note.title = title;
-
     await _noteService.updateNote(note: note);
     _user.notes[note.id] = note;
 
     notifyListeners();
 
     InAppLogger.info('updateNoteTitle ${note.id}');
-    // NotifyToast.success('updateNoteTitle ${note.id}');
   }
 
   /// update note isDefault

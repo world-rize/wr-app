@@ -145,7 +145,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   // TODO: re-architecture
   final userNotifier = UserNotifier(userService: userService);
-
   final authNotifier = AuthNotifier(authService: authService);
   authNotifier.addListener(() {
     InAppLogger.debug(
@@ -156,6 +155,10 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   noteNotifier.addListener(() {
     InAppLogger.debug('update note');
     userNotifier.user = noteNotifier.user;
+  });
+  userNotifier.addListener(() {
+    authNotifier.user = userNotifier.user;
+    noteNotifier.user = userNotifier.user;
   });
 
   final app = MultiProvider(

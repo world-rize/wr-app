@@ -28,6 +28,10 @@ class AuthNotifier with ChangeNotifier {
 
   User _user = User.empty();
   User get user => _user;
+  set user(User user) {
+    _user = user;
+    notifyListeners();
+  }
 
   /// メールアドレスとパスワードでサインアップ
   Future<void> signUpWithEmailAndPassword({

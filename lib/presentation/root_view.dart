@@ -13,6 +13,7 @@ import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/toast.dart';
 
 /// root view
 class RootView extends StatefulWidget {
@@ -29,18 +30,50 @@ class _RootViewState extends State<RootView>
   /// navbar controller
   PageController _pageController;
 
+  /// 自動でサインイン
+  Future<void> _autoSignIn(BuildContext context) async {
+    try {
+      final an = context.read<AuthNotifier>();
+      final un = context.read<UserNotifier>();
+      final isAlreadySignIn = await an.isAlreadySignedIn();
+
+      if (isAlreadySignIn) {
+        await un.fetchUser();
+        await an.login();
+
+        Navigator.popUntil(context, (route) => route.isFirst);
+        return Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => RootView(),
+          ),
+        );
+      }
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    }
+  }
+
   /// Check user status
   Future<void> _checkUserStatus(Duration timestamp) async {
     // TODO: membership check
 
     // on first launch, show on-boarding page
     final signedIn = await context.read<AuthNotifier>().isAlreadySignedIn();
+    final loggedIn = context.read<UserNotifier>().signedIn;
     final firstLaunch = context.read<SystemNotifier>().getFirstLaunch();
 
-    InAppLogger.debug('first launch: $firstLaunch, signed in: $signedIn');
+    InAppLogger.debug('first launch: $firstLaunch');
+    InAppLogger.debug('signed in: $signedIn');
+    InAppLogger.debug('logged in: $loggedIn');
+
+    if (signedIn && !loggedIn) {
+      await _autoSignIn(context);
+    }
 
     // show on boarding modal
-    if (firstLaunch) {
+    if (firstLaunch || !signedIn) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => OnBoardingPage(),
@@ -184,7 +217,7 @@ class _RootViewState extends State<RootView>
       appBar: PreferredSize(
         child: Container(
           //padding: const EdgeInsets.symmetric(vertical: 20),
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(10),
           child: header,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
@@ -204,7 +237,10 @@ class _RootViewState extends State<RootView>
       ),
       body: Stack(
         children: <Widget>[
-          pageView,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 60),
+            child: pageView,
+          ),
           Positioned(
             left: 0,
             right: 0,

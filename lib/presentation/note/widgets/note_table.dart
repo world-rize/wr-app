@@ -1,15 +1,29 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
-import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
+
+class Debouncer {
+  final int milliseconds;
+  VoidCallback action;
+  Timer _timer;
+  Debouncer({this.milliseconds});
+  run(VoidCallback action) {
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+}
 
 /// ノートのフレーズを表示するテーブル
 class NoteTable extends StatefulWidget {
@@ -27,11 +41,30 @@ class NoteTable extends StatefulWidget {
 
 class _NoteTableState extends State<NoteTable> {
   bool _isLoading;
+  // save every 3000ms
+  final Debouncer _debouncer = Debouncer(milliseconds: 3000);
 
   @override
   void initState() {
     super.initState();
     _isLoading = false;
+  }
+
+  Future _saveNote() async {
+    try {
+      final nn = context.read<NoteNotifier>();
+      await nn.updateNote(note: widget.note);
+      InAppLogger.debug('save note');
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _saveNote();
+    InAppLogger.debug('note table dispose');
   }
 
   void _showDeleteNoteConfirmDialog() {
@@ -81,7 +114,6 @@ class _NoteTableState extends State<NoteTable> {
 
   @override
   Widget build(BuildContext context) {
-    final un = Provider.of<UserNotifier>(context);
     final nn = Provider.of<NoteNotifier>(context);
     final h5 = Theme.of(context).textTheme.headline5;
 
@@ -113,9 +145,7 @@ class _NoteTableState extends State<NoteTable> {
       onPressed: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (_) => FlashCardPage(
-              note: widget.note,
-            ),
+            builder: (_) => FlashCardPage(),
           ),
         );
       },
@@ -201,17 +231,7 @@ class _NoteTableState extends State<NoteTable> {
                       maxLines: null,
                       onChanged: (t) {
                         phrase.japanese = t;
-                      },
-                      onEditingComplete: () {
-                        try {
-                          print(phrase.japanese);
-                          nn.updatePhraseInNote(
-                              noteId: widget.note.id,
-                              phraseId: phrase.id,
-                              phrase: phrase);
-                        } on Exception catch (e) {
-                          InAppLogger.error(e);
-                        }
+                        _debouncer.run(_saveNote);
                       },
                     ).padding(),
                   ),
@@ -227,17 +247,7 @@ class _NoteTableState extends State<NoteTable> {
                       keyboardType: TextInputType.multiline,
                       onChanged: (t) {
                         phrase.english = t;
-                      },
-                      onEditingComplete: () {
-                        try {
-                          print(phrase.english);
-                          nn.updatePhraseInNote(
-                              noteId: widget.note.id,
-                              phraseId: phrase.id,
-                              phrase: phrase);
-                        } on Exception catch (e) {
-                          InAppLogger.error(e);
-                        }
+                        _debouncer.run(_saveNote);
                       },
                     ).padding(),
                   ),
@@ -283,7 +293,7 @@ class _NoteTableState extends State<NoteTable> {
         title,
         header,
         phrasesTable.padding(),
-        if (!widget.note.isDefaultNote && widget.note.id != 'achieved')
+        if (!widget.note.isDefaultNote && !widget.note.isAchievedNote)
           Padding(
             padding: const EdgeInsets.all(8),
             child: _deleteNoteButton,
