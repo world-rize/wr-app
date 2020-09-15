@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
@@ -76,6 +77,17 @@ class APITestView extends StatelessWidget {
                   await un.resetTestLimitCount().catchError(NotifyToast.error);
                   NotifyToast.success('成功');
                 },
+              ),
+              SettingsTile.switchTile(
+                title: 'プレミアムプラン',
+                onToggle: (value) {
+                  if (value) {
+                    un.changePlan(Membership.pro);
+                  } else {
+                    un.changePlan(Membership.normal);
+                  }
+                },
+                switchValue: un.user.isPremium,
               ),
             ],
           ),

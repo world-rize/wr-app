@@ -13,13 +13,11 @@ class ShopService {
   }) : _shopPersistence = shopPersistence;
 
   /// ショップのアイテムを取得
-  // TODO: shopServiceを作成
   Future<List<GiftItem>> getShopItems() {
     return _shopPersistence.shopItems();
   }
 
   /// アイテムを購入
-  // TODO: shopServiceを作成
   Future<User> purchaseItem({
     @required User user,
     @required String itemId,

@@ -45,8 +45,9 @@ class _ShopPageState extends State<ShopPage> {
     }
   }
 
-  void _showPurchaseConfirmDialog(GiftItem item) {
-    showDialog(
+  /// 購入確認ダイアログをだす
+  Future _showPurchaseConfirmDialog(GiftItem item) {
+    return showDialog(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('購入'),
@@ -80,6 +81,64 @@ class _ShopPageState extends State<ShopPage> {
         ],
       ),
     );
+  }
+
+  /// アイテムの説明テキスト
+  Future _showGiftItemDescriptionDialog(String title, String description) {
+    return showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(description),
+        actions: [
+          FlatButton(
+            child: const Text('Ok'),
+            onPressed: () async {
+              Navigator.pop(context);
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  /// アイテムの購入&使用
+  Future _purchase(GiftItem item) async {
+    await _showPurchaseConfirmDialog(item);
+
+    switch (item.id) {
+      case 'accent_in':
+        InAppLogger.debug('activate ${item.id}');
+        await _showGiftItemDescriptionDialog(
+            item.title, 'en_INアクセントが使用可能になりました!(嘘)');
+        break;
+
+      case 'accent_uk':
+        InAppLogger.debug('activate ${item.id}');
+        await _showGiftItemDescriptionDialog(
+            item.title, 'en_UKアクセントが使用可能になりました!(嘘)');
+        break;
+      case 'accent_us':
+        InAppLogger.debug('activate ${item.id}');
+        await _showGiftItemDescriptionDialog(
+            item.title, 'en_USアクセントが使用可能になりました!(嘘)');
+        break;
+
+      case 'amazon':
+        InAppLogger.debug('activate ${item.id}');
+        await _showGiftItemDescriptionDialog(item.title, 'アマゾン(嘘)');
+        break;
+
+      case 'itunes':
+        InAppLogger.debug('activate ${item.id}');
+        await _showGiftItemDescriptionDialog(item.title, 'iTunes(嘘)');
+        break;
+
+      case 'extra_note':
+        InAppLogger.debug('activate ${item.id}');
+        await _showGiftItemDescriptionDialog(item.title, 'ノートの枠が一つ増えました(本当)');
+        break;
+    }
   }
 
   @override
@@ -126,7 +185,7 @@ class _ShopPageState extends State<ShopPage> {
                         child: GiftItemCard(
                           giftItem: item,
                           onTap: () {
-                            _showPurchaseConfirmDialog(item);
+                            _purchase(item);
                           },
                         ),
                       ),

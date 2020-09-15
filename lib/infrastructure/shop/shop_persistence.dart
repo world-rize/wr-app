@@ -8,13 +8,9 @@ import 'package:wr_app/util/cloud_functions.dart';
 class ShopPersistence implements ShopRepository {
   @override
   Future<List<GiftItem>> shopItems() async {
-    return callFunction('getShopItems').then((res) {
-      print(res.data);
-      final l = List.from(res.data);
-      print(l);
-      final ll = l.map((d) => GiftItem.fromJson(Map.from(d))).toList();
-      return ll;
-    });
+    return callFunction('getShopItems').then((res) => List.from(res.data)
+        .map((d) => GiftItem.fromJson(Map.from(d)))
+        .toList());
   }
 
   @override
