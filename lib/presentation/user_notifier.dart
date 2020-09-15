@@ -50,6 +50,17 @@ class UserNotifier with ChangeNotifier {
     _user = await _userService.updateAge(user: _user, age: age);
     notifyListeners();
 
+    InAppLogger.debug('setAge $age');
+    NotifyToast.success('ageを変更しました');
+  }
+
+  /// update name
+  Future<void> setName({@required String name}) async {
+    _user.name = name;
+    _user = await _userService.updateUser(user: _user);
+    notifyListeners();
+
+    InAppLogger.debug('setName $name');
     NotifyToast.success('ageを変更しました');
   }
 
@@ -244,7 +255,4 @@ class UserNotifier with ChangeNotifier {
     _user = await _userService.readUser();
     notifyListeners();
   }
-
-  /// TODO: purchase Amazon Gift
-  /// TODO: purchase iTunes Gift
 }

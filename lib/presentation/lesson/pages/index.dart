@@ -12,7 +12,6 @@ import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
-import 'package:wr_app/util/logger.dart';
 
 import './favorite_page.dart';
 import './newcoming_page.dart';
@@ -40,11 +39,9 @@ class LessonIndexPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userNotifier = Provider.of<UserNotifier>(context);
-    final user = userNotifier.user;
-    final lessonNotifier = Provider.of<LessonNotifier>(context);
-
-    InAppLogger.debugJson(user.favorites['default'].toJson());
+    final un = Provider.of<UserNotifier>(context);
+    final user = un.user;
+    final ln = Provider.of<LessonNotifier>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -60,7 +57,7 @@ class LessonIndexPage extends StatelessWidget {
             height: 250,
             child: GFCarousel(
               enableInfiniteScroll: false,
-              items: lessonNotifier.lessons
+              items: ln.lessons
                   .indexedMap(
                     (index, lesson) => CarouselCell(
                       lesson: lesson,
@@ -85,7 +82,7 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           FutureBuilder<List<Phrase>>(
-            future: lessonNotifier.favoritePhrases(user),
+            future: ln.favoritePhrases(user),
             builder: (_, res) {
               if (!res.hasData || res.data.isEmpty) {
                 return const Padding(
@@ -120,7 +117,7 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           FutureBuilder<List<Phrase>>(
-            future: lessonNotifier.newComingPhrases(),
+            future: ln.newComingPhrases(),
             builder: (_, res) {
               if (!res.hasData || res.data.isEmpty) {
                 return const Padding(
@@ -136,18 +133,17 @@ class LessonIndexPage extends StatelessWidget {
                   children: [
                     PhraseCard(
                       phrase: p,
-                      favorite: userNotifier.existPhraseInFavoriteList(
-                          phraseId: p.id),
+                      favorite: un.existPhraseInFavoriteList(phraseId: p.id),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => NewComingPage()),
                         );
                       },
                       onFavorite: () {
-                        userNotifier.favoritePhrase(
+                        un.favoritePhrase(
                           phraseId: p.id,
-                          favorite: !userNotifier.existPhraseInFavoriteList(
-                              phraseId: p.id),
+                          favorite:
+                              !un.existPhraseInFavoriteList(phraseId: p.id),
                         );
                       },
                     ),

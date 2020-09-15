@@ -147,8 +147,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final userNotifier = UserNotifier(userService: userService);
   final authNotifier = AuthNotifier(authService: authService);
   authNotifier.addListener(() {
-    InAppLogger.debug(
-        'update auth ${authNotifier.user.attributes.email} ${userNotifier.user.attributes.email}');
     userNotifier.user = authNotifier.user;
   });
   final noteNotifier = NoteNotifier(noteService: noteService);

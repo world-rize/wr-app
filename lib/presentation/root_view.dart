@@ -98,61 +98,79 @@ class _RootViewState extends State<RootView>
     final un = context.watch<UserNotifier>();
     final primaryColor = Theme.of(context).primaryColor;
     final user = un.user;
+    assert(user != null);
 
-    final header = Row(
-      children: <Widget>[
-        // points
-        Container(
-          padding: const EdgeInsets.only(left: 20),
-          child: Image.asset(
+    final coins = Container(
+      padding: const EdgeInsets.only(left: 20),
+      child: Row(
+        children: [
+          Image.asset(
             'assets/icon/wr_coin.png',
-            width: 30,
-            height: 30,
+            width: 20,
+            height: 20,
           ).padding(),
-        ),
-        Text(
-          I.of(context).points(user.statistics.points),
-          style: const TextStyle(color: Colors.white),
-        ),
-        // test limit
+          Text(
+            I.of(context).points(user.statistics.points),
+            style: const TextStyle(color: Colors.white),
+          ).padding(),
+        ],
+      ),
+    );
+
+    final limits = Row(
+      children: [
         const Padding(
           padding: EdgeInsets.only(left: 8),
           child: Icon(Icons.favorite, color: Colors.pinkAccent),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Text('${user.statistics.testLimitCount}',
-              style: Theme.of(context).textTheme.caption),
-        ),
-        const Spacer(),
-        if (_index == 0)
-          IconButton(
-            icon: const Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => AnythingSearchPage(),
-                ),
-              );
-            },
-          ),
-        // settings
-        IconButton(
-          icon: const Icon(
-            Icons.settings,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (_) => SettingsPage(),
-              fullscreenDialog: true,
-            ));
-          },
-        ),
+        Text(
+          '${user.statistics.testLimitCount}',
+          style: Theme.of(context).textTheme.caption,
+        ).padding(),
       ],
+    );
+
+    final searchButton = IconButton(
+      icon: const Icon(
+        Icons.search,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => AnythingSearchPage(),
+          ),
+        );
+      },
+    );
+
+    final settingsButton = IconButton(
+      icon: const Icon(
+        Icons.settings,
+        color: Colors.white,
+      ),
+      onPressed: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => SettingsPage(),
+          fullscreenDialog: true,
+        ));
+      },
+    );
+
+    final header = Padding(
+      padding: EdgeInsets.only(top: 10),
+      child: Row(
+        children: <Widget>[
+          // points
+          coins,
+          // test limit
+          limits,
+          const Spacer(),
+          if (_index == 0) searchButton,
+          // settings
+          settingsButton,
+        ],
+      ),
     );
 
     final navBar = ClipRRect(
@@ -161,7 +179,7 @@ class _RootViewState extends State<RootView>
         topRight: Radius.circular(20),
       ),
       child: BottomNavigationBar(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: primaryColor,
         unselectedItemColor: Colors.white.withOpacity(0.6),
         selectedItemColor: Theme.of(context).accentIconTheme.color,
         type: BottomNavigationBarType.fixed,
