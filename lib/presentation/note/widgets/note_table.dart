@@ -35,8 +35,7 @@ class _NoteTableState extends State<NoteTable> {
   }
 
   void _showDeleteNoteConfirmDialog() {
-    final un = Provider.of<UserNotifier>(context, listen: false);
-    final nn = Provider.of<NoteNotifier>(context, listen: false);
+    final nn = context.read<NoteNotifier>();
 
     showDialog(
       context: context,
@@ -59,7 +58,7 @@ class _NoteTableState extends State<NoteTable> {
                   setState(() {
                     _isLoading = true;
                   });
-                  await un.deleteNote(noteId: widget.note.id);
+                  await nn.deleteNote(noteId: widget.note.id);
                   nn.nowSelectedNoteId = null;
 
                   Navigator.pop(context);
@@ -183,7 +182,7 @@ class _NoteTableState extends State<NoteTable> {
                   color: Colors.green,
                 ),
                 onPressed: () {
-                  un.achievePhrase(
+                  nn.achievePhrase(
                     noteId: widget.note.id,
                     phraseId: phrase.id,
                   );
@@ -206,7 +205,7 @@ class _NoteTableState extends State<NoteTable> {
                       onEditingComplete: () {
                         try {
                           print(phrase.japanese);
-                          un.updatePhraseInNote(
+                          nn.updatePhraseInNote(
                               noteId: widget.note.id,
                               phraseId: phrase.id,
                               phrase: phrase);
@@ -232,7 +231,7 @@ class _NoteTableState extends State<NoteTable> {
                       onEditingComplete: () {
                         try {
                           print(phrase.english);
-                          un.updatePhraseInNote(
+                          nn.updatePhraseInNote(
                               noteId: widget.note.id,
                               phraseId: phrase.id,
                               phrase: phrase);

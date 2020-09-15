@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/root_view.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
-import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
@@ -17,12 +17,13 @@ class OnBoardingPage extends StatelessWidget {
   // 自動でサインイン
   Future<void> _autoSignIn(BuildContext context) async {
     try {
-      final un = Provider.of<UserNotifier>(context, listen: false);
-      final isAlreadySignIn = await un.isAlreadySignedIn();
+      final an = context.read<AuthNotifier>();
+      final un = context.read<UserNotifier>();
+      final isAlreadySignIn = await an.isAlreadySignedIn();
 
       if (isAlreadySignIn) {
-        await sendEvent(event: AnalyticsEvent.logIn);
-        await un.login();
+        await un.fetchUser();
+        await an.login();
 
         Navigator.popUntil(context, (route) => route.isFirst);
         return Navigator.pushReplacement(

@@ -18,7 +18,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   // account section
   SettingsSection accountSection() {
     final userStore = Provider.of<UserNotifier>(context);
-    final user = userStore.getUser();
+    final user = userStore.user;
 
     return SettingsSection(
       title: '基本情報',

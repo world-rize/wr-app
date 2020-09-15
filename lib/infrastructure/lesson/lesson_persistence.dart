@@ -64,7 +64,7 @@ class LessonPersistence implements LessonRepository {
 
     // inspect
     lessons.forEach((lesson) {
-      InAppLogger.info(
+      InAppLogger.debug(
           '\t ${lesson.id}: ${lesson.phrases.length} phrases found');
     });
 

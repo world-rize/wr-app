@@ -8,23 +8,16 @@ import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
-import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
-import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
-import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
-import 'package:wr_app/usecase/note_service.dart';
 
 class UserPersistenceMock implements UserRepository {
   /// get current user
   User _readUserMock() {
     final notifier = UserNotifier(
       userService: UserService(
-        authPersistence: AuthPersistenceMock(),
         userPersistence: UserPersistenceMock(),
-        shopPersistence: ShopPersistenceMock(),
       ),
-      noteService: NoteService(notePersistence: NotePersistenceMock()),
     );
-    return notifier.getUser();
+    return notifier.user;
   }
 
   @override
@@ -133,14 +126,6 @@ class UserPersistenceMock implements UserRepository {
   @override
   Future<bool> checkTestStreaks(CheckTestStreaksRequest req) async {
     return false;
-  }
-
-  @override
-  Future<User> purchaseItem(PurchaseItemRequest req) async {
-    final user = _readUserMock();
-    user.items.putIfAbsent(req.itemId, () => 0);
-    user.items[req.itemId] = 1;
-    return user;
   }
 
   @override

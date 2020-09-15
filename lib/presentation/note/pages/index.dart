@@ -48,7 +48,7 @@ class _NotePageState extends State<NotePage> {
 
     // FIXME: noteNotifierのデフォルトのnote idを設定できない
     // TODO: NoteNotifierに直接Noteをもたせてもいいかもしれない
-    final note = un.getUser().getNoteById(noteId: nn.nowSelectedNoteId);
+    final note = un.user.getNoteById(noteId: nn.nowSelectedNoteId);
 
     final _noteNotFoundView = Padding(
       padding: const EdgeInsets.all(8),

@@ -20,7 +20,7 @@ class GiftItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final user = Provider.of<UserNotifier>(context).getUser();
+    final user = Provider.of<UserNotifier>(context).user;
     final backgroundColor = Theme.of(context).backgroundColor;
     final englishStyle = theme.primaryTextTheme.bodyText1;
     final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;

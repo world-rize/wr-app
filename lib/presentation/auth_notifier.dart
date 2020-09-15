@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/auth_service.dart';
+import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
@@ -25,7 +26,7 @@ class AuthNotifier with ChangeNotifier {
 
   AuthService _authService;
 
-  User _user;
+  User _user = User.empty();
   User get user => _user;
 
   /// メールアドレスとパスワードでサインアップ
@@ -74,7 +75,7 @@ class AuthNotifier with ChangeNotifier {
 
   /// ログイン処理をする
   Future<void> login() async {
-//    _user = await _userService.readUser();
+    await sendEvent(event: AnalyticsEvent.logIn);
     await _authService.login();
     notifyListeners();
   }

@@ -66,9 +66,8 @@ class _ShopPageState extends State<ShopPage> {
                 setState(() {
                   _isLoading = true;
                 });
-                final userNotifier =
-                    Provider.of<UserNotifier>(context, listen: false);
-                await userNotifier.purchaseItem(itemId: item.id);
+                final sn = context.read<ShopNotifier>();
+                await sn.purchaseItem(itemId: item.id);
               } on Exception catch (e) {
                 InAppLogger.error(e);
               } finally {
@@ -86,7 +85,7 @@ class _ShopPageState extends State<ShopPage> {
   @override
   Widget build(BuildContext context) {
     final userNotifier = Provider.of<UserNotifier>(context);
-    final points = userNotifier.getUser().statistics.points;
+    final points = userNotifier.user.statistics.points;
     if (_items.isEmpty) {
       _getShopItems();
     }

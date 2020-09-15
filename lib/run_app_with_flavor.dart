@@ -6,6 +6,7 @@ import 'package:admob_flutter/admob_flutter.dart';
 import 'package:contentful/client.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
@@ -32,6 +33,7 @@ import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/auth_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
+import 'package:wr_app/usecase/shop_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/cloud_functions.dart';
 import 'package:wr_app/util/env_keys.dart';
@@ -59,6 +61,10 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
   GetIt.I.registerSingleton<FirebaseAnalytics>(analytics);
   InAppLogger.info('🔥 FirebaseAnalytics Initialized');
 
+  final observer = FirebaseAnalyticsObserver(analytics: analytics);
+  GetIt.I.registerSingleton<FirebaseAnalyticsObserver>(observer);
+  InAppLogger.info('🔥 FirebaseAnalyticsObserver Initialized');
+
   // pub spec
   final pubSpec = await PackageInfo.fromPlatform();
   GetIt.I.registerSingleton<PackageInfo>(pubSpec);
@@ -75,7 +81,7 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
   InAppLogger.info('🔥 Contentful Initialized');
 
   // initialize admob
-  await Admob.initialize(env.admobAppId);
+  Admob.initialize(env.admobAppId);
   InAppLogger.info('🔥 Admob Initialized');
 
   // notificator
@@ -101,9 +107,8 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
   await setupGlobalSingletons(flavor);
-
-  final analytics = GetIt.I<FirebaseAnalytics>();
   final env = GetIt.I<EnvKeys>();
+  final sentry = GetIt.I<SentryClient>();
 
   const useMock = false;
 
@@ -117,7 +122,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     InAppLogger.info('❗ Using Mock');
   }
   print('debug mode? $isInDebugMode');
-
   // repos
   final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
   final articlePersistence =
@@ -130,87 +134,69 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
 
   // services
-  final userService = UserService(
-      userPersistence: userPersistence, shopPersistence: shopPersistence);
+  final userService = UserService(userPersistence: userPersistence);
   final articleService = ArticleService(articlePersistence: articlePersistence);
   final lessonService = LessonService(lessonPersistence: lessonPersistence);
   final systemService = SystemService(systemPersistence: systemPersistence);
   final authService = AuthService(
       authPersistence: authPersistence, userPersistence: userPersistence);
+  final shopService = ShopService(shopPersistence: shopPersistence);
   final noteService = NoteService(notePersistence: notePersistence);
 
-  // provide notifiers
-  // TODO: 全部rootに注入するの良くない
-  await runZonedGuarded<Future<void>>(() async {
-    runApp(
-      MultiProvider(
-        providers: [
-          // Firebase Analytics
-          Provider.value(
-              value: FirebaseAnalyticsObserver(analytics: analytics)),
-          // system
-          ChangeNotifierProvider.value(
-            value: SystemNotifier(systemService: systemService, flavor: flavor),
-          ),
-          // ユーザーデータ
-          ChangeNotifierProvider.value(
-            value: UserNotifier(
-                userService: userService, noteService: noteService),
-          ),
-          // Auth
-          ChangeNotifierProxyProvider<UserNotifier, AuthNotifier>(
-            create: (_) => AuthNotifier(authService: authService),
-            // TODO
-            update: (_, un, an) {
-              un.updateUser(an.user);
-              return an;
-            },
-          ),
-          ChangeNotifierProxyProvider<UserNotifier, NoteNotifier>(
-            create: (_) => NoteNotifier(noteService: noteService),
-            // TODO
-            update: (_, un, nn) {
-              un.updateUser(nn.user);
-              return nn;
-            },
-          ),
-          // Lesson
-          ChangeNotifierProvider.value(
-            value: LessonNotifier(
-              userService: userService,
-              lessonService: lessonService,
-            ),
-          ),
-          // Article
-          ChangeNotifierProvider.value(
-            value: ArticleNotifier(
-              articleService: articleService,
-            ),
-          ),
-          ChangeNotifierProvider.value(
-            value: ShopNotifier(userService: userService),
-          ),
-        ],
-        child: runZonedGuarded(
-          () => WRApp(),
-          (error, stackTrace) async {
-            try {
-              print('called sentry');
-              final sentry = GetIt.I<SentryClient>();
-              await sentry.captureException(
-                exception: error,
-                stackTrace: stackTrace,
-              );
-              print('Error sent to sentry.io: $error');
-            } catch (e) {
-              print('Sending report to sentry.io failed: $e');
-              print('Original error: $error');
-            }
-          },
+  // TODO: re-architecture
+  final userNotifier = UserNotifier(userService: userService);
+
+  final authNotifier = AuthNotifier(authService: authService);
+  authNotifier.addListener(() {
+    InAppLogger.debug(
+        'update auth ${authNotifier.user.attributes.email} ${userNotifier.user.attributes.email}');
+    userNotifier.user = authNotifier.user;
+  });
+  final noteNotifier = NoteNotifier(noteService: noteService);
+  noteNotifier.addListener(() {
+    InAppLogger.debug('update note');
+    userNotifier.user = noteNotifier.user;
+  });
+
+  final app = MultiProvider(
+    providers: [
+      Provider.value(
+          value: SystemNotifier(systemService: systemService, flavor: flavor)),
+      // system
+      ChangeNotifierProvider.value(
+        value: SystemNotifier(systemService: systemService, flavor: flavor),
+      ),
+      // ユーザーデータ
+      ChangeNotifierProvider.value(value: userNotifier),
+      // Auth
+      ChangeNotifierProvider.value(value: authNotifier),
+      // Note
+      ChangeNotifierProvider.value(value: noteNotifier),
+      // Lesson
+      ChangeNotifierProvider.value(
+        value: LessonNotifier(
+          userService: userService,
+          lessonService: lessonService,
         ),
       ),
-    );
-  }, (error, stackTrace) async {
-    await sentryReportError(error, stackTrace);
-  });
+      // Article
+      ChangeNotifierProvider.value(
+        value: ArticleNotifier(
+          articleService: articleService,
+        ),
+      ),
+      ChangeNotifierProvider.value(
+        value: ShopNotifier(shopService: shopService),
+      ),
+    ],
+    child: WRApp(),
+  );
+
+  runZonedGuarded(
+    () => runApp(app),
+    (error, stackTrace) => sentry.captureException(
+      exception: error,
+      stackTrace: stackTrace,
+    ),
+  );
 }

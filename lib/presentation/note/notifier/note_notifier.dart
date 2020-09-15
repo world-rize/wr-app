@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/note_service.dart';
@@ -18,11 +19,13 @@ class NoteNotifier extends ChangeNotifier {
   static NoteNotifier _cache;
   NoteService _noteService;
 
-  User _user;
+  User _user = User.empty();
   User get user => _user;
 
   /// 現在のノート
   String _nowSelectedNoteId = 'default';
+
+  Note get currentNote => _user.getNoteById(noteId: _nowSelectedNoteId);
 
   /// 英語
   bool _canSeeEnglish = true;
@@ -61,6 +64,10 @@ class NoteNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<Note> getNotes() {
+    return _user.notes.values.toList();
+  }
+
   /// create note
   Future<void> createNote({
     @required String title,
@@ -72,6 +79,18 @@ class NoteNotifier extends ChangeNotifier {
 
     InAppLogger.info('createNote ${note.id}');
     NotifyToast.success('createNote ${note.id}');
+  }
+
+  Note getDefaultNote() {
+    final note = _user.getDefaultNote();
+    assert(note != null);
+    return note;
+  }
+
+  Note getAchievedNote() {
+    final note = _user.getAchievedNote();
+    assert(note != null);
+    return note;
   }
 
   /// update note title
@@ -153,5 +172,26 @@ class NoteNotifier extends ChangeNotifier {
     _user.notes[note.id] = note;
     notifyListeners();
     InAppLogger.info('updatePhraseInNote $noteId');
+  }
+
+  Future<void> achievePhrase({
+    @required String noteId,
+    @required String phraseId,
+  }) async {
+    // blank note
+    final note = _user.getNoteById(noteId: noteId);
+    final phrase = note.findByNotePhraseId(phraseId);
+    if (phrase == null) {
+      throw Exception('note phrase not found');
+    }
+    phrase
+      ..japanese = ''
+      ..english = '';
+    note.updateNotePhrase(phrase.id, phrase);
+
+    final addPhrase =
+        NotePhrase.create(english: phrase.english, japanese: phrase.japanese);
+    _user.getAchievedNote().addPhrase(addPhrase);
+    notifyListeners();
   }
 }

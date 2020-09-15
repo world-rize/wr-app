@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
-import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
-import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
@@ -17,43 +15,30 @@ import 'package:wr_app/util/toast.dart';
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
   final UserService _userService;
-  final NoteService _noteService;
 
   /// ユーザーデータ
-  User _user;
-
-  /// logged in?
-  bool get loggedIn => _user != null;
-
-  User getUser() {
-    if (_user == null) {
-      throw Exception('user is null');
-    }
-    return _user;
-  }
+  User _user = User.empty();
+  User get user => _user;
+  set user(User user) => _user = user;
 
   /// singleton
   static UserNotifier _cache;
 
   factory UserNotifier({
     @required UserService userService,
-    @required NoteService noteService,
   }) {
     return _cache ??= UserNotifier._internal(
       userService: userService,
-      noteService: noteService,
     );
   }
 
   UserNotifier._internal({
     @required UserService userService,
-    @required NoteService noteService,
-  })  : _userService = userService,
-        _noteService = noteService;
+  }) : _userService = userService;
 
-  /// User をアップデートする
-  void updateUser(User user) {
-    _user = user;
+  /// ユーザーデータを取得
+  Future<void> fetchUser() async {
+    _user = await _userService.readUser();
     notifyListeners();
   }
 
@@ -249,34 +234,6 @@ class UserNotifier with ChangeNotifier {
   /// search user from user id
   Future<User> searchUserFromUserId({@required String userId}) {
     return _userService.searchUserFromUserId(userId: userId);
-  }
-
-  /// purchase item
-  Future<void> purchaseItem({@required String itemId}) async {
-    _user = await _userService.purchaseItem(user: _user, itemId: itemId);
-    await _userService.updateUser(user: _user);
-    notifyListeners();
-  }
-
-  Future<void> achievePhrase({
-    @required String noteId,
-    @required String phraseId,
-  }) async {
-    // blank note
-    final note = _user.getNoteById(noteId: noteId);
-    final phrase = note.findByNotePhraseId(phraseId);
-    if (phrase == null) {
-      throw Exception('note phrase not found');
-    }
-    phrase
-      ..japanese = ''
-      ..english = '';
-    note.updateNotePhrase(phrase.id, phrase);
-
-    final addPhrase =
-        NotePhrase.create(english: phrase.english, japanese: phrase.japanese);
-    _user.getAchievedNote().addPhrase(addPhrase);
-    notifyListeners();
   }
 
   Future<void> introduceFriend({@required String introduceeId}) async {

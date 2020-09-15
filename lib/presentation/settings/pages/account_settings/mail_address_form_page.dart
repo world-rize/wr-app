@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 class MailAddressFormPage extends StatefulWidget {
@@ -16,10 +16,10 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
 
   @override
   Widget build(BuildContext context) {
-    final userNotifier = Provider.of<UserNotifier>(context);
+    final an = context.watch<AuthNotifier>();
 
     final _emailField = TextFormField(
-      initialValue: userNotifier.getUser().attributes.email,
+      initialValue: an.user.attributes.email,
       onChanged: (email) {
         setState(() {
           _email = email;
@@ -51,7 +51,7 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
           onTap: () {
             if (_formKey.currentState.validate()) {
               _formKey.currentState.save();
-              userNotifier.setEmail(email: _email);
+              an.setEmail(email: _email);
             }
           },
         ),

@@ -41,7 +41,7 @@ class LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userNotifier = Provider.of<UserNotifier>(context);
-    final user = userNotifier.getUser();
+    final user = userNotifier.user;
     final lessonNotifier = Provider.of<LessonNotifier>(context);
 
     InAppLogger.debugJson(user.favorites['default'].toJson());

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/widgets/note_card.dart';
 import 'package:wr_app/presentation/note/widgets/note_edit_dialog.dart';
@@ -25,9 +24,8 @@ class _NoteListPageState extends State<NoteListPage> {
 
   @override
   Widget build(BuildContext context) {
-    final un = Provider.of<UserNotifier>(context);
-    final nn = Provider.of<NoteNotifier>(context);
-    final notes = un.getUser().notes.values;
+    final nn = context.watch<NoteNotifier>();
+    final notes = nn.getNotes();
     final h6 = Theme.of(context).textTheme.headline6;
 
     void _showErrorDialog(String errorMessage) {
@@ -60,7 +58,7 @@ class _NoteListPageState extends State<NoteListPage> {
                 _isLoading = true;
               });
               Navigator.pop(context);
-              await un.createNote(title: title);
+              await nn.createNote(title: title);
             } on Exception catch (e) {
               InAppLogger.error(e);
               _showErrorDialog(e.toString());
@@ -104,7 +102,7 @@ class _NoteListPageState extends State<NoteListPage> {
 
               // achieved note
               NoteCard(
-                note: un.getUser().getAchievedNote(),
+                note: nn.getAchievedNote(),
               ),
 
               ...notes.map((note) => NoteCard(note: note)).toList(),

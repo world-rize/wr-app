@@ -1,8 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:data_classes/data_classes.dart';
-import 'package:wr_app/domain/shop/model/shop_item.dart';
-import 'package:wr_app/domain/shop/shop_repository.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
@@ -12,12 +10,9 @@ import 'package:wr_app/domain/user/user_repository.dart';
 class UserService {
   const UserService({
     @required UserRepository userPersistence,
-    @required ShopRepository shopPersistence,
-  })  : _userPersistence = userPersistence,
-        _shopPersistence = shopPersistence;
+  }) : _userPersistence = userPersistence;
 
   final UserRepository _userPersistence;
-  final ShopRepository _shopPersistence;
 
   /// ユーザーデータを習得します
   Future<User> readUser() async {
@@ -109,7 +104,6 @@ class UserService {
   }
 
   /// search user from User ID
-  /// TODO: implement API
   Future<User> searchUserFromUserId({@required String userId}) {
     final req = FindUserByUserIdRequest(userId: userId);
     return _userPersistence.findUserByUserId(req);
@@ -119,32 +113,6 @@ class UserService {
   Future<bool> checkTestStreaks() {
     final req = CheckTestStreaksRequest();
     return _userPersistence.checkTestStreaks(req);
-  }
-
-  /// ショップのアイテムを取得
-  // TODO: shopServiceを作成
-  Future<List<GiftItem>> getShopItems() {
-    return _shopPersistence.shopItems();
-  }
-
-  /// アイテムを購入
-  // TODO: shopServiceを作成
-  Future<User> purchaseItem({
-    @required User user,
-    @required String itemId,
-  }) async {
-    final item = (await _shopPersistence.shopItems())
-        .firstWhere((item) => item.id == itemId);
-    if (item == null) {
-      return user;
-    }
-    user.items.putIfAbsent(item.id, () => 0);
-    user.items[item.id] += 1;
-    user.statistics.points -= item.price;
-
-    return user;
-//    final req = PurchaseItemRequest(itemId: itemId);
-//    return _userPersistence.purchaseItem(req);
   }
 
   /// 友達紹介をする

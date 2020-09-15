@@ -21,7 +21,7 @@ class FavoritePage extends StatelessWidget {
     final lessonNotifier = Provider.of<LessonNotifier>(context);
 
     final favoritePhraseCards = FutureBuilder<List<Phrase>>(
-        future: lessonNotifier.favoritePhrases(userNotifier.getUser()),
+        future: lessonNotifier.favoritePhrases(userNotifier.user),
         builder: (_, res) {
           if (!res.hasData) {
             return Padding(

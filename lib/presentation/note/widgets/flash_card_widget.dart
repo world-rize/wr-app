@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
-import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
@@ -20,22 +19,21 @@ class _FlashCardState extends State<FlashCard> {
   bool _flipped;
 
   Widget _createFlashCardContainer(NotePhrase phrase) {
-    final userNotifier = Provider.of<UserNotifier>(context);
-    final noteId = Provider.of<NoteNotifier>(context).nowSelectedNoteId;
-    final note = userNotifier.getUser().notes[noteId];
-    if (note == null) {
+    final nn = context.read<NoteNotifier>();
+    final currentNote = nn.currentNote;
+    if (currentNote == null) {
       return const SizedBox.shrink();
     }
 
     final achieved =
-        note.phrases.map((phrase) => phrase.id).contains(phrase.id);
+        currentNote.phrases.map((phrase) => phrase.id).contains(phrase.id);
     final achievedButton = IconButton(
       icon: Icon(
         achieved ? Icons.favorite : Icons.favorite_border,
         size: 24,
       ),
       onPressed: () {
-        userNotifier.achievePhrase(noteId: noteId, phraseId: phrase.id);
+        nn.achievePhrase(noteId: currentNote.id, phraseId: phrase.id);
       },
     );
     final backgroundColor = Theme.of(context).backgroundColor;

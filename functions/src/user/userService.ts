@@ -32,10 +32,11 @@ export class UserService {
       name: '',
       userId: shortid.generate(),
       favorites: {
-        'default': UserService.generateFavoriteList('default', 'お気に入り', true)
+        [uuidv4()]: UserService.generateFavoriteList('default', 'お気に入り', true)
       },
       notes: {
-        'default': NoteService.generateNote('default', 'ノート', true)
+        [uuidv4()]: NoteService.generateNote('default', 'ノート', true, false),
+        [uuidv4()]: NoteService.generateNote('default', 'ノート', false, true)
       },
       activities: [
         {

@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/lesson/pages/anything_search_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
@@ -31,16 +32,15 @@ class _RootViewState extends State<RootView>
   /// Check user status
   Future<void> _checkUserStatus(Duration timestamp) async {
     // TODO: membership check
-    // on first launch, show on-boarding page
-    final loggedIn =
-        await Provider.of<UserNotifier>(context, listen: false).loggedIn;
-    final firstLaunch =
-        Provider.of<SystemNotifier>(context, listen: false).getFirstLaunch();
 
-    InAppLogger.debug('first launch: $firstLaunch, logged in: $loggedIn');
+    // on first launch, show on-boarding page
+    final signedIn = await context.read<AuthNotifier>().isAlreadySignedIn();
+    final firstLaunch = context.read<SystemNotifier>().getFirstLaunch();
+
+    InAppLogger.debug('first launch: $firstLaunch, signed in: $signedIn');
 
     // show on boarding modal
-    if (firstLaunch || !loggedIn) {
+    if (firstLaunch) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => OnBoardingPage(),
@@ -62,14 +62,9 @@ class _RootViewState extends State<RootView>
   @override
   Widget build(BuildContext context) {
     final env = GetIt.I<EnvKeys>();
-    final un = Provider.of<UserNotifier>(context);
+    final un = context.watch<UserNotifier>();
     final primaryColor = Theme.of(context).primaryColor;
-
-    if (!un.loggedIn) {
-      return const Scaffold();
-    }
-
-    final user = un.getUser();
+    final user = un.user;
 
     final header = Row(
       children: <Widget>[
@@ -87,12 +82,12 @@ class _RootViewState extends State<RootView>
           style: const TextStyle(color: Colors.white),
         ),
         // test limit
-        Padding(
-          padding: const EdgeInsets.only(left: 8),
+        const Padding(
+          padding: EdgeInsets.only(left: 8),
           child: Icon(Icons.favorite, color: Colors.pinkAccent),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Text('${user.statistics.testLimitCount}',
               style: Theme.of(context).textTheme.caption),
         ),

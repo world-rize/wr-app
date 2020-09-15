@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/on_boarding/pages/index.dart';
 import 'package:wr_app/presentation/settings/pages/notification_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
@@ -46,9 +47,8 @@ class _SettingsState extends State<SettingsPage> {
             child: const Text('Ok'),
             onPressed: () async {
               Navigator.pop(context);
-              final userNotifier =
-                  Provider.of<UserNotifier>(context, listen: false);
-              await userNotifier.signOut();
+              final an = context.read<AuthNotifier>();
+              await an.signOut();
               await Navigator.of(context)
                   .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
             },
@@ -256,12 +256,12 @@ class _SettingsState extends State<SettingsPage> {
           title: 'プレミアムプラン',
           onToggle: (value) {
             if (value) {
-              Provider.of<UserNotifier>(context).changePlan(Membership.pro);
+              context.watch<UserNotifier>().changePlan(Membership.pro);
             } else {
-              Provider.of<UserNotifier>(context).changePlan(Membership.normal);
+              context.watch<UserNotifier>().changePlan(Membership.normal);
             }
           },
-          switchValue: Provider.of<UserNotifier>(context).getUser().isPremium,
+          switchValue: context.watch<UserNotifier>().user.isPremium,
         ),
         SettingsTile(
           title: 'トップページへ移動',
