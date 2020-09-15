@@ -55,7 +55,7 @@ export class NoteService {
 
     const noteId = uuidv4()
     user.notes[noteId] = note
-    await this.repo.update(user)
+    await this.repo.update(user, true)
     return note
   }
 

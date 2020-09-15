@@ -26,17 +26,21 @@ export class UserService {
    * @param req 
    */
   static generateInitialUser (uuid: string): User {
+    const defaultFavoriteList = UserService.generateFavoriteList(uuidv4(), 'お気に入り', true)
+    const defaultNote = NoteService.generateNote(uuidv4(), 'ノート', true, false)
+    const achievedNote = NoteService.generateNote(uuidv4(), 'Achieved Note', false, true)
+
     return {
       schemaVersion: 'v1',
       uuid: uuid,
       name: '',
       userId: shortid.generate(),
       favorites: {
-        [uuidv4()]: UserService.generateFavoriteList('default', 'お気に入り', true)
+        [defaultFavoriteList.id]: defaultFavoriteList,
       },
       notes: {
-        [uuidv4()]: NoteService.generateNote('default', 'ノート', true, false),
-        [uuidv4()]: NoteService.generateNote('default', 'ノート', false, true)
+        [defaultNote.id]: defaultNote,
+        [achievedNote.id]: achievedNote,
       },
       activities: [
         {
