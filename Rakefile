@@ -99,6 +99,7 @@ desc 'upload assets'
 task :upload_assets do
   if File.exist?('./assets')
     sh 'zip -r assets.zip assets'
+    sh 'sha512sum assets.zip > assets.checksum'
     sh 'echo "please upload assets.zip to google drive!!!"'
   end
 end
