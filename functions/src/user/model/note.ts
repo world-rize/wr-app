@@ -1,8 +1,6 @@
 /**
  * Copyright © 2020 WorldRIZe. All rights reserved.
- */
-import { Phrase } from './phrase'
-
+*/
 /**
  * ノートのフレーズのモデル
  */
@@ -15,23 +13,23 @@ export interface NotePhrase {
   id: string
 
   /**
-   * 単語
+   * 英語
    */
-  word: string
+  english: string
 
   /**
-   * 訳
+   * 日本語
    */
-  translation: string
+  japanese: string
 
   /**
-   * achieved
+   * 作成日時
    */
-  achieved: boolean
+  createdAt: string
 }
 
 /**
- * 任意のフレーズのリスト
+ * 編集可能なフレーズのリスト
  */
 export interface Note {
   schemaVersion: 'v1'
@@ -41,7 +39,7 @@ export interface Note {
   id: string
 
   /**
-   * グループ名
+   * ノート名
    */
   title: string
 
@@ -53,7 +51,12 @@ export interface Note {
   /**
    * デフォルトか
    */
-  isDefault: boolean
+  isDefaultNote: boolean
+
+  /**
+   * Achieved Note か
+   */
+  isAchievedNote: boolean
 
   /**
    * フレーズ

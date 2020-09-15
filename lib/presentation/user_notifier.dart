@@ -5,11 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
-import 'package:wr_app/domain/note/model/note.dart';
-import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
-import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
@@ -17,104 +14,35 @@ import 'package:wr_app/util/toast.dart';
 
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
-  // TODO: エラーハンドリング
-  // TODO: いろいろとつらいのでイミュータブルにしたい
   final UserService _userService;
-  final NoteService _noteService;
 
   /// ユーザーデータ
-  User _user;
-
-  /// logged in?
-  bool get loggedIn => _user != null;
-
-  User getUser() {
-    if (_user == null) {
-      throw Exception('user is null');
-    }
-    return _user;
-  }
+  User _user = User.empty();
+  User get user => _user;
+  set user(User user) => _user = user;
 
   /// singleton
   static UserNotifier _cache;
 
+  bool signedIn = false;
+
   factory UserNotifier({
     @required UserService userService,
-    @required NoteService noteService,
   }) {
     return _cache ??= UserNotifier._internal(
       userService: userService,
-      noteService: noteService,
     );
   }
 
   UserNotifier._internal({
     @required UserService userService,
-    @required NoteService noteService,
-  })  : _userService = userService,
-        _noteService = noteService;
+  }) : _userService = userService;
 
-  /// メールアドレスとパスワードでサインアップ
-  Future<void> signUpWithEmailAndPassword({
-    @required String email,
-    @required String password,
-    @required String name,
-  }) async {
-    InAppLogger.info('✔ signUpWithEmailAndPassword');
-    _user = await _userService.signUpWithEmailAndPassword(
-        email: email, password: password, age: '0', name: name);
-    notifyListeners();
-  }
-
-  /// Google Sign in でサインアップ
-  Future<void> signUpWithGoogle(String name) async {
-    _user = await _userService.signUpWithGoogle(name);
-    notifyListeners();
-  }
-
-  /// Sign up with SIWA
-  Future<void> signUpWithApple(String name) async {
-    _user = await _userService.signUpWithApple(name);
-    notifyListeners();
-  }
-
-  /// メールアドレスとパスワードでログイン
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
-    _user = await _userService.signInWithEmailAndPassword(email, password);
-    InAppLogger.info('✔ signInWithEmailAndPassword');
-    notifyListeners();
-  }
-
-  /// Googleでログイン
-  Future<void> signInWithGoogle() async {
-    _user = await _userService.signInWithGoogle();
-    InAppLogger.info('✔ signInWithGoogle');
-    notifyListeners();
-  }
-
-  /// Sign In With Apple でログイン
-  Future<void> signInWithApple() async {
-    _user = await _userService.signInWithApple();
-    notifyListeners();
-  }
-
-  Future<void> login() async {
+  /// ユーザーデータを取得
+  Future<void> fetchUser() async {
     _user = await _userService.readUser();
-    await _userService.login();
+    signedIn = true;
     notifyListeners();
-  }
-
-  Future<void> signOut() async {
-    InAppLogger.info('✔ user signed out');
-    return _userService.signOut();
-  }
-
-  /// update Email
-  Future<void> setEmail({@required String email}) async {
-    _user = await _userService.updateEmail(user: _user, newEmail: email);
-    notifyListeners();
-
-    NotifyToast.success('Emailを変更しました');
   }
 
   /// update age
@@ -122,25 +50,18 @@ class UserNotifier with ChangeNotifier {
     _user = await _userService.updateAge(user: _user, age: age);
     notifyListeners();
 
+    InAppLogger.debug('setAge $age');
     NotifyToast.success('ageを変更しました');
   }
 
-  /// update password
-  Future<void> setPassword(
-      {@required String currentPassword, @required String newPassword}) async {
-    await _userService.updatePassword(
-        currentPassword: currentPassword, newPassword: newPassword);
+  /// update name
+  Future<void> setName({@required String name}) async {
+    _user.name = name;
+    _user = await _userService.updateUser(user: _user);
     notifyListeners();
 
-    NotifyToast.success('passwordを変更しました');
-  }
-
-  /// Test API
-  Future<void> test() async {
-    InAppLogger.info('callTestAPI()');
-
-    await _userService.test();
-    notifyListeners();
+    InAppLogger.debug('setName $name');
+    NotifyToast.success('ageを変更しました');
   }
 
   /// フレーズをお気に入りに登録します
@@ -300,155 +221,6 @@ class UserNotifier with ChangeNotifier {
         .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 
-  /// create note
-  Future<void> createNote({
-    @required String title,
-  }) async {
-    final note = await _noteService.createNote(title: title);
-    _user.notes[note.id] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('createNote ${note.id}');
-    NotifyToast.success('createNote ${note.id}');
-  }
-
-  /// update note title
-  Future<void> updateNoteTitle({
-    @required String noteId,
-    @required String title,
-  }) async {
-    final note =
-        await _noteService.updateNoteTitle(noteId: noteId, title: title);
-    _user.notes[note.id] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('updateNoteTitle ${note.id}');
-    // NotifyToast.success('updateNoteTitle ${note.id}');
-  }
-
-  /// update note isDefault
-  Future<void> updateDefaultNote({@required String noteId}) async {
-    final note = await _noteService.updateDefaultNote(noteId: noteId);
-    _user.notes[note.id] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('updateDefaultNote ${note.id}');
-    // NotifyToast.success('updateDefaultNote ${note.id}');
-  }
-
-  /// delete note
-  Future<void> deleteNote({@required String noteId}) async {
-    await _noteService.deleteNote(noteId: noteId);
-    _user.notes.remove(noteId);
-
-    notifyListeners();
-
-    InAppLogger.info('updateDefaultNote ${noteId}');
-    // NotifyToast.success('updateDefaultNote ${noteId}');
-  }
-
-  /// add phrase
-  Future<void> addPhraseInNote({
-    @required String noteId,
-    @required NotePhrase phrase,
-  }) async {
-    final note =
-        await _noteService.addPhraseInNote(noteId: noteId, phrase: phrase);
-    _user.notes[noteId] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('addPhraseInNote ${noteId}');
-    // NotifyToast.success('addPhraseInNote ${noteId}');
-  }
-
-  /// update phrase
-  Future<void> updatePhraseInNote({
-    @required String noteId,
-    @required String phraseId,
-    @required NotePhrase phrase,
-  }) async {
-    final note = await _noteService.updatePhraseInNote(
-      noteId: noteId,
-      phraseId: phraseId,
-      phrase: phrase,
-    );
-    _user.notes[note.id] = note;
-
-    notifyListeners();
-  }
-
-  /// delete phrase
-  Future<void> deletePhraseInNote({
-    @required String noteId,
-    @required String phraseId,
-  }) async {
-    await _noteService.deletePhraseInNote(
-      noteId: noteId,
-      phraseId: phraseId,
-    );
-    _user.notes[noteId].phrases.remove(phraseId);
-
-    notifyListeners();
-
-    InAppLogger.info('deletePhraseInNote $noteId/$phraseId');
-    // NotifyToast.success('deletePhraseInNote $noteId/$phraseId');
-  }
-
-  /// achieve notePhrase
-  Future<void> achievePhraseInNote({
-    @required String noteId,
-    @required String phraseId,
-    @required bool achieve,
-  }) async {
-    // local
-    final phrase = _user.notes[noteId].findByNotePhraseId(phraseId)
-      ..achieved = achieve;
-    _user.notes[noteId].updateNotePhrase(phraseId, phrase);
-    notifyListeners();
-
-    await _noteService.achievePhraseInNote(
-        noteId: noteId, phraseId: phraseId, achieve: achieve);
-    notifyListeners();
-
-    InAppLogger.debug('achievePhraseInNote $noteId/$phraseId');
-    // NotifyToast.success('achievePhraseInNote $noteId/$phraseId');
-  }
-
-  Note getNoteById({String noteId}) {
-    // ノートを削除した直後はnullになる
-    if (noteId == null) {
-      // default note
-      return _user.notes.values
-          .firstWhere((note) => note.isDefault, orElse: null);
-    }
-    // TODO: noteにisViewをもたせる
-    if (noteId == 'achieved') {
-      return getAchievedNote();
-    }
-    return _user.notes.values
-        .firstWhere((note) => note.id == noteId, orElse: null);
-  }
-
-  /// achieved notes
-  Note getAchievedNote() {
-    final achievedPhrases = _user.notes.values
-        .expand((note) => note.phrases)
-        .where((phrase) => phrase.achieved)
-        .toList();
-
-    return Note(
-      id: 'achieved',
-      isDefault: false,
-      title: 'Achieved Note',
-      sortType: '',
-      phrases: achievedPhrases,
-    );
-  }
-
   /// calculates heatMap of testResult
   Map<DateTime, int> calcHeatMap(List<TestResult> results) {
     final dates = results.map((r) => Jiffy(r.date)..startOf(Units.DAY));
@@ -478,27 +250,9 @@ class UserNotifier with ChangeNotifier {
     return _userService.searchUserFromUserId(userId: userId);
   }
 
-  /// purchase item
-  Future<void> purchaseItem({@required String itemId}) async {
-    _user = await _userService.purchaseItem(user: _user, itemId: itemId);
-    await _userService.updateUser(user: _user);
-    notifyListeners();
-  }
-
-  Future<bool> isAlreadySignedIn() async {
-    return _userService.isAlreadySignedIn();
-  }
-
-  Future<void> sendPasswordResetEmail() async {
-    return _userService.sendPasswordResetEmail(_user.attributes.email);
-  }
-
   Future<void> introduceFriend({@required String introduceeId}) async {
     await _userService.introduceFriend(introduceeUserId: introduceeId);
     _user = await _userService.readUser();
     notifyListeners();
   }
-
-  /// TODO: purchase Amazon Gift
-  /// TODO: purchase iTunes Gift
 }

@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/shop_service.dart';
-import 'package:wr_app/util/logger.dart';
 
 class ShopNotifier with ChangeNotifier {
-  ShopService _shopService;
+  final ShopService _shopService;
+
+  /// ユーザーデータ
+  User _user;
 
   /// singleton
   static ShopNotifier _cache;
-  User _user;
-  User get user => _user;
 
   factory ShopNotifier({
     @required ShopService shopService,
@@ -28,10 +28,9 @@ class ShopNotifier with ChangeNotifier {
     return _shopService.getShopItems();
   }
 
+  /// purchase item
   Future<void> purchaseItem({@required String itemId}) async {
     _user = await _shopService.purchaseItem(user: _user, itemId: itemId);
     notifyListeners();
-
-    InAppLogger.debug('purchase item $itemId x1');
   }
 }

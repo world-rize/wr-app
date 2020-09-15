@@ -24,7 +24,7 @@ class TestTab extends StatefulWidget {
 class _TestTabState extends State<TestTab> {
   void _showConfirmTestDialog(Section section) {
     final userNotifier = Provider.of<UserNotifier>(context, listen: false);
-    final user = userNotifier.getUser();
+    final user = userNotifier.user;
 
     showCupertinoDialog(
       context: context,
@@ -70,7 +70,7 @@ class _TestTabState extends State<TestTab> {
 
   void _onTapTestSection(Section section) {
     final userNotifier = Provider.of<UserNotifier>(context, listen: false);
-    final user = userNotifier.getUser();
+    final user = userNotifier.user;
 
     if (user.statistics.testLimitCount == 0) {
       _showTestLimitAlertDialog();

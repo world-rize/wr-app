@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
-import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/boldable_text.dart';
@@ -117,8 +116,9 @@ class PhraseExampleCard extends StatelessWidget {
         color: Colors.grey,
       ),
       onPressed: () {
-        un.addPhraseInNote(
-            noteId: 'default', phrase: NotePhrase.fromPhrase(phrase));
+        // un.addPhraseInNote(
+        //     // TODO: ノートを選べるようにする
+        //     // noteId: 'default', phrase: NotePhrase.fromPhrase(phrase));
       },
     );
 

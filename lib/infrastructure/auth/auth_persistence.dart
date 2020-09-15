@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
+import 'package:wr_app/util/cloud_functions.dart';
 
 /// ## firebase ログイン方法
 /// - email & password
@@ -147,5 +148,10 @@ class AuthPersistence implements AuthRepository {
   @override
   Future<void> sendPasswordResetEmail(String email) async {
     await fbAuth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future<void> login() {
+    return callFunction('login');
   }
 }

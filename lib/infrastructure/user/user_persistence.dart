@@ -7,21 +7,9 @@ import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/util/cloud_functions.dart';
 
 class UserPersistence implements UserRepository {
-  // TODO: rename XXXPhraseYYY -> XXXNotePhraseYYY?
-
-  @override
-  Future<void> test() {
-    return callFunction('test');
-  }
-
   @override
   Future<User> readUser() {
     return callFunction('readUser').then((res) => User.fromJson(res.data));
-  }
-
-  @override
-  Future<void> login() {
-    return callFunction('login');
   }
 
   @override
@@ -89,12 +77,6 @@ class UserPersistence implements UserRepository {
   Future<bool> checkTestStreaks(CheckTestStreaksRequest req) {
     return callFunction('checkTestStreaks', req.toJson())
         .then((res) => res.data);
-  }
-
-  @override
-  Future<User> purchaseItem(PurchaseItemRequest req) {
-    // TODO: implement API
-    // return callFunction('purchaseItem', req.toJson()).then((res) => res.data);
   }
 
   @override

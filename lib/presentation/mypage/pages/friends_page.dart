@@ -194,7 +194,7 @@ class _FriendsPageState extends State<FriendsPage> {
                     style: h5,
                   ),
                   Text(
-                    userNotifier.getUser().userId,
+                    userNotifier.user.userId,
                     style: h5,
                   ),
                   Text(

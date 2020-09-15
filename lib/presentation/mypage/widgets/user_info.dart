@@ -16,7 +16,7 @@ class UserInfo extends StatelessWidget {
     final userNotifier = Provider.of<UserNotifier>(context);
     final streaks = userNotifier.calcTestStreaks();
     final theme = Theme.of(context);
-    final user = userNotifier.getUser();
+    final user = userNotifier.user;
     final items = Provider.of<ShopNotifier>(context).getShopItems();
 
     final badge = Padding(

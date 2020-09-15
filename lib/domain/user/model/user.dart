@@ -4,6 +4,7 @@ import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/note/model/note.dart';
+import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user_attributes.dart';
@@ -79,7 +80,8 @@ class User {
         ),
       ],
       notes: {
-        'default': Note.dummy('ノート1', isDefault: true),
+        'default': Note.dummy('ノート1', isDefaultNote: true),
+        // TODO: achieved追加
       },
       items: {
         '3': 1,
@@ -116,4 +118,32 @@ class User {
   Map<String, int> items;
 
   bool get isPremium => attributes.membership == Membership.pro;
+
+  FavoritePhraseList getDefaultFavoriteList() {
+    return favorites.values
+        .firstWhere((list) => list.isDefault, orElse: () => null);
+  }
+
+  Note getNoteById({String noteId}) {
+    // ノートを削除した直後はnullになる
+    if (noteId == null || noteId.isEmpty) {
+      return getDefaultNote();
+    }
+    return notes.values
+        .firstWhere((note) => note.id == noteId, orElse: () => null);
+  }
+
+  Note getDefaultNote() {
+    return notes.values
+        .firstWhere((note) => note.isDefaultNote, orElse: () => null);
+  }
+
+  Note getAchievedNote() {
+    return notes.values
+        .firstWhere((note) => note.isAchievedNote, orElse: () => null);
+  }
+
+  NotePhrase getPhrase({@required String noteId, @required String phraseId}) {
+    return getNoteById(noteId: noteId)?.findByNotePhraseId(phraseId);
+  }
 }

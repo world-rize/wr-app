@@ -19,7 +19,7 @@ class NoteCard extends StatelessWidget {
     final nn = Provider.of<NoteNotifier>(context, listen: false);
     final titleStyle = Theme.of(context).primaryTextTheme.bodyText1;
     final subTitleStyle = Theme.of(context).primaryTextTheme.bodyText2;
-    final achieved = note.id == 'achieved';
+    final achieved = note.isAchievedNote;
 
     return InkWell(
       onTap: () {
@@ -28,7 +28,7 @@ class NoteCard extends StatelessWidget {
         Navigator.of(context).pop();
       },
       child: ShadowedContainer(
-        color: achieved ? Colors.white : Colors.white,
+        color: achieved ? Colors.grey[200] : Colors.white,
         child: Column(
           children: [
             Row(

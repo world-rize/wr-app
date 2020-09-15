@@ -9,7 +9,7 @@ class StreakView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context);
-    final heatMap = un.calcHeatMap(un.getUser().statistics.testResults);
+    final heatMap = un.calcHeatMap(un.user.statistics.testResults);
 
     return HeatMapCalendar(
       input: heatMap,

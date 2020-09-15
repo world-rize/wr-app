@@ -4,33 +4,32 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/ui/theme.dart';
 
-/// root widget
-class WRApp extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => WRAppState();
-}
-
-/// [WRApp] state
-class WRAppState extends State<WRApp> {
+/// App Root
+class WRApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final observer = Provider.of<FirebaseAnalyticsObserver>(context);
-    final system = Provider.of<SystemNotifier>(context);
+    const locales = [
+      Locale('ja'),
+      Locale('en'),
+    ];
+    final sn = context.watch<SystemNotifier>();
+    final observer = GetIt.I<FirebaseAnalyticsObserver>();
 
     return MaterialApp(
       theme: WorldRizeLightTheme,
       darkTheme: WorldRizeDarkTheme,
-      themeMode: system.getThemeMode(),
+      themeMode: sn.getThemeMode(),
       navigatorObservers: <NavigatorObserver>[
+        observer,
         // route observer
         RouteObserver<PageRoute<dynamic>>(),
-        observer,
       ],
       localizationsDelegates: const [
         I.delegate,
@@ -38,11 +37,8 @@ class WRAppState extends State<WRApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('ja'),
-        Locale('en'),
-      ],
-      home: RootView(),
+      supportedLocales: locales,
+      home: SafeArea(child: RootView()),
     );
   }
 }
