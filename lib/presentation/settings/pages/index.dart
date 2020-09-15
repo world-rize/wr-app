@@ -2,23 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/domain/system/index.dart';
-import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/on_boarding/pages/index.dart';
 import 'package:wr_app/presentation/settings/pages/notification_page.dart';
-import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/flavor.dart';
 
-import './account_settings_page.dart';
 import './api_test_page.dart';
 import './dark_mode_page.dart';
 import './inapp_log_page.dart';
@@ -30,58 +25,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsPage> {
-  void _showSignOutConfirmDialog() {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('ログアウトする'),
-        content: const Text('本当にログアウトしますか？'),
-        actions: [
-          FlatButton(
-            child: const Text('Cancel'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          FlatButton(
-            child: const Text('Ok'),
-            onPressed: () async {
-              Navigator.pop(context);
-              final an = context.read<AuthNotifier>();
-              await an.signOut();
-              await Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  // account section
-  SettingsSection accountSection() {
-    return SettingsSection(
-      title: I.of(context).accountSection,
-      tiles: [
-        SettingsTile(
-          title: 'アカウント設定',
-          leading: const Icon(Icons.people),
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => AccountSettingsPage()));
-          },
-        ),
-        SettingsTile(
-          title: 'サインアウト',
-          leading: const Icon(FontAwesome5.eye),
-          onTap: () async {
-            _showSignOutConfirmDialog();
-          },
-        ),
-      ],
-    );
-  }
-
   // general
   SettingsSection generalSection() {
     return SettingsSection(
@@ -252,17 +195,6 @@ class _SettingsState extends State<SettingsPage> {
                 .push(MaterialPageRoute(builder: (_) => APITestView()));
           },
         ),
-        SettingsTile.switchTile(
-          title: 'プレミアムプラン',
-          onToggle: (value) {
-            if (value) {
-              context.watch<UserNotifier>().changePlan(Membership.pro);
-            } else {
-              context.watch<UserNotifier>().changePlan(Membership.normal);
-            }
-          },
-          switchValue: context.watch<UserNotifier>().user.isPremium,
-        ),
         SettingsTile(
           title: 'トップページへ移動',
           onTap: () {
@@ -300,7 +232,6 @@ class _SettingsState extends State<SettingsPage> {
       ),
       body: SettingsList(
         sections: [
-          accountSection(),
           generalSection(),
           aboutSection(),
           if (true || systemNotifier.flavor == Flavor.development)
