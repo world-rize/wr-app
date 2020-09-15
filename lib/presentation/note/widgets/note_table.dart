@@ -3,12 +3,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/language.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
+import 'package:wr_app/presentation/note/widgets/note_table_edit_phrase.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -16,7 +19,9 @@ class Debouncer {
   final int milliseconds;
   VoidCallback action;
   Timer _timer;
+
   Debouncer({this.milliseconds});
+
   run(VoidCallback action) {
     if (_timer != null) {
       _timer.cancel();
@@ -41,6 +46,7 @@ class NoteTable extends StatefulWidget {
 
 class _NoteTableState extends State<NoteTable> {
   bool _isLoading;
+
   // save every 3000ms
   final Debouncer _debouncer = Debouncer(milliseconds: 3000);
 
@@ -111,6 +117,8 @@ class _NoteTableState extends State<NoteTable> {
       },
     );
   }
+
+  void _showEditPhraseSheet(NotePhrase notePhrase, Language language) {}
 
   @override
   Widget build(BuildContext context) {
@@ -223,33 +231,71 @@ class _NoteTableState extends State<NoteTable> {
           TableCell(
             child: !nn.canSeeJapanese
                 ? Container()
-                : Container(
-                    child: TextFormField(
-                      initialValue: phrase.japanese,
-                      decoration: InputDecoration.collapsed(hintText: ''),
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      onChanged: (t) {
-                        phrase.japanese = t;
-                        _debouncer.run(_saveNote);
-                      },
-                    ).padding(),
+                : GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        expand: false,
+                        context: context,
+                        builder: (BuildContext context, _) => EditPhrase(
+                          language: Language.japanese,
+                          notePhrase: phrase,
+                          onSubmit: (String text) {
+                            final nn = Provider.of<NoteNotifier>(
+                              context,
+                              listen: false,
+                            );
+                            phrase.japanese = text;
+                            nn.updatePhraseInNote(
+                              noteId: nn.nowSelectedNoteId,
+                              phraseId: phrase.id,
+                              phrase: phrase,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Center(
+                        child: Text('${phrase.japanese}').padding(),
+                      ).padding(),
+                    ),
                   ),
           ),
           TableCell(
             child: !nn.canSeeEnglish
                 ? Container()
-                : Container(
-                    child: TextFormField(
-                      initialValue: phrase.english,
-                      decoration: InputDecoration.collapsed(hintText: ''),
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      onChanged: (t) {
-                        phrase.english = t;
-                        _debouncer.run(_saveNote);
-                      },
-                    ).padding(),
+                : GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      showCupertinoModalBottomSheet(
+                        expand: false,
+                        context: context,
+                        builder: (BuildContext context, _) => EditPhrase(
+                          language: Language.america,
+                          notePhrase: phrase,
+                          onSubmit: (String text) {
+                            final nn = Provider.of<NoteNotifier>(
+                              context,
+                              listen: false,
+                            );
+                            phrase.english = text;
+                            nn.updatePhraseInNote(
+                              noteId: nn.nowSelectedNoteId,
+                              phraseId: phrase.id,
+                              phrase: phrase,
+                            );
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      child: Center(
+                        child: Text('${phrase.english}').padding(),
+                      ).padding(),
+                    ),
                   ),
           ),
         ],

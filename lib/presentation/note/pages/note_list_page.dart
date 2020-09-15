@@ -26,6 +26,7 @@ class _NoteListPageState extends State<NoteListPage> {
   Widget build(BuildContext context) {
     final nn = context.watch<NoteNotifier>();
     final notes = nn.getNotes();
+    print(notes.map((note) => note.title).join(','));
     final h6 = Theme.of(context).textTheme.headline6;
 
     void _showErrorDialog(String errorMessage) {
@@ -99,12 +100,6 @@ class _NoteListPageState extends State<NoteListPage> {
           child: Column(
             children: [
               _createNoteButton,
-
-              // achieved note
-              NoteCard(
-                note: nn.getAchievedNote(),
-              ),
-
               ...notes.map((note) => NoteCard(note: note)).toList(),
             ],
           ),

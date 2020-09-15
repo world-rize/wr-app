@@ -9,23 +9,6 @@ import 'package:wr_app/presentation/note/widgets/note_table.dart';
 /// `ノート` ページのトップ
 ///
 class NotePage extends StatefulWidget {
-//  void _showAddPhraseDialog(BuildContext context, Note note) {
-//    showDialog(
-//      context: context,
-//      builder: (context) => PhraseEditDialog(
-//        language: Language.america,
-//        onSubmit: (phrase) {
-//          Provider.of<UserNotifier>(context, listen: false)
-//              .addPhraseInNote(noteId: note.id, phrase: phrase);
-//          Navigator.pop(context);
-//        },
-//        onCancel: () {
-//          Navigator.pop(context);
-//        },
-//      ),
-//    );
-//  }
-
   @override
   _NotePageState createState() => _NotePageState();
 }
@@ -46,9 +29,13 @@ class _NotePageState extends State<NotePage> {
     final nn = Provider.of<NoteNotifier>(context);
     final theme = Theme.of(context);
 
-    // FIXME: noteNotifierのデフォルトのnote idを設定できない
-    // TODO: NoteNotifierに直接Noteをもたせてもいいかもしれない
-    final note = un.user.getNoteById(noteId: nn.nowSelectedNoteId);
+    // 最初はデフォルトを設定
+    if (nn.nowSelectedNoteId.isEmpty) {
+      nn.nowSelectedNoteId = un.user.getDefaultNote().id;
+    }
+
+    final note = nn.currentNote ?? un.user.getDefaultNote();
+    assert(note != null);
 
     final _noteNotFoundView = Padding(
       padding: const EdgeInsets.all(8),
@@ -61,24 +48,29 @@ class _NotePageState extends State<NotePage> {
     );
 
     return Scaffold(
-      body: SingleChildScrollView(
-        controller: _controller,
-        child: Column(
-          children: [
-            if (note == null)
-              _noteNotFoundView
-            else
-              NoteTable(
-                note: note,
-                onDeleted: () {
-                  _controller.animateTo(
-                    0,
-                    curve: Curves.easeOut,
-                    duration: const Duration(milliseconds: 500),
-                  );
-                },
-              ),
-          ],
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          controller: _controller,
+          child: Column(
+            children: [
+              if (note == null)
+                _noteNotFoundView
+              else
+                NoteTable(
+                  note: note,
+                  onDeleted: () {
+                    _controller.animateTo(
+                      0,
+                      curve: Curves.easeOut,
+                      duration: const Duration(milliseconds: 500),
+                    );
+                  },
+                ),
+            ],
+          ),
         ),
       ),
     );

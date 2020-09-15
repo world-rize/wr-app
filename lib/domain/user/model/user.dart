@@ -119,9 +119,14 @@ class User {
 
   bool get isPremium => attributes.membership == Membership.pro;
 
+  FavoritePhraseList getDefaultFavoriteList() {
+    return favorites.values
+        .firstWhere((list) => list.isDefault, orElse: () => null);
+  }
+
   Note getNoteById({String noteId}) {
     // ノートを削除した直後はnullになる
-    if (noteId == null) {
+    if (noteId == null || noteId.isEmpty) {
       return getDefaultNote();
     }
     return notes.values

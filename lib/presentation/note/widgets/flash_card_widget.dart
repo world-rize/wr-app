@@ -5,12 +5,20 @@ import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
-import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
-import 'package:wr_app/util/logger.dart';
 
 /// NotePhrase を表示するウィジェット
 class FlashCard extends StatefulWidget {
+  FlashCard({
+    @required this.noteId,
+    @required this.notePhrases,
+    @required this.onCardTap,
+  });
+
+  String noteId;
+  List<NotePhrase> notePhrases;
+  Function(NotePhrase) onCardTap;
+
   @override
   _FlashCardState createState() => _FlashCardState();
 }
@@ -26,12 +34,6 @@ class _FlashCardState extends State<FlashCard> {
   }
 
   Widget _createFlashCardContainer(NotePhrase phrase) {
-    final nn = context.watch<NoteNotifier>();
-    final currentNote = nn.currentNote;
-    if (currentNote == null) {
-      return const SizedBox.shrink();
-    }
-
     final achievedButton = IconButton(
       icon: const Icon(
         Icons.check_box,
@@ -39,7 +41,7 @@ class _FlashCardState extends State<FlashCard> {
         color: Colors.green,
       ),
       onPressed: () {
-        nn.achievePhrase(noteId: currentNote.id, phraseId: phrase.id);
+        widget.onCardTap(phrase);
       },
     );
     final backgroundColor = Theme.of(context).backgroundColor;
@@ -88,9 +90,6 @@ class _FlashCardState extends State<FlashCard> {
   @override
   Widget build(BuildContext context) {
     final fn = Provider.of<FlashCardNotifier>(context);
-    final phrases = fn.notePhrases;
-    InAppLogger.debug(
-        phrases.map((p) => '(${p.japanese} -> ${p.english}').join(', '));
 
     final flashCard = GFCarousel(
       viewportFraction: 0.9,
@@ -98,7 +97,7 @@ class _FlashCardState extends State<FlashCard> {
       autoPlay: false,
       autoPlayInterval: const Duration(seconds: 3),
       enableInfiniteScroll: false,
-      items: phrases.map(_createFlashCardContainer).toList(),
+      items: fn.notePhrases.map(_createFlashCardContainer).toList(),
       initialPage: fn.nowPhraseIndex,
     );
 

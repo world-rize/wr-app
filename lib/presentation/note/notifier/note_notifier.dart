@@ -85,17 +85,9 @@ class NoteNotifier extends ChangeNotifier {
     NotifyToast.success('createNote ${note.id}');
   }
 
-  Note getDefaultNote() {
-    final note = _user.getDefaultNote();
-    assert(note != null);
-    return note;
-  }
+  Note getDefaultNote() => _user.getDefaultNote();
 
-  Note getAchievedNote() {
-    final note = _user.getAchievedNote();
-    assert(note != null);
-    return note;
-  }
+  Note getAchievedNote() => _user.getAchievedNote();
 
   /// update note title
   Future<void> updateNote({

@@ -12,9 +12,15 @@ class FlashCardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final nn = context.watch<NoteNotifier>();
     final note = nn.currentNote;
+    final phrases = note.phrases
+        .where((p) => p.japanese.isNotEmpty && p.english.isNotEmpty)
+        .toList();
 
     return ChangeNotifierProvider<FlashCardNotifier>(
-      create: (_) => FlashCardNotifier(note: note),
+      create: (_) => FlashCardNotifier(
+        noteId: note.id,
+        notePhrases: phrases,
+      ),
       child: Scaffold(
         appBar: AppBar(
           title: Text(note.title),
@@ -22,11 +28,20 @@ class FlashCardPage extends StatelessWidget {
         body: Column(
           children: [
             const Spacer(),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: FlashCard(),
-            ),
+            // 単語が空の時はフラッシュカードを表示しない
+            if (phrases.isEmpty)
+              const SizedBox.shrink()
+            else
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: FlashCard(
+                  noteId: note.id,
+                  notePhrases: phrases,
+                  onCardTap: (phrase) {
+                    nn.achievePhrase(noteId: note.id, phraseId: phrase.id);
+                  },
+                ),
+              ),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.all(8),
