@@ -28,16 +28,6 @@ class UserPersistenceMock implements UserRepository {
   }
 
   @override
-  Future<void> test() async {
-    await Future.delayed(const Duration(seconds: 1));
-  }
-
-  @override
-  Future<void> login() async {
-    await Future.delayed(const Duration(seconds: 1));
-  }
-
-  @override
   Future<User> readUser() async {
     await Future.delayed(const Duration(seconds: 1));
     return User.dummy();

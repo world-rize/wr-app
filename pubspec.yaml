@@ -20,7 +20,7 @@ dependencies:
   json_annotation: ^3.0.0
 
   # TODO
-  # freezed_annotation:
+  freezed_annotation:
   # state_notifier: ^0.5.0
 
   # firebase
@@ -102,7 +102,7 @@ dev_dependencies:
   flutter_native_splash: ^0.1.9
   # i18n
   intl_translation: any
-  # freezed:
+  freezed:
   test:
 
 #dependency_overrides:

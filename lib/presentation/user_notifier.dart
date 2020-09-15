@@ -16,8 +16,6 @@ import 'package:wr_app/util/toast.dart';
 
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
-  // TODO: エラーハンドリング
-  // TODO: いろいろとつらいのでイミュータブルにしたい
   final UserService _userService;
   final NoteService _noteService;
 
@@ -53,67 +51,10 @@ class UserNotifier with ChangeNotifier {
   })  : _userService = userService,
         _noteService = noteService;
 
-  /// メールアドレスとパスワードでサインアップ
-  Future<void> signUpWithEmailAndPassword({
-    @required String email,
-    @required String password,
-    @required String name,
-  }) async {
-    InAppLogger.info('✔ signUpWithEmailAndPassword');
-    _user = await _userService.signUpWithEmailAndPassword(
-        email: email, password: password, age: '0', name: name);
+  /// User をアップデートする
+  void updateUser(User user) {
+    _user = user;
     notifyListeners();
-  }
-
-  /// Google Sign in でサインアップ
-  Future<void> signUpWithGoogle(String name) async {
-    _user = await _userService.signUpWithGoogle(name);
-    notifyListeners();
-  }
-
-  /// Sign up with SIWA
-  Future<void> signUpWithApple(String name) async {
-    _user = await _userService.signUpWithApple(name);
-    notifyListeners();
-  }
-
-  /// メールアドレスとパスワードでログイン
-  Future<void> signInWithEmailAndPassword(String email, String password) async {
-    _user = await _userService.signInWithEmailAndPassword(email, password);
-    InAppLogger.info('✔ signInWithEmailAndPassword');
-    notifyListeners();
-  }
-
-  /// Googleでログイン
-  Future<void> signInWithGoogle() async {
-    _user = await _userService.signInWithGoogle();
-    InAppLogger.info('✔ signInWithGoogle');
-    notifyListeners();
-  }
-
-  /// Sign In With Apple でログイン
-  Future<void> signInWithApple() async {
-    _user = await _userService.signInWithApple();
-    notifyListeners();
-  }
-
-  Future<void> login() async {
-    _user = await _userService.readUser();
-    await _userService.login();
-    notifyListeners();
-  }
-
-  Future<void> signOut() async {
-    InAppLogger.info('✔ user signed out');
-    return _userService.signOut();
-  }
-
-  /// update Email
-  Future<void> setEmail({@required String email}) async {
-    _user = await _userService.updateEmail(user: _user, newEmail: email);
-    notifyListeners();
-
-    NotifyToast.success('Emailを変更しました');
   }
 
   /// update age
@@ -122,24 +63,6 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     NotifyToast.success('ageを変更しました');
-  }
-
-  /// update password
-  Future<void> setPassword(
-      {@required String currentPassword, @required String newPassword}) async {
-    await _userService.updatePassword(
-        currentPassword: currentPassword, newPassword: newPassword);
-    notifyListeners();
-
-    NotifyToast.success('passwordを変更しました');
-  }
-
-  /// Test API
-  Future<void> test() async {
-    InAppLogger.info('callTestAPI()');
-
-    await _userService.test();
-    notifyListeners();
   }
 
   /// フレーズをお気に入りに登録します
@@ -299,100 +222,6 @@ class UserNotifier with ChangeNotifier {
         .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 
-  /// create note
-  Future<void> createNote({
-    @required String title,
-  }) async {
-    final note = await _noteService.createNote(title: title);
-    _user.notes[note.id] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('createNote ${note.id}');
-    NotifyToast.success('createNote ${note.id}');
-  }
-
-  /// update note title
-  Future<void> updateNoteTitle({
-    @required String noteId,
-    @required String title,
-  }) async {
-    final note = _user.getNoteById(noteId: noteId).clone();
-    if (note == null) {
-      throw Exception('note not found');
-    }
-    note.title = title;
-
-    await _noteService.updateNote(note: note);
-    _user.notes[note.id] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('updateNoteTitle ${note.id}');
-    // NotifyToast.success('updateNoteTitle ${note.id}');
-  }
-
-  /// update note isDefault
-  Future<void> updateDefaultNote({@required String noteId}) async {
-    final defaultNote = _user.getDefaultNote();
-    if (defaultNote != null) {
-      defaultNote.isDefaultNote = false;
-    }
-
-    final note = _user.getNoteById(noteId: noteId).clone();
-    note.isDefaultNote = true;
-
-    await _noteService.updateNote(note: defaultNote);
-    await _noteService.updateNote(note: note);
-    _user.notes[note.id] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('updateDefaultNote ${note.id}');
-    // NotifyToast.success('updateDefaultNote ${note.id}');
-  }
-
-  /// delete note
-  Future<void> deleteNote({@required String noteId}) async {
-    await _noteService.deleteNote(noteId: noteId);
-    _user.notes.remove(noteId);
-
-    notifyListeners();
-
-    InAppLogger.info('updateDefaultNote $noteId');
-    // NotifyToast.success('updateDefaultNote ${noteId}');
-  }
-
-  /// add phrase
-  Future<void> addPhraseInNote({
-    @required String noteId,
-    @required NotePhrase phrase,
-  }) async {
-    final note = _user.getNoteById(noteId: noteId).clone();
-    note.addPhrase(phrase);
-
-    await _noteService.updateNote(note: note);
-    _user.notes[noteId] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('addPhraseInNote $noteId');
-    // NotifyToast.success('addPhraseInNote ${noteId}');
-  }
-
-  /// update phrase
-  Future<void> updatePhraseInNote({
-    @required String noteId,
-    @required String phraseId,
-    @required NotePhrase phrase,
-  }) async {
-    final note = _user.getNoteById(noteId: noteId).clone();
-    await _noteService.updateNote(note: note);
-    _user.notes[note.id] = note;
-    notifyListeners();
-    InAppLogger.info('updatePhraseInNote $noteId');
-  }
-
   /// calculates heatMap of testResult
   Map<DateTime, int> calcHeatMap(List<TestResult> results) {
     final dates = results.map((r) => Jiffy(r.date)..startOf(Units.DAY));
@@ -448,14 +277,6 @@ class UserNotifier with ChangeNotifier {
         NotePhrase.create(english: phrase.english, japanese: phrase.japanese);
     _user.getAchievedNote().addPhrase(addPhrase);
     notifyListeners();
-  }
-
-  Future<bool> isAlreadySignedIn() async {
-    return _userService.isAlreadySignedIn();
-  }
-
-  Future<void> sendPasswordResetEmail() async {
-    return _userService.sendPasswordResetEmail(_user.attributes.email);
   }
 
   Future<void> introduceFriend({@required String introduceeId}) async {

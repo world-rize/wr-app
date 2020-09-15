@@ -26,9 +26,11 @@ import 'package:wr_app/infrastructure/shop/shop_persistence.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
+import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/usecase/article_service.dart';
+import 'package:wr_app/usecase/auth_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/cloud_functions.dart';
@@ -129,12 +131,12 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   // services
   final userService = UserService(
-      authPersistence: authPersistence,
-      userPersistence: userPersistence,
-      shopPersistence: shopPersistence);
+      userPersistence: userPersistence, shopPersistence: shopPersistence);
   final articleService = ArticleService(articlePersistence: articlePersistence);
   final lessonService = LessonService(lessonPersistence: lessonPersistence);
   final systemService = SystemService(systemPersistence: systemPersistence);
+  final authService = AuthService(
+      authPersistence: authPersistence, userPersistence: userPersistence);
   final noteService = NoteService(notePersistence: notePersistence);
 
   // provide notifiers
@@ -155,6 +157,23 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
             value: UserNotifier(
                 userService: userService, noteService: noteService),
           ),
+          // Auth
+          ChangeNotifierProxyProvider<UserNotifier, AuthNotifier>(
+            create: (_) => AuthNotifier(authService: authService),
+            // TODO
+            update: (_, un, an) {
+              un.updateUser(an.user);
+              return an;
+            },
+          ),
+          ChangeNotifierProxyProvider<UserNotifier, NoteNotifier>(
+            create: (_) => NoteNotifier(noteService: noteService),
+            // TODO
+            update: (_, un, nn) {
+              un.updateUser(nn.user);
+              return nn;
+            },
+          ),
           // Lesson
           ChangeNotifierProvider.value(
             value: LessonNotifier(
@@ -167,9 +186,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
             value: ArticleNotifier(
               articleService: articleService,
             ),
-          ),
-          ChangeNotifierProvider.value(
-            value: NoteNotifier(),
           ),
           ChangeNotifierProvider.value(
             value: ShopNotifier(userService: userService),
