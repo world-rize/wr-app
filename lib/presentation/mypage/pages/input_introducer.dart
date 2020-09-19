@@ -6,12 +6,12 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 
 /// mypage > index > FriendsPage
-class FriendsPage extends StatefulWidget {
+class InputIntroducerPage extends StatefulWidget {
   @override
-  _FriendsPageState createState() => _FriendsPageState();
+  _InputIntroducerPageState createState() => _InputIntroducerPageState();
 }
 
-class _FriendsPageState extends State<FriendsPage> {
+class _InputIntroducerPageState extends State<InputIntroducerPage> {
   String _userId;
   bool _isLoading;
 
