@@ -2,10 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/shop/model/gift_item_id.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
-import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/mypage/widgets/gift_item_card.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
+import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -62,13 +63,21 @@ class _ShopPageState extends State<ShopPage> {
           FlatButton(
             child: const Text('Ok'),
             onPressed: () async {
+              print('before pop');
               Navigator.pop(context);
+              print('after pop');
               try {
+                print('befeore set state');
                 setState(() {
                   _isLoading = true;
                 });
+                print('after set state');
                 final sn = context.read<ShopNotifier>();
-                await sn.purchaseItem(itemId: item.id);
+                print('before purchas imt');
+                await sn.purchaseItem(itemId: GiftItemIdEx.fromString(item.id));
+                print('before use item');
+                await _useItem(GiftItemIdEx.fromString(item.id));
+                print('after use item');
               } on Exception catch (e) {
                 InAppLogger.error(e);
               } finally {
@@ -83,12 +92,33 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
+  Future _useItem(GiftItemId id) async {
+    final un = context.read<UserNotifier>();
+    final sn = context.read<ShopNotifier>();
+    // 購入した瞬間使用
+    // TODO: アクセント追加処理, ノート追加処理
+    print(id);
+    switch (id) {
+      case GiftItemId.iTunes:
+        await sn.sendITunesRequest(uid: un.user.uuid);
+        await _showGiftItemDescriptionDialog(
+            '交換が確定されました。2週間以内に登録されているメールアドレスにギフトコードを送信します');
+        break;
+      case GiftItemId.amazon:
+        await sn.sendITunesRequest(uid: un.user.uuid);
+        await _showGiftItemDescriptionDialog(
+            '交換が確定されました。2週間以内に登録されているメールアドレスにギフトコードを送信します');
+        break;
+      default:
+        break;
+    }
+  }
+
   /// アイテムの説明テキスト
-  Future _showGiftItemDescriptionDialog(String title, String description) {
+  Future _showGiftItemDescriptionDialog(String description) {
     return showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text(title),
         content: Text(description),
         actions: [
           FlatButton(
@@ -102,43 +132,9 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  /// アイテムの購入&使用
+  /// アイテムの購入 & 使用
   Future _purchase(GiftItem item) async {
     await _showPurchaseConfirmDialog(item);
-
-    switch (item.id) {
-      case 'accent_in':
-        InAppLogger.debug('activate ${item.id}');
-        await _showGiftItemDescriptionDialog(
-            item.title, 'en_INアクセントが使用可能になりました!(嘘)');
-        break;
-
-      case 'accent_uk':
-        InAppLogger.debug('activate ${item.id}');
-        await _showGiftItemDescriptionDialog(
-            item.title, 'en_UKアクセントが使用可能になりました!(嘘)');
-        break;
-      case 'accent_us':
-        InAppLogger.debug('activate ${item.id}');
-        await _showGiftItemDescriptionDialog(
-            item.title, 'en_USアクセントが使用可能になりました!(嘘)');
-        break;
-
-      case 'amazon':
-        InAppLogger.debug('activate ${item.id}');
-        await _showGiftItemDescriptionDialog(item.title, 'アマゾン(嘘)');
-        break;
-
-      case 'itunes':
-        InAppLogger.debug('activate ${item.id}');
-        await _showGiftItemDescriptionDialog(item.title, 'iTunes(嘘)');
-        break;
-
-      case 'extra_note':
-        InAppLogger.debug('activate ${item.id}');
-        await _showGiftItemDescriptionDialog(item.title, 'ノートの枠が一つ増えました(本当)');
-        break;
-    }
   }
 
   @override
