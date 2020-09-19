@@ -38,17 +38,16 @@ class PhraseDetailPageView extends StatelessWidget {
               title: Text(
                 I.of(context).onePointAdvice,
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 24,
                   color: Colors.lightBlue,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Text(
-                phrase.advice['ja'],
-                style: Theme.of(context).textTheme.subtitle2,
-              ),
+              child: Text(phrase.advice['ja'],
+                  style: Theme.of(context).primaryTextTheme.bodyText2),
             ),
           ],
         ),

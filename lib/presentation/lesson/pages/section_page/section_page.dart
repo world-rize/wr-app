@@ -78,7 +78,10 @@ class _SectionPageState extends State<SectionPage>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Play'),
+              Text(
+                'Play',
+                style: Theme.of(context).primaryTextTheme.headline4,
+              ),
               Icon(
                 vp.isPlaying ? Icons.pause : Icons.play_arrow,
                 color: Colors.white,
@@ -116,9 +119,10 @@ class _SectionPageState extends State<SectionPage>
             .map(
               // TODO: Floatingボタンの下に説明が書かれているのでpadding
               //  画面のサイズによるのでPaddingやめたい
+              // deviceによってむらがある
               (phrase) => Padding(
                 child: PhraseDetailPageView(phrase: phrase),
-                padding: EdgeInsets.only(bottom: 70),
+                padding: EdgeInsets.only(bottom: 100),
               ),
             )
             .toList(),
