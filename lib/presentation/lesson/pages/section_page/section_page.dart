@@ -6,10 +6,10 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_detail_page_view.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/widgets/setting_dialog.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/presentation/voice_player.dart';
 
 class SectionPage extends StatefulWidget {
   const SectionPage({@required this.section, @required this.index});
@@ -71,13 +71,20 @@ class _SectionPageState extends State<SectionPage>
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
       child: SizedBox(
         width: double.infinity,
-        child: FloatingActionButton.extended(
+        child: FloatingActionButton(
+          isExtended: true,
           backgroundColor: Colors.blue,
           heroTag: 'play',
-          label: Icon(
-            vp.isPlaying ? Icons.pause : Icons.play_arrow,
-            color: Colors.white,
-            size: 40,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Play'),
+              Icon(
+                vp.isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 40,
+              ),
+            ],
           ),
           onPressed: () async {
             if (vp.isPlaying) {
@@ -106,7 +113,14 @@ class _SectionPageState extends State<SectionPage>
           setState(() => index = i);
         },
         children: section.phrases
-            .map((phrase) => PhraseDetailPageView(phrase: phrase))
+            .map(
+              // TODO: Floatingボタンの下に説明が書かれているのでpadding
+              //  画面のサイズによるのでPaddingやめたい
+              (phrase) => Padding(
+                child: PhraseDetailPageView(phrase: phrase),
+                padding: EdgeInsets.only(bottom: 70),
+              ),
+            )
             .toList(),
       ),
       // controller

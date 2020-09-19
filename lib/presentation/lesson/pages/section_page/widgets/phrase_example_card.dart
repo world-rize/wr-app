@@ -1,11 +1,16 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
-import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
+import 'package:wr_app/domain/note/model/note.dart';
+import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/ui/widgets/boldable_text.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
@@ -95,6 +100,36 @@ class PhraseExampleCard extends StatelessWidget {
     );
   }
 
+  Widget _noteOptions(BuildContext context, Note note, Phrase phrase) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () async {
+        print('tapped');
+        Navigator.of(context).pop();
+        await Provider.of<NoteNotifier>(
+          context,
+          listen: false,
+        ).addLessonPhraseToNote(note.id, phrase).then((value) {
+          print('ok');
+        }).catchError(
+          (_) {
+            // TODO: ちゃんとエラー用のshowToastをエラー表示用のwidget作る
+            Fluttertoast.showToast(
+              timeInSecForIosWeb: 3,
+              backgroundColor: Colors.deepOrangeAccent,
+              msg: 'Space has been used up.',
+            );
+          },
+        );
+      },
+      child: Container(
+        height: 50,
+        padding: EdgeInsets.all(8),
+        child: Center(child: Text(note.title)),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -116,6 +151,30 @@ class PhraseExampleCard extends StatelessWidget {
         color: Colors.grey,
       ),
       onPressed: () {
+        showCupertinoModalBottomSheet(
+          context: context,
+          builder: (context, _) => Material(
+            child: SafeArea(
+              top: false,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    height: 30,
+                    padding: EdgeInsets.all(8),
+                    child: Center(child: Text('Add Phrase to Note')),
+                  ),
+                  Divider(),
+                  ...un.user.notes.entries
+                      // TODO: ここwhereするの汚い
+                      .where((element) => !element.value.isAchievedNote)
+                      .map((e) => _noteOptions(context, e.value, phrase))
+                      .toList(),
+                ],
+              ),
+            ),
+          ),
+        );
         // un.addPhraseInNote(
         //     // TODO: ノートを選べるようにする
         //     // noteId: 'default', phrase: NotePhrase.fromPhrase(phrase));

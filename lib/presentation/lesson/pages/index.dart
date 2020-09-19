@@ -51,18 +51,18 @@ class LessonIndexPage extends StatelessWidget {
             dividerColor: GFColors.PRIMARY,
           ),
 
-          // TODO(someone): fix LessonSelectCarousel
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 250,
             child: GFCarousel(
               enableInfiniteScroll: false,
-              items: ln.lessons
+              items: ln
+                  .getAllLessons()
                   .indexedMap(
                     (index, lesson) => CarouselCell(
                       lesson: lesson,
                       index: index,
-                      locked: !user.isPremium && 3 <= index,
+                      locked: ln.isLessonLocked(user, lesson),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
