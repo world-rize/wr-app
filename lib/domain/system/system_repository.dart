@@ -1,5 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:wr_app/domain/system/model/app_info.dart';
+
 abstract class SystemRepository {
   Future<void> notify({String title, String body, String payload});
 
@@ -18,4 +20,6 @@ abstract class SystemRepository {
   // アンケートに答えたか
   bool getQuestionnaireAnswered();
   void setQuestionnaireAnswered({bool value});
+
+  Future<AppInfo> getAppInfo();
 }
