@@ -7,23 +7,32 @@ import 'package:wr_app/ui/widgets/primary_button.dart';
 class UpgradePage extends StatelessWidget {
   Widget _table() {
     final rows = [
-      ['xxxxx', 'xxx', 'xxx'],
-      ['xxxxx', 'xxx', 'xxx'],
-      ['xxxxx', 'xxx', 'xxx'],
-      ['xxxxx', 'xxx', 'xxx'],
+      ['', 'Free', 'Pro'],
+      ['Lessonフレーズ', '各カテゴリー7問', '640+'],
+      ['Request', '❌', '⭕'],
+      ['WR Coin交換', '❌', '⭕'],
+      ['30 days bonus', '❌', '⭕'],
+      ['Note Fileの数', '最大1個', '最大3個'],
+      ['広告', '⭕', '❌'],
     ];
 
     return Table(
+      border: TableBorder(
+          horizontalInside: BorderSide(color: Colors.grey[400], width: 0.5)),
       columnWidths: const {
-        1: FractionColumnWidth(.2),
-        2: FractionColumnWidth(.2),
+        1: FractionColumnWidth(.3),
+        2: FractionColumnWidth(.3),
       },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: [
         ...rows.map(
           (row) => TableRow(
             children: row
                 .map(
-                  (c) => Text(c),
+                  (c) => Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Text(c),
+                  ),
                 )
                 .toList(),
           ),
@@ -56,7 +65,7 @@ class UpgradePage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8).add(EdgeInsets.only(bottom: 30)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -88,9 +97,7 @@ class UpgradePage extends StatelessWidget {
                       '無料版との違い',
                       style: h,
                     ),
-                    const Placeholder(
-                      fallbackHeight: 300,
-                    )
+                    _table(),
                   ],
                 ),
               ),
@@ -103,6 +110,10 @@ class UpgradePage extends StatelessWidget {
                     Text(
                       '注意事項',
                       style: h,
+                    ),
+                    Text(
+                      '説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。',
+                      style: b,
                     ),
                   ],
                 ),
