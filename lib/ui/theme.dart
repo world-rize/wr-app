@@ -9,6 +9,7 @@ final ThemeData WorldRizeLightTheme = ThemeData(
   primaryColor: const Color(0xff56c0ea),
   accentColor: Colors.black,
   backgroundColor: Colors.white,
+  primaryIconTheme: const IconThemeData(color: Colors.white),
   primaryTextTheme: const TextTheme(
     headline1: TextStyle(
       color: Colors.black,
@@ -27,6 +28,11 @@ final ThemeData WorldRizeLightTheme = ThemeData(
     ),
     headline4: TextStyle(
       color: Colors.black,
+      fontSize: 22,
+      fontWeight: FontWeight.bold,
+    ),
+    headline6: TextStyle(
+      color: Colors.white,
       fontSize: 20,
       fontWeight: FontWeight.bold,
     ),
@@ -36,8 +42,8 @@ final ThemeData WorldRizeLightTheme = ThemeData(
       fontSize: 18,
     ),
     bodyText2: TextStyle(
-      color: Colors.grey,
-      fontSize: 14,
+      color: Colors.black,
+      fontSize: 22,
     ),
   ),
 );
@@ -47,6 +53,7 @@ final ThemeData WorldRizeDarkTheme = ThemeData(
   primaryColor: const Color(0xff56c0ea),
   accentColor: Colors.black,
   backgroundColor: Colors.black45,
+  primaryIconTheme: const IconThemeData(color: Colors.white),
   primaryTextTheme: const TextTheme(
     headline1: TextStyle(
       color: Colors.white,
@@ -68,14 +75,19 @@ final ThemeData WorldRizeDarkTheme = ThemeData(
       fontSize: 20,
       fontWeight: FontWeight.bold,
     ),
+    headline6: TextStyle(
+      color: Colors.white,
+      fontSize: 20,
+      fontWeight: FontWeight.bold,
+    ),
     bodyText1: TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,
       fontSize: 18,
     ),
     bodyText2: TextStyle(
-      color: Colors.grey,
-      fontSize: 14,
+      color: Colors.white,
+      fontSize: 22,
     ),
   ),
 );
