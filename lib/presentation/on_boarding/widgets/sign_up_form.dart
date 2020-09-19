@@ -192,9 +192,9 @@ class _SignUpFormState extends State<SignUpForm> {
                 text: '利用規約',
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    if (await canLaunch(env.privacyPolicyUrl)) {
+                    if (await canLaunch(env.privacyPolicyJaUrl)) {
                       await launch(
-                        env.privacyPolicyUrl,
+                        env.privacyPolicyJaUrl,
                         forceSafariVC: false,
                         forceWebView: false,
                       );

@@ -10,7 +10,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/on_boarding/pages/index.dart';
-import 'package:wr_app/presentation/settings/pages/notification_page.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/flavor.dart';
 
@@ -32,28 +31,18 @@ class _SettingsState extends State<SettingsPage> {
       tiles: [
         SettingsTile(
           title: 'ダークモード',
-          leading: const Icon(Icons.attach_money),
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => SettingsThemePage()));
           },
         ),
-        SettingsTile(
-          title: 'フィードバック',
-          leading: const Icon(Icons.attach_money),
-          onTap: () {
-//            Navigator.of(context)
-//                .push(MaterialPageRoute(builder: (_) => RequestPage()));
-          },
-        ),
-        SettingsTile(
-          title: '通知',
-          leading: const Icon(Icons.notifications),
-          onTap: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => SettingsNotificationPage()));
-          },
-        ),
+//        SettingsTile(
+//          title: '通知',
+//          onTap: () {
+//            Navigator.of(context).push(
+//                MaterialPageRoute(builder: (_) => SettingsNotificationPage()));
+//          },
+//        ),
       ],
     );
   }
@@ -141,15 +130,26 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'プライバシーポリシー',
           onTap: () async {
-            if (await canLaunch(env.privacyPolicyUrl)) {
+            if (await canLaunch(env.privacyPolicyJaUrl)) {
               await launch(
-                env.privacyPolicyUrl,
+                env.privacyPolicyJaUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
             }
           },
         ),
+        SettingsTile(
+            title: '特商法に基づく表示',
+            onTap: () async {
+              if (await canLaunch(env.specifiedCommercialTransactionActUrl)) {
+                await launch(
+                  env.specifiedCommercialTransactionActUrl,
+                  forceSafariVC: false,
+                  forceWebView: false,
+                );
+              }
+            }),
         SettingsTile(
           title: 'アプリバージョン',
           subtitle: pubSpec.version,

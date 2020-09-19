@@ -55,7 +55,7 @@ class PhraseExampleCard extends StatelessWidget {
                 child: BoldableText(
                   text: message.text['en'],
                   basicStyle: TextStyle(
-                    fontSize: 14,
+                    fontSize: 20,
                     fontWeight: FontWeight.w300,
                     color: primary ? Colors.white : Colors.black,
                   ),
@@ -210,7 +210,7 @@ class PhraseExampleCard extends StatelessWidget {
                   child: Text(
                     phrase.title['ja'],
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: theme.accentColor,
                     ),
