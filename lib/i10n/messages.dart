@@ -213,7 +213,7 @@ mixin Messages {
       Intl.message('お気に入り', name: 'favoritePageTitle');
 
   String get newComingPageTitle =>
-      Intl.message('新着単語', name: 'newComingPageTitle');
+      Intl.message('New Coming Phrases', name: 'newComingPageTitle');
 
   String get requestPageTitle =>
       Intl.message('Request', name: 'requestPageTitle');

@@ -1,5 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -26,4 +28,14 @@ class AppInfo {
       _$AppInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppInfoToJson(this);
+
+  // TODO: versionのチェックをする
+  bool get isValid {
+    if (Platform.isIOS && isIOsAppAvailable) {
+      return true;
+    } else if (Platform.isAndroid && isAndroidAppAvailable) {
+      return true;
+    }
+    return false;
+  }
 }

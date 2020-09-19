@@ -20,6 +20,7 @@ class FlashCardNotifier extends ChangeNotifier {
     _nowPhraseIndex = 0;
     _autoScroll = true;
     _isShuffle = false;
+    _showJapanese = true;
     _voiceAccent = VoiceAccent.americanEnglish;
     _flutterTts = FlutterTts();
     _ttsState = TtsState.stopped;
@@ -39,6 +40,9 @@ class FlashCardNotifier extends ChangeNotifier {
 
   /// 自動送りするか
   bool _autoScroll;
+
+  /// 日本語を表示するか
+  bool _showJapanese;
 
   /// シャッフルするか
   bool _isShuffle;
@@ -69,6 +73,8 @@ class FlashCardNotifier extends ChangeNotifier {
   bool get isStopped => _ttsState == TtsState.stopped;
 
   bool get isShuffle => _isShuffle;
+
+  bool get showJapanese => _showJapanese;
 
   TtsState get ttsState => _ttsState;
 
@@ -102,6 +108,11 @@ class FlashCardNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
+  void flipCard() {
+    _showJapanese = !_showJapanese;
+    notifyListeners();
+  }
+
   double get playSpeed => _rate * 2;
 
   /// しゃべる倍率をわたす
@@ -130,6 +141,31 @@ class FlashCardNotifier extends ChangeNotifier {
   /// 音声を再生する
   /// completerを毎回セットする必要がある
   Future<void> play() async {
+    _ttsState = TtsState.playing;
+    notifyListeners();
+
+    final nowPhrase = notePhrases[_nowPhraseIndex];
+
+    // wait play word
+    if (_showJapanese) {
+      await _flutterTts
+          .setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
+      await _flutterTts.speak(nowPhrase.japanese);
+    } else {
+      await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
+      await _flutterTts.speak(nowPhrase.english);
+    }
+    final completer = Completer<void>();
+    _flutterTts.setCompletionHandler(completer.complete);
+    await completer.future;
+
+    _ttsState = TtsState.stopped;
+    notifyListeners();
+  }
+
+  /// 音声を再生する
+  /// completerを毎回セットする必要がある
+  Future<void> playAll() async {
     _ttsState = TtsState.playing;
     notifyListeners();
 

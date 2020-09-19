@@ -235,7 +235,7 @@ class _RootViewState extends State<RootView>
       appBar: PreferredSize(
         child: Container(
           //padding: const EdgeInsets.symmetric(vertical: 20),
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
           child: header,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
