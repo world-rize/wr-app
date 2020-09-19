@@ -462,6 +462,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/WR英会話.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2M9U9NVS2C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -474,7 +475,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.2;
+				MARKETING_VERSION = "0.6.2-nightly";
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.dev;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -549,6 +550,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/WR英会話.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2M9U9NVS2C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -561,7 +563,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.2;
+				MARKETING_VERSION = "0.6.2-nightly";
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.stg;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -635,6 +637,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/WR英会話.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2M9U9NVS2C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -647,7 +650,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.2;
+				MARKETING_VERSION = "0.6.2-nightly";
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -720,6 +723,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/WR英会話.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2M9U9NVS2C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -732,7 +736,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.2;
+				MARKETING_VERSION = "0.6.2-nightly";
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -864,6 +868,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/WR英会話.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2M9U9NVS2C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -876,7 +881,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.2;
+				MARKETING_VERSION = "0.6.2-nightly";
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app.dev;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -897,6 +902,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Runner/WR英会話.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 2M9U9NVS2C;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -909,7 +915,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
-				MARKETING_VERSION = 0.6.2;
+				MARKETING_VERSION = "0.6.2-nightly";
 				PRODUCT_BUNDLE_IDENTIFIER = com.worldrize.app;
 				PRODUCT_NAME = Runner;
 				PROVISIONING_PROFILE_SPECIFIER = "";
