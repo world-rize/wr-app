@@ -142,7 +142,7 @@ export class UserService {
         }
       }
     } else {
-      delete user.favorites[listId].phrases[index]
+        user.favorites[listId].phrases.splice(index, 1)
     }
   
     return this.repo.update(user)

@@ -12,6 +12,8 @@ import * as UserDto from './model/userApiDto'
 import * as NoteDto from './model/noteApiDto'
 import { Note } from './model/note'
 import { GiftItem } from './model/item'
+import { AppInfo } from 'firebase-functions/lib/providers/analytics'
+import { WRAppInfo } from 'src/ops/model/appinfo'
 
 // onCall() has varify firebase tokens unlike onRequest()
 
@@ -385,4 +387,17 @@ export const getShopItems = async(req: {}, context: Context): Promise<GiftItem[]
   const a = await userService.getShopItems()
   console.log(a)
   return a
+}
+
+import { firestore } from 'firebase-admin'
+
+/**
+ * アプリ情報
+ */
+export const getAppInfo = async(req: {}, context: Context): Promise<WRAppInfo> => {
+  const data = (await firestore().collection('etc').doc('appinfo').get()).data()
+    if (!data) {
+      throw new functions.https.HttpsError('not-found', 'user not found')
+    }
+  return data as WRAppInfo
 }
