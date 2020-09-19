@@ -2,7 +2,9 @@
 
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/domain/system/system_repository.dart';
+import 'package:wr_app/util/cloud_functions.dart';
 import 'package:wr_app/util/notification.dart';
 
 class SystemPersistence implements SystemRepository {
@@ -13,6 +15,7 @@ class SystemPersistence implements SystemRepository {
         title: title, body: body, payload: payload);
   }
 
+  // TODO: key enum化
   @override
   void setSetDarkMode({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
@@ -59,5 +62,10 @@ class SystemPersistence implements SystemRepository {
   bool getQuestionnaireAnswered() {
     final pref = GetIt.I<SharedPreferences>();
     return pref.getBool('questionnaire_answered') ?? false;
+  }
+
+  @override
+  Future<AppInfo> getAppInfo() {
+    return callFunction('getAppInfo').then((res) => AppInfo.fromJson(res.data));
   }
 }
