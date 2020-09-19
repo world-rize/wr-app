@@ -88,7 +88,9 @@ class LessonNotifier with ChangeNotifier {
   }
 
   Future<List<Phrase>> newComingPhrases() async {
-    return _lessonService.newComingPhrases();
+    final hoge = await _lessonService.newComingPhrases();
+    print('notifier $hoge');
+    return hoge;
   }
 
   Future<void> sendPhraseRequest({@required String text}) {

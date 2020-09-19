@@ -56,11 +56,8 @@ class SectionListPage extends StatelessWidget {
                 onFavorite: () async {
                   final favorite = userNotifier.existPhraseInFavoriteList(
                       phraseId: phrase.id);
-                  print('$favorite');
-                  print('tapped favorite');
                   await userNotifier.favoritePhrase(
                       phraseId: phrase.id, favorite: !favorite);
-                  print('save favorite');
                 },
               );
             }).toList(),

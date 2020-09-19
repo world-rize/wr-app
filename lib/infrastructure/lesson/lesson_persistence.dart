@@ -115,7 +115,7 @@ class LessonPersistence implements LessonRepository {
   @override
   Future<List<Phrase>> newComingPhrases() async {
     final phrases = jsonDecode(tmpNewComingPhrases);
-    return phrases;
+    return List.from(phrases).map((j) => Phrase.fromJson(j)).toList();
   }
 }
 
@@ -138,7 +138,7 @@ const tmpNewComingPhrases = """[{
 }
 },
 "advice": {
-"ja": "\"drongo\"はかなり強めに相手を侮辱する言葉で「バカ」というようなニュアンスで使われます。"
+"ja": "\\"drongo\\"はかなり強めに相手を侮辱する言葉で「バカ」というようなニュアンスで使われます。"
 },
 "example": {
 "value": [
@@ -206,7 +206,7 @@ const tmpNewComingPhrases = """[{
 }
 },
 "advice": {
-"ja": "\"yonks\"「長い間」という意味で使われます。ここでは\"ages\"や\"long time\"に置き換えることが可能です。"
+"ja": "\\"yonks\\"「長い間」という意味で使われます。ここでは\\"ages\\"や\\"long time\\"に置き換えることが可能です。"
 },
 "example": {
 "value": [
@@ -317,210 +317,6 @@ const tmpNewComingPhrases = """[{
 "en-au": "voices/aussie_39_3_en-au.mp3",
 "en-uk": "voices/aussie_39_3_en-uk.mp3",
 "en-in": "voices/aussie_39_3_en-in.mp3"
-}
-}
-}
-]
-}
-},
-{
-"id": "aussie_40",
-"title": {
-"en": "I just gotta grab my bathers and a towel.",
-"ja": "水着とタオルを持ってこないと"
-},
-"meta": {
-"lessonId": "aussie",
-"phraseId": "40"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_40_kp_en-us.mp3",
-"en-au": "voices/aussie_40_kp_en-au.mp3",
-"en-uk": "voices/aussie_40_kp_en-uk.mp3",
-"en-in": "voices/aussie_40_kp_en-in.mp3"
-}
-},
-"advice": {
-"ja": "“bathers”はオーストラリアのスラングで「水着」のことです。"
-},
-"example": {
-"value": [
-{
-"text": {
-"en": "Do you wanna go to the beach today?",
-"ja": "今日ビーチに行かない？"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_40_1_en-us.mp3",
-"en-au": "voices/aussie_40_1_en-au.mp3",
-"en-uk": "voices/aussie_40_1_en-uk.mp3",
-"en-in": "voices/aussie_40_1_en-in.mp3"
-}
-}
-},
-{
-"text": {
-"en": "Sure, (I just gotta grab my bathers and a towel.)",
-"ja": "いいよ、(水着とタオルを持ってこないと）"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_40_2_en-us.mp3",
-"en-au": "voices/aussie_40_2_en-au.mp3",
-"en-uk": "voices/aussie_40_2_en-uk.mp3",
-"en-in": "voices/aussie_40_2_en-in.mp3"
-}
-}
-},
-{
-"text": {
-"en": "I’ll get some sunscreen.",
-"ja": "日焼け止めも持っていくね"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_40_3_en-us.mp3",
-"en-au": "voices/aussie_40_3_en-au.mp3",
-"en-uk": "voices/aussie_40_3_en-uk.mp3",
-"en-in": "voices/aussie_40_3_en-in.mp3"
-}
-}
-}
-]
-}
-},
-{
-"id": "aussie_41",
-"title": {
-"en": "that bloke always dogs the boys.",
-"ja": "あの男いつも裏切るんだよね"
-},
-"meta": {
-"lessonId": "aussie",
-"phraseId": "41"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_41_kp_en-us.mp3",
-"en-au": "voices/aussie_41_kp_en-au.mp3",
-"en-uk": "voices/aussie_41_kp_en-uk.mp3",
-"en-in": "voices/aussie_41_kp_en-in.mp3"
-}
-},
-"advice": {
-"ja": "\"bloke\"は\"「男」を指す名詞で\"guy\"に置き換え可能です。また、\"dogs\"はここでは動詞\"dog\"に三人称単数の\"s\"がついたもので、ここでは\"dog\"は「犬」ではなく、「裏切る」という意味で使われます。\"betray\"と置き換えることができます。"
-},
-"example": {
-"value": [
-{
-"text": {
-"en": "I don't think Mike is coming out to drink tonight.",
-"ja": "マイクは今日飲みに来なそうだね"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_41_1_en-us.mp3",
-"en-au": "voices/aussie_41_1_en-au.mp3",
-"en-uk": "voices/aussie_41_1_en-uk.mp3",
-"en-in": "voices/aussie_41_1_en-in.mp3"
-}
-}
-},
-{
-"text": {
-"en": "Damn, (that bloke always dogs the boys.)",
-"ja": "くそ、(あの男いつも裏切るんだよね)"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_41_2_en-us.mp3",
-"en-au": "voices/aussie_41_2_en-au.mp3",
-"en-uk": "voices/aussie_41_2_en-uk.mp3",
-"en-in": "voices/aussie_41_2_en-in.mp3"
-}
-}
-},
-{
-"text": {
-"en": "Yeah, he's probably at home sleeping.",
-"ja": "たぶん今家で寝てるよ"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_41_3_en-us.mp3",
-"en-au": "voices/aussie_41_3_en-au.mp3",
-"en-uk": "voices/aussie_41_3_en-uk.mp3",
-"en-in": "voices/aussie_41_3_en-in.mp3"
-}
-}
-}
-]
-}
-},
-{
-"id": "aussie_42",
-"title": {
-"en": "I got your messo",
-"ja": "メッセージ受け取ったよ"
-},
-"meta": {
-"lessonId": "aussie",
-"phraseId": "42"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_42_kp_en-us.mp3",
-"en-au": "voices/aussie_42_kp_en-au.mp3",
-"en-uk": "voices/aussie_42_kp_en-uk.mp3",
-"en-in": "voices/aussie_42_kp_en-in.mp3"
-}
-},
-"advice": {
-"ja": "\"messo\"は\"message\"「メッセージ」の意味として使われます。よって、\"I got your messo\"で「メッセージ受け取ったよ」という意味になります。"
-},
-"example": {
-"value": [
-{
-"text": {
-"en": "Hey, (I got your messo) about the party.",
-"ja": "おう、パーティーのことについての(メッセージ受け取ったよ)"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_42_1_en-us.mp3",
-"en-au": "voices/aussie_42_1_en-au.mp3",
-"en-uk": "voices/aussie_42_1_en-uk.mp3",
-"en-in": "voices/aussie_42_1_en-in.mp3"
-}
-}
-},
-{
-"text": {
-"en": "Do you think you can go?",
-"ja": "行けそう？"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_42_2_en-us.mp3",
-"en-au": "voices/aussie_42_2_en-au.mp3",
-"en-uk": "voices/aussie_42_2_en-uk.mp3",
-"en-in": "voices/aussie_42_2_en-in.mp3"
-}
-}
-},
-{
-"text": {
-"en": "Yeah probably, I’ll have to ask for the next day off at work.",
-"ja": "たぶんね、次の日休みにしてもらうように頼まなきゃ"
-},
-"assets": {
-"voice": {
-"en-us": "voices/aussie_42_3_en-us.mp3",
-"en-au": "voices/aussie_42_3_en-au.mp3",
-"en-uk": "voices/aussie_42_3_en-uk.mp3",
-"en-in": "voices/aussie_42_3_en-in.mp3"
 }
 }
 }

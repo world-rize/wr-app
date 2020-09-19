@@ -59,7 +59,7 @@ class PhraseExampleCard extends StatelessWidget {
                     fontWeight: FontWeight.w300,
                     color: primary ? Colors.white : Colors.black,
                   ),
-                  hide: !showKeyphrase,
+                  hide: false,
                 ),
               ),
             ),
