@@ -28,6 +28,7 @@ import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
+import 'package:wr_app/presentation/maintenance.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/voice_player.dart';
@@ -124,6 +125,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     InAppLogger.info('❗ Using Mock');
   }
   print('debug mode? $isInDebugMode');
+
   // repos
   final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
   final articlePersistence =
@@ -145,77 +147,89 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final shopService = ShopService(shopPersistence: shopPersistence);
   final noteService = NoteService(notePersistence: notePersistence);
 
-  // TODO: re-architecture
-  // notifier とストア分離する (StoreProvider)
-  // notifier は StatefulNotifier を Stateless化するものなので
-  // 1 Stateful画面 1 ChangeNotifier
-  //  Dao に CRUI
-  // 下から上の更新に依存したい
-  // 下から上(update): ProxyProvider
-  // 上から下(get): GetIt<UserNotifier>
+  // メンテナンスかどうか
+  if (!await systemService.getAppInfo().then((value) => value.isValid)) {
+    runZonedGuarded(
+      () => runApp(Maintenance()),
+      (error, stackTrace) => sentry.captureException(
+        exception: error,
+        stackTrace: stackTrace,
+      ),
+    );
+  } else {
+    // TODO: re-architecture
+    // notifier とストア分離する (StoreProvider)
+    // notifier は StatefulNotifier を Stateless化するものなので
+    // 1 Stateful画面 1 ChangeNotifier
+    //  Dao に CRUI
+    // 下から上の更新に依存したい
+    // 下から上(update): ProxyProvider
+    // 上から下(get): GetIt<UserNotifier>
 
-  // functions いらない説
-  final userNotifier = UserNotifier(userService: userService);
-  final authNotifier = AuthNotifier(authService: authService);
-  final shopNotifier = ShopNotifier(shopService: shopService);
-  authNotifier.addListener(() {
-    userNotifier.user = authNotifier.user;
-  });
-  final noteNotifier = NoteNotifier(noteService: noteService);
-  noteNotifier.addListener(() {
-    InAppLogger.debug('update note');
-    userNotifier.user = noteNotifier.user;
-  });
-  userNotifier.addListener(() {
-    authNotifier.user = userNotifier.user;
-    noteNotifier.user = userNotifier.user;
-    shopNotifier.user = userNotifier.user;
-  });
+    // functions いらない説
+    final userNotifier = UserNotifier(userService: userService);
+    final authNotifier = AuthNotifier(authService: authService);
+    final shopNotifier = ShopNotifier(shopService: shopService);
+    authNotifier.addListener(() {
+      userNotifier.user = authNotifier.user;
+    });
+    final noteNotifier = NoteNotifier(noteService: noteService);
+    noteNotifier.addListener(() {
+      InAppLogger.debug('update note');
+      userNotifier.user = noteNotifier.user;
+    });
+    userNotifier.addListener(() {
+      authNotifier.user = userNotifier.user;
+      noteNotifier.user = userNotifier.user;
+      shopNotifier.user = userNotifier.user;
+    });
 
-  final app = MultiProvider(
-    providers: [
-      Provider.value(
-          value: SystemNotifier(systemService: systemService, flavor: flavor)),
-      // system
-      ChangeNotifierProvider.value(
-        value: SystemNotifier(systemService: systemService, flavor: flavor),
-      ),
-      // ユーザーデータ
-      ChangeNotifierProvider.value(value: userNotifier),
-      // Auth
-      ChangeNotifierProvider.value(value: authNotifier),
-      // Note
-      ChangeNotifierProvider.value(value: noteNotifier),
-      // Lesson
-      ChangeNotifierProvider.value(
-        value: LessonNotifier(
-          userService: userService,
-          lessonService: lessonService,
+    final app = MultiProvider(
+      providers: [
+        Provider.value(
+            value:
+                SystemNotifier(systemService: systemService, flavor: flavor)),
+        // system
+        ChangeNotifierProvider.value(
+          value: SystemNotifier(systemService: systemService, flavor: flavor),
         ),
-      ),
-      ChangeNotifierProvider.value(
-        value: VoicePlayer(
-          onError: NotifyToast.error,
+        // ユーザーデータ
+        ChangeNotifierProvider.value(value: userNotifier),
+        // Auth
+        ChangeNotifierProvider.value(value: authNotifier),
+        // Note
+        ChangeNotifierProvider.value(value: noteNotifier),
+        // Lesson
+        ChangeNotifierProvider.value(
+          value: LessonNotifier(
+            userService: userService,
+            lessonService: lessonService,
+          ),
         ),
-      ),
-      // Article
-      ChangeNotifierProvider.value(
-        value: ArticleNotifier(
-          articleService: articleService,
+        ChangeNotifierProvider.value(
+          value: VoicePlayer(
+            onError: NotifyToast.error,
+          ),
         ),
-      ),
-      ChangeNotifierProvider.value(
-        value: shopNotifier,
-      ),
-    ],
-    child: WRApp(),
-  );
+        // Article
+        ChangeNotifierProvider.value(
+          value: ArticleNotifier(
+            articleService: articleService,
+          ),
+        ),
+        ChangeNotifierProvider.value(
+          value: shopNotifier,
+        ),
+      ],
+      child: WRApp(),
+    );
 
-  runZonedGuarded(
-    () => runApp(app),
-    (error, stackTrace) => sentry.captureException(
-      exception: error,
-      stackTrace: stackTrace,
-    ),
-  );
+    runZonedGuarded(
+      () => runApp(app),
+      (error, stackTrace) => sentry.captureException(
+        exception: error,
+        stackTrace: stackTrace,
+      ),
+    );
+  }
 }
