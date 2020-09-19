@@ -24,7 +24,7 @@ class AppInfo {
 
   bool isAndroidAppAvailable;
 
-  factory AppInfo.fromJson(Map<String, dynamic> json) =>
+  factory AppInfo.fromJson(Map<dynamic, dynamic> json) =>
       _$AppInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$AppInfoToJson(this);
