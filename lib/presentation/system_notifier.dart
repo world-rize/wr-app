@@ -75,6 +75,14 @@ class SystemNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  Future getAppInfo() async {
+    final appInfo = await _systemService.getAppInfo();
+
+    InAppLogger.debugJson(appInfo.toJson());
+
+    notifyListeners();
+  }
+
   Future<void> notify({
     @required String title,
     @required String body,

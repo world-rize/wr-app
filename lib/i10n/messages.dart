@@ -193,4 +193,52 @@ mixin Messages {
         'エラー',
         name: 'error',
       );
+
+  /// article
+  String get articleNotFoundMessage =>
+      Intl.message('記事がありません', name: 'articleNotFoundMessage');
+
+  String get readMore => Intl.message('続きを読む', name: 'readMore');
+
+  /// lesson
+  String get lessonSearchHintText =>
+      Intl.message('単語など', name: 'lessonSearchHintText');
+
+  String get lessonSearchAppBarTitle =>
+      Intl.message('検索', name: 'lessonSearchAppBarTitle');
+
+  String get lessonPageTitle => Intl.message('Lesson', name: 'LessonPageTitle');
+
+  String get favoritePageTitle =>
+      Intl.message('お気に入り', name: 'favoritePageTitle');
+
+  String get newComingPageTitle =>
+      Intl.message('New Coming Phrases', name: 'newComingPageTitle');
+
+  String get requestPageTitle =>
+      Intl.message('Request', name: 'requestPageTitle');
+
+  String get noNewComingPhraseMessage =>
+      Intl.message('No new coming phrases', name: 'noNewComingPhraseMessage');
+
+  String get sendPhraseRequest =>
+      Intl.message('リクエストを送る', name: 'sendPhraseRequest');
+
+  String get sendRequestButton => Intl.message('送る', name: 'sendRequestButton');
+
+  String get showQuestionnaireDialogTitle =>
+      Intl.message('アンケートに答えてください', name: 'showQuestionnaireDialogTitle');
+
+  String get showQuestionnaireDialogMessage =>
+      Intl.message('アンケートに答えてください', name: 'showQuestionnaireDialogTitle');
+
+  String get showQuestionnaireDialogOk =>
+      Intl.message('答える', name: 'showQuestionnaireDialogOk');
+
+  String get showQuestionnaireDialogNg =>
+      Intl.message('後で', name: 'showQuestionnaireDialogNg');
+
+  String get show30DaysChallengeAchievedDialogTitle =>
+      Intl.message('30 Days Challenge 達成',
+          name: 'show30DaysChallengeAchievedDialogTitle');
 }

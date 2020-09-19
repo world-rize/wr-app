@@ -8,6 +8,7 @@ import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase)
 import * as userApi from './user/api'
 
+export const getAppInfo = functions.region('asia-northeast1').https.onCall(userApi.getAppInfo)
 export const test = functions.region('asia-northeast1').https.onCall(userApi.test)
 export const login = functions.region('asia-northeast1').https.onCall(userApi.login)
 export const readUser = functions.region('asia-northeast1').https.onCall(userApi.readUser)

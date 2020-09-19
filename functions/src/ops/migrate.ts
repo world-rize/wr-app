@@ -2,10 +2,10 @@
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
 import * as admin from 'firebase-admin'
-import { User } from './user/model/user'
-import { UserService } from './user/userService'
+import { User } from '../user/model/user'
+import { UserService } from '../user/userService'
 import diffDefault from 'jest-diff'
-import { UserRepository } from './user/userRepository'
+import { UserRepository } from '../user/userRepository'
 import firebase from 'firebase'
 const nqdm = require('nqdm')
 const colors = require('colors')

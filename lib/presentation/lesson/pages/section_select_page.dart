@@ -84,10 +84,8 @@ class _SectionSelectPageState extends State<SectionSelectPage>
                   parameters: {'sectionTitle': section.title},
                 );
 
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (_) => SectionListPage(section: section)),
-                );
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => SectionListPage(section: section)));
               } on Exception catch (e) {
                 NotifyToast.error(e);
               }

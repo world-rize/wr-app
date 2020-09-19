@@ -6,8 +6,8 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
-import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
+import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/toast.dart';
 

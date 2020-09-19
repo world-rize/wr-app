@@ -8,7 +8,7 @@ import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// NotePhrase を表示するウィジェット
-class FlashCard extends StatefulWidget {
+class FlashCard extends StatelessWidget {
   FlashCard({
     @required this.noteId,
     @required this.notePhrases,
@@ -19,21 +19,8 @@ class FlashCard extends StatefulWidget {
   List<NotePhrase> notePhrases;
   Function(NotePhrase) onCardTap;
 
-  @override
-  _FlashCardState createState() => _FlashCardState();
-}
-
-class _FlashCardState extends State<FlashCard> {
-  /// 裏側か
-  bool _flipped;
-
-  @override
-  void initState() {
-    super.initState();
-    _flipped = false;
-  }
-
-  Widget _createFlashCardContainer(NotePhrase phrase) {
+  Widget _createFlashCardContainer(BuildContext context, NotePhrase phrase) {
+    final fn = Provider.of<FlashCardNotifier>(context, listen: false);
     final achievedButton = IconButton(
       icon: const Icon(
         Icons.check_box,
@@ -41,7 +28,17 @@ class _FlashCardState extends State<FlashCard> {
         color: Colors.green,
       ),
       onPressed: () {
-        widget.onCardTap(phrase);
+        onCardTap(phrase);
+      },
+    );
+    final playButton = IconButton(
+      icon: const Icon(
+        Icons.volume_up,
+        size: 24,
+        color: Colors.green,
+      ),
+      onPressed: () {
+        fn.play();
       },
     );
     final backgroundColor = Theme.of(context).backgroundColor;
@@ -49,9 +46,7 @@ class _FlashCardState extends State<FlashCard> {
 
     return GestureDetector(
       onTap: () {
-        setState(() {
-          _flipped = !_flipped;
-        });
+        Provider.of<FlashCardNotifier>(context, listen: false).flipCard();
       },
       child: Padding(
         padding: const EdgeInsets.all(8),
@@ -68,16 +63,21 @@ class _FlashCardState extends State<FlashCard> {
                 children: [
                   Center(
                     child: Text(
-                      _flipped ? phrase.english : phrase.japanese,
+                      fn.showJapanese ? phrase.japanese : phrase.english,
                       style: body1,
                     ),
                   ),
-                  if (!_flipped)
+                  if (fn.showJapanese)
                     Positioned(
-                      right: 10,
+                      left: 10,
                       bottom: 10,
                       child: achievedButton,
-                    )
+                    ),
+                  Positioned(
+                    right: 10,
+                    bottom: 10,
+                    child: playButton,
+                  )
                 ],
               ),
             ),
@@ -97,7 +97,9 @@ class _FlashCardState extends State<FlashCard> {
       autoPlay: false,
       autoPlayInterval: const Duration(seconds: 3),
       enableInfiniteScroll: false,
-      items: fn.notePhrases.map(_createFlashCardContainer).toList(),
+      items: fn.notePhrases
+          .map((e) => _createFlashCardContainer(context, e))
+          .toList(),
       initialPage: fn.nowPhraseIndex,
     );
 

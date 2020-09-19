@@ -3,11 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
-import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
-import 'package:wr_app/util/toast.dart';
 
 import '../widgets/phrase_card.dart';
 
@@ -15,6 +13,7 @@ import '../widgets/phrase_card.dart';
 ///
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469136>
 class SectionListPage extends StatelessWidget {
+  // TODO: PhraseListPageっぽい
   const SectionListPage({@required this.section});
 
   final Section section;
@@ -47,22 +46,17 @@ class SectionListPage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => ChangeNotifierProvider<VoicePlayer>.value(
-                        value: VoicePlayer(
-                          onError: NotifyToast.error,
-                        ),
-                        child: SectionPage(
-                          section: section,
-                          index: index,
-                        ),
+                      builder: (_) => SectionPage(
+                        section: section,
+                        index: index,
                       ),
                     ),
                   );
                 },
-                onFavorite: () {
+                onFavorite: () async {
                   final favorite = userNotifier.existPhraseInFavoriteList(
                       phraseId: phrase.id);
-                  userNotifier.favoritePhrase(
+                  await userNotifier.favoritePhrase(
                       phraseId: phrase.id, favorite: !favorite);
                 },
               );

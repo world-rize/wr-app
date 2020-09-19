@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
@@ -32,7 +33,7 @@ class FavoritePage extends StatelessWidget {
 
           final section = Section(
             id: 'favorite',
-            title: 'お気に入り',
+            title: I.of(context).favoritePageTitle,
             phrases: res.data,
           );
 
@@ -66,9 +67,9 @@ class FavoritePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: const Text(
-          'お気に入り',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          I.of(context).favoritePageTitle,
+          style: const TextStyle(color: Colors.white),
         ),
       ),
       body: SingleChildScrollView(

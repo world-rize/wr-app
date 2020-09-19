@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:data_classes/data_classes.dart';
+import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/domain/system/system_repository.dart';
 import 'package:wr_app/util/notification.dart';
 
@@ -31,6 +32,8 @@ class SystemService {
 
   void setQuestionnaireAnswered({bool value}) =>
       _systemPersistence.setQuestionnaireAnswered(value: value);
+
+  Future<AppInfo> getAppInfo() => _systemPersistence.getAppInfo();
 
   Future<void> notify(
       {NotificationNotifier notificator,

@@ -37,7 +37,7 @@ class _NameFormPageState extends State<NameFormPage> {
             color: Colors.grey,
           ),
         ),
-        hintText: 'なまえ',
+        hintText: 'Name',
       ),
     );
 
@@ -46,7 +46,7 @@ class _NameFormPageState extends State<NameFormPage> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: RoundedButton(
-          text: '変更',
+          text: 'Change',
           color: Colors.blueAccent,
           onTap: () {
             if (_formKey.currentState.validate()) {
@@ -60,7 +60,7 @@ class _NameFormPageState extends State<NameFormPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('名前の変更'),
+        title: const Text('Change Name'),
       ),
       body: Container(
         child: Column(

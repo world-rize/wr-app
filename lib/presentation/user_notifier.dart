@@ -69,29 +69,42 @@ class UserNotifier with ChangeNotifier {
     @required String phraseId,
     @required bool favorite,
   }) async {
-    const listId = 'default';
-
-    // 仮反映
+    // TODO: default以外に保存できるようにする
+    final defaultFavoriteList = _user.getDefaultFavoriteList();
+    // defaultふぁぼりてリスト以外に保存したらdeleteするときむずかしくね?
     if (favorite) {
-      _user.favorites[listId].updatePhrase(
+      // 仮反映
+      defaultFavoriteList.updatePhrase(
           phraseId,
           FavoritePhraseDigest(
             id: phraseId,
             createdAt: DateTime.now(),
           ));
+
+      notifyListeners();
+
+      // 本反映
+      _user = await _userService.favorite(
+        user: _user,
+        listId: defaultFavoriteList.id,
+        phraseId: phraseId,
+        favorite: favorite,
+      );
     } else {
-      _user.favorites[listId].deletePhrase(phraseId);
+      // 仮反映
+      defaultFavoriteList.deletePhrase(phraseId);
+
+      notifyListeners();
+
+      // 本反映
+      _user = await _userService.favorite(
+        user: _user,
+        listId: defaultFavoriteList.id,
+        phraseId: phraseId,
+        favorite: favorite,
+      );
     }
 
-    notifyListeners();
-
-    // 本反映
-    _user = await _userService.favorite(
-      user: _user,
-      listId: listId,
-      phraseId: phraseId,
-      favorite: favorite,
-    );
     notifyListeners();
 
     InAppLogger.debug(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');

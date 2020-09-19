@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/index.dart';
@@ -20,14 +21,16 @@ class NoteNotifier extends ChangeNotifier {
   NoteService _noteService;
 
   User _user = User.empty();
+
   User get user => _user;
+
   set user(User user) {
     _user = user;
     notifyListeners();
   }
 
   /// 現在のノート
-  String _nowSelectedNoteId = 'default';
+  String _nowSelectedNoteId;
 
   Note get currentNote => _user.getNoteById(noteId: _nowSelectedNoteId);
 
@@ -37,7 +40,9 @@ class NoteNotifier extends ChangeNotifier {
   /// 日本語
   bool _canSeeJapanese = true;
 
-  String get nowSelectedNoteId => _nowSelectedNoteId;
+  String get nowSelectedNoteId {
+    return _nowSelectedNoteId ??= user.getDefaultFavoriteList().id;
+  }
 
   bool get canSeeEnglish => _canSeeEnglish;
 
@@ -180,6 +185,20 @@ class NoteNotifier extends ChangeNotifier {
     final addPhrase =
         NotePhrase.create(english: phrase.english, japanese: phrase.japanese);
     _user.getAchievedNote().addPhrase(addPhrase);
+    notifyListeners();
+  }
+
+  Future<void> addLessonPhraseToNote(String noteId, Phrase phrase) async {
+    final note = _user.getNoteById(noteId: noteId);
+    final notePhrase = note.firstEmptyNotePhrase();
+    if (notePhrase == null) {
+      InAppLogger.error('error happened');
+      throw Exception("Can't add Phrase ${phrase.id} to Note ${note.id}");
+    }
+    notePhrase
+      ..japanese = phrase.title['ja']
+      ..english = phrase.title['en'];
+    await _noteService.updateNote(note: note);
     notifyListeners();
   }
 }
