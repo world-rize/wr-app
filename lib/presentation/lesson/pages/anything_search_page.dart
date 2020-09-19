@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
@@ -48,72 +49,70 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
       onChanged: (word) {
         setState(() => _word = word);
       },
-      decoration: const InputDecoration(
-        border: UnderlineInputBorder(
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
           ),
         ),
-        hintText: '単語など',
+        hintText: I.of(context).lessonSearchHintText,
       ),
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('検索'),
+        title: Text(I.of(context).lessonSearchAppBarTitle),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: _wordField,
-            ),
-            FutureBuilder<Iterable<Phrase>>(
-                future: _searchPhrases(_word),
-                builder: (_, snapshot) {
-                  if (!snapshot.hasData) {
-                    // loading
-                    return Text('loading');
-                  } else {
-                    return Column(
-                      children: snapshot.data
-                          .map(
-                            (phrase) => PhraseCard(
-                              phrase: phrase,
-                              favorite: false,
-                              onTap: () {
-                                // TODO: voice player SectionPageの中に
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => ChangeNotifierProvider<
-                                        VoicePlayer>.value(
-                                      value: VoicePlayer(
-                                        onError: NotifyToast.error,
-                                      ),
-                                      builder: (_, __) => SectionPage(
-                                        section: Section.fromPhrase(phrase),
-                                        index: 0,
-                                      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: _wordField,
+          ),
+          FutureBuilder<Iterable<Phrase>>(
+              future: _searchPhrases(_word),
+              builder: (_, snapshot) {
+                if (!snapshot.hasData) {
+                  // loading
+                  return Text('loading');
+                } else {
+                  return Column(
+                    children: snapshot.data
+                        .map(
+                          (phrase) => PhraseCard(
+                            phrase: phrase,
+                            favorite: false,
+                            onTap: () {
+                              // TODO: voice player SectionPageの中に
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ChangeNotifierProvider<VoicePlayer>.value(
+                                    value: VoicePlayer(
+                                      onError: NotifyToast.error,
+                                    ),
+                                    builder: (_, __) => SectionPage(
+                                      section: Section.fromPhrase(phrase),
+                                      index: 0,
                                     ),
                                   ),
-                                );
-                              },
-                              onFavorite: () {
-                                un.favoritePhrase(
-                                    phraseId: phrase.id,
-                                    favorite: un.existPhraseInFavoriteList(
-                                        phraseId: phrase.id));
-                              },
-                            ),
-                          )
-                          .toList(),
-                    );
-                  }
-                }),
-          ],
-        ),
+                                ),
+                              );
+                            },
+                            onFavorite: () {
+                              un.favoritePhrase(
+                                  phraseId: phrase.id,
+                                  favorite: un.existPhraseInFavoriteList(
+                                      phraseId: phrase.id));
+                            },
+                          ),
+                        )
+                        .toList(),
+                  );
+                }
+              }),
+        ],
       ),
     );
   }

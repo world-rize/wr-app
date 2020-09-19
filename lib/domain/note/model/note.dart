@@ -108,4 +108,12 @@ class Note {
       return false;
     }
   }
+
+  /// 空のノートフレーズを返す、ないならnullを返す
+  NotePhrase firstEmptyNotePhrase() {
+    return _phrases.firstWhere(
+      (element) => element.japanese == '' && element.english == '',
+      orElse: () => null,
+    );
+  }
 }

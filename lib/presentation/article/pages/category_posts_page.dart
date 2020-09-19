@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/article/index.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 
 import './article_webview_page.dart';
@@ -46,14 +47,14 @@ class CategoryPosts extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
-          children: const <Widget>[
-            Icon(
+          children: <Widget>[
+            const Icon(
               Icons.error,
               color: Colors.grey,
             ),
             Text(
-              '記事がありません',
-              style: TextStyle(
+              I.of(context).articleNotFoundMessage,
+              style: const TextStyle(
                 fontSize: 20,
                 color: Colors.grey,
               ),

@@ -1,12 +1,13 @@
+/**
+ * Copyright © 2020 WorldRIZe. All rights reserved.
+ */
 import * as admin from 'firebase-admin'
-import { GiftItem } from './user/model/item'
-const colors = require('colors')
+import { WRAppInfo } from './model/appinfo'
+import { GiftItem } from '../user/model/item'
 
-admin.initializeApp({
-  projectId: 'wr-english-dev',
-  credential: admin.credential.applicationDefault()
-})
-
+/**
+ * ショップのデータ
+ */
 const items: GiftItem[] = [
   {
     id: 'amazon',
@@ -60,4 +61,37 @@ const updateShop = async () => {
   }
 }
 
-updateShop()
+const updateAppInfo = async () => {
+  const firestore = admin.firestore()
+  const appInfo: WRAppInfo = {
+    currentVersion: '0.6.2',
+    requireVersion: '0.6.2',
+    isAndroidAppAvailable: false,
+    isIOsAppAvailable: false,
+  }
+  await firestore.collection('etc').doc('appinfo').set(appInfo)
+}
+
+export const useStg = () => {
+  admin.initializeApp({
+    projectId: 'wr-english-dev',
+    credential: admin.credential.applicationDefault()
+  })
+}
+
+export const usePrd = () => {
+  admin.initializeApp({
+    projectId: 'wr-english-prd',
+    credential: admin.credential.applicationDefault()
+  })
+}
+
+const updateVersion = async () => {
+  // dev environment
+  usePrd()
+  // useStg()
+  await updateShop()
+  await updateAppInfo()
+}
+
+updateVersion()

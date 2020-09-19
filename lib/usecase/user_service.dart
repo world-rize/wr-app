@@ -1,10 +1,12 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:data_classes/data_classes.dart';
+import 'package:flutter/material.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/util/logger.dart';
 
 // TODO: Error handling
 class UserService {
@@ -26,8 +28,12 @@ class UserService {
     @required String phraseId,
     @required bool favorite,
   }) async {
+    InAppLogger.debug('favorite $favorite');
     final req = FavoritePhraseRequest(
-        listId: 'default', phraseId: phraseId, favorite: favorite);
+      listId: listId,
+      phraseId: phraseId,
+      favorite: favorite,
+    );
     return _userPersistence.favoritePhrase(req);
   }
 

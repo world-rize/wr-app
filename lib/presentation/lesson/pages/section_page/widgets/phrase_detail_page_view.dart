@@ -45,7 +45,10 @@ class PhraseDetailPageView extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Text(phrase.advice['ja']),
+              child: Text(
+                phrase.advice['ja'],
+                style: Theme.of(context).textTheme.subtitle2,
+              ),
             ),
           ],
         ),

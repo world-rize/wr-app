@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/domain/article/model/article.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/article/pages/article_webview_page.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
@@ -79,7 +80,7 @@ class ArticleOverView extends StatelessWidget {
             ButtonBar(
               children: <Widget>[
                 FlatButton(
-                  child: const Text('続きを読む'),
+                  child: Text(I.of(context).readMore),
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

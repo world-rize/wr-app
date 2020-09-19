@@ -28,8 +28,9 @@ import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
-import 'package:wr_app/presentation/mypage/notifier/shop_notifier.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
+import 'package:wr_app/presentation/shop_notifier.dart';
+import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/auth_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
@@ -41,6 +42,7 @@ import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
 import 'package:wr_app/util/sentry.dart';
+import 'package:wr_app/util/toast.dart';
 
 /// initialize singleton instances and inject to GetIt
 Future<void> setupGlobalSingletons(Flavor flavor) async {
@@ -144,8 +146,18 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final noteService = NoteService(notePersistence: notePersistence);
 
   // TODO: re-architecture
+  // notifier とストア分離する (StoreProvider)
+  // notifier は StatefulNotifier を Stateless化するものなので
+  // 1 Stateful画面 1 ChangeNotifier
+  //  Dao に CRUI
+  // 下から上の更新に依存したい
+  // 下から上(update): ProxyProvider
+  // 上から下(get): GetIt<UserNotifier>
+
+  // functions いらない説
   final userNotifier = UserNotifier(userService: userService);
   final authNotifier = AuthNotifier(authService: authService);
+  final shopNotifier = ShopNotifier(shopService: shopService);
   authNotifier.addListener(() {
     userNotifier.user = authNotifier.user;
   });
@@ -157,6 +169,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   userNotifier.addListener(() {
     authNotifier.user = userNotifier.user;
     noteNotifier.user = userNotifier.user;
+    shopNotifier.user = userNotifier.user;
   });
 
   final app = MultiProvider(
@@ -180,6 +193,11 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
           lessonService: lessonService,
         ),
       ),
+      ChangeNotifierProvider.value(
+        value: VoicePlayer(
+          onError: NotifyToast.error,
+        ),
+      ),
       // Article
       ChangeNotifierProvider.value(
         value: ArticleNotifier(
@@ -187,7 +205,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ),
       ),
       ChangeNotifierProvider.value(
-        value: ShopNotifier(shopService: shopService),
+        value: shopNotifier,
       ),
     ],
     child: WRApp(),

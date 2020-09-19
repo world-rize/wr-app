@@ -12,6 +12,7 @@ import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 
 import './favorite_page.dart';
 import './newcoming_page.dart';
@@ -23,20 +24,6 @@ import '../widgets/phrase_card.dart';
 /// Lesson > index
 /// - top page of lesson
 class LessonIndexPage extends StatelessWidget {
-//  Future<void> _sendAnalyticsEvent(BuildContext context) async {
-//    final userStore = Provider.of<UserNotifier>(context);
-//    if (userStore == null) {
-//      return;
-//    }
-//    final analytics = Provider.of<FirebaseAnalytics>(context);
-//    await analytics.logEvent(
-//      name: 'test_event',
-//      parameters: {
-//        'uid': userStore.user.uuid,
-//      },
-//    );
-//  }
-
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context);
@@ -46,23 +33,23 @@ class LessonIndexPage extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          const Header1(
-            text: 'Lesson',
+          Header1(
+            text: I.of(context).lessonPageTitle,
             dividerColor: GFColors.PRIMARY,
           ),
 
-          // TODO(someone): fix LessonSelectCarousel
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width,
             height: 250,
             child: GFCarousel(
               enableInfiniteScroll: false,
-              items: ln.lessons
+              items: ln
+                  .getAllLessons()
                   .indexedMap(
                     (index, lesson) => CarouselCell(
                       lesson: lesson,
                       index: index,
-                      locked: !user.isPremium && 3 <= index,
+                      locked: ln.isLessonLocked(user, lesson),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -111,20 +98,22 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           // New Coming Phrases Section
-          const Header1(
-            text: 'New coming phrases',
+          Header1(
+            text: I.of(context).newComingPageTitle,
             dividerColor: GFColors.SUCCESS,
           ),
 
           FutureBuilder<List<Phrase>>(
             future: ln.newComingPhrases(),
             builder: (_, res) {
+              InAppLogger.debug('${res.error}');
               if (!res.hasData || res.data.isEmpty) {
-                return const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 30, horizontal: 8),
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 30, horizontal: 8),
                   child: Text(
-                    'No new coming phrases',
-                    style: TextStyle(fontSize: 20, color: Colors.grey),
+                    I.of(context).noNewComingPhraseMessage,
+                    style: const TextStyle(fontSize: 20, color: Colors.grey),
                   ),
                 );
               } else {
@@ -154,8 +143,8 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           // Request Section
-          const Header1(
-            text: 'Request',
+          Header1(
+            text: I.of(context).requestPageTitle,
             dividerColor: GFColors.SECONDARY,
           ),
 

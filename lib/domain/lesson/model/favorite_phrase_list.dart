@@ -84,6 +84,7 @@ class FavoritePhraseList {
 
   bool updatePhrase(String id, FavoritePhraseDigest digest) {
     final index = phrases.indexWhere((element) => element.id == id);
+    print('updatePhrase $index');
     if (index != -1) {
       phrases[index] = digest;
       return true;

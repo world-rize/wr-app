@@ -11,6 +11,7 @@ import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
+import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 
@@ -19,11 +20,16 @@ import '../widgets/phrase_card.dart';
 /// テスト結果画面
 ///
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469140>
-class TestResultPage extends StatelessWidget {
+class TestResultPage extends StatefulWidget {
   const TestResultPage({@required this.stats});
 
   final TestStats stats;
 
+  @override
+  _TestResultPageState createState() => _TestResultPageState();
+}
+
+class _TestResultPageState extends State<TestResultPage> {
   /// 報酬獲得画面
   Future<void> _showRewardDialog(BuildContext context) {
     return showCupertinoDialog(
@@ -32,7 +38,7 @@ class TestResultPage extends StatelessWidget {
         title: Text(I.of(context).testClear),
         content: Column(
           children: <Widget>[
-            Text(I.of(context).getPoints(stats.corrects)),
+            Text(I.of(context).getPoints(widget.stats.corrects)),
             GFButton(
               color: Colors.orange,
               text: I.of(context).close,
@@ -55,16 +61,15 @@ class TestResultPage extends StatelessWidget {
     final systemNotifier = Provider.of<SystemNotifier>(context, listen: false);
     final env = DotEnv().env;
     final questionnaireUrl = env['QUESTIONNAIRE_URL'];
-    assert(questionnaireUrl != '');
 
     return showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
-        title: const Text('アンケートに答えてください'),
+        title: Text(I.of(context).showQuestionnaireDialogTitle),
         content: const Text('アンケートに答えてください'),
         actions: <Widget>[
           CupertinoButton(
-            child: const Text('答える'),
+            child: Text(I.of(context).showQuestionnaireDialogOk),
             onPressed: () async {
               systemNotifier.setQuestionnaireAnswered(value: true);
               if (await canLaunch(questionnaireUrl)) {
@@ -77,7 +82,7 @@ class TestResultPage extends StatelessWidget {
             },
           ),
           CupertinoButton(
-            child: const Text('後で'),
+            child: Text(I.of(context).showQuestionnaireDialogNg),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -91,47 +96,78 @@ class TestResultPage extends StatelessWidget {
   Future<void> _show30DaysChallengeAchievedDialog(BuildContext context) {
     return showDialog(
       context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: const Text('30Days Challenge達成'),
-        content: Column(
-          children: [
-            Center(
-              child: Text('Congratulations!'),
-            ),
-            Text('30 Days Challenge 達成'),
-            Row(
-              children: [
-                Image.asset('assets/mock.png'),
-                Image.asset('assets/mock.png'),
-                Image.asset('assets/mock.png'),
-              ],
-            ),
-            Text('30 Days Challenge 達成'),
-            PrimaryButton(
-              label: Text('追加するアクセントを選ぶ'),
-              onPressed: () {
-                // TODO: Go to "addAccentPage"
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        ),
-        actions: <Widget>[
-          CupertinoButton(
-            child: const Text('Ok'),
-            onPressed: () async {},
-          ),
-        ],
-      ),
+      builder: (_) => ChallengeAchievedDialog(),
     );
+  }
+
+  void _onTapNext() async {
+    final un = context.read<UserNotifier>();
+    final sn = context.read<SystemNotifier>();
+
+    // send score
+    await un.sendTestScore(
+        sectionId: widget.stats.section.id, score: widget.stats.corrects);
+    // get points
+    await un.callGetPoint(points: widget.stats.corrects);
+    // show dialog
+    await _showRewardDialog(context);
+
+    final is30DaysChallengeAchieved = await un.checkTestStreaks();
+
+    if (true || is30DaysChallengeAchieved) {
+      await _show30DaysChallengeAchievedDialog(context);
+    }
+
+    // 最後のテストでアンケート誘導
+    if (!sn.getQuestionnaireAnswered() &&
+        un.user.statistics.testLimitCount == 0) {
+      await _showQuestionnaireDialog(context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
     final userNotifier = Provider.of<UserNotifier>(context);
-    final systemNotifier = Provider.of<SystemNotifier>(context);
-    final scoreText = I.of(context).testScore(stats.questions, stats.corrects);
+
+    final scoreText =
+        I.of(context).testScore(widget.stats.questions, widget.stats.corrects);
+
+    final resultList = List.generate(
+      widget.stats.section.phrases.length,
+      (i) => PhraseCard(
+        highlight: widget.stats.answers[i] ? Colors.green : Colors.red,
+        phrase: widget.stats.section.phrases[i],
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) =>
+                  SectionPage(section: widget.stats.section, index: i),
+            ),
+          );
+        },
+        favorite: userNotifier.existPhraseInFavoriteList(
+            phraseId: widget.stats.section.phrases[i].id),
+        onFavorite: () {
+          final phrase = widget.stats.section.phrases[i];
+          userNotifier.favoritePhrase(
+            phraseId: phrase.id,
+            favorite:
+                !userNotifier.existPhraseInFavoriteList(phraseId: phrase.id),
+          );
+        },
+      ).padding(),
+    );
+    final nextButton = PrimaryButton(
+      label: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 100),
+        child: Text(
+          I.of(context).next,
+          style: const TextStyle(fontSize: 20),
+        ),
+      ),
+      onPressed: _onTapNext,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -148,31 +184,7 @@ class TestResultPage extends StatelessWidget {
             ).padding(),
             Container(
               child: Column(
-                children: List.generate(
-                  stats.section.phrases.length,
-                  (i) => PhraseCard(
-                    highlight: stats.answers[i] ? Colors.green : Colors.red,
-                    phrase: stats.section.phrases[i],
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              SectionPage(section: stats.section, index: i),
-                        ),
-                      );
-                    },
-                    favorite: userNotifier.existPhraseInFavoriteList(
-                        phraseId: stats.section.phrases[i].id),
-                    onFavorite: () {
-                      final phrase = stats.section.phrases[i];
-                      userNotifier.favoritePhrase(
-                        phraseId: phrase.id,
-                        favorite: !userNotifier.existPhraseInFavoriteList(
-                            phraseId: phrase.id),
-                      );
-                    },
-                  ).padding(),
-                ),
+                children: resultList,
               ),
             ),
           ],
@@ -180,36 +192,7 @@ class TestResultPage extends StatelessWidget {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20),
-        child: PrimaryButton(
-          label: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 100),
-            child: Text(
-              I.of(context).next,
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-          onPressed: () async {
-            // send score
-            await userNotifier.sendTestScore(
-                sectionId: stats.section.id, score: stats.corrects);
-            // get points
-            await userNotifier.callGetPoint(points: stats.corrects);
-            // show dialog
-            await _showRewardDialog(context);
-
-            final is30DaysChallengeAchieved =
-                await userNotifier.checkTestStreaks();
-
-            if (true || is30DaysChallengeAchieved)
-              await _show30DaysChallengeAchievedDialog(context);
-
-            // 最後のテストでアンケート誘導
-            if (!systemNotifier.getQuestionnaireAnswered() &&
-                userNotifier.user.statistics.testLimitCount == 0) {
-              await _showQuestionnaireDialog(context);
-            }
-          },
-        ),
+        child: nextButton,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

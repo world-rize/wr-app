@@ -56,23 +56,6 @@ class _NoteTableState extends State<NoteTable> {
     _isLoading = false;
   }
 
-  Future _saveNote() async {
-    try {
-      final nn = context.read<NoteNotifier>();
-      await nn.updateNote(note: widget.note);
-      InAppLogger.debug('save note');
-    } on Exception catch (e) {
-      InAppLogger.error(e);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _saveNote();
-    InAppLogger.debug('note table dispose');
-  }
-
   void _showDeleteNoteConfirmDialog() {
     final nn = context.read<NoteNotifier>();
 

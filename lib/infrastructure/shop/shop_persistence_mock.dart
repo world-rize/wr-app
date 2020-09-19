@@ -59,4 +59,10 @@ class ShopPersistenceMock implements ShopRepository {
     // TODO: call buy item api
     throw UnimplementedError();
   }
+
+  @override
+  Future sendITunesGiftEmail(String uid) async {}
+
+  @override
+  Future sendAmazonGiftEmail(String uid) async {}
 }

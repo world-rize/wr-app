@@ -7,4 +7,8 @@ abstract class ShopRepository {
   Future<List<GiftItem>> shopItems();
 
   Future<User> buyShopItem(String itemId);
+
+  Future<void> sendAmazonGiftEmail(String uid);
+
+  Future<void> sendITunesGiftEmail(String uid);
 }

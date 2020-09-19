@@ -43,7 +43,7 @@ class FlashCardController extends StatelessWidget {
               print('stopped');
             } else if (fn.isStopped) {
               print('playing');
-              await fn.play();
+              await fn.playAll();
               print('played');
             } else {
               throw Exception('unknown state ${fn.ttsState}');

@@ -43,14 +43,36 @@ class LessonNotifier with ChangeNotifier {
 
   Future<void> loadAllLessons() async {
     _lessons = await _lessonService.loadPhrases();
-    InAppLogger.info(
-        '📚 ${_lessons.length} Lessons, ${phrases.length} Phrases loaded');
+    InAppLogger.info('📚 ${_lessons.length} Lessons loaded');
   }
 
-  List<Lesson> get lessons => _lessons;
+  List<Lesson> getAllLessons() {
+    return _lessons;
+  }
+
+  // TODO: usecaseに移動
+  List<Lesson> getLessons(User user) {
+    if (user.isPremium) {
+      return _lessons;
+    } else {
+      return _lessons.sublist(0, 3);
+    }
+  }
+
+  bool isLessonLocked(User user, Lesson lesson) {
+    return !user.isPremium || 3 <= _lessons.indexOf(lesson);
+  }
 
   List<Phrase> phrasesWhere(bool Function(Phrase) filter) {
     return _lessons.expand((lesson) => lesson.phrases).where(filter).toList();
+  }
+
+  List<Phrase> getPhrases(User user) {
+    if (user.isPremium) {
+      return _lessons.sublist(0, 3).expand((lesson) => lesson.phrases).toList();
+    } else {
+      return _lessons.expand((lesson) => lesson.phrases).toList();
+    }
   }
 
   List<Phrase> get phrases => phrasesWhere((_) => true);
@@ -66,7 +88,9 @@ class LessonNotifier with ChangeNotifier {
   }
 
   Future<List<Phrase>> newComingPhrases() async {
-    return _lessonService.newComingPhrases();
+    final hoge = await _lessonService.newComingPhrases();
+    print('notifier $hoge');
+    return hoge;
   }
 
   Future<void> sendPhraseRequest({@required String text}) {

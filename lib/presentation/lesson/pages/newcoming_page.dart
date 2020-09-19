@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 import './section_list_page.dart';
 import '../notifier/lesson_notifier.dart';
@@ -20,7 +21,7 @@ class NewComingPage extends StatelessWidget {
         return SectionListPage(
           section: Section(
             id: 'newcoming',
-            title: '新着',
+            title: I.of(context).newComingPageTitle,
             phrases: res.hasData ? res.data : [],
           ),
         );

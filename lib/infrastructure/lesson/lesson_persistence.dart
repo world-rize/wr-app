@@ -114,6 +114,213 @@ class LessonPersistence implements LessonRepository {
 
   @override
   Future<List<Phrase>> newComingPhrases() async {
-    return <Phrase>[];
+    final phrases = jsonDecode(tmpNewComingPhrases);
+    return List.from(phrases).map((j) => Phrase.fromJson(j)).toList();
   }
 }
+
+const tmpNewComingPhrases = """[{
+"id": "aussie_37",
+"title": {
+"en": "drongo",
+"ja": "どういう意味？"
+},
+"meta": {
+"lessonId": "aussie",
+"phraseId": "37"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_37_kp_en-us.mp3",
+"en-au": "voices/aussie_37_kp_en-au.mp3",
+"en-uk": "voices/aussie_37_kp_en-uk.mp3",
+"en-in": "voices/aussie_37_kp_en-in.mp3"
+}
+},
+"advice": {
+"ja": "\\"drongo\\"はかなり強めに相手を侮辱する言葉で「バカ」というようなニュアンスで使われます。"
+},
+"example": {
+"value": [
+{
+"text": {
+"en": "You're acting like a (drongo).",
+"ja": "バカみたいだよ"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_37_1_en-us.mp3",
+"en-au": "voices/aussie_37_1_en-au.mp3",
+"en-uk": "voices/aussie_37_1_en-uk.mp3",
+"en-in": "voices/aussie_37_1_en-in.mp3"
+}
+}
+},
+{
+"text": {
+"en": "What do you mean?",
+"ja": "どういう意味？"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_37_2_en-us.mp3",
+"en-au": "voices/aussie_37_2_en-au.mp3",
+"en-uk": "voices/aussie_37_2_en-uk.mp3",
+"en-in": "voices/aussie_37_2_en-in.mp3"
+}
+}
+},
+{
+"text": {
+"en": "Can you please just sit still!?",
+"ja": "じっと座ってられないの!？"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_37_3_en-us.mp3",
+"en-au": "voices/aussie_37_3_en-au.mp3",
+"en-uk": "voices/aussie_37_3_en-uk.mp3",
+"en-in": "voices/aussie_37_3_en-in.mp3"
+}
+}
+}
+]
+}
+},
+{
+"id": "aussie_38",
+"title": {
+"en": "I haven't seen you in yonks.",
+"ja": "すごい長い間会ってなかった"
+},
+"meta": {
+"lessonId": "aussie",
+"phraseId": "38"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_38_kp_en-us.mp3",
+"en-au": "voices/aussie_38_kp_en-au.mp3",
+"en-uk": "voices/aussie_38_kp_en-uk.mp3",
+"en-in": "voices/aussie_38_kp_en-in.mp3"
+}
+},
+"advice": {
+"ja": "\\"yonks\\"「長い間」という意味で使われます。ここでは\\"ages\\"や\\"long time\\"に置き換えることが可能です。"
+},
+"example": {
+"value": [
+{
+"text": {
+"en": "I feel like (I haven't seen you in yonks.)",
+"ja": "(すごい長い間会ってなかった)ように感じるな"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_38_1_en-us.mp3",
+"en-au": "voices/aussie_38_1_en-au.mp3",
+"en-uk": "voices/aussie_38_1_en-uk.mp3",
+"en-in": "voices/aussie_38_1_en-in.mp3"
+}
+}
+},
+{
+"text": {
+"en": "Yeah mate it's been a while, how are you?",
+"ja": "そうだね、結構経ったね。元気だった？"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_38_2_en-us.mp3",
+"en-au": "voices/aussie_38_2_en-au.mp3",
+"en-uk": "voices/aussie_38_2_en-uk.mp3",
+"en-in": "voices/aussie_38_2_en-in.mp3"
+}
+}
+},
+{
+"text": {
+"en": "Not bad, yourself?",
+"ja": "まぁまぁだね、君は？"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_38_3_en-us.mp3",
+"en-au": "voices/aussie_38_3_en-au.mp3",
+"en-uk": "voices/aussie_38_3_en-uk.mp3",
+"en-in": "voices/aussie_38_3_en-in.mp3"
+}
+}
+}
+]
+}
+},
+{
+"id": "aussie_39",
+"title": {
+"en": "I’m still feeling crook.",
+"ja": "まだ体調が悪いの"
+},
+"meta": {
+"lessonId": "aussie",
+"phraseId": "39"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_39_kp_en-us.mp3",
+"en-au": "voices/aussie_39_kp_en-au.mp3",
+"en-uk": "voices/aussie_39_kp_en-uk.mp3",
+"en-in": "voices/aussie_39_kp_en-in.mp3"
+}
+},
+"advice": {
+"ja": "“crook”の同意語として”unpleasant”や”unwell”が挙げられます。よって”feel crook”で体調が悪いという意味になります。"
+},
+"example": {
+"value": [
+{
+"text": {
+"en": "Are you coming tomorrow,  Emma?",
+"ja": "エマ、明日って来れる？"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_39_1_en-us.mp3",
+"en-au": "voices/aussie_39_1_en-au.mp3",
+"en-uk": "voices/aussie_39_1_en-uk.mp3",
+"en-in": "voices/aussie_39_1_en-in.mp3"
+}
+}
+},
+{
+"text": {
+"en": "Probably not. (I’m still feeling crook.)",
+"ja": "多分無理かな。(まだ体調が悪いの)"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_39_2_en-us.mp3",
+"en-au": "voices/aussie_39_2_en-au.mp3",
+"en-uk": "voices/aussie_39_2_en-uk.mp3",
+"en-in": "voices/aussie_39_2_en-in.mp3"
+}
+}
+},
+{
+"text": {
+"en": "I hope you get better soon.",
+"ja": "良くなるといいね"
+},
+"assets": {
+"voice": {
+"en-us": "voices/aussie_39_3_en-us.mp3",
+"en-au": "voices/aussie_39_3_en-au.mp3",
+"en-uk": "voices/aussie_39_3_en-uk.mp3",
+"en-in": "voices/aussie_39_3_en-in.mp3"
+}
+}
+}
+]
+}
+}]
+""";
