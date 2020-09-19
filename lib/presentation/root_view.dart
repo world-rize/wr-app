@@ -111,24 +111,17 @@ class _RootViewState extends State<RootView>
           ).padding(),
           Text(
             I.of(context).points(user.statistics.points),
-            style: const TextStyle(color: Colors.white),
+            style: Theme.of(context).primaryTextTheme.headline6,
           ).padding(),
         ],
       ),
     );
 
-    final limits = Row(
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 8),
-          child: Icon(Icons.favorite, color: Colors.pinkAccent),
-        ),
-        Text(
-          '${user.statistics.testLimitCount}',
-          style: Theme.of(context).textTheme.caption,
-        ).padding(),
-      ],
-    );
+    final limits = Row(children: [
+      ...List.generate(3, (index) => index < user.statistics.testLimitCount)
+          .map((b) => Icon(b ? Icons.favorite : Icons.favorite_border,
+              color: Colors.pinkAccent)),
+    ]).padding();
 
     final searchButton = IconButton(
       icon: const Icon(
