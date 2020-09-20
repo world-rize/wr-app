@@ -30,9 +30,7 @@ class PhraseExampleCard extends StatelessWidget {
     int index,
     bool primary = false,
   }) {
-    final showKeyphrase = false;
-    final showTranslation = false;
-
+    final ln = Provider.of<LessonNotifier>(context);
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -53,13 +51,10 @@ class PhraseExampleCard extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: BoldableText(
-                  text: message.text['en'],
-                  basicStyle: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w300,
-                    color: primary ? Colors.white : Colors.black,
-                  ),
-                  hide: false,
+                  text: ln.showEnglish
+                      ? message.text['en']
+                      : ' ' * message.text['en'].length,
+                  basicStyle: Theme.of(context).primaryTextTheme.bodyText2,
                 ),
               ),
             ),
@@ -81,15 +76,14 @@ class PhraseExampleCard extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 10),
-                    // child: Text(conversation.japanese),
-                    child: showTranslation
+                    child: ln.showJapanese
                         ? BoldableText(
                             text: message.text['ja'],
-                            basicStyle: const TextStyle(
-                              fontSize: 12,
-                            ),
+                            basicStyle:
+                                Theme.of(context).primaryTextTheme.bodyText2,
                           )
-                        : const Text(''),
+                        // TODO: 文字の端が等幅フォントじゃないのでなにか考える
+                        : Text('　' * message.text['ja'].length),
                   ),
                 ),
               ],
@@ -134,10 +128,7 @@ class PhraseExampleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final vp = Provider.of<VoicePlayer>(context);
-    final ln = Provider.of<LessonNotifier>(context);
     final un = Provider.of<UserNotifier>(context);
-
-    final showTranslation = ln.getShowTranslation();
 
     // TODO: phrase.id !== notePhrase.uuid
     final existNotes = un.existPhraseInNotes(phraseId: phrase.id);

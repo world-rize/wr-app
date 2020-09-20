@@ -55,11 +55,14 @@ class PhraseDetailPageView extends StatelessWidget {
     );
 
     return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          exampleView,
-          adviceView,
-        ],
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 100),
+        child: Column(
+          children: <Widget>[
+            exampleView,
+            adviceView,
+          ],
+        ),
       ),
     );
   }

@@ -8,14 +8,6 @@ import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
-enum Visibility {
-  all,
-  // 英語
-  englishOnly,
-  // 日本語
-  japaneseOnly,
-}
-
 class LessonNotifier with ChangeNotifier {
   LessonService _lessonService;
   UserService _userService;
@@ -99,15 +91,16 @@ class LessonNotifier with ChangeNotifier {
         .catchError(NotifyToast.error);
   }
 
-  bool getShowTranslation() => _lessonService.getShowTranslation();
+  bool get showJapanese => _lessonService.getShowJapanese();
+  bool get showEnglish => _lessonService.getShowEnglish();
 
-  void toggleShowTranslation() {
-    _lessonService.toggleShowTranslation();
+  void toggleJapanese() {
+    _lessonService.toggleShowJapanese();
     notifyListeners();
   }
 
-  void toggleShowText() {
-    _lessonService.toggleShowText();
+  void toggleEnglish() {
+    _lessonService.toggleShowEnglish();
     notifyListeners();
   }
 }
