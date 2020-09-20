@@ -110,7 +110,7 @@ class _RootViewState extends State<RootView>
             height: 20,
           ).padding(),
           Text(
-            I.of(context).points(user.statistics.points),
+            '${user.statistics.points}',
             style: Theme.of(context).primaryTextTheme.headline6,
           ).padding(),
         ],
@@ -178,8 +178,6 @@ class _RootViewState extends State<RootView>
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           _pageController.jumpToPage(index);
-//          _pageController.animateToPage(index,
-//              duration: const Duration(milliseconds: 300), curve: Curves.ease);
         },
         currentIndex: _index,
         items: [
@@ -195,10 +193,6 @@ class _RootViewState extends State<RootView>
             icon: const Icon(Icons.view_column),
             title: Text(I.of(context).bottomNavColumn),
           ),
-//        BottomNavigationBarItem(
-//          icon: const Icon(Icons.public),
-//          title: Text(I.of(context).bottomNavAgency),
-//        ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person_outline),
             title: Text(I.of(context).bottomNavMyPage),

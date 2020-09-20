@@ -36,13 +36,6 @@ class _SettingsState extends State<SettingsPage> {
                 .push(MaterialPageRoute(builder: (_) => SettingsThemePage()));
           },
         ),
-//        SettingsTile(
-//          title: I.of(context).notifications,
-//          onTap: () {
-//            Navigator.of(context).push(
-//                MaterialPageRoute(builder: (_) => SettingsNotificationPage()));
-//          },
-//        ),
       ],
     );
   }
@@ -234,8 +227,7 @@ class _SettingsState extends State<SettingsPage> {
         sections: [
           generalSection(),
           aboutSection(),
-          if (true || systemNotifier.flavor == Flavor.development)
-            debugSection(),
+          if (systemNotifier.flavor == Flavor.development) debugSection(),
         ],
       ),
     );

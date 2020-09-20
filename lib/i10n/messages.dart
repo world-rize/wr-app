@@ -35,7 +35,7 @@ mixin Messages {
 
   /// point
   String points(int point) => Intl.message(
-        '$point WR coins',
+        '$point coins',
         name: 'points',
         args: [point],
       );
@@ -182,7 +182,7 @@ mixin Messages {
   String get lessonSearchAppBarTitle =>
       Intl.message('検索', name: 'lessonSearchAppBarTitle');
 
-  String get lessonPageTitle => Intl.message('Lesson', name: 'LessonPageTitle');
+  String get lessonPageTitle => Intl.message('Lesson', name: 'lessonPageTitle');
 
   String get favoritePageTitle =>
       Intl.message('お気に入り', name: 'favoritePageTitle');
@@ -205,7 +205,7 @@ mixin Messages {
       Intl.message('アンケートに答えてください', name: 'showQuestionnaireDialogTitle');
 
   String get showQuestionnaireDialogMessage =>
-      Intl.message('アンケートに答えてください', name: 'showQuestionnaireDialogTitle');
+      Intl.message('アンケートに答えてください', name: 'showQuestionnaireDialogMessage');
 
   String get showQuestionnaireDialogOk =>
       Intl.message('答える', name: 'showQuestionnaireDialogOk');
@@ -269,9 +269,11 @@ mixin Messages {
   /// ショップページ
   String get shopPagePurchase => Intl.message('購入', name: 'shopPagePurchase');
 
-  String shopPageConfirmDialog(String title, int price) =>
-      Intl.message('$title を $price コインで購入しますか？',
-          name: 'shopPageConfirmDialog');
+  String shopPageConfirmDialog(String title, int price) => Intl.message(
+        '$title を $price コインで購入しますか？',
+        name: 'shopPageConfirmDialog',
+        args: [title, price],
+      );
 
   String get shopPageSuccess =>
       Intl.message('交換が確定されました。2週間以内に登録されているメールアドレスにギフトコードを送信します',

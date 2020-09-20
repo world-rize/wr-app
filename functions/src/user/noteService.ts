@@ -34,7 +34,7 @@ export class NoteService {
       title: title,
       sortType: 'createdAt-',
       // 30 phrases
-      phrases: [...Array(30)].map(_ => NoteService.generateNotePhrase()),
+      phrases: isAchievedNote ? [] : [...Array(30)].map(_ => NoteService.generateNotePhrase()),
     }
   }
 

@@ -39,8 +39,6 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "accountPageTitle" : MessageLookupByLibrary.simpleMessage("Account"),
-    "accountSection" : MessageLookupByLibrary.simpleMessage("アカウント"),
     "bottomNavAgency" : MessageLookupByLibrary.simpleMessage("Agency"),
     "bottomNavColumn" : MessageLookupByLibrary.simpleMessage("Columns"),
     "bottomNavLesson" : MessageLookupByLibrary.simpleMessage("Lesson"),
@@ -51,19 +49,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "getPoints" : m0,
     "lessonStatus" : m1,
     "memberStatus" : m2,
-    "myPageTitle" : MessageLookupByLibrary.simpleMessage("設定"),
     "next" : MessageLookupByLibrary.simpleMessage("次へ"),
     "no" : MessageLookupByLibrary.simpleMessage("No"),
     "ok" : MessageLookupByLibrary.simpleMessage("OK"),
     "onePointAdvice" : MessageLookupByLibrary.simpleMessage("One Point Advice"),
-    "otherSection" : MessageLookupByLibrary.simpleMessage("その他"),
     "phraseDetailTitle" : MessageLookupByLibrary.simpleMessage("Phrase Detail"),
     "points" : m3,
     "question" : m4,
     "requestPhrase" : MessageLookupByLibrary.simpleMessage("フレーズのリクエスト"),
     "requestPhraseButton" : MessageLookupByLibrary.simpleMessage("フレーズをリクエストする"),
     "sectionStatus" : m5,
-    "studySection" : MessageLookupByLibrary.simpleMessage("学習"),
     "testClear" : MessageLookupByLibrary.simpleMessage("Test Clear!"),
     "testConfirm" : m6,
     "testInterrupt" : MessageLookupByLibrary.simpleMessage("テストを中断しますか?"),

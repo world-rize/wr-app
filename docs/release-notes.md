@@ -1,3 +1,13 @@
+## v0.6.3 Nightly Release(2020-09-21)
+- i10n
+- いろいろな修正
+
+## v0.6.2 Nightly Release(2020-09-16)
+- Android版ビルド
+- Note API, UI修正
+- ショップ
+- 軽微な修正
+
 ## v0.6.1 Nightly Release(2020-09-13)
 - Andoird CI/CD
 - Admob設定
