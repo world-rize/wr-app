@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/pages/friends.dart';
 import 'package:wr_app/presentation/mypage/pages/info_page.dart';
 import 'package:wr_app/presentation/mypage/widgets/user_info.dart';
@@ -50,7 +51,7 @@ class MyPagePage extends StatelessWidget {
           ShadowedContainer(
             color: bg,
             child: _createIconCell(
-              title: '友達紹介',
+              title: I.of(context).myPageReferFriendsButton,
               icon: 'assets/icon/mypage_friends.png',
               onTap: () {
                 Navigator.of(context)
@@ -61,7 +62,7 @@ class MyPagePage extends StatelessWidget {
           ShadowedContainer(
             color: bg,
             child: _createIconCell(
-              title: 'アップグレード',
+              title: I.of(context).myPageUpgradeButton,
               icon: 'assets/icon/mypage_upgrade.png',
               onTap: () {
                 Navigator.of(context)
@@ -72,7 +73,7 @@ class MyPagePage extends StatelessWidget {
           ShadowedContainer(
             color: bg,
             child: _createIconCell(
-              title: 'ショップ',
+              title: I.of(context).myPageShopButton,
               icon: 'assets/icon/mypage_gift.png',
               onTap: () {
                 Navigator.of(context)
@@ -83,7 +84,7 @@ class MyPagePage extends StatelessWidget {
           ShadowedContainer(
             color: bg,
             child: _createIconCell(
-              title: 'お知らせ',
+              title: I.of(context).myPageInfoButton,
               icon: 'assets/icon/mypage_info.png',
               onTap: () {
                 Navigator.of(context)

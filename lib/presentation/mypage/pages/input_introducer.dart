@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 
 /// mypage > index > FriendsPage
@@ -20,10 +21,10 @@ class _InputIntroducerPageState extends State<InputIntroducerPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const Text('ユーザーが見つかりませんでした'),
+          content: Text(I.of(context).referFriendsNotFound),
           actions: <Widget>[
             FlatButton(
-              child: const Text('ok'),
+              child: Text(I.of(context).ok),
               key: const Key('ok'),
               onPressed: () {
                 Navigator.pop(context);
@@ -41,10 +42,11 @@ class _InputIntroducerPageState extends State<InputIntroducerPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: Text('${introducee.name} さんを紹介者として登録しますか？'),
+          content:
+              Text(I.of(context).referFriendsConfirmDialog(introducee.name)),
           actions: <Widget>[
             FlatButton(
-              child: const Text('Yes'),
+              child: Text(I.of(context).yes),
               key: const Key('ok'),
               onPressed: () async {
                 Navigator.pop(context);
@@ -52,7 +54,7 @@ class _InputIntroducerPageState extends State<InputIntroducerPage> {
               },
             ),
             FlatButton(
-              child: const Text('No'),
+              child: Text(I.of(context).no),
               key: const Key('no'),
               onPressed: () async {
                 Navigator.pop(context);
@@ -71,10 +73,10 @@ class _InputIntroducerPageState extends State<InputIntroducerPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           content:
-              Text('${introducee.name} さんに10000ポイントが送られました\n自分は500ポイントゲットしました'),
+              Text(I.of(context).referFriendsSuccessDialog(introducee.name)),
           actions: <Widget>[
             FlatButton(
-              child: const Text('Ok'),
+              child: Text(I.of(context).ok),
               key: const Key('Ok'),
               onPressed: () async {
                 Navigator.pop(context);
@@ -94,7 +96,7 @@ class _InputIntroducerPageState extends State<InputIntroducerPage> {
           content: Text(e.toString()),
           actions: <Widget>[
             FlatButton(
-              child: const Text('Ok'),
+              child: Text(I.of(context).ok),
               key: const Key('Ok'),
               onPressed: () async {
                 Navigator.pop(context);
@@ -157,19 +159,19 @@ class _InputIntroducerPageState extends State<InputIntroducerPage> {
       onChanged: (userId) {
         setState(() => _userId = userId);
       },
-      decoration: const InputDecoration(
-        border: UnderlineInputBorder(
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
           ),
         ),
-        hintText: 'ユーザーID',
+        hintText: I.of(context).referFriendsUserIdHintText,
       ),
     );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('友人紹介'),
+        title: Text(I.of(context).referFriendsTitle),
       ),
       body: LoadingView(
         loading: _isLoading,
@@ -190,7 +192,7 @@ class _InputIntroducerPageState extends State<InputIntroducerPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'あなたのID',
+                    I.of(context).referFriendsYourID,
                     style: h5,
                   ),
                   Text(
@@ -198,13 +200,13 @@ class _InputIntroducerPageState extends State<InputIntroducerPage> {
                     style: h5,
                   ),
                   Text(
-                    '紹介者のIDを入力する',
+                    I.of(context).referFriendsIntroduceeIDInputTitle,
                     style: h5,
                   ),
                   _searchUserIdField,
                   RaisedButton(
                     onPressed: () => _searchUserId(_userId),
-                    child: const Text('検索'),
+                    child: Text(I.of(context).referFriendsSearchButton),
                   ),
                 ],
               )

@@ -1,6 +1,6 @@
 {
   "@@locale": "ja",
-  "@@last_modified": "2020-09-19T19:56:21.644424",
+  "@@last_modified": "2020-09-21T03:35:18.057883",
   "lessonStatus": "クリア[{count}/{all}]",
   "@lessonStatus": {
     "type": "text",
@@ -62,6 +62,11 @@
   },
   "ok": "OK",
   "@ok": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "cancel": "キャンセル",
+  "@cancel": {
     "type": "text",
     "placeholders": {}
   },
@@ -161,33 +166,250 @@
       "clear": {}
     }
   },
-  "myPageTitle": "設定",
-  "@myPageTitle": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "accountSection": "アカウント",
-  "@accountSection": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "studySection": "学習",
-  "@studySection": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "otherSection": "その他",
-  "@otherSection": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "accountPageTitle": "Account",
-  "@accountPageTitle": {
-    "type": "text",
-    "placeholders": {}
-  },
   "error": "エラー",
   "@error": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "articleNotFoundMessage": "記事がありません",
+  "@articleNotFoundMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "readMore": "続きを読む",
+  "@readMore": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lessonSearchHintText": "単語など",
+  "@lessonSearchHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lessonSearchAppBarTitle": "検索",
+  "@lessonSearchAppBarTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lessonPageTitle": "Lesson",
+  "@lessonPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "favoritePageTitle": "お気に入り",
+  "@favoritePageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "newComingPageTitle": "New Coming Phrases",
+  "@newComingPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "requestPageTitle": "Request",
+  "@requestPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noNewComingPhraseMessage": "No new coming phrases",
+  "@noNewComingPhraseMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendPhraseRequest": "リクエストを送る",
+  "@sendPhraseRequest": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendRequestButton": "送る",
+  "@sendRequestButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "showQuestionnaireDialogTitle": "アンケートに答えてください",
+  "@showQuestionnaireDialogTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "showQuestionnaireDialogMessage": "アンケートに答えてください",
+  "@showQuestionnaireDialogMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "showQuestionnaireDialogOk": "答える",
+  "@showQuestionnaireDialogOk": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "showQuestionnaireDialogNg": "後で",
+  "@showQuestionnaireDialogNg": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "show30DaysChallengeAchievedDialogTitle": "30 Days Challenge 達成",
+  "@show30DaysChallengeAchievedDialogTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageReferFriendsButton": "Refer Friends",
+  "@myPageReferFriendsButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageUpgradeButton": "Upgrade",
+  "@myPageUpgradeButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageShopButton": "Shop",
+  "@myPageShopButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageInfoButton": "Annoucements",
+  "@myPageInfoButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageInfoNotFound": "お知らせはありません",
+  "@myPageInfoNotFound": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsTitle": "Refer Friends",
+  "@referFriendsTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsConfirmDialog": "{name} さんを紹介者として登録しますか？",
+  "@referFriendsConfirmDialog": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "referFriendsSuccessDialog": "{name} さんに10000ポイントが送られました\n自分は500ポイントゲットしました",
+  "@referFriendsSuccessDialog": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "referFriendsUserIdHintText": "ユーザーID",
+  "@referFriendsUserIdHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsYourID": "あなたのID",
+  "@referFriendsYourID": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsIntroduceeIDInputTitle": "紹介者のIDを入力する",
+  "@referFriendsIntroduceeIDInputTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsSearchButton": "検索",
+  "@referFriendsSearchButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsNotFound": "ユーザーが見つかりませんでした",
+  "@referFriendsNotFound": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsUpgradeButton": "友だちの紹介でアップグレードする",
+  "@referFriendsUpgradeButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shopPagePurchase": "購入",
+  "@shopPagePurchase": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shopPageConfirmDialog": "{title} を {price} コインで購入しますか？",
+  "@shopPageConfirmDialog": {
+    "type": "text",
+    "placeholders": {
+      "title": {},
+      "price": {}
+    }
+  },
+  "shopPageSuccess": "交換が確定されました。2週間以内に登録されているメールアドレスにギフトコードを送信します",
+  "@shopPageSuccess": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "havingCoin": "保有しているコイン",
+  "@havingCoin": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "userPageTitle": "ユーザーページ",
+  "@userPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noteList": "Note List",
+  "@noteList": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings": "Settings",
+  "@settings": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback": "Feedback",
+  "@feedback": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "homepage": "World RIZe Website",
+  "@homepage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "faq": "FAQ",
+  "@faq": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "termsOfService": "Terms of service",
+  "@termsOfService": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "privacyPolicy": "Privacy Policy",
+  "@privacyPolicy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "appVersion": "App Version",
+  "@appVersion": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "license": "License",
+  "@license": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "topPage": "Go to the top page",
+  "@topPage": {
     "type": "text",
     "placeholders": {}
   }

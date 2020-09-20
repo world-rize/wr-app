@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_detail_page_view.dart';
@@ -58,6 +59,7 @@ class _SectionPageState extends State<SectionPage>
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context);
+    final ln = Provider.of<LessonNotifier>(context);
     final vp = Provider.of<VoicePlayer>(context);
     final phrase = section.phrases[index];
     final existNotes = un.existPhraseInNotes(phraseId: phrase.id);
@@ -67,37 +69,56 @@ class _SectionPageState extends State<SectionPage>
       onPressed: () => _showPhraseDetailSettingsDialog(context),
     );
 
-    final _phrasePlayButton = Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-      child: SizedBox(
-        width: double.infinity,
-        child: FloatingActionButton(
-          isExtended: true,
-          backgroundColor: Colors.blue,
-          heroTag: 'play',
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Play',
-                style: Theme.of(context).primaryTextTheme.headline4,
-              ),
-              Icon(
-                vp.isPlaying ? Icons.pause : Icons.play_arrow,
-                color: Colors.white,
-                size: 40,
-              ),
-            ],
+    final _phrasePlayButton = FloatingActionButton(
+      isExtended: true,
+      backgroundColor: Colors.blue,
+      child: Icon(
+        vp.isPlaying ? Icons.pause : Icons.play_arrow,
+        color: Colors.white,
+        size: 40,
+      ),
+      onPressed: () async {
+        if (vp.isPlaying) {
+          await vp.stop();
+        } else {
+          await vp.playMessages(messages: phrase.example.value);
+        }
+      },
+    );
+
+    final _toggleVisibilityButtons = Row(
+      children: [
+        // japanese toggle button
+        RaisedButton(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Image.asset(
+              'assets/icon/hiragana_a.png',
+              scale: 2.5,
+            ),
           ),
-          onPressed: () async {
-            if (vp.isPlaying) {
-              await vp.stop();
-            } else {
-              await vp.playMessages(messages: phrase.example.value);
-            }
+          color: ln.showJapanese ? Colors.white : Colors.grey,
+          shape: CircleBorder(),
+          onPressed: () {
+            ln.toggleJapanese();
           },
         ),
-      ),
+        // english toggle button
+        RaisedButton(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Image.asset(
+              'assets/icon/alphabet_a.png',
+              scale: 2.5,
+            ),
+          ),
+          color: ln.showEnglish ? Colors.white : Colors.grey,
+          shape: const CircleBorder(),
+          onPressed: () {
+            ln.toggleEnglish();
+          },
+        ),
+      ],
     );
 
     return Scaffold(
@@ -120,16 +141,37 @@ class _SectionPageState extends State<SectionPage>
               // TODO: Floatingボタンの下に説明が書かれているのでpadding
               //  画面のサイズによるのでPaddingやめたい
               // deviceによってむらがある
-              (phrase) => Padding(
-                child: PhraseDetailPageView(phrase: phrase),
-                padding: EdgeInsets.only(bottom: 100),
-              ),
+              (phrase) => PhraseDetailPageView(phrase: phrase),
             )
             .toList(),
       ),
-      // controller
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _phrasePlayButton,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+      floatingActionButton: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: double.infinity,
+            child: Container(
+              padding: EdgeInsets.only(bottom: 20),
+              color: Colors.white10,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Row(
+                  children: [
+                    Align(
+                      alignment: Alignment.bottomLeft,
+                      child: _phrasePlayButton,
+                    ),
+                    Spacer(),
+                    _toggleVisibilityButtons,
+                  ],
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

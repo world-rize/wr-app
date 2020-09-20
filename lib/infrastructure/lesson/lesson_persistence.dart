@@ -49,6 +49,9 @@ Future<List<Lesson>> loadAllLessonsFromLocal({
 }
 
 class LessonPersistence implements LessonRepository {
+  String SHOW_JAPANESE = 'show_japanese';
+  String SHOW_ENGLISH = 'show_english';
+
   // load all phrases from local JSON
   @override
   Future<List<Lesson>> loadAllLessons() async {
@@ -89,27 +92,27 @@ class LessonPersistence implements LessonRepository {
   }
 
   @override
-  bool getShowTranslation() {
+  bool getShowJapanese() {
     final pref = GetIt.I<SharedPreferences>();
-    return pref.getBool('show_translation') ?? false;
+    return pref.getBool(SHOW_JAPANESE) ?? false;
   }
 
   @override
-  void setShowTranslation({bool value}) {
+  void setShowEnglish({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
-    pref.setBool('show_translation', value);
+    pref.setBool(SHOW_ENGLISH, value);
   }
 
   @override
-  bool getShowText() {
+  bool getShowEnglish() {
     final pref = GetIt.I<SharedPreferences>();
-    return pref.getBool('show_text') ?? true;
+    return pref.getBool(SHOW_ENGLISH) ?? true;
   }
 
   @override
-  void setShowText({bool value}) {
+  void setShowJapanese({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
-    pref.setBool('show_text', value);
+    pref.setBool(SHOW_JAPANESE, value);
   }
 
   @override

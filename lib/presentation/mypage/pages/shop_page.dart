@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/shop/model/gift_item_id.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/widgets/gift_item_card.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/shop_notifier.dart';
@@ -51,33 +52,27 @@ class _ShopPageState extends State<ShopPage> {
     return showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('購入'),
-        content: Text('${item.title} を ${item.price} コインで購入しますか？'),
+        title: Text(I.of(context).shopPagePurchase),
+        content:
+            Text(I.of(context).shopPageConfirmDialog(item.title, item.price)),
         actions: [
           FlatButton(
-            child: const Text('Cancel'),
+            child: Text(I.of(context).cancel),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
           FlatButton(
-            child: const Text('Ok'),
+            child: Text(I.of(context).ok),
             onPressed: () async {
-              print('before pop');
               Navigator.pop(context);
-              print('after pop');
               try {
-                print('befeore set state');
                 setState(() {
                   _isLoading = true;
                 });
-                print('after set state');
                 final sn = context.read<ShopNotifier>();
-                print('before purchas imt');
                 await sn.purchaseItem(itemId: GiftItemIdEx.fromString(item.id));
-                print('before use item');
                 await _useItem(GiftItemIdEx.fromString(item.id));
-                print('after use item');
               } on Exception catch (e) {
                 InAppLogger.error(e);
               } finally {
@@ -101,13 +96,11 @@ class _ShopPageState extends State<ShopPage> {
     switch (id) {
       case GiftItemId.iTunes:
         await sn.sendITunesRequest(uid: un.user.uuid);
-        await _showGiftItemDescriptionDialog(
-            '交換が確定されました。2週間以内に登録されているメールアドレスにギフトコードを送信します');
+        await _showGiftItemDescriptionDialog(I.of(context).shopPageSuccess);
         break;
       case GiftItemId.amazon:
         await sn.sendITunesRequest(uid: un.user.uuid);
-        await _showGiftItemDescriptionDialog(
-            '交換が確定されました。2週間以内に登録されているメールアドレスにギフトコードを送信します');
+        await _showGiftItemDescriptionDialog(I.of(context).shopPageSuccess);
         break;
       default:
         break;
@@ -122,7 +115,7 @@ class _ShopPageState extends State<ShopPage> {
         content: Text(description),
         actions: [
           FlatButton(
-            child: const Text('Ok'),
+            child: Text(I.of(context).ok),
             onPressed: () async {
               Navigator.pop(context);
             },
@@ -147,7 +140,7 @@ class _ShopPageState extends State<ShopPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ショップ'),
+        title: Text(I.of(context).myPageShopButton),
       ),
       body: LoadingView(
         loading: _isLoading,
@@ -155,19 +148,13 @@ class _ShopPageState extends State<ShopPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: Text('保有しているコイン'),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(I.of(context).havingCoin),
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('$points'),
-                    const Text('WR coins'),
-                  ],
-                ),
+                child: Text(I.of(context).points(points)),
               ),
               const Padding(
                 padding: EdgeInsets.all(8),
