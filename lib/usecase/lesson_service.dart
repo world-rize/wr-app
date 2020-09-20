@@ -38,18 +38,17 @@ class LessonService {
     InAppLogger.info('send phrase request');
   }
 
-  bool getShowTranslation() => _lessonPersistence.getShowTranslation();
+  bool getShowJapanese() => _lessonPersistence.getShowJapanese();
+  bool getShowEnglish() => _lessonPersistence.getShowEnglish();
 
-  void toggleShowTranslation() {
-    final value = _lessonPersistence.getShowTranslation();
-    _lessonPersistence.setShowTranslation(value: !value);
+  void toggleShowJapanese() {
+    final value = _lessonPersistence.getShowJapanese();
+    _lessonPersistence.setShowJapanese(value: !value);
   }
 
-  bool getShowText() => _lessonPersistence.getShowText();
-
-  void toggleShowText() {
-    final value = _lessonPersistence.getShowText();
-    _lessonPersistence.setShowText(value: !value);
+  void toggleShowEnglish() {
+    final value = _lessonPersistence.getShowEnglish();
+    _lessonPersistence.setShowEnglish(value: !value);
   }
 
   Future<List<Phrase>> newComingPhrases() {

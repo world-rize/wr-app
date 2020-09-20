@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/env_keys.dart';
@@ -189,7 +190,7 @@ class _SignUpFormState extends State<SignUpForm> {
             text: '',
             children: [
               TextSpan(
-                text: '利用規約',
+                text: I.of(context).termsOfService,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
                     if (await canLaunch(env.privacyPolicyJaUrl)) {

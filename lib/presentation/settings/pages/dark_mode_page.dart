@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/domain/system/index.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 /// テーマページ
 class SettingsThemePage extends StatelessWidget {
@@ -14,12 +15,12 @@ class SettingsThemePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ダークモード'),
+        title: Text(I.of(context).darkMode),
       ),
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: 'ダークモード',
+            title: I.of(context).darkMode,
             tiles: [
               SettingsTile.switchTile(
                 switchValue: system.getFollowSystemTheme(),
@@ -30,7 +31,7 @@ class SettingsThemePage extends StatelessWidget {
               if (!system.getFollowSystemTheme())
                 SettingsTile.switchTile(
                   switchValue: system.getDarkMode(),
-                  title: 'ダークモード',
+                  title: I.of(context).darkMode,
                   leading: const Icon(Icons.attach_money),
                   onToggle: (v) => system.setDarkMode(value: v),
                 ),

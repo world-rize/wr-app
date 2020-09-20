@@ -43,7 +43,7 @@ final ThemeData WorldRizeLightTheme = ThemeData(
     ),
     bodyText2: TextStyle(
       color: Colors.black,
-      fontSize: 22,
+      fontSize: 18,
     ),
   ),
 );
@@ -87,7 +87,7 @@ final ThemeData WorldRizeDarkTheme = ThemeData(
     ),
     bodyText2: TextStyle(
       color: Colors.white,
-      fontSize: 22,
+      fontSize: 20,
     ),
   ),
 );

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/widgets/note_card.dart';
 import 'package:wr_app/presentation/note/widgets/note_edit_dialog.dart';
@@ -92,7 +93,7 @@ class _NoteListPageState extends State<NoteListPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ノート一覧'),
+        title: Text(I.of(context).noteList),
       ),
       body: LoadingView(
         loading: _isLoading,

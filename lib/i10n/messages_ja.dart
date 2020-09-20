@@ -29,7 +29,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m4(q) => "${q}問目";
 
+  static m9(name) => "${name} さんを紹介者として登録しますか？";
+
+  static m10(name) => "${name} さんに10000ポイントが送られました\n自分は500ポイントゲットしました";
+
   static m5(clear) => "${Intl.select(clear, {'true': 'クリア', 'false': '未クリア', })}";
+
+  static m11(title, price) => "${title} を ${price} コインで購入しますか？";
 
   static m6(title) => "${title}のテストを開始しますか?";
 
@@ -39,31 +45,72 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-    "accountPageTitle" : MessageLookupByLibrary.simpleMessage("Account"),
-    "accountSection" : MessageLookupByLibrary.simpleMessage("アカウント"),
+    "appVersion" : MessageLookupByLibrary.simpleMessage("App Version"),
+    "articleNotFoundMessage" : MessageLookupByLibrary.simpleMessage("記事がありません"),
     "bottomNavAgency" : MessageLookupByLibrary.simpleMessage("Agency"),
     "bottomNavColumn" : MessageLookupByLibrary.simpleMessage("Columns"),
     "bottomNavLesson" : MessageLookupByLibrary.simpleMessage("Lesson"),
     "bottomNavMyPage" : MessageLookupByLibrary.simpleMessage("My page"),
     "bottomNavNote" : MessageLookupByLibrary.simpleMessage("Note"),
+    "cancel" : MessageLookupByLibrary.simpleMessage("キャンセル"),
     "close" : MessageLookupByLibrary.simpleMessage("閉じる"),
+    "darkMode" : MessageLookupByLibrary.simpleMessage("Dark Mode"),
     "error" : MessageLookupByLibrary.simpleMessage("エラー"),
+    "faq" : MessageLookupByLibrary.simpleMessage("FAQ"),
+    "favoritePageTitle" : MessageLookupByLibrary.simpleMessage("お気に入り"),
+    "feedback" : MessageLookupByLibrary.simpleMessage("Feedback"),
     "getPoints" : m0,
+    "havingCoin" : MessageLookupByLibrary.simpleMessage("保有しているコイン"),
+    "homepage" : MessageLookupByLibrary.simpleMessage("World RIZe Website"),
+    "lessonPageTitle" : MessageLookupByLibrary.simpleMessage("Lesson"),
+    "lessonSearchAppBarTitle" : MessageLookupByLibrary.simpleMessage("検索"),
+    "lessonSearchHintText" : MessageLookupByLibrary.simpleMessage("単語など"),
     "lessonStatus" : m1,
+    "license" : MessageLookupByLibrary.simpleMessage("License"),
     "memberStatus" : m2,
-    "myPageTitle" : MessageLookupByLibrary.simpleMessage("設定"),
+    "myPageInfoButton" : MessageLookupByLibrary.simpleMessage("Annoucements"),
+    "myPageInfoNotFound" : MessageLookupByLibrary.simpleMessage("お知らせはありません"),
+    "myPageReferFriendsButton" : MessageLookupByLibrary.simpleMessage("Refer Friends"),
+    "myPageShopButton" : MessageLookupByLibrary.simpleMessage("Shop"),
+    "myPageUpgradeButton" : MessageLookupByLibrary.simpleMessage("Upgrade"),
+    "newComingPageTitle" : MessageLookupByLibrary.simpleMessage("New Coming Phrases"),
     "next" : MessageLookupByLibrary.simpleMessage("次へ"),
     "no" : MessageLookupByLibrary.simpleMessage("No"),
+    "noNewComingPhraseMessage" : MessageLookupByLibrary.simpleMessage("No new coming phrases"),
+    "noteList" : MessageLookupByLibrary.simpleMessage("Note List"),
+    "notifications" : MessageLookupByLibrary.simpleMessage("Notifications"),
     "ok" : MessageLookupByLibrary.simpleMessage("OK"),
     "onePointAdvice" : MessageLookupByLibrary.simpleMessage("One Point Advice"),
-    "otherSection" : MessageLookupByLibrary.simpleMessage("その他"),
     "phraseDetailTitle" : MessageLookupByLibrary.simpleMessage("Phrase Detail"),
     "points" : m3,
+    "privacyPolicy" : MessageLookupByLibrary.simpleMessage("Privacy Policy"),
     "question" : m4,
+    "readMore" : MessageLookupByLibrary.simpleMessage("続きを読む"),
+    "referFriendsConfirmDialog" : m9,
+    "referFriendsIntroduceeIDInputTitle" : MessageLookupByLibrary.simpleMessage("紹介者のIDを入力する"),
+    "referFriendsNotFound" : MessageLookupByLibrary.simpleMessage("ユーザーが見つかりませんでした"),
+    "referFriendsSearchButton" : MessageLookupByLibrary.simpleMessage("検索"),
+    "referFriendsSuccessDialog" : m10,
+    "referFriendsTitle" : MessageLookupByLibrary.simpleMessage("Refer Friends"),
+    "referFriendsUpgradeButton" : MessageLookupByLibrary.simpleMessage("友だちの紹介でアップグレードする"),
+    "referFriendsUserIdHintText" : MessageLookupByLibrary.simpleMessage("ユーザーID"),
+    "referFriendsYourID" : MessageLookupByLibrary.simpleMessage("あなたのID"),
+    "requestPageTitle" : MessageLookupByLibrary.simpleMessage("Request"),
     "requestPhrase" : MessageLookupByLibrary.simpleMessage("フレーズのリクエスト"),
     "requestPhraseButton" : MessageLookupByLibrary.simpleMessage("フレーズをリクエストする"),
     "sectionStatus" : m5,
-    "studySection" : MessageLookupByLibrary.simpleMessage("学習"),
+    "sendPhraseRequest" : MessageLookupByLibrary.simpleMessage("リクエストを送る"),
+    "sendRequestButton" : MessageLookupByLibrary.simpleMessage("送る"),
+    "settings" : MessageLookupByLibrary.simpleMessage("Settings"),
+    "shopPageConfirmDialog" : m11,
+    "shopPagePurchase" : MessageLookupByLibrary.simpleMessage("購入"),
+    "shopPageSuccess" : MessageLookupByLibrary.simpleMessage("交換が確定されました。2週間以内に登録されているメールアドレスにギフトコードを送信します"),
+    "show30DaysChallengeAchievedDialogTitle" : MessageLookupByLibrary.simpleMessage("30 Days Challenge 達成"),
+    "showQuestionnaireDialogMessage" : MessageLookupByLibrary.simpleMessage("アンケートに答えてください"),
+    "showQuestionnaireDialogNg" : MessageLookupByLibrary.simpleMessage("後で"),
+    "showQuestionnaireDialogOk" : MessageLookupByLibrary.simpleMessage("答える"),
+    "showQuestionnaireDialogTitle" : MessageLookupByLibrary.simpleMessage("アンケートに答えてください"),
+    "termsOfService" : MessageLookupByLibrary.simpleMessage("Terms of service"),
     "testClear" : MessageLookupByLibrary.simpleMessage("Test Clear!"),
     "testConfirm" : m6,
     "testInterrupt" : MessageLookupByLibrary.simpleMessage("テストを中断しますか?"),
@@ -72,6 +119,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "testLimitAlertDetail" : MessageLookupByLibrary.simpleMessage("テストは1日に3回まで受講することができます"),
     "testMessage" : m7,
     "testScore" : m8,
+    "topPage" : MessageLookupByLibrary.simpleMessage("Go to the top page"),
+    "userPageTitle" : MessageLookupByLibrary.simpleMessage("ユーザーページ"),
     "yes" : MessageLookupByLibrary.simpleMessage("Yes")
   };
 }

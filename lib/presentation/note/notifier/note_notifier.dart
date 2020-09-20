@@ -177,14 +177,18 @@ class NoteNotifier extends ChangeNotifier {
     if (phrase == null) {
       throw Exception('note phrase not found');
     }
+
+    // add to achieved note
+    final addPhrase =
+        NotePhrase.create(english: phrase.english, japanese: phrase.japanese);
+
+    _user.getAchievedNote().addPhrase(addPhrase);
+
+    // refresh phrase
     phrase
       ..japanese = ''
       ..english = '';
     note.updateNotePhrase(phrase.id, phrase);
-
-    final addPhrase =
-        NotePhrase.create(english: phrase.english, japanese: phrase.japanese);
-    _user.getAchievedNote().addPhrase(addPhrase);
     notifyListeners();
   }
 
