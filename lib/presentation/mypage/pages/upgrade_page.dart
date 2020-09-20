@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 
 /// mypage > index > UpgradePage
@@ -61,7 +62,7 @@ class UpgradePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('アップグレード'),
+        title: Text(I.of(context).myPageUpgradeButton),
       ),
       body: SingleChildScrollView(
         child: Padding(

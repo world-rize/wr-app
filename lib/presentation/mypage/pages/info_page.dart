@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:wr_app/i10n/i10n.dart';
 
 /// mypage > index > InformationPage
 class InformationPage extends StatelessWidget {
@@ -8,12 +9,12 @@ class InformationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('お知らせ'),
+        title: Text(I.of(context).myPageInfoButton),
       ),
-      body: const Center(
+      body: Center(
         child: Text(
-          'お知らせはありません',
-          style: TextStyle(color: Colors.grey, fontSize: 24),
+          I.of(context).myPageInfoNotFound,
+          style: const TextStyle(color: Colors.grey, fontSize: 24),
         ),
       ),
     );

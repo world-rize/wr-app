@@ -30,14 +30,14 @@ class _SettingsState extends State<SettingsPage> {
       title: '一般',
       tiles: [
         SettingsTile(
-          title: 'ダークモード',
+          title: I.of(context).darkMode,
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => SettingsThemePage()));
           },
         ),
 //        SettingsTile(
-//          title: '通知',
+//          title: I.of(context).notifications,
 //          onTap: () {
 //            Navigator.of(context).push(
 //                MaterialPageRoute(builder: (_) => SettingsNotificationPage()));
@@ -53,10 +53,10 @@ class _SettingsState extends State<SettingsPage> {
     final env = GetIt.I<EnvKeys>();
 
     return SettingsSection(
-      title: I.of(context).otherSection,
+      title: 'その他',
       tiles: [
         SettingsTile(
-          title: 'WorldRIZeホームページ',
+          title: I.of(context).homepage,
           onTap: () async {
             if (await canLaunch(env.homePageUrl)) {
               await launch(
@@ -92,7 +92,7 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
-          title: 'よくある質問',
+          title: I.of(context).faq,
           onTap: () async {
             if (await canLaunch(env.faqUrl)) {
               await launch(
@@ -104,7 +104,7 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
-          title: 'フィードバック',
+          title: I.of(context).feedback,
           onTap: () async {
             if (await canLaunch(env.contactUrl)) {
               await launch(
@@ -116,7 +116,7 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
-          title: '利用規約',
+          title: I.of(context).termsOfService,
           onTap: () async {
             if (await canLaunch(env.termsOfServiceUtl)) {
               await launch(
@@ -128,7 +128,7 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
-          title: 'プライバシーポリシー',
+          title: I.of(context).privacyPolicy,
           onTap: () async {
             if (await canLaunch(env.privacyPolicyJaUrl)) {
               await launch(
@@ -151,11 +151,11 @@ class _SettingsState extends State<SettingsPage> {
               }
             }),
         SettingsTile(
-          title: 'アプリバージョン',
+          title: I.of(context).appVersion,
           subtitle: pubSpec.version,
         ),
         SettingsTile(
-          title: 'ライセンス',
+          title: I.of(context).license,
           onTap: () {
             final pubSpec = GetIt.I<PackageInfo>();
             Navigator.of(context).push(
@@ -196,7 +196,7 @@ class _SettingsState extends State<SettingsPage> {
           },
         ),
         SettingsTile(
-          title: 'トップページへ移動',
+          title: I.of(context).topPage,
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
@@ -228,7 +228,7 @@ class _SettingsState extends State<SettingsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('設定'),
+        title: Text(I.of(context).settings),
       ),
       body: SettingsList(
         sections: [
