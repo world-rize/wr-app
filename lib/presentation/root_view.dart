@@ -70,7 +70,7 @@ class _RootViewState extends State<RootView>
     final appInfo = await sn.getAppInfo();
     InAppLogger.debugJson(appInfo.toJson());
 
-    if (_isAvailable(appInfo)) {
+    if (!_isAvailable(appInfo)) {
       await Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) => OnBoardingPage(),

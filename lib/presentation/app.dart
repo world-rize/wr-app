@@ -26,6 +26,7 @@ class WRApp extends StatelessWidget {
       theme: WorldRizeLightTheme,
       darkTheme: WorldRizeDarkTheme,
       themeMode: sn.getThemeMode(),
+      debugShowCheckedModeBanner: false,
       navigatorObservers: <NavigatorObserver>[
         observer,
         // route observer
