@@ -1,24 +1,45 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/util/toast.dart';
+import 'package:wr_app/util/logger.dart';
 
 class APITestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final syn = context.watch<SystemNotifier>();
     final an = context.watch<AuthNotifier>();
     final un = context.watch<UserNotifier>();
     final ln = context.watch<LessonNotifier>();
     final nn = context.watch<NoteNotifier>();
     final sn = context.watch<ShopNotifier>();
+
+    _showResultDialog(BuildContext context, String title, [dynamic content]) {
+      showDialog(
+        context: context,
+        child: CupertinoAlertDialog(
+          title: Text(title),
+          content: content != null ? Text(content.toString()) : null,
+          actions: [
+            FlatButton(
+              child: const Text('Ok'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -26,59 +47,41 @@ class APITestView extends StatelessWidget {
       ),
       body: SettingsList(
         sections: [
+          // auth APIs
           SettingsSection(
             title: 'Auth',
             tiles: [
               SettingsTile(
-                title: 'お気に入りに登録',
+                title: 'AppInfo',
                 onTap: () async {
-                  await un
-                      .favoritePhrase(phraseId: '0000', favorite: true)
-                      .catchError(NotifyToast.error);
-                  NotifyToast.success('成功');
+                  try {
+                    final info = await syn.getAppInfo();
+                    _showResultDialog(context, '成功', info.toJson());
+                  } on Exception catch (e) {
+                    InAppLogger.error(e);
+                    _showResultDialog(context, 'エラー', e);
+                  }
                 },
               ),
             ],
           ),
+          // user APIs
           SettingsSection(
             title: 'User',
             tiles: [
               SettingsTile(
-                title: 'お気に入りに登録',
-                onTap: () async {
-                  await un
-                      .favoritePhrase(phraseId: '0000', favorite: true)
-                      .catchError(NotifyToast.error);
-                  NotifyToast.success('成功');
-                },
-              ),
-              SettingsTile(
                 title: '10000ポイントゲット',
                 onTap: () async {
-                  await un
-                      .callGetPoint(points: 10000)
-                      .catchError(NotifyToast.error);
-                  NotifyToast.success('成功');
-                },
-              ),
-              SettingsTile(
-                title: 'テストを受ける',
-                leading: const Icon(Icons.title),
-                onTap: () async {
-                  await un
-                      .doTest(sectionId: 'debug')
-                      .catchError(NotifyToast.error);
-                  NotifyToast.success('成功');
-                },
-              ),
-              SettingsTile(
-                title: '受講可能回数をリセット',
-                onTap: () async {
-                  await un.resetTestLimitCount().catchError(NotifyToast.error);
-                  NotifyToast.success('成功');
+                  try {
+                    await un.callGetPoint(points: 10000);
+                    _showResultDialog(context, '成功');
+                  } on Exception catch (e) {
+                    _showResultDialog(context, 'エラー', e);
+                  }
                 },
               ),
               SettingsTile.switchTile(
+                switchValue: un.user.isPremium,
                 title: 'プレミアムプラン',
                 onToggle: (value) {
                   if (value) {
@@ -87,20 +90,74 @@ class APITestView extends StatelessWidget {
                     un.changePlan(Membership.normal);
                   }
                 },
-                switchValue: un.user.isPremium,
               ),
             ],
           ),
+          // lesson APIs
           SettingsSection(
             title: 'Lesson',
             tiles: [
               SettingsTile(
+                title: 'New Coming Phrases',
+                onTap: () async {
+                  try {
+                    final phrases = await ln.newComingPhrases();
+                    _showResultDialog(
+                        context, '成功', phrases.map((p) => p.toJson()));
+                  } on Exception catch (e) {
+                    _showResultDialog(context, 'エラー', e);
+                  }
+                },
+              ),
+              SettingsTile(
                 title: 'お気に入りに登録',
                 onTap: () async {
-                  await un
-                      .favoritePhrase(phraseId: '0000', favorite: true)
-                      .catchError(NotifyToast.error);
-                  NotifyToast.success('成功');
+                  try {
+                    await un.favoritePhrase(phraseId: '0000', favorite: true);
+                    _showResultDialog(context, '成功');
+                  } on Exception catch (e) {
+                    _showResultDialog(context, 'エラー', e);
+                  }
+                },
+              ),
+              SettingsTile(
+                title: 'テストを受ける',
+                onTap: () async {
+                  try {
+                    await un.doTest(sectionId: 'debug');
+                    _showResultDialog(context, '成功');
+                  } on Exception catch (e) {
+                    _showResultDialog(context, 'エラー', e);
+                  }
+                },
+              ),
+              SettingsTile(
+                title: '受講可能回数をリセット',
+                onTap: () async {
+                  try {
+                    await un.resetTestLimitCount();
+                    _showResultDialog(context, '成功');
+                  } on Exception catch (e) {
+                    _showResultDialog(context, 'エラー', e);
+                  }
+                },
+              ),
+            ],
+          ),
+          // shop APIs
+          SettingsSection(
+            title: 'Shop',
+            tiles: [
+              SettingsTile(
+                title: 'ショップアイテム',
+                onTap: () async {
+                  try {
+                    final items = await sn.getShopItems();
+                    _showResultDialog(
+                        context, '成功', items.map((e) => e.toJson()));
+                  } on Exception catch (e) {
+                    _showResultDialog(context, 'エラー', e);
+                  }
                 },
               ),
             ],
