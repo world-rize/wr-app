@@ -4,14 +4,13 @@ import 'package:data_classes/data_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wr_app/domain/note/model/note.dart';
-import 'package:wr_app/domain/note/model/note_phrase.dart';
 
 part 'note_api_dto.g.dart';
 
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateNoteRequest {
   CreateNoteRequest({
-    @required this.title,
+    @required this.note,
   });
 
   factory CreateNoteRequest.fromJson(Map<String, dynamic> json) =>
@@ -19,7 +18,7 @@ class CreateNoteRequest {
 
   Map<String, dynamic> toJson() => _$CreateNoteRequestToJson(this);
 
-  String title;
+  Note note;
 }
 
 @JsonSerializable(explicitToJson: true, anyMap: true)

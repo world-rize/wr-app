@@ -171,7 +171,6 @@ class FlashCardController extends StatelessWidget {
                   pitch: pitch,
                   pitches: const [0.5, 0.75, 1.0, 1.5],
                   onChanged: (double p) {
-                    InAppLogger.debug('speed $p');
                     Provider.of<FlashCardNotifier>(context, listen: false)
                         .setPlaySpeed(p);
                   },

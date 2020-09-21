@@ -81,7 +81,8 @@ class NoteNotifier extends ChangeNotifier {
   Future<void> createNote({
     @required String title,
   }) async {
-    final note = await _noteService.createNote(title: title);
+    final newNote = Note.empty(title);
+    final note = await _noteService.createNote(note: newNote);
     _user.notes[note.id] = note;
 
     notifyListeners();
