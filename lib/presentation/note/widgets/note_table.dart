@@ -165,7 +165,9 @@ class _NoteTableState extends State<NoteTable> {
               nn.toggleSeeJapanese();
             },
             child: Container(
-              color: nn.canSeeJapanese ? Colors.white : Colors.green,
+              color: nn.canSeeJapanese
+                  ? Theme.of(context).scaffoldBackgroundColor
+                  : Colors.green,
               child: const Center(
                 child: Text('Japanese'),
               ).padding(),
@@ -178,7 +180,9 @@ class _NoteTableState extends State<NoteTable> {
               nn.toggleSeeEnglish();
             },
             child: Container(
-              color: nn.canSeeEnglish ? Colors.white : Colors.green,
+              color: nn.canSeeEnglish
+                  ? Theme.of(context).scaffoldBackgroundColor
+                  : Colors.green,
               child: const Center(
                 child: Text('English'),
               ).padding(),

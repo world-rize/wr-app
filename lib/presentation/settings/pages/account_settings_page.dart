@@ -1,7 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
@@ -58,7 +57,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         SettingsTile(
           title: '名前',
           subtitle: user.name,
-          leading: const Icon(Icons.people),
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => NameFormPage()));
@@ -67,7 +65,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         SettingsTile(
           title: 'メールアドレス',
           subtitle: user.attributes.email,
-          leading: const Icon(Icons.people),
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => MailAddressFormPage()));
@@ -76,7 +73,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         SettingsTile(
           title: 'ユーザーID',
           subtitle: user.userId,
-          leading: const Icon(Icons.attach_money),
         ),
 //        SettingsTile(
 //          title: '年代',
@@ -88,7 +84,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
 //        ),
         SettingsTile(
           title: 'パスワード変更',
-          leading: const Icon(Icons.attach_money),
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => PasswordFormPage()));
@@ -96,7 +91,6 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         ),
         SettingsTile(
           title: 'サインアウト',
-          leading: const Icon(FontAwesome5.eye),
           onTap: () async {
             _showSignOutConfirmDialog();
           },
