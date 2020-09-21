@@ -1,10 +1,13 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
+import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/index.dart';
@@ -55,8 +58,30 @@ class _RootViewState extends State<RootView>
     }
   }
 
+  bool _isAvailable(AppInfo info) {
+    return (Platform.isIOS && info.isIOsAppAvailable) ||
+        (Platform.isAndroid && info.isAndroidAppAvailable);
+  }
+
+  /// Check app status
+  Future _checkAppStatus() async {
+    InAppLogger.debug('AppInfo');
+    final sn = Provider.of<SystemNotifier>(context);
+    final appInfo = await sn.getAppInfo();
+    InAppLogger.debugJson(appInfo.toJson());
+
+    if (_isAvailable(appInfo)) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => OnBoardingPage(),
+          fullscreenDialog: true,
+        ),
+      );
+    }
+  }
+
   /// Check user status
-  Future<void> _checkUserStatus(Duration timestamp) async {
+  Future<void> _checkUserStatus() async {
     // TODO: membership check
 
     // on first launch, show on-boarding page
@@ -83,13 +108,19 @@ class _RootViewState extends State<RootView>
     }
   }
 
+  /// page loaded callback
+  void onPageLoaded() {
+    _checkAppStatus();
+    _checkUserStatus();
+  }
+
   @override
   void initState() {
     super.initState();
     _index = 0;
     _pageController = PageController();
 
-    WidgetsBinding.instance.addPostFrameCallback(_checkUserStatus);
+    WidgetsBinding.instance.addPostFrameCallback((_) => onPageLoaded());
   }
 
   @override
@@ -173,8 +204,8 @@ class _RootViewState extends State<RootView>
       ),
       child: BottomNavigationBar(
         backgroundColor: primaryColor,
-        unselectedItemColor: Colors.white.withOpacity(0.6),
-        selectedItemColor: Theme.of(context).accentIconTheme.color,
+        unselectedItemColor: Colors.white.withOpacity(0.5),
+        selectedItemColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
           _pageController.jumpToPage(index);
