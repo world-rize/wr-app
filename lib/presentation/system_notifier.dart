@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/usecase/system_service.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
@@ -75,12 +76,8 @@ class SystemNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  Future getAppInfo() async {
-    final appInfo = await _systemService.getAppInfo();
-
-    InAppLogger.debugJson(appInfo.toJson());
-
-    notifyListeners();
+  Future<AppInfo> getAppInfo() async {
+    return _systemService.getAppInfo();
   }
 
   Future<void> notify({

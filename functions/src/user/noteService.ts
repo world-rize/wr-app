@@ -46,6 +46,10 @@ export class NoteService {
   async createNote(userId: string, note: Note): Promise<Note> {
     const user = await this.repo.findById(userId)
 
+    if (note == null) {
+      throw new functions.https.HttpsError('invalid-argument', `note is null`)
+    }
+
     const userNoteLimit = 3 + (user.items['extra_note'] ?? 0)
     const noteCount = Object.keys(user.notes).length
     console.log(`limit: ${userNoteLimit}, notes: ${noteCount}`)
@@ -53,8 +57,7 @@ export class NoteService {
       throw new functions.https.HttpsError('out-of-range', `note limit exceeded`)
     }
 
-    const noteId = uuidv4()
-    user.notes[noteId] = note
+    user.notes[note.id] = note
     await this.repo.update(user, true)
     return note
   }

@@ -25,14 +25,12 @@ class SettingsThemePage extends StatelessWidget {
               SettingsTile.switchTile(
                 switchValue: system.getFollowSystemTheme(),
                 title: '端末の設定に従う',
-                leading: const Icon(Icons.people),
                 onToggle: (v) => system.setFollowSystemTheme(value: v),
               ),
               if (!system.getFollowSystemTheme())
                 SettingsTile.switchTile(
                   switchValue: system.getDarkMode(),
                   title: I.of(context).darkMode,
-                  leading: const Icon(Icons.attach_money),
                   onToggle: (v) => system.setDarkMode(value: v),
                 ),
             ],

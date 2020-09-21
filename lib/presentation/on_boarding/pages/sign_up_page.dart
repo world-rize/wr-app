@@ -24,7 +24,7 @@ class _SignUpPageState extends State<SignUpPage> {
   Future<void> _gotoHome() {
     // debug
     final user = Provider.of<UserNotifier>(context, listen: false).user;
-    InAppLogger.debugJson(user.toJson());
+    // InAppLogger.debugJson(user.toJson());
 
     // initial login
     Provider.of<SystemNotifier>(context, listen: false)

@@ -79,7 +79,8 @@ class FavoritePhraseList {
   }
 
   FavoritePhraseDigest findByPhraseId(String id) {
-    return phrases.firstWhere((element) => element.id == id, orElse: null);
+    return phrases.firstWhere((element) => element.id == id,
+        orElse: () => null);
   }
 
   bool updatePhrase(String id, FavoritePhraseDigest digest) {

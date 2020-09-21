@@ -132,6 +132,8 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
+    final h = Theme.of(context).primaryTextTheme.headline3;
+    final b = Theme.of(context).primaryTextTheme.bodyText1;
     final userNotifier = Provider.of<UserNotifier>(context);
     final points = userNotifier.user.statistics.points;
     if (_items.isEmpty) {
@@ -150,15 +152,24 @@ class _ShopPageState extends State<ShopPage> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: Text(I.of(context).havingCoin),
+                child: Text(
+                  I.of(context).havingCoin,
+                  style: h,
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(8),
-                child: Text(I.of(context).points(points)),
+                child: Text(
+                  I.of(context).points(points),
+                  style: b,
+                ),
               ),
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: Text('交換できるもの'),
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  '交換できるもの',
+                  style: h,
+                ),
               ),
               Column(
                 children: _items

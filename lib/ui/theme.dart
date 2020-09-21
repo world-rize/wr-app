@@ -51,7 +51,7 @@ final ThemeData WorldRizeLightTheme = ThemeData(
 final ThemeData WorldRizeDarkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: const Color(0xff56c0ea),
-  accentColor: Colors.black,
+  accentColor: Colors.white,
   backgroundColor: Colors.black45,
   primaryIconTheme: const IconThemeData(color: Colors.white),
   primaryTextTheme: const TextTheme(
