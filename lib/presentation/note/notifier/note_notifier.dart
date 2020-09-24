@@ -161,11 +161,16 @@ class NoteNotifier extends ChangeNotifier {
     @required String phraseId,
     @required NotePhrase phrase,
   }) async {
-    final note = _user.getNoteById(noteId: noteId).clone();
-    await _noteService.updateNote(note: note);
-    _user.notes[note.id] = note;
-    notifyListeners();
-    InAppLogger.info('updatePhraseInNote $noteId');
+    try {
+      final note = _user.getNoteById(noteId: noteId)?.clone();
+      await _noteService.updateNote(note: note);
+      _user.notes[note.id] = note;
+      notifyListeners();
+      InAppLogger.info('updatePhraseInNote $noteId');
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+      rethrow;
+    }
   }
 
   Future<void> achievePhrase({
