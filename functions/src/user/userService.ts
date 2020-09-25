@@ -61,7 +61,7 @@ export class UserService {
         schemaVersion: 'v1',
         email: '',
         age: '',
-        memberShip: 'normal',
+        memberShip: 'pro',
       },
       items: {},
     }

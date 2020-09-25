@@ -187,14 +187,10 @@ class _TestResultPageState extends State<TestResultPage> {
                 children: resultList,
               ),
             ),
+            Center(child: nextButton.padding()),
           ],
         ).padding(),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: nextButton,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

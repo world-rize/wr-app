@@ -10,6 +10,7 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
+import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/toast.dart';
 
 class AnythingSearchPage extends StatefulWidget {
@@ -63,56 +64,68 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
       appBar: AppBar(
         title: Text(I.of(context).lessonSearchAppBarTitle),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: _wordField,
-          ),
-          FutureBuilder<Iterable<Phrase>>(
-              future: _searchPhrases(_word),
-              builder: (_, snapshot) {
-                if (!snapshot.hasData) {
-                  // loading
-                  return Text('loading');
-                } else {
-                  return Column(
-                    children: snapshot.data
-                        .map(
-                          (phrase) => PhraseCard(
-                            phrase: phrase,
-                            favorite: false,
-                            onTap: () {
-                              // TODO: voice player SectionPageの中に
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) =>
-                                      ChangeNotifierProvider<VoicePlayer>.value(
-                                    value: VoicePlayer(
-                                      onError: NotifyToast.error,
-                                    ),
-                                    builder: (_, __) => SectionPage(
-                                      section: Section.fromPhrase(phrase),
-                                      index: 0,
-                                    ),
-                                  ),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: _wordField,
+              ),
+              FutureBuilder<Iterable<Phrase>>(
+                  future: _searchPhrases(_word),
+                  builder: (_, snapshot) {
+                    if (!snapshot.hasData) {
+                      // loading
+                      return const Text('loading');
+                    } else {
+                      return Column(
+                        children: [
+                          if (snapshot.hasData && snapshot.data.isNotEmpty)
+                            Text('${snapshot.data.length} フレーズみつかりました')
+                                .padding(),
+                          ...snapshot.data
+                              .map(
+                                (phrase) => PhraseCard(
+                                  phrase: phrase,
+                                  favorite: false,
+                                  onTap: () {
+                                    // TODO: voice player SectionPageの中に
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => ChangeNotifierProvider<
+                                            VoicePlayer>.value(
+                                          value: VoicePlayer(
+                                            onError: NotifyToast.error,
+                                          ),
+                                          builder: (_, __) => SectionPage(
+                                            section: Section.fromPhrase(phrase),
+                                            index: 0,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  onFavorite: () {
+                                    un.favoritePhrase(
+                                        phraseId: phrase.id,
+                                        favorite: un.existPhraseInFavoriteList(
+                                            phraseId: phrase.id));
+                                  },
                                 ),
-                              );
-                            },
-                            onFavorite: () {
-                              un.favoritePhrase(
-                                  phraseId: phrase.id,
-                                  favorite: un.existPhraseInFavoriteList(
-                                      phraseId: phrase.id));
-                            },
-                          ),
-                        )
-                        .toList(),
-                  );
-                }
-              }),
-        ],
+                              )
+                              .toList(),
+                        ],
+                      );
+                    }
+                  }),
+            ],
+          ),
+        ),
       ),
     );
   }

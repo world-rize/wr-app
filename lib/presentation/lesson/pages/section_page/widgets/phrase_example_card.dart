@@ -15,13 +15,15 @@ import 'package:wr_app/ui/widgets/boldable_text.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
 
-/// phrase example view
+/// phrase example view testなら[isTest]trueでキーフレーズを隠す
 class PhraseExampleCard extends StatelessWidget {
   const PhraseExampleCard({
     @required this.phrase,
+    @required this.isTest,
   });
 
   final Phrase phrase;
+  final bool isTest;
 
   Widget _createMessageView({
     BuildContext context,
@@ -37,6 +39,7 @@ class PhraseExampleCard extends StatelessWidget {
         crossAxisAlignment:
             primary ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
+          // TODO: if (primary) で分けるべき
           // 英語メッセージ
           GestureDetector(
             onTap: onPressed,
@@ -50,11 +53,18 @@ class PhraseExampleCard extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
+                // TODO: ViewModelはNotifierに書くべき
                 child: BoldableText(
-                  text: ln.showEnglish
+                  text: isTest
                       ? message.text['en']
-                      : ' ' * message.text['en'].length,
-                  basicStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                      : (ln.showEnglish
+                          ? message.text['en']
+                          : ' ' * message.text['en'].length),
+                  basicStyle: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyText2
+                      .apply(color: primary ? Colors.white : Colors.black),
+                  hide: isTest,
                 ),
               ),
             ),
@@ -74,17 +84,18 @@ class PhraseExampleCard extends StatelessWidget {
                 ),
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: ln.showJapanese
-                        ? BoldableText(
-                            text: message.text['ja'],
-                            basicStyle:
-                                Theme.of(context).primaryTextTheme.bodyText2,
-                          )
-                        // TODO: 文字の端が等幅フォントじゃないのでなにか考える
-                        : Text('　' * message.text['ja'].length),
-                  ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: BoldableText(
+                        text: isTest
+                            ? message.text['ja']
+                            : (ln.showJapanese
+                                ? message.text['ja']
+                                // TODO: 文字の端が等幅フォントじゃないのでなにか考える
+                                : '　' * message.text['ja'].length),
+                        basicStyle:
+                            Theme.of(context).primaryTextTheme.bodyText2,
+                      )),
                 ),
               ],
             ),

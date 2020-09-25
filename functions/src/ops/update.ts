@@ -38,6 +38,13 @@ const items: GiftItem[] = [
     expendable: false,
   },
   {
+    id: 'accent_au',
+    title: 'フレーズアクセント(AU)',
+    description: 'AUアクセント',
+    price: 2500,
+    expendable: false,
+  },
+  {
     id: 'accent_uk',
     title: 'フレーズアクセント(UK)',
     description: 'UKアクセント',

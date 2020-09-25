@@ -32,7 +32,10 @@ class NoteNotifier extends ChangeNotifier {
   /// 現在のノート
   String _nowSelectedNoteId;
 
-  Note get currentNote => _user.getNoteById(noteId: _nowSelectedNoteId);
+  Note get currentNote {
+    return _user.getNoteById(noteId: nowSelectedNoteId) ??
+        _user.getDefaultNote();
+  }
 
   /// 英語
   bool _canSeeEnglish = true;
@@ -41,7 +44,8 @@ class NoteNotifier extends ChangeNotifier {
   bool _canSeeJapanese = true;
 
   String get nowSelectedNoteId {
-    return _nowSelectedNoteId ??= user.getDefaultFavoriteList().id;
+    // TODO: 無駄コード
+    return _nowSelectedNoteId ??= user.getDefaultNote().id;
   }
 
   bool get canSeeEnglish => _canSeeEnglish;
