@@ -8,6 +8,7 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
+import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
@@ -162,6 +163,18 @@ class APITestView extends StatelessWidget {
               ),
             ],
           ),
+          SettingsSection(
+            title: 'Dialogs',
+            tiles: [
+              SettingsTile(
+                title: '30 days challenge',
+                onTap: () {
+                  showDialog(
+                      context: context, child: ChallengeAchievedDialog());
+                },
+              ),
+            ],
+          )
         ],
       ),
     );

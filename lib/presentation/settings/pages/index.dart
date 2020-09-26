@@ -207,7 +207,7 @@ class _SettingsState extends State<SettingsPage> {
           onTap: () {
             final pubSpec = GetIt.I<PackageInfo>();
             // ignore: cascade_invocations
-            Provider.of<SystemNotifier>(context)
+            Provider.of<SystemNotifier>(context, listen: false)
                 .notify(title: pubSpec.appName, body: 'test', payload: 'ok');
           },
         ),

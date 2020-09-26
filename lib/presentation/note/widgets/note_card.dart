@@ -17,8 +17,10 @@ class NoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final nn = Provider.of<NoteNotifier>(context, listen: false);
-    final titleStyle = Theme.of(context).primaryTextTheme.bodyText1;
-    final subTitleStyle = Theme.of(context).primaryTextTheme.bodyText2;
+    final titleStyle =
+        Theme.of(context).primaryTextTheme.bodyText1.apply(color: Colors.black);
+    final subTitleStyle =
+        Theme.of(context).primaryTextTheme.bodyText2.apply(color: Colors.black);
     final achieved = note.isAchievedNote;
 
     return InkWell(

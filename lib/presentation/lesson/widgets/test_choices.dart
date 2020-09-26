@@ -42,8 +42,11 @@ class _TestChoicesState extends State<TestChoices> {
       children: <Widget>[
         Flexible(
           flex: 5,
-          child: PhraseExampleCard(
-            phrase: widget.phrase,
+          child: SingleChildScrollView(
+            child: PhraseExampleCard(
+              phrase: widget.phrase,
+              isTest: true,
+            ),
           ),
         ),
         Flexible(

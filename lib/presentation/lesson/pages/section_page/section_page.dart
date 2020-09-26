@@ -153,8 +153,7 @@ class _SectionPageState extends State<SectionPage>
           SizedBox(
             width: double.infinity,
             child: Container(
-              padding: EdgeInsets.only(bottom: 20),
-              color: Colors.white10,
+              padding: const EdgeInsets.only(bottom: 20),
               child: Padding(
                 padding: const EdgeInsets.only(left: 30),
                 child: Row(

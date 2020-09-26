@@ -17,11 +17,7 @@ class ChallengeAchievedDialog extends StatelessWidget {
           ),
           Text(I.of(context).show30DaysChallengeAchievedDialogTitle),
           Row(
-            children: [
-              Image.asset('assets/mock.png'),
-              Image.asset('assets/mock.png'),
-              Image.asset('assets/mock.png'),
-            ],
+            children: [],
           ),
           const Text('30 Days Challenge 達成'),
           PrimaryButton(
