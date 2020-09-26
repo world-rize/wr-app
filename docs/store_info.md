@@ -65,6 +65,8 @@ WR英会話ではWR Coinsというポイントをテスト合格後や友達紹�
 <img src="figs/store/icon_512x512.jpeg" width=50%>
 
 ## スクリーンショット(仮)
-<img src="figs/store/screenshot_android_1.png" width=50%>
-
-<img src="figs/store/screenshot_android_2.png" width=50%>
+<img src="figs/store/screenshot_1.jpg" width=50%>
+<img src="figs/store/screenshot_2.jpg" width=50%>
+<img src="figs/store/screenshot_3.jpg" width=50%>
+<img src="figs/store/screenshot_4.jpg" width=50%>
+<img src="figs/store/screenshot_5.jpg" width=50%>
