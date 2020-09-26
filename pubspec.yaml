@@ -53,6 +53,7 @@ dependencies:
   flutter_sequence_animation: ^3.0.0
   flutter_icons: ^1.1.0
   heatmap_calendar: ^1.2.8
+  like_button: ^1.0.1
 
   # util
   flutter_markdown: ^0.3.2
