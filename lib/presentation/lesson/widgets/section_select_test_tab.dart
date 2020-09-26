@@ -15,7 +15,7 @@ class TestTab extends StatefulWidget {
   TestTab({@required this.sections, @required this.onTap});
 
   List<Section> sections;
-  Function onTap;
+  Function(Section) onTap;
 
   @override
   _TestTabState createState() => _TestTabState();

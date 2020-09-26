@@ -8,11 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/domain/lesson/model/test_stats.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/widgets/test_choices.dart';
+import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 
 import './test_result_page.dart';
 
@@ -31,6 +34,8 @@ class TestPage extends StatefulWidget {
 /// [TestPage] の State
 class TestPageState extends State<TestPage> {
   TestPageState({@required this.section});
+
+  bool _isLoading;
 
   /// 出題されるセクション
   final Section section;
@@ -53,8 +58,50 @@ class TestPageState extends State<TestPage> {
   @override
   void initState() {
     super.initState();
+    _isLoading = false;
     _index = 0;
     _answers = [];
+  }
+
+  // テストを終了する
+  Future _finishTest() async {
+    final un = context.read<UserNotifier>();
+
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      await sendEvent(event: AnalyticsEvent.finishTest);
+
+      // send score
+      await un.sendTestScore(sectionId: section.id, score: _corrects);
+      // get points
+      await un.callGetPoint(points: _corrects);
+
+      final challengeAchieved = await un.checkTestStreaks();
+
+      final stats = TestStats(
+        challengeAchieved: challengeAchieved,
+        section: section,
+        questions: 7,
+        corrects: _corrects,
+        answers: _answers,
+      );
+
+      // pop TestPage
+      Navigator.of(context).pop();
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => TestResultPage(stats: stats)),
+      );
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+    } finally {
+//      setState(() {
+//        _isLoading = false;
+//      });
+    }
   }
 
   /// 次の問題へ
@@ -72,20 +119,7 @@ class TestPageState extends State<TestPage> {
 
     // test finish
     if (_index == section.phrases.length - 1) {
-      final stats = TestStats(
-        section: section,
-        questions: 7,
-        corrects: _corrects,
-        answers: _answers,
-      );
-
-      await sendEvent(event: AnalyticsEvent.finishTest);
-
-      Navigator.of(context).pop();
-
-      await Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => TestResultPage(stats: stats)),
-      );
+      await _finishTest();
     } else {
       // seek index
       setState(() {
@@ -135,23 +169,26 @@ class TestPageState extends State<TestPage> {
     final primaryColor = Theme.of(context).primaryColor;
     final selection = _randomSelections();
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: Text(I.of(context).question(_index + 1)),
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: _showConfirmDialog,
-          )
-        ],
-      ),
-      body: TestChoices(
-        index: _index,
-        phrase: currentPhrase,
-        selection: selection,
-        onNext: _next,
+    return LoadingView(
+      loading: _isLoading,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          title: Text(I.of(context).question(_index + 1)),
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: _showConfirmDialog,
+            )
+          ],
+        ),
+        body: TestChoices(
+          index: _index,
+          phrase: currentPhrase,
+          selection: selection,
+          onNext: _next,
+        ),
       ),
     );
   }

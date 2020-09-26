@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
+import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/toast.dart';
@@ -38,6 +39,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
 
   ///レッスン
   final Lesson lesson;
+  bool _isLoading;
 
   /// タブ
   TabController _tabController;
@@ -46,74 +48,91 @@ class _SectionSelectPageState extends State<SectionSelectPage>
     const Tab(text: 'Test'),
   ];
 
+  Future _doLesson(Section section) async {
+    try {
+      await sendEvent(
+        event: AnalyticsEvent.visitLesson,
+        parameters: {'sectionTitle': section.title},
+      );
+
+      await Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => SectionListPage(section: section)));
+    } on Exception catch (e) {
+      NotifyToast.error(e);
+    }
+  }
+
+  // テスト受講
+  Future _doTest(Section section) async {
+    final un = Provider.of<UserNotifier>(context, listen: false);
+
+    try {
+      // ダイアログ一回のみ
+      Navigator.of(context).pop();
+      setState(() {
+        _isLoading = true;
+      });
+      await un.doTest(sectionId: section.title);
+
+      await sendEvent(
+        event: AnalyticsEvent.doTest,
+        parameters: {'sectionTitle': section.title},
+      );
+
+      await Navigator.of(context).push(
+        MaterialPageRoute(builder: (_) => TestPage(section: section)),
+      );
+    } on Exception catch (e) {
+      NotifyToast.error(e);
+      Navigator.pop(context);
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _isLoading = false;
     _tabController = TabController(length: _tabs.length, vsync: this);
   }
 
   @override
   Widget build(BuildContext context) {
-    final userStore = Provider.of<UserNotifier>(context);
     final sections = Section.fromLesson(lesson);
     final primaryColor = Theme.of(context).primaryColor;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: Text(lesson.title['ja'],
-            style: const TextStyle(color: Colors.white)),
-        bottom: TabBar(
-          tabs: _tabs,
-          controller: _tabController,
-          indicatorColor: Colors.orange,
-          indicatorWeight: 3,
-          labelColor: Colors.white,
-          labelStyle: const TextStyle(fontSize: 20),
+    return LoadingView(
+      loading: _isLoading,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: primaryColor,
+          title: Text(lesson.title['ja'],
+              style: const TextStyle(color: Colors.white)),
+          bottom: TabBar(
+            tabs: _tabs,
+            controller: _tabController,
+            indicatorColor: Colors.orange,
+            indicatorWeight: 3,
+            labelColor: Colors.white,
+            labelStyle: const TextStyle(fontSize: 20),
+          ),
         ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          LessonTab(
-            sections: sections,
-            onTap: (Section section) {
-              try {
-                sendEvent(
-                  event: AnalyticsEvent.visitLesson,
-                  parameters: {'sectionTitle': section.title},
-                );
-
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => SectionListPage(section: section)));
-              } on Exception catch (e) {
-                NotifyToast.error(e);
-              }
-            },
-          ),
-          TestTab(
-            sections: sections,
-            onTap: (Section section) async {
-              try {
-                await userStore.doTest(sectionId: section.title);
-
-                await sendEvent(
-                  event: AnalyticsEvent.doTest,
-                  parameters: {'sectionTitle': section.title},
-                );
-
-                Navigator.pop(context);
-
-                await Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => TestPage(section: section)),
-                );
-              } on Exception catch (e) {
-                NotifyToast.error(e);
-                Navigator.pop(context);
-              }
-            },
-          ),
-        ],
+        body: TabBarView(
+          controller: _tabController,
+          children: [
+            LessonTab(
+              sections: sections,
+              onTap: _doLesson,
+            ),
+            TestTab(
+              sections: sections,
+              onTap: _doTest,
+            ),
+          ],
+        ),
       ),
     );
   }
