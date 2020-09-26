@@ -1,16 +1,17 @@
 /**
  * Copyright © 2020 WorldRIZe. All rights reserved.
  */
-import { User } from './model/user'
+import { firestore } from 'firebase-admin'
+import * as functions from 'firebase-functions'
 import moment from 'moment'
 import _ from 'lodash'
 import { v4 as uuidv4 } from 'uuid'
+import shortid from 'shortid'
+
+import { User } from './model/user'
 import { NoteService } from './noteService'
 import { UserRepository } from './userRepository'
 import { FavoritePhraseList } from './model/phrase'
-import { firestore } from 'firebase-admin'
-import shortid from 'shortid'
-import * as functions from 'firebase-functions'
 import { GiftItem } from './model/item'
 
 export class UserService {
@@ -22,8 +23,8 @@ export class UserService {
 
   /**
    * 初期ユーザーを作成
-   * @param uuid 
-   * @param req 
+   * @param uuid
+   * @param req
    */
   static generateInitialUser (uuid: string): User {
     const defaultFavoriteList = UserService.generateFavoriteList(uuidv4(), 'お気に入り', true)
@@ -144,7 +145,7 @@ export class UserService {
     } else {
         user.favorites[listId].phrases.splice(index, 1)
     }
-  
+
     return this.repo.update(user)
   }
 
