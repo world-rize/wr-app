@@ -83,7 +83,11 @@ class Note {
   /// achieved noteなら何個でもしまえる
   /// そうでないならfalse
   bool addPhrase(NotePhrase phrase) {
-    if (isAchievedNote) {
+    if (isAchievedNote && !(phrase.japanese == '' && phrase.english == '')) {
+      phrase
+        ..english = phrase.english.trim()
+        ..japanese = phrase.japanese.trim();
+
       _phrases.add(phrase);
       return true;
     } else {
@@ -102,7 +106,9 @@ class Note {
   bool updateNotePhrase(String id, NotePhrase phrase) {
     final index = _phrases.indexWhere((element) => element.id == id);
     if (index != -1) {
-      _phrases[index] = phrase;
+      phrase
+        ..english = phrase.english.trim()
+        ..japanese = phrase.japanese.trim();
       return true;
     } else {
       return false;
