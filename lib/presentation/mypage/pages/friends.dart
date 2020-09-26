@@ -101,9 +101,9 @@ class FriendsPage extends StatelessWidget {
                         text: 'FAQ',
                         recognizer: TapGestureRecognizer()
                           ..onTap = () async {
-                            if (await canLaunch(env.privacyPolicyJaUrl)) {
+                            if (await canLaunch(env.faqUrl)) {
                               await launch(
-                                env.privacyPolicyJaUrl,
+                                env.faqUrl,
                                 forceSafariVC: false,
                                 forceWebView: false,
                               );

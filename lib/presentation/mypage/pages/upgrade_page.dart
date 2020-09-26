@@ -1,7 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/mypage/pages/friends.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 
 /// mypage > index > UpgradePage
@@ -66,7 +68,7 @@ class UpgradePage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(8).add(EdgeInsets.only(bottom: 30)),
+          padding: const EdgeInsets.all(8).add(EdgeInsets.only(bottom: 90)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -78,12 +80,19 @@ class UpgradePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'プレミアム版',
+                      'PRO版',
                       style: h,
                     ),
-                    Text(
-                      '説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。',
-                      style: b,
+                    Text.rich(
+                      TextSpan(
+                        text: '',
+                        children: [
+                          TextSpan(
+                            text: '※WR英会話をアップグレードしてみよう！\nアップグレードをすると',
+                            style: Theme.of(context).primaryTextTheme.bodyText1,
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -104,6 +113,32 @@ class UpgradePage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(16),
+                child: Text.rich(
+                  TextSpan(
+                    text: '',
+                    children: [
+                      TextSpan(
+                        text: 'さらに招待コードを入力で双方にWR coinをプレゼントします！詳しくは',
+                        style: Theme.of(context).primaryTextTheme.bodyText1,
+                      ),
+                      TextSpan(
+                        text: 'こちら',
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => FriendsPage()));
+                          },
+                        style: b.apply(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -113,12 +148,12 @@ class UpgradePage extends StatelessWidget {
                       style: h,
                     ),
                     Text(
-                      '説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。説明テキスト。',
+                      '一度アップデートをしたら返金は行っていませんのでご了承ください\n詳しくはFAQのUpgradeについてをご確認ください',
                       style: b,
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
