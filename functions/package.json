@@ -5,10 +5,11 @@
     "dev": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
-    "deploy:dev": "yarn build && firebase --project wr-english-dev deploy --only functions",
-    "deploy:prd": "yarn build && firebase --project wr-english-prd deploy --only functions",
+    "deploy:dev": "yarn build && firebase --project wr-english-dev deploy --only functions,firestore:rules",
+    "deploy:prd": "yarn build && firebase --project wr-english-prd deploy --only functions,firestore:rules",
     "logs": "firebase functions:log",
     "test": "jest -i --detectOpenHandles",
+    "test:rule_test": "export FIRESTORE_EMULATOR_HOST=\"localhost:8080\"; jest -t rule_test --forceExit --detectOpenHandles --runInBand",
     "docs": "typedoc --out ../docs/typedoc src",
     "emu": "yarn build && firebase emulators:start --project wr-english-dev",
     "run:emu": "export FIRESTORE_EMULATOR_HOST=\"localhost:8080\"; MIGRATE=true ts-node"
@@ -49,10 +50,12 @@
     "typescript": "^3.2.2"
   },
   "jest": {
+    "testEnvironment": "node",
     "preset": "ts-jest",
     "moduleFileExtensions": [
       "ts",
-      "js"
+      "js",
+      "json"
     ],
     "testMatch": [
       "**/test/**/*.ts"

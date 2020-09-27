@@ -8,12 +8,14 @@ class TestStats {
   TestStats({
     @required this.section,
     @required this.answers,
+    @required this.challengeAchieved,
+    @required this.corrects,
     this.questions = 7,
-    this.corrects = 0,
   });
 
   Section section;
   int questions;
   int corrects;
   List<bool> answers;
+  bool challengeAchieved;
 }

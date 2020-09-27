@@ -118,6 +118,7 @@ class PhrasesParser(object):
         self.phrase_id = 0
 
     def _parse_phrase(self, phrase_txt: str, lesson_id: str, phrase_id: str):
+        # head must be ".\n"
         # unique phrase id
         master_id = f'{lesson_id}_{phrase_id}'
 
@@ -190,6 +191,7 @@ class PhrasesParser(object):
             }
 
             self.phrases.append(phrase_json)
+
         except Exception as e:
             error(f'Warning {master_id} invalid')
             # error('\t', e)
@@ -199,12 +201,16 @@ class PhrasesParser(object):
         lesson_txt = strip_brs(lesson_txt)
         # phrases[0]: title
         # phrases[1..]: phrases contents
-        header, *phrases = re.split(r'^\s*\d+\.', lesson_txt, flags=re.MULTILINE)
+        header, *phrases = re.split(r'^\s*(\d+)\.', lesson_txt, flags=re.MULTILINE)
         title = strip_brs(header)
         # ex: 'Social Media' -> 'social'
         lesson_id = title.split(' ')[0].strip(string.punctuation).lower()
 
-        for phrase_id, phrase_txt in enumerate(phrases, start=1):
+        for i in range(0, len(phrases), 2):
+            phrase_id, phrase_txt = phrases[i:i+2]
+            phrase_id = int(phrase_id)
+            if phrase_id > 42:
+                break
             self._parse_phrase(phrase_txt, lesson_id=lesson_id, phrase_id=str(phrase_id))
 
         lesson_json = {

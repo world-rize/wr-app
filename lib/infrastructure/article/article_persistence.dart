@@ -5,12 +5,6 @@ import 'package:wr_app/domain/article/index.dart';
 
 final List<ArticleCategory> categories = <ArticleCategory>[
   ArticleCategory(
-    id: 'online_lesson',
-    title: 'オンライン英会話',
-    thumbnailUrl: 'assets/thumbnails/english.jpg',
-    url: 'https://world-rize.com/category/article/',
-  ),
-  ArticleCategory(
     id: 'article',
     title: 'Articles',
     thumbnailUrl: 'assets/thumbnails/article.jpg',

@@ -7,7 +7,9 @@ import 'package:getflutter/colors/gf_color.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wr_app/domain/article/model/category.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
+import 'package:wr_app/presentation/article/pages/english_lesson_pr_page.dart';
 import 'package:wr_app/presentation/article/widgets/category_view.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
 import 'package:wr_app/util/env_keys.dart';
@@ -27,11 +29,27 @@ class ColumnIndexPage extends StatelessWidget {
         children: [
           const Header1(text: 'Column', dividerColor: GFColors.SUCCESS)
               .padding(),
+          // English lesson
+          CategoryView(
+            category: ArticleCategory(
+              id: 'online_lesson',
+              title: 'オンライン英会話',
+              thumbnailUrl: 'assets/thumbnails/english.jpg',
+              url: '',
+            ),
+            onTap: (_) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => EnglishLessonPrPage(),
+                ),
+              );
+            },
+          ),
           // categories
           ...categories.map(
             (category) => CategoryView(
                 category: category,
-                onTap: (article) async {
+                onTap: (_) async {
                   if (await canLaunch(category.url)) {
                     await launch(
                       category.url,
