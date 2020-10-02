@@ -42,41 +42,46 @@ class _RequestPageState extends State<RequestPage> {
         backgroundColor: primaryColor,
         title: Text(I.of(context).requestPhrase),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8),
-                child: Text(
-                  'リクエストを送る',
-                  style: TextStyle(fontSize: 24),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Text(
+                    'リクエストを送る',
+                    style: TextStyle(fontSize: 24),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: ShadowedContainer(
-                  color: backgroundColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: TextField(
-                      maxLines: 20,
-                      decoration:
-                          const InputDecoration.collapsed(hintText: hintText),
-                      onChanged: (text) {
-                        setState(() {
-                          _text = text;
-                        });
-                      },
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ShadowedContainer(
+                    color: backgroundColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: TextField(
+                        maxLines: 20,
+                        decoration:
+                            const InputDecoration.collapsed(hintText: hintText),
+                        onChanged: (text) {
+                          setState(() {
+                            _text = text;
+                          });
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const Text('''⚠️リクエストに返答することはできません。
-              可能な限りリクエストを反映させるのでNew coming Phraseを確認してください。'''),
-            ],
+                const Text('''⚠️リクエストに返答することはできません。
+                可能な限りリクエストを反映させるのでNew coming Phraseを確認してください。'''),
+              ],
+            ),
           ),
         ),
       ),

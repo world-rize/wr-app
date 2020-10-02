@@ -62,16 +62,13 @@ class VoicePlayer with ChangeNotifier {
   /// current pronunciation
   VoiceAccent locale;
 
-  /// play queue(TODO)
-  List<String> queue;
-
-  // @override
-  // void dispose() {
-  //   print('dispose');
-  //   _player.fixedPlayer.dispose();
-  //   _cache.dispose();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    stop();
+    _player.fixedPlayer.dispose();
+    _cache.dispose();
+    super.dispose();
+  }
 
   void _onStateChanged(AudioPlayerState state) {
     // if (state == AudioPlayerState.COMPLETED) {
@@ -84,17 +81,18 @@ class VoicePlayer with ChangeNotifier {
   Future<void> playMessages({@required List<Message> messages}) async {
     isPlaying = true;
     notifyListeners();
-    await Future.forEach(messages, (message) async {
+    await Future.forEach(messages, (Message message) async {
       final l = _voiceAccentMP3AssetsName[locale];
 
       await _player.load(message.assets.voice[l]);
-      final d = await _player.fixedPlayer.getDuration();
       await _player.play(message.assets.voice[l]);
       final c = Completer();
-      _fixedPlayer.onPlayerCompletion.listen((event) {
+      final sub = _fixedPlayer.onPlayerCompletion.listen((event) {
         c.complete();
       });
       await c.future;
+      // remove listener
+      await sub.cancel();
     });
     isPlaying = false;
     notifyListeners();
@@ -103,10 +101,11 @@ class VoicePlayer with ChangeNotifier {
   Future<void> stop() async {
     await _player.fixedPlayer.stop();
     final c = Completer();
-    _fixedPlayer.onPlayerCompletion.listen((event) {
+    final sub = _fixedPlayer.onPlayerCompletion.listen((event) {
       c.complete();
     });
     isPlaying = false;
+    await sub.cancel();
     notifyListeners();
   }
 

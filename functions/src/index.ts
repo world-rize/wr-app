@@ -28,6 +28,7 @@ export const sendTestResult = functions.region('asia-northeast1').https.onCall(u
 
 export const introduceFriend = functions.region('asia-northeast1').https.onCall(userApi.introduceFriend)
 export const getShopItems = functions.region('asia-northeast1').https.onCall(userApi.getShopItems)
+export const getNewComingPhrases = functions.region('asia-northeast1').https.onCall(userApi.getNewComingPhrases)
 
 // note api
 export const createNote = functions.region('asia-northeast1').https.onCall(userApi.createNote)

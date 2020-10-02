@@ -3,7 +3,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/domain/lesson/model/test_stats.dart';
@@ -12,6 +11,7 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
+import 'package:wr_app/presentation/lesson/widgets/reward_dialog.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 
@@ -31,33 +31,21 @@ class TestResultPage extends StatefulWidget {
 
 class _TestResultPageState extends State<TestResultPage> {
   /// 報酬獲得画面
-  Future<void> _showRewardDialog(BuildContext context) {
+  Future _showRewardDialog(BuildContext context) {
     return showCupertinoDialog(
       context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: Text(I.of(context).testClear),
-        content: Column(
-          children: <Widget>[
-            Text(I.of(context).getPoints(widget.stats.corrects)),
-            GFButton(
-              color: Colors.orange,
-              text: I.of(context).close,
-              size: GFSize.LARGE,
-              shape: GFButtonShape.pills,
-              padding: const EdgeInsets.symmetric(horizontal: 80),
-              onPressed: () {
-                // pop history
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-            )
-          ],
-        ),
+      builder: (_) => RewardDialog(
+        text: Text(I.of(context).getPoints(widget.stats.corrects)),
+        onTap: () {
+          // pop history
+          Navigator.popUntil(context, (route) => route.isFirst);
+        },
       ),
     );
   }
 
   /// アンケートを出す
-  Future<void> _showQuestionnaireDialog(BuildContext context) {
+  Future _showQuestionnaireDialog(BuildContext context) {
     final systemNotifier = Provider.of<SystemNotifier>(context, listen: false);
     final env = DotEnv().env;
     final questionnaireUrl = env['QUESTIONNAIRE_URL'];
@@ -93,28 +81,23 @@ class _TestResultPageState extends State<TestResultPage> {
   }
 
   /// 30days challenge 達成
-  Future<void> _show30DaysChallengeAchievedDialog(BuildContext context) {
+  Future _show30DaysChallengeAchievedDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (_) => ChallengeAchievedDialog(),
     );
   }
 
-  void _onTapNext() async {
+  // Nextぼたんをおしたとき
+  Future _onTapNext() async {
     final un = context.read<UserNotifier>();
     final sn = context.read<SystemNotifier>();
 
-    // send score
-    await un.sendTestScore(
-        sectionId: widget.stats.section.id, score: widget.stats.corrects);
-    // get points
-    await un.callGetPoint(points: widget.stats.corrects);
     // show dialog
     await _showRewardDialog(context);
 
-    final is30DaysChallengeAchieved = await un.checkTestStreaks();
-
-    if (true || is30DaysChallengeAchieved) {
+    // 30 days challenge
+    if (widget.stats.challengeAchieved) {
       await _show30DaysChallengeAchievedDialog(context);
     }
 
@@ -187,14 +170,10 @@ class _TestResultPageState extends State<TestResultPage> {
                 children: resultList,
               ),
             ),
+            Center(child: nextButton.padding()),
           ],
         ).padding(),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 20),
-        child: nextButton,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

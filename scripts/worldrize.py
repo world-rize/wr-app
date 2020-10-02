@@ -3,6 +3,7 @@ WorldRIZe CLI
 """
 import os, re, json, shutil, requests, string
 import fire, chalk
+from retry import retry
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -58,11 +59,13 @@ def generate_phrase_voices(phrase: object, out_dir: Path):
         else:
             success(f'Skipped {voice["path"]}')
 
+@retry(tries=5)
 def call_api(access_key: str, text: str, gender_voice: str, language: str, out_path: Path):
     """
     gender_voice: 'male' | 'female'
     language: 'en-us' | 'en-uk' | 'en-au' | 'en-in' -> 'en_US' | 'en_GB' | 'en_AU' | 'en_IN'
     """
+
     language_map = {
         'en-us': 'en_US',
         'en-uk': 'en_GB',
@@ -99,8 +102,8 @@ def call_api(access_key: str, text: str, gender_voice: str, language: str, out_p
 
     res = res.json()
     if res['error']:
-        error(f'Error {res["error"]}')
-        raise Exception()
+        error(f'Error {res["message"]}')
+        raise Exception(res["message"])
 
     audio_src = res['audio_src']
 
@@ -118,6 +121,7 @@ class PhrasesParser(object):
         self.phrase_id = 0
 
     def _parse_phrase(self, phrase_txt: str, lesson_id: str, phrase_id: str):
+        # head must be ".\n"
         # unique phrase id
         master_id = f'{lesson_id}_{phrase_id}'
 
@@ -190,6 +194,7 @@ class PhrasesParser(object):
             }
 
             self.phrases.append(phrase_json)
+
         except Exception as e:
             error(f'Warning {master_id} invalid')
             # error('\t', e)
@@ -199,12 +204,16 @@ class PhrasesParser(object):
         lesson_txt = strip_brs(lesson_txt)
         # phrases[0]: title
         # phrases[1..]: phrases contents
-        header, *phrases = re.split(r'^\s*\d+\.', lesson_txt, flags=re.MULTILINE)
+        header, *phrases = re.split(r'^\s*(\d+)\.', lesson_txt, flags=re.MULTILINE)
         title = strip_brs(header)
         # ex: 'Social Media' -> 'social'
         lesson_id = title.split(' ')[0].strip(string.punctuation).lower()
 
-        for phrase_id, phrase_txt in enumerate(phrases, start=1):
+        for i in range(0, len(phrases), 2):
+            phrase_id, phrase_txt = phrases[i:i+2]
+            phrase_id = int(phrase_id)
+            if phrase_id > 42:
+                break
             self._parse_phrase(phrase_txt, lesson_id=lesson_id, phrase_id=str(phrase_id))
 
         lesson_json = {
@@ -237,7 +246,7 @@ class Cli(object):
     def __init__(self):
         self.assets_path = pwd.parent / 'assets'
         self.voices_path = self.assets_path / 'voices'
-        self.lessons_txt_path = self.assets_path / 'contents/phrases_v2.md'
+        self.lessons_txt_path = self.assets_path / 'contents/phrases_v3.md'
         self.lessons_json_path = self.assets_path / 'lessons.json'
         self.phrases_json_path  = self.assets_path / 'phrases.json'
 

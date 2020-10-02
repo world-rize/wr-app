@@ -32,7 +32,10 @@ class NoteNotifier extends ChangeNotifier {
   /// 現在のノート
   String _nowSelectedNoteId;
 
-  Note get currentNote => _user.getNoteById(noteId: _nowSelectedNoteId);
+  Note get currentNote {
+    return _user.getNoteById(noteId: nowSelectedNoteId) ??
+        _user.getDefaultNote();
+  }
 
   /// 英語
   bool _canSeeEnglish = true;
@@ -41,7 +44,8 @@ class NoteNotifier extends ChangeNotifier {
   bool _canSeeJapanese = true;
 
   String get nowSelectedNoteId {
-    return _nowSelectedNoteId ??= user.getDefaultFavoriteList().id;
+    // TODO: 無駄コード
+    return _nowSelectedNoteId ??= user.getDefaultNote().id;
   }
 
   bool get canSeeEnglish => _canSeeEnglish;
@@ -81,7 +85,8 @@ class NoteNotifier extends ChangeNotifier {
   Future<void> createNote({
     @required String title,
   }) async {
-    final note = await _noteService.createNote(title: title);
+    final newNote = Note.empty(title);
+    final note = await _noteService.createNote(note: newNote);
     _user.notes[note.id] = note;
 
     notifyListeners();
@@ -160,11 +165,16 @@ class NoteNotifier extends ChangeNotifier {
     @required String phraseId,
     @required NotePhrase phrase,
   }) async {
-    final note = _user.getNoteById(noteId: noteId).clone();
-    await _noteService.updateNote(note: note);
-    _user.notes[note.id] = note;
-    notifyListeners();
-    InAppLogger.info('updatePhraseInNote $noteId');
+    try {
+      final note = _user.getNoteById(noteId: noteId)?.clone();
+      await _noteService.updateNote(note: note);
+      _user.notes[note.id] = note;
+      notifyListeners();
+      InAppLogger.info('updatePhraseInNote $noteId');
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+      rethrow;
+    }
   }
 
   Future<void> achievePhrase({

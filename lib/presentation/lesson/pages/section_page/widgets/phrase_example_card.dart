@@ -3,6 +3,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:like_button/like_button.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
@@ -15,13 +16,15 @@ import 'package:wr_app/ui/widgets/boldable_text.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
 
-/// phrase example view
+/// phrase example view testなら[isTest]trueでキーフレーズを隠す
 class PhraseExampleCard extends StatelessWidget {
   const PhraseExampleCard({
     @required this.phrase,
+    @required this.isTest,
   });
 
   final Phrase phrase;
+  final bool isTest;
 
   Widget _createMessageView({
     BuildContext context,
@@ -37,6 +40,7 @@ class PhraseExampleCard extends StatelessWidget {
         crossAxisAlignment:
             primary ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: <Widget>[
+          // TODO: if (primary) で分けるべき
           // 英語メッセージ
           GestureDetector(
             onTap: onPressed,
@@ -50,11 +54,18 @@ class PhraseExampleCard extends StatelessWidget {
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
+                // TODO: ViewModelはNotifierに書くべき
                 child: BoldableText(
-                  text: ln.showEnglish
+                  text: isTest
                       ? message.text['en']
-                      : ' ' * message.text['en'].length,
-                  basicStyle: Theme.of(context).primaryTextTheme.bodyText2,
+                      : (ln.showEnglish
+                          ? message.text['en']
+                          : ' ' * message.text['en'].length),
+                  basicStyle: Theme.of(context)
+                      .primaryTextTheme
+                      .bodyText2
+                      .apply(color: primary ? Colors.white : Colors.black),
+                  hide: isTest,
                 ),
               ),
             ),
@@ -74,17 +85,18 @@ class PhraseExampleCard extends StatelessWidget {
                 ),
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 10),
-                    child: ln.showJapanese
-                        ? BoldableText(
-                            text: message.text['ja'],
-                            basicStyle:
-                                Theme.of(context).primaryTextTheme.bodyText2,
-                          )
-                        // TODO: 文字の端が等幅フォントじゃないのでなにか考える
-                        : Text('　' * message.text['ja'].length),
-                  ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
+                      child: BoldableText(
+                        text: isTest
+                            ? message.text['ja']
+                            : (ln.showJapanese
+                                ? message.text['ja']
+                                // TODO: 文字の端が等幅フォントじゃないのでなにか考える
+                                : '　' * message.text['ja'].length),
+                        basicStyle:
+                            Theme.of(context).primaryTextTheme.bodyText2,
+                      )),
                 ),
               ],
             ),
@@ -99,7 +111,8 @@ class PhraseExampleCard extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: () async {
         print('tapped');
-        Navigator.of(context).pop();
+        // ちゃんとノートを選択したらtrueを返す
+        Navigator.of(context).pop(true);
         await Provider.of<NoteNotifier>(
           context,
           listen: false,
@@ -134,15 +147,26 @@ class PhraseExampleCard extends StatelessWidget {
     final existNotes = un.existPhraseInNotes(phraseId: phrase.id);
     final favorited = un.existPhraseInFavoriteList(phraseId: phrase.id);
 
-    final _addNotesButton = IconButton(
-      icon: Icon(
+    final _addNotesButton = LikeButton(
+      isLiked: false,
+      circleColor: CircleColor(
+        start: Colors.lightBlue[100],
+        end: Colors.lightBlue[400],
+      ),
+      bubblesColor: BubblesColor(
+        dotSecondaryColor: Colors.lightBlue[100],
+        dotPrimaryColor: Colors.lightBlue[400],
+      ),
+      likeBuilder: (_) => Icon(
+        // TODO: ここどうするのか
+        // ノートはフレーズを編集できてしまうので存在するもクソもない?
         un.existPhraseInNotes(phraseId: phrase.id)
             ? Icons.bookmark
             : Icons.bookmark_border,
         color: Colors.grey,
       ),
-      onPressed: () {
-        showCupertinoModalBottomSheet(
+      onTap: (_) async {
+        return showCupertinoModalBottomSheet(
           context: context,
           builder: (context, _) => Material(
             child: SafeArea(
@@ -165,21 +189,41 @@ class PhraseExampleCard extends StatelessWidget {
               ),
             ),
           ),
-        );
+        ).then((value) {
+          if (value == null) {
+            print('value is null');
+            return false;
+          }
+          return value;
+        });
         // un.addPhraseInNote(
         //     // TODO: ノートを選べるようにする
         //     // noteId: 'default', phrase: NotePhrase.fromPhrase(phrase));
       },
     );
 
-    final _favoriteButton = IconButton(
-        icon: Icon(
-          favorited ? Icons.favorite : Icons.favorite_border,
-          color: Colors.redAccent,
-        ),
-        onPressed: () {
-          un.favoritePhrase(phraseId: phrase.id, favorite: !favorited);
-        });
+    final _favoriteButton = LikeButton(
+      isLiked: favorited,
+      circleColor: CircleColor(
+        start: Colors.redAccent[100],
+        end: Colors.redAccent[400],
+      ),
+      bubblesColor: BubblesColor(
+        dotSecondaryColor: Colors.redAccent[100],
+        dotPrimaryColor: Colors.redAccent[400],
+      ),
+      likeBuilder: (isLiked) => Icon(
+        isLiked ? Icons.favorite : Icons.favorite_border,
+        color: Colors.redAccent,
+      ),
+      onTap: (isLiked) async {
+        un.favoritePhrase(
+          phraseId: phrase.id,
+          favorite: !isLiked,
+        );
+        return !isLiked;
+      },
+    );
 
     final _buttons = Row(
       mainAxisSize: MainAxisSize.min,

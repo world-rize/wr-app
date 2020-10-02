@@ -21,7 +21,7 @@ class NotePersistenceMock implements NoteRepository {
   Future<Note> createNote(CreateNoteRequest req) async {
     final user = _readUserMock();
     final listId = Uuid().v4();
-    user.notes[listId] = Note.empty(req.title);
+    user.notes[listId] = req.note;
     await Future.delayed(const Duration(seconds: 1));
     return user.notes[listId];
   }

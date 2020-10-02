@@ -28,9 +28,9 @@ class NoteService {
   }
 
   Future<Note> createNote({
-    @required String title,
+    @required Note note,
   }) async {
-    final req = CreateNoteRequest(title: title);
+    final req = CreateNoteRequest(note: note);
     return _notePersistence.createNote(req);
   }
 

@@ -1,7 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -9,26 +7,12 @@ import 'package:wr_app/domain/language.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
+import 'package:wr_app/presentation/note/pages/achieved_phrase_list.dart';
 import 'package:wr_app/presentation/note/pages/flash_card_page.dart';
 import 'package:wr_app/presentation/note/pages/note_list_page.dart';
 import 'package:wr_app/presentation/note/widgets/note_table_edit_phrase.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
-
-class Debouncer {
-  final int milliseconds;
-  VoidCallback action;
-  Timer _timer;
-
-  Debouncer({this.milliseconds});
-
-  run(VoidCallback action) {
-    if (_timer != null) {
-      _timer.cancel();
-    }
-    _timer = Timer(Duration(milliseconds: milliseconds), action);
-  }
-}
 
 /// ノートのフレーズを表示するテーブル
 class NoteTable extends StatefulWidget {
@@ -46,9 +30,6 @@ class NoteTable extends StatefulWidget {
 
 class _NoteTableState extends State<NoteTable> {
   bool _isLoading;
-
-  // save every 3000ms
-  final Debouncer _debouncer = Debouncer(milliseconds: 3000);
 
   @override
   void initState() {
@@ -100,8 +81,6 @@ class _NoteTableState extends State<NoteTable> {
       },
     );
   }
-
-  void _showEditPhraseSheet(NotePhrase notePhrase, Language language) {}
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +144,9 @@ class _NoteTableState extends State<NoteTable> {
               nn.toggleSeeJapanese();
             },
             child: Container(
-              color: nn.canSeeJapanese ? Colors.white : Colors.green,
+              color: nn.canSeeJapanese
+                  ? Theme.of(context).scaffoldBackgroundColor
+                  : Colors.green,
               child: const Center(
                 child: Text('Japanese'),
               ).padding(),
@@ -178,7 +159,9 @@ class _NoteTableState extends State<NoteTable> {
               nn.toggleSeeEnglish();
             },
             child: Container(
-              color: nn.canSeeEnglish ? Colors.white : Colors.green,
+              color: nn.canSeeEnglish
+                  ? Theme.of(context).scaffoldBackgroundColor
+                  : Colors.green,
               child: const Center(
                 child: Text('English'),
               ).padding(),
@@ -317,17 +300,19 @@ class _NoteTableState extends State<NoteTable> {
       },
     );
 
-    return Column(
-      children: [
-        title,
-        header,
-        phrasesTable.padding(),
-        if (!widget.note.isDefaultNote && !widget.note.isAchievedNote)
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: _deleteNoteButton,
-          ),
-      ],
-    );
+    return widget.note.isAchievedNote
+        ? Column(children: [title, AchievedPhraseList()])
+        : Column(
+            children: [
+              title,
+              header,
+              phrasesTable.padding(),
+              if (!widget.note.isDefaultNote && !widget.note.isAchievedNote)
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: _deleteNoteButton,
+                ),
+            ],
+          );
   }
 }

@@ -23,6 +23,7 @@ class PhraseDetailPageView extends StatelessWidget {
           children: <Widget>[
             PhraseExampleCard(
               phrase: phrase,
+              isTest: false,
             ),
           ],
         ),

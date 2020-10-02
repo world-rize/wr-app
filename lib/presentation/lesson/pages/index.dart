@@ -106,7 +106,6 @@ class LessonIndexPage extends StatelessWidget {
           FutureBuilder<List<Phrase>>(
             future: ln.newComingPhrases(),
             builder: (_, res) {
-              InAppLogger.debug('${res.error}');
               if (!res.hasData || res.data.isEmpty) {
                 return Padding(
                   padding:

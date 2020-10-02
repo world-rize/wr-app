@@ -8,13 +8,13 @@ part of 'note_api_dto.dart';
 
 CreateNoteRequest _$CreateNoteRequestFromJson(Map json) {
   return CreateNoteRequest(
-    title: json['title'] as String,
+    note: json['note'] == null ? null : Note.fromJson(json['note'] as Map),
   );
 }
 
 Map<String, dynamic> _$CreateNoteRequestToJson(CreateNoteRequest instance) =>
     <String, dynamic>{
-      'title': instance.title,
+      'note': instance.note?.toJson(),
     };
 
 UpdateNoteRequest _$UpdateNoteRequestFromJson(Map json) {

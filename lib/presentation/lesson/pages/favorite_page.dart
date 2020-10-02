@@ -75,10 +75,6 @@ class FavoritePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: Text('グループ, 並び替え機能(TODO)'),
-            ),
             favoritePhraseCards,
           ],
         ),

@@ -53,13 +53,13 @@ class _NotePageState extends State<NotePage> {
           FocusScope.of(context).unfocus();
         },
         child: SingleChildScrollView(
+          // TODO: scaffoldを自前クラスを作ったほうがいいかも
+          // bottom navigationがstackを利用しているためにpaddingを入れる必要がある
+          padding: EdgeInsets.only(bottom: 30),
           controller: _controller,
-          child: Column(
-            children: [
-              if (note == null)
-                _noteNotFoundView
-              else
-                NoteTable(
+          child: note == null
+              ? _noteNotFoundView
+              : NoteTable(
                   note: note,
                   onDeleted: () {
                     _controller.animateTo(
@@ -69,8 +69,6 @@ class _NotePageState extends State<NotePage> {
                     );
                   },
                 ),
-            ],
-          ),
         ),
       ),
     );

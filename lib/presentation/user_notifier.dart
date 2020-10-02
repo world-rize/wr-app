@@ -3,7 +3,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
@@ -73,30 +72,15 @@ class UserNotifier with ChangeNotifier {
     final defaultFavoriteList = _user.getDefaultFavoriteList();
     // defaultふぁぼりてリスト以外に保存したらdeleteするときむずかしくね?
     if (favorite) {
-      // 仮反映
-      defaultFavoriteList.updatePhrase(
-          phraseId,
-          FavoritePhraseDigest(
-            id: phraseId,
-            createdAt: DateTime.now(),
-          ));
-
-      notifyListeners();
-
-      // 本反映
+      // false -> true
       _user = await _userService.favorite(
         user: _user,
         listId: defaultFavoriteList.id,
         phraseId: phraseId,
         favorite: favorite,
       );
+      await Future.delayed(const Duration(milliseconds: 1000));
     } else {
-      // 仮反映
-      defaultFavoriteList.deletePhrase(phraseId);
-
-      notifyListeners();
-
-      // 本反映
       _user = await _userService.favorite(
         user: _user,
         listId: defaultFavoriteList.id,
@@ -104,7 +88,6 @@ class UserNotifier with ChangeNotifier {
         favorite: favorite,
       );
     }
-
     notifyListeners();
 
     InAppLogger.debug(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');

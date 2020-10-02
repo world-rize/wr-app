@@ -6,7 +6,6 @@ import { User } from '../user/model/user'
 import { UserService } from '../user/userService'
 import diffDefault from 'jest-diff'
 import { UserRepository } from '../user/userRepository'
-import firebase from 'firebase'
 const nqdm = require('nqdm')
 const colors = require('colors')
 
@@ -37,7 +36,7 @@ export interface MigrationPolicy {
 
 export class MigrationService {
   /**
-   * 
+   *
    * Migrate All items by batch
    */
   async migrateAll<From, To = From>({
@@ -81,7 +80,7 @@ const createDummyUser = async (name: string, email: string): Promise<User> => {
   if (!user) {
     await admin.auth().createUser({ email, displayName: name })
   }
-  
+
   const testUser = UserService.generateInitialUser(user.uid)
   testUser.name = name
   testUser.statistics.points = 30000

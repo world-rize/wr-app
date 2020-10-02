@@ -390,14 +390,30 @@ export const getShopItems = async(req: {}, context: Context): Promise<GiftItem[]
 }
 
 import { firestore } from 'firebase-admin'
+import { Phrase } from './model/phrase'
 
 /**
  * アプリ情報
  */
 export const getAppInfo = async(req: {}, context: Context): Promise<WRAppInfo> => {
-  const data = (await firestore().collection('etc').doc('appinfo').get()).data()
-    if (!data) {
-      throw new functions.https.HttpsError('not-found', 'user not found')
-    }
-  return data as WRAppInfo
+  try {
+    const data = (await firestore().collection('etc').doc('appinfo').get()).data()
+    return data as WRAppInfo
+  } catch (e) {
+    console.error(e)
+    throw new functions.https.HttpsError('internal', 'getAppInfo failed')
+  }
+}
+
+/**
+ * 新着フレーズ
+ */
+export const getNewComingPhrases = async(req: {}, context: Context): Promise<Phrase[]> => {
+  try {
+    const phrases = (await firestore().collection('newcoming').get()).docs.map(doc => doc.data() as Phrase)
+    return phrases
+  } catch (e) {
+    console.error(e)
+    throw new functions.https.HttpsError('internal', 'getNewComingPhrase failed')
+  }
 }

@@ -11,7 +11,7 @@ part 'phrase.g.dart';
 /// フレーズを表す
 ///
 /// - フレーズはi18nされたタイトル
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true, anyMap: true)
 class Phrase {
   Phrase({
     @required this.id,
@@ -22,7 +22,7 @@ class Phrase {
     @required this.example,
   });
 
-  factory Phrase.fromJson(Map<dynamic, dynamic> json) => _$PhraseFromJson(json);
+  factory Phrase.fromJson(Map json) => _$PhraseFromJson(json);
 
   /// minimum dummy
   factory Phrase.note(String uuid) {
