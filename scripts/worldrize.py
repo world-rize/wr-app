@@ -3,6 +3,7 @@ WorldRIZe CLI
 """
 import os, re, json, shutil, requests, string
 import fire, chalk
+from retry import retry
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -58,11 +59,13 @@ def generate_phrase_voices(phrase: object, out_dir: Path):
         else:
             success(f'Skipped {voice["path"]}')
 
+@retry(tries=5)
 def call_api(access_key: str, text: str, gender_voice: str, language: str, out_path: Path):
     """
     gender_voice: 'male' | 'female'
     language: 'en-us' | 'en-uk' | 'en-au' | 'en-in' -> 'en_US' | 'en_GB' | 'en_AU' | 'en_IN'
     """
+
     language_map = {
         'en-us': 'en_US',
         'en-uk': 'en_GB',
@@ -99,8 +102,8 @@ def call_api(access_key: str, text: str, gender_voice: str, language: str, out_p
 
     res = res.json()
     if res['error']:
-        error(f'Error {res["error"]}')
-        raise Exception()
+        error(f'Error {res["message"]}')
+        raise Exception(res["message"])
 
     audio_src = res['audio_src']
 
@@ -243,7 +246,7 @@ class Cli(object):
     def __init__(self):
         self.assets_path = pwd.parent / 'assets'
         self.voices_path = self.assets_path / 'voices'
-        self.lessons_txt_path = self.assets_path / 'contents/phrases_v2.md'
+        self.lessons_txt_path = self.assets_path / 'contents/phrases_v3.md'
         self.lessons_json_path = self.assets_path / 'lessons.json'
         self.phrases_json_path  = self.assets_path / 'phrases.json'
 
