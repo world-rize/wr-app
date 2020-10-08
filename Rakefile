@@ -27,10 +27,6 @@ task :prd do
   sh 'flutter run --flavor production -t lib/main_production.dart'
 end
 
-task :build_android do
-  sh 'export ANDROID_HOME=~/Library/Android/sdk; flutter build appbundle --flavor production -t lib/main.dart'
-end
-
 desc 'open Xcode Workspace'
 task :xc do
   sh 'open ios/Runner.xcworkspace'

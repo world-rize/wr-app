@@ -58,14 +58,13 @@ class AuthPersistence implements AuthRepository {
   /// sign in with google
   @override
   Future<FirebaseUser> signInWithGoogleSignIn() async {
-    final _credential = await _getGoogleAuthCredential();
-    assert(_credential != null);
+    final credential = await _getGoogleAuthCredential();
+    if (credential == null) {
+      throw Exception("GoogleAuthCredential is null");
+    }
 
     // credential -> firebase user
-    final authResult =
-        await fbAuth.signInWithCredential(_credential).catchError(print);
-
-    assert(authResult != null);
+    final authResult = await fbAuth.signInWithCredential(credential);
 
     return authResult.user;
   }
