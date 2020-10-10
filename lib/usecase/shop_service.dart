@@ -4,14 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/domain/shop/shop_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/domain/user/user_repository.dart';
 
 class ShopService {
   final ShopRepository _shopPersistence;
+  final UserRepository _userPersistence;
 
   const ShopService({
+    @required UserRepository userPersistence,
     @required ShopRepository shopPersistence,
-  }) : _shopPersistence = shopPersistence;
+  })  : _userPersistence = userPersistence,
+        _shopPersistence = shopPersistence;
 
   /// ショップのアイテムを取得
   Future<List<GiftItem>> getShopItems() {
@@ -31,31 +34,22 @@ class ShopService {
     @required User user,
     @required String itemId,
   }) async {
-    print('persistence ok?');
     final item = (await _shopPersistence.shopItems())
         .firstWhere((item) => item.id == itemId, orElse: () => null);
 
-    print('pre assert');
     assert(item != null);
     assert(user != null);
-
-    print('persistence ok');
 
     if (item == null) {
       print('hgoe');
       return user;
     }
 
-    InAppLogger.debugJson(user.toJson());
-    InAppLogger.debug('contenthgeojge$user');
-    print('put if absent ok?');
     user.items.putIfAbsent(item.id, () => 0);
-    print('put if absent ok');
     user.items[item.id] += 1;
     user.statistics.points -= item.price;
+    await _userPersistence.updateUser(user);
 
     return user;
-//    final req = PurchaseItemRequest(itemId: itemId);
-//    return _userPersistence.purchaseItem(req);
   }
 }

@@ -144,7 +144,8 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final systemService = SystemService(systemPersistence: systemPersistence);
   final authService = AuthService(
       authPersistence: authPersistence, userPersistence: userPersistence);
-  final shopService = ShopService(shopPersistence: shopPersistence);
+  final shopService = ShopService(
+      userPersistence: userPersistence, shopPersistence: shopPersistence);
   final noteService = NoteService(notePersistence: notePersistence);
 
   // メンテナンスかどうか
