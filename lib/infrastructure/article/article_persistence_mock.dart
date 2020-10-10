@@ -32,20 +32,6 @@ final List<ArticleCategory> categories = <ArticleCategory>[
 
 class ArticlePersistenceMock implements ArticleRepository {
   @override
-  Future<List<ArticleDigest>> findByCategory(
-      Client client, String category) async {
-    await Future.delayed(const Duration(milliseconds: 1000));
-    return List.generate(10, (index) {
-      return ArticleDigest.dummy(
-        title: 'Article $category ${index ~/ 6}',
-        category: category,
-        url: 'https://world-rize.com/working-in-hotel-in-sydney/',
-        summary: 'Article $category summary',
-      );
-    });
-  }
-
-  @override
   List<ArticleCategory> getCategories() {
     return categories;
   }

@@ -41,17 +41,6 @@ final List<ArticleCategory> categories = <ArticleCategory>[
 
 class ArticlePersistence implements ArticleRepository {
   @override
-  Future<List<ArticleDigest>> findByCategory(
-      Client client, String category) async {
-    final collection = await client.getEntries<ArticleDigest>({
-      'content_type': 'article',
-      'fields.category': category,
-    }, ArticleDigest.fromJson);
-
-    return collection.items;
-  }
-
-  @override
   List<ArticleCategory> getCategories() {
     /// # categories
     /// - online_lesson

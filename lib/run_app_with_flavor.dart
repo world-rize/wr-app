@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:admob_flutter/admob_flutter.dart';
-import 'package:contentful/client.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,7 +25,6 @@ import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
-import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/maintenance.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
@@ -78,11 +76,6 @@ Future<void> setupGlobalSingletons({
   final pref = await SharedPreferences.getInstance();
   GetIt.I.registerSingleton<SharedPreferences>(pref);
   InAppLogger.info('🔥 SharedPreferences Initialized');
-
-  // contentful client
-  final client = Client(env.contentfulSpaceId, env.contentfulToken);
-  GetIt.I.registerSingleton<Client>(client);
-  InAppLogger.info('🔥 Contentful Initialized');
 
   // initialize admob
   Admob.initialize(env.admobAppId);
@@ -158,23 +151,18 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
   // repos
   final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
-  final articlePersistence =
-  useMock ? ArticlePersistenceMock() : ArticlePersistence();
   final lessonPersistence =
   useMock ? LessonPersistenceMock() : LessonPersistence();
   final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
   final systemPersistence = SystemPersistence();
   final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
-  final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
 
   // services
   final userService = UserService(userPersistence: userPersistence);
-  final articleService = ArticleService(articlePersistence: articlePersistence);
   final lessonService = LessonService(lessonPersistence: lessonPersistence);
   final systemService = SystemService(systemPersistence: systemPersistence);
   final authService = AuthService(
       authPersistence: authPersistence, userPersistence: userPersistence);
-  final shopService = ShopService(shopPersistence: shopPersistence);
   final noteService = NoteService(notePersistence: notePersistence);
 
   // メンテナンスかどうか
@@ -229,12 +217,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ChangeNotifierProvider.value(
           value: VoicePlayer(
             onError: NotifyToast.error,
-          ),
-        ),
-        // Article
-        ChangeNotifierProvider.value(
-          value: ArticleNotifier(
-            articleService: articleService,
           ),
         ),
       ],
