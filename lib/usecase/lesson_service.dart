@@ -10,17 +10,10 @@ import 'package:wr_app/util/logger.dart';
 
 /// Lessonに関するサービスをまとめる
 class LessonService {
-  factory LessonService({
-    @required LessonRepository lessonPersistence,
-  }) {
-    return _cache ??= LessonService._(lessonPersistence: lessonPersistence);
-  }
-
-  LessonService._({
+  LessonService({
     @required LessonRepository lessonPersistence,
   }) : _lessonPersistence = lessonPersistence;
 
-  static LessonService _cache;
   final LessonRepository _lessonPersistence;
 
   Future<List<Lesson>> loadPhrases() {

@@ -8,17 +8,10 @@ import 'package:wr_app/util/logger.dart';
 
 /// shopに関するサービスをまとめる
 class ShopService {
-  factory ShopService({
-    @required ShopRepository shopPersistence,
-  }) {
-    return _cache ??= ShopService._(shopPersistence: shopPersistence);
-  }
-
-  ShopService._({
+  ShopService({
     @required ShopRepository shopPersistence,
   }) : _shopPersistence = shopPersistence;
 
-  static ShopService _cache;
   final ShopRepository _shopPersistence;
 
   /// ショップのアイテムを取得

@@ -5,17 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/article/index.dart';
 
 class ArticleService {
-  factory ArticleService({
-    @required ArticleRepository articlePersistence,
-  }) {
-    return _cache ??= ArticleService._(articlePersistence: articlePersistence);
-  }
-
-  ArticleService._({
+  ArticleService({
     @required ArticleRepository articlePersistence,
   }) : _articlePersistence = articlePersistence;
 
-  static ArticleService _cache;
   final ArticleRepository _articlePersistence;
 
   Future<List<ArticleDigest>> findByCategory({

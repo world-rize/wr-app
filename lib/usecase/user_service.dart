@@ -9,19 +9,10 @@ import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
 // TODO: Error handling
-/// singleton
 class UserService {
-  factory UserService({
-    @required UserRepository userPersistence,
-  }) {
-    return _cache ??= UserService._(userPersistence: userPersistence);
-  }
-
-  UserService._({
+  UserService({
     @required UserRepository userPersistence,
   }) : _userPersistence = userPersistence;
-
-  static UserService _cache;
 
   final UserRepository _userPersistence;
 

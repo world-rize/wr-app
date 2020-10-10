@@ -9,23 +9,12 @@ import 'package:wr_app/util/logger.dart';
 
 /// 認証に係るサービスをまとめる
 class AuthService {
-  factory AuthService({
-    @required AuthRepository authPersistence,
-    @required UserRepository userPersistence,
-  }) {
-    return _cache ??= AuthService._(
-      authPersistence: authPersistence,
-      userPersistence: userPersistence,
-    );
-  }
-
-  AuthService._({
+  AuthService({
     @required AuthRepository authPersistence,
     @required UserRepository userPersistence,
   })  : _authPersistence = authPersistence,
         _userPersistence = userPersistence;
 
-  static AuthService _cache;
   final AuthRepository _authPersistence;
   final UserRepository _userPersistence;
 

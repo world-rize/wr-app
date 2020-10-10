@@ -5,20 +5,12 @@ import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/domain/system/system_repository.dart';
 import 'package:wr_app/util/notification.dart';
 
-/// singleton
 /// 主にデバイスに関するサービスをまとめる
 class SystemService {
-  factory SystemService({
-    @required SystemRepository systemPersistence,
-  }) {
-    return _cache ??= SystemService._(systemPersistence: systemPersistence);
-  }
-
-  SystemService._({
+  SystemService({
     @required SystemRepository systemPersistence,
   }) : _systemPersistence = systemPersistence;
 
-  static SystemService _cache;
   final SystemRepository _systemPersistence;
 
   bool getDarkMode() => _systemPersistence.getDarkMode();
