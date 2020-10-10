@@ -97,9 +97,9 @@ class _TestResultPageState extends State<TestResultPage> {
     await _showRewardDialog(context);
 
     // 30 days challenge
-    if (widget.stats.challengeAchieved) {
-      await _show30DaysChallengeAchievedDialog(context);
-    }
+//    if (widget.stats.challengeAchieved) {
+//      await _show30DaysChallengeAchievedDialog(context);
+//    }
 
     // 最後のテストでアンケート誘導
     if (!sn.getQuestionnaireAnswered() &&

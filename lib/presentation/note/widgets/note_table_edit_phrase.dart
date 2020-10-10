@@ -59,7 +59,10 @@ class _EditPhraseState extends State<EditPhrase> {
               onPressed: () {
                 widget.onSubmit(_tmpString);
               },
-              child: const Text('Save'),
+              child: Text(
+                'Save',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         ),
