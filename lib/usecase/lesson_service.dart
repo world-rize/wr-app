@@ -8,12 +8,20 @@ import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/util/logger.dart';
 
+/// Lessonに関するサービスをまとめる
 class LessonService {
-  final LessonRepository _lessonPersistence;
+  factory LessonService({
+    @required LessonRepository lessonPersistence,
+  }) {
+    return _cache ??= LessonService._(lessonPersistence: lessonPersistence);
+  }
 
-  const LessonService({
+  LessonService._({
     @required LessonRepository lessonPersistence,
   }) : _lessonPersistence = lessonPersistence;
+
+  static LessonService _cache;
+  final LessonRepository _lessonPersistence;
 
   Future<List<Lesson>> loadPhrases() {
     return _lessonPersistence.loadAllLessons();
@@ -39,6 +47,7 @@ class LessonService {
   }
 
   bool getShowJapanese() => _lessonPersistence.getShowJapanese();
+
   bool getShowEnglish() => _lessonPersistence.getShowEnglish();
 
   void toggleShowJapanese() {

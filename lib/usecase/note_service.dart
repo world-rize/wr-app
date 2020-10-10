@@ -7,11 +7,19 @@ import 'package:wr_app/domain/note/model/note_api_dto.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/note/note_repository.dart';
 
+/// Noteに関するサービスをまとめる
 class NoteService {
-  NoteService({
+  factory NoteService({
+    @required NoteRepository notePersistence,
+  }) {
+    return _cache ??= NoteService._(notePersistence: notePersistence);
+  }
+
+  NoteService._({
     @required NoteRepository notePersistence,
   }) : _notePersistence = notePersistence;
 
+  static NoteService _cache;
   final NoteRepository _notePersistence;
 
   Note createDummyNote(String title, {bool isDefault = false}) {

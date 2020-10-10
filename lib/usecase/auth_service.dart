@@ -7,13 +7,25 @@ import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
+/// 認証に係るサービスをまとめる
 class AuthService {
-  const AuthService({
+  factory AuthService({
+    @required AuthRepository authPersistence,
+    @required UserRepository userPersistence,
+  }) {
+    return _cache ??= AuthService._(
+      authPersistence: authPersistence,
+      userPersistence: userPersistence,
+    );
+  }
+
+  AuthService._({
     @required AuthRepository authPersistence,
     @required UserRepository userPersistence,
   })  : _authPersistence = authPersistence,
         _userPersistence = userPersistence;
 
+  static AuthService _cache;
   final AuthRepository _authPersistence;
   final UserRepository _userPersistence;
 

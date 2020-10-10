@@ -6,12 +6,20 @@ import 'package:wr_app/domain/shop/shop_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/util/logger.dart';
 
+/// shopに関するサービスをまとめる
 class ShopService {
-  final ShopRepository _shopPersistence;
+  factory ShopService({
+    @required ShopRepository shopPersistence,
+  }) {
+    return _cache ??= ShopService._(shopPersistence: shopPersistence);
+  }
 
-  const ShopService({
+  ShopService._({
     @required ShopRepository shopPersistence,
   }) : _shopPersistence = shopPersistence;
+
+  static ShopService _cache;
+  final ShopRepository _shopPersistence;
 
   /// ショップのアイテムを取得
   Future<List<GiftItem>> getShopItems() {
