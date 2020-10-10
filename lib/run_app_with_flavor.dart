@@ -30,7 +30,6 @@ import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/maintenance.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
-import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/auth_service.dart';
@@ -46,7 +45,9 @@ import 'package:wr_app/util/sentry.dart';
 import 'package:wr_app/util/toast.dart';
 
 /// initialize singleton instances and inject to GetIt
-Future<void> setupGlobalSingletons(Flavor flavor) async {
+Future<void> setupGlobalSingletons({
+  @required Flavor flavor, @required bool useMock,
+}) async {
   // load .env
   await DotEnv().load('secrets/.env');
   final env = EnvKeys.fromEnv(env: DotEnv().env);
@@ -99,21 +100,53 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
   InAppLogger.info('🔥 sign in with apple Initialized');
 
   // sentry client
-  // TODO: 書く場所考える
   final _sentry = SentryClient(dsn: env.sentryDsn);
   GetIt.I.registerSingleton<SentryClient>(_sentry);
   InAppLogger.info('🔥 sentry Initialized');
+
+  // repos
+  final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
+  final articlePersistence =
+  useMock ? ArticlePersistenceMock() : ArticlePersistence();
+  final lessonPersistence =
+  useMock ? LessonPersistenceMock() : LessonPersistence();
+  final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
+  final systemPersistence = SystemPersistence();
+  final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
+  final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
+
+  // services
+  final userService = UserService(userPersistence: userPersistence);
+  final articleService = ArticleService(articlePersistence: articlePersistence);
+  final lessonService = LessonService(lessonPersistence: lessonPersistence);
+  final systemService = SystemService(systemPersistence: systemPersistence);
+  final authService = AuthService(
+      authPersistence: authPersistence, userPersistence: userPersistence);
+  final shopService = ShopService(shopPersistence: shopPersistence);
+  final noteService = NoteService(notePersistence: notePersistence);
+  GetIt.I.registerSingleton<UserService>(userService);
+  GetIt.I.registerSingleton<ArticleService>(articleService);
+  GetIt.I.registerSingleton<LessonService>(lessonService);
+  GetIt.I.registerSingleton<SystemService>(systemService);
+  GetIt.I.registerSingleton<AuthService>(authService);
+  GetIt.I.registerSingleton<ShopService>(shopService);
+  GetIt.I.registerSingleton<NoteService>(noteService);
+  InAppLogger.info('🔥 usecase/services Initialized');
 }
 
 /// runApp() with flavor
 Future<void> runAppWithFlavor(final Flavor flavor) async {
   Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
-  await setupGlobalSingletons(flavor);
+  const useMock = false;
+  if (useMock) {
+    InAppLogger.info('❗ Using Mock');
+  }
+
+  await setupGlobalSingletons(flavor: flavor, useMock: useMock);
   final env = GetIt.I<EnvKeys>();
   final sentry = GetIt.I<SentryClient>();
 
-  const useMock = false;
 
   if (env.useEmulator) {
     final origin = env.functionsEmulatorOrigin;
@@ -121,17 +154,14 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     useCloudFunctionsEmulator(origin);
   }
 
-  if (useMock) {
-    InAppLogger.info('❗ Using Mock');
-  }
   print('debug mode? $isInDebugMode');
 
   // repos
   final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
   final articlePersistence =
-      useMock ? ArticlePersistenceMock() : ArticlePersistence();
+  useMock ? ArticlePersistenceMock() : ArticlePersistence();
   final lessonPersistence =
-      useMock ? LessonPersistenceMock() : LessonPersistence();
+  useMock ? LessonPersistenceMock() : LessonPersistence();
   final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
   final systemPersistence = SystemPersistence();
   final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
@@ -150,26 +180,17 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   // メンテナンスかどうか
   if (!await systemService.getAppInfo().then((value) => value.isValid)) {
     runZonedGuarded(
-      () => runApp(Maintenance()),
-      (error, stackTrace) => sentry.captureException(
-        exception: error,
-        stackTrace: stackTrace,
-      ),
+          () => runApp(Maintenance()),
+          (error, stackTrace) =>
+          sentry.captureException(
+            exception: error,
+            stackTrace: stackTrace,
+          ),
     );
   } else {
-    // TODO: re-architecture
-    // notifier とストア分離する (StoreProvider)
-    // notifier は StatefulNotifier を Stateless化するものなので
-    // 1 Stateful画面 1 ChangeNotifier
-    //  Dao に CRUI
-    // 下から上の更新に依存したい
-    // 下から上(update): ProxyProvider
-    // 上から下(get): GetIt<UserNotifier>
-
     // functions いらない説
     final userNotifier = UserNotifier(userService: userService);
     final authNotifier = AuthNotifier(authService: authService);
-    final shopNotifier = ShopNotifier(shopService: shopService);
     authNotifier.addListener(() {
       userNotifier.user = authNotifier.user;
     });
@@ -181,14 +202,13 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     userNotifier.addListener(() {
       authNotifier.user = userNotifier.user;
       noteNotifier.user = userNotifier.user;
-      shopNotifier.user = userNotifier.user;
     });
 
     final app = MultiProvider(
       providers: [
         Provider.value(
             value:
-                SystemNotifier(systemService: systemService, flavor: flavor)),
+            SystemNotifier(systemService: systemService, flavor: flavor)),
         // system
         ChangeNotifierProvider.value(
           value: SystemNotifier(systemService: systemService, flavor: flavor),
@@ -217,19 +237,17 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
             articleService: articleService,
           ),
         ),
-        ChangeNotifierProvider.value(
-          value: shopNotifier,
-        ),
       ],
       child: WRApp(),
     );
 
     runZonedGuarded(
-      () => runApp(app),
-      (error, stackTrace) => sentry.captureException(
-        exception: error,
-        stackTrace: stackTrace,
-      ),
+          () => runApp(app),
+          (error, stackTrace) =>
+          sentry.captureException(
+            exception: error,
+            stackTrace: stackTrace,
+          ),
     );
   }
 }

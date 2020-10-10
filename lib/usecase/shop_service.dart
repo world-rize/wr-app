@@ -39,30 +39,23 @@ class ShopService {
     @required User user,
     @required String itemId,
   }) async {
-    print('persistence ok?');
     final item = (await _shopPersistence.shopItems())
         .firstWhere((item) => item.id == itemId, orElse: () => null);
 
-    print('pre assert');
     assert(item != null);
     assert(user != null);
 
-    print('persistence ok');
-
     if (item == null) {
-      print('hgoe');
       return user;
     }
 
     InAppLogger.debugJson(user.toJson());
-    InAppLogger.debug('contenthgeojge$user');
-    print('put if absent ok?');
     user.items.putIfAbsent(item.id, () => 0);
-    print('put if absent ok');
     user.items[item.id] += 1;
     user.statistics.points -= item.price;
 
     return user;
+    // TODO: itemはまだ買っていない
 //    final req = PurchaseItemRequest(itemId: itemId);
 //    return _userPersistence.purchaseItem(req);
   }

@@ -1,54 +1,65 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/shop/model/gift_item_id.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
+import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/widgets/gift_item_card.dart';
-import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
-import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/usecase/shop_service.dart';
 import 'package:wr_app/util/logger.dart';
 
 /// ポイント交換
-class ShopPage extends StatefulWidget {
+class ShopPage extends StatelessWidget {
   @override
-  _ShopPageState createState() => _ShopPageState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: _ShopPageNotifier(
+        shopService: GetIt.I<ShopService>(),
+        userService: GetIt.I<UserService>(),
+      ),
+      child: _ShopPage(),
+    );
+  }
 }
 
-class _ShopPageState extends State<ShopPage> {
-  bool _isLoading;
-  List<GiftItem> _items = [];
+class _ShopPageNotifier extends ChangeNotifier {
+  _ShopPageNotifier({
+    @required ShopService shopService,
+    @required UserService userService,
+  })  : _shopService = shopService,
+        _userService = userService,
+        _items = shopService.getShopItems(),
+        _user = userService.readUser();
 
-  @override
-  void initState() {
-    super.initState();
-    _isLoading = false;
+  final ShopService _shopService;
+  final UserService _userService;
+  Future<User> _user;
+  Future<List<GiftItem>> get items => _items;
+  Future<List<GiftItem>> _items;
+
+  /// purchase item
+  Future<void> purchaseItem({@required GiftItemId itemId}) async {
+    print('waiting purchase item');
+    _user = _shopService.purchaseItem(user: await _user, itemId: itemId.key);
+    print('done purchase item');
   }
 
-  Future _getShopItems() async {
-    final shopNotifier = Provider.of<ShopNotifier>(context, listen: false);
-
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      final items = await shopNotifier.getShopItems();
-      setState(() {
-        _items = items;
-      });
-    } on Exception catch (e) {
-      InAppLogger.error(e);
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
+  Future sendAmazonGiftRequest({@required String uid}) {
+    return _shopService.sendAmazonGiftRequest(uid: uid);
   }
 
+  Future sendITunesRequest({@required String uid}) {
+    return _shopService.sendITunesRequest(uid: uid);
+  }
+}
+
+class _ShopPage extends StatelessWidget {
   /// 購入確認ダイアログをだす
-  Future _showPurchaseConfirmDialog(GiftItem item) {
+  Future _showPurchaseConfirmDialog(BuildContext context, GiftItem item) {
     return showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -67,18 +78,11 @@ class _ShopPageState extends State<ShopPage> {
             onPressed: () async {
               Navigator.pop(context);
               try {
-                setState(() {
-                  _isLoading = true;
-                });
-                final sn = context.read<ShopNotifier>();
+                final sn = context.read<_ShopPageNotifier>();
                 await sn.purchaseItem(itemId: GiftItemIdEx.fromString(item.id));
-                await _useItem(GiftItemIdEx.fromString(item.id));
+                await _useItem(context, GiftItemIdEx.fromString(item.id));
               } on Exception catch (e) {
                 InAppLogger.error(e);
-              } finally {
-                setState(() {
-                  _isLoading = false;
-                });
               }
             },
           )
@@ -87,20 +91,22 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  Future _useItem(GiftItemId id) async {
+  Future _useItem(BuildContext context, GiftItemId id) async {
     final un = context.read<UserNotifier>();
-    final sn = context.read<ShopNotifier>();
+    final sn = context.read<_ShopPageNotifier>();
     // 購入した瞬間使用
     // TODO: アクセント追加処理, ノート追加処理
     print(id);
     switch (id) {
       case GiftItemId.iTunes:
         await sn.sendITunesRequest(uid: un.user.uuid);
-        await _showGiftItemDescriptionDialog(I.of(context).shopPageSuccess);
+        await _showGiftItemDescriptionDialog(
+            context, I.of(context).shopPageSuccess);
         break;
       case GiftItemId.amazon:
         await sn.sendITunesRequest(uid: un.user.uuid);
-        await _showGiftItemDescriptionDialog(I.of(context).shopPageSuccess);
+        await _showGiftItemDescriptionDialog(
+            context, I.of(context).shopPageSuccess);
         break;
       default:
         break;
@@ -108,7 +114,10 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   /// アイテムの説明テキスト
-  Future _showGiftItemDescriptionDialog(String description) {
+  Future _showGiftItemDescriptionDialog(
+    BuildContext context,
+    String description,
+  ) {
     return showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -125,70 +134,79 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
-  /// アイテムの購入 & 使用
-  Future _purchase(GiftItem item) async {
-    await _showPurchaseConfirmDialog(item);
-  }
-
   @override
   Widget build(BuildContext context) {
     final h = Theme.of(context).primaryTextTheme.headline3;
     final b = Theme.of(context).primaryTextTheme.bodyText1;
     final userNotifier = Provider.of<UserNotifier>(context);
+    final spn = Provider.of<_ShopPageNotifier>(context);
     final points = userNotifier.user.statistics.points;
-    if (_items.isEmpty) {
-      _getShopItems();
-    }
 
     return Scaffold(
       appBar: AppBar(
         title: Text(I.of(context).myPageShopButton),
       ),
-      body: LoadingView(
-        loading: _isLoading,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  I.of(context).havingCoin,
-                  style: h,
+      body: FutureBuilder(
+        future: spn.items,
+        builder:
+            (BuildContext context, AsyncSnapshot<List<GiftItem>> snapshot) {
+          if (snapshot.hasError) {
+            InAppLogger.error(snapshot.error);
+          }
+          if (!snapshot.hasData ||
+              snapshot.connectionState != ConnectionState.done) {
+            return Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Theme.of(context).primaryColor,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  I.of(context).points(points),
-                  style: b,
+            );
+          }
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    I.of(context).havingCoin,
+                    style: h,
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  '交換できるもの',
-                  style: h,
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    I.of(context).points(points),
+                    style: b,
+                  ),
                 ),
-              ),
-              Column(
-                children: _items
-                    .map(
-                      (item) => Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: GiftItemCard(
-                          giftItem: item,
-                          onTap: () {
-                            _purchase(item);
-                          },
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    '交換できるもの',
+                    style: h,
+                  ),
+                ),
+                Column(
+                  children: snapshot.data
+                      .map(
+                        (item) => Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: GiftItemCard(
+                            giftItem: item,
+                            onTap: () {
+                              _showPurchaseConfirmDialog(context, item);
+                            },
+                          ),
                         ),
-                      ),
-                    )
-                    .toList(),
-              ),
-            ],
-          ),
-        ),
+                      )
+                      .toList(),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

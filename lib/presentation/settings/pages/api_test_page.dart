@@ -10,7 +10,6 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
-import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -22,7 +21,8 @@ class APITestView extends StatelessWidget {
     final un = context.watch<UserNotifier>();
     final ln = context.watch<LessonNotifier>();
     final nn = context.watch<NoteNotifier>();
-    final sn = context.watch<ShopNotifier>();
+    // TODO shopのapiテストとりあえず消すNotifierを移行するので
+    // final sn = context.watch<ShopNotifier>();
 
     _showResultDialog(BuildContext context, String title, [dynamic content]) {
       showDialog(
@@ -146,23 +146,23 @@ class APITestView extends StatelessWidget {
             ],
           ),
           // shop APIs
-          SettingsSection(
-            title: 'Shop',
-            tiles: [
-              SettingsTile(
-                title: 'ショップアイテム',
-                onTap: () async {
-                  try {
-                    final items = await sn.getShopItems();
-                    _showResultDialog(
-                        context, '成功', items.map((e) => e.toJson()));
-                  } on Exception catch (e) {
-                    _showResultDialog(context, 'エラー', e);
-                  }
-                },
-              ),
-            ],
-          ),
+          // SettingsSection(
+          //   title: 'Shop',
+          //   tiles: [
+          //     SettingsTile(
+          //       title: 'ショップアイテム',
+          //       onTap: () async {
+          //         try {
+          //           final items = await sn.getShopItems();
+          //           _showResultDialog(
+          //               context, '成功', items.map((e) => e.toJson()));
+          //         } on Exception catch (e) {
+          //           _showResultDialog(context, 'エラー', e);
+          //         }
+          //       },
+          //     ),
+          //   ],
+          // ),
           SettingsSection(
             title: 'Dialogs',
             tiles: [
