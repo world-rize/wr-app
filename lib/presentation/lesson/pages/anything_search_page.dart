@@ -8,7 +8,7 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/notifier/voice_player.dart';
-import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
+import 'package:wr_app/presentation/lesson/pages/phrase_page_view/index.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/toast.dart';
@@ -102,7 +102,7 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
                                           value: VoicePlayer(
                                             onError: NotifyToast.error,
                                           ),
-                                          builder: (_, __) => SectionPage(
+                                          builder: (_, __) => PhrasePageView(
                                             section: Section.fromPhrase(phrase),
                                             index: 0,
                                           ),

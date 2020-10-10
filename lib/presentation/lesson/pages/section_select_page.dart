@@ -10,7 +10,7 @@ import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/toast.dart';
 
-import './section_list_page.dart';
+import './phrase_list_page.dart';
 import './test_page.dart';
 import '../widgets/section_select_lesson_tab.dart';
 import '../widgets/section_select_test_tab.dart';
@@ -56,7 +56,7 @@ class _SectionSelectPageState extends State<SectionSelectPage>
       );
 
       await Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => SectionListPage(section: section)));
+          MaterialPageRoute(builder: (_) => PhraseListPage(section: section)));
     } on Exception catch (e) {
       NotifyToast.error(e);
     }

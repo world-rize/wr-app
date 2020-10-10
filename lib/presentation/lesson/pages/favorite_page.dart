@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
+import 'package:wr_app/presentation/lesson/pages/phrase_page_view/index.dart';
 import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
@@ -46,7 +46,7 @@ class FavoritePage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => SectionPage(
+                      builder: (_) => PhrasePageView(
                         section: section,
                         index: index,
                       ),

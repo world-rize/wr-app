@@ -7,27 +7,30 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_detail_page_view.dart';
-import 'package:wr_app/presentation/lesson/pages/section_page/widgets/setting_dialog.dart';
+import 'package:wr_app/presentation/lesson/pages/phrase_page_view/widgets/phrase_detail_page.dart';
+import 'package:wr_app/presentation/lesson/pages/phrase_page_view/widgets/setting_dialog.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/presentation/voice_player.dart';
 
-class SectionPage extends StatefulWidget {
-  const SectionPage({@required this.section, @required this.index});
+class PhrasePageView extends StatefulWidget {
+  const PhrasePageView({@required this.section, @required this.index});
 
+  /// カテゴリーの中のどのセクションか
   final Section section;
+
+  /// sectionの何番目のPhraseか
   final int index;
 
   @override
-  _SectionPageState createState() => _SectionPageState(
+  _PhrasePageViewState createState() => _PhrasePageViewState(
         section: section,
         index: index,
       );
 }
 
-class _SectionPageState extends State<SectionPage>
+class _PhrasePageViewState extends State<PhrasePageView>
     with SingleTickerProviderStateMixin {
-  _SectionPageState({
+  _PhrasePageViewState({
     @required this.section,
     @required this.index,
   });
@@ -141,7 +144,7 @@ class _SectionPageState extends State<SectionPage>
               // TODO: Floatingボタンの下に説明が書かれているのでpadding
               //  画面のサイズによるのでPaddingやめたい
               // deviceによってむらがある
-              (phrase) => PhraseDetailPageView(phrase: phrase),
+              (phrase) => PhraseDetailPage(phrase: phrase),
             )
             .toList(),
       ),

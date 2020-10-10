@@ -3,18 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
-import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
+import 'package:wr_app/presentation/lesson/pages/phrase_page_view/index.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
 
 import '../widgets/phrase_card.dart';
 
-/// フレーズ一覧ページ
+/// フレーズが短いカード形式で一覧みれるページ
 ///
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469136>
-class SectionListPage extends StatelessWidget {
-  // TODO: PhraseListPageっぽい
-  const SectionListPage({@required this.section});
+class PhraseListPage extends StatelessWidget {
+  const PhraseListPage({@required this.section});
 
   final Section section;
 
@@ -46,7 +45,7 @@ class SectionListPage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => SectionPage(
+                      builder: (_) => PhrasePageView(
                         section: section,
                         index: index,
                       ),

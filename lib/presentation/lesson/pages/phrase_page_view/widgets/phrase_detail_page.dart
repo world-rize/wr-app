@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_example_card.dart';
+import 'package:wr_app/presentation/lesson/pages/phrase_page_view/widgets/phrase_example_card.dart';
 
 /// フレーズ詳細画面
-class PhraseDetailPageView extends StatelessWidget {
-  const PhraseDetailPageView({@required this.phrase});
+class PhraseDetailPage extends StatelessWidget {
+  const PhraseDetailPage({@required this.phrase});
 
   final Phrase phrase;
 
