@@ -140,7 +140,6 @@ class PhraseExampleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final vp = Provider.of<VoicePlayer>(context);
     final un = Provider.of<UserNotifier>(context);
 
     // TODO: phrase.id !== notePhrase.uuid
@@ -271,7 +270,10 @@ class PhraseExampleCard extends StatelessWidget {
         ...phrase.example.value.indexedMap(
           (i, message) => _createMessageView(
             context: context,
-            onPressed: () => vp.playMessages(messages: [message]),
+            onPressed: isTest
+                ? null
+                : () => Provider.of<VoicePlayer>(context, listen: false)
+                    .playMessages(messages: [message]),
             message: message,
             index: i,
             primary: i.isOdd,

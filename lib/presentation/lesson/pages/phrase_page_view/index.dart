@@ -278,6 +278,7 @@ class VoicePlayer with ChangeNotifier {
     // _fixedPlayer.
     isPlaying = true;
     notifyListeners();
+    print('isPlaying: $isPlaying');
     // TODO: queue でやらないと割り込みに対応できない
     await Future.forEach(messages, (Message message) async {
       final l = _voiceAccentMP3AssetsName[locale];
@@ -291,11 +292,10 @@ class VoicePlayer with ChangeNotifier {
       await c.future;
       // // remove listener
       await sub.cancel();
-    }).catchError(() {
-      print('canceled');
     });
     isPlaying = false;
     notifyListeners();
+    print('isPlaying: $isPlaying');
   }
 
   Future<void> stop() async {

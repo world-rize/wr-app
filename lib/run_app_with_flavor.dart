@@ -180,11 +180,15 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       userNotifier.user = authNotifier.user;
     });
     final noteNotifier = NoteNotifier(noteService: noteService);
-
+    final lessonNotifier = LessonNotifier(
+      userService: userService,
+      lessonService: lessonService,
+    );
     noteNotifier.addListener(() {
       InAppLogger.debug('update note');
       userNotifier.user = noteNotifier.user;
     });
+
     userNotifier.addListener(() {
       authNotifier.user = userNotifier.user;
       noteNotifier.user = userNotifier.user;
@@ -204,10 +208,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ChangeNotifierProvider.value(value: noteNotifier),
         // Lesson
         ChangeNotifierProvider.value(
-          value: LessonNotifier(
-            userService: userService,
-            lessonService: lessonService,
-          ),
+          value: lessonNotifier,
         ),
       ],
       child: WRApp(),
