@@ -122,17 +122,22 @@ class _SignUpPageState extends State<SignUpPage> {
         backgroundColor: splashColor,
         title: const Text('サインアップ'),
       ),
-      body: LoadingView(
-        loading: _isLoading,
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SignUpForm(
-                onSignUpWithEmailAndPassword: _signUpWithEmailAndPassword,
-                onSignUpWithGoogle: _signUpWithGoogle,
-                onSignUpWithApple: _signUpWithApple,
-              ),
-            ],
+      body: GestureDetector(
+        onTap: () {
+          // FocusScope.of(context).unfocus();
+        },
+        child: LoadingView(
+          loading: _isLoading,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SignUpForm(
+                  onSignUpWithEmailAndPassword: _signUpWithEmailAndPassword,
+                  onSignUpWithGoogle: _signUpWithGoogle,
+                  onSignUpWithApple: _signUpWithApple,
+                ),
+              ],
+            ),
           ),
         ),
       ),

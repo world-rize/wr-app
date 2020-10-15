@@ -207,9 +207,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         // Note
         ChangeNotifierProvider.value(value: noteNotifier),
         // Lesson
-        ChangeNotifierProvider.value(
-          value: lessonNotifier,
-        ),
+        ChangeNotifierProvider.value(value: lessonNotifier),
       ],
       child: WRApp(),
     );

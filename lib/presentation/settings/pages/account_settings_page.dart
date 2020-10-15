@@ -12,13 +12,8 @@ import './account_settings/mail_address_form_page.dart';
 import './account_settings/password_form_page.dart';
 
 /// 設定ページ
-class AccountSettingsPage extends StatefulWidget {
-  @override
-  _AccountSettingsPageState createState() => _AccountSettingsPageState();
-}
-
-class _AccountSettingsPageState extends State<AccountSettingsPage> {
-  void _showSignOutConfirmDialog() {
+class AccountSettingsPage extends StatelessWidget {
+  void _showSignOutConfirmDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -47,7 +42,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
   }
 
   // account section
-  SettingsSection accountSection() {
+  SettingsSection accountSection(BuildContext context) {
     final userStore = Provider.of<UserNotifier>(context);
     final user = userStore.user;
 
@@ -92,7 +87,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         SettingsTile(
           title: 'サインアウト',
           onTap: () async {
-            _showSignOutConfirmDialog();
+            _showSignOutConfirmDialog(context);
           },
         ),
       ],
@@ -109,7 +104,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
       ),
       body: SettingsList(
         sections: [
-          accountSection(),
+          accountSection(context),
         ],
       ),
     );

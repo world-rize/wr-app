@@ -9,33 +9,53 @@ import 'package:wr_app/ui/widgets/primary_button.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 /// リクエスト画面
-class RequestPage extends StatefulWidget {
-  @override
-  _RequestPageState createState() => _RequestPageState();
-}
-
-class _RequestPageState extends State<RequestPage> {
-  String _text;
-
-  @override
-  void initState() {
-    super.initState();
-    _text = '';
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final notifier = Provider.of<LessonNotifier>(context);
-    final primaryColor = Theme.of(context).primaryColor;
-    final backgroundColor = Theme.of(context).backgroundColor;
-    const hintText = '''
+const hintText = '''
 (記入例)
 「電気をつけっぱなしにしないで」はどうやって表現すれば良いですか？
 
 ”I’ll keep you company”はどのようなシチュエーションで使えば良いですか？
 
 ”I don’t understand”の言い換えってありますか？
-    ''';
+''';
+const infoText = '''⚠️リクエストに返答することはできません。
+                可能な限りリクエストを反映させるのでNew coming Phraseを確認してください。''';
+
+class RequestPageModel extends ChangeNotifier {
+  RequestPageModel() : _text = '';
+
+  String _text;
+  set text(String value) {
+    _text = value;
+    notifyListeners();
+  }
+
+  String get text => _text;
+
+  Widget submitButton(BuildContext context) {
+    final ln = context.read<LessonNotifier>();
+    return PrimaryButton(
+      label: Text(I.of(context).sendRequestButton),
+      onPressed: _text == '' ? null : () => ln.sendPhraseRequest(text: _text),
+    );
+  }
+}
+
+class RequestPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: RequestPageModel(),
+      child: _RequestPage(),
+    );
+  }
+}
+
+class _RequestPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<RequestPageModel>();
+    final primaryColor = Theme.of(context).primaryColor;
+    final backgroundColor = Theme.of(context).backgroundColor;
 
     return Scaffold(
       appBar: AppBar(
@@ -70,16 +90,13 @@ class _RequestPageState extends State<RequestPage> {
                         decoration:
                             const InputDecoration.collapsed(hintText: hintText),
                         onChanged: (text) {
-                          setState(() {
-                            _text = text;
-                          });
+                          state.text = text;
                         },
                       ),
                     ),
                   ),
                 ),
-                const Text('''⚠️リクエストに返答することはできません。
-                可能な限りリクエストを反映させるのでNew coming Phraseを確認してください。'''),
+                const Text(infoText),
               ],
             ),
           ),
@@ -87,14 +104,7 @@ class _RequestPageState extends State<RequestPage> {
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 20),
-        child: PrimaryButton(
-          label: Text(I.of(context).sendRequestButton),
-          onPressed: _text == ''
-              ? null
-              : () async {
-                  await notifier.sendPhraseRequest(text: _text);
-                },
-        ),
+        child: state.submitButton(context),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

@@ -119,18 +119,23 @@ class _SignInPageState extends State<SignInPage> {
         backgroundColor: splashColor,
         title: const Text('SignIn'),
       ),
-      body: LoadingView(
-        loading: _isLoading,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              SignInForm(
-                onSignInWithEmailAndPassword: _signInWithEmailAndPassword,
-                onSignInWithGoogle: _signInWithGoogle,
-                onSignInWithApple: _signInWithApple,
-              ).padding(),
-            ],
+      body: GestureDetector(
+        onTap: () {
+          // FocusScope.of(context).unfocus();
+        },
+        child: LoadingView(
+          loading: _isLoading,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SignInForm(
+                  onSignInWithEmailAndPassword: _signInWithEmailAndPassword,
+                  onSignInWithGoogle: _signInWithGoogle,
+                  onSignInWithApple: _signInWithApple,
+                ).padding(),
+              ],
+            ),
           ),
         ),
       ),

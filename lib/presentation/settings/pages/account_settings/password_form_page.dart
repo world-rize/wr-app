@@ -5,27 +5,57 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
-class PasswordFormPage extends StatefulWidget {
+class PasswordFormPage extends StatelessWidget {
   @override
-  _PasswordFormPageState createState() => _PasswordFormPageState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: PasswordFormPageModel(),
+      child: _PasswordFormPage(),
+    );
+  }
 }
 
-class _PasswordFormPageState extends State<PasswordFormPage> {
+class PasswordFormPageModel extends ChangeNotifier {
   final _formKey = GlobalKey<FormState>();
+
   bool _showPassword = false;
   String _currentPassword = '';
   String _newPassword = '';
 
+  GlobalKey<FormState> get formKey => _formKey;
+
+  bool get showPassword => _showPassword;
+
+  set showPassword(bool value) {
+    _showPassword = value;
+    notifyListeners();
+  }
+
+  String get currentPassword => _currentPassword;
+
+  set currentPassword(String value) {
+    _currentPassword = value;
+    notifyListeners();
+  }
+
+  String get newPassword => _newPassword;
+
+  set newPassword(String value) {
+    _newPassword = value;
+    notifyListeners();
+  }
+}
+
+class _PasswordFormPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final an = context.watch<AuthNotifier>();
+    final state = context.watch<PasswordFormPageModel>();
 
     final _currentPasswordField = TextFormField(
-      obscureText: !_showPassword,
+      obscureText: !state.showPassword,
       onChanged: (password) {
-        setState(() {
-          _currentPassword = password;
-        });
+        state.currentPassword = password;
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -41,12 +71,12 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
         ),
         suffixIcon: IconButton(
           icon: Icon(
-            _showPassword ? Icons.remove_circle_outline : Icons.remove_red_eye,
+            state.showPassword
+                ? Icons.remove_circle_outline
+                : Icons.remove_red_eye,
           ),
           onPressed: () {
-            setState(() {
-              _showPassword = !_showPassword;
-            });
+            state.showPassword = !state.showPassword;
           },
         ),
         hintText: '現在のパスワード',
@@ -54,9 +84,9 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
     );
 
     final _newPasswordField = TextFormField(
-      obscureText: !_showPassword,
+      obscureText: !state.showPassword,
       onChanged: (password) {
-        setState(() => _newPassword = password);
+        state.newPassword = password;
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -72,12 +102,12 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
         ),
         suffixIcon: IconButton(
           icon: Icon(
-            _showPassword ? Icons.remove_circle_outline : Icons.remove_red_eye,
+            state.showPassword
+                ? Icons.remove_circle_outline
+                : Icons.remove_red_eye,
           ),
           onPressed: () {
-            setState(() {
-              _showPassword = !_showPassword;
-            });
+            state.showPassword = !state.showPassword;
           },
         ),
         hintText: '新しいパスワード',
@@ -92,11 +122,11 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
           text: '変更',
           color: Colors.blueAccent,
           onTap: () {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
+            if (state.formKey.currentState.validate()) {
+              state.formKey.currentState.save();
               an.setPassword(
-                currentPassword: _currentPassword,
-                newPassword: _newPassword,
+                currentPassword: state.currentPassword,
+                newPassword: state.newPassword,
               );
             }
           },
@@ -114,7 +144,7 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Form(
-                key: _formKey,
+                key: state.formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[

@@ -12,19 +12,25 @@ import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/toast.dart';
 
-class AnythingSearchPage extends StatefulWidget {
-  @override
-  _AnythingSearchPageState createState() => _AnythingSearchPageState();
-}
+class AnythingSearchPageModel extends ChangeNotifier {
+  AnythingSeatchPageMode({List<Phrase> initialPhrases}) {
+    _phrases = initialPhrases;
+  }
 
-class _AnythingSearchPageState extends State<AnythingSearchPage> {
   String _word;
+  String get word => _word;
   List<Phrase> _phrases;
 
+  set word(String value) {
+    _word = value;
+    notifyListeners();
+  }
+
+  // TODO: domain
   Future<Iterable<Phrase>> _searchPhrases(String word) async {
     final r = RegExp(word, caseSensitive: false);
     final future = Future.microtask(() => _phrases.where((phrase) {
-          if (_word.isNotEmpty) {
+          if (word.isNotEmpty) {
             return r.hasMatch(phrase.title['en']);
           } else {
             return false;
@@ -34,20 +40,80 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
     return future;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _word = '';
-    _phrases = Provider.of<LessonNotifier>(context, listen: false).phrases;
+  void _onTapPhrase(BuildContext context, Phrase phrase) {
+    // TODO: voice player SectionPageの中に
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => ChangeNotifierProvider<VoicePlayer>.value(
+          value: VoicePlayer(
+            onError: NotifyToast.error,
+          ),
+          builder: (_, __) => PhrasePageView(
+            section: Section.fromPhrase(phrase),
+            index: 0,
+          ),
+        ),
+      ),
+    );
   }
 
+  Future _onFavoritePhrase(BuildContext context, Phrase phrase) async {
+    final un = context.read<UserNotifier>();
+
+    await un.favoritePhrase(
+        phraseId: phrase.id,
+        favorite: un.existPhraseInFavoriteList(phraseId: phrase.id));
+  }
+
+  // result
+  Widget searchResultList(BuildContext context) {
+    final _loadingView = const Text('loading');
+
+    return FutureBuilder<Iterable<Phrase>>(
+      future: _searchPhrases(_word),
+      builder: (_, snapshot) {
+        if (!snapshot.hasData) {
+          return _loadingView;
+        }
+        return Column(
+          children: [
+            if (snapshot.hasData && snapshot.data.isNotEmpty)
+              Text('${snapshot.data.length} フレーズみつかりました').padding(),
+            ...snapshot.data
+                .map(
+                  (phrase) => PhraseCard(
+                    phrase: phrase,
+                    favorite: false,
+                    onTap: () => _onTapPhrase(context, phrase),
+                    onFavorite: () => _onFavoritePhrase(context, phrase),
+                  ),
+                )
+                .toList(),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class AnythingSearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final un = Provider.of<UserNotifier>(context, listen: false);
+    return ChangeNotifierProvider.value(
+      value: AnythingSearchPageModel(),
+      child: _AnythingSearchPage(),
+    );
+  }
+}
+
+class _AnythingSearchPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<AnythingSearchPageModel>();
 
     final _wordField = TextFormField(
       onChanged: (word) {
-        setState(() => _word = word);
+        state.word = word;
       },
       decoration: InputDecoration(
         border: const UnderlineInputBorder(
@@ -64,9 +130,7 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
         title: Text(I.of(context).lessonSearchAppBarTitle),
       ),
       body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
+        onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,53 +139,7 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
                 padding: const EdgeInsets.all(16),
                 child: _wordField,
               ),
-              FutureBuilder<Iterable<Phrase>>(
-                  future: _searchPhrases(_word),
-                  builder: (_, snapshot) {
-                    if (!snapshot.hasData) {
-                      // loading
-                      return const Text('loading');
-                    } else {
-                      return Column(
-                        children: [
-                          if (snapshot.hasData && snapshot.data.isNotEmpty)
-                            Text('${snapshot.data.length} フレーズみつかりました')
-                                .padding(),
-                          ...snapshot.data
-                              .map(
-                                (phrase) => PhraseCard(
-                                  phrase: phrase,
-                                  favorite: false,
-                                  onTap: () {
-                                    // TODO: voice player SectionPageの中に
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => ChangeNotifierProvider<
-                                            VoicePlayer>.value(
-                                          value: VoicePlayer(
-                                            onError: NotifyToast.error,
-                                          ),
-                                          builder: (_, __) => PhrasePageView(
-                                            section: Section.fromPhrase(phrase),
-                                            index: 0,
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  onFavorite: () {
-                                    un.favoritePhrase(
-                                        phraseId: phrase.id,
-                                        favorite: un.existPhraseInFavoriteList(
-                                            phraseId: phrase.id));
-                                  },
-                                ),
-                              )
-                              .toList(),
-                        ],
-                      );
-                    }
-                  }),
+              state.searchResultList(context),
             ],
           ),
         ),

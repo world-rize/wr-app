@@ -6,12 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/lesson/pages/anything_search_page.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';
@@ -19,19 +19,37 @@ import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
 /// root view
-class RootView extends StatefulWidget {
+class RootView extends StatelessWidget {
   @override
-  _RootViewState createState() => _RootViewState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: RootViewModel(context),
+      child: _RootView(),
+    );
+  }
 }
 
-/// [RootView] state
-class _RootViewState extends State<RootView>
-    with SingleTickerProviderStateMixin {
+class RootViewModel extends ChangeNotifier {
+  RootViewModel(BuildContext context)
+      : _index = 0,
+        _pageController = PageController() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => onPageLoaded(context));
+  }
+
   /// tab index
   int _index;
 
   /// navbar controller
   PageController _pageController;
+
+  int get index => _index;
+
+  set index(int value) {
+    _index = value;
+    notifyListeners();
+  }
+
+  get pageController => _pageController;
 
   /// 自動でサインイン
   Future<void> _autoSignIn(BuildContext context) async {
@@ -43,14 +61,6 @@ class _RootViewState extends State<RootView>
       if (isAlreadySignIn) {
         await un.fetchUser();
         await an.login();
-
-        Navigator.popUntil(context, (route) => route.isFirst);
-        return Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RootView(),
-          ),
-        );
       }
     } on Exception catch (e) {
       InAppLogger.error(e);
@@ -64,7 +74,7 @@ class _RootViewState extends State<RootView>
   }
 
   /// Check app status
-  Future _checkAppStatus() async {
+  Future _checkAppStatus(BuildContext context) async {
     InAppLogger.debug('AppInfo');
     final sn = Provider.of<SystemNotifier>(context);
     final appInfo = await sn.getAppInfo();
@@ -81,7 +91,7 @@ class _RootViewState extends State<RootView>
   }
 
   /// Check user status
-  Future<void> _checkUserStatus() async {
+  Future<void> _checkUserStatus(BuildContext context) async {
     // TODO: membership check
 
     // on first launch, show on-boarding page
@@ -109,22 +119,18 @@ class _RootViewState extends State<RootView>
   }
 
   /// page loaded callback
-  void onPageLoaded() {
-    _checkAppStatus();
-    _checkUserStatus();
+  void onPageLoaded(BuildContext context) {
+    print('loaded');
+    _checkAppStatus(context);
+    _checkUserStatus(context);
   }
+}
 
-  @override
-  void initState() {
-    super.initState();
-    _index = 0;
-    _pageController = PageController();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) => onPageLoaded());
-  }
-
+/// [RootView] state
+class _RootView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<RootViewModel>();
     final env = GetIt.I<EnvKeys>();
     final un = context.watch<UserNotifier>();
     final primaryColor = Theme.of(context).primaryColor;
@@ -190,7 +196,7 @@ class _RootViewState extends State<RootView>
           // test limit
           limits,
           const Spacer(),
-          if (_index == 0) searchButton,
+          if (state.index == 0) searchButton,
           // settings
           settingsButton,
         ],
@@ -208,9 +214,9 @@ class _RootViewState extends State<RootView>
         selectedItemColor: Colors.white,
         type: BottomNavigationBarType.fixed,
         onTap: (int index) {
-          _pageController.jumpToPage(index);
+          state.pageController.jumpToPage(index);
         },
-        currentIndex: _index,
+        currentIndex: state.index,
         items: [
           BottomNavigationBarItem(
             icon: const Icon(Icons.create),
@@ -233,12 +239,10 @@ class _RootViewState extends State<RootView>
     );
 
     final pageView = PageView(
-      controller: _pageController,
+      controller: state.pageController,
       physics: const NeverScrollableScrollPhysics(),
       onPageChanged: (index) {
-        setState(() {
-          _index = index;
-        });
+        state.index = index;
       },
       children: <Widget>[
         LessonIndexPage(),

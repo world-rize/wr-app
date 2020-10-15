@@ -18,14 +18,9 @@ import './dark_mode_page.dart';
 import './inapp_log_page.dart';
 
 /// 設定ページ
-class SettingsPage extends StatefulWidget {
-  @override
-  _SettingsState createState() => _SettingsState();
-}
-
-class _SettingsState extends State<SettingsPage> {
+class SettingsPage extends StatelessWidget {
   // general
-  SettingsSection generalSection() {
+  SettingsSection generalSection(BuildContext context) {
     return SettingsSection(
       title: '一般',
       tiles: [
@@ -41,7 +36,7 @@ class _SettingsState extends State<SettingsPage> {
   }
 
   // about
-  SettingsSection aboutSection() {
+  SettingsSection aboutSection(BuildContext context) {
     final pubSpec = GetIt.I<PackageInfo>();
     final env = GetIt.I<EnvKeys>();
 
@@ -166,7 +161,7 @@ class _SettingsState extends State<SettingsPage> {
   }
 
   // debug menu
-  SettingsSection debugSection() {
+  SettingsSection debugSection(BuildContext context) {
     return SettingsSection(
       title: 'Debug',
       tiles: [
@@ -225,9 +220,10 @@ class _SettingsState extends State<SettingsPage> {
       ),
       body: SettingsList(
         sections: [
-          generalSection(),
-          aboutSection(),
-          if (systemNotifier.flavor == Flavor.development) debugSection(),
+          generalSection(context),
+          aboutSection(context),
+          if (systemNotifier.flavor == Flavor.development)
+            debugSection(context),
         ],
       ),
     );

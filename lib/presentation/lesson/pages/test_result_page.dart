@@ -17,25 +17,17 @@ import 'package:wr_app/ui/widgets/primary_button.dart';
 
 import '../widgets/phrase_card.dart';
 
-/// テスト結果画面
-///
-/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469140>
-class TestResultPage extends StatefulWidget {
-  const TestResultPage({@required this.stats});
+class TestResultPageModel extends ChangeNotifier {
+  TestResultPageModel({@required this.stats});
 
   final TestStats stats;
 
-  @override
-  _TestResultPageState createState() => _TestResultPageState();
-}
-
-class _TestResultPageState extends State<TestResultPage> {
   /// 報酬獲得画面
   Future _showRewardDialog(BuildContext context) {
     return showCupertinoDialog(
       context: context,
       builder: (_) => RewardDialog(
-        text: Text(I.of(context).getPoints(widget.stats.corrects)),
+        text: Text(I.of(context).getPoints(stats.corrects)),
         onTap: () {
           // pop history
           Navigator.popUntil(context, (route) => route.isFirst);
@@ -46,7 +38,7 @@ class _TestResultPageState extends State<TestResultPage> {
 
   /// アンケートを出す
   Future _showQuestionnaireDialog(BuildContext context) {
-    final systemNotifier = Provider.of<SystemNotifier>(context, listen: false);
+    final sn = context.read<SystemNotifier>();
     final env = DotEnv().env;
     final questionnaireUrl = env['QUESTIONNAIRE_URL'];
 
@@ -59,7 +51,7 @@ class _TestResultPageState extends State<TestResultPage> {
           CupertinoButton(
             child: Text(I.of(context).showQuestionnaireDialogOk),
             onPressed: () async {
-              systemNotifier.setQuestionnaireAnswered(value: true);
+              sn.setQuestionnaireAnswered(value: true);
               if (await canLaunch(questionnaireUrl)) {
                 await launch(
                   questionnaireUrl,
@@ -89,7 +81,7 @@ class _TestResultPageState extends State<TestResultPage> {
   }
 
   // Nextぼたんをおしたとき
-  Future _onTapNext() async {
+  Future _onTapNext(BuildContext context) async {
     final un = context.read<UserNotifier>();
     final sn = context.read<SystemNotifier>();
 
@@ -97,7 +89,7 @@ class _TestResultPageState extends State<TestResultPage> {
     await _showRewardDialog(context);
 
     // 30 days challenge
-    if (widget.stats.challengeAchieved) {
+    if (stats.challengeAchieved) {
       await _show30DaysChallengeAchievedDialog(context);
     }
 
@@ -108,38 +100,64 @@ class _TestResultPageState extends State<TestResultPage> {
     }
   }
 
+  Future onFavorite(BuildContext context, int index) async {
+    final phrase = stats.section.phrases[index];
+    final un = context.read<UserNotifier>();
+    await un.favoritePhrase(
+      phraseId: phrase.id,
+      favorite: !un.existPhraseInFavoriteList(phraseId: phrase.id),
+    );
+  }
+
+  Future onTap(BuildContext context, int index) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PhrasePageView(section: stats.section, index: index),
+      ),
+    );
+  }
+
+  Widget phraseCard(BuildContext context, int index) {
+    final un = context.read<UserNotifier>();
+
+    return PhraseCard(
+      highlight: stats.answers[index] ? Colors.green : Colors.red,
+      phrase: stats.section.phrases[index],
+      onTap: () => onTap(context, index),
+      favorite: un.existPhraseInFavoriteList(
+          phraseId: stats.section.phrases[index].id),
+      onFavorite: () => onFavorite(context, index),
+    );
+  }
+}
+
+class TestResultPage extends StatelessWidget {
+  const TestResultPage({@required this.stats});
+
+  // 出題セクション
+  final TestStats stats;
+
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: TestResultPageModel(stats: stats),
+      child: _TestResultPageState(),
+    );
+  }
+}
+
+class _TestResultPageState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<TestResultPageModel>();
     final primaryColor = Theme.of(context).primaryColor;
-    final userNotifier = Provider.of<UserNotifier>(context);
 
     final scoreText =
-        I.of(context).testScore(widget.stats.questions, widget.stats.corrects);
+        I.of(context).testScore(state.stats.questions, state.stats.corrects);
 
     final resultList = List.generate(
-      widget.stats.section.phrases.length,
-      (i) => PhraseCard(
-        highlight: widget.stats.answers[i] ? Colors.green : Colors.red,
-        phrase: widget.stats.section.phrases[i],
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) =>
-                  PhrasePageView(section: widget.stats.section, index: i),
-            ),
-          );
-        },
-        favorite: userNotifier.existPhraseInFavoriteList(
-            phraseId: widget.stats.section.phrases[i].id),
-        onFavorite: () {
-          final phrase = widget.stats.section.phrases[i];
-          userNotifier.favoritePhrase(
-            phraseId: phrase.id,
-            favorite:
-                !userNotifier.existPhraseInFavoriteList(phraseId: phrase.id),
-          );
-        },
-      ).padding(),
+      state.stats.section.phrases.length,
+      (i) => state.phraseCard(context, i).padding(),
     );
     final nextButton = PrimaryButton(
       label: Padding(
@@ -149,7 +167,7 @@ class _TestResultPageState extends State<TestResultPage> {
           style: const TextStyle(fontSize: 20),
         ),
       ),
-      onPressed: _onTapNext,
+      onPressed: () => state._onTapNext(context),
     );
 
     return Scaffold(

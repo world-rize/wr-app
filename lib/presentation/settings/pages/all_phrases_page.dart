@@ -19,16 +19,12 @@ Future<bool> existAssets(String path) async {
   return rootBundle.load(path).then((_) => true).catchError((_) => false);
 }
 
-class AllPhrasesPage extends StatefulWidget {
+class AllPhrasesPage extends StatelessWidget {
   const AllPhrasesPage({this.filter});
+
   final bool Function(Phrase) filter;
 
-  @override
-  _AllPhrasesPageState createState() => _AllPhrasesPageState();
-}
-
-class _AllPhrasesPageState extends State<AllPhrasesPage> {
-  Future<List<Voice>> paths() async {
+  Future<List<Voice>> paths(BuildContext context) async {
     final notifier = Provider.of<LessonNotifier>(context);
     final voices = await Future.wait(notifier.phrases.expand((phrase) {
       return phrase.voicePaths().map((path) async {
@@ -43,7 +39,7 @@ class _AllPhrasesPageState extends State<AllPhrasesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final voices = paths();
+    final voices = paths(context);
     final backgroundColor = Theme.of(context).backgroundColor;
 
     return Scaffold(

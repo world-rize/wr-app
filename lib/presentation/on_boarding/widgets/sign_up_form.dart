@@ -4,6 +4,7 @@ import 'package:apple_sign_in/apple_sign_in.dart' as siwa;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
@@ -11,24 +12,42 @@ import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';
 
-class SignUpForm extends StatefulWidget {
+class SignUpForm extends StatelessWidget {
   const SignUpForm({
     @required this.onSignUpWithEmailAndPassword,
     @required this.onSignUpWithApple,
     @required this.onSignUpWithGoogle,
   });
 
-  // email, password, name
-  final Function(String, String, String) onSignUpWithEmailAndPassword;
-  // name
-  final Function(String) onSignUpWithGoogle;
-  final Function(String) onSignUpWithApple;
+  final Function(String email, String password, String name)
+      onSignUpWithEmailAndPassword;
+
+  final Function(String name) onSignUpWithGoogle;
+  final Function(String name) onSignUpWithApple;
 
   @override
-  _SignUpFormState createState() => _SignUpFormState();
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: SignUpFormModel(),
+      child: _SignUpForm(
+        onSignUpWithGoogle: onSignUpWithGoogle,
+        onSignUpWithApple: onSignUpWithApple,
+        onSignUpWithEmailAndPassword: onSignUpWithEmailAndPassword,
+      ),
+    );
+  }
 }
 
-class _SignUpFormState extends State<SignUpForm> {
+class SignUpFormModel extends ChangeNotifier {
+  SignUpFormModel()
+      : _agree = false,
+        _showPassword = false,
+        _showConfirmationPassword = false,
+        _name = '',
+        _email = '',
+        _password = '',
+        _confirmationPassword = '';
+
   final _formKey = GlobalKey<FormState>();
   bool _agree;
   bool _showPassword;
@@ -38,42 +57,91 @@ class _SignUpFormState extends State<SignUpForm> {
   String _password;
   String _confirmationPassword;
 
-  @override
-  void initState() {
-    super.initState();
-    _agree = false;
-    _showPassword = false;
-    _showConfirmationPassword = false;
-    _name = '';
-    _email = '';
-    _password = '';
-    _confirmationPassword = '';
+  GlobalKey<FormState> get formKey => _formKey;
+
+  bool get showPassword => _showPassword;
+
+  bool get showConfirmationPassword => _showConfirmationPassword;
+
+  set showConfirmationPassword(bool value) {
+    _showConfirmationPassword = value;
+    notifyListeners();
   }
 
-  bool _isValid() {
-    return _name.isNotEmpty &&
-        _email.isNotEmpty &&
-        _password.isNotEmpty &&
-        _password.length >= 6 &&
-        _confirmationPassword.isNotEmpty &&
-        _agree &&
-        _password == _confirmationPassword;
+  set confirmationPassword(String confirmationPassword) {
+    _confirmationPassword = confirmationPassword;
+    notifyListeners();
   }
 
-  bool _isValidName() {
-    return _name.isNotEmpty && _agree;
+  String get password => _password;
+
+  set password(String value) {
+    _password = value;
+    notifyListeners();
   }
+
+  set showPassword(bool value) {
+    _showPassword = value;
+    notifyListeners();
+  }
+
+  bool get agree => _agree;
+
+  set agree(bool value) {
+    _agree = value;
+    notifyListeners();
+  }
+
+  String get name => _name;
+
+  set name(String value) {
+    _name = value;
+    notifyListeners();
+  }
+
+  String get email => _email;
+
+  set email(String value) {
+    _email = value;
+    notifyListeners();
+  }
+
+  bool get isValid =>
+      _name.isNotEmpty &&
+      _email.isNotEmpty &&
+      _password.isNotEmpty &&
+      _password.length >= 6 &&
+      _confirmationPassword.isNotEmpty &&
+      _agree &&
+      _password == _confirmationPassword;
+
+  bool get isValidName => _name.isNotEmpty && _agree;
+}
+
+class _SignUpForm extends StatelessWidget {
+  const _SignUpForm({
+    @required this.onSignUpWithEmailAndPassword,
+    @required this.onSignUpWithApple,
+    @required this.onSignUpWithGoogle,
+  });
+
+  final Function(String email, String password, String name)
+      onSignUpWithEmailAndPassword;
+
+  final Function(String name) onSignUpWithGoogle;
+  final Function(String name) onSignUpWithApple;
 
   @override
   Widget build(BuildContext context) {
     final env = GetIt.I<EnvKeys>();
     const splashColor = Color(0xff56c0ea);
     final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
+    final state = context.watch<SignUpFormModel>();
 
     final _nameField = TextFormField(
       key: const Key('name'),
       onChanged: (name) {
-        setState(() => _name = name);
+        state.name = name;
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -94,7 +162,7 @@ class _SignUpFormState extends State<SignUpForm> {
     final _emailField = TextFormField(
       key: const Key('email'),
       onChanged: (email) {
-        setState(() => _email = email);
+        state.email = email;
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -114,9 +182,9 @@ class _SignUpFormState extends State<SignUpForm> {
 
     final _passwordField = TextFormField(
       key: const Key('password'),
-      obscureText: !_showPassword,
+      obscureText: !state.showPassword,
       onChanged: (password) {
-        setState(() => _password = password);
+        state.password = password;
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -127,10 +195,12 @@ class _SignUpFormState extends State<SignUpForm> {
       decoration: InputDecoration(
         suffixIcon: IconButton(
           icon: Icon(
-            _showPassword ? Icons.remove_circle_outline : Icons.remove_red_eye,
+            state.showPassword
+                ? Icons.remove_circle_outline
+                : Icons.remove_red_eye,
           ),
           onPressed: () {
-            setState(() => _showPassword = !_showPassword);
+            state.showPassword = !state.showPassword;
           },
         ),
         border: const UnderlineInputBorder(
@@ -144,9 +214,9 @@ class _SignUpFormState extends State<SignUpForm> {
 
     final _confirmationPasswordField = TextFormField(
       key: const Key('password_confirm'),
-      obscureText: !_showConfirmationPassword,
+      obscureText: !state.showConfirmationPassword,
       onChanged: (text) {
-        setState(() => _confirmationPassword = text);
+        state.confirmationPassword = text;
       },
       validator: (text) {
         if (text.isEmpty) {
@@ -157,14 +227,12 @@ class _SignUpFormState extends State<SignUpForm> {
       decoration: InputDecoration(
         suffixIcon: IconButton(
           icon: Icon(
-            _showConfirmationPassword
+            state.showConfirmationPassword
                 ? Icons.remove_circle_outline
                 : Icons.remove_red_eye,
           ),
           onPressed: () {
-            setState(() {
-              _showConfirmationPassword = !_showConfirmationPassword;
-            });
+            state.showConfirmationPassword = !state.showConfirmationPassword;
           },
         ),
         border: const UnderlineInputBorder(
@@ -182,7 +250,7 @@ class _SignUpFormState extends State<SignUpForm> {
       ),
       child: CheckboxListTile(
         key: const Key('agree'),
-        value: _agree,
+        value: state.agree,
         activeColor: Colors.blue,
         title: Text.rich(
           // TODO: error
@@ -211,7 +279,7 @@ class _SignUpFormState extends State<SignUpForm> {
           ),
         ),
         onChanged: (value) {
-          setState(() => _agree = value);
+          state.agree = value;
         },
       ),
     );
@@ -220,15 +288,19 @@ class _SignUpFormState extends State<SignUpForm> {
       key: const Key('sign_up_form_sign_up_button'),
       text: 'Sign up',
       color: splashColor,
-      onTap: !_isValid()
+      onTap: !state.isValid
           ? null
           : () {
-              if (!_formKey.currentState.validate()) {
+              if (!state.formKey.currentState.validate()) {
                 return;
               }
-              _formKey.currentState.save();
+              state.formKey.currentState.save();
 
-              widget.onSignUpWithEmailAndPassword(_email, _password, _name);
+              onSignUpWithEmailAndPassword(
+                state.email,
+                state.password,
+                state.name,
+              );
             },
     );
 
@@ -236,30 +308,30 @@ class _SignUpFormState extends State<SignUpForm> {
       key: const Key('sign_up_form_sign_up_with_google_button'),
       text: 'Sign up with Google',
       color: Colors.redAccent,
-      onTap: !_isValidName()
+      onTap: !state.isValidName
           ? null
           : () {
-              if (!_isValidName()) {
+              if (!state.isValidName) {
                 return;
               }
-              _formKey.currentState.save();
+              state.formKey.currentState.save();
 
-              widget.onSignUpWithGoogle(_name);
+              onSignUpWithGoogle(state.name);
             },
     );
 
     final _signInWithAppleButton = siwa.AppleSignInButton(
       style: siwa.ButtonStyle.black,
       type: siwa.ButtonType.signIn,
-      onPressed: !_isValidName()
+      onPressed: !state.isValidName
           ? null
           : () {
-              if (!_isValidName()) {
+              if (!state.isValidName) {
                 return;
               }
-              _formKey.currentState.save();
+              state.formKey.currentState.save();
 
-              widget.onSignUpWithApple(_name);
+              onSignUpWithApple(state.name);
             },
     );
 
@@ -268,12 +340,12 @@ class _SignUpFormState extends State<SignUpForm> {
       text: 'Test User',
       color: Colors.white30,
       onTap: () {
-        widget.onSignUpWithEmailAndPassword('a@b.com', '123456', 'てすと');
+        onSignUpWithEmailAndPassword('a@b.com', '123456', 'てすと');
       },
     );
 
     return Form(
-      key: _formKey,
+      key: state.formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

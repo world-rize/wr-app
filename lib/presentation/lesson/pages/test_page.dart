@@ -19,58 +19,40 @@ import 'package:wr_app/util/logger.dart';
 
 import './test_result_page.dart';
 
-/// テストページ
-///
-/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469139>
-class TestPage extends StatefulWidget {
-  const TestPage({@required this.section});
+class TestPageModel extends ChangeNotifier {
+  TestPageModel({@required this.section})
+      : _isLoading = false,
+        _index = 0,
+        _answerIndex = 0,
+        _corrects = 0,
+        _answers = [];
 
   final Section section;
-
-  @override
-  State<StatefulWidget> createState() => TestPageState(section: section);
-}
-
-/// [TestPage] の State
-class TestPageState extends State<TestPage> {
-  TestPageState({@required this.section});
 
   bool _isLoading;
 
-  /// 出題されるセクション
-  final Section section;
-
   /// 現在の問題番号
-  int _index = 0;
+  int _index;
 
   /// 正解のindex
-  int _answerIndex = 0;
+  int _answerIndex;
 
   /// 正解数
-  int _corrects = 0;
+  int _corrects;
 
   /// 選択
-  List<bool> _answers;
+  final List<bool> _answers;
 
   /// 現在の問題
   Phrase get currentPhrase => section.phrases[_index];
 
-  @override
-  void initState() {
-    super.initState();
-    _isLoading = false;
-    _index = 0;
-    _answers = [];
-  }
-
   // テストを終了する
-  Future _finishTest() async {
+  Future _finishTest(BuildContext context) async {
     final un = context.read<UserNotifier>();
 
     try {
-      setState(() {
-        _isLoading = true;
-      });
+      _isLoading = true;
+      notifyListeners();
 
       await sendEvent(event: AnalyticsEvent.finishTest);
 
@@ -98,15 +80,14 @@ class TestPageState extends State<TestPage> {
     } on Exception catch (e) {
       InAppLogger.error(e);
     } finally {
-//      setState(() {
-//        _isLoading = false;
-//      });
+      _isLoading = false;
+      notifyListeners();
     }
   }
 
   /// 次の問題へ
   // TODO: refactoring
-  Future<void> _next(int answer) async {
+  Future _next(BuildContext context, int answer) async {
     _answers.add(answer == _answerIndex);
 
     // show result
@@ -119,16 +100,15 @@ class TestPageState extends State<TestPage> {
 
     // test finish
     if (_index == section.phrases.length - 1) {
-      await _finishTest();
+      await _finishTest(context);
     } else {
       // seek index
-      setState(() {
-        _index++;
-      });
+      _index++;
+      notifyListeners();
     }
   }
 
-  void _showConfirmDialog() {
+  void _showConfirmDialog(BuildContext context) {
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
@@ -155,7 +135,7 @@ class TestPageState extends State<TestPage> {
     );
   }
 
-  List<String> _randomSelections() {
+  List<String> _randomSelections(BuildContext context) {
     final notifier = Provider.of<LessonNotifier>(context);
     final selections =
         notifier.phrases.sample(4).map((phrase) => phrase.title['en']).toList();
@@ -163,31 +143,49 @@ class TestPageState extends State<TestPage> {
     selections[_answerIndex] = currentPhrase.title['en'];
     return selections;
   }
+}
+
+class TestPage extends StatelessWidget {
+  const TestPage({@required this.section});
+
+  // 出題セクション
+  final Section section;
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider.value(
+      value: TestPageModel(section: section),
+      child: _TestPage(),
+    );
+  }
+}
+
+class _TestPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final state = context.watch<TestPageModel>();
     final primaryColor = Theme.of(context).primaryColor;
-    final selection = _randomSelections();
+    final selection = state._randomSelections(context);
 
     return LoadingView(
-      loading: _isLoading,
+      loading: state._isLoading,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: primaryColor,
-          title: Text(I.of(context).question(_index + 1)),
+          title: Text(I.of(context).question(state._index + 1)),
           automaticallyImplyLeading: false,
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.menu),
-              onPressed: _showConfirmDialog,
+              onPressed: () => state._showConfirmDialog(context),
             )
           ],
         ),
         body: TestChoices(
-          index: _index,
-          phrase: currentPhrase,
+          index: state._index,
+          phrase: state.currentPhrase,
           selection: selection,
-          onNext: _next,
+          onNext: (answer) => state._next(context, answer),
         ),
       ),
     );
