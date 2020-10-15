@@ -65,7 +65,7 @@ export const login = async (req: {}, context: Context) => {
   await userService.login(uid)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to login')
+      throw e
     })
 
   console.log(`[login] done`)
@@ -94,7 +94,7 @@ export const createUser = async (req: UserDto.CreateUserRequest, context: Contex
   const user = await userService.createUser(uid, req.name, req.email, req.age)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to create user')
+      throw e
     })
 
   console.log(`[createUser] userId: ${uid} user created`)
@@ -119,7 +119,7 @@ export const favoritePhrase = async (req: UserDto.FavoritePhraseRequest, context
   return userService.favoritePhrase(uid, req.listId, req.phraseId, req.favorite)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to favorite phrase')
+      throw e
     })
 }
 
@@ -140,7 +140,7 @@ export const getPoint = async (req: UserDto.GetPointRequest, context: Context): 
   return userService.getPoint(uid, req.points)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to get points')
+      throw e
     })
 }
 
@@ -161,7 +161,7 @@ export const doTest = async (req: UserDto.DoTestRequest, context: Context): Prom
   return userService.doTest(uid, req.sectionId)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to do test')
+      throw e
     })
 }
 
@@ -176,7 +176,7 @@ export const updateUser = async (req: User, context: Context): Promise<User> => 
   return await userService.updateUser(req)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to update user')
+      throw e
     })
 }
 
@@ -195,7 +195,7 @@ export const deleteUser = async (req: {}, context: Context) => {
   await firebase.auth().deleteUser(userId)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to delete account')
+      throw e
     })
 
   console.log(`[deleteUser] userId: ${userId} user deleted`)
@@ -219,7 +219,7 @@ export const createFavoriteList = async (req: UserDto.CreateFavoriteListRequest,
   return userService.createFavoriteList(userId, req.name)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to createFavoriteList')
+      throw e
     })
 }
 
@@ -241,7 +241,7 @@ export const deleteFavoriteList = async (req: UserDto.DeleteFavoriteListRequest,
   return userService.deleteFavoriteList(userId, req.listId)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to deleteFavoriteList')
+      throw e
     })
 }
 
@@ -273,7 +273,7 @@ export const sendTestResult  = async (req: UserDto.SendTestResultRequest, contex
   return userService.sendTestResult(userId, req.sectionId, req.score)
     .catch (e => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to sendTestResult')
+      throw e
     })
   }
 
@@ -290,7 +290,7 @@ export const createNote = async (req: NoteDto.CreateNoteRequest, context: Contex
   return noteService.createNote(userId, req.note)
     .catch((e) => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to createNote')
+      throw e
   })
 }
 
@@ -311,7 +311,7 @@ export const updateNote = async (req: NoteDto.UpdateNoteRequest, context: Contex
   return noteService.updateNote(userId, req.note)
     .catch((e) => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to updateNote')
+      throw e
     })
 }
 
@@ -332,7 +332,7 @@ export const deleteNote = async (req: NoteDto.DeleteNoteRequest, context: Contex
   return noteService.deleteNote(userId, req.noteId)
     .catch((e) => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', 'failed to deleteNote')
+      throw e
     })
 }
 
@@ -354,7 +354,7 @@ export const findUserByUserId = async(req: UserDto.FindUserByUserIdRequest, cont
   return userService.findUserByUserId(req.userId)
     .catch((e) => {
       console.error(e)
-      throw new functions.https.HttpsError('not-found', `userId ${req.userId} not found`)
+      throw e
     })
 }
 
@@ -374,7 +374,7 @@ export const introduceFriend = async (req: UserDto.IntroduceFriendRequest, conte
   return userService.introduceUser(userId, req.introduceeUserId)
     .catch((e) => {
       console.error(e)
-      throw new functions.https.HttpsError('internal', e)
+      throw e
     })
 }
 
@@ -401,7 +401,7 @@ export const getAppInfo = async(req: {}, context: Context): Promise<WRAppInfo> =
     return data as WRAppInfo
   } catch (e) {
     console.error(e)
-    throw new functions.https.HttpsError('internal', 'getAppInfo failed')
+    throw e
   }
 }
 
@@ -414,6 +414,6 @@ export const getNewComingPhrases = async(req: {}, context: Context): Promise<Phr
     return phrases
   } catch (e) {
     console.error(e)
-    throw new functions.https.HttpsError('internal', 'getNewComingPhrase failed')
+    throw e
   }
 }

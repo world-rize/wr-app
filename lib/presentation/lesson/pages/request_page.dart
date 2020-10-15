@@ -78,8 +78,8 @@ class _RequestPageState extends State<RequestPage> {
                     ),
                   ),
                 ),
-                const Text('''⚠️リクエストに返答することはできません。
-                可能な限りリクエストを反映させるのでNew coming Phraseを確認してください。'''),
+                const Text(
+                    '⚠️リクエストに返信することはできません。\n可能な限りリクエストを反映させるのでNew coming Phraseを確認してください。'),
               ],
             ),
           ),

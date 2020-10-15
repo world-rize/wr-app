@@ -52,7 +52,11 @@ class LessonNotifier with ChangeNotifier {
   }
 
   bool isLessonLocked(User user, Lesson lesson) {
-    return !user.isPremium || 3 <= _lessons.indexOf(lesson);
+    if (user.isPremium) {
+      return false;
+    } else {
+      return 3 <= _lessons.indexOf(lesson);
+    }
   }
 
   List<Phrase> phrasesWhere(bool Function(Phrase) filter) {

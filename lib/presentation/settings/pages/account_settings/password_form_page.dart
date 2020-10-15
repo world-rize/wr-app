@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
@@ -16,6 +17,10 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
   String _currentPassword = '';
   String _newPassword = '';
 
+  bool _isValid() {
+    return _currentPassword.length >= 6 && _newPassword.length >= 6;
+  }
+
   @override
   Widget build(BuildContext context) {
     final an = context.watch<AuthNotifier>();
@@ -28,8 +33,8 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
         });
       },
       validator: (text) {
-        if (text.isEmpty) {
-          return 'do not empty';
+        if (text.length < 6) {
+          return I.of(context).invalidPasswordMessage;
         }
         return null;
       },
@@ -49,7 +54,7 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
             });
           },
         ),
-        hintText: '現在のパスワード',
+        hintText: I.of(context).currentPasswordHintText,
       ),
     );
 
@@ -59,8 +64,8 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
         setState(() => _newPassword = password);
       },
       validator: (text) {
-        if (text.isEmpty) {
-          return 'do not empty';
+        if (text.length < 6) {
+          return I.of(context).invalidPasswordMessage;
         }
         return null;
       },
@@ -80,7 +85,7 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
             });
           },
         ),
-        hintText: '新しいパスワード',
+        hintText: I.of(context).newPasswordHintText,
       ),
     );
 
@@ -89,17 +94,19 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: RoundedButton(
-          text: '変更',
+          text: I.of(context).changeButtonText,
           color: Colors.blueAccent,
-          onTap: () {
-            if (_formKey.currentState.validate()) {
-              _formKey.currentState.save();
-              an.setPassword(
-                currentPassword: _currentPassword,
-                newPassword: _newPassword,
-              );
-            }
-          },
+          onTap: !_isValid()
+              ? null
+              : () {
+                  if (_formKey.currentState.validate()) {
+                    _formKey.currentState.save();
+                    an.setPassword(
+                      currentPassword: _currentPassword,
+                      newPassword: _newPassword,
+                    );
+                  }
+                },
         ),
       ),
     );

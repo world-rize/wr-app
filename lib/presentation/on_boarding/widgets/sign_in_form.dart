@@ -4,6 +4,7 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as siwa;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/extensions.dart';
@@ -48,12 +49,13 @@ class _SignInFormState extends State<SignInForm> {
 
     final _emailField = TextFormField(
       key: const Key('sign_in_form_email'),
+      keyboardType: TextInputType.emailAddress,
       onChanged: (email) {
         setState(() => _email = email);
       },
       validator: (text) {
         if (text.isEmpty) {
-          return 'do not empty';
+          return I.of(context).doNotEmptyMessage;
         }
         return null;
       },
@@ -69,6 +71,7 @@ class _SignInFormState extends State<SignInForm> {
 
     final _passwordField = TextFormField(
       key: const Key('sign_in_form_password'),
+      keyboardType: TextInputType.visiblePassword,
       obscureText: !_showPassword,
       onChanged: (password) {
         setState(() {
@@ -77,7 +80,7 @@ class _SignInFormState extends State<SignInForm> {
       },
       validator: (text) {
         if (text.isEmpty) {
-          return 'do not empty';
+          return I.of(context).doNotEmptyMessage;
         }
         return null;
       },
@@ -97,7 +100,7 @@ class _SignInFormState extends State<SignInForm> {
             });
           },
         ),
-        hintText: 'Password',
+        hintText: I.of(context).passwordHintText,
       ),
     );
 
@@ -154,19 +157,19 @@ class _SignInFormState extends State<SignInForm> {
           // Sign Up
           _signInButton.padding(),
 
-          const Divider(
-            indent: 20,
-            endIndent: 20,
-            color: Colors.grey,
-          ),
+//          const Divider(
+//            indent: 20,
+//            endIndent: 20,
+//            color: Colors.grey,
+//          ),
 
           // Google Sign in
-          _signInWithGoogleButton.padding(),
+          // _signInWithGoogleButton.padding(),
 
           if (appleSignInAvailable.isAvailable)
             _signInWithAppleButton.padding(),
 
-          _signInByTestUserButton.padding(),
+          // _signInByTestUserButton.padding(),
         ],
       ),
     );

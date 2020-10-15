@@ -50,7 +50,8 @@ export class NoteService {
       throw new functions.https.HttpsError('invalid-argument', `note is null`)
     }
 
-    const userNoteLimit = 3 + (user.items['extra_note'] ?? 0)
+    // 1: achieved note
+    const userNoteLimit = 1 + 3 + (user.items['extra_note'] ?? 0)
     const noteCount = Object.keys(user.notes).length
     console.log(`limit: ${userNoteLimit}, notes: ${noteCount}`)
     if (userNoteLimit <= noteCount) {

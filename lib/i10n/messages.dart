@@ -302,4 +302,21 @@ mixin Messages {
   String get appVersion => Intl.message('App Version', name: 'appVersion');
   String get license => Intl.message('License', name: 'license');
   String get topPage => Intl.message('Go to the top page', name: 'topPage');
+
+  String get changeButtonText => Intl.message('変更', name: 'changeButtonText');
+
+  String get nameHintText => Intl.message('名前', name: 'nameHintText');
+  String get emailHintText => Intl.message('Email', name: 'emailHintText');
+  String get passwordHintText =>
+      Intl.message('パスワード(6文字以上)', name: 'passwordHintText');
+  String get currentPasswordHintText =>
+      Intl.message('現在のパスワード', name: 'currentPasswordHintText');
+  String get newPasswordHintText =>
+      Intl.message('新しいパスワード(6文字以上)', name: 'newPasswordHintText');
+  String get passwordConfirmHintText =>
+      Intl.message('パスワード(確認)', name: 'passwordConfirmHintText');
+  String get doNotEmptyMessage =>
+      Intl.message('入力してください', name: 'doNotEmptyMessage');
+  String get invalidPasswordMessage =>
+      Intl.message('パスワードは6文字以上で入力してください', name: 'invalidPasswordMessage');
 }

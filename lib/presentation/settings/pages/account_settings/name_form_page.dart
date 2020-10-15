@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 class NameFormPage extends StatefulWidget {
@@ -27,17 +28,17 @@ class _NameFormPageState extends State<NameFormPage> {
       },
       validator: (text) {
         if (text.isEmpty) {
-          return 'do not empty';
+          return I.of(context).doNotEmptyMessage;
         }
         return null;
       },
-      decoration: const InputDecoration(
-        border: UnderlineInputBorder(
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
           ),
         ),
-        hintText: 'Name',
+        hintText: I.of(context).nameHintText,
       ),
     );
 
@@ -46,7 +47,7 @@ class _NameFormPageState extends State<NameFormPage> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: RoundedButton(
-          text: 'Change',
+          text: I.of(context).changeButtonText,
           color: Colors.blueAccent,
           onTap: () {
             if (_formKey.currentState.validate()) {
@@ -60,7 +61,7 @@ class _NameFormPageState extends State<NameFormPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Change Name'),
+        title: const Text('名前の変更'),
       ),
       body: Container(
         child: Column(
