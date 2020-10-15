@@ -1,14 +1,12 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:admob_flutter/admob_flutter.dart';
-import 'package:contentful/contentful.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:getflutter/colors/gf_color.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wr_app/domain/article/model/article.dart';
 import 'package:wr_app/domain/article/model/category.dart';
 import 'package:wr_app/presentation/article/pages/english_lesson_pr_page.dart';
 import 'package:wr_app/presentation/article/widgets/category_view.dart';

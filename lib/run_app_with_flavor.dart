@@ -28,7 +28,6 @@ import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/maintenance.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
-import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/auth_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
@@ -40,11 +39,11 @@ import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
 import 'package:wr_app/util/sentry.dart';
-import 'package:wr_app/util/toast.dart';
 
 /// initialize singleton instances and inject to GetIt
 Future<void> setupGlobalSingletons({
-  @required Flavor flavor, @required bool useMock,
+  @required Flavor flavor,
+  @required bool useMock,
 }) async {
   // load .env
   await DotEnv().load('secrets/.env');
@@ -100,9 +99,9 @@ Future<void> setupGlobalSingletons({
   // repos
   final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
   final articlePersistence =
-  useMock ? ArticlePersistenceMock() : ArticlePersistence();
+      useMock ? ArticlePersistenceMock() : ArticlePersistence();
   final lessonPersistence =
-  useMock ? LessonPersistenceMock() : LessonPersistence();
+      useMock ? LessonPersistenceMock() : LessonPersistence();
   final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
   final systemPersistence = SystemPersistence();
   final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
@@ -140,7 +139,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   final env = GetIt.I<EnvKeys>();
   final sentry = GetIt.I<SentryClient>();
 
-
   if (env.useEmulator) {
     final origin = env.functionsEmulatorOrigin;
     InAppLogger.info('❗ Using Emulator @ $origin');
@@ -152,7 +150,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   // repos
   final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
   final lessonPersistence =
-  useMock ? LessonPersistenceMock() : LessonPersistence();
+      useMock ? LessonPersistenceMock() : LessonPersistence();
   final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
   final systemPersistence = SystemPersistence();
   final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
@@ -168,12 +166,11 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   // メンテナンスかどうか
   if (!await systemService.getAppInfo().then((value) => value.isValid)) {
     runZonedGuarded(
-          () => runApp(Maintenance()),
-          (error, stackTrace) =>
-          sentry.captureException(
-            exception: error,
-            stackTrace: stackTrace,
-          ),
+      () => runApp(Maintenance()),
+      (error, stackTrace) => sentry.captureException(
+        exception: error,
+        stackTrace: stackTrace,
+      ),
     );
   } else {
     // functions いらない説
@@ -183,6 +180,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       userNotifier.user = authNotifier.user;
     });
     final noteNotifier = NoteNotifier(noteService: noteService);
+
     noteNotifier.addListener(() {
       InAppLogger.debug('update note');
       userNotifier.user = noteNotifier.user;
@@ -194,9 +192,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
     final app = MultiProvider(
       providers: [
-        Provider.value(
-            value:
-            SystemNotifier(systemService: systemService, flavor: flavor)),
         // system
         ChangeNotifierProvider.value(
           value: SystemNotifier(systemService: systemService, flavor: flavor),
@@ -214,22 +209,16 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
             lessonService: lessonService,
           ),
         ),
-        ChangeNotifierProvider.value(
-          value: VoicePlayer(
-            onError: NotifyToast.error,
-          ),
-        ),
       ],
       child: WRApp(),
     );
 
     runZonedGuarded(
-          () => runApp(app),
-          (error, stackTrace) =>
-          sentry.captureException(
-            exception: error,
-            stackTrace: stackTrace,
-          ),
+      () => runApp(app),
+      (error, stackTrace) => sentry.captureException(
+        exception: error,
+        stackTrace: stackTrace,
+      ),
     );
   }
 }

@@ -1,6 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:contentful/client.dart';
 import 'package:wr_app/domain/article/index.dart';
 
 final List<ArticleCategory> categories = <ArticleCategory>[

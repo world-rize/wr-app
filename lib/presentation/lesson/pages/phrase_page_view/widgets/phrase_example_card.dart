@@ -9,9 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
 import 'package:wr_app/domain/note/model/note.dart';
+import 'package:wr_app/presentation/lesson/pages/phrase_page_view/index.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/ui/widgets/boldable_text.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
@@ -144,7 +144,6 @@ class PhraseExampleCard extends StatelessWidget {
     final un = Provider.of<UserNotifier>(context);
 
     // TODO: phrase.id !== notePhrase.uuid
-    final existNotes = un.existPhraseInNotes(phraseId: phrase.id);
     final favorited = un.existPhraseInFavoriteList(phraseId: phrase.id);
 
     final _addNotesButton = LikeButton(
@@ -160,7 +159,7 @@ class PhraseExampleCard extends StatelessWidget {
       likeBuilder: (_) => Icon(
         // TODO: ここどうするのか
         // ノートはフレーズを編集できてしまうので存在するもクソもない?
-        un.existPhraseInNotes(phraseId: phrase.id)
+        un.user.existPhraseInNotes(phraseId: phrase.id)
             ? Icons.bookmark
             : Icons.bookmark_border,
         color: Colors.grey,

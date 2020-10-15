@@ -4,9 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/voice_accent.dart';
+import 'package:wr_app/presentation/lesson/pages/phrase_page_view/index.dart';
 import 'package:wr_app/presentation/note/widgets/national_flags.dart';
 import 'package:wr_app/presentation/note/widgets/pitch_slider.dart';
-import 'package:wr_app/presentation/voice_player.dart';
 
 class PhraseDetailSettingsDialog extends StatelessWidget {
   @override

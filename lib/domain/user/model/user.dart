@@ -124,6 +124,22 @@ class User {
         .firstWhere((list) => list.isDefault, orElse: () => null);
   }
 
+  /// exist phrase in notes
+  bool existPhraseInNotes({
+    @required String phraseId,
+  }) {
+    return notes.values
+        .any((list) => list.phrases.any((p) => p.id == phraseId));
+  }
+
+  /// exist phrase in favorites
+  bool existPhraseInFavorites({
+    @required String phraseId,
+  }) {
+    return favorites.values
+        .any((list) => list.phrases.any((p) => p.id == phraseId));
+  }
+
   Note getNoteById({String noteId}) {
     // ノートを削除した直後はnullになる
     if (noteId == null || noteId.isEmpty) {
