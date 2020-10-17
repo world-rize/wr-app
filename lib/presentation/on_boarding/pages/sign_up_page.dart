@@ -1,14 +1,16 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
-import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_up_form.dart';
 import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
+import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/util/analytics.dart';
+import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
@@ -46,6 +48,8 @@ class _SignUpPageState extends State<SignUpPage> {
   /// Email & パスワード でサインアップ
   Future<void> _signUpWithEmailAndPassword(
       String email, String password, String name) async {
+    FocusScope.of(context).unfocus();
+
     setState(() {
       _isLoading = true;
     });
@@ -55,13 +59,17 @@ class _SignUpPageState extends State<SignUpPage> {
       await an.signUpWithEmailAndPassword(
           email: email, password: password, name: name);
       await _gotoHome();
+    } on PlatformException catch (e) {
+      InAppLogger.error(e);
+      final mes = e.toLocalizedMessage(context);
+      NotifyToast.error(mes);
     } on Exception catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    } finally {
       setState(() {
         _isLoading = false;
       });
-
-      InAppLogger.error(e);
-      NotifyToast.error(e);
     }
   }
 
@@ -115,11 +123,9 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    const splashColor = Color(0xff56c0ea);
-
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: splashColor,
+        backgroundColor: Theme.of(context).primaryColor,
         title: const Text('サインアップ'),
       ),
       body: LoadingView(

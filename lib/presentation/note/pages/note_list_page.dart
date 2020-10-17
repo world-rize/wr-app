@@ -6,7 +6,7 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/widgets/note_card.dart';
 import 'package:wr_app/presentation/note/widgets/note_edit_dialog.dart';
-import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
+import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/util/logger.dart';
 
 class NoteListPage extends StatefulWidget {

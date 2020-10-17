@@ -239,31 +239,29 @@ class _SignUpFormState extends State<SignUpForm> {
       key: const Key('sign_up_form_sign_up_with_google_button'),
       text: 'Sign up with Google',
       color: Colors.redAccent,
-      onTap: !_isValidName()
-          ? null
-          : () {
-              if (!_isValidName()) {
-                return;
-              }
-              _formKey.currentState.save();
+      onTap: () {
+        // only name agree validate
+        if (!_isValidName()) {
+          return;
+        }
+        _formKey.currentState.save();
 
-              widget.onSignUpWithGoogle(_name);
-            },
+        widget.onSignUpWithGoogle(_name);
+      },
     );
 
     final _signInWithAppleButton = siwa.AppleSignInButton(
       style: siwa.ButtonStyle.black,
       type: siwa.ButtonType.signIn,
-      onPressed: !_isValidName()
-          ? null
-          : () {
-              if (!_isValidName()) {
-                return;
-              }
-              _formKey.currentState.save();
+      onPressed: () {
+        // only name agree validate
+        if (!_isValidName()) {
+          return;
+        }
+        _formKey.currentState.save();
 
-              widget.onSignUpWithApple(_name);
-            },
+        widget.onSignUpWithApple(_name);
+      },
     );
 
     final _signUpByTestUserButton = RoundedButton(
@@ -309,11 +307,11 @@ class _SignUpFormState extends State<SignUpForm> {
 //          ),
 
           // Google Sign up
-          // _signUpWithGoogleButton.padding(),
+          // if (Platform.isIOS) _signUpWithGoogleButton.padding(),
 
           // Sign up with siwa
-          if (appleSignInAvailable.isAvailable)
-            _signInWithAppleButton.padding(),
+          // if (appleSignInAvailable.isAvailable)
+          //   _signInWithAppleButton.padding(),
 
           // test user
           // _signUpByTestUserButton.padding(),

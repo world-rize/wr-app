@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
-import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/toast.dart';
 

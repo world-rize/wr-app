@@ -44,7 +44,6 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   Widget build(BuildContext context) {
-    const splashColor = Color(0xff56c0ea);
     final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
 
     final _emailField = TextFormField(
@@ -107,7 +106,7 @@ class _SignInFormState extends State<SignInForm> {
     final _signInButton = RoundedButton(
       key: const Key('sign_in_form_sign_in_with_email_and_password'),
       text: 'Sign in',
-      color: splashColor,
+      color: Theme.of(context).primaryColor,
       onTap: !_isValid()
           ? null
           : () {
@@ -154,20 +153,21 @@ class _SignInFormState extends State<SignInForm> {
           _emailField.padding(),
           // Password
           _passwordField.padding(),
+
           // Sign Up
           _signInButton.padding(),
 
-//          const Divider(
-//            indent: 20,
-//            endIndent: 20,
-//            color: Colors.grey,
-//          ),
+          // const Divider(
+          //   indent: 20,
+          //   endIndent: 20,
+          //   color: Colors.grey,
+          // ),
 
           // Google Sign in
-          // _signInWithGoogleButton.padding(),
-
-          if (appleSignInAvailable.isAvailable)
-            _signInWithAppleButton.padding(),
+          // if (Platform.isIOS) _signInWithGoogleButton.padding(),
+          //
+          // if (appleSignInAvailable.isAvailable)
+          //   _signInWithAppleButton.padding(),
 
           // _signInByTestUserButton.padding(),
         ],

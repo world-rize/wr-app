@@ -1,12 +1,13 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
-import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_in_form.dart';
 import 'package:wr_app/presentation/root_view.dart';
+import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
@@ -40,6 +41,8 @@ class _SignInPageState extends State<SignInPage> {
   /// Email & パスワードでログイン
   Future<void> _signInWithEmailAndPassword(
       String email, String password) async {
+    FocusScope.of(context).unfocus();
+
     setState(() {
       _isLoading = true;
     });
@@ -50,13 +53,17 @@ class _SignInPageState extends State<SignInPage> {
 
       NotifyToast.success('ログインしました');
       await _gotoHome();
+    } on PlatformException catch (e) {
+      InAppLogger.error(e);
+      final mes = e.toLocalizedMessage(context);
+      NotifyToast.error(mes);
     } on Exception catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+    } finally {
       setState(() {
         _isLoading = false;
       });
-
-      InAppLogger.error(e);
-      NotifyToast.error(e);
     }
   }
 

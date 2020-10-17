@@ -112,25 +112,23 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       ),
     );
 
-    return SafeArea(
-      child: Scaffold(
-        body: Column(
-          children: <Widget>[
-            Image.asset('assets/icon/login.png'),
-            Flexible(
-              child: Container(
-                color: theme.backgroundColor,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    signUpField,
-                    signInField,
-                  ],
-                ),
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Image.asset('assets/icon/login.png'),
+          Flexible(
+            child: Container(
+              color: theme.backgroundColor,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  signUpField,
+                  signInField,
+                ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
