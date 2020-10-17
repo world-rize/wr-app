@@ -44,13 +44,13 @@ class _RootViewState extends State<RootView>
         await un.fetchUser();
         await an.login();
 
-        Navigator.popUntil(context, (route) => route.isFirst);
-        return Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RootView(),
-          ),
-        );
+        // Navigator.popUntil(context, (route) => route.isFirst);
+        // return Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => RootView(),
+        //   ),
+        // );
       }
     } on Exception catch (e) {
       InAppLogger.error(e);
@@ -253,7 +253,7 @@ class _RootViewState extends State<RootView>
       appBar: PreferredSize(
         child: Container(
           //padding: const EdgeInsets.symmetric(vertical: 20),
-          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
           child: header,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(

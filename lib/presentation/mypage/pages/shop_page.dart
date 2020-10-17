@@ -6,9 +6,9 @@ import 'package:wr_app/domain/shop/model/gift_item_id.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/widgets/gift_item_card.dart';
-import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/util/logger.dart';
 
 /// ポイント交換

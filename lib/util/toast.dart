@@ -11,6 +11,7 @@ class NotifyToast {
     InAppLogger.info('[SuccessToast] $message');
     Fluttertoast.showToast(
       msg: message,
+      timeInSecForIosWeb: 3,
       toastLength: Toast.LENGTH_LONG,
       backgroundColor: Colors.green,
     );
@@ -21,6 +22,7 @@ class NotifyToast {
     InAppLogger.info('[ErrorToast] $e');
     Fluttertoast.showToast(
       msg: '$e',
+      timeInSecForIosWeb: 3,
       toastLength: Toast.LENGTH_LONG,
       backgroundColor: Colors.redAccent,
     );

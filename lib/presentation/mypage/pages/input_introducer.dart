@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
+import 'package:wr_app/ui/widgets/loading_view.dart';
 
 /// mypage > index > FriendsPage
 class InputIntroducerPage extends StatefulWidget {

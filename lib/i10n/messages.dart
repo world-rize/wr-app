@@ -319,4 +319,33 @@ mixin Messages {
       Intl.message('入力してください', name: 'doNotEmptyMessage');
   String get invalidPasswordMessage =>
       Intl.message('パスワードは6文字以上で入力してください', name: 'invalidPasswordMessage');
+
+  // Firebase Auth Exception
+  // 'Your email address appears to be malformed.'
+  String get errorInvalidEmail =>
+      Intl.message('不正なメールアドレスです', name: 'errorInvalidEmail');
+
+  // 'Your password is wrong.'
+  String get errorWrongPassword =>
+      Intl.message('パスワードが間違っています', name: 'errorWrongPassword');
+
+  // 'User with this email doesn\'t exist.'
+  String get errorUserNotFound =>
+      Intl.message('ユーザーが見つかりませんでした', name: 'errorUserNotFound');
+
+  // 'User with this email has been disabled.'
+  String get errorUserDisabled =>
+      Intl.message('このユーザーは現在使用できません', name: 'errorUserDisabled');
+
+  // 'Too many requests. Try again later.'
+  String get errorTooManyRequests =>
+      Intl.message('時間をおいて再試行してください', name: 'errorTooManyRequests');
+
+  // 'Signing in with Email and Password is not enabled.'
+  String get errorOperationNotAllowed =>
+      Intl.message('この操作は許可されていません', name: 'errorOperationNotAllowed');
+
+  // 'An undefined Error happened.'
+  String get errorUndefinedError =>
+      Intl.message('不明なエラー', name: 'errorUndefinedError');
 }

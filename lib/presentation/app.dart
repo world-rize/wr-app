@@ -39,7 +39,7 @@ class WRApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: locales,
-      home: SafeArea(child: RootView()),
+      home: RootView(),
     );
   }
 }
