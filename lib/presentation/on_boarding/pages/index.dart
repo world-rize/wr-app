@@ -7,6 +7,8 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
+import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/toast.dart';
 
 import './sign_in_page.dart';
 import './sign_up_page.dart';
@@ -32,23 +34,31 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   }
 
   Future _checkAppAvailable() async {
-    final sn = Provider.of<SystemNotifier>(context);
-    final appInfo = await sn.getAppInfo();
+    try {
+      final sn = context.read<SystemNotifier>();
+      final appInfo = await sn.getAppInfo();
 
-    if (_isAvailable(appInfo)) {
-      setState(() {
-        _isAppAvailable = true;
-      });
-      return;
+      if (_isAvailable(appInfo)) {
+        if (mounted) {
+          setState(() {
+            _isAppAvailable = true;
+          });
+        }
+        return;
+      }
+
+      await showDialog(
+        context: context,
+        child: const AlertDialog(
+          title: Text('メンテナンス中'),
+          content: Text('只今メンテナンス中です。'),
+        ),
+      );
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+      rethrow;
     }
-
-    await showDialog(
-      context: context,
-      child: const AlertDialog(
-        title: Text('メンテナンス中'),
-        content: Text('只今メンテナンス中です。'),
-      ),
-    );
   }
 
   @override

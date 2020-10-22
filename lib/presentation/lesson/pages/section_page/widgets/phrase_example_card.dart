@@ -252,10 +252,11 @@ class PhraseExampleCard extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: _buttons,
-              ),
+              if (!isTest)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: _buttons,
+                ),
             ],
           ),
         ],
