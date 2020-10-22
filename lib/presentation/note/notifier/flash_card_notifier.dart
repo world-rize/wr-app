@@ -170,37 +170,10 @@ class FlashCardNotifier extends ChangeNotifier {
     _ttsState = TtsState.playing;
     notifyListeners();
 
-    final nowPhrase = notePhrases[_nowPhraseIndex];
-
-    // wait play word
-    await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
-    await _flutterTts.speak(nowPhrase.english);
-    final completerWord = Completer<void>();
-    _flutterTts.setCompletionHandler(completerWord.complete);
-    await completerWord.future;
-
     // wait play translation
     // TODO: 言語に対応していないと再生できない
-    await _flutterTts.setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
-    await _flutterTts.speak(nowPhrase.japanese);
-    final completerTranslation = Completer<void>();
-    _flutterTts.setCompletionHandler(completerTranslation.complete);
-    await completerTranslation.future;
-
-    while (_autoScroll) {
-      _nowPhraseIndex = _nowPhraseIndex + 1;
-      await _pageController.animateToPage(
-        _nowPhraseIndex % notePhrases.length,
-        duration: const Duration(seconds: 1),
-        curve: Curves.ease,
-      );
+    do {
       final nowPhrase = notePhrases[_nowPhraseIndex];
-
-      await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
-      await _flutterTts.speak(nowPhrase.english);
-      final completerWord = Completer<void>();
-      _flutterTts.setCompletionHandler(completerWord.complete);
-      await completerWord.future;
 
       await _flutterTts
           .setLanguage(voiceAccentToTtsString(VoiceAccent.japanese));
@@ -209,12 +182,24 @@ class FlashCardNotifier extends ChangeNotifier {
       _flutterTts.setCompletionHandler(completerTranslation.complete);
       await completerTranslation.future;
 
+      await _flutterTts.setLanguage(voiceAccentToTtsString(voiceAccent));
+      await _flutterTts.speak(nowPhrase.english);
+      final completerWord = Completer<void>();
+      _flutterTts.setCompletionHandler(completerWord.complete);
+      await completerWord.future;
+
+      _nowPhraseIndex = _nowPhraseIndex + 1;
       // player last
       if (_nowPhraseIndex == notePhrases.length) {
         _nowPhraseIndex = _nowPhraseIndex % notePhrases.length;
         break;
       }
-    }
+      await _pageController.animateToPage(
+        _nowPhraseIndex % notePhrases.length,
+        duration: const Duration(seconds: 1),
+        curve: Curves.ease,
+      );
+    } while (_autoScroll);
     _ttsState = TtsState.stopped;
     notifyListeners();
   }

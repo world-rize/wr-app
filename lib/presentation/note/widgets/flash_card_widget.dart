@@ -15,9 +15,9 @@ class FlashCard extends StatelessWidget {
     @required this.onCardTap,
   });
 
-  String noteId;
-  List<NotePhrase> notePhrases;
-  Function(NotePhrase) onCardTap;
+  final String noteId;
+  final List<NotePhrase> notePhrases;
+  final Function(NotePhrase) onCardTap;
 
   Widget _createFlashCardContainer(BuildContext context, NotePhrase phrase) {
     final fn = Provider.of<FlashCardNotifier>(context, listen: false);
