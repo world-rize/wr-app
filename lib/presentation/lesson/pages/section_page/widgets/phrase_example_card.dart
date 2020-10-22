@@ -254,7 +254,7 @@ class PhraseExampleCard extends StatelessWidget {
               ),
               if (!isTest)
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8),
                   child: _buttons,
                 ),
             ],
@@ -273,7 +273,8 @@ class PhraseExampleCard extends StatelessWidget {
         ...phrase.example.value.indexedMap(
           (i, message) => _createMessageView(
             context: context,
-            onPressed: () => vp.playMessages(messages: [message]),
+            onPressed:
+                isTest ? null : () => vp.playMessages(messages: [message]),
             message: message,
             index: i,
             primary: i.isOdd,

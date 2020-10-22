@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
-import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/locked_view.dart';
 
 /// lesson select crousel cell
@@ -74,14 +73,14 @@ class CarouselCell extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 10,
-                  right: 20,
-                  child: Text(
-                      I.of(context).lessonStatus(0, lesson.phrases.length),
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 18)),
-                ),
+                // Positioned(
+                //   bottom: 10,
+                //   right: 20,
+                //   child: Text(
+                //       I.of(context).lessonStatus(0, lesson.phrases.length),
+                //       style:
+                //           const TextStyle(color: Colors.white, fontSize: 18)),
+                // ),
               ],
             ),
           ),
