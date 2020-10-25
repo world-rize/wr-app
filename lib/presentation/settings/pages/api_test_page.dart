@@ -2,6 +2,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/domain/lesson/index.dart';
@@ -174,7 +175,18 @@ class APITestView extends StatelessWidget {
                 },
               ),
             ],
-          )
+          ),
+          SettingsSection(
+            title: 'ErrorGenerate',
+            tiles: [
+              SettingsTile(
+                title: 'raise sample error',
+                onTap: () {
+                  throw PlatformException(code: 'WTF_HAMADA');
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );

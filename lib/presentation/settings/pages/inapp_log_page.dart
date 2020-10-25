@@ -16,7 +16,7 @@ class LoggerView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: InAppLogger.getLogs()
-                .map((log) => Text('[${log.date}] ${log.content}'))
+                .map((log) => Text('${log.content}'))
                 .toList(),
           ),
         ),

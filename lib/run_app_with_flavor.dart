@@ -12,7 +12,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
-import 'package:sentry/io_client.dart';
+import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/system/index.dart';
@@ -152,8 +152,8 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   if (!await systemService.getAppInfo().then((value) => value.isValid)) {
     runZonedGuarded(
       () => runApp(Maintenance()),
-      (error, stackTrace) => sentry.captureException(
-        exception: error,
+      (error, stackTrace) => sentryReportError(
+        error: error,
         stackTrace: stackTrace,
       ),
     );
@@ -227,8 +227,8 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
     runZonedGuarded(
       () => runApp(app),
-      (error, stackTrace) => sentry.captureException(
-        exception: error,
+      (error, stackTrace) => sentryReportError(
+        error: error,
         stackTrace: stackTrace,
       ),
     );
