@@ -11,7 +11,7 @@ bool get isInDebugMode {
 }
 
 /// Reports [error] along with its [stackTrace] to Sentry.io.
-Future<Null> sentryReportError(dynamic error, dynamic stackTrace) async {
+Future<Null> sentryReportError({dynamic error, dynamic stackTrace}) async {
   InAppLogger.error(error);
 
   // Errors thrown in development mode are unlikely to be interesting. You can

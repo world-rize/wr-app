@@ -111,9 +111,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: I.of(context).termsOfService,
           onTap: () async {
-            if (await canLaunch(env.termsOfServiceUtl)) {
+            if (await canLaunch(env.termsOfServiceUrl)) {
               await launch(
-                env.termsOfServiceUtl,
+                env.termsOfServiceUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
@@ -161,6 +161,13 @@ class _SettingsState extends State<SettingsPage> {
             );
           },
         ),
+        SettingsTile(
+          title: 'InApp Log',
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => LoggerView()));
+          },
+        ),
       ],
     );
   }
@@ -173,13 +180,6 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: 'Flutter Flavor',
           subtitle: Provider.of<SystemNotifier>(context).flavor.toShortString(),
-        ),
-        SettingsTile(
-          title: 'InApp Log',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => LoggerView()));
-          },
         ),
         SettingsTile(
           title: 'API Testing',

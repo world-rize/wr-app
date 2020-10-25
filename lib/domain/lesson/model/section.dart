@@ -24,6 +24,7 @@ class Section {
 
   static List<Section> fromLesson(Lesson lesson) {
     final sections = <Section>[];
+    // フレーズを7個ごとに分ける
     for (var i = 0; i < lesson.phrases.length; i += 7) {
       sections.add(Section(
         id: '${lesson.id}-${i ~/ 7 + 1}',

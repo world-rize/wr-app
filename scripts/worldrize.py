@@ -155,6 +155,8 @@ class PhrasesParser(object):
                     break
             else:
                 if self.verbose: error(f'Warning {master_id} title(ja) is empty')
+                print(jas)
+                print(content)
                 title_ja = jas[1]
 
             for en in ens:
@@ -164,6 +166,8 @@ class PhrasesParser(object):
                     break
             else:
                 if self.verbose: error(f'Warning {master_id} title(en) is empty')
+                print(ens)
+                print(content)
                 title_en = ens[1]
 
             phrase_json = {
@@ -243,7 +247,7 @@ class Cli(object):
     def __init__(self):
         self.assets_path = pwd.parent / 'assets'
         self.voices_path = self.assets_path / 'voices'
-        self.lessons_txt_path = self.assets_path / 'contents/phrases_v2.md'
+        self.lessons_txt_path = self.assets_path / 'contents/phrases_v3.md'
         self.lessons_json_path = self.assets_path / 'lessons.json'
         self.phrases_json_path  = self.assets_path / 'phrases.json'
 
