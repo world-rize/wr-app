@@ -33,10 +33,6 @@
 .pub/
 /build/
 
-# Local Assets
-assets/
-!assets/*.jsonc
-
 # Web related
 lib/generated_plugin_registrant.dart
 
