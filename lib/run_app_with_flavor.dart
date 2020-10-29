@@ -84,7 +84,7 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
   InAppLogger.info('🔥 Contentful Initialized');
 
   // initialize admob
-  Admob.initialize(env.admobAppId);
+  Admob.initialize(testDeviceIds: [env.admobAppId]);
   InAppLogger.info('🔥 Admob Initialized');
 
   // notificator
