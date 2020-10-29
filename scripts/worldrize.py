@@ -247,7 +247,7 @@ class Cli(object):
     def __init__(self):
         self.assets_path = pwd.parent / 'assets'
         self.voices_path = self.assets_path / 'voices'
-        self.lessons_txt_path = self.assets_path / 'contents/phrases_v3.md'
+        self.lessons_txt_path = self.assets_path / 'contents/phrases.md'
         self.lessons_json_path = self.assets_path / 'lessons.json'
         self.phrases_json_path  = self.assets_path / 'phrases.json'
 
