@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 import './sign_in_page.dart';
@@ -17,10 +18,10 @@ class OnBoardingPage extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(8),
             child: Center(
-              child: Text('初めての方はこちら'),
+              child: Text(I.of(context).signUpMessage),
             ),
           ),
           Padding(
@@ -28,7 +29,7 @@ class OnBoardingPage extends StatelessWidget {
             child: RoundedButton(
               key: const Key('to_sign_up_button'),
               color: splashColor,
-              text: '新しくアカウントを作成する',
+              text: I.of(context).signUpButton,
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => SignUpPage(),
@@ -44,10 +45,10 @@ class OnBoardingPage extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         children: <Widget>[
-          const Padding(
+          Padding(
             padding: EdgeInsets.all(8),
             child: Center(
-              child: Text('既にアカウントを持っている方はこちら'),
+              child: Text(I.of(context).signInMessage),
             ),
           ),
           Padding(
@@ -55,7 +56,7 @@ class OnBoardingPage extends StatelessWidget {
             child: RoundedButton(
               key: const Key('to_sign_in_button'),
               color: splashColor,
-              text: 'ログイン',
+              text: I.of(context).signInButton,
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => SignInPage(),

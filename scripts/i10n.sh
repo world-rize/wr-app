@@ -15,7 +15,7 @@ flutter packages pub run intl_translation:extract_to_arb \
 # デフォルト文言のarbは不要かも
 cat $DIR/intl_messages.arb | \
     sed -e 's/"@@locale": "messages"/"@@locale": "ja"/g' > \
-    $DIR/intl_ja.arb
+    $DIR/intl_en.arb
 
 
 # このタイミングで、必要に応じて、メインの言語以外のarbファイルを用意
