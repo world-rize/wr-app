@@ -13,6 +13,7 @@ import 'package:wr_app/presentation/note/pages/note_list_page.dart';
 import 'package:wr_app/presentation/note/widgets/note_table_edit_phrase.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/toast.dart';
 
 /// ノートのフレーズを表示するテーブル
 class NoteTable extends StatefulWidget {
@@ -74,6 +75,39 @@ class _NoteTableState extends State<NoteTable> {
                     _isLoading = false;
                   });
                 }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showAchievePhraseConfirmDialog({
+    @required Widget message,
+    @required Function onAchieve,
+    @required Function onCancel,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: message,
+          actions: <Widget>[
+            FlatButton(
+              child: const Text('Cancel'),
+              key: const Key('cancel'),
+              onPressed: () {
+                onCancel();
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: const Text('Achieve!'),
+              key: const Key('ok'),
+              onPressed: () async {
+                onAchieve();
+                Navigator.pop(context);
               },
             ),
           ],
@@ -186,9 +220,36 @@ class _NoteTableState extends State<NoteTable> {
                   color: Colors.green,
                 ),
                 onPressed: () {
-                  nn.achievePhrase(
-                    noteId: widget.note.id,
-                    phraseId: phrase.id,
+                  _showAchievePhraseConfirmDialog(
+                    message: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Achieved Listに移しますか?\n'),
+                        Text(
+                          'japanese',
+                          style: Theme.of(context).primaryTextTheme.bodyText2,
+                        ),
+                        Text(
+                          '    ${phrase.japanese}',
+                          style: Theme.of(context).primaryTextTheme.bodyText1,
+                        ),
+                        Text(
+                          'english',
+                          style: Theme.of(context).primaryTextTheme.bodyText2,
+                        ),
+                        Text(
+                          '    ${phrase.english}',
+                          style: Theme.of(context).primaryTextTheme.bodyText1,
+                        ),
+                      ],
+                    ),
+                    onAchieve: () => nn.achievePhrase(
+                      noteId: widget.note.id,
+                      phraseId: phrase.id,
+                    ),
+                    onCancel: () =>
+                        {InAppLogger.debug('cancel achieve phrase: $phrase')},
                   );
                 },
               ),
