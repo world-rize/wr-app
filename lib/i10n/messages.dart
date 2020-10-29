@@ -4,6 +4,17 @@ import 'package:wr_app/domain/user/model/membership.dart';
 
 // referenced https://github.com/mono0926/intl_sample/blob/master/lib/l10n/messages.dart
 mixin Messages {
+  /// on_boarding
+  String get signUpMessage => Intl.message('初めての方はこちら', name: 'signUpMessage');
+
+  String get signUpButton =>
+      Intl.message('新しくアカウントを作成する', name: 'signUpButton');
+
+  String get signInMessage =>
+      Intl.message('既にアカウントを持っている方はこちら', name: 'signInMessage');
+
+  String get signInButton => Intl.message('ログイン', name: 'signInButton');
+
   /// lesson
   String lessonStatus(int count, int all) => Intl.message(
         'クリア[$count/$all]',
@@ -319,6 +330,11 @@ mixin Messages {
       Intl.message('入力してください', name: 'doNotEmptyMessage');
   String get invalidPasswordMessage =>
       Intl.message('パスワードは6文字以上で入力してください', name: 'invalidPasswordMessage');
+
+  String get signInSuccessful => Intl.message(
+    'ログインしました',
+    name: 'signInSuccessful'
+  );
 
   // Firebase Auth Exception
   // 'Your email address appears to be malformed.'

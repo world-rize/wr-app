@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_up_form.dart';
 import 'package:wr_app/presentation/root_view.dart';
@@ -126,7 +127,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
-        title: const Text('サインアップ'),
+        title: Text(I.of(context).signUpButton),
       ),
       body: LoadingView(
         loading: _isLoading,

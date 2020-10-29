@@ -1,6 +1,26 @@
 {
   "@@locale": "ja",
-  "@@last_modified": "2020-09-21T03:35:18.057883",
+  "@@last_modified": "2020-10-29T11:45:14.337912",
+  "signUpMessage": "初めての方はこちら",
+  "@signUpMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signUpButton": "新しくアカウントを作成する",
+  "@signUpButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInMessage": "既にアカウントを持っている方はこちら",
+  "@signInMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInButton": "ログイン",
+  "@signInButton": {
+    "type": "text",
+    "placeholders": {}
+  },
   "lessonStatus": "クリア[{count}/{all}]",
   "@lessonStatus": {
     "type": "text",
@@ -410,6 +430,91 @@
   },
   "topPage": "Go to the top page",
   "@topPage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "changeButtonText": "変更",
+  "@changeButtonText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "nameHintText": "名前",
+  "@nameHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emailHintText": "Email",
+  "@emailHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordHintText": "パスワード(6文字以上)",
+  "@passwordHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "currentPasswordHintText": "現在のパスワード",
+  "@currentPasswordHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "newPasswordHintText": "新しいパスワード(6文字以上)",
+  "@newPasswordHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordConfirmHintText": "パスワード(確認)",
+  "@passwordConfirmHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "doNotEmptyMessage": "入力してください",
+  "@doNotEmptyMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidPasswordMessage": "パスワードは6文字以上で入力してください",
+  "@invalidPasswordMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInSuccessful": "ログインしました",
+  "@signInSuccessful": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorInvalidEmail": "不正なメールアドレスです",
+  "@errorInvalidEmail": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorWrongPassword": "パスワードが間違っています",
+  "@errorWrongPassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUserNotFound": "ユーザーが見つかりませんでした",
+  "@errorUserNotFound": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUserDisabled": "このユーザーは現在使用できません",
+  "@errorUserDisabled": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorTooManyRequests": "時間をおいて再試行してください",
+  "@errorTooManyRequests": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorOperationNotAllowed": "この操作は許可されていません",
+  "@errorOperationNotAllowed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUndefinedError": "不明なエラー",
+  "@errorUndefinedError": {
     "type": "text",
     "placeholders": {}
   }
