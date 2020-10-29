@@ -17,20 +17,18 @@ void useCloudFunctionsEmulator(String origin) {
 
 /// Cloud Functionの関数を呼び出す
 Future<HttpsCallableResult> callFunction(String functionName,
-    [dynamic arg = const {}]) {
+    [dynamic arg = const {}]) async {
   // emulator
   if (_useFunctionsEmulator) {
     CloudFunctions.instance.useFunctionsEmulator(origin: _emulatorOrigin);
-    final callable = CloudFunctions.instance
-        .getHttpsCallable(functionName: functionName)
-          ..timeout = const Duration(seconds: 10);
+    final callable =
+        CloudFunctions.instance.getHttpsCallable(functionName: functionName);
     return callable.call(arg);
   }
 
   final callable = CloudFunctions(
     app: FirebaseApp.instance,
     region: 'asia-northeast1',
-  ).getHttpsCallable(functionName: functionName)
-    ..timeout = const Duration(seconds: 10);
+  ).getHttpsCallable(functionName: functionName);
   return callable.call(arg);
 }
