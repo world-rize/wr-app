@@ -23,7 +23,7 @@ class AuthPersistence implements AuthRepository {
     final googleSignIn = GoogleSignIn();
     final signInAccount = await googleSignIn.signIn();
     final googleAuth = await signInAccount.authentication;
-    final credential = GoogleAuthProvider.getCredential(
+    final credential = GoogleAuthProvider.credential(
       idToken: googleAuth.idToken,
       accessToken: googleAuth.accessToken,
     );
@@ -33,8 +33,7 @@ class AuthPersistence implements AuthRepository {
 
   /// メールアドレスとパスワードでサインアップ
   @override
-  Future<FirebaseUser> signUpWithEmailAndPassword(
-      String email, String password) {
+  Future<User> signUpWithEmailAndPassword(String email, String password) {
     return fbAuth
         .createUserWithEmailAndPassword(
           email: email,
@@ -45,8 +44,7 @@ class AuthPersistence implements AuthRepository {
 
   /// sign in with email & password
   @override
-  Future<FirebaseUser> signInWithEmailAndPassword(
-      String email, String password) {
+  Future<User> signInWithEmailAndPassword(String email, String password) {
     return fbAuth
         .signInWithEmailAndPassword(
           email: email,
@@ -57,10 +55,10 @@ class AuthPersistence implements AuthRepository {
 
   /// sign in with google
   @override
-  Future<FirebaseUser> signInWithGoogleSignIn() async {
+  Future<User> signInWithGoogleSignIn() async {
     final credential = await _getGoogleAuthCredential();
     if (credential == null) {
-      throw Exception("GoogleAuthCredential is null");
+      throw Exception('GoogleAuthCredential is null');
     }
 
     // credential -> firebase user
@@ -72,7 +70,7 @@ class AuthPersistence implements AuthRepository {
   /// sign in with sign in apple
   /// <https://codewithandrea.com/videos/2020-01-20-apple-sign-in-flutter-firebase/>
   @override
-  Future<FirebaseUser> signInWithSignInWithApple(
+  Future<User> signInWithSignInWithApple(
       {List<Scope> scopes = const []}) async {
     // 1. perform the sign-in request
     final result = await AppleSignIn.performRequests(
@@ -82,8 +80,8 @@ class AuthPersistence implements AuthRepository {
     switch (result.status) {
       case AuthorizationStatus.authorized:
         final appleIdCredential = result.credential;
-        final oAuthProvider = OAuthProvider(providerId: 'apple.com');
-        final credential = oAuthProvider.getCredential(
+        final oAuthProvider = OAuthProvider('apple.com');
+        final credential = oAuthProvider.credential(
           idToken: String.fromCharCodes(appleIdCredential.identityToken),
           accessToken:
               String.fromCharCodes(appleIdCredential.authorizationCode),
@@ -91,10 +89,9 @@ class AuthPersistence implements AuthRepository {
         final authResult = await fbAuth.signInWithCredential(credential);
         final firebaseUser = authResult.user;
         if (scopes.contains(Scope.fullName)) {
-          final updateUser = UserUpdateInfo();
-          updateUser.displayName =
-              '${appleIdCredential.fullName.givenName} ${appleIdCredential.fullName.familyName}';
-          await firebaseUser.updateProfile(updateUser);
+          final fullName = appleIdCredential.fullName;
+          final displayName = '${fullName.givenName} ${fullName.familyName}';
+          await firebaseUser.updateProfile(displayName: displayName);
         }
         return firebaseUser;
 
@@ -117,7 +114,7 @@ class AuthPersistence implements AuthRepository {
   @override
   Future<void> updatePassword(
       String currentPassword, String newPassword) async {
-    final fbUser = await fbAuth.currentUser();
+    final fbUser = fbAuth.currentUser;
     if (fbUser == null) {
       throw Exception('firebase user is null');
     }
@@ -126,7 +123,7 @@ class AuthPersistence implements AuthRepository {
 
   @override
   Future<void> updateEmail(String newEmail) async {
-    final fbUser = await fbAuth.currentUser();
+    final fbUser = fbAuth.currentUser;
     if (fbUser == null) {
       throw Exception('firebase user is null');
     }
@@ -141,7 +138,7 @@ class AuthPersistence implements AuthRepository {
 
   @override
   Future<bool> isAlreadySignedIn() async {
-    return (await fbAuth.currentUser()) != null;
+    return fbAuth.currentUser != null;
   }
 
   @override

@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
-import 'package:wr_app/infrastructure/auth/mock_firebase_user.dart';
 
 /// ## firebase ログイン方法
 /// - email & password
@@ -14,7 +13,6 @@ import 'package:wr_app/infrastructure/auth/mock_firebase_user.dart';
 /// - mock(test)
 /// ## FirebaseUser -> User
 class AuthPersistenceMock implements AuthRepository {
-  // TODO(some): anti pattern?
   /// FireStore Mock Auth
   final FirebaseAuth fbAuth = MockFirebaseAuth();
 
@@ -24,7 +22,7 @@ class AuthPersistenceMock implements AuthRepository {
     final googleSignIn = MockGoogleSignIn();
     final signInAccount = await googleSignIn.signIn();
     final googleAuth = await signInAccount.authentication;
-    final credential = GoogleAuthProvider.getCredential(
+    final credential = GoogleAuthProvider.credential(
       idToken: googleAuth.idToken,
       accessToken: googleAuth.accessToken,
     );
@@ -34,29 +32,27 @@ class AuthPersistenceMock implements AuthRepository {
 
   /// メールアドレスとパスワードでサインアップ
   @override
-  Future<FirebaseUser> signUpWithEmailAndPassword(
-      String email, String password) async {
-    return MockFirebaseUser();
+  Future<User> signUpWithEmailAndPassword(String email, String password) async {
+    return fbAuth.currentUser;
   }
 
   /// sign in with email & password
   @override
-  Future<FirebaseUser> signInWithEmailAndPassword(
-      String email, String password) async {
-    return MockFirebaseUser();
+  Future<User> signInWithEmailAndPassword(String email, String password) async {
+    return fbAuth.currentUser;
   }
 
   /// sign in with google
   @override
-  Future<FirebaseUser> signInWithGoogleSignIn() async {
-    return MockFirebaseUser();
+  Future<User> signInWithGoogleSignIn() async {
+    return fbAuth.currentUser;
   }
 
   /// sign in with sign in apple
   @override
-  Future<FirebaseUser> signInWithSignInWithApple(
+  Future<User> signInWithSignInWithApple(
       {List<Scope> scopes = const []}) async {
-    return MockFirebaseUser();
+    return fbAuth.currentUser;
   }
 
   /// sign out
