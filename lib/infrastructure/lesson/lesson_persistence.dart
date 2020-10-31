@@ -67,10 +67,10 @@ class LessonPersistence implements LessonRepository {
     );
 
     // inspect
-    lessons.forEach((lesson) {
-      InAppLogger.debug(
-          '\t ${lesson.id}: ${lesson.phrases.length} phrases found');
-    });
+    // lessons.forEach((lesson) {
+    //   InAppLogger.debug(
+    //       '\t ${lesson.id}: ${lesson.phrases.length} phrases found');
+    // });
 
     return lessons;
   }

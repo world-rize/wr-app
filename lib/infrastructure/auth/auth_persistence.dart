@@ -15,7 +15,8 @@ import 'package:wr_app/util/cloud_functions.dart';
 class AuthPersistence implements AuthRepository {
   // TODO(some): anti pattern?
   /// FireStore Auth
-  final FirebaseAuth fbAuth = FirebaseAuth.instance;
+  // NOTE: fbAuth = FirebaseAuth.instance だと止まってしまう
+  FirebaseAuth get fbAuth => FirebaseAuth.instance;
 
   /// get Google AuthCredential
   // TODO(any): refactoring
