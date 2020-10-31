@@ -44,7 +44,6 @@ import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
 import 'package:wr_app/util/sentry.dart';
-import 'package:wr_app/util/toast.dart';
 
 void showMaintenance() {
   runZonedGuarded(
@@ -222,7 +221,9 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ),
         ChangeNotifierProvider.value(
           value: VoicePlayer(
-            onError: NotifyToast.error,
+            onError: (e) {
+              print(e);
+            },
           ),
         ),
         // Article

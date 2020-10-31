@@ -37,6 +37,8 @@ class VoicePlayer with ChangeNotifier {
     isPlaying = false;
     _speed = 1.0;
     locale = VoiceAccent.americanEnglish;
+
+    //
     _fixedPlayer.onPlayerStateChanged.listen(_onStateChanged);
     _fixedPlayer.onPlayerError.listen(onError);
   }
@@ -71,9 +73,9 @@ class VoicePlayer with ChangeNotifier {
   }
 
   void _onStateChanged(AudioPlayerState state) {
-    // if (state == AudioPlayerState.COMPLETED) {
-    //   isPlaying = false;
-    // }
+    if (state == AudioPlayerState.COMPLETED) {
+      isPlaying = false;
+    }
     print(state);
     notifyListeners();
   }
