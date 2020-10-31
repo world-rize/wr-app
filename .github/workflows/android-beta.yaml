@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # 全コミット持ってくる
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
@@ -20,6 +22,7 @@ jobs:
           echo "${ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON}" > android/app/src/production/google-services.json
           echo "${ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON}" > android/fastlane/google-play-api-key.json
           echo "${ANDROID_KEYSTORE_RELEASE_PROPERTIES}" > android/keystore_release.properties
+          echo "${ANDROID_KEYSTORE_PROPERTIES}" > android/keystore.properties
         env:
           ANDROID_APP_RELEASE_JKS_BASE64: ${{ secrets.ANDROID_APP_RELEASE_JKS_BASE64 }}
           ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON: ${{ secrets.ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON }}
