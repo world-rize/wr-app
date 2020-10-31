@@ -9,22 +9,30 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # 全コミット持ってくる
+          submodules: true
+          token: ${{ secrets.ASSETS_REPO_PAT }} # 別のprivateリポジトリ用
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 12.x
+          java-version: 1.8
       - name: Setup Android keys
         run: |
-          echo -n "${ANDROID_APP_RELEASE_JKS_BASE64}" | base64 -D > android/app/release.jks
+          echo -n "${ANDROID_APP_RELEASE_JKS_BASE64}" | base64 --decode > android/app/release.jks
+          echo -n "${ANDROID_APP_DEBUG_KEYSTORE_BASE64}" | base64 --decode > android/app/debug.keystore
           mkdir android/app/src/production
           echo "${ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON}" > android/app/src/production/google-services.json
           echo "${ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON}" > android/fastlane/google-play-api-key.json
           echo "${ANDROID_KEYSTORE_RELEASE_PROPERTIES}" > android/keystore_release.properties
+          echo "${ANDROID_KEYSTORE_PROPERTIES}" > android/keystore.properties
         env:
           ANDROID_APP_RELEASE_JKS_BASE64: ${{ secrets.ANDROID_APP_RELEASE_JKS_BASE64 }}
+          ANDROID_APP_DEBUG_KEYSTORE_BASE64: ${{ secrets.ANDROID_APP_DEBUG_KEYSTORE_BASE64 }}
           ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON: ${{ secrets.ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON }}
           ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON: ${{ secrets.ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON }}
           ANDROID_KEYSTORE_RELEASE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_RELEASE_PROPERTIES }}
+          ANDROID_KEYSTORE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
