@@ -11,10 +11,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0 # 全コミット持ってくる
+          submodules: true
+          token: ${{ secrets.ASSETS_REPO_PAT }} # 別のprivateリポジトリ用
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
-          java-version: 12.x
+          java-version: 1.8
       - name: Setup Android keys
         run: |
           echo -n "${ANDROID_APP_RELEASE_JKS_BASE64}" | base64 --decode > android/app/release.jks
