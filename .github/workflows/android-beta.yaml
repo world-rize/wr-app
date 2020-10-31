@@ -18,6 +18,7 @@ jobs:
       - name: Setup Android keys
         run: |
           echo -n "${ANDROID_APP_RELEASE_JKS_BASE64}" | base64 --decode > android/app/release.jks
+          echo "${ANDROID_APP_DEBUG_KEYSTORE}" > android/app/debug.keystore
           mkdir android/app/src/production
           echo "${ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON}" > android/app/src/production/google-services.json
           echo "${ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON}" > android/fastlane/google-play-api-key.json
@@ -25,6 +26,7 @@ jobs:
           echo "${ANDROID_KEYSTORE_PROPERTIES}" > android/keystore.properties
         env:
           ANDROID_APP_RELEASE_JKS_BASE64: ${{ secrets.ANDROID_APP_RELEASE_JKS_BASE64 }}
+          ANDROID_APP_DEBUG_KEYSTORE: ${{ secrets.ANDROID_APP_DEBUG_KEYSTORE }}
           ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON: ${{ secrets.ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON }}
           ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON: ${{ secrets.ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON }}
           ANDROID_KEYSTORE_RELEASE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_RELEASE_PROPERTIES }}
