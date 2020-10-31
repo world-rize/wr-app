@@ -15,7 +15,7 @@ jobs:
           java-version: 12.x
       - name: Setup Android keys
         run: |
-          echo -n "${ANDROID_APP_RELEASE_JKS_BASE64}" | base64 -D > android/app/release.jks
+          echo -n "${ANDROID_APP_RELEASE_JKS_BASE64}" | base64 --decode > android/app/release.jks
           mkdir android/app/src/production
           echo "${ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON}" > android/app/src/production/google-services.json
           echo "${ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON}" > android/fastlane/google-play-api-key.json
