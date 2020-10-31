@@ -16,12 +16,6 @@
 default_platform(:android)
 
 platform :android do
-  desc "Runs all the tests"
-  lane :test do
-    gradle(task: "test")
-  end
-
-  desc "Submit a new Beta Build to Crashlytics Beta"
   desc "Deploy a new beta build to Google Play"
   lane :beta do
     build_number = number_of_commits()
@@ -31,11 +25,5 @@ platform :android do
       sh("flutter", "build", "appbundle", "--release", "--flavor", "production", "-t", "lib/main.dart", "--build-number=#{build_number}")
     end
     upload_to_play_store(track: 'beta', aab: '../build/app/outputs/bundle/productionRelease/app-production-release.aab')
-end
-
-  desc "Deploy a new version to the Google Play"
-  lane :deploy do
-    gradle(task: "clean assembleRelease")
-    upload_to_play_store
   end
 end
