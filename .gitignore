@@ -51,5 +51,6 @@ setup.sh
 *.keystore
 keystore*.properties
 *.jks
+android/fastlane/google-play-api-key.json
 
 .node-version
