@@ -1,0 +1,36 @@
+name: android fastlane beta
+on:
+  workflow_dispatch:
+
+jobs:
+  fastlane-beta:
+    runs-on: ubuntu-latest
+    needs: []
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 12.x
+      - name: Setup Android keys
+        run: |
+          echo -n "${ANDROID_APP_RELEASE_JKS_BASE64}" | base64 -D > android/app/release.jks
+          mkdir android/app/src/production
+          echo "${ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON}" > android/app/src/production/google-services.json
+          echo "${ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON}" > android/fastlane/google-play-api-key.json
+          echo "${ANDROID_KEYSTORE_RELEASE_PROPERTIES}" > android/keystore_release.properties
+        env:
+          ANDROID_APP_RELEASE_JKS_BASE64: ${{ secrets.ANDROID_APP_RELEASE_JKS_BASE64 }}
+          ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON: ${{ secrets.ANDROID_APP_SRC_PRODUCTION_GOOGLE_SERVICES_JSON }}
+          ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON: ${{ secrets.ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON }}
+          ANDROID_KEYSTORE_RELEASE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_RELEASE_PROPERTIES }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: 1.22.3
+      - name: Run Fastlane
+        uses: maierj/fastlane-action@v1.4.0
+        with:
+          lane: beta
+          subdirectory: android
