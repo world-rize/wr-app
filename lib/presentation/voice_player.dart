@@ -3,8 +3,8 @@
 import 'dart:async';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
 import 'package:wr_app/domain/voice_accent.dart';
 import 'package:wr_app/util/logger.dart';
@@ -24,8 +24,6 @@ enum Visibility {
   japaneseOnly,
 }
 
-final player = AssetsAudioPlayer();
-
 /// phrase detail voice player
 class VoicePlayer with ChangeNotifier {
   factory VoicePlayer() {
@@ -36,12 +34,17 @@ class VoicePlayer with ChangeNotifier {
     InAppLogger.debug('VoicePlayer._internal()');
     isPlaying = false;
     _speed = 1.0;
-    locale = VoiceAccent.americanEnglish;
-
-    player.playlistAudioFinished.listen((_) {
-      isPlaying = false;
-      notifyListeners();
+    player = AssetsAudioPlayer();
+    player.playlistFinished.listen((finished) {
+      print('done? isPlaying: ${player.isPlaying.value}');
+      if (finished) {
+        InAppLogger.debug('done play');
+      }
     });
+    player.onErrorDo = (error) async {
+      print(error.error);
+    };
+    locale = VoiceAccent.americanEnglish;
   }
 
   /// singleton
@@ -55,16 +58,10 @@ class VoicePlayer with ChangeNotifier {
 
   double get speed => _speed;
 
+  AssetsAudioPlayer player;
+
   /// current pronunciation
   VoiceAccent locale;
-
-  void _onStateChanged(AudioPlayerState state) {
-    if (state == AudioPlayerState.COMPLETED) {
-      isPlaying = false;
-    }
-    print(state);
-    notifyListeners();
-  }
 
   Future<void> playMessages({@required List<Message> messages}) async {
     isPlaying = true;
@@ -72,15 +69,34 @@ class VoicePlayer with ChangeNotifier {
 
     final paths = messages.map((m) {
       final l = _voiceAccentMP3AssetsName[locale];
-      return Audio.file("assets/" + m.assets.voice[l]);
+      return Audio("assets/" + m.assets.voice[l]);
+    }).toList();
+    print('len ${paths.length}');
+    await player.open(
+      Playlist(audios: paths),
+      autoStart: false,
+      loopMode: LoopMode.single,
+    );
+    await Future.forEach(paths, (path) async {
+      await player.play();
+      final c = Completer();
+      final a = player.playlistFinished.listen((finished) async {
+        print('finished $finished');
+        if (finished) {
+          c.complete();
+        }
+      });
+      await c.future;
+      await player.next();
     });
-    player.playlist.addAll(paths);
-    await player.play();
+    isPlaying = false;
     notifyListeners();
   }
 
   Future<void> stop() async {
     await player.stop();
+    isPlaying = false;
+    notifyListeners();
   }
 
   void setSpeed(double speed) {
