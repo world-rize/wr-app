@@ -2,7 +2,7 @@
 
 import 'dart:async';
 
-import 'package:audioplayers/audio_cache.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
@@ -24,34 +24,28 @@ enum Visibility {
   japaneseOnly,
 }
 
+final player = AssetsAudioPlayer();
+
 /// phrase detail voice player
 class VoicePlayer with ChangeNotifier {
-  factory VoicePlayer({@required onError}) {
-    return _cache ??= VoicePlayer._internal(onError: onError);
+  factory VoicePlayer() {
+    return _cache ??= VoicePlayer._internal();
   }
 
-  VoicePlayer._internal({@required onError}) {
+  VoicePlayer._internal() {
     InAppLogger.debug('VoicePlayer._internal()');
-    _fixedPlayer = AudioPlayer();
-    _player = AudioCache(fixedPlayer: _fixedPlayer);
     isPlaying = false;
     _speed = 1.0;
     locale = VoiceAccent.americanEnglish;
 
-    //
-    _fixedPlayer.onPlayerStateChanged.listen(_onStateChanged);
-    _fixedPlayer.onPlayerError.listen(onError);
+    player.playlistAudioFinished.listen((_) {
+      isPlaying = false;
+      notifyListeners();
+    });
   }
 
   /// singleton
   static VoicePlayer _cache;
-
-  /// voice pronunciations
-  AudioPlayer _fixedPlayer;
-  AudioCache _player;
-
-  /// on error callback
-  Function onError;
 
   /// 再生中かどうか?
   bool isPlaying;
@@ -64,14 +58,6 @@ class VoicePlayer with ChangeNotifier {
   /// current pronunciation
   VoiceAccent locale;
 
-  @override
-  void dispose() {
-    stop();
-    _player.fixedPlayer.dispose();
-    _cache.dispose();
-    super.dispose();
-  }
-
   void _onStateChanged(AudioPlayerState state) {
     if (state == AudioPlayerState.COMPLETED) {
       isPlaying = false;
@@ -83,37 +69,23 @@ class VoicePlayer with ChangeNotifier {
   Future<void> playMessages({@required List<Message> messages}) async {
     isPlaying = true;
     notifyListeners();
-    await Future.forEach(messages, (Message message) async {
-      final l = _voiceAccentMP3AssetsName[locale];
 
-      await _player.load(message.assets.voice[l]);
-      await _player.play(message.assets.voice[l]);
-      final c = Completer();
-      final sub = _fixedPlayer.onPlayerCompletion.listen((event) {
-        c.complete();
-      });
-      await c.future;
-      // remove listener
-      await sub.cancel();
+    final paths = messages.map((m) {
+      final l = _voiceAccentMP3AssetsName[locale];
+      return Audio.file("assets/" + m.assets.voice[l]);
     });
-    isPlaying = false;
+    player.playlist.addAll(paths);
+    await player.play();
     notifyListeners();
   }
 
   Future<void> stop() async {
-    await _player.fixedPlayer.stop();
-    final c = Completer();
-    final sub = _fixedPlayer.onPlayerCompletion.listen((event) {
-      c.complete();
-    });
-    isPlaying = false;
-    await sub.cancel();
-    notifyListeners();
+    await player.stop();
   }
 
   void setSpeed(double speed) {
     assert([0.5, 0.75, 1, 1.25, 1.5].contains(speed));
-    _player.fixedPlayer.setPlaybackRate(playbackRate: speed);
+    player.setPlaySpeed(speed);
     _speed = speed;
     notifyListeners();
   }
