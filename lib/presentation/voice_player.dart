@@ -34,16 +34,6 @@ class VoicePlayer with ChangeNotifier {
     InAppLogger.debug('VoicePlayer._internal()');
     isPlaying = false;
     _speed = 1.0;
-    player = AssetsAudioPlayer();
-    player.playlistFinished.listen((finished) {
-      print('done? isPlaying: ${player.isPlaying.value}');
-      if (finished) {
-        InAppLogger.debug('done play');
-      }
-    });
-    player.onErrorDo = (error) async {
-      print(error.error);
-    };
     locale = VoiceAccent.americanEnglish;
   }
 
@@ -66,18 +56,27 @@ class VoicePlayer with ChangeNotifier {
   Future<void> playMessages({@required List<Message> messages}) async {
     isPlaying = true;
     notifyListeners();
+    await player?.stop();
 
-    final paths = messages.map((m) {
+    await Future.forEach(messages, (message) async {
+      // 毎回playerを作り直す
+      player = AssetsAudioPlayer();
+      player.playlistFinished.listen((finished) {
+        print('done? isPlaying: ${player.isPlaying.value}');
+        if (finished) {
+          InAppLogger.debug('done play');
+        }
+      });
+      player.onErrorDo = (error) async {
+        print(error.error);
+      };
       final l = _voiceAccentMP3AssetsName[locale];
-      return Audio("assets/" + m.assets.voice[l]);
-    }).toList();
-    print('len ${paths.length}');
-    await player.open(
-      Playlist(audios: paths),
-      autoStart: false,
-      loopMode: LoopMode.single,
-    );
-    await Future.forEach(paths, (path) async {
+      final audio = Audio("assets/" + message.assets.voice[l]);
+      await player.open(
+        audio,
+        autoStart: false,
+        loopMode: LoopMode.none,
+      );
       await player.play();
       final c = Completer();
       final a = player.playlistFinished.listen((finished) async {
@@ -87,8 +86,9 @@ class VoicePlayer with ChangeNotifier {
         }
       });
       await c.future;
-      await player.next();
+      await a.cancel();
     });
+    await player.stop();
     isPlaying = false;
     notifyListeners();
   }
