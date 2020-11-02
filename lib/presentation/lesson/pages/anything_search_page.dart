@@ -11,7 +11,6 @@ import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart'
 import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/util/extensions.dart';
-import 'package:wr_app/util/toast.dart';
 
 class AnythingSearchPage extends StatefulWidget {
   @override
@@ -99,9 +98,7 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
                                       MaterialPageRoute(
                                         builder: (_) => ChangeNotifierProvider<
                                             VoicePlayer>.value(
-                                          value: VoicePlayer(
-                                            onError: NotifyToast.error,
-                                          ),
+                                          value: VoicePlayer(),
                                           builder: (_, __) => SectionPage(
                                             section: Section.fromPhrase(phrase),
                                             index: 0,

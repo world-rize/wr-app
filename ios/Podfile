@@ -93,7 +93,7 @@ post_install do |installer|
 
       # https://github.com/florent37/Flutter-AssetsAudioPlayer/issues/1
       if target.name == 'assets_audio_player'
-        config.build_settings['SWIFT_VERSION'] = '4.0'
+        config.build_settings['SWIFT_VERSION'] = '4.2'
       end
     end
   end

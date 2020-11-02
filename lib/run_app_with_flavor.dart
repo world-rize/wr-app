@@ -220,11 +220,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
           ),
         ),
         ChangeNotifierProvider.value(
-          value: VoicePlayer(
-            onError: (e) {
-              print(e);
-            },
-          ),
+          value: VoicePlayer(),
         ),
         // Article
         ChangeNotifierProvider.value(

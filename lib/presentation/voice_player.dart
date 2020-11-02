@@ -2,9 +2,9 @@
 
 import 'dart:async';
 
-import 'package:audioplayers/audio_cache.dart';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
 import 'package:wr_app/domain/voice_accent.dart';
 import 'package:wr_app/util/logger.dart';
@@ -26,32 +26,19 @@ enum Visibility {
 
 /// phrase detail voice player
 class VoicePlayer with ChangeNotifier {
-  factory VoicePlayer({@required onError}) {
-    return _cache ??= VoicePlayer._internal(onError: onError);
+  factory VoicePlayer() {
+    return _cache ??= VoicePlayer._internal();
   }
 
-  VoicePlayer._internal({@required onError}) {
+  VoicePlayer._internal() {
     InAppLogger.debug('VoicePlayer._internal()');
-    _fixedPlayer = AudioPlayer();
-    _player = AudioCache(fixedPlayer: _fixedPlayer);
     isPlaying = false;
     _speed = 1.0;
     locale = VoiceAccent.americanEnglish;
-
-    //
-    _fixedPlayer.onPlayerStateChanged.listen(_onStateChanged);
-    _fixedPlayer.onPlayerError.listen(onError);
   }
 
   /// singleton
   static VoicePlayer _cache;
-
-  /// voice pronunciations
-  AudioPlayer _fixedPlayer;
-  AudioCache _player;
-
-  /// on error callback
-  Function onError;
 
   /// 再生中かどうか?
   bool isPlaying;
@@ -61,59 +48,60 @@ class VoicePlayer with ChangeNotifier {
 
   double get speed => _speed;
 
+  AssetsAudioPlayer player;
+
   /// current pronunciation
   VoiceAccent locale;
-
-  @override
-  void dispose() {
-    stop();
-    _player.fixedPlayer.dispose();
-    _cache.dispose();
-    super.dispose();
-  }
-
-  void _onStateChanged(AudioPlayerState state) {
-    if (state == AudioPlayerState.COMPLETED) {
-      isPlaying = false;
-    }
-    print(state);
-    notifyListeners();
-  }
 
   Future<void> playMessages({@required List<Message> messages}) async {
     isPlaying = true;
     notifyListeners();
-    await Future.forEach(messages, (Message message) async {
-      final l = _voiceAccentMP3AssetsName[locale];
+    await player?.stop();
 
-      await _player.load(message.assets.voice[l]);
-      await _player.play(message.assets.voice[l]);
+    await Future.forEach(messages, (message) async {
+      // 毎回playerを作り直す
+      player = AssetsAudioPlayer();
+      player.playlistFinished.listen((finished) {
+        print('done? isPlaying: ${player.isPlaying.value}');
+        if (finished) {
+          InAppLogger.debug('done play');
+        }
+      });
+      player.onErrorDo = (error) async {
+        print(error.error);
+      };
+      final l = _voiceAccentMP3AssetsName[locale];
+      final audio = Audio("assets/" + message.assets.voice[l]);
+      await player.open(
+        audio,
+        autoStart: false,
+        loopMode: LoopMode.none,
+      );
+      await player.play();
       final c = Completer();
-      final sub = _fixedPlayer.onPlayerCompletion.listen((event) {
-        c.complete();
+      final a = player.playlistFinished.listen((finished) async {
+        print('finished $finished');
+        if (finished) {
+          c.complete();
+        }
       });
       await c.future;
-      // remove listener
-      await sub.cancel();
+      await a.cancel();
     });
+    await player.stop();
     isPlaying = false;
     notifyListeners();
   }
 
   Future<void> stop() async {
-    await _player.fixedPlayer.stop();
-    final c = Completer();
-    final sub = _fixedPlayer.onPlayerCompletion.listen((event) {
-      c.complete();
-    });
+    await player.stop();
     isPlaying = false;
-    await sub.cancel();
     notifyListeners();
   }
 
   void setSpeed(double speed) {
     assert([0.5, 0.75, 1, 1.25, 1.5].contains(speed));
-    _player.fixedPlayer.setPlaybackRate(playbackRate: speed);
+    player.setPlaySpeed(speed);
     _speed = speed;
     notifyListeners();
   }
