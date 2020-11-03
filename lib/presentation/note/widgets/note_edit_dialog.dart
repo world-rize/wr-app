@@ -4,19 +4,19 @@ import 'package:flutter/material.dart';
 
 class NoteEditDialog extends StatefulWidget {
   NoteEditDialog({
-    required this.onSubmit,
-    required this.onCancel,
+    @required this.onSubmit,
+    @required this.onCancel,
   });
 
-  void Function(String) onSubmit;
-  void Function() onCancel;
+  Function(String) onSubmit;
+  Function onCancel;
 
   @override
   _NoteEditDialogState createState() => _NoteEditDialogState();
 }
 
 class _NoteEditDialogState extends State<NoteEditDialog> {
-  late String _title;
+  String _title;
 
   @override
   void initState() {

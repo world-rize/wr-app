@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class ShadowedContainer extends StatelessWidget {
   const ShadowedContainer({
-    required this.child,
-    required this.color,
+    @required this.child,
+    @required this.color,
   });
 
   final Widget child;

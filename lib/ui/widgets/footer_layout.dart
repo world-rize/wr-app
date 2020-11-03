@@ -6,9 +6,9 @@ import 'package:flutter/cupertino.dart';
 
 class FooterLayout extends StatelessWidget {
   const FooterLayout({
-    Key? key,
-    required this.body,
-    required this.footer,
+    Key key,
+    @required this.body,
+    this.footer,
   }) : super(key: key);
 
   final Widget body;

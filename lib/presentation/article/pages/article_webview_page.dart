@@ -8,7 +8,7 @@ class MyInAppBrowser extends InAppBrowser {}
 
 class ArticleWebViewPage extends StatefulWidget {
   ArticleWebViewPage({
-    required this.articleDigest,
+    @required this.articleDigest,
   });
 
   ArticleDigest articleDigest;
@@ -19,10 +19,10 @@ class ArticleWebViewPage extends StatefulWidget {
 }
 
 class _ArticleWebViewPageState extends State<ArticleWebViewPage> {
-  _ArticleWebViewPageState({required this.articleDigest});
+  _ArticleWebViewPageState({@required this.articleDigest});
 
   ArticleDigest articleDigest;
-  // InAppWebViewController webView;
+  InAppWebViewController webView;
 
   @override
   void initState() {
@@ -56,9 +56,9 @@ class _ArticleWebViewPageState extends State<ArticleWebViewPage> {
                 //                debuggingEnabled: true,
                 //              )
                 //          ),
-                // onWebViewCreated: (InAppWebViewController controller) {
-                //   webView = controller;
-                // },
+                onWebViewCreated: (InAppWebViewController controller) {
+                  webView = controller;
+                },
                 //          onLoadStart: (InAppWebViewController controller, String url) {
                 //            setState(() {
                 //              this.url = url;

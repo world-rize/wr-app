@@ -17,8 +17,8 @@ import 'package:wr_app/util/logger.dart';
 
 /// load all lessons from local
 Future<List<Lesson>> loadAllLessonsFromLocal({
-  required String lessonsJsonPath,
-  required String phrasesJsonPath,
+  @required String lessonsJsonPath,
+  @required String phrasesJsonPath,
 }) async {
   // load lessons
   final lessons = await rootBundle
@@ -37,12 +37,12 @@ Future<List<Lesson>> loadAllLessonsFromLocal({
           List.from(list).map((json) => Phrase.fromJson(json)).toList());
 
   // mapping phrases
-  final phraseMap = groupBy<Phrase, String>(
-      phrases, (Phrase phrase) => phrase.meta['lessonId']!);
+  final phraseMap =
+      groupBy<Phrase, String>(phrases, (phrase) => phrase.meta['lessonId']);
 
   lessons.forEach((lesson) {
     if (phraseMap.containsKey(lesson.id)) {
-      lesson.phrases = phraseMap[lesson.id]!;
+      lesson.phrases = phraseMap[lesson.id];
     }
   });
 
@@ -77,8 +77,8 @@ class LessonPersistence implements LessonRepository {
 
   @override
   Future<void> sendPhraseRequest({
-    required String email,
-    required String text,
+    @required String email,
+    @required String text,
   }) {
     print('text $text');
     final request = Email(
@@ -99,7 +99,7 @@ class LessonPersistence implements LessonRepository {
   }
 
   @override
-  void setShowEnglish({required bool value}) {
+  void setShowEnglish({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool(SHOW_ENGLISH, value);
   }
@@ -111,7 +111,7 @@ class LessonPersistence implements LessonRepository {
   }
 
   @override
-  void setShowJapanese({required bool value}) {
+  void setShowJapanese({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool(SHOW_JAPANESE, value);
   }

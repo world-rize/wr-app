@@ -19,7 +19,7 @@ import '../widgets/section_select_test_tab.dart';
 ///
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469132>
 class SectionSelectPage extends StatefulWidget {
-  const SectionSelectPage({required this.lesson});
+  const SectionSelectPage({@required this.lesson});
 
   final Lesson lesson;
 
@@ -34,23 +34,15 @@ class SectionSelectPage extends StatefulWidget {
 /// [LessonTab] レッスン一覧画面
 /// [TestTab] テスト一覧画面
 class _SectionSelectPageState extends State<SectionSelectPage>
-    with SingleTickerProviderStateMixin<SectionSelectPage> {
-  _SectionSelectPageState({required this.lesson});
-
-  @override
-  void initState() {
-    super.initState();
-    _isLoading = false;
-    _tabController = TabController(length: _tabs.length, vsync: this);
-  }
-
+    with SingleTickerProviderStateMixin {
+  _SectionSelectPageState({@required this.lesson});
 
   ///レッスン
-  late final Lesson lesson;
-  late bool _isLoading;
+  final Lesson lesson;
+  bool _isLoading;
 
   /// タブ
-  late TabController _tabController;
+  TabController _tabController;
   final List<Tab> _tabs = [
     const Tab(text: 'Lesson'),
     const Tab(text: 'Test'),
@@ -98,6 +90,13 @@ class _SectionSelectPageState extends State<SectionSelectPage>
         _isLoading = false;
       });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _isLoading = false;
+    _tabController = TabController(length: _tabs.length, vsync: this);
   }
 
   @override

@@ -6,7 +6,7 @@ version: 0.6.4+7
 repository: https://github.com/worldrize/wr-app
 
 environment:
-  sdk: ">=2.10.0 <3.0.0"
+  sdk: ">=2.9.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -103,8 +103,6 @@ dev_dependencies:
 
 #dependency_overrides:
 #  analyzer: ^0.39.14
-dependency_overrides:
-  analyzer: ^0.39.15
 
 flutter:
   uses-material-design: true

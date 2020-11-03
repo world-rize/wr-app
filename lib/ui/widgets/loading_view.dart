@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class LoadingView extends StatelessWidget {
   LoadingView({
-    required this.child,
-    required this.loading,
+    @required this.child,
+    @required this.loading,
     this.color = Colors.white,
   });
 

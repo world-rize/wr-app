@@ -6,9 +6,7 @@ part 'assets.g.dart';
 /// Phraseに結びついている素材へのパスを表す
 @JsonSerializable()
 class Assets {
-  Assets({final voice, final img})
-      : voice = voice ?? {},
-        img = img ?? {};
+  Assets({this.voice, this.img});
 
   factory Assets.empty() => Assets(voice: {}, img: {});
 

@@ -16,18 +16,18 @@ part 'user.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class User {
   User({
-    required this.uuid,
-    required this.name,
-    required this.userId,
-    required this.favorites,
-    required this.notes,
-    required this.statistics,
-    required this.activities,
-    required this.attributes,
-    required this.items,
+    @required this.uuid,
+    @required this.name,
+    @required this.userId,
+    @required this.favorites,
+    @required this.notes,
+    @required this.statistics,
+    @required this.activities,
+    @required this.attributes,
+    @required this.items,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
@@ -120,26 +120,30 @@ class User {
   bool get isPremium => attributes.membership == Membership.pro;
 
   FavoritePhraseList getDefaultFavoriteList() {
-    return favorites.values.firstWhere((list) => list.isDefault);
+    return favorites.values
+        .firstWhere((list) => list.isDefault, orElse: () => null);
   }
 
-  Note getNoteById({String? noteId}) {
+  Note getNoteById({String noteId}) {
     // ノートを削除した直後はnullになる
-    if (noteId == null ? true : noteId.isEmpty) {
+    if (noteId == null || noteId.isEmpty) {
       return getDefaultNote();
     }
-    return notes.values.firstWhere((note) => note.id == noteId);
+    return notes.values
+        .firstWhere((note) => note.id == noteId, orElse: () => null);
   }
 
   Note getDefaultNote() {
-    return notes.values.firstWhere((note) => note.isDefaultNote);
+    return notes.values
+        .firstWhere((note) => note.isDefaultNote, orElse: () => null);
   }
 
   Note getAchievedNote() {
-    return notes.values.firstWhere((note) => note.isAchievedNote);
+    return notes.values
+        .firstWhere((note) => note.isAchievedNote, orElse: () => null);
   }
 
-  NotePhrase? getPhrase({required String noteId, required String phraseId}) {
-    return getNoteById(noteId: noteId).findByNotePhraseId(phraseId);
+  NotePhrase getPhrase({@required String noteId, @required String phraseId}) {
+    return getNoteById(noteId: noteId)?.findByNotePhraseId(phraseId);
   }
 }

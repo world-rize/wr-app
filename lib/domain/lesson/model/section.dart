@@ -9,9 +9,9 @@ import 'package:wr_app/domain/lesson/model/phrase.dart';
 /// セクション: フレーズの集まり
 class Section {
   Section({
-    required this.id,
-    required this.title,
-    required this.phrases,
+    @required this.id,
+    @required this.title,
+    @required this.phrases,
   });
 
   factory Section.fromPhrase(Phrase phrase) {

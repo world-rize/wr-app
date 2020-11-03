@@ -9,11 +9,11 @@ part 'favorite_phrase_digest.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class FavoritePhraseDigest {
   FavoritePhraseDigest({
-    required this.id,
-    required this.createdAt,
+    @required this.id,
+    @required this.createdAt,
   });
 
-  factory FavoritePhraseDigest.fromJson(Map<String, dynamic> json) =>
+  factory FavoritePhraseDigest.fromJson(Map<dynamic, dynamic> json) =>
       _$FavoritePhraseDigestFromJson(json);
 
   Map<String, dynamic> toJson() => _$FavoritePhraseDigestToJson(this);

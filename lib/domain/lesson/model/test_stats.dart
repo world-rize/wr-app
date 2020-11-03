@@ -6,10 +6,10 @@ import 'package:wr_app/domain/lesson/index.dart';
 /// テストの情報
 class TestStats {
   TestStats({
-    required this.section,
-    required this.answers,
-    required this.challengeAchieved,
-    required this.corrects,
+    @required this.section,
+    @required this.answers,
+    @required this.challengeAchieved,
+    @required this.corrects,
     this.questions = 7,
   });
 

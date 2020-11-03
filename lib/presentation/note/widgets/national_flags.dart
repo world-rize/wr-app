@@ -32,9 +32,9 @@ Map<VoiceAccent, String> _mapVoiceAccentString = {
 /// 国旗
 class NationalFlags extends StatelessWidget {
   NationalFlags({
-    required this.locales,
-    required this.locale,
-    required this.onChanged,
+    @required this.locales,
+    @required this.locale,
+    @required this.onChanged,
   });
 
   final List<VoiceAccent> locales;

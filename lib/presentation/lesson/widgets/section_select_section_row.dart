@@ -10,15 +10,15 @@ import 'package:wr_app/ui/widgets/shadowed_container.dart';
 /// 各テストセクションのタイル
 class TestSectionRow extends StatelessWidget {
   const TestSectionRow({
-    required this.section,
-    required this.onTap,
+    @required this.section,
+    @required this.onTap,
   });
 
   /// 表示する Section
   final Section section;
 
   /// タップしたときのコールバック関数
-  final void Function() onTap;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -69,15 +69,15 @@ class TestSectionRow extends StatelessWidget {
 /// 各セクションのタイル
 class SectionRow extends StatelessWidget {
   const SectionRow({
-    required this.section,
-    required this.onTap,
+    @required this.section,
+    @required this.onTap,
   });
 
   /// 表示する Section
   final Section section;
 
   /// タップしたときのコールバック関数
-  final void Function() onTap;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {

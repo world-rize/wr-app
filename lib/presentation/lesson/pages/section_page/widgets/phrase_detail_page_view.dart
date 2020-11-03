@@ -9,7 +9,7 @@ import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_exa
 
 /// フレーズ詳細画面
 class PhraseDetailPageView extends StatelessWidget {
-  const PhraseDetailPageView({required this.phrase});
+  const PhraseDetailPageView({@required this.phrase});
 
   final Phrase phrase;
 

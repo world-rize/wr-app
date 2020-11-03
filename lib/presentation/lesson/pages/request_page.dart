@@ -15,7 +15,7 @@ class RequestPage extends StatefulWidget {
 }
 
 class _RequestPageState extends State<RequestPage> {
-  late String _text;
+  String _text;
 
   @override
   void initState() {
@@ -90,7 +90,7 @@ class _RequestPageState extends State<RequestPage> {
         child: PrimaryButton(
           label: Text(I.of(context).sendRequestButton),
           onPressed: _text == ''
-              ? () {}
+              ? null
               : () async {
                   await notifier.sendPhraseRequest(text: _text);
                 },

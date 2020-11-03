@@ -5,9 +5,9 @@ import 'package:wr_app/util/extensions.dart';
 
 class EditableTableCell extends StatelessWidget {
   EditableTableCell({
-    required this.disabled,
-    required this.value,
-    required this.onChanged,
+    @required this.disabled,
+    @required this.value,
+    @required this.onChanged,
   });
 
   bool disabled;

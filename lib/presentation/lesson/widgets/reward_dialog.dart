@@ -6,10 +6,10 @@ import 'package:getflutter/getflutter.dart';
 import 'package:wr_app/i10n/i10n.dart';
 
 class RewardDialog extends StatelessWidget {
-  const RewardDialog({required this.text, required this.onTap});
+  const RewardDialog({this.text, this.onTap});
 
   final Widget text;
-  final void Function() onTap;
+  final Function onTap;
 
   @override
   Widget build(BuildContext context) {

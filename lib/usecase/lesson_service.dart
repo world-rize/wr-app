@@ -12,7 +12,7 @@ class LessonService {
   final LessonRepository _lessonPersistence;
 
   const LessonService({
-    required LessonRepository lessonPersistence,
+    @required LessonRepository lessonPersistence,
   }) : _lessonPersistence = lessonPersistence;
 
   Future<List<Lesson>> loadPhrases() {
@@ -20,18 +20,18 @@ class LessonService {
   }
 
   List<Section> getSectionsById({
-    required List<Lesson> lessons,
-    required String id,
+    @required List<Lesson> lessons,
+    @required String id,
   }) {
     final lesson = lessons.firstWhere((lesson) => lesson.id == id);
     return Section.fromLesson(lesson);
   }
 
   Future<void> sendPhraseRequest({
-    required String text,
+    @required String text,
   }) async {
     final env = DotEnv().env;
-    final email = env['REQUEST_MAIL_ADDRESS']!;
+    final email = env['REQUEST_MAIL_ADDRESS'];
     assert(email != '');
     await _lessonPersistence.sendPhraseRequest(email: email, text: text);
 

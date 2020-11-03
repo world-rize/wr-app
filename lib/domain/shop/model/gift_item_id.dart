@@ -12,7 +12,7 @@ enum GiftItemId {
 
 extension GiftItemIdEx on GiftItemId {
   // TODO: json codec時に変換
-  static GiftItemId? fromString(String id) {
+  static GiftItemId fromString(String id) {
     switch (id) {
       case 'accent_au':
         return GiftItemId.accentAu;

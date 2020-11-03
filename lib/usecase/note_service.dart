@@ -9,7 +9,7 @@ import 'package:wr_app/domain/note/note_repository.dart';
 
 class NoteService {
   NoteService({
-    required NoteRepository notePersistence,
+    @required NoteRepository notePersistence,
   }) : _notePersistence = notePersistence;
 
   final NoteRepository _notePersistence;
@@ -28,18 +28,18 @@ class NoteService {
   }
 
   Future<Note> createNote({
-    required Note note,
+    @required Note note,
   }) async {
     final req = CreateNoteRequest(note: note);
     return _notePersistence.createNote(req);
   }
 
-  Future<void> deleteNote({required String noteId}) {
+  Future<void> deleteNote({@required String noteId}) {
     final req = DeleteNoteRequest(noteId: noteId);
     return _notePersistence.deleteNote(req);
   }
 
-  Future<void> updateNote({required Note note}) {
+  Future<void> updateNote({@required Note note}) {
     final req = UpdateNoteRequest(note: note);
     return _notePersistence.updateNote(req);
   }

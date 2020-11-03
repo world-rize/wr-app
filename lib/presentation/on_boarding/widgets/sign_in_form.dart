@@ -11,9 +11,9 @@ import 'package:wr_app/util/extensions.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({
-    required this.onSignInWithEmailAndPassword,
-    required this.onSignInWithApple,
-    required this.onSignInWithGoogle,
+    @required this.onSignInWithEmailAndPassword,
+    @required this.onSignInWithApple,
+    @required this.onSignInWithGoogle,
   });
 
   final Function(String, String) onSignInWithEmailAndPassword;
@@ -25,9 +25,9 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
-  late bool _showPassword;
-  late String _email;
-  late String _password;
+  bool _showPassword;
+  String _email;
+  String _password;
   final _formKey = GlobalKey<FormState>();
 
   bool _isValid() {
@@ -108,7 +108,7 @@ class _SignInFormState extends State<SignInForm> {
       text: 'Sign in',
       color: Theme.of(context).primaryColor,
       onTap: !_isValid()
-          ? () {}
+          ? null
           : () {
               if (!_formKey.currentState.validate()) {
                 return;

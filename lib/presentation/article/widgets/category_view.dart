@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/domain/article/index.dart';
 
 class CategoryView extends StatelessWidget {
-  const CategoryView({required this.category, required this.onTap});
+  const CategoryView({this.category, this.onTap});
 
   final ArticleCategory category;
   final Function(ArticleCategory) onTap;
