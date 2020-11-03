@@ -9,8 +9,8 @@ import 'package:wr_app/util/extensions.dart';
 /// phrase card view
 class PhraseCard extends StatelessWidget {
   const PhraseCard({
-    @required this.phrase,
-    @required this.favorite,
+    required this.phrase,
+    required this.favorite,
     this.onTap,
     this.onFavorite,
     this.highlight,
@@ -18,9 +18,9 @@ class PhraseCard extends StatelessWidget {
 
   final Phrase phrase;
   final bool favorite;
-  final Function onTap;
-  final Function onFavorite;
-  final Color highlight;
+  final void Function()? onTap;
+  final void Function()? onFavorite;
+  final Color? highlight;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class PhraseCard extends StatelessWidget {
             color: Colors.grey,
             gradient: LinearGradient(
               stops: const [0.03, 0.03],
-              colors: [highlight, theme.canvasColor],
+              colors: [highlight!, theme.canvasColor],
             ),
             borderRadius: const BorderRadius.all(Radius.circular(8)),
           )
@@ -53,7 +53,7 @@ class PhraseCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      phrase.title['en'].capitalize(),
+                      phrase.title['en']!.capitalize(),
                       style: englishStyle,
                     ).padding(4),
                     Text(

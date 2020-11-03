@@ -14,7 +14,7 @@ import '../widgets/phrase_card.dart';
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469136>
 class SectionListPage extends StatelessWidget {
   // TODO: PhraseListPageっぽい
-  const SectionListPage({@required this.section});
+  const SectionListPage({required this.section});
 
   final Section section;
 

@@ -15,19 +15,19 @@ class LessonNotifier with ChangeNotifier {
   List<Lesson> _lessons = [];
 
   /// singleton
-  static LessonNotifier _cache;
+  static LessonNotifier? _cache;
 
   factory LessonNotifier({
-    @required LessonService lessonService,
-    @required UserService userService,
+    required LessonService lessonService,
+    required UserService userService,
   }) {
     return _cache ??= LessonNotifier._internal(
         userService: userService, lessonService: lessonService);
   }
 
   LessonNotifier._internal({
-    @required LessonService lessonService,
-    @required UserService userService,
+    required LessonService lessonService,
+    required UserService userService,
   })  : _lessonService = lessonService,
         _userService = userService {
     loadAllLessons();
@@ -87,7 +87,7 @@ class LessonNotifier with ChangeNotifier {
     return _lessonService.newComingPhrases();
   }
 
-  Future<void> sendPhraseRequest({@required String text}) {
+  Future<void> sendPhraseRequest({required String text}) {
     return _lessonService
         .sendPhraseRequest(text: text)
         .catchError(NotifyToast.error);
