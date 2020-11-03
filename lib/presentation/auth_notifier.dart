@@ -10,24 +10,24 @@ import 'package:wr_app/util/toast.dart';
 /// ログイン等
 class AuthNotifier with ChangeNotifier {
   factory AuthNotifier({
-    @required AuthService authService,
+    required AuthService authService,
   }) {
     return _cache ??= AuthNotifier._internal(authService: authService);
   }
 
-  /// singleton
-  static AuthNotifier _cache;
-
   AuthNotifier._internal({
-    @required AuthService authService,
-  }) {
-    _authService = authService;
-  }
+    required AuthService authService,
+  }) : _authService = authService;
+
+  /// singleton
+  static late AuthNotifier _cache;
 
   AuthService _authService;
 
   User _user = User.empty();
+
   User get user => _user;
+
   set user(User user) {
     _user = user;
     notifyListeners();
@@ -35,9 +35,9 @@ class AuthNotifier with ChangeNotifier {
 
   /// メールアドレスとパスワードでサインアップ
   Future<void> signUpWithEmailAndPassword({
-    @required String email,
-    @required String password,
-    @required String name,
+    required String email,
+    required String password,
+    required String name,
   }) async {
     InAppLogger.info('✔ signUpWithEmailAndPassword');
     _user = await _authService.signUpWithEmailAndPassword(
@@ -99,7 +99,7 @@ class AuthNotifier with ChangeNotifier {
   }
 
   /// update Email
-  Future<void> setEmail({@required String email}) async {
+  Future<void> setEmail({required String email}) async {
     _user = await _authService.updateEmail(user: _user, newEmail: email);
     notifyListeners();
 
@@ -108,7 +108,7 @@ class AuthNotifier with ChangeNotifier {
 
   /// update password
   Future<void> setPassword(
-      {@required String currentPassword, @required String newPassword}) async {
+      {required String currentPassword, required String newPassword}) async {
     await _authService.updatePassword(
         currentPassword: currentPassword, newPassword: newPassword);
     notifyListeners();

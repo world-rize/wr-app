@@ -15,7 +15,7 @@ class CarouselCell extends StatelessWidget {
 
   final Lesson lesson;
   final int index;
-  final Function onTap;
+  final void Function() onTap;
   final bool locked;
 
   @override
@@ -29,7 +29,7 @@ class CarouselCell extends StatelessWidget {
         child: LockedView(
           locked: locked,
           child: GestureDetector(
-            onTap: onTap as void Function(),
+            onTap: onTap,
             child: Stack(
               children: <Widget>[
                 Image.asset(

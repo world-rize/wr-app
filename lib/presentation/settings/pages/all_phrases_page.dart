@@ -8,7 +8,7 @@ import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
 class Voice {
-  Voice({this.title, this.path, this.exist});
+  Voice({required this.title, required this.path, required this.exist});
 
   String title;
   String path;
@@ -20,7 +20,7 @@ Future<bool> existAssets(String path) async {
 }
 
 class AllPhrasesPage extends StatefulWidget {
-  const AllPhrasesPage({this.filter});
+  const AllPhrasesPage({required this.filter});
   final bool Function(Phrase) filter;
 
   @override

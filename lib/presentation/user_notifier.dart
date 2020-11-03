@@ -13,20 +13,8 @@ import 'package:wr_app/util/toast.dart';
 
 /// ユーザーデータストア
 class UserNotifier with ChangeNotifier {
-  final UserService _userService;
-
-  /// ユーザーデータ
-  User _user = User.empty();
-  User get user => _user;
-  set user(User user) => _user = user;
-
-  /// singleton
-  static UserNotifier _cache;
-
-  bool signedIn = false;
-
   factory UserNotifier({
-    @required UserService userService,
+    required UserService userService,
   }) {
     return _cache ??= UserNotifier._internal(
       userService: userService,
@@ -34,8 +22,22 @@ class UserNotifier with ChangeNotifier {
   }
 
   UserNotifier._internal({
-    @required UserService userService,
+    required UserService userService,
   }) : _userService = userService;
+
+  final UserService _userService;
+
+  /// ユーザーデータ
+  User _user = User.empty();
+
+  User get user => _user;
+
+  set user(User user) => _user = user;
+
+  /// singleton
+  static late UserNotifier _cache;
+
+  bool signedIn = false;
 
   /// ユーザーデータを取得
   Future<void> fetchUser() async {
@@ -45,7 +47,7 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// update age
-  Future<void> setAge({@required String age}) async {
+  Future<void> setAge({required String age}) async {
     _user = await _userService.updateAge(user: _user, age: age);
     notifyListeners();
 
@@ -54,7 +56,7 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// update name
-  Future<void> setName({@required String name}) async {
+  Future<void> setName({required String name}) async {
     _user.name = name;
     _user = await _userService.updateUser(user: _user);
     notifyListeners();
@@ -65,8 +67,8 @@ class UserNotifier with ChangeNotifier {
 
   /// フレーズをお気に入りに登録します
   Future<void> favoritePhrase({
-    @required String phraseId,
-    @required bool favorite,
+    required String phraseId,
+    required bool favorite,
   }) async {
     // TODO: default以外に保存できるようにする
     final defaultFavoriteList = _user.getDefaultFavoriteList();
@@ -104,7 +106,7 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// ポイントを習得します
-  Future<void> callGetPoint({@required int points}) async {
+  Future<void> callGetPoint({required int points}) async {
     _user = await _userService.getPoints(user: _user, points: points);
     notifyListeners();
 
@@ -116,7 +118,7 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// テストを受ける
-  Future<void> doTest({@required String sectionId}) async {
+  Future<void> doTest({required String sectionId}) async {
     _user = await _userService.doTest(user: _user, sectionId: sectionId);
     notifyListeners();
 
@@ -130,7 +132,7 @@ class UserNotifier with ChangeNotifier {
 
   /// テスト結果
   Future<void> sendTestScore(
-      {@required String sectionId, @required int score}) async {
+      {required String sectionId, required int score}) async {
     _user = await _userService.sendTestResult(
         user: _user, sectionId: sectionId, score: score);
     notifyListeners();
@@ -152,7 +154,7 @@ class UserNotifier with ChangeNotifier {
 
   /// create favorite list
   Future<void> createFavoriteList({
-    @required String name,
+    required String name,
   }) async {
     _user = await _userService.createFavoriteList(name: name);
 
@@ -163,7 +165,7 @@ class UserNotifier with ChangeNotifier {
 
   /// delete favorite list
   Future<void> deleteFavoriteList({
-    @required String listId,
+    required String listId,
   }) async {
     _user = await _userService.deleteFavoriteList(listId: listId);
 
@@ -175,7 +177,7 @@ class UserNotifier with ChangeNotifier {
 
   /// exist phrase in favorites
   bool existPhraseInFavoriteList({
-    @required String phraseId,
+    required String phraseId,
   }) {
     return _user.favorites.values
         .any((list) => list.phrases.any((p) => p.id == phraseId));
@@ -183,7 +185,7 @@ class UserNotifier with ChangeNotifier {
 
   /// create note
   Future<void> createPhrasesList({
-    @required String title,
+    required String title,
   }) async {
     _user = await _userService.createFavoriteList(name: title);
 
@@ -195,7 +197,7 @@ class UserNotifier with ChangeNotifier {
 
   /// get highest score
   int getHighestScore({
-    @required String sectionId,
+    required String sectionId,
   }) {
     // TODO
     return 0;
@@ -203,7 +205,7 @@ class UserNotifier with ChangeNotifier {
 
   /// exist phrase in notes
   bool existPhraseInNotes({
-    @required String phraseId,
+    required String phraseId,
   }) {
     return _user.notes.values
         .any((list) => list.phrases.any((p) => p.id == phraseId));
@@ -211,7 +213,7 @@ class UserNotifier with ChangeNotifier {
 
   /// exist phrase in favorites
   bool existPhraseInFavorites({
-    @required String phraseId,
+    required String phraseId,
   }) {
     return _user.favorites.values
         .any((list) => list.phrases.any((p) => p.id == phraseId));
@@ -242,11 +244,11 @@ class UserNotifier with ChangeNotifier {
   }
 
   /// search user from user id
-  Future<User> searchUserFromUserId({@required String userId}) {
+  Future<User?> searchUserFromUserId({required String userId}) {
     return _userService.searchUserFromUserId(userId: userId);
   }
 
-  Future<void> introduceFriend({@required String introduceeId}) async {
+  Future<void> introduceFriend({required String introduceeId}) async {
     await _userService.introduceFriend(introduceeUserId: introduceeId);
     _user = await _userService.readUser();
     notifyListeners();

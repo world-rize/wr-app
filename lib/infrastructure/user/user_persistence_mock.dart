@@ -47,14 +47,14 @@ class UserPersistenceMock implements UserRepository {
   Future<User> favoritePhrase(FavoritePhraseRequest req) async {
     final user = _readUserMock();
     if (req.favorite) {
-      user.favorites[req.listId].addPhrase(
+      user.favorites[req.listId]?.addPhrase(
         FavoritePhraseDigest(
           id: req.phraseId,
           createdAt: DateTime.now(),
         ),
       );
     } else {
-      if (!user.favorites[req.listId].deletePhrase(req.phraseId)) {
+      if (!(user.favorites[req.listId]?.deletePhrase(req.phraseId) ?? false)) {
         throw Exception('Phrase ${req.phraseId} is not found');
       }
     }
@@ -119,7 +119,7 @@ class UserPersistenceMock implements UserRepository {
   }
 
   @override
-  Future<User> findUserByUserId(FindUserByUserIdRequest req) async {
+  Future<User?> findUserByUserId(FindUserByUserIdRequest req) async {
     return User.dummy()..userId = req.userId;
   }
 

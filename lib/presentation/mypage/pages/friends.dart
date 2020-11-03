@@ -30,7 +30,7 @@ class FriendsPage extends StatelessWidget {
           style: TextStyle(fontSize: 20),
         ),
       ),
-      onPressed: null,
+      onPressed: (){},
     );
 
     return Scaffold(

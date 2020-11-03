@@ -118,7 +118,7 @@ Future<void> setupGlobalSingletons(Flavor flavor) async {
 /// runApp() with flavor
 Future<void> runAppWithFlavor(final Flavor flavor) async {
   try {
-    Provider.debugCheckInvalidValueType = null;
+    Provider.debugCheckInvalidValueType = (_) {} as void Function<T>(T);
     WidgetsFlutterBinding.ensureInitialized();
 
     await Firebase.initializeApp();

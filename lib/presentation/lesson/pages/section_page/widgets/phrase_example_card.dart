@@ -28,7 +28,7 @@ class PhraseExampleCard extends StatelessWidget {
 
   Widget _createMessageView({
     required BuildContext context,
-    required Function onPressed,
+    required void Function() onPressed,
     required Message message,
     required int index,
     bool primary = false,
@@ -43,7 +43,7 @@ class PhraseExampleCard extends StatelessWidget {
           // TODO: if (primary) で分けるべき
           // 英語メッセージ
           GestureDetector(
-            onTap: onPressed as void Function(),
+            onTap: onPressed ,
             child: Container(
               padding: const EdgeInsets.all(10),
               width: 350,

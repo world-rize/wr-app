@@ -15,9 +15,9 @@ import './shop_page.dart';
 /// mypage > index
 class MyPagePage extends StatelessWidget {
   Widget _createIconCell({
-    @required String title,
-    @required String icon,
-    @required Function onTap,
+    required String title,
+    required String icon,
+    required void Function() onTap,
   }) {
     return GestureDetector(
       onTap: onTap,

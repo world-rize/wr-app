@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 /// ロック中の要素
 class LockedView extends StatelessWidget {
-  const LockedView({this.child, this.locked = false});
+  const LockedView({required this.child, this.locked = false});
 
   final Widget child;
   final bool locked;

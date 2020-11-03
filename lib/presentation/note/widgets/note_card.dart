@@ -9,7 +9,7 @@ import 'package:wr_app/util/extensions.dart';
 
 class NoteCard extends StatelessWidget {
   NoteCard({
-    @required this.note,
+    required this.note,
   });
 
   Note note;

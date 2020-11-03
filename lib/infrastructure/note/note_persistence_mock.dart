@@ -23,7 +23,7 @@ class NotePersistenceMock implements NoteRepository {
     final listId = Uuid().v4();
     user.notes[listId] = req.note;
     await Future.delayed(const Duration(seconds: 1));
-    return user.notes[listId];
+    return user.notes[listId]!;
   }
 
   @override

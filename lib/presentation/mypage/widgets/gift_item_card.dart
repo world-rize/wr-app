@@ -10,12 +10,12 @@ import 'package:wr_app/util/extensions.dart';
 /// 交換できるもののカード
 class GiftItemCard extends StatelessWidget {
   GiftItemCard({
-    @required this.giftItem,
-    @required this.onTap,
+    required this.giftItem,
+    required this.onTap,
   });
 
   final GiftItem giftItem;
-  final Function onTap;
+  final void Function() onTap;
 
   @override
   Widget build(BuildContext context) {

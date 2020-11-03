@@ -9,10 +9,10 @@ import 'package:wr_app/util/logger.dart';
 
 class ReceivedNotification {
   const ReceivedNotification({
-    @required this.id,
-    @required this.title,
-    @required this.body,
-    @required this.payload,
+    required this.id,
+    required this.title,
+    required this.body,
+    required this.payload,
   });
 
   final int id;
@@ -25,7 +25,7 @@ class ReceivedNotification {
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-NotificationAppLaunchDetails _notificationAppLaunchDetails;
+late NotificationAppLaunchDetails _notificationAppLaunchDetails;
 
 final StreamController<ReceivedNotification>
     didReceiveLocalNotificationSubject =
@@ -96,9 +96,9 @@ class NotificationNotifier {
 
   /// show notification
   Future<void> showNotification({
-    @required String title,
-    @required String body,
-    @required String payload,
+    required String title,
+    required String body,
+    required String payload,
   }) async {
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       'channel id',
