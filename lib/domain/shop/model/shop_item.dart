@@ -9,11 +9,11 @@ part 'shop_item.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class GiftItem {
   GiftItem({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.price,
-    required this.expendable,
+    @required this.id,
+    @required this.title,
+    @required this.description,
+    @required this.price,
+    @required this.expendable,
   });
 
   /// id
@@ -31,7 +31,7 @@ class GiftItem {
   /// 複数購入可能か
   bool expendable;
 
-  factory GiftItem.fromJson(Map<String, dynamic> json) =>
+  factory GiftItem.fromJson(Map<dynamic, dynamic> json) =>
       _$GiftItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$GiftItemToJson(this);

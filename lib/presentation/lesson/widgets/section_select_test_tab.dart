@@ -12,7 +12,7 @@ import '../widgets/section_select_section_row.dart';
 /// Lesson > index > lesson > sections
 /// - enumerate sections', tests' [SectionRow]
 class TestTab extends StatefulWidget {
-  TestTab({required this.sections, required this.onTap});
+  TestTab({@required this.sections, @required this.onTap});
 
   List<Section> sections;
   Function(Section) onTap;

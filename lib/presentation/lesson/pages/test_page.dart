@@ -23,7 +23,7 @@ import './test_result_page.dart';
 ///
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469139>
 class TestPage extends StatefulWidget {
-  const TestPage({required this.section});
+  const TestPage({@required this.section});
 
   final Section section;
 
@@ -33,12 +33,12 @@ class TestPage extends StatefulWidget {
 
 /// [TestPage] の State
 class TestPageState extends State<TestPage> {
-  TestPageState({required this.section});
+  TestPageState({@required this.section});
 
-  late bool _isLoading;
+  bool _isLoading;
 
   /// 出題されるセクション
-  late final Section section;
+  final Section section;
 
   /// 現在の問題番号
   int _index = 0;
@@ -50,7 +50,7 @@ class TestPageState extends State<TestPage> {
   int _corrects = 0;
 
   /// 選択
-  late List<bool> _answers;
+  List<bool> _answers;
 
   /// 現在の問題
   Phrase get currentPhrase => section.phrases[_index];
@@ -157,12 +157,10 @@ class TestPageState extends State<TestPage> {
 
   List<String> _randomSelections() {
     final notifier = Provider.of<LessonNotifier>(context);
-    final selections = notifier.phrases
-        .sample(4)
-        .map((phrase) => phrase.title['en']!)
-        .toList();
+    final selections =
+        notifier.phrases.sample(4).map((phrase) => phrase.title['en']).toList();
     _answerIndex = Random().nextInt(4);
-    selections[_answerIndex] = currentPhrase.title['en']!;
+    selections[_answerIndex] = currentPhrase.title['en'];
     return selections;
   }
 

@@ -9,11 +9,7 @@ import 'package:wr_app/util/notification.dart';
 
 class SystemPersistence implements SystemRepository {
   @override
-  Future<void> notify({
-    required String title,
-    required String body,
-    required String payload,
-  }) {
+  Future<void> notify({String title, String body, String payload}) {
     final notificator = GetIt.I<NotificationNotifier>();
     return notificator.showNotification(
         title: title, body: body, payload: payload);
@@ -21,7 +17,7 @@ class SystemPersistence implements SystemRepository {
 
   // TODO: key enum化
   @override
-  void setSetDarkMode({required bool value}) {
+  void setSetDarkMode({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool('dark_mode', value);
   }
@@ -33,7 +29,7 @@ class SystemPersistence implements SystemRepository {
   }
 
   @override
-  void setFollowSystemTheme({required bool value}) {
+  void setFollowSystemTheme({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool('follow_system_theme', value);
   }
@@ -45,7 +41,7 @@ class SystemPersistence implements SystemRepository {
   }
 
   @override
-  void setFirstLaunch({required bool value}) {
+  void setFirstLaunch({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool('first_launch', value);
   }
@@ -57,7 +53,7 @@ class SystemPersistence implements SystemRepository {
   }
 
   @override
-  void setQuestionnaireAnswered({required bool value}) {
+  void setQuestionnaireAnswered({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool('questionnaire_answered', value);
   }

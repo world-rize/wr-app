@@ -9,8 +9,8 @@ import 'package:wr_app/util/logger.dart';
 
 class AuthService {
   const AuthService({
-    required AuthRepository authPersistence,
-    required UserRepository userPersistence,
+    @required AuthRepository authPersistence,
+    @required UserRepository userPersistence,
   })  : _authPersistence = authPersistence,
         _userPersistence = userPersistence;
 
@@ -19,10 +19,10 @@ class AuthService {
 
   /// sign up with email & password
   Future<User> signUpWithEmailAndPassword({
-    required String email,
-    required String password,
-    required String name,
-    required String age,
+    @required String email,
+    @required String password,
+    @required String name,
+    @required String age,
   }) async {
     final req = CreateUserRequest(
       name: name,
@@ -151,16 +151,16 @@ class AuthService {
 
   /// update password
   Future<void> updatePassword({
-    required String currentPassword,
-    required String newPassword,
+    @required String currentPassword,
+    @required String newPassword,
   }) {
     return _authPersistence.updatePassword(currentPassword, newPassword);
   }
 
   /// update email
   Future<User> updateEmail({
-    required User user,
-    required String newEmail,
+    @required User user,
+    @required String newEmail,
   }) async {
     user.attributes.email = newEmail;
     await _userPersistence.updateUser(user);

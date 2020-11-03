@@ -9,9 +9,9 @@ part 'message.g.dart';
 /// フレーズ例中の会話一文
 @JsonSerializable()
 class Message {
-  Message({required this.text, required this.assets});
+  Message({@required this.text, @required this.assets});
 
-  factory Message.fromJson(Map<String, dynamic> json) =>
+  factory Message.fromJson(Map<dynamic, dynamic> json) =>
       _$MessageFromJson(json);
 
   Map<String, dynamic> toJson() => _$MessageToJson(this);

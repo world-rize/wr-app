@@ -9,7 +9,7 @@ import '../widgets/section_select_section_row.dart';
 ///
 /// 各レッスンに対応する [SectionRow] を列挙
 class LessonTab extends StatelessWidget {
-  LessonTab({required this.sections, required this.onTap});
+  LessonTab({@required this.sections, @required this.onTap});
 
   List<Section> sections;
   Function onTap;

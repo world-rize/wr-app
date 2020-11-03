@@ -15,7 +15,7 @@ enum AnalyticsEvent {
 }
 
 Future<void> sendEvent({
-  required AnalyticsEvent event,
+  @required AnalyticsEvent event,
   Map<String, dynamic> parameters = const {},
 }) async {
   final eventName = event.toString().split('.')[1];

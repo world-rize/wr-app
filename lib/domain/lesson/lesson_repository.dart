@@ -4,10 +4,10 @@ import 'package:wr_app/domain/lesson/index.dart';
 
 abstract class LessonRepository {
   Future<List<Lesson>> loadAllLessons();
-  Future<void> sendPhraseRequest({required String text, required String email});
+  Future<void> sendPhraseRequest({String text, String email});
   Future<List<Phrase>> newComingPhrases();
   bool getShowJapanese();
-  void setShowJapanese({required bool value});
+  void setShowJapanese({bool value});
   bool getShowEnglish();
-  void setShowEnglish({required bool value});
+  void setShowEnglish({bool value});
 }

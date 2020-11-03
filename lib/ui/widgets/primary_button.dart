@@ -3,10 +3,10 @@
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({required this.label, this.onPressed});
+  const PrimaryButton({this.label, this.onPressed});
 
   final Widget label;
-  final void Function()? onPressed;
+  final Function onPressed;
 
   @override
   Widget build(BuildContext context) {

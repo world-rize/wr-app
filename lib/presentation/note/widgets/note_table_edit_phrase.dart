@@ -5,9 +5,9 @@ import 'package:wr_app/domain/note/model/note_phrase.dart';
 
 class EditPhrase extends StatefulWidget {
   EditPhrase({
-    required this.language,
-    required this.notePhrase,
-    required this.onSubmit,
+    @required this.language,
+    @required this.notePhrase,
+    @required this.onSubmit,
   });
 
   Language language;
@@ -19,7 +19,7 @@ class EditPhrase extends StatefulWidget {
 }
 
 class _EditPhraseState extends State<EditPhrase> {
-  late String _tmpString;
+  String _tmpString;
   @override
   void initState() {
     super.initState();

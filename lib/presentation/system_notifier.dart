@@ -10,22 +10,24 @@ import 'package:wr_app/util/logger.dart';
 /// システム情報など
 class SystemNotifier with ChangeNotifier {
   factory SystemNotifier({
-    required SystemService systemService,
-    required Flavor flavor,
+    @required SystemService systemService,
+    @required Flavor flavor,
   }) {
     return _cache ??=
         SystemNotifier._internal(systemService: systemService, flavor: flavor);
   }
 
   SystemNotifier._internal({
-    required SystemService systemService,
-    required this.flavor,
-  }) : _systemService = systemService;
+    @required SystemService systemService,
+    @required this.flavor,
+  }) {
+    _systemService = systemService;
+  }
 
   SystemService _systemService;
 
   /// シングルトンインスタンス
-  static late SystemNotifier _cache;
+  static SystemNotifier _cache;
 
   /// flavor
   final Flavor flavor;
@@ -42,21 +44,21 @@ class SystemNotifier with ChangeNotifier {
 
   bool getDarkMode() => _systemService.getDarkMode();
 
-  void setDarkMode({required bool value}) {
+  void setDarkMode({bool value}) {
     _systemService.setDarkMode(value: value);
     notifyListeners();
   }
 
   bool getFollowSystemTheme() => _systemService.getFollowSystemTheme();
 
-  void setFollowSystemTheme({required bool value}) {
+  void setFollowSystemTheme({bool value}) {
     _systemService.setFollowSystemTheme(value: value);
     notifyListeners();
   }
 
   bool getFirstLaunch() => _systemService.getFirstLaunch();
 
-  void setFirstLaunch({required bool value}) {
+  void setFirstLaunch({bool value}) {
     _systemService.setFirstLaunch(value: value);
 
     InAppLogger.info('setFirstLaunch -> $value');
@@ -66,7 +68,7 @@ class SystemNotifier with ChangeNotifier {
 
   bool getQuestionnaireAnswered() => _systemService.getQuestionnaireAnswered();
 
-  void setQuestionnaireAnswered({required bool value}) {
+  void setQuestionnaireAnswered({bool value}) {
     _systemService.setQuestionnaireAnswered(value: value);
 
     InAppLogger.info('getQuestionnaireAnswered -> $value');
@@ -79,9 +81,9 @@ class SystemNotifier with ChangeNotifier {
   }
 
   Future<void> notify({
-    required String title,
-    required String body,
-    required String payload,
+    @required String title,
+    @required String body,
+    @required String payload,
   }) {
     return _systemService.notify(title: title, body: body, payload: payload);
   }

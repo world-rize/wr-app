@@ -35,10 +35,7 @@ class LessonPersistenceMock implements LessonRepository {
   }
 
   @override
-  Future<void> sendPhraseRequest({
-    required String text,
-    required String email,
-  }) async {
+  Future<void> sendPhraseRequest({String text, String email}) async {
     InAppLogger.info(text);
   }
 
@@ -49,7 +46,7 @@ class LessonPersistenceMock implements LessonRepository {
   }
 
   @override
-  void setShowEnglish({required bool value}) {
+  void setShowEnglish({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool(SHOW_ENGLISH, value);
   }
@@ -61,7 +58,7 @@ class LessonPersistenceMock implements LessonRepository {
   }
 
   @override
-  void setShowJapanese({required bool value}) {
+  void setShowJapanese({bool value}) {
     final pref = GetIt.I<SharedPreferences>();
     pref.setBool(SHOW_JAPANESE, value);
   }

@@ -21,7 +21,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  late bool _isLoading;
+  bool _isLoading;
 
   /// ホームへ移動
   Future<void> _gotoHome() {

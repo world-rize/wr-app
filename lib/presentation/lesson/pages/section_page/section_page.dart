@@ -13,7 +13,7 @@ import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/presentation/voice_player.dart';
 
 class SectionPage extends StatefulWidget {
-  const SectionPage({required this.section, required this.index});
+  const SectionPage({@required this.section, @required this.index});
 
   final Section section;
   final int index;
@@ -26,15 +26,14 @@ class SectionPage extends StatefulWidget {
 }
 
 class _SectionPageState extends State<SectionPage>
-  with SingleTickerProviderStateMixin<SectionPage> {
+    with SingleTickerProviderStateMixin {
   _SectionPageState({
-    required this.section,
-    required this.index,
-
+    @required this.section,
+    @required this.index,
   });
 
   final Section section;
-  PageController? _pageController;
+  PageController _pageController;
   int index;
 
   void _showPhraseDetailSettingsDialog(BuildContext context) {

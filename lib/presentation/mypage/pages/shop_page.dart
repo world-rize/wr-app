@@ -18,7 +18,7 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-  late bool _isLoading;
+  bool _isLoading;
   List<GiftItem> _items = [];
 
   @override
@@ -71,11 +71,10 @@ class _ShopPageState extends State<ShopPage> {
                   _isLoading = true;
                 });
                 final sn = context.read<ShopNotifier>();
-                await sn.purchaseItem(
-                    itemId: GiftItemIdEx.fromString(item.id)!);
+                await sn.purchaseItem(itemId: GiftItemIdEx.fromString(item.id));
                 final un = context.read<UserNotifier>();
                 await un.callGetPoint(points: -item.price);
-                await _useItem(GiftItemIdEx.fromString(item.id)!);
+                await _useItem(GiftItemIdEx.fromString(item.id));
               } on Exception catch (e) {
                 InAppLogger.error(e);
               } finally {

@@ -9,15 +9,15 @@ import 'package:wr_app/util/toast.dart';
 
 /// NotePageの状態を管理する
 class NoteNotifier extends ChangeNotifier {
-  factory NoteNotifier({required NoteService noteService}) {
+  factory NoteNotifier({@required NoteService noteService}) {
     return _cache ??= NoteNotifier._(noteService: noteService);
   }
 
-  NoteNotifier._({required NoteService noteService})
+  NoteNotifier._({@required NoteService noteService})
       : _noteService = noteService;
 
   /// singleton
-  static late NoteNotifier _cache;
+  static NoteNotifier _cache;
   NoteService _noteService;
 
   User _user = User.empty();
@@ -30,7 +30,7 @@ class NoteNotifier extends ChangeNotifier {
   }
 
   /// 現在のノート
-  late String _nowSelectedNoteId;
+  String _nowSelectedNoteId;
 
   Note get currentNote {
     return _user.getNoteById(noteId: nowSelectedNoteId) ??
@@ -83,7 +83,7 @@ class NoteNotifier extends ChangeNotifier {
 
   /// create note
   Future<void> createNote({
-    required String title,
+    @required String title,
   }) async {
     final newNote = Note.empty(title);
     final note = await _noteService.createNote(note: newNote);
@@ -101,7 +101,7 @@ class NoteNotifier extends ChangeNotifier {
 
   /// update note title
   Future<void> updateNote({
-    required Note note,
+    @required Note note,
   }) async {
     await _noteService.updateNote(note: note);
     _user.notes[note.id] = note;
@@ -112,7 +112,7 @@ class NoteNotifier extends ChangeNotifier {
   }
 
   /// update note isDefault
-  Future<void> updateDefaultNote({required String noteId}) async {
+  Future<void> updateDefaultNote({@required String noteId}) async {
     final defaultNote = _user.getDefaultNote();
     if (defaultNote != null) {
       defaultNote.isDefaultNote = false;
@@ -132,7 +132,7 @@ class NoteNotifier extends ChangeNotifier {
   }
 
   /// delete note
-  Future<void> deleteNote({required String noteId}) async {
+  Future<void> deleteNote({@required String noteId}) async {
     await _noteService.deleteNote(noteId: noteId);
     _user.notes.remove(noteId);
 
@@ -144,8 +144,8 @@ class NoteNotifier extends ChangeNotifier {
 
   /// add phrase
   Future<void> addPhraseInNote({
-    required String noteId,
-    required NotePhrase phrase,
+    @required String noteId,
+    @required NotePhrase phrase,
   }) async {
     final note = _user.getNoteById(noteId: noteId).clone();
     note.addPhrase(phrase);
@@ -161,12 +161,12 @@ class NoteNotifier extends ChangeNotifier {
 
   /// update phrase
   Future<void> updatePhraseInNote({
-    required String noteId,
-    required String phraseId,
-    required NotePhrase phrase,
+    @required String noteId,
+    @required String phraseId,
+    @required NotePhrase phrase,
   }) async {
     try {
-      final note = _user.getNoteById(noteId: noteId).clone();
+      final note = _user.getNoteById(noteId: noteId)?.clone();
       await _noteService.updateNote(note: note);
       _user.notes[note.id] = note;
       notifyListeners();
@@ -178,8 +178,8 @@ class NoteNotifier extends ChangeNotifier {
   }
 
   Future<void> achievePhrase({
-    required String noteId,
-    required String phraseId,
+    @required String noteId,
+    @required String phraseId,
   }) async {
     // blank note
     final note = _user.getNoteById(noteId: noteId);
@@ -210,8 +210,8 @@ class NoteNotifier extends ChangeNotifier {
       throw Exception("Can't add Phrase ${phrase.id} to Note ${note.id}");
     }
     notePhrase
-      ..japanese = phrase.title['ja']!
-      ..english = phrase.title['en']!;
+      ..japanese = phrase.title['ja']
+      ..english = phrase.title['en'];
     await _noteService.updateNote(note: note);
     notifyListeners();
   }

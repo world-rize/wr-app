@@ -13,10 +13,10 @@ import 'package:wr_app/util/extensions.dart';
 /// [phrase] と [selection] を表示し選択されたら [onNext] がコールバックされる
 class TestChoices extends StatefulWidget {
   const TestChoices({
-    required this.index,
-    required this.phrase,
-    required this.selection,
-    required this.onNext,
+    @required this.index,
+    @required this.phrase,
+    @required this.selection,
+    @required this.onNext,
   });
 
   /// index

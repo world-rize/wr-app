@@ -11,7 +11,7 @@ import 'package:wr_app/util/extensions.dart';
 /// 記事見出し
 class ArticleOverView extends StatelessWidget {
   const ArticleOverView({
-    required this.articleDigest,
+    @required this.articleDigest,
   });
 
   final ArticleDigest articleDigest;

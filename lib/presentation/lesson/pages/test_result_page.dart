@@ -21,7 +21,7 @@ import '../widgets/phrase_card.dart';
 ///
 /// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469140>
 class TestResultPage extends StatefulWidget {
-  const TestResultPage({required this.stats});
+  const TestResultPage({@required this.stats});
 
   final TestStats stats;
 
@@ -48,7 +48,7 @@ class _TestResultPageState extends State<TestResultPage> {
   Future _showQuestionnaireDialog(BuildContext context) {
     final systemNotifier = Provider.of<SystemNotifier>(context, listen: false);
     final env = DotEnv().env;
-    final questionnaireUrl = env['QUESTIONNAIRE_URL']!;
+    final questionnaireUrl = env['QUESTIONNAIRE_URL'];
 
     return showCupertinoDialog(
       context: context,

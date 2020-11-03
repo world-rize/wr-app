@@ -10,20 +10,20 @@ class ArticleNotifier extends ChangeNotifier {
   ArticleService _articleService;
 
   /// singleton
-  static ArticleNotifier? _cache;
+  static ArticleNotifier _cache;
 
   factory ArticleNotifier({
-    required ArticleService articleService,
+    @required ArticleService articleService,
   }) {
     return _cache ??= ArticleNotifier._internal(articleService: articleService);
   }
 
   ArticleNotifier._internal({
-    required ArticleService articleService,
+    @required ArticleService articleService,
   }) : _articleService = articleService;
 
   Future<List<ArticleDigest>> findByCategory({
-    required String id,
+    @required String id,
   }) {
     final client = GetIt.I<Client>();
     return _articleService.findByCategory(client: client, id: id);

@@ -10,7 +10,7 @@ part 'note_api_dto.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateNoteRequest {
   CreateNoteRequest({
-    required this.note,
+    @required this.note,
   });
 
   factory CreateNoteRequest.fromJson(Map<String, dynamic> json) =>
@@ -24,7 +24,7 @@ class CreateNoteRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class UpdateNoteRequest {
   UpdateNoteRequest({
-    required this.note,
+    @required this.note,
   });
 
   factory UpdateNoteRequest.fromJson(Map<String, dynamic> json) =>
@@ -38,7 +38,7 @@ class UpdateNoteRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class DeleteNoteRequest {
   DeleteNoteRequest({
-    required this.noteId,
+    @required this.noteId,
   });
 
   factory DeleteNoteRequest.fromJson(Map<String, dynamic> json) =>
