@@ -18,11 +18,11 @@ part 'favorite_phrase_list.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class FavoritePhraseList {
   FavoritePhraseList({
-    @required this.id,
-    @required this.title,
-    @required this.sortType,
-    @required this.isDefault,
-    @required this.phrases,
+    required this.id,
+    required this.title,
+    required this.sortType,
+    required this.isDefault,
+    required this.phrases,
   });
 
   /// ダミーを作成
@@ -53,7 +53,7 @@ class FavoritePhraseList {
     );
   }
 
-  factory FavoritePhraseList.fromJson(Map<dynamic, dynamic> json) =>
+  factory FavoritePhraseList.fromJson(Map<String, dynamic> json) =>
       _$FavoritePhraseListFromJson(json);
 
   Map<String, dynamic> toJson() => _$FavoritePhraseListToJson(this);
@@ -79,8 +79,7 @@ class FavoritePhraseList {
   }
 
   FavoritePhraseDigest findByPhraseId(String id) {
-    return phrases.firstWhere((element) => element.id == id,
-        orElse: () => null);
+    return phrases.firstWhere((element) => element.id == id);
   }
 
   bool updatePhrase(String id, FavoritePhraseDigest digest) {

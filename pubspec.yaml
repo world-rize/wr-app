@@ -103,6 +103,8 @@ dev_dependencies:
 
 #dependency_overrides:
 #  analyzer: ^0.39.14
+dependency_overrides:
+  analyzer: '0.39.14'
 
 flutter:
   uses-material-design: true

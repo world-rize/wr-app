@@ -6,6 +6,7 @@ import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
+import 'package:wr_app/util/sentry.dart';
 
 part 'note.g.dart';
 
@@ -16,15 +17,13 @@ part 'note.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class Note {
   Note({
-    @required this.id,
-    @required this.title,
-    @required this.sortType,
-    @required this.isDefaultNote,
-    @required this.isAchievedNote,
-    @required List<NotePhrase> phrases,
-  }) {
-    _phrases = phrases;
-  }
+    required this.id,
+    required this.title,
+    required this.sortType,
+    required this.isDefaultNote,
+    required this.isAchievedNote,
+    required List<NotePhrase> phrases,
+  }) : _phrases = phrases;
 
   factory Note.dummy(
     String title, {
@@ -58,7 +57,7 @@ class Note {
     );
   }
 
-  factory Note.fromJson(Map<dynamic, dynamic> json) => _$NoteFromJson(json);
+  factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
 
   Map<String, dynamic> toJson() => _$NoteToJson(this);
 
@@ -96,11 +95,11 @@ class Note {
   }
 
   /// ないならnullを返す
-  NotePhrase findByNotePhraseId(String id) {
-    return _phrases.firstWhere(
+  NotePhrase? findByNotePhraseId(String id) {
+    final idx = _phrases.indexWhere(
       (element) => element.id == id,
-      orElse: () => null,
     );
+    return idx == -1 ? null : _phrases[idx];
   }
 
   bool updateNotePhrase(String id, NotePhrase phrase) {
@@ -116,10 +115,10 @@ class Note {
   }
 
   /// 空のノートフレーズを返す、ないならnullを返す
-  NotePhrase firstEmptyNotePhrase() {
-    return _phrases.firstWhere(
+  NotePhrase? firstEmptyNotePhrase() {
+    final idx = _phrases.indexWhere(
       (element) => element.japanese == '' && element.english == '',
-      orElse: () => null,
     );
+    return idx == -1 ? null : _phrases[idx];
   }
 }

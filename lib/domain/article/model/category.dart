@@ -9,13 +9,13 @@ part 'category.g.dart';
 @JsonSerializable()
 class ArticleCategory {
   ArticleCategory({
-    @required this.id,
-    @required this.title,
-    @required this.thumbnailUrl,
-    @required this.url,
+    required this.id,
+    required this.title,
+    required this.thumbnailUrl,
+    required this.url,
   });
 
-  factory ArticleCategory.fromJson(Map<dynamic, dynamic> json) =>
+  factory ArticleCategory.fromJson(Map<String, dynamic> json) =>
       _$ArticleCategoryFromJson(json);
 
   /// id

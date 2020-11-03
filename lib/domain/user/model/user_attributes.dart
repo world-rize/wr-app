@@ -11,9 +11,9 @@ part 'user_attributes.g.dart';
 @CustomMembershipConverter()
 class UserAttributes {
   UserAttributes({
-    this.age,
-    this.email,
-    this.membership,
+    required this.age,
+    required this.email,
+    required this.membership,
   });
 
   factory UserAttributes.dummy() {
@@ -24,7 +24,7 @@ class UserAttributes {
     );
   }
 
-  factory UserAttributes.fromJson(Map<dynamic, dynamic> json) =>
+  factory UserAttributes.fromJson(Map<String, dynamic> json) =>
       _$UserAttributesFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserAttributesToJson(this);

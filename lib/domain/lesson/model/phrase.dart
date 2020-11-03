@@ -14,12 +14,12 @@ part 'phrase.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class Phrase {
   Phrase({
-    @required this.id,
-    @required this.title,
-    @required this.assets,
-    @required this.meta,
-    @required this.advice,
-    @required this.example,
+    required this.id,
+    required this.title,
+    required this.assets,
+    required this.meta,
+    required this.advice,
+    required this.example,
   });
 
   factory Phrase.fromJson(Map json) => _$PhraseFromJson(json);
@@ -34,7 +34,7 @@ class Phrase {
       },
       meta: {},
       assets: Assets.empty(),
-      example: null,
+      example: Example(value: []),
       advice: {},
     );
   }

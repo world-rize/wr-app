@@ -15,7 +15,7 @@ part 'user_api_dto.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class DoTestRequest {
   DoTestRequest({
-    @required this.sectionId,
+    required this.sectionId,
   });
 
   factory DoTestRequest.fromJson(Map<String, dynamic> json) =>
@@ -29,9 +29,9 @@ class DoTestRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateUserRequest {
   CreateUserRequest({
-    @required this.name,
-    @required this.email,
-    @required this.age,
+    required this.name,
+    required this.email,
+    required this.age,
   });
 
   factory CreateUserRequest.fromJson(Map<String, dynamic> json) =>
@@ -49,9 +49,9 @@ class CreateUserRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class FavoritePhraseRequest {
   FavoritePhraseRequest({
-    @required this.phraseId,
-    @required this.listId,
-    @required this.favorite,
+    required this.phraseId,
+    required this.listId,
+    required this.favorite,
   });
 
   factory FavoritePhraseRequest.fromJson(Map<String, dynamic> json) =>
@@ -67,7 +67,7 @@ class FavoritePhraseRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class GetPointRequest {
   GetPointRequest({
-    @required this.points,
+    required this.points,
   });
 
   factory GetPointRequest.fromJson(Map<String, dynamic> json) =>
@@ -81,7 +81,7 @@ class GetPointRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreateFavoriteListRequest {
   CreateFavoriteListRequest({
-    @required this.name,
+    required this.name,
   });
 
   factory CreateFavoriteListRequest.fromJson(Map<String, dynamic> json) =>
@@ -95,7 +95,7 @@ class CreateFavoriteListRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class DeleteFavoriteListRequest {
   DeleteFavoriteListRequest({
-    @required this.listId,
+    required this.listId,
   });
 
   factory DeleteFavoriteListRequest.fromJson(Map<String, dynamic> json) =>
@@ -109,7 +109,7 @@ class DeleteFavoriteListRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class CreatePhrasesListRequest {
   CreatePhrasesListRequest({
-    @required this.title,
+    required this.title,
   });
 
   factory CreatePhrasesListRequest.fromJson(Map<String, dynamic> json) =>
@@ -123,9 +123,9 @@ class CreatePhrasesListRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class UpdatePhraseRequest {
   UpdatePhraseRequest({
-    @required this.listId,
-    @required this.phraseId,
-    @required this.phrase,
+    required this.listId,
+    required this.phraseId,
+    required this.phrase,
   });
 
   factory UpdatePhraseRequest.fromJson(Map<String, dynamic> json) =>
@@ -143,8 +143,8 @@ class UpdatePhraseRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class AddPhraseToPhraseListRequest {
   AddPhraseToPhraseListRequest({
-    @required this.listId,
-    @required this.phrase,
+    required this.listId,
+    required this.phrase,
   });
 
   factory AddPhraseToPhraseListRequest.fromJson(Map<String, dynamic> json) =>
@@ -160,8 +160,8 @@ class AddPhraseToPhraseListRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class DeletePhraseRequest {
   DeletePhraseRequest({
-    @required this.listId,
-    @required this.phraseId,
+    required this.listId,
+    required this.phraseId,
   });
 
   factory DeletePhraseRequest.fromJson(Map<String, dynamic> json) =>
@@ -177,8 +177,8 @@ class DeletePhraseRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class SendTestResultRequest {
   SendTestResultRequest({
-    @required this.sectionId,
-    @required this.score,
+    required this.sectionId,
+    required this.score,
   });
 
   factory SendTestResultRequest.fromJson(Map<String, dynamic> json) =>
@@ -194,7 +194,7 @@ class SendTestResultRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class FindUserByUserIdRequest {
   FindUserByUserIdRequest({
-    @required this.userId,
+    required this.userId,
   });
 
   factory FindUserByUserIdRequest.fromJson(Map<String, dynamic> json) =>
@@ -218,7 +218,7 @@ class CheckTestStreaksRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class PurchaseItemRequest {
   PurchaseItemRequest({
-    @required this.itemId,
+    required this.itemId,
   });
 
   factory PurchaseItemRequest.fromJson(Map<String, dynamic> json) =>
@@ -232,7 +232,7 @@ class PurchaseItemRequest {
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class IntroduceFriendRequest {
   IntroduceFriendRequest({
-    @required this.introduceeUserId,
+    required this.introduceeUserId,
   });
 
   String introduceeUserId;

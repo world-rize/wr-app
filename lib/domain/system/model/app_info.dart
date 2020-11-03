@@ -10,10 +10,10 @@ part 'app_info.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class AppInfo {
   AppInfo({
-    @required this.currentVersion,
-    @required this.requireVersion,
-    @required this.isIOsAppAvailable,
-    @required this.isAndroidAppAvailable,
+    required this.currentVersion,
+    required this.requireVersion,
+    required this.isIOsAppAvailable,
+    required this.isAndroidAppAvailable,
   });
 
   String currentVersion;
@@ -24,7 +24,7 @@ class AppInfo {
 
   bool isAndroidAppAvailable;
 
-  factory AppInfo.fromJson(Map<dynamic, dynamic> json) {
+  factory AppInfo.fromJson(Map<String, dynamic> json) {
     return _$AppInfoFromJson(json);
   }
 

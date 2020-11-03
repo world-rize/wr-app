@@ -10,13 +10,13 @@ part 'note_phrase.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class NotePhrase {
   NotePhrase({
-    @required this.id,
-    @required this.english,
-    @required this.japanese,
-    @required this.createdAt,
+    required this.id,
+    required this.english,
+    required this.japanese,
+    required this.createdAt,
   });
 
-  factory NotePhrase.dummy({@required String id}) {
+  factory NotePhrase.dummy({required String id}) {
     return NotePhrase(
       id: id,
       japanese: 'こんにちは',
@@ -49,7 +49,7 @@ class NotePhrase {
   //  TODO: DateTimeに
   String createdAt;
 
-  factory NotePhrase.fromJson(Map<dynamic, dynamic> json) =>
+  factory NotePhrase.fromJson(Map<String, dynamic> json) =>
       _$NotePhraseFromJson(json);
 
   Map<String, dynamic> toJson() => _$NotePhraseToJson(this);
