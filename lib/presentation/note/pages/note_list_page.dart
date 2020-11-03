@@ -15,7 +15,7 @@ class NoteListPage extends StatefulWidget {
 }
 
 class _NoteListPageState extends State<NoteListPage> {
-  bool _isLoading;
+  late bool _isLoading;
 
   @override
   void initState() {

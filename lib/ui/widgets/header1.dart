@@ -6,8 +6,8 @@ import 'package:getflutter/getflutter.dart';
 
 class Header1 extends StatelessWidget {
   const Header1({
-    @required this.text,
-    @required this.dividerColor,
+    required this.text,
+    required this.dividerColor,
   });
 
   final String text;

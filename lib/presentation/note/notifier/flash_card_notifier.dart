@@ -10,20 +10,17 @@ enum TtsState { playing, stopped }
 /// フラッシュカードの操作
 class FlashCardNotifier extends ChangeNotifier {
   FlashCardNotifier({
-    @required this.noteId,
-    @required this.notePhrases,
-  }) {
+    required this.noteId,
+    required this.notePhrases,
+  })   : originalNotePhrases = [...notePhrases],
+        _nowPhraseIndex = 0,
+        _autoScroll = true,
+        _isShuffle = false,
+        _showJapanese = true,
+        _voiceAccent = VoiceAccent.americanEnglish,
+        _flutterTts = FlutterTts(),
+        _ttsState = TtsState.stopped {
     print(notePhrases.map((e) => '${e.japanese}').join(','));
-
-    originalNotePhrases = [...notePhrases];
-
-    _nowPhraseIndex = 0;
-    _autoScroll = true;
-    _isShuffle = false;
-    _showJapanese = true;
-    _voiceAccent = VoiceAccent.americanEnglish;
-    _flutterTts = FlutterTts();
-    _ttsState = TtsState.stopped;
   }
 
   /// 元の並び
@@ -62,7 +59,7 @@ class FlashCardNotifier extends ChangeNotifier {
 
   TtsState _ttsState;
 
-  PageController _pageController;
+  late PageController _pageController;
 
   VoiceAccent get voiceAccent => _voiceAccent;
 
@@ -226,6 +223,6 @@ class FlashCardNotifier extends ChangeNotifier {
       VoiceAccent.australiaEnglish: 'en-AU',
       VoiceAccent.britishEnglish: 'en-GB',
       VoiceAccent.indianEnglish: 'en-IN',
-    }[va];
+    }[va]!;
   }
 }

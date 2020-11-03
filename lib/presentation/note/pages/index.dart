@@ -14,7 +14,7 @@ class NotePage extends StatefulWidget {
 }
 
 class _NotePageState extends State<NotePage> {
-  ScrollController _controller;
+  late ScrollController _controller;
 
   @override
   void initState() {

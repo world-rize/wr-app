@@ -4,6 +4,7 @@ include: package:pedantic_mono/analysis_options.yaml
 analyzer:
   enable-experiment:
     - extension-methods
+    - non-nullable
   exclude:
     - '**/*.g.dart'
     - 'lib/i10n/*'

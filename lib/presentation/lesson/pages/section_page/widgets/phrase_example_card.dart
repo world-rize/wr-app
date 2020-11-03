@@ -19,18 +19,18 @@ import 'package:wr_app/util/extensions.dart';
 /// phrase example view testなら[isTest]trueでキーフレーズを隠す
 class PhraseExampleCard extends StatelessWidget {
   const PhraseExampleCard({
-    @required this.phrase,
-    @required this.isTest,
+    required this.phrase,
+    required this.isTest,
   });
 
   final Phrase phrase;
   final bool isTest;
 
   Widget _createMessageView({
-    BuildContext context,
-    Function onPressed,
-    Message message,
-    int index,
+    required BuildContext context,
+    required void Function() onPressed,
+    required Message message,
+    required int index,
     bool primary = false,
   }) {
     final ln = Provider.of<LessonNotifier>(context);
@@ -43,7 +43,7 @@ class PhraseExampleCard extends StatelessWidget {
           // TODO: if (primary) で分けるべき
           // 英語メッセージ
           GestureDetector(
-            onTap: onPressed,
+            onTap: onPressed ,
             child: Container(
               padding: const EdgeInsets.all(10),
               width: 350,
@@ -57,10 +57,10 @@ class PhraseExampleCard extends StatelessWidget {
                 // TODO: ViewModelはNotifierに書くべき
                 child: BoldableText(
                   text: isTest
-                      ? message.text['en']
+                      ? message.text['en']!
                       : (ln.showEnglish
-                          ? message.text['en']
-                          : ' ' * message.text['en'].length),
+                          ? message.text['en']!
+                          : ' ' * message.text['en']!.length),
                   basicStyle: Theme.of(context)
                       .primaryTextTheme
                       .bodyText2
@@ -89,11 +89,11 @@ class PhraseExampleCard extends StatelessWidget {
                           horizontal: 10, vertical: 10),
                       child: BoldableText(
                         text: isTest
-                            ? message.text['ja']
+                            ? message.text['ja']!
                             : (ln.showJapanese
-                                ? message.text['ja']
+                                ? message.text['ja']!
                                 // TODO: 文字の端が等幅フォントじゃないのでなにか考える
-                                : '　' * message.text['ja'].length),
+                                : '　' * message.text['ja']!.length),
                         basicStyle:
                             Theme.of(context).primaryTextTheme.bodyText2,
                       )),
@@ -274,7 +274,7 @@ class PhraseExampleCard extends StatelessWidget {
           (i, message) => _createMessageView(
             context: context,
             onPressed:
-                isTest ? null : () => vp.playMessages(messages: [message]),
+                isTest ? () {} : () => vp.playMessages(messages: [message]),
             message: message,
             index: i,
             primary: i.isOdd,

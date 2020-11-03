@@ -10,11 +10,11 @@ part 'user_activity.g.dart';
 @CustomDateTimeConverter()
 class UserActivity {
   UserActivity({
-    @required this.content,
-    @required this.date,
+    required this.content,
+    required this.date,
   });
 
-  factory UserActivity.fromJson(Map<dynamic, dynamic> json) =>
+  factory UserActivity.fromJson(Map<String, dynamic> json) =>
       _$UserActivityFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserActivityToJson(this);

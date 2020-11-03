@@ -18,14 +18,14 @@ class AnythingSearchPage extends StatefulWidget {
 }
 
 class _AnythingSearchPageState extends State<AnythingSearchPage> {
-  String _word;
-  List<Phrase> _phrases;
+  late String _word;
+  late List<Phrase> _phrases;
 
   Future<Iterable<Phrase>> _searchPhrases(String word) async {
     final r = RegExp(word, caseSensitive: false);
     final future = Future.microtask(() => _phrases.where((phrase) {
           if (_word.isNotEmpty) {
-            return r.hasMatch(phrase.title['en']);
+            return r.hasMatch(phrase.title['en']!);
           } else {
             return false;
           }

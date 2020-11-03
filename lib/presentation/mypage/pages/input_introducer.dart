@@ -13,8 +13,8 @@ class InputIntroducerPage extends StatefulWidget {
 }
 
 class _InputIntroducerPageState extends State<InputIntroducerPage> {
-  String _userId;
-  bool _isLoading;
+  late String _userId;
+  late bool _isLoading;
 
   Future _showUserNotFoundDialog() async {
     await showDialog(

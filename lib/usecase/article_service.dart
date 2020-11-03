@@ -8,12 +8,12 @@ class ArticleService {
   final ArticleRepository _articlePersistence;
 
   const ArticleService({
-    @required ArticleRepository articlePersistence,
+    required ArticleRepository articlePersistence,
   }) : _articlePersistence = articlePersistence;
 
   Future<List<ArticleDigest>> findByCategory({
-    @required Client client,
-    @required String id,
+    required Client client,
+    required String id,
   }) {
     return _articlePersistence.findByCategory(client, id);
   }

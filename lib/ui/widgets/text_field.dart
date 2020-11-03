@@ -3,8 +3,8 @@
 import 'package:flutter/material.dart';
 
 Widget wrTextField({
-  @required Function(String) onChanged,
-  @required String hintText,
+  required Function(String) onChanged,
+  required String hintText,
 }) {
   return TextField(
     onChanged: onChanged,

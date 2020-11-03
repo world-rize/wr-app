@@ -26,12 +26,12 @@ class RootView extends StatefulWidget {
 
 /// [RootView] state
 class _RootViewState extends State<RootView>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin<RootView> {
   /// tab index
-  int _index;
+  late int _index;
 
   /// navbar controller
-  PageController _pageController;
+  late PageController _pageController;
 
   /// 自動でサインイン
   Future<void> _autoSignIn(BuildContext context) async {

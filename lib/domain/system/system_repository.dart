@@ -3,23 +3,31 @@
 import 'package:wr_app/domain/system/model/app_info.dart';
 
 abstract class SystemRepository {
-  Future<void> notify({String title, String body, String payload});
+  Future<void> notify({
+    required String title,
+    required String body,
+    required String payload,
+  });
 
   // テーマ: システムに従う
   bool getFollowSystemTheme();
-  void setFollowSystemTheme({bool value});
+
+  void setFollowSystemTheme({required bool value});
 
   // テーマ: ダークモード
   bool getDarkMode();
-  void setSetDarkMode({bool value});
+
+  void setSetDarkMode({required bool value});
 
   // 初回起動か
   bool getFirstLaunch();
-  void setFirstLaunch({bool value});
+
+  void setFirstLaunch({required bool value});
 
   // アンケートに答えたか
   bool getQuestionnaireAnswered();
-  void setQuestionnaireAnswered({bool value});
+
+  void setQuestionnaireAnswered({required bool value});
 
   Future<AppInfo> getAppInfo();
 }

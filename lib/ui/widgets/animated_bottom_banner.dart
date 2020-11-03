@@ -8,9 +8,9 @@ class AnimatedBottomBanner extends StatefulWidget {
 }
 
 class _AnimatedBottomBannerState extends State<AnimatedBottomBanner>
-    with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation<Offset> _position;
+    with SingleTickerProviderStateMixin<AnimatedBottomBanner> {
+  late AnimationController _animationController;
+  late Animation<Offset> _position;
 
   @override
   void initState() {

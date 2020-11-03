@@ -97,7 +97,7 @@ class _PasswordFormPageState extends State<PasswordFormPage> {
           text: I.of(context).changeButtonText,
           color: Colors.blueAccent,
           onTap: !_isValid()
-              ? null
+              ? () {}
               : () {
                   if (_formKey.currentState.validate()) {
                     _formKey.currentState.save();

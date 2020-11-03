@@ -18,8 +18,8 @@ import 'package:wr_app/util/toast.dart';
 /// ノートのフレーズを表示するテーブル
 class NoteTable extends StatefulWidget {
   NoteTable({
-    @required this.note,
-    @required this.onDeleted,
+    required this.note,
+    required this.onDeleted,
   });
 
   Note note;
@@ -30,7 +30,7 @@ class NoteTable extends StatefulWidget {
 }
 
 class _NoteTableState extends State<NoteTable> {
-  bool _isLoading;
+  late bool _isLoading;
 
   @override
   void initState() {
@@ -63,7 +63,7 @@ class _NoteTableState extends State<NoteTable> {
                     _isLoading = true;
                   });
                   await nn.deleteNote(noteId: widget.note.id);
-                  nn.nowSelectedNoteId = null;
+                  nn.nowSelectedNoteId = 'dafault';
 
                   Navigator.pop(context);
 
@@ -84,9 +84,9 @@ class _NoteTableState extends State<NoteTable> {
   }
 
   void _showAchievePhraseConfirmDialog({
-    @required Widget message,
-    @required Function onAchieve,
-    @required Function onCancel,
+    required Widget message,
+    required Function onAchieve,
+    required Function onCancel,
   }) {
     showDialog(
       context: context,
@@ -206,7 +206,7 @@ class _NoteTableState extends State<NoteTable> {
     );
 
     TableRow _createPhraseRow({
-      @required NotePhrase phrase,
+      required NotePhrase phrase,
     }) {
       final nn = Provider.of<NoteNotifier>(context);
 

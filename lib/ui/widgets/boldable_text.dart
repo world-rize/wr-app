@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 /// 例 "abc(def)g" -> "abc<strong>def</strong>g"
 class BoldableText extends StatelessWidget {
   BoldableText({
-    @required this.text,
-    @required this.basicStyle,
+    required this.text,
+    required this.basicStyle,
     this.hide = false,
   });
 

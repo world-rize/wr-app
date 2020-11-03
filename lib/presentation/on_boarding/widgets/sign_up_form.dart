@@ -13,13 +13,14 @@ import 'package:wr_app/util/extensions.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({
-    @required this.onSignUpWithEmailAndPassword,
-    @required this.onSignUpWithApple,
-    @required this.onSignUpWithGoogle,
+    required this.onSignUpWithEmailAndPassword,
+    required this.onSignUpWithApple,
+    required this.onSignUpWithGoogle,
   });
 
   // email, password, name
   final Function(String, String, String) onSignUpWithEmailAndPassword;
+
   // name
   final Function(String) onSignUpWithGoogle;
   final Function(String) onSignUpWithApple;
@@ -30,13 +31,13 @@ class SignUpForm extends StatefulWidget {
 
 class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
-  bool _agree;
-  bool _showPassword;
-  bool _showConfirmationPassword;
-  String _name;
-  String _email;
-  String _password;
-  String _confirmationPassword;
+  late bool _agree;
+  late bool _showPassword;
+  late bool _showConfirmationPassword;
+  late String _name;
+  late String _email;
+  late String _password;
+  late String _confirmationPassword;
 
   @override
   void initState() {
@@ -224,7 +225,7 @@ class _SignUpFormState extends State<SignUpForm> {
       text: 'Sign up',
       color: splashColor,
       onTap: !_isValid()
-          ? null
+          ? () {}
           : () {
               if (!_formKey.currentState.validate()) {
                 return;

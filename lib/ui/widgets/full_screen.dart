@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 
 class FullScreen extends StatelessWidget {
-  const FullScreen({@required this.child});
+  const FullScreen({required this.child});
 
   final Widget child;
 

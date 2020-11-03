@@ -10,11 +10,11 @@ part 'user_statistics.g.dart';
 @JsonSerializable(explicitToJson: true, anyMap: true)
 class UserStatistics {
   UserStatistics({
-    @required this.testResults,
-    @required this.points,
-    @required this.testLimitCount,
-    @required this.lastLogin,
-    @required this.isIntroducedFriend,
+    required this.testResults,
+    required this.points,
+    required this.testLimitCount,
+    required this.lastLogin,
+    required this.isIntroducedFriend,
   });
 
   factory UserStatistics.dummy() {
@@ -27,7 +27,7 @@ class UserStatistics {
     );
   }
 
-  factory UserStatistics.fromJson(Map<dynamic, dynamic> json) =>
+  factory UserStatistics.fromJson(Map<String, dynamic> json) =>
       _$UserStatisticsFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserStatisticsToJson(this);

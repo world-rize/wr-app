@@ -108,8 +108,12 @@ class AuthPersistence implements AuthRepository {
           code: 'ERROR_ABORTED_BY_USER',
           message: 'Sign in aborted by user',
         );
+      default:
+        throw PlatformException(
+          code: 'ERROR_UNHANDLED_VALUE',
+          message: '${StackTrace.current}',
+        );
     }
-    return null;
   }
 
   @override

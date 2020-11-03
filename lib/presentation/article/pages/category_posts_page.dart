@@ -12,7 +12,7 @@ import '../widgets/article_overview.dart';
 /// Column > index > category_posts
 class CategoryPosts extends StatelessWidget {
   CategoryPosts({
-    @required this.category,
+    required this.category,
   });
 
   final ArticleCategory category;

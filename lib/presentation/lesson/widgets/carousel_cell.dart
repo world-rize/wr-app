@@ -7,15 +7,15 @@ import 'package:wr_app/ui/widgets/locked_view.dart';
 /// lesson select crousel cell
 class CarouselCell extends StatelessWidget {
   const CarouselCell({
-    @required this.lesson,
-    @required this.index,
-    @required this.onTap,
+    required this.lesson,
+    required this.index,
+    required this.onTap,
     this.locked = false,
   });
 
   final Lesson lesson;
   final int index;
-  final Function onTap;
+  final void Function() onTap;
   final bool locked;
 
   @override
@@ -57,7 +57,7 @@ class CarouselCell extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ...lesson.title['ja'].split(',').map(
+                        ...lesson.title['ja']!.split(',').map(
                               (title) => Center(
                                 child: Text(
                                   title,

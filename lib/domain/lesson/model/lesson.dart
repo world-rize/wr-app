@@ -13,13 +13,13 @@ part 'lesson.g.dart';
 @JsonSerializable()
 class Lesson {
   Lesson({
-    @required this.id,
-    @required this.title,
-    @required this.phrases,
-    @required this.assets,
+    required this.id,
+    required this.title,
+    required this.phrases,
+    required this.assets,
   });
 
-  factory Lesson.fromJson(Map<dynamic, dynamic> json) => _$LessonFromJson(json);
+  factory Lesson.fromJson(Map<String, dynamic> json) => _$LessonFromJson(json);
 
   Map<String, dynamic> toJson() => _$LessonToJson(this);
 

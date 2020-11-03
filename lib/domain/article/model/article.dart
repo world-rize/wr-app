@@ -11,16 +11,16 @@ part 'article.g.dart';
 @JsonSerializable()
 class ArticleDigest extends Entry<ArticleDigestFields> {
   ArticleDigest({
-    @required SystemFields sys,
-    @required ArticleDigestFields fields,
+    required SystemFields sys,
+    required ArticleDigestFields fields,
   }) : super(sys: sys, fields: fields);
 
   /// ダミーを作成
   ArticleDigest.dummy({
-    @required String title,
-    @required String category,
-    @required String url,
-    @required String summary,
+    required String title,
+    required String category,
+    required String url,
+    required String summary,
   }) : super(
           sys: SystemFields(),
           fields: ArticleDigestFields(
@@ -37,7 +37,7 @@ class ArticleDigest extends Entry<ArticleDigestFields> {
           ),
         );
 
-  static ArticleDigest fromJson(Map<dynamic, dynamic> json) =>
+  static ArticleDigest fromJson(Map<String, dynamic> json) =>
       _$ArticleDigestFromJson(json);
 
   Map<String, dynamic> toJson() => _$ArticleDigestToJson(this);
@@ -47,15 +47,15 @@ class ArticleDigest extends Entry<ArticleDigestFields> {
 @JsonSerializable()
 class ArticleDigestFields extends Equatable {
   const ArticleDigestFields({
-    @required this.title,
-    @required this.url,
-    @required this.category,
-    @required this.tags,
-    @required this.thumbnail,
-    @required this.summary,
+    required this.title,
+    required this.url,
+    required this.category,
+    required this.tags,
+    required this.thumbnail,
+    required this.summary,
   }) : super();
 
-  factory ArticleDigestFields.fromJson(Map<dynamic, dynamic> json) =>
+  factory ArticleDigestFields.fromJson(Map<String, dynamic> json) =>
       _$ArticleDigestFieldsFromJson(json);
 
   /// タイトル

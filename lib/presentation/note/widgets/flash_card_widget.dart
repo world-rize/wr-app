@@ -10,9 +10,9 @@ import 'package:wr_app/ui/widgets/shadowed_container.dart';
 /// NotePhrase を表示するウィジェット
 class FlashCard extends StatelessWidget {
   FlashCard({
-    @required this.noteId,
-    @required this.notePhrases,
-    @required this.onCardTap,
+    required this.noteId,
+    required this.notePhrases,
+    required this.onCardTap,
   });
 
   final String noteId;
