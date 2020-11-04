@@ -26,6 +26,7 @@ jobs:
           echo "${ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON}" > android/fastlane/google-play-api-key.json
           echo "${ANDROID_KEYSTORE_RELEASE_PROPERTIES}" > android/keystore_release.properties
           echo "${ANDROID_KEYSTORE_PROPERTIES}" > android/keystore.properties
+          echo "${SECRETS_ENV}" > secrets/.env
         env:
           ANDROID_APP_RELEASE_JKS_BASE64: ${{ secrets.ANDROID_APP_RELEASE_JKS_BASE64 }}
           ANDROID_APP_DEBUG_KEYSTORE_BASE64: ${{ secrets.ANDROID_APP_DEBUG_KEYSTORE_BASE64 }}
@@ -33,6 +34,7 @@ jobs:
           ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON: ${{ secrets.ANDROID_FASTLANE_GOOGLE_PLAY_API_KEY_JSON }}
           ANDROID_KEYSTORE_RELEASE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_RELEASE_PROPERTIES }}
           ANDROID_KEYSTORE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
+          SECRETS_ENV: ${{ secrets.SECRETS_ENV }}
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
