@@ -13,10 +13,12 @@ jobs:
           fetch-depth: 0 # 全コミット持ってくる
           submodules: true
           token: ${{ secrets.ASSETS_REPO_PAT }} # 別のprivateリポジトリ用
+
       - name: Setup Java
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
+
       - name: Setup Android keys
         run: |
           echo -n "${ANDROID_APP_RELEASE_JKS_BASE64}" | base64 --decode > android/app/release.jks
@@ -35,10 +37,15 @@ jobs:
           ANDROID_KEYSTORE_RELEASE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_RELEASE_PROPERTIES }}
           ANDROID_KEYSTORE_PROPERTIES: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
           SECRETS_ENV: ${{ secrets.SECRETS_ENV }}
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v1
         with:
           flutter-version: 1.22.3
+
+      - run: flutter pub get
+      - run: flutter test
+
       - name: Run Fastlane
         uses: maierj/fastlane-action@v1.4.0
         with:

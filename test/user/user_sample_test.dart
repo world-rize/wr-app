@@ -8,7 +8,7 @@ void main() {
     test('Init', () {
       final user = User.dummy();
 
-      expect(user.name, 'テスト');
+      expect(user.name, 'dummy');
     });
   });
 }
