@@ -39,18 +39,9 @@ class UserNotifier with ChangeNotifier {
 
   /// ユーザーデータを取得
   Future<void> fetchUser() async {
-    _user = await _userService.readUser();
+    _user = await _userService.readUser(uuid: _user.uuid);
     signedIn = true;
     notifyListeners();
-  }
-
-  /// update age
-  Future<void> setAge({@required String age}) async {
-    _user = await _userService.updateAge(user: _user, age: age);
-    notifyListeners();
-
-    InAppLogger.debug('setAge $age');
-    NotifyToast.success('ageを変更しました');
   }
 
   /// update name
@@ -60,7 +51,7 @@ class UserNotifier with ChangeNotifier {
     notifyListeners();
 
     InAppLogger.debug('setName $name');
-    NotifyToast.success('ageを変更しました');
+    NotifyToast.success('名前を変更しました');
   }
 
   /// フレーズをお気に入りに登録します
@@ -74,7 +65,7 @@ class UserNotifier with ChangeNotifier {
     if (favorite) {
       // false -> true
       _user = await _userService.favorite(
-        user: _user,
+        uuid: _user.uuid,
         listId: defaultFavoriteList.id,
         phraseId: phraseId,
         favorite: favorite,
@@ -82,7 +73,7 @@ class UserNotifier with ChangeNotifier {
       await Future.delayed(const Duration(milliseconds: 1000));
     } else {
       _user = await _userService.favorite(
-        user: _user,
+        uuid: _user.uuid,
         listId: defaultFavoriteList.id,
         phraseId: phraseId,
         favorite: favorite,
@@ -105,7 +96,7 @@ class UserNotifier with ChangeNotifier {
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int points}) async {
-    _user = await _userService.getPoints(user: _user, points: points);
+    _user = await _userService.getPoints(uuid: _user.uuid, points: points);
     notifyListeners();
 
     await sendEvent(
@@ -117,7 +108,7 @@ class UserNotifier with ChangeNotifier {
 
   /// テストを受ける
   Future<void> doTest({@required String sectionId}) async {
-    _user = await _userService.doTest(user: _user, sectionId: sectionId);
+    _user = await _userService.doTest(uuid: _user.uuid, sectionId: sectionId);
     notifyListeners();
 
     await sendEvent(
@@ -132,7 +123,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> sendTestScore(
       {@required String sectionId, @required int score}) async {
     _user = await _userService.sendTestResult(
-        user: _user, sectionId: sectionId, score: score);
+        uuid: _user.uuid, sectionId: sectionId, score: score);
     notifyListeners();
 
     InAppLogger.info('sendTestScore');
@@ -152,20 +143,22 @@ class UserNotifier with ChangeNotifier {
 
   /// create favorite list
   Future<void> createFavoriteList({
-    @required String name,
+    @required String title,
   }) async {
-    _user = await _userService.createFavoriteList(name: name);
+    _user =
+        await _userService.createFavoriteList(uuid: _user.uuid, title: title);
 
     notifyListeners();
 
-    InAppLogger.info('createFavoriteList $name');
+    InAppLogger.info('createFavoriteList $title');
   }
 
   /// delete favorite list
   Future<void> deleteFavoriteList({
+    @required String uuid,
     @required String listId,
   }) async {
-    _user = await _userService.deleteFavoriteList(listId: listId);
+    _user = await _userService.deleteFavoriteList(uuid: uuid, listId: listId);
 
     notifyListeners();
 
@@ -185,7 +178,8 @@ class UserNotifier with ChangeNotifier {
   Future<void> createPhrasesList({
     @required String title,
   }) async {
-    _user = await _userService.createFavoriteList(name: title);
+    _user =
+        await _userService.createFavoriteList(uuid: _user.uuid, title: title);
 
     notifyListeners();
 
@@ -238,7 +232,7 @@ class UserNotifier with ChangeNotifier {
 
   /// check test 30days streaks
   Future<bool> checkTestStreaks() async {
-    return _userService.checkTestStreaks();
+    return _userService.checkTestStreaks(uuid: _user.uuid);
   }
 
   /// search user from user id
@@ -246,9 +240,12 @@ class UserNotifier with ChangeNotifier {
     return _userService.searchUserFromUserId(userId: userId);
   }
 
-  Future<void> introduceFriend({@required String introduceeId}) async {
-    await _userService.introduceFriend(introduceeUserId: introduceeId);
-    _user = await _userService.readUser();
+  Future<void> introduceFriend({
+    @required String introduceeId,
+  }) async {
+    await _userService.introduceFriend(
+        uuid: _user.uuid, introduceeUserId: introduceeId);
+    _user = await _userService.readUser(uuid: _user.uuid);
     notifyListeners();
   }
 }

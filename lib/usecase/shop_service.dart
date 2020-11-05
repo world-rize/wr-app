@@ -48,7 +48,7 @@ class ShopService {
     user.items.putIfAbsent(item.id, () => 0);
     user.items[item.id] += 1;
     user.statistics.points -= item.price;
-    await _userPersistence.updateUser(user);
+    await _userPersistence.updateUser(user: user);
 
     return user;
   }

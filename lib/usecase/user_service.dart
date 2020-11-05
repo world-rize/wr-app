@@ -4,9 +4,7 @@ import 'package:data_classes/data_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
-import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
-import 'package:wr_app/util/logger.dart';
 
 // TODO: Error handling
 class UserService {
@@ -17,24 +15,25 @@ class UserService {
   final UserRepository _userPersistence;
 
   /// ユーザーデータを習得します
-  Future<User> readUser() async {
-    return _userPersistence.readUser();
+  Future<User> readUser({
+    @required String uuid,
+  }) async {
+    return _userPersistence.readUser(uuid: uuid);
   }
 
   /// フレーズをお気に入りに登録します
   Future<User> favorite({
-    @required User user,
+    @required String uuid,
     @required String listId,
     @required String phraseId,
     @required bool favorite,
   }) async {
-    InAppLogger.debug('favorite $favorite');
-    final req = FavoritePhraseRequest(
+    return _userPersistence.favoritePhrase(
+      uuid: uuid,
       listId: listId,
       phraseId: phraseId,
       favorite: favorite,
     );
-    return _userPersistence.favoritePhrase(req);
   }
 
   /// 受講可能回数をリセット
@@ -42,23 +41,15 @@ class UserService {
     @required User user,
   }) async {
     user.statistics.testLimitCount = 3;
-    return _userPersistence.updateUser(user);
+    return _userPersistence.updateUser(user: user);
   }
 
   /// ポイントを習得します
   Future<User> getPoints({
-    @required User user,
+    @required String uuid,
     @required int points,
   }) async {
-    final req = GetPointRequest(
-      points: points,
-    );
-    return _userPersistence.getPoint(req);
-  }
-
-  Future<User> updateAge({@required User user, @required String age}) async {
-    user.attributes.age = age;
-    return _userPersistence.updateUser(user);
+    return _userPersistence.getPoint(uuid: uuid, points: points);
   }
 
   /// upgrade to Pro or downgrade
@@ -67,63 +58,70 @@ class UserService {
     @required Membership membership,
   }) {
     user.attributes.membership = membership;
-    return _userPersistence.updateUser(user);
+    return _userPersistence.updateUser(user: user);
   }
 
   /// do test
   Future<User> doTest({
-    @required User user,
+    @required String uuid,
     @required String sectionId,
   }) {
-    return _userPersistence.doTest(DoTestRequest(sectionId: sectionId));
+    return _userPersistence.doTest(
+      uuid: uuid,
+      sectionId: sectionId,
+    );
   }
 
   /// send result
   Future<User> sendTestResult({
-    @required User user,
+    @required String uuid,
     @required String sectionId,
     @required int score,
   }) {
     return _userPersistence.sendTestResult(
-        SendTestResultRequest(sectionId: sectionId, score: score));
+      uuid: uuid,
+      sectionId: sectionId,
+      score: score,
+    );
   }
 
   /// update user
   Future<User> updateUser({@required User user}) {
-    return _userPersistence.updateUser(user);
+    return _userPersistence.updateUser(user: user);
   }
 
   /// create favorite list
   Future<User> createFavoriteList({
-    @required String name,
+    @required String uuid,
+    @required String title,
   }) {
-    final req = CreateFavoriteListRequest(name: name);
-    return _userPersistence.createFavoriteList(req);
+    return _userPersistence.createFavoriteList(uuid: uuid, title: title);
   }
 
   /// delete favorite list
   Future<User> deleteFavoriteList({
+    @required String uuid,
     @required String listId,
   }) async {
-    final req = DeleteFavoriteListRequest(listId: listId);
-    return _userPersistence.deleteFavoriteList(req);
+    return _userPersistence.deleteFavoriteList(uuid: uuid, listId: listId);
   }
 
   /// search user from User ID
   Future<User> searchUserFromUserId({@required String userId}) {
-    final req = FindUserByUserIdRequest(userId: userId);
-    return _userPersistence.findUserByUserId(req);
+    return _userPersistence.findUserByUserId(uuid: userId);
   }
 
   /// check test streaks
-  Future<bool> checkTestStreaks() {
-    final req = CheckTestStreaksRequest();
-    return _userPersistence.checkTestStreaks(req);
+  Future<bool> checkTestStreaks({@required String uuid}) {
+    return _userPersistence.checkTestStreaks(uuid: uuid);
   }
 
   /// 友達紹介をする
-  Future<void> introduceFriend({@required String introduceeUserId}) {
-    final req = IntroduceFriendRequest(introduceeUserId: introduceeUserId);
-    return _userPersistence.introduceFriend(req);
+  Future<void> introduceFriend({
+    @required String uuid,
+    @required String introduceeUserId,
+  }) {
+    return _userPersistence.introduceFriend(
+        uuid: uuid, introduceeUserId: introduceeUserId);
   }
 }

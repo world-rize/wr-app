@@ -217,7 +217,7 @@ class PhraseExampleCard extends StatelessWidget {
         color: Colors.redAccent,
       ),
       onTap: (isLiked) async {
-        un.favoritePhrase(
+        await un.favoritePhrase(
           phraseId: phrase.id,
           favorite: !isLiked,
         );

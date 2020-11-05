@@ -1,17 +1,23 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:flutter/foundation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_api_dto.dart';
 import 'package:wr_app/domain/note/note_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/domain/user/user_repository.dart';
 
 class NotePersistenceMock implements NoteRepository {
+  const NotePersistenceMock({@required this.userRepository});
+
+  final UserRepository userRepository;
+
   /// get current user
   User _readUserMock() {
     final notifier = UserNotifier(
       userService: UserService(
-        userPersistence: UserPersistenceMock(),
+        userPersistence: userRepository,
       ),
     );
     return notifier.user;

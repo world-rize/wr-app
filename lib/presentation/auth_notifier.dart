@@ -59,7 +59,8 @@ class AuthNotifier with ChangeNotifier {
 
   /// メールアドレスとパスワードでログイン
   Future<void> signInWithEmailAndPassword(String email, String password) async {
-    _user = await _authService.signInWithEmailAndPassword(email, password);
+    _user = await _authService.signInWithEmailAndPassword(
+        email: email, password: password);
     InAppLogger.info('✔ signInWithEmailAndPassword');
     notifyListeners();
   }

@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/domain/user/model/user_api_dto.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -24,17 +23,11 @@ class AuthService {
     @required String name,
     @required String age,
   }) async {
-    final req = CreateUserRequest(
-      name: name,
-      age: age,
-      email: email,
-    );
-
     InAppLogger.debug('_userPersistence.signUpWithEmailAndPassword()');
     await _authPersistence.signUpWithEmailAndPassword(email, password);
 
     InAppLogger.debug('_userPersistence.createUser()');
-    final user = await _userPersistence.createUser(req);
+    final user = await _userPersistence.createUser(name: name, email: email);
 
     InAppLogger.debug('_userPersistence.login()');
     await _authPersistence.login();
@@ -52,14 +45,12 @@ class AuthService {
     InAppLogger.debug('email: ${fbUser.email}');
     final userName = name ?? fbUser.displayName ?? '';
     assert(userName.isNotEmpty);
-    final req = CreateUserRequest(
-      name: userName,
-      email: fbUser.email,
-      age: '0',
-    );
 
     InAppLogger.debug('_userPersistence.createUser()');
-    final user = _userPersistence.createUser(req);
+    final user = _userPersistence.createUser(
+      name: name,
+      email: userName,
+    );
 
     InAppLogger.debug('_authPersistence.login()');
     await _authPersistence.login();
@@ -77,14 +68,10 @@ class AuthService {
 
     final userName = name ?? fbUser.displayName ?? '';
     assert(userName.isNotEmpty);
-    final req = CreateUserRequest(
-      name: name,
-      email: fbUser.email ?? '',
-      age: '0',
-    );
 
     InAppLogger.debug('_userPersistence.createUser()');
-    final user = await _userPersistence.createUser(req);
+    final user = await _userPersistence.createUser(
+        name: name, email: fbUser.email ?? '');
 
     InAppLogger.debug('_authPersistence.login()');
     await _authPersistence.login();
@@ -93,12 +80,14 @@ class AuthService {
   }
 
   /// sign in with email & password
-  Future<User> signInWithEmailAndPassword(String email, String password) async {
+  Future<User> signInWithEmailAndPassword(
+      {@required String email, @required String password}) async {
     InAppLogger.debug('_userPersistence.signInWithEmailAndPassword()');
-    await _authPersistence.signInWithEmailAndPassword(email, password);
+    final res =
+        await _authPersistence.signInWithEmailAndPassword(email, password);
 
     InAppLogger.debug('_userPersistence.readUser()');
-    final user = await _userPersistence.readUser();
+    final user = await _userPersistence.readUser(uuid: res.uid);
 
     InAppLogger.debug('_authPersistence.login()');
     await _authPersistence.login();
@@ -109,10 +98,10 @@ class AuthService {
   /// sign in with google
   Future<User> signInWithGoogle() async {
     InAppLogger.debug('_authPersistence.signInWithGoogleSignIn()');
-    await _authPersistence.signInWithGoogleSignIn();
+    final res = await _authPersistence.signInWithGoogleSignIn();
 
     InAppLogger.debug('_userPersistence.readUser()');
-    final user = await _userPersistence.readUser();
+    final user = await _userPersistence.readUser(uuid: res.uid);
 
     InAppLogger.debug('_authPersistence.login()');
     await _authPersistence.login();
@@ -123,10 +112,10 @@ class AuthService {
   /// sign in with apple
   Future<User> signInWithApple() async {
     InAppLogger.debug('_authPersistence.signInWithSignInWithApple()');
-    await _authPersistence.signInWithSignInWithApple();
+    final res = await _authPersistence.signInWithSignInWithApple();
 
     InAppLogger.debug('_userPersistence.readUser()');
-    final user = await _userPersistence.readUser();
+    final user = await _userPersistence.readUser(uuid: res.uid);
 
     InAppLogger.debug('_authPersistence.login()');
     await _authPersistence.login();
@@ -163,7 +152,7 @@ class AuthService {
     @required String newEmail,
   }) async {
     user.attributes.email = newEmail;
-    await _userPersistence.updateUser(user);
+    await _userPersistence.updateUser(user: user);
     await _authPersistence.updateEmail(newEmail);
 
     return user;

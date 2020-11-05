@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contentful/client.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -141,14 +142,16 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     print('debug mode? $isInDebugMode');
 
     // repos
-    final userPersistence = useMock ? UserPersistenceMock() : UserPersistence();
+    final userPersistence = UserPersistence(store: FirebaseFirestore.instance);
     final articlePersistence =
         useMock ? ArticlePersistenceMock() : ArticlePersistence();
     final lessonPersistence =
         useMock ? LessonPersistenceMock() : LessonPersistence();
     final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
     final systemPersistence = SystemPersistence();
-    final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
+    final notePersistence = useMock
+        ? NotePersistenceMock(userRepository: userPersistence)
+        : NotePersistence();
     final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
 
     // services

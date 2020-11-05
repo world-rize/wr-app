@@ -1,32 +1,86 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:flutter/foundation.dart';
+import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
+import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/domain/user/model/user_api_dto.dart';
 
 abstract class UserRepository {
-  Future<User> readUser();
+  User generateInitialUser(String uuid);
 
-  Future<User> createUser(CreateUserRequest req);
+  FavoritePhraseList generateFavoriteList({
+    @required String listId,
+    @required String title,
+    bool isDefault = false,
+  });
 
-  Future<User> updateUser(User user);
+  Note generateNote({
+    @required String noteId,
+    @required String title,
+    bool isDefault,
+    bool isAchieved,
+  });
 
-  Future<void> deleteUser();
+  Future<User> readUser({
+    @required String uuid,
+  });
 
-  Future<User> favoritePhrase(FavoritePhraseRequest req);
+  Future<User> createUser({
+    @required String name,
+    @required String email,
+  });
 
-  Future<User> getPoint(GetPointRequest req);
+  Future<User> updateUser({
+    @required User user,
+  });
 
-  Future<User> doTest(DoTestRequest req);
+  Future<void> deleteUser({
+    @required String uuid,
+  });
 
-  Future<bool> checkTestStreaks(CheckTestStreaksRequest req);
+  Future<User> favoritePhrase({
+    @required String uuid,
+    @required String phraseId,
+    @required String listId,
+    @required bool favorite,
+  });
 
-  Future<User> sendTestResult(SendTestResultRequest req);
+  Future<User> getPoint({
+    @required String uuid,
+    @required int points,
+  });
 
-  Future<User> createFavoriteList(CreateFavoriteListRequest req);
+  Future<User> doTest({
+    @required String uuid,
+    @required String sectionId,
+  });
 
-  Future<User> deleteFavoriteList(DeleteFavoriteListRequest req);
+  Future<bool> checkTestStreaks({
+    @required String uuid,
+  });
 
-  Future<User> findUserByUserId(FindUserByUserIdRequest req);
+  Future<User> sendTestResult({
+    @required String uuid,
+    @required String sectionId,
+    @required int score,
+  });
 
-  Future<void> introduceFriend(IntroduceFriendRequest req);
+  Future<User> createFavoriteList({
+    @required String uuid,
+    @required String title,
+  });
+
+  Future<User> deleteFavoriteList({
+    @required String uuid,
+    @required String listId,
+  });
+
+  Future<User> findUserByUserId({
+    @required String uuid,
+  });
+
+  Future<void> introduceFriend({
+    @required String uuid,
+    @required String introduceeUserId,
+  });
 }
