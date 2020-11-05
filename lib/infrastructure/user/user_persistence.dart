@@ -115,8 +115,8 @@ class UserPersistence implements UserRepository {
   Note generateNote({
     @required String noteId,
     @required String title,
-    bool isDefault,
-    bool isAchieved,
+    bool isDefault = false,
+    bool isAchieved = false,
   }) {
     return Note(
         id: noteId,
@@ -130,8 +130,10 @@ class UserPersistence implements UserRepository {
   }
 
   @override
-  Future introduceFriend(
-      {@required String uuid, @required String introduceeUserId}) {
+  Future introduceFriend({
+    @required String uuid,
+    @required String introduceeUserId,
+  }) {
     return callFunction('introduceFriend', {
       'introduceeUserId': introduceeUserId,
     });
@@ -256,18 +258,24 @@ class UserPersistence implements UserRepository {
   }
 
   @override
-  Future deleteUser({@required String uuid}) async {
+  Future deleteUser({
+    @required String uuid,
+  }) async {
     return users.doc(uuid).delete();
   }
 
   @override
-  Future<User> updateUser({@required User user}) {
+  Future<User> updateUser({
+    @required User user,
+  }) {
     return setUser(user);
   }
 
   @override
-  Future<User> createUser(
-      {@required String name, @required String email}) async {
+  Future<User> createUser({
+    @required String name,
+    @required String email,
+  }) async {
     final user = generateInitialUser(Uuid().v4())
       ..name = name
       ..attributes.email = email;
@@ -276,7 +284,9 @@ class UserPersistence implements UserRepository {
   }
 
   @override
-  Future<User> readUser({@required String uuid}) {
+  Future<User> readUser({
+    @required String uuid,
+  }) {
     return getUser(uuid);
   }
 }
