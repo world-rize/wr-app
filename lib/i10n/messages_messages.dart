@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "answerQuestionnaire" : MessageLookupByLibrary.simpleMessage("アンケートに答える!"),
     "appVersion" : MessageLookupByLibrary.simpleMessage("App Version"),
     "articleNotFoundMessage" : MessageLookupByLibrary.simpleMessage("記事がありません"),
     "bottomNavAgency" : MessageLookupByLibrary.simpleMessage("Agency"),
@@ -122,10 +123,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "shopPagePurchase" : MessageLookupByLibrary.simpleMessage("購入"),
     "shopPageSuccess" : MessageLookupByLibrary.simpleMessage("交換が確定されました。2週間以内に登録されているメールアドレスにギフトコードを送信します"),
     "show30DaysChallengeAchievedDialogTitle" : MessageLookupByLibrary.simpleMessage("30 Days Challenge 達成"),
-    "showQuestionnaireDialogMessage" : MessageLookupByLibrary.simpleMessage("アンケートに答えてください"),
-    "showQuestionnaireDialogNg" : MessageLookupByLibrary.simpleMessage("後で"),
-    "showQuestionnaireDialogOk" : MessageLookupByLibrary.simpleMessage("答える"),
-    "showQuestionnaireDialogTitle" : MessageLookupByLibrary.simpleMessage("アンケートに答えてください"),
     "signInButton" : MessageLookupByLibrary.simpleMessage("ログイン"),
     "signInMessage" : MessageLookupByLibrary.simpleMessage("既にアカウントを持っている方はこちら"),
     "signInSuccessful" : MessageLookupByLibrary.simpleMessage("ログインしました"),

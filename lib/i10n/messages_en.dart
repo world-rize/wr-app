@@ -45,6 +45,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
+    "answerQuestionnaire" : MessageLookupByLibrary.simpleMessage("Answer the questionnaire!"),
     "appVersion" : MessageLookupByLibrary.simpleMessage("App Version"),
     "articleNotFoundMessage" : MessageLookupByLibrary.simpleMessage("No article exists"),
     "bottomNavAgency" : MessageLookupByLibrary.simpleMessage("Agency"),
@@ -122,10 +123,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "shopPagePurchase" : MessageLookupByLibrary.simpleMessage("Purchase"),
     "shopPageSuccess" : MessageLookupByLibrary.simpleMessage("The exchange has been confirmed. We will send the gift code to the registered email address within 2 weeks"),
     "show30DaysChallengeAchievedDialogTitle" : MessageLookupByLibrary.simpleMessage("Achieved 30 Days Challenge"),
-    "showQuestionnaireDialogMessage" : MessageLookupByLibrary.simpleMessage("Please answer the questionnaire"),
-    "showQuestionnaireDialogNg" : MessageLookupByLibrary.simpleMessage("Later"),
-    "showQuestionnaireDialogOk" : MessageLookupByLibrary.simpleMessage("Answer"),
-    "showQuestionnaireDialogTitle" : MessageLookupByLibrary.simpleMessage("Please answer the questionnaire"),
     "signInButton" : MessageLookupByLibrary.simpleMessage("Sign in"),
     "signInMessage" : MessageLookupByLibrary.simpleMessage("Click here if you already have an account"),
     "signInSuccessful" : MessageLookupByLibrary.simpleMessage("logged in successfully"),
