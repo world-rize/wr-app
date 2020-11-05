@@ -54,3 +54,6 @@ keystore*.properties
 android/fastlane/google-play-api-key.json
 
 .node-version
+
+ios/*.zip
+*.ipa

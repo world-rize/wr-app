@@ -37,6 +37,11 @@ target 'Runner' do
   use_frameworks!
   use_modular_headers!
 
+  # firebaseのビルドが早くなる
+    # Override Firebase SDK Version
+    pod 'FirebaseCore', :git => 'https://github.com/firebase/firebase-ios-sdk.git', :tag => 'CocoaPods-6.33.0'
+    pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '6.33.0'
+
   # Flutter Pod
 
   copied_flutter_dir = File.join(__dir__, 'Flutter')
@@ -77,10 +82,6 @@ target 'Runner' do
     File.symlink(path, symlink)
     pod name, :path => File.join(symlink, 'ios')
   end
-
-  # firebaseのビルドが早くなる
-  # Override Firebase SDK Version
-  pod 'FirebaseCore', :git => 'https://github.com/firebase/firebase-ios-sdk.git', :tag => 'CocoaPods-6.33.0'
 end
 
 # Prevent Cocoapods from embedding a second Flutter framework and causing an error with the new Xcode build system.
