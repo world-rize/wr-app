@@ -28,7 +28,7 @@ platform :android do
   end
 
   desc "Deploy alpha"
-  lane :beta do
+  lane :alpha do
     build_number = number_of_commits()
     Dir.chdir "../.." do
       sh("flutter", "packages", "get")
