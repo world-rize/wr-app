@@ -246,23 +246,8 @@
     "type": "text",
     "placeholders": {}
   },
-  "showQuestionnaireDialogTitle": "アンケートに答えてください",
-  "@showQuestionnaireDialogTitle": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "showQuestionnaireDialogMessage": "アンケートに答えてください",
-  "@showQuestionnaireDialogMessage": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "showQuestionnaireDialogOk": "答える",
-  "@showQuestionnaireDialogOk": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "showQuestionnaireDialogNg": "後で",
-  "@showQuestionnaireDialogNg": {
+  "answerQuestionnaire": "アンケートに答える!",
+  "@answerQuestionnaire": {
     "type": "text",
     "placeholders": {}
   },
