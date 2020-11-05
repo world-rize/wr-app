@@ -44,42 +44,6 @@ class _TestResultPageState extends State<TestResultPage> {
     );
   }
 
-  /// アンケートを出す
-  Future _showQuestionnaireDialog(BuildContext context) {
-    final systemNotifier = Provider.of<SystemNotifier>(context, listen: false);
-    final env = DotEnv().env;
-    final questionnaireUrl = env['QUESTIONNAIRE_URL'];
-
-    return showCupertinoDialog(
-      context: context,
-      builder: (_) => CupertinoAlertDialog(
-        title: Text(I.of(context).showQuestionnaireDialogTitle),
-        content: const Text('アンケートに答えてください'),
-        actions: <Widget>[
-          CupertinoButton(
-            child: Text(I.of(context).showQuestionnaireDialogOk),
-            onPressed: () async {
-              systemNotifier.setQuestionnaireAnswered(value: true);
-              if (await canLaunch(questionnaireUrl)) {
-                await launch(
-                  questionnaireUrl,
-                  forceSafariVC: false,
-                  forceWebView: false,
-                );
-              }
-            },
-          ),
-          CupertinoButton(
-            child: Text(I.of(context).showQuestionnaireDialogNg),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   /// 30days challenge 達成
   Future _show30DaysChallengeAchievedDialog(BuildContext context) {
     return showDialog(
@@ -100,12 +64,6 @@ class _TestResultPageState extends State<TestResultPage> {
 //    if (widget.stats.challengeAchieved) {
 //      await _show30DaysChallengeAchievedDialog(context);
 //    }
-
-    // 最後のテストでアンケート誘導
-    if (!sn.getQuestionnaireAnswered() &&
-        un.user.statistics.testLimitCount == 0) {
-      await _showQuestionnaireDialog(context);
-    }
   }
 
   @override
