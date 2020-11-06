@@ -106,7 +106,7 @@ void main() {
             ..attributes.email = 'c@d.com';
           await repo.updateUser(user: u);
         },
-        matcher: (b, a) => b.attributes.email == 'c@d.com',
+        matcher: (b, a) => a.attributes.email == 'c@d.com',
       );
 
       expect(diff, true);
