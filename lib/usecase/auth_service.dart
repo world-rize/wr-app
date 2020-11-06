@@ -24,7 +24,8 @@ class AuthService {
     @required String age,
   }) async {
     InAppLogger.debug('_userPersistence.signUpWithEmailAndPassword()');
-    await _authPersistence.signUpWithEmailAndPassword(email, password);
+    await _authPersistence.signUpWithEmailAndPassword(
+        email: email, password: password);
 
     InAppLogger.debug('_userPersistence.createUser()');
     final user = await _userPersistence.createUser(name: name, email: email);
@@ -83,8 +84,8 @@ class AuthService {
   Future<User> signInWithEmailAndPassword(
       {@required String email, @required String password}) async {
     InAppLogger.debug('_userPersistence.signInWithEmailAndPassword()');
-    final res =
-        await _authPersistence.signInWithEmailAndPassword(email, password);
+    final res = await _authPersistence.signInWithEmailAndPassword(
+        email: email, password: password);
 
     InAppLogger.debug('_userPersistence.readUser()');
     final user = await _userPersistence.readUser(uuid: res.uid);
@@ -143,7 +144,8 @@ class AuthService {
     @required String currentPassword,
     @required String newPassword,
   }) {
-    return _authPersistence.updatePassword(currentPassword, newPassword);
+    return _authPersistence.updatePassword(
+        currentPassword: currentPassword, newPassword: newPassword);
   }
 
   /// update email
@@ -153,13 +155,13 @@ class AuthService {
   }) async {
     user.attributes.email = newEmail;
     await _userPersistence.updateUser(user: user);
-    await _authPersistence.updateEmail(newEmail);
+    await _authPersistence.updateEmail(email: newEmail);
 
     return user;
   }
 
   /// パスワードリセットメールを送る
   Future<void> sendPasswordResetEmail(String email) {
-    return _authPersistence.sendPasswordResetEmail(email);
+    return _authPersistence.sendPasswordResetEmail(email: email);
   }
 }

@@ -1,27 +1,23 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wr_app/domain/auth/auth_repository.dart';
 import 'package:wr_app/util/cloud_functions.dart';
 
-/// ## firebase ログイン方法
-/// - email & password
-/// - google sign in
-/// - Sign in With Apple
-/// - mock(test)
-/// ## FirebaseUser -> User
 class AuthPersistence implements AuthRepository {
-  // TODO(some): anti pattern?
-  /// FireStore Auth
-  // NOTE: fbAuth = FirebaseAuth.instance だと止まってしまう
-  FirebaseAuth get fbAuth => FirebaseAuth.instance;
+  const AuthPersistence({
+    @required this.auth,
+    @required this.googleSignIn,
+  });
+
+  final FirebaseAuth auth;
+  final GoogleSignIn googleSignIn;
 
   /// get Google AuthCredential
-  // TODO(any): refactoring
   Future<AuthCredential> _getGoogleAuthCredential() async {
-    final googleSignIn = GoogleSignIn();
     final signInAccount = await googleSignIn.signIn();
     final googleAuth = await signInAccount.authentication;
     final credential = GoogleAuthProvider.credential(
@@ -34,24 +30,26 @@ class AuthPersistence implements AuthRepository {
 
   /// メールアドレスとパスワードでサインアップ
   @override
-  Future<User> signUpWithEmailAndPassword(String email, String password) {
-    return fbAuth
-        .createUserWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-        .then((res) => res.user);
+  Future<User> signUpWithEmailAndPassword({
+    @required String email,
+    @required String password,
+  }) async {
+    final res = await auth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return res.user;
   }
 
   /// sign in with email & password
   @override
-  Future<User> signInWithEmailAndPassword(String email, String password) {
-    return fbAuth
-        .signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        )
-        .then((res) => res.user);
+  Future<User> signInWithEmailAndPassword(
+      {@required String email, @required String password}) async {
+    final res = await auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return res.user;
   }
 
   /// sign in with google
@@ -63,7 +61,7 @@ class AuthPersistence implements AuthRepository {
     }
 
     // credential -> firebase user
-    final authResult = await fbAuth.signInWithCredential(credential);
+    final authResult = await auth.signInWithCredential(credential);
 
     return authResult.user;
   }
@@ -71,8 +69,9 @@ class AuthPersistence implements AuthRepository {
   /// sign in with sign in apple
   /// <https://codewithandrea.com/videos/2020-01-20-apple-sign-in-flutter-firebase/>
   @override
-  Future<User> signInWithSignInWithApple(
-      {List<Scope> scopes = const []}) async {
+  Future<User> signInWithSignInWithApple({
+    List<Scope> scopes = const [],
+  }) async {
     // 1. perform the sign-in request
     final result = await AppleSignIn.performRequests(
         [AppleIdRequest(requestedScopes: scopes)]);
@@ -87,14 +86,14 @@ class AuthPersistence implements AuthRepository {
           accessToken:
               String.fromCharCodes(appleIdCredential.authorizationCode),
         );
-        final authResult = await fbAuth.signInWithCredential(credential);
-        final firebaseUser = authResult.user;
+        final res = await auth.signInWithCredential(credential);
+        final user = res.user;
         if (scopes.contains(Scope.fullName)) {
           final fullName = appleIdCredential.fullName;
           final displayName = '${fullName.givenName} ${fullName.familyName}';
-          await firebaseUser.updateProfile(displayName: displayName);
+          await user.updateProfile(displayName: displayName);
         }
-        return firebaseUser;
+        return user;
 
       case AuthorizationStatus.error:
         print(result.error.toString());
@@ -113,9 +112,11 @@ class AuthPersistence implements AuthRepository {
   }
 
   @override
-  Future<void> updatePassword(
-      String currentPassword, String newPassword) async {
-    final fbUser = fbAuth.currentUser;
+  Future<void> updatePassword({
+    @required String currentPassword,
+    @required String newPassword,
+  }) async {
+    final fbUser = auth.currentUser;
     if (fbUser == null) {
       throw Exception('firebase user is null');
     }
@@ -123,28 +124,30 @@ class AuthPersistence implements AuthRepository {
   }
 
   @override
-  Future<void> updateEmail(String newEmail) async {
-    final fbUser = fbAuth.currentUser;
+  Future<void> updateEmail({
+    @required String email,
+  }) async {
+    final fbUser = auth.currentUser;
     if (fbUser == null) {
       throw Exception('firebase user is null');
     }
-    await fbUser.updateEmail(newEmail);
+    await fbUser.updateEmail(email);
   }
 
   /// sign out
   @override
   Future<void> signOut() {
-    return fbAuth.signOut();
+    return auth.signOut();
   }
 
   @override
   Future<bool> isAlreadySignedIn() async {
-    return fbAuth.currentUser != null;
+    return auth.currentUser != null;
   }
 
   @override
-  Future<void> sendPasswordResetEmail(String email) async {
-    await fbAuth.sendPasswordResetEmail(email: email);
+  Future<void> sendPasswordResetEmail({@required String email}) async {
+    await auth.sendPasswordResetEmail(email: email);
   }
 
   @override

@@ -4,14 +4,19 @@ import 'dart:async';
 
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
 import 'package:contentful/client.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
@@ -22,7 +27,6 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/article/article_persistence.dart';
 import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
-import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
 import 'package:wr_app/infrastructure/note/note_persistence.dart';
 import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence.dart';
@@ -57,10 +61,38 @@ void showMaintenance() {
 }
 
 /// initialize singleton instances and inject to GetIt
-Future<void> setupGlobalSingletons(Flavor flavor) async {
+/// [useMock] によって差し替える
+Future<void> setupGlobalSingletons({
+  @required Flavor flavor,
+  @required bool useMock,
+}) async {
+  await Firebase.initializeApp();
+
+  if (useMock) {
+    InAppLogger.info('❗ Using Mock');
+  }
+
   // load .env
   await DotEnv().load('secrets/.env');
   final env = EnvKeys.fromEnv(env: DotEnv().env);
+
+  if (env.useEmulator) {
+    final origin = env.functionsEmulatorOrigin;
+    InAppLogger.info('❗ Using Emulator @ $origin');
+    useCloudFunctionsEmulator(origin);
+  }
+
+  // firestore
+  GetIt.I.registerSingleton<FirebaseFirestore>(
+      useMock ? MockFirestoreInstance() : FirebaseFirestore.instance);
+
+  // firebase auth
+  GetIt.I.registerSingleton<FirebaseAuth>(
+      useMock ? MockFirebaseAuth() : FirebaseAuth.instance);
+
+  // google sign in
+  GetIt.I.registerSingleton<GoogleSignIn>(
+      useMock ? MockGoogleSignIn() : GoogleSignIn());
 
   // env keys
   GetIt.I.registerSingleton<EnvKeys>(env);
@@ -122,32 +154,21 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     Provider.debugCheckInvalidValueType = null;
     WidgetsFlutterBinding.ensureInitialized();
 
-    await Firebase.initializeApp();
-
-    await setupGlobalSingletons(flavor);
-
-    final env = GetIt.I<EnvKeys>();
-
-    if (env.useEmulator) {
-      final origin = env.functionsEmulatorOrigin;
-      InAppLogger.info('❗ Using Emulator @ $origin');
-      useCloudFunctionsEmulator(origin);
-    }
-
     const useMock = false;
 
-    if (useMock) {
-      InAppLogger.info('❗ Using Mock');
-    }
-    print('debug mode? $isInDebugMode');
+    await setupGlobalSingletons(flavor: flavor, useMock: useMock);
 
     // repos
-    final userPersistence = UserPersistence(store: FirebaseFirestore.instance);
     final articlePersistence =
         useMock ? ArticlePersistenceMock() : ArticlePersistence();
+    final userPersistence =
+        UserPersistence(store: GetIt.I<FirebaseFirestore>());
     final lessonPersistence =
         useMock ? LessonPersistenceMock() : LessonPersistence();
-    final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
+    final authPersistence = AuthPersistence(
+      auth: GetIt.I<FirebaseAuth>(),
+      googleSignIn: GetIt.I<GoogleSignIn>(),
+    );
     final systemPersistence = SystemPersistence();
     final notePersistence = useMock
         ? NotePersistenceMock(userRepository: userPersistence)
