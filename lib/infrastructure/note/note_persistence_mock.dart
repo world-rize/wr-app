@@ -7,6 +7,7 @@ import 'package:wr_app/domain/note/model/note_api_dto.dart';
 import 'package:wr_app/domain/note/note_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/infrastructure/api/functions.dart';
 
 class NotePersistenceMock implements NoteRepository {
   const NotePersistenceMock({@required this.userRepository});
@@ -18,6 +19,7 @@ class NotePersistenceMock implements NoteRepository {
     final notifier = UserNotifier(
       userService: UserService(
         userPersistence: userRepository,
+        userApi: UserAPI(),
       ),
     );
     return notifier.user;
