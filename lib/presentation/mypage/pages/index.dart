@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/pages/friends.dart';
 import 'package:wr_app/presentation/mypage/pages/info_page.dart';
+import 'package:wr_app/presentation/mypage/pages/upgrade_page.dart';
 import 'package:wr_app/presentation/mypage/widgets/user_info.dart';
 import 'package:wr_app/presentation/settings/pages/account_settings_page.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
 
 import './shop_page.dart';
-import './upgrade_page.dart';
 
 /// mypage > index
 class MyPagePage extends StatelessWidget {

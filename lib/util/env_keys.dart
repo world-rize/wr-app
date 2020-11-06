@@ -17,7 +17,7 @@ class EnvKeys {
   final String requestMailAddress;
   final String giftMailAddress;
   final String questionnaireUrl;
-  final String termsOfServiceUtl;
+  final String termsOfServiceUrl;
   final String privacyPolicyJaUrl;
   final String privacyPolicyEuUrl;
   final String specifiedCommercialTransactionActUrl;
@@ -40,7 +40,7 @@ class EnvKeys {
     @required this.requestMailAddress,
     @required this.giftMailAddress,
     @required this.questionnaireUrl,
-    @required this.termsOfServiceUtl,
+    @required this.termsOfServiceUrl,
     @required this.privacyPolicyJaUrl,
     @required this.privacyPolicyEuUrl,
     @required this.specifiedCommercialTransactionActUrl,
@@ -89,7 +89,7 @@ class EnvKeys {
       requestMailAddress: env['REQUEST_MAIL_ADDRESS'],
       giftMailAddress: env['GIFT_MAIL_ADDRESS'],
       questionnaireUrl: env['QUESTIONNAIRE_URL'],
-      termsOfServiceUtl: env['TERMS_OF_SERVICE_URL'],
+      termsOfServiceUrl: env['TERMS_OF_SERVICE_URL'],
       privacyPolicyJaUrl: env['PRIVACY_POLICY_JA_URL'],
       privacyPolicyEuUrl: env['PRIVACY_POLICY_EU_URL'],
       specifiedCommercialTransactionActUrl:

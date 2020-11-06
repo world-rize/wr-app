@@ -1,10 +1,10 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
+import 'package:quiver/iterables.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
+import 'package:wr_app/util/extensions.dart';
 
 /// セクション: フレーズの集まり
 class Section {
@@ -23,16 +23,14 @@ class Section {
   }
 
   static List<Section> fromLesson(Lesson lesson) {
-    final sections = <Section>[];
-    for (var i = 0; i < lesson.phrases.length; i += 7) {
-      sections.add(Section(
-        id: '${lesson.id}-${i ~/ 7 + 1}',
-        title: '#${i ~/ 7 + 1} ${lesson.id}',
-        phrases:
-            lesson.phrases.sublist(i, min(i + 7, lesson.phrases.length - 1)),
-      ));
-    }
-    return sections;
+    // フレーズを7個ごとに分ける
+    return partition(lesson.phrases, 7).toList().indexedMap((i, phrases) {
+      return Section(
+        id: '${lesson.id}-${i + 1}',
+        title: '#${i + 1} ${lesson.id}',
+        phrases: phrases,
+      );
+    }).toList();
   }
 
   final String id;

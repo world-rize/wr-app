@@ -4,6 +4,17 @@ import 'package:wr_app/domain/user/model/membership.dart';
 
 // referenced https://github.com/mono0926/intl_sample/blob/master/lib/l10n/messages.dart
 mixin Messages {
+  /// on_boarding
+  String get signUpMessage => Intl.message('初めての方はこちら', name: 'signUpMessage');
+
+  String get signUpButton =>
+      Intl.message('新しくアカウントを作成する', name: 'signUpButton');
+
+  String get signInMessage =>
+      Intl.message('既にアカウントを持っている方はこちら', name: 'signInMessage');
+
+  String get signInButton => Intl.message('ログイン', name: 'signInButton');
+
   /// lesson
   String lessonStatus(int count, int all) => Intl.message(
         'クリア[$count/$all]',
@@ -201,17 +212,8 @@ mixin Messages {
 
   String get sendRequestButton => Intl.message('送る', name: 'sendRequestButton');
 
-  String get showQuestionnaireDialogTitle =>
-      Intl.message('アンケートに答えてください', name: 'showQuestionnaireDialogTitle');
-
-  String get showQuestionnaireDialogMessage =>
-      Intl.message('アンケートに答えてください', name: 'showQuestionnaireDialogMessage');
-
-  String get showQuestionnaireDialogOk =>
-      Intl.message('答える', name: 'showQuestionnaireDialogOk');
-
-  String get showQuestionnaireDialogNg =>
-      Intl.message('後で', name: 'showQuestionnaireDialogNg');
+  String get answerQuestionnaire =>
+      Intl.message('アンケートに答える!', name: 'answerQuestionnaire');
 
   String get show30DaysChallengeAchievedDialogTitle =>
       Intl.message('30 Days Challenge 達成',
@@ -289,17 +291,83 @@ mixin Messages {
 
   // Settings
   String get settings => Intl.message('Settings', name: 'settings');
+
   String get darkMode => Intl.message('Dark Mode', name: 'darkMode');
+
   String get feedback => Intl.message('Feedback', name: 'feedback');
+
   String get notifications =>
       Intl.message('Notifications', name: 'notifications');
+
   String get homepage => Intl.message('World RIZe Website', name: 'homepage');
+
   String get faq => Intl.message('FAQ', name: 'faq');
+
   String get termsOfService =>
       Intl.message('Terms of service', name: 'termsOfService');
+
   String get privacyPolicy =>
       Intl.message('Privacy Policy', name: 'privacyPolicy');
+
   String get appVersion => Intl.message('App Version', name: 'appVersion');
+
   String get license => Intl.message('License', name: 'license');
+
   String get topPage => Intl.message('Go to the top page', name: 'topPage');
+
+  String get changeButtonText => Intl.message('変更', name: 'changeButtonText');
+
+  String get nameHintText => Intl.message('名前', name: 'nameHintText');
+
+  String get emailHintText => Intl.message('Email', name: 'emailHintText');
+
+  String get passwordHintText =>
+      Intl.message('パスワード(6文字以上)', name: 'passwordHintText');
+
+  String get currentPasswordHintText =>
+      Intl.message('現在のパスワード', name: 'currentPasswordHintText');
+
+  String get newPasswordHintText =>
+      Intl.message('新しいパスワード(6文字以上)', name: 'newPasswordHintText');
+
+  String get passwordConfirmHintText =>
+      Intl.message('パスワード(確認)', name: 'passwordConfirmHintText');
+
+  String get doNotEmptyMessage =>
+      Intl.message('入力してください', name: 'doNotEmptyMessage');
+
+  String get invalidPasswordMessage =>
+      Intl.message('パスワードは6文字以上で入力してください', name: 'invalidPasswordMessage');
+
+  String get signInSuccessful =>
+      Intl.message('ログインしました', name: 'signInSuccessful');
+
+  // Firebase Auth Exception
+  // 'Your email address appears to be malformed.'
+  String get errorInvalidEmail =>
+      Intl.message('不正なメールアドレスです', name: 'errorInvalidEmail');
+
+  // 'Your password is wrong.'
+  String get errorWrongPassword =>
+      Intl.message('パスワードが間違っています', name: 'errorWrongPassword');
+
+  // 'User with this email doesn\'t exist.'
+  String get errorUserNotFound =>
+      Intl.message('ユーザーが見つかりませんでした', name: 'errorUserNotFound');
+
+  // 'User with this email has been disabled.'
+  String get errorUserDisabled =>
+      Intl.message('このユーザーは現在使用できません', name: 'errorUserDisabled');
+
+  // 'Too many requests. Try again later.'
+  String get errorTooManyRequests =>
+      Intl.message('時間をおいて再試行してください', name: 'errorTooManyRequests');
+
+  // 'Signing in with Email and Password is not enabled.'
+  String get errorOperationNotAllowed =>
+      Intl.message('この操作は許可されていません', name: 'errorOperationNotAllowed');
+
+  // 'An undefined Error happened.'
+  String get errorUndefinedError =>
+      Intl.message('不明なエラー', name: 'errorUndefinedError');
 }

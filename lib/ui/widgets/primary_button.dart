@@ -11,7 +11,7 @@ class PrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
-      backgroundColor: Colors.orange,
+      backgroundColor: onPressed == null ? Colors.grey : Colors.orange,
       onPressed: onPressed,
       label: label,
     );

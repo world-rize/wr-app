@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
@@ -27,17 +28,17 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
       },
       validator: (text) {
         if (text.isEmpty) {
-          return 'do not empty';
+          return I.of(context).doNotEmptyMessage;
         }
         return null;
       },
-      decoration: const InputDecoration(
-        border: UnderlineInputBorder(
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
           ),
         ),
-        hintText: 'Email',
+        hintText: I.of(context).emailHintText,
       ),
     );
 
@@ -46,7 +47,7 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: RoundedButton(
-          text: '変更',
+          text: I.of(context).changeButtonText,
           color: Colors.blueAccent,
           onTap: () {
             if (_formKey.currentState.validate()) {

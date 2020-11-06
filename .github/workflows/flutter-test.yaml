@@ -1,0 +1,30 @@
+name: flutter test
+on:
+  - pull_request
+
+jobs:
+  flutter-test:
+    runs-on: ubuntu-latest
+    needs: []
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # 全コミット持ってくる
+          submodules: true
+          token: ${{ secrets.ASSETS_REPO_PAT }} # 別のprivateリポジトリ用
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Setup Envs # このステップいらないかも
+        run: |
+          echo "${SECRETS_ENV}" > secrets/.env
+        env:
+          SECRETS_ENV: ${{ secrets.SECRETS_ENV }}
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v1
+        with:
+          flutter-version: 1.22.3
+      - run: flutter pub get
+      - run: flutter test

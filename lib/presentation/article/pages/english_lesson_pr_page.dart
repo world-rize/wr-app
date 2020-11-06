@@ -7,7 +7,7 @@ class EnglishLessonPrPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final image = Image.asset('assets/thumbnails/affiliate.png');
-    const onlineLessonsUrl = 'https://world-rize.com/category/online-lessons/';
+    const onlineLessonsUrl = 'https://world-rize.com/online-lessons/';
     const affiliateUrl =
         'https://px.a8.net/svt/ejp?a8mat=3BG371+6C11GY+2QPM+61JSI';
 
@@ -66,7 +66,7 @@ class EnglishLessonPrPage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100.0),
               ),
               child: Text(
-                'オンライン英会話へ',
+                '記事をみる',
                 style: Theme.of(context).textTheme.headline5,
               ),
               onPressed: () async {

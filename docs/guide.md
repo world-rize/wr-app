@@ -21,25 +21,25 @@
 <!-- UIプロトタイプのURL, 実装例のURL等 -->
 - [仕様書](https://worldrize.github.io/wr-app/spec.pdf)
 
-```
+## 開発ブランチ
+### develop
+betaリリースに相当する
 
-## ブランチモデル(WIP)
-`git-flow` likeなはず.
+test flightに出すが、AppStoreには提出できないブランチ
 
-![](https://image.itmedia.co.jp/ait/articles/1708/01/at-it-git-15-001.jpg)
+masterにマージするのが目標のブランチ
 
-```bash
-# 環境ブランチ(CI/CD走る)
-- release # 開発環境, チーム内のアプリ確認用
-- master # 本番環境, リリース
+新しく次のバージョンを出したいときは必ずmasterからブランチを切り直す
+- semantic releaseのtagを1つのブランチに統一する必要があるため
 
-# 開発ブランチ
-- develop # 開発中
-- feature/xxx # 機能
-```
+### master
+AppStoreに提出できるブランチ
+TestFlightで確認を取れたら、developブランチからマージできる
+
 
 ## 開発フロー
 1. アサインされているIssueに対してカンバンを `[In Progress]` に移動
-2. `features/<issue number>` でブランチを切りそこで開発
-3. PRを送る(できればコードレビューとかしたい)
-4. Merged
+2. `develop`から`features/<issue number>` でブランチを切りそこで開発
+3. `develop`にPRを送り、Mergeする
+4. githubの`tag`を振りたければ、github actionのトリガーをUIから走らせる
+5. AppStoreに提出できるようになったら、masterにマージ

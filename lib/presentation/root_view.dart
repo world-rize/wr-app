@@ -44,13 +44,13 @@ class _RootViewState extends State<RootView>
         await un.fetchUser();
         await an.login();
 
-        Navigator.popUntil(context, (route) => route.isFirst);
-        return Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => RootView(),
-          ),
-        );
+        // Navigator.popUntil(context, (route) => route.isFirst);
+        // return Navigator.pushReplacement(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => RootView(),
+        //   ),
+        // );
       }
     } on Exception catch (e) {
       InAppLogger.error(e);
@@ -65,18 +65,23 @@ class _RootViewState extends State<RootView>
 
   /// Check app status
   Future _checkAppStatus() async {
-    InAppLogger.debug('AppInfo');
-    final sn = Provider.of<SystemNotifier>(context);
-    final appInfo = await sn.getAppInfo();
-    InAppLogger.debugJson(appInfo.toJson());
+    try {
+      final sn = context.read<SystemNotifier>();
+      final appInfo = await sn.getAppInfo();
+      InAppLogger.debugJson(appInfo.toJson());
 
-    if (!_isAvailable(appInfo)) {
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => OnBoardingPage(),
-          fullscreenDialog: true,
-        ),
-      );
+      if (!_isAvailable(appInfo)) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => OnBoardingPage(),
+            fullscreenDialog: true,
+          ),
+        );
+      }
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+      rethrow;
     }
   }
 
@@ -84,27 +89,33 @@ class _RootViewState extends State<RootView>
   Future<void> _checkUserStatus() async {
     // TODO: membership check
 
-    // on first launch, show on-boarding page
-    final signedIn = await context.read<AuthNotifier>().isAlreadySignedIn();
-    final loggedIn = context.read<UserNotifier>().signedIn;
-    final firstLaunch = context.read<SystemNotifier>().getFirstLaunch();
+    try {
+      // on first launch, show on-boarding page
+      final signedIn = await context.read<AuthNotifier>().isAlreadySignedIn();
+      final loggedIn = context.read<UserNotifier>().signedIn;
+      final firstLaunch = context.read<SystemNotifier>().getFirstLaunch();
 
-    InAppLogger.debug('first launch: $firstLaunch');
-    InAppLogger.debug('signed in: $signedIn');
-    InAppLogger.debug('logged in: $loggedIn');
+      InAppLogger.debug('first launch: $firstLaunch');
+      InAppLogger.debug('signed in: $signedIn');
+      InAppLogger.debug('logged in: $loggedIn');
 
-    if (signedIn && !loggedIn) {
-      await _autoSignIn(context);
-    }
+      if (signedIn && !loggedIn) {
+        await _autoSignIn(context);
+      }
 
-    // show on boarding modal
-    if (firstLaunch || !signedIn) {
-      await Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => OnBoardingPage(),
-          fullscreenDialog: true,
-        ),
-      );
+      // show on boarding modal
+      if (firstLaunch || !signedIn) {
+        await Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => OnBoardingPage(),
+            fullscreenDialog: true,
+          ),
+        );
+      }
+    } on Exception catch (e) {
+      InAppLogger.error(e);
+      NotifyToast.error(e);
+      rethrow;
     }
   }
 
@@ -253,7 +264,7 @@ class _RootViewState extends State<RootView>
       appBar: PreferredSize(
         child: Container(
           //padding: const EdgeInsets.symmetric(vertical: 20),
-          padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
           child: header,
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(

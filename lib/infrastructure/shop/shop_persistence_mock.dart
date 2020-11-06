@@ -2,7 +2,6 @@
 
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/domain/shop/shop_repository.dart';
-import 'package:wr_app/domain/user/index.dart';
 
 class ShopPersistenceMock implements ShopRepository {
   // TODO: マスタデータとして管理(Firebaseとかで)
@@ -52,12 +51,6 @@ class ShopPersistenceMock implements ShopRepository {
         expendable: false,
       ),
     ];
-  }
-
-  @override
-  Future<User> buyShopItem(String itemId) {
-    // TODO: call buy item api
-    throw UnimplementedError();
   }
 
   @override

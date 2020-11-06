@@ -286,9 +286,9 @@ const updateShop = async () => {
 const updateAppInfo = async () => {
   const firestore = admin.firestore()
   const appInfo: WRAppInfo = {
-    currentVersion: '0.6.3',
-    requireVersion: '0.6.3',
-    isAndroidAppAvailable: false,
+    currentVersion: '0.6.4',
+    requireVersion: '0.6.4',
+    isAndroidAppAvailable: true,
     isIOsAppAvailable: true,
   }
   await firestore.collection('etc').doc('appinfo').set(appInfo)

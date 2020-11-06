@@ -33,10 +33,6 @@
 .pub/
 /build/
 
-# Local Assets
-assets/
-!assets/*.jsonc
-
 # Web related
 lib/generated_plugin_registrant.dart
 
@@ -55,5 +51,6 @@ setup.sh
 *.keystore
 keystore*.properties
 *.jks
+android/fastlane/google-play-api-key.json
 
 .node-version

@@ -3,7 +3,6 @@ WorldRIZe CLI
 """
 import os, re, json, shutil, requests, string
 import fire, chalk
-from retry import retry
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -59,13 +58,11 @@ def generate_phrase_voices(phrase: object, out_dir: Path):
         else:
             success(f'Skipped {voice["path"]}')
 
-@retry(tries=5)
 def call_api(access_key: str, text: str, gender_voice: str, language: str, out_path: Path):
     """
     gender_voice: 'male' | 'female'
     language: 'en-us' | 'en-uk' | 'en-au' | 'en-in' -> 'en_US' | 'en_GB' | 'en_AU' | 'en_IN'
     """
-
     language_map = {
         'en-us': 'en_US',
         'en-uk': 'en_GB',
@@ -102,8 +99,8 @@ def call_api(access_key: str, text: str, gender_voice: str, language: str, out_p
 
     res = res.json()
     if res['error']:
-        error(f'Error {res["message"]}')
-        raise Exception(res["message"])
+        error(f'Error {res["error"]}')
+        raise Exception()
 
     audio_src = res['audio_src']
 
@@ -158,6 +155,8 @@ class PhrasesParser(object):
                     break
             else:
                 if self.verbose: error(f'Warning {master_id} title(ja) is empty')
+                print(jas)
+                print(content)
                 title_ja = jas[1]
 
             for en in ens:
@@ -167,6 +166,8 @@ class PhrasesParser(object):
                     break
             else:
                 if self.verbose: error(f'Warning {master_id} title(en) is empty')
+                print(ens)
+                print(content)
                 title_en = ens[1]
 
             phrase_json = {
@@ -246,7 +247,7 @@ class Cli(object):
     def __init__(self):
         self.assets_path = pwd.parent / 'assets'
         self.voices_path = self.assets_path / 'voices'
-        self.lessons_txt_path = self.assets_path / 'contents/phrases_v3.md'
+        self.lessons_txt_path = self.assets_path / 'contents/phrases.md'
         self.lessons_json_path = self.assets_path / 'lessons.json'
         self.phrases_json_path  = self.assets_path / 'phrases.json'
 

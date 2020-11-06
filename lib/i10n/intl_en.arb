@@ -1,7 +1,27 @@
 {
   "@@locale": "en",
-  "@@last_modified": "2020-09-19T19:56:21.644424",
-  "lessonStatus": "クリア[{count}/{all}]",
+  "@@last_modified": "2020-10-29T11:45:14.337912",
+  "signUpMessage": "The first one here",
+  "@signUpMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signUpButton": "Sign up",
+  "@signUpButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInMessage": "Click here if you already have an account",
+  "@signInMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInButton": "Sign in",
+  "@signInButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lessonStatus": "Clear [{count}/{all}]",
   "@lessonStatus": {
     "type": "text",
     "placeholders": {
@@ -9,12 +29,12 @@
       "all": {}
     }
   },
-  "requestPhraseButton": "フレーズをリクエストする",
+  "requestPhraseButton": "Request a new phrase",
   "@requestPhraseButton": {
     "type": "text",
     "placeholders": {}
   },
-  "requestPhrase": "フレーズのリクエスト",
+  "requestPhrase": "Request a new phrase",
   "@requestPhrase": {
     "type": "text",
     "placeholders": {}
@@ -43,7 +63,7 @@
       "membership": {}
     }
   },
-  "testConfirm": "{title}のテストを開始しますか?",
+  "testConfirm": "Do you want to start testing {title}?",
   "@testConfirm": {
     "type": "text",
     "placeholders": {
@@ -65,36 +85,41 @@
     "type": "text",
     "placeholders": {}
   },
-  "testMessage": "本日のテスト残り{limit}回",
+  "cancel": "Cancel",
+  "@cancel": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "testMessage": "Today's test remaining {limit} times",
   "@testMessage": {
     "type": "text",
     "placeholders": {
       "limit": {}
     }
   },
-  "question": "{q}問目",
+  "question": "Question {q}",
   "@question": {
     "type": "text",
     "placeholders": {
       "q": {}
     }
   },
-  "testLimitAlert": "本日はこれ以上テストを受講することはできません",
+  "testLimitAlert": "I can't take any more tests today",
   "@testLimitAlert": {
     "type": "text",
     "placeholders": {}
   },
-  "testLimitAlertDetail": "テストは1日に3回まで受講することができます",
+  "testLimitAlertDetail": "You can take the test up to 3 times a day",
   "@testLimitAlertDetail": {
     "type": "text",
     "placeholders": {}
   },
-  "testInterrupt": "テストを中断しますか?",
+  "testInterrupt": "Do you want to interrupt the test?",
   "@testInterrupt": {
     "type": "text",
     "placeholders": {}
   },
-  "testInterruptDetail": "テストを中断した場合このテストは0点となり、1日のテスト受講可能回数は1回分消費されます",
+  "testInterruptDetail": "If you interrupt the test, this test will be 0 points, and the number of times you can take the test per day will be consumed once.",
   "@testInterruptDetail": {
     "type": "text",
     "placeholders": {}
@@ -116,7 +141,7 @@
     "type": "text",
     "placeholders": {}
   },
-  "testScore": "{questions}問中{corrects}問正解！",
+  "testScore": "{questions} Questions {corrects} Questions Correct!",
   "@testScore": {
     "type": "text",
     "placeholders": {
@@ -124,7 +149,7 @@
       "corrects": {}
     }
   },
-  "next": "次へ",
+  "next": "Next",
   "@next": {
     "type": "text",
     "placeholders": {}
@@ -154,40 +179,327 @@
     "type": "text",
     "placeholders": {}
   },
-  "sectionStatus": "{clear,select, true{クリア}false{未クリア}}",
+  "sectionStatus": "{clear,select, true{cleared}false{uncleared}}",
   "@sectionStatus": {
     "type": "text",
     "placeholders": {
       "clear": {}
     }
   },
-  "myPageTitle": "設定",
-  "@myPageTitle": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "accountSection": "アカウント",
-  "@accountSection": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "studySection": "学習",
-  "@studySection": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "otherSection": "その他",
-  "@otherSection": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "accountPageTitle": "Account",
-  "@accountPageTitle": {
-    "type": "text",
-    "placeholders": {}
-  },
-  "error": "エラー",
+  "error": "Error",
   "@error": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "articleNotFoundMessage": "No article exists",
+  "@articleNotFoundMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "readMore": "Read more",
+  "@readMore": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lessonSearchHintText": "Words etc.",
+  "@lessonSearchHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lessonSearchAppBarTitle": "Search",
+  "@lessonSearchAppBarTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "lessonPageTitle": "Lesson",
+  "@lessonPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "favoritePageTitle": "Favorites",
+  "@favoritePageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "newComingPageTitle": "New Coming Phrases",
+  "@newComingPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "requestPageTitle": "Request",
+  "@requestPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noNewComingPhraseMessage": "No new coming phrases",
+  "@noNewComingPhraseMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendPhraseRequest": "Send a request",
+  "@sendPhraseRequest": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "sendRequestButton": "Send",
+  "@sendRequestButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "answerQuestionnaire": "Answer the questionnaire!",
+  "@answerQuestionnaire": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "show30DaysChallengeAchievedDialogTitle": "Achieved 30 Days Challenge",
+  "@show30DaysChallengeAchievedDialogTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageReferFriendsButton": "Refer Friends",
+  "@myPageReferFriendsButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageUpgradeButton": "Upgrade",
+  "@myPageUpgradeButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageShopButton": "Shop",
+  "@myPageShopButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageInfoButton": "Annoucements",
+  "@myPageInfoButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "myPageInfoNotFound": "There is no notification",
+  "@myPageInfoNotFound": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsTitle": "Refer Friends",
+  "@referFriendsTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsConfirmDialog": "Would you like to register {name} as an introducer?",
+  "@referFriendsConfirmDialog": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "referFriendsSuccessDialog": "10000 points were sent to {name}. I got 500 points",
+  "@referFriendsSuccessDialog": {
+    "type": "text",
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "referFriendsUserIdHintText": "User ID",
+  "@referFriendsUserIdHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsYourID": "Your ID",
+  "@referFriendsYourID": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsIntroduceeIDInputTitle": "Enter the referrer's ID",
+  "@referFriendsIntroduceeIDInputTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsSearchButton": "Search",
+  "@referFriendsSearchButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsNotFound": "User not found",
+  "@referFriendsNotFound": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "referFriendsUpgradeButton": "Upgrade with a friend's referral",
+  "@referFriendsUpgradeButton": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shopPagePurchase": "Purchase",
+  "@shopPagePurchase": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "shopPageConfirmDialog": "Would you like to buy {title} with {price} coins?",
+  "@shopPageConfirmDialog": {
+    "type": "text",
+    "placeholders": {
+      "title": {},
+      "price": {}
+    }
+  },
+  "shopPageSuccess": "The exchange has been confirmed. We will send the gift code to the registered email address within 2 weeks",
+  "@shopPageSuccess": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "havingCoin": "Coins you have",
+  "@havingCoin": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "userPageTitle": "User page",
+  "@userPageTitle": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "noteList": "Note List",
+  "@noteList": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "settings": "Settings",
+  "@settings": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "darkMode": "Dark Mode",
+  "@darkMode": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "feedback": "Feedback",
+  "@feedback": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "homepage": "World RIZe Website",
+  "@homepage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "faq": "FAQ",
+  "@faq": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "termsOfService": "Terms of service",
+  "@termsOfService": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "privacyPolicy": "Privacy Policy",
+  "@privacyPolicy": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "appVersion": "App Version",
+  "@appVersion": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "license": "License",
+  "@license": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "topPage": "Go to the top page",
+  "@topPage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "changeButtonText": "Change",
+  "@changeButtonText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "nameHintText": "Name",
+  "@nameHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "emailHintText": "Email",
+  "@emailHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordHintText": "Password (6 characters or more)",
+  "@passwordHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "currentPasswordHintText": "Current password",
+  "@currentPasswordHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "newPasswordHintText": "New Password (6 characters or more)",
+  "@newPasswordHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "passwordConfirmHintText": "Password confirmation",
+  "@passwordConfirmHintText": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "doNotEmptyMessage": "Do not empty",
+  "@doNotEmptyMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "invalidPasswordMessage": "Please enter the password with at least 6 characters",
+  "@invalidPasswordMessage": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "signInSuccessful": "logged in successfully",
+  "@signInSuccessful": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorInvalidEmail": "Your email address appears to be malformed.",
+  "@errorInvalidEmail": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorWrongPassword": "Your password is wrong.",
+  "@errorWrongPassword": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUserNotFound": "User with this email doesn't exist.",
+  "@errorUserNotFound": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUserDisabled": "User with this email has been disabled.",
+  "@errorUserDisabled": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorTooManyRequests": "Too many requests. Try again later.",
+  "@errorTooManyRequests": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorOperationNotAllowed": "Signing in with Email and Password is not enabled.",
+  "@errorOperationNotAllowed": {
+    "type": "text",
+    "placeholders": {}
+  },
+  "errorUndefinedError": "An undefined Error happened.",
+  "@errorUndefinedError": {
     "type": "text",
     "placeholders": {}
   }

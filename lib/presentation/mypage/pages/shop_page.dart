@@ -6,9 +6,9 @@ import 'package:wr_app/domain/shop/model/gift_item_id.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/widgets/gift_item_card.dart';
-import 'package:wr_app/presentation/on_boarding/widgets/loading_view.dart';
 import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/util/logger.dart';
 
 /// ポイント交換
@@ -72,6 +72,8 @@ class _ShopPageState extends State<ShopPage> {
                 });
                 final sn = context.read<ShopNotifier>();
                 await sn.purchaseItem(itemId: GiftItemIdEx.fromString(item.id));
+                final un = context.read<UserNotifier>();
+                await un.callGetPoint(points: -item.price);
                 await _useItem(GiftItemIdEx.fromString(item.id));
               } on Exception catch (e) {
                 InAppLogger.error(e);

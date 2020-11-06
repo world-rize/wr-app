@@ -77,50 +77,52 @@ class _SignUpFormState extends State<SignUpForm> {
       },
       validator: (text) {
         if (text.isEmpty) {
-          return 'do not empty';
+          return I.of(context).doNotEmptyMessage;
         }
         return null;
       },
-      decoration: const InputDecoration(
-        border: UnderlineInputBorder(
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
           ),
         ),
-        hintText: '名前',
+        hintText: I.of(context).nameHintText,
       ),
     );
 
     final _emailField = TextFormField(
       key: const Key('email'),
+      keyboardType: TextInputType.emailAddress,
       onChanged: (email) {
         setState(() => _email = email);
       },
       validator: (text) {
         if (text.isEmpty) {
-          return 'do not empty';
+          return I.of(context).doNotEmptyMessage;
         }
         return null;
       },
-      decoration: const InputDecoration(
-        border: UnderlineInputBorder(
+      decoration: InputDecoration(
+        border: const UnderlineInputBorder(
           borderSide: BorderSide(
             color: Colors.grey,
           ),
         ),
-        hintText: 'Email',
+        hintText: I.of(context).emailHintText,
       ),
     );
 
     final _passwordField = TextFormField(
       key: const Key('password'),
+      keyboardType: TextInputType.visiblePassword,
       obscureText: !_showPassword,
       onChanged: (password) {
         setState(() => _password = password);
       },
       validator: (text) {
         if (text.isEmpty) {
-          return 'do not empty';
+          return I.of(context).doNotEmptyMessage;
         }
         return null;
       },
@@ -138,19 +140,20 @@ class _SignUpFormState extends State<SignUpForm> {
             color: Colors.grey,
           ),
         ),
-        hintText: 'パスワード(6文字以上)',
+        hintText: I.of(context).passwordHintText,
       ),
     );
 
     final _confirmationPasswordField = TextFormField(
       key: const Key('password_confirm'),
+      keyboardType: TextInputType.visiblePassword,
       obscureText: !_showConfirmationPassword,
       onChanged: (text) {
         setState(() => _confirmationPassword = text);
       },
       validator: (text) {
         if (text.isEmpty) {
-          return 'do not empty';
+          return I.of(context).doNotEmptyMessage;
         }
         return null;
       },
@@ -172,7 +175,7 @@ class _SignUpFormState extends State<SignUpForm> {
             color: Colors.grey,
           ),
         ),
-        hintText: 'パスワード(確認用)',
+        hintText: I.of(context).passwordConfirmHintText,
       ),
     );
 
@@ -193,9 +196,9 @@ class _SignUpFormState extends State<SignUpForm> {
                 text: I.of(context).termsOfService,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    if (await canLaunch(env.privacyPolicyJaUrl)) {
+                    if (await canLaunch(env.termsOfServiceUrl)) {
                       await launch(
-                        env.privacyPolicyJaUrl,
+                        env.termsOfServiceUrl,
                         forceSafariVC: false,
                         forceWebView: false,
                       );
@@ -236,31 +239,29 @@ class _SignUpFormState extends State<SignUpForm> {
       key: const Key('sign_up_form_sign_up_with_google_button'),
       text: 'Sign up with Google',
       color: Colors.redAccent,
-      onTap: !_isValidName()
-          ? null
-          : () {
-              if (!_isValidName()) {
-                return;
-              }
-              _formKey.currentState.save();
+      onTap: () {
+        // only name agree validate
+        if (!_isValidName()) {
+          return;
+        }
+        _formKey.currentState.save();
 
-              widget.onSignUpWithGoogle(_name);
-            },
+        widget.onSignUpWithGoogle(_name);
+      },
     );
 
     final _signInWithAppleButton = siwa.AppleSignInButton(
       style: siwa.ButtonStyle.black,
       type: siwa.ButtonType.signIn,
-      onPressed: !_isValidName()
-          ? null
-          : () {
-              if (!_isValidName()) {
-                return;
-              }
-              _formKey.currentState.save();
+      onPressed: () {
+        // only name agree validate
+        if (!_isValidName()) {
+          return;
+        }
+        _formKey.currentState.save();
 
-              widget.onSignUpWithApple(_name);
-            },
+        widget.onSignUpWithApple(_name);
+      },
     );
 
     final _signUpByTestUserButton = RoundedButton(
@@ -299,21 +300,21 @@ class _SignUpFormState extends State<SignUpForm> {
           _signUpButton.padding(),
 
           // Or
-          const Divider(
-            indent: 20,
-            endIndent: 20,
-            color: Colors.grey,
-          ),
+//          const Divider(
+//            indent: 20,
+//            endIndent: 20,
+//            color: Colors.grey,
+//          ),
 
           // Google Sign up
-          _signUpWithGoogleButton.padding(),
+          // if (Platform.isIOS) _signUpWithGoogleButton.padding(),
 
           // Sign up with siwa
-          if (appleSignInAvailable.isAvailable)
-            _signInWithAppleButton.padding(),
+          // if (appleSignInAvailable.isAvailable)
+          //   _signInWithAppleButton.padding(),
 
           // test user
-          _signUpByTestUserButton.padding(),
+          // _signUpByTestUserButton.padding(),
         ],
       ),
     ).padding();
