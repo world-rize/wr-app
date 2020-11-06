@@ -1,71 +1,43 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/note/model/note.dart';
-import 'package:wr_app/domain/note/model/note_api_dto.dart';
 import 'package:wr_app/domain/note/note_repository.dart';
-import 'package:wr_app/domain/user/model/user.dart' as wr_user;
-import 'package:wr_app/util/cloud_functions.dart';
+import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/util/logger.dart';
 
 class NotePersistence implements NoteRepository {
+  NotePersistence({@required this.firestore});
+
+  final FirebaseFirestore firestore;
+
   @override
-  Future<Note> createNote(CreateNoteRequest req) async {
-    final firestore = FirebaseFirestore.instance;
-    final firebaseUser = FirebaseAuth.instance.currentUser;
-    await firestore
-        .collection('users')
-        .doc(firebaseUser.uid)
-        .get()
-        .then((value) {
-      final user = wr_user.User.fromJson(value.data());
-      user.notes.putIfAbsent(req.note.id, () => req.note);
-      InAppLogger.debug('${req.note.toJson()}');
-      return firestore
-          .collection('users')
-          .doc(firebaseUser.uid)
-          .set(user.toJson());
-    });
-    return req.note;
+  Future<Note> createNote({
+    @required User user,
+    @required Note note,
+  }) async {
+    user.notes.putIfAbsent(note.id, () => note);
+    InAppLogger.debug('${note.toJson()}');
+    await firestore.collection('users').doc(user.uuid).set(user.toJson());
+    return note;
   }
 
   @override
-  Future<void> deleteNote(DeleteNoteRequest req) {
-    final firestore = FirebaseFirestore.instance;
-    final firebaseUser = FirebaseAuth.instance.currentUser;
-    return firestore
-        .collection('users')
-        .doc(firebaseUser.uid)
-        .get()
-        .then((value) {
-      final user = wr_user.User.fromJson(value.data());
-      user.notes.removeWhere((key, value) => value.id == req.noteId);
-      InAppLogger.debug('delete note ${req.noteId}');
-      return firestore
-          .collection('users')
-          .doc(firebaseUser.uid)
-          .set(user.toJson());
-    });
+  Future<void> deleteNote({@required User user, @required Note note}) {
+    user.notes.removeWhere((key, value) => value.id == note.id);
+    InAppLogger.debug('delete note $note');
+    return firestore.collection('users').doc(user.uuid).set(user.toJson());
   }
 
   @override
-  Future<Note> updateNote(UpdateNoteRequest req) async {
-    final firestore = FirebaseFirestore.instance;
-    final firebaseUser = FirebaseAuth.instance.currentUser;
-    await firestore
-        .collection('users')
-        .doc(firebaseUser.uid)
-        .get()
-        .then((value) {
-      final user = wr_user.User.fromJson(value.data());
-      user.notes[req.note.id] = req.note;
-      InAppLogger.debug('update note ${req.note.id}: ${req.note.title}');
-      return firestore
-          .collection('users')
-          .doc(firebaseUser.uid)
-          .set(user.toJson());
+  Future<Note> updateNote({@required User user, @required Note note}) async {
+    await firestore.collection('users').doc(user.uuid).get().then((value) {
+      final user = User.fromJson(value.data());
+      user.notes[note.id] = note;
+      InAppLogger.debug('update note ${note.id}: ${note.title}');
+      return firestore.collection('users').doc(user.uuid).set(user.toJson());
     });
-    return req.note;
+    return note;
   }
 }

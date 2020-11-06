@@ -118,11 +118,10 @@ class NoteNotifier extends ChangeNotifier {
       defaultNote.isDefaultNote = false;
     }
 
-    final note = _user.getNoteById(noteId: noteId).clone();
-    note.isDefaultNote = true;
+    final note = _user.getNoteById(noteId: noteId)..isDefaultNote = true;
 
-    await _noteService.updateNote(note: defaultNote);
-    await _noteService.updateNote(note: note);
+    await _noteService.updateNote(note: defaultNote, user: _user);
+    await _noteService.updateNote(note: note, user: _user);
     _user.notes[note.id] = note;
 
     notifyListeners();
@@ -133,7 +132,8 @@ class NoteNotifier extends ChangeNotifier {
 
   /// delete note
   Future<void> deleteNote({@required String noteId}) async {
-    await _noteService.deleteNote(noteId: noteId);
+    final note = _user.getNoteById(noteId: noteId).clone();
+    await _noteService.deleteNote(user: _user, note: note);
     _user.notes.remove(noteId);
 
     notifyListeners();
@@ -147,10 +147,9 @@ class NoteNotifier extends ChangeNotifier {
     @required String noteId,
     @required NotePhrase phrase,
   }) async {
-    final note = _user.getNoteById(noteId: noteId).clone();
-    note.addPhrase(phrase);
+    final note = _user.getNoteById(noteId: noteId).clone()..addPhrase(phrase);
 
-    await _noteService.updateNote(note: note);
+    await _noteService.updateNote(user: _user, note: note);
     _user.notes[noteId] = note;
 
     notifyListeners();
@@ -167,7 +166,7 @@ class NoteNotifier extends ChangeNotifier {
   }) async {
     try {
       final note = _user.getNoteById(noteId: noteId)?.clone();
-      await _noteService.updateNote(note: note);
+      await _noteService.updateNote(user: _user, note: note);
       _user.notes[note.id] = note;
       notifyListeners();
       InAppLogger.info('updatePhraseInNote $noteId');
@@ -212,7 +211,7 @@ class NoteNotifier extends ChangeNotifier {
     notePhrase
       ..japanese = phrase.title['ja']
       ..english = phrase.title['en'];
-    await _noteService.updateNote(note: note);
+    await _noteService.updateNote(user: _user, note: note);
     notifyListeners();
   }
 }
