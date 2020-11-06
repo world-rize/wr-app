@@ -1,3 +1,4 @@
+import 'package:data_classes/data_classes.dart';
 import 'package:get_it/get_it.dart';
 import 'package:sentry/io_client.dart';
 import 'package:wr_app/util/flavor.dart';
@@ -11,7 +12,10 @@ bool get isInDebugMode {
 }
 
 /// Reports [error] along with its [stackTrace] to Sentry.io.
-Future<Null> sentryReportError({dynamic error, dynamic stackTrace}) async {
+Future<void> sentryReportError({
+  @required dynamic error,
+  @required dynamic stackTrace,
+}) async {
   InAppLogger.error(error);
 
   // Errors thrown in development mode are unlikely to be interesting. You can
