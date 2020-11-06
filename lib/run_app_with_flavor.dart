@@ -246,7 +246,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   } on Exception catch (e) {
     // set up error
     InAppLogger.error(e);
-    final sentry = GetIt.I<SentryClient>();
-    await sentry.captureException(exception: e);
+    await sentryReportError(error: e, stackTrace: StackTrace.current);
   }
 }
