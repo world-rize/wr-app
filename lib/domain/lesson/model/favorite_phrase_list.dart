@@ -41,17 +41,12 @@ class FavoritePhraseList {
     );
   }
 
-  /// 空の作成
-  factory FavoritePhraseList.empty(String title) {
-    final id = Uuid().v4();
-    return FavoritePhraseList(
-      id: id,
-      title: title,
-      sortType: '',
-      isDefault: false,
-      phrases: [],
-    );
-  }
+  FavoritePhraseList.create({
+    @required this.title,
+    this.isDefault = false,
+  })  : id = Uuid().v4(),
+        sortType = '',
+        phrases = [];
 
   factory FavoritePhraseList.fromJson(Map<dynamic, dynamic> json) =>
       _$FavoritePhraseListFromJson(json);

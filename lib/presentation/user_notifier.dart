@@ -65,7 +65,7 @@ class UserNotifier with ChangeNotifier {
     if (favorite) {
       // false -> true
       _user = await _userService.favorite(
-        uuid: _user.uuid,
+        user: _user,
         listId: defaultFavoriteList.id,
         phraseId: phraseId,
         favorite: favorite,
@@ -73,7 +73,7 @@ class UserNotifier with ChangeNotifier {
       await Future.delayed(const Duration(milliseconds: 1000));
     } else {
       _user = await _userService.favorite(
-        uuid: _user.uuid,
+        user: _user,
         listId: defaultFavoriteList.id,
         phraseId: phraseId,
         favorite: favorite,
@@ -108,7 +108,7 @@ class UserNotifier with ChangeNotifier {
 
   /// テストを受ける
   Future<void> doTest({@required String sectionId}) async {
-    _user = await _userService.doTest(uuid: _user.uuid, sectionId: sectionId);
+    _user = await _userService.doTest(user: _user, sectionId: sectionId);
     notifyListeners();
 
     await sendEvent(
@@ -123,7 +123,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> sendTestScore(
       {@required String sectionId, @required int score}) async {
     _user = await _userService.sendTestResult(
-        uuid: _user.uuid, sectionId: sectionId, score: score);
+        user: _user, sectionId: sectionId, score: score);
     notifyListeners();
 
     InAppLogger.info('sendTestScore');
@@ -145,8 +145,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> createFavoriteList({
     @required String title,
   }) async {
-    _user =
-        await _userService.createFavoriteList(uuid: _user.uuid, title: title);
+    _user = await _userService.createFavoriteList(user: _user, title: title);
 
     notifyListeners();
 
@@ -155,10 +154,9 @@ class UserNotifier with ChangeNotifier {
 
   /// delete favorite list
   Future<void> deleteFavoriteList({
-    @required String uuid,
     @required String listId,
   }) async {
-    _user = await _userService.deleteFavoriteList(uuid: uuid, listId: listId);
+    _user = await _userService.deleteFavoriteList(user: _user, listId: listId);
 
     notifyListeners();
 
@@ -178,8 +176,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> createPhrasesList({
     @required String title,
   }) async {
-    _user =
-        await _userService.createFavoriteList(uuid: _user.uuid, title: title);
+    _user = await _userService.createFavoriteList(user: _user, title: title);
 
     notifyListeners();
 
@@ -232,7 +229,7 @@ class UserNotifier with ChangeNotifier {
 
   /// check test 30days streaks
   Future<bool> checkTestStreaks() async {
-    return _userService.checkTestStreaks(uuid: _user.uuid);
+    return _userService.checkTestStreaks(user: _user);
   }
 
   /// search user from user id
@@ -243,8 +240,8 @@ class UserNotifier with ChangeNotifier {
   Future<void> introduceFriend({
     @required String introduceeId,
   }) async {
-    await _userService.introduceFriend(
-        uuid: _user.uuid, introduceeUserId: introduceeId);
+    // TODO: イケてない
+    await _userService.introduceFriend(introduceeUserId: introduceeId);
     _user = await _userService.readUser(uuid: _user.uuid);
     notifyListeners();
   }

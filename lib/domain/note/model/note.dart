@@ -42,6 +42,27 @@ class Note {
     );
   }
 
+  factory Note.create({
+    @required String title,
+    bool isDefault = false,
+    bool isAchieved = false,
+  }) {
+    final noteId = Uuid().v4();
+    return Note(
+      id: noteId,
+      title: title,
+      sortType: 'createdAt-',
+      isDefaultNote: isDefault,
+      isAchievedNote: isAchieved,
+      phrases: isAchieved
+          ? []
+          : List.generate(
+              30,
+              (index) => NotePhrase.create(),
+            ),
+    );
+  }
+
   factory Note.empty(
     String title, {
     bool isDefaultNote = false,

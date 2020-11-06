@@ -2,6 +2,7 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
@@ -30,6 +31,50 @@ class User {
   factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
+
+  factory User.create() {
+    final uuid = Uuid().v4();
+    final defaultFavoriteList = FavoritePhraseList.create(
+      title: 'お気に入り',
+      isDefault: true,
+    );
+    final defaultNote = Note.create(
+      title: 'ノート',
+      isDefault: true,
+    );
+    final achievedNote = Note.create(
+      title: 'Achieved Note',
+      isAchieved: true,
+    );
+
+    return User(
+      uuid: uuid,
+      name: '',
+      // TODO
+      userId: uuid,
+      favorites: {
+        defaultFavoriteList.id: defaultFavoriteList,
+      },
+      notes: {
+        defaultNote.id: defaultNote,
+        achievedNote.id: achievedNote,
+      },
+      statistics: UserStatistics(
+        testResults: [],
+        points: 0,
+        testLimitCount: 3,
+        lastLogin: DateTime.now().toIso8601String(),
+        isIntroducedFriend: false,
+      ),
+      activities: [],
+      attributes: UserAttributes(
+        age: '',
+        email: '',
+        membership: Membership.normal,
+      ),
+      items: {},
+    );
+  }
 
   factory User.empty() {
     return User(
