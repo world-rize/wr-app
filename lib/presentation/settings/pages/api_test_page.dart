@@ -1,5 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -187,6 +189,25 @@ class APITestView extends StatelessWidget {
               ),
             ],
           ),
+          SettingsSection(
+            title: 'Text Firestore',
+            tiles: [
+              SettingsTile(
+                title: 'read user date',
+                onTap: () {
+                  final firestore = FirebaseFirestore.instance;
+                  final firebaseUser = FirebaseAuth.instance.currentUser;
+                  firestore
+                      .collection('users')
+                      .doc(firebaseUser.uid)
+                      .get()
+                      .then((value) {
+                    InAppLogger.debug('${value.data()}');
+                  });
+                },
+              ),
+            ],
+          )
         ],
       ),
     );

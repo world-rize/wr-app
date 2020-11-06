@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:admob_flutter/admob_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contentful/client.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -23,7 +24,6 @@ import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence_mock.dart';
 import 'package:wr_app/infrastructure/note/note_persistence.dart';
-import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
@@ -148,7 +148,8 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         useMock ? LessonPersistenceMock() : LessonPersistence();
     final authPersistence = useMock ? AuthPersistenceMock() : AuthPersistence();
     final systemPersistence = SystemPersistence();
-    final notePersistence = useMock ? NotePersistenceMock() : NotePersistence();
+    final notePersistence =
+        NotePersistence(firestore: FirebaseFirestore.instance);
     final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
 
     // services

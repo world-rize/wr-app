@@ -3,9 +3,9 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/note/model/note.dart';
-import 'package:wr_app/domain/note/model/note_api_dto.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/note/note_repository.dart';
+import 'package:wr_app/domain/user/model/user.dart';
 
 class NoteService {
   NoteService({
@@ -28,19 +28,23 @@ class NoteService {
   }
 
   Future<Note> createNote({
+    @required User user,
     @required Note note,
   }) async {
-    final req = CreateNoteRequest(note: note);
-    return _notePersistence.createNote(req);
+    return _notePersistence.createNote(user: user, note: note);
   }
 
-  Future<void> deleteNote({@required String noteId}) {
-    final req = DeleteNoteRequest(noteId: noteId);
-    return _notePersistence.deleteNote(req);
+  Future<void> deleteNote({
+    @required User user,
+    @required Note note,
+  }) {
+    return _notePersistence.deleteNote(user: user, note: note);
   }
 
-  Future<void> updateNote({@required Note note}) {
-    final req = UpdateNoteRequest(note: note);
-    return _notePersistence.updateNote(req);
+  Future<void> updateNote({
+    @required User user,
+    @required Note note,
+  }) {
+    return _notePersistence.updateNote(user: user, note: note);
   }
 }
