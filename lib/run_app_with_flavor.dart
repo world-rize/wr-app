@@ -29,7 +29,6 @@ import 'package:wr_app/infrastructure/article/article_persistence.dart';
 import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
 import 'package:wr_app/infrastructure/note/note_persistence.dart';
-import 'package:wr_app/infrastructure/note/note_persistence_mock.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence.dart';
 import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
 import 'package:wr_app/presentation/app.dart';
@@ -171,9 +170,9 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       googleSignIn: GetIt.I<GoogleSignIn>(),
     );
     final systemPersistence = SystemPersistence();
-    final notePersistence = useMock
-        ? NotePersistenceMock(userRepository: userPersistence)
-        : NotePersistence();
+
+    final notePersistence =
+        NotePersistence(firestore: FirebaseFirestore.instance);
     final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
 
     // services
@@ -273,7 +272,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
   } on Exception catch (e) {
     // set up error
     InAppLogger.error(e);
-    final sentry = GetIt.I<SentryClient>();
-    await sentry.captureException(exception: e);
+    await sentryReportError(error: e, stackTrace: StackTrace.current);
   }
 }
