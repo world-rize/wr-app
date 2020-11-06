@@ -1,7 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-// Copyright © 2020 WorldRIZe. All rights reserved.
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +9,6 @@ import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/infrastructure/api/functions.dart';
 
 extension StoreEx on FirebaseFirestore {
   CollectionReference get users => collection('users');
@@ -40,7 +37,6 @@ Future<bool> snapShotDiff<T>({
 void main() {
   final store = MockFirestoreInstance();
   final repo = UserPersistence(store: store);
-  final service = UserService(userPersistence: repo, userApi: UserAPI());
 
   setUp(() async {
     print('setup');
@@ -61,50 +57,59 @@ void main() {
     await store.setDummyUser(initialUser);
   });
 
-  group('UserService', () {
-    test('sendTestResult', () async {
+  group('User Persistence', () {
+    test('readUser', () async {
+      final user = await repo.readUser(uuid: 'test');
+      final uuid = (await store.getDummyUser()).uuid;
+      expect(user.uuid, uuid);
+    });
+
+    test('createUser', () async {
+      final user = await repo.createUser(name: 'Test', email: 'a@b.com');
+      expect(user.name, 'Test');
+    });
+
+    test('deleteFavoriteList', () async {
+      final beforeUser = await store.getDummyUser();
+      await repo.deleteFavoriteList(user: beforeUser, listId: 'favlist');
+      final afterUser = await store.getDummyUser();
+      expect(afterUser.favorites.containsKey('favlist'), false);
+    });
+
+    test('createFavoriteList', () async {
       final diff = await snapShotDiff<User>(
         getter: () => store.getDummyUser(),
         callback: () async {
           final u = await store.getDummyUser();
-          await service.sendTestResult(user: u, sectionId: 'section', score: 3);
+          await repo.createFavoriteList(user: u, title: '');
         },
-        matcher: (b, a) =>
-            b.statistics.testResults.length + 1 ==
-            a.statistics.testResults.length,
+        matcher: (b, a) {
+          print(b.favorites.keys);
+          print(a.favorites.keys);
+          return b.favorites.length + 1 == a.favorites.length;
+        },
       );
-
-      expect(true, diff);
+      expect(diff, true);
     });
 
-    test('checkTestStreaks', () async {
-      final user = await store.getDummyUser();
-      final streaked = await service.checkTestStreaks(user: user);
-      expect(true, streaked);
+    test('deleteUser', () async {
+      await repo.deleteUser(uuid: 'test');
+      final ss = await store.users.doc('test').get();
+      expect(ss.exists, false);
     });
 
-    test('doTest', () async {
+    test('updateUser', () async {
       final diff = await snapShotDiff<User>(
         getter: () => store.getDummyUser(),
         callback: () async {
-          final u = await store.getDummyUser();
-          await service.doTest(user: u, sectionId: '');
+          final u = await store.getDummyUser()
+            ..attributes.email = 'c@d.com';
+          await repo.updateUser(user: u);
         },
-        matcher: (b, a) =>
-            b.statistics.testLimitCount - 1 == a.statistics.testLimitCount,
+        matcher: (b, a) => b.attributes.email == 'c@d.com',
       );
 
-      expect(true, diff);
-    });
-
-    test('favoritePhrase', () async {
-      final user = await store.getDummyUser();
-      final favList = user.getDefaultFavoriteList();
-      await service.favorite(
-          user: user, phraseId: 'phrase', listId: favList.id, favorite: true);
-      final afterFavList =
-          (await store.getDummyUser()).getDefaultFavoriteList();
-      expect(1, afterFavList.phrases.where((d) => d.id == 'phrase').length);
+      expect(diff, true);
     });
   });
 }
