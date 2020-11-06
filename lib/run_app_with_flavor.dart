@@ -24,6 +24,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/article/article_persistence.dart';
 import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
 import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
@@ -176,7 +177,10 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
 
     // services
-    final userService = UserService(userPersistence: userPersistence);
+    final userService = UserService(
+      userPersistence: userPersistence,
+      userApi: UserAPI(),
+    );
     final articleService =
         ArticleService(articlePersistence: articlePersistence);
     final lessonService = LessonService(lessonPersistence: lessonPersistence);
