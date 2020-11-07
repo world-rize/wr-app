@@ -39,7 +39,7 @@ final List<ArticleCategory> categories = <ArticleCategory>[
 //  ),
 ];
 
-class ArticlePersistence implements ArticleRepository {
+class ArticlePersistence implements IArticleRepository {
   @override
   Future<List<ArticleDigest>> findByCategory(
       Client client, String category) async {

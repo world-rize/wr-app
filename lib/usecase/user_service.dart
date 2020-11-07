@@ -10,18 +10,18 @@ import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
-import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/domain/user/i_user_repository.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 
 // TODO: Error handling
 class UserService {
   const UserService({
-    @required UserRepository userPersistence,
+    @required IUserRepository userPersistence,
     @required IUserAPI userApi,
   })  : _userPersistence = userPersistence,
         _userApi = userApi;
 
-  final UserRepository _userPersistence;
+  final IUserRepository _userPersistence;
   final UserAPI _userApi;
 
   /// ユーザーデータを習得します

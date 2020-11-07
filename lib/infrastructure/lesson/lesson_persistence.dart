@@ -9,7 +9,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wr_app/domain/lesson/lesson_repository.dart';
+import 'package:wr_app/domain/lesson/i_lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/util/cloud_functions.dart';
@@ -49,7 +49,7 @@ Future<List<Lesson>> loadAllLessonsFromLocal({
   return lessons;
 }
 
-class LessonPersistence implements LessonRepository {
+class LessonPersistence implements ILessonRepository {
   String SHOW_JAPANESE = 'show_japanese';
   String SHOW_ENGLISH = 'show_english';
 

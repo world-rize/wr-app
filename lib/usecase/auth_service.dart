@@ -1,20 +1,20 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/material.dart';
-import 'package:wr_app/domain/auth/auth_repository.dart';
+import 'package:wr_app/domain/auth/i_auth_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/domain/user/i_user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
 class AuthService {
   const AuthService({
-    @required AuthRepository authPersistence,
-    @required UserRepository userPersistence,
+    @required IAuthRepository authPersistence,
+    @required IUserRepository userPersistence,
   })  : _authPersistence = authPersistence,
         _userPersistence = userPersistence;
 
-  final AuthRepository _authPersistence;
-  final UserRepository _userPersistence;
+  final IAuthRepository _authPersistence;
+  final IUserRepository _userPersistence;
 
   /// sign up with email & password
   Future<User> signUpWithEmailAndPassword({

@@ -4,15 +4,15 @@ import 'package:data_classes/data_classes.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
-import 'package:wr_app/domain/note/note_repository.dart';
+import 'package:wr_app/domain/note/i_note_repository.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 
 class NoteService {
   NoteService({
-    @required NoteRepository notePersistence,
+    @required INoteRepository notePersistence,
   }) : _notePersistence = notePersistence;
 
-  final NoteRepository _notePersistence;
+  final INoteRepository _notePersistence;
 
   Note createDummyNote(String title, {bool isDefault = false}) {
     final phrases =

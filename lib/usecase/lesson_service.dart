@@ -3,16 +3,16 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wr_app/domain/lesson/index.dart';
-import 'package:wr_app/domain/lesson/lesson_repository.dart';
+import 'package:wr_app/domain/lesson/i_lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/util/logger.dart';
 
 class LessonService {
-  final LessonRepository _lessonPersistence;
+  final ILessonRepository _lessonPersistence;
 
   const LessonService({
-    @required LessonRepository lessonPersistence,
+    @required ILessonRepository lessonPersistence,
   }) : _lessonPersistence = lessonPersistence;
 
   Future<List<Lesson>> loadPhrases() {

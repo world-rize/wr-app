@@ -5,10 +5,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/domain/user/i_user_repository.dart';
 
 // TODO: i10n注入
-class UserPersistence implements UserRepository {
+class UserPersistence implements IUserRepository {
   const UserPersistence({@required this.store});
 
   final FirebaseFirestore store;

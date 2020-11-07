@@ -2,7 +2,7 @@
 
 import 'package:wr_app/domain/system/model/app_info.dart';
 
-abstract class SystemRepository {
+abstract class ISystemRepository {
   Future<void> notify({String title, String body, String payload});
 
   // テーマ: システムに従う

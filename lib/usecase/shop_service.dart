@@ -2,16 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
-import 'package:wr_app/domain/shop/shop_repository.dart';
+import 'package:wr_app/domain/shop/i_shop_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/domain/user/i_user_repository.dart';
 
 class ShopService {
   final ShopRepository _shopPersistence;
-  final UserRepository _userPersistence;
+  final IUserRepository _userPersistence;
 
   const ShopService({
-    @required UserRepository userPersistence,
+    @required IUserRepository userPersistence,
     @required ShopRepository shopPersistence,
   })  : _userPersistence = userPersistence,
         _shopPersistence = shopPersistence;

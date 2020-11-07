@@ -2,14 +2,14 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/system/model/app_info.dart';
-import 'package:wr_app/domain/system/system_repository.dart';
+import 'package:wr_app/domain/system/i_system_repository.dart';
 import 'package:wr_app/util/notification.dart';
 
 class SystemService {
-  final SystemRepository _systemPersistence;
+  final ISystemRepository _systemPersistence;
 
   const SystemService({
-    @required SystemRepository systemPersistence,
+    @required ISystemRepository systemPersistence,
   }) : _systemPersistence = systemPersistence;
 
   bool getDarkMode() => _systemPersistence.getDarkMode();

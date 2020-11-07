@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:wr_app/domain/shop/model/shop_item.dart';
-import 'package:wr_app/domain/shop/shop_repository.dart';
+import 'package:wr_app/domain/shop/i_shop_repository.dart';
 
 class ShopPersistenceMock implements ShopRepository {
   // TODO: マスタデータとして管理(Firebaseとかで)
