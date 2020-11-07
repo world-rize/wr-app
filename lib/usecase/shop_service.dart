@@ -2,31 +2,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
-import 'package:wr_app/domain/shop/shop_repository.dart';
+import 'package:wr_app/infrastructure/shop/i_shop_repository.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/infrastructure/user/i_user_repository.dart';
 
 class ShopService {
-  final ShopRepository _shopPersistence;
-  final UserRepository _userPersistence;
+  final IShopRepository _shopRepository;
+  final IUserRepository _userRepository;
 
   const ShopService({
-    @required UserRepository userPersistence,
-    @required ShopRepository shopPersistence,
-  })  : _userPersistence = userPersistence,
-        _shopPersistence = shopPersistence;
+    @required IUserRepository userRepository,
+    @required IShopRepository shopRepository,
+  })  : _userRepository = userRepository,
+        _shopRepository = shopRepository;
 
   /// ショップのアイテムを取得
   Future<List<GiftItem>> getShopItems() {
-    return _shopPersistence.shopItems();
+    return _shopRepository.shopItems();
   }
 
   Future sendAmazonGiftRequest({@required String uid}) {
-    return _shopPersistence.sendAmazonGiftEmail(uid);
+    return _shopRepository.sendAmazonGiftEmail(uid);
   }
 
   Future sendITunesRequest({@required String uid}) {
-    return _shopPersistence.sendITunesGiftEmail(uid);
+    return _shopRepository.sendITunesGiftEmail(uid);
   }
 
   /// アイテムを購入
@@ -34,7 +34,7 @@ class ShopService {
     @required User user,
     @required String itemId,
   }) async {
-    final item = (await _shopPersistence.shopItems())
+    final item = (await _shopRepository.shopItems())
         .firstWhere((item) => item.id == itemId, orElse: () => null);
 
     assert(item != null);
@@ -48,7 +48,7 @@ class ShopService {
     user.items.putIfAbsent(item.id, () => 0);
     user.items[item.id] += 1;
     user.statistics.points -= item.price;
-    await _userPersistence.updateUser(user: user);
+    await _userRepository.updateUser(user: user);
 
     return user;
   }

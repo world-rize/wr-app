@@ -1,11 +1,9 @@
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/infrastructure/note/note_persistence.dart';
+import 'package:wr_app/infrastructure/note/note_repository.dart';
 
 void main() {
   final store = MockFirestoreInstance();
-  final noteRepo = NotePersistence(firestore: store);
+  final noteRepo = NoteRepository(firestore: store);
 
   // TODO: テストを書く
   // setUp(() async {
@@ -27,7 +25,7 @@ void main() {
   //   await store.setUser(initialUser);
   // });
 
-  // group('User Persistence', () {
+  // group('User Repository', () {
   //   test('readUser', () async {
   //     final user = await repo.readUser(uuid: 'test');
   //     final uuid = (await store.getUser('test')).uuid;

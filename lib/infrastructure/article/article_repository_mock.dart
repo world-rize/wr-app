@@ -2,6 +2,7 @@
 
 import 'package:contentful/client.dart';
 import 'package:wr_app/domain/article/index.dart';
+import 'package:wr_app/infrastructure/article/i_article_repository.dart';
 
 final List<ArticleCategory> categories = <ArticleCategory>[
   ArticleCategory(
@@ -30,7 +31,7 @@ final List<ArticleCategory> categories = <ArticleCategory>[
   )
 ];
 
-class ArticlePersistenceMock implements ArticleRepository {
+class ArticleRepositoryMock implements IArticleRepository {
   @override
   Future<List<ArticleDigest>> findByCategory(
       Client client, String category) async {

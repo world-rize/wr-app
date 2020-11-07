@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/root_view.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/ui/theme.dart';
 
 /// App Root

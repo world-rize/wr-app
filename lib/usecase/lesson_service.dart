@@ -3,20 +3,20 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:wr_app/domain/lesson/index.dart';
-import 'package:wr_app/domain/lesson/lesson_repository.dart';
+import 'package:wr_app/infrastructure/lesson/i_lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/util/logger.dart';
 
 class LessonService {
-  final LessonRepository _lessonPersistence;
+  final ILessonRepository _lessonRepository;
 
   const LessonService({
-    @required LessonRepository lessonPersistence,
-  }) : _lessonPersistence = lessonPersistence;
+    @required ILessonRepository lessonRepository,
+  }) : _lessonRepository = lessonRepository;
 
   Future<List<Lesson>> loadPhrases() {
-    return _lessonPersistence.loadAllLessons();
+    return _lessonRepository.loadAllLessons();
   }
 
   List<Section> getSectionsById({
@@ -33,25 +33,25 @@ class LessonService {
     final env = DotEnv().env;
     final email = env['REQUEST_MAIL_ADDRESS'];
     assert(email != '');
-    await _lessonPersistence.sendPhraseRequest(email: email, text: text);
+    await _lessonRepository.sendPhraseRequest(email: email, text: text);
 
     InAppLogger.info('send phrase request');
   }
 
-  bool getShowJapanese() => _lessonPersistence.getShowJapanese();
-  bool getShowEnglish() => _lessonPersistence.getShowEnglish();
+  bool getShowJapanese() => _lessonRepository.getShowJapanese();
+  bool getShowEnglish() => _lessonRepository.getShowEnglish();
 
   void toggleShowJapanese() {
-    final value = _lessonPersistence.getShowJapanese();
-    _lessonPersistence.setShowJapanese(value: !value);
+    final value = _lessonRepository.getShowJapanese();
+    _lessonRepository.setShowJapanese(value: !value);
   }
 
   void toggleShowEnglish() {
-    final value = _lessonPersistence.getShowEnglish();
-    _lessonPersistence.setShowEnglish(value: !value);
+    final value = _lessonRepository.getShowEnglish();
+    _lessonRepository.setShowEnglish(value: !value);
   }
 
   Future<List<Phrase>> newComingPhrases() {
-    return _lessonPersistence.newComingPhrases();
+    return _lessonRepository.newComingPhrases();
   }
 }

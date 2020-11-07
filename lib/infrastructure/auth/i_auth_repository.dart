@@ -4,7 +4,7 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
-abstract class AuthRepository {
+abstract class IAuthRepository {
   Future<User> signUpWithEmailAndPassword({
     @required String email,
     @required String password,

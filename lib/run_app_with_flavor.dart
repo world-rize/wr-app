@@ -21,27 +21,34 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wr_app/domain/lesson/index.dart';
-import 'package:wr_app/domain/system/index.dart';
-import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
-import 'package:wr_app/infrastructure/article/article_persistence.dart';
-import 'package:wr_app/infrastructure/article/article_persistence_mock.dart';
-import 'package:wr_app/infrastructure/auth/auth_persistence.dart';
-import 'package:wr_app/infrastructure/note/note_persistence.dart';
-import 'package:wr_app/infrastructure/shop/shop_persistence.dart';
-import 'package:wr_app/infrastructure/shop/shop_persistence_mock.dart';
+import 'package:wr_app/infrastructure/article/article_repository.dart';
+import 'package:wr_app/infrastructure/article/article_repository_mock.dart';
+import 'package:wr_app/infrastructure/auth/auth_repository.dart';
+import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
+import 'package:wr_app/infrastructure/lesson/lesson_repository_mock.dart';
+import 'package:wr_app/infrastructure/note/note_repository.dart';
+import 'package:wr_app/infrastructure/shop/shop_repository.dart';
+import 'package:wr_app/infrastructure/shop/shop_repository_mock.dart';
+import 'package:wr_app/infrastructure/system/system_repository.dart';
+import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
+import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/maintenance.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/shop_notifier.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/auth_service.dart';
+import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/usecase/shop_service.dart';
+import 'package:wr_app/usecase/system_service.dart';
+import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/cloud_functions.dart';
 import 'package:wr_app/util/env_keys.dart';
@@ -159,36 +166,34 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     await setupGlobalSingletons(flavor: flavor, useMock: useMock);
 
     // repos
-    final articlePersistence =
-        useMock ? ArticlePersistenceMock() : ArticlePersistence();
-    final userPersistence =
-        UserPersistence(store: GetIt.I<FirebaseFirestore>());
-    final lessonPersistence =
-        useMock ? LessonPersistenceMock() : LessonPersistence();
-    final authPersistence = AuthPersistence(
+    final articleRepository =
+        useMock ? ArticleRepositoryMock() : ArticleRepository();
+    final userRepository = UserRepository(store: GetIt.I<FirebaseFirestore>());
+    final lessonRepository =
+        useMock ? LessonRepositoryMock() : LessonRepository();
+    final authRepository = AuthRepository(
       auth: GetIt.I<FirebaseAuth>(),
       googleSignIn: GetIt.I<GoogleSignIn>(),
     );
-    final systemPersistence = SystemPersistence();
+    final systemRepository = SystemRepository();
 
-    final notePersistence =
-        NotePersistence(firestore: FirebaseFirestore.instance);
-    final shopPersistence = useMock ? ShopPersistenceMock() : ShopPersistence();
+    final noteRepository =
+        NoteRepository(firestore: FirebaseFirestore.instance);
+    final shopRepository = useMock ? ShopRepositoryMock() : ShopRepository();
 
     // services
     final userService = UserService(
-      userPersistence: userPersistence,
+      userRepository: userRepository,
       userApi: UserAPI(),
     );
-    final articleService =
-        ArticleService(articlePersistence: articlePersistence);
-    final lessonService = LessonService(lessonPersistence: lessonPersistence);
-    final systemService = SystemService(systemPersistence: systemPersistence);
+    final articleService = ArticleService(articleRepository: articleRepository);
+    final lessonService = LessonService(lessonRepository: lessonRepository);
+    final systemService = SystemService(systemRepository: systemRepository);
     final authService = AuthService(
-        authPersistence: authPersistence, userPersistence: userPersistence);
+        authRepository: authRepository, userRepository: userRepository);
     final shopService = ShopService(
-        userPersistence: userPersistence, shopPersistence: shopPersistence);
-    final noteService = NoteService(notePersistence: notePersistence);
+        userRepository: userRepository, shopRepository: shopRepository);
+    final noteService = NoteService(noteRepository: noteRepository);
 
     // maintenance check
     final appInfo = await systemService.getAppInfo();

@@ -12,6 +12,7 @@ import 'package:wr_app/presentation/extensions.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
 import 'package:wr_app/presentation/lesson/widgets/reward_dialog.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 

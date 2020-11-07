@@ -1,6 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
 
 void main() {
   // for using AssetBundle
@@ -16,7 +17,7 @@ void main() {
     });
 
     test('sections of all lessons has 7 phrases', () async {
-      final repo = LessonPersistence();
+      final repo = LessonRepository();
       final lessons = await repo.loadAllLessons();
       for (final lesson in lessons) {
         final sections = Section.fromLesson(lesson);

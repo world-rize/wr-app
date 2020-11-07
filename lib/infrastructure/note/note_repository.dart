@@ -3,12 +3,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/note/model/note.dart';
-import 'package:wr_app/domain/note/note_repository.dart';
+import 'package:wr_app/infrastructure/note/i_note_repository.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/util/logger.dart';
 
-class NotePersistence implements NoteRepository {
-  NotePersistence({@required this.firestore});
+class NoteRepository implements INoteRepository {
+  NoteRepository({@required this.firestore});
 
   final FirebaseFirestore firestore;
 

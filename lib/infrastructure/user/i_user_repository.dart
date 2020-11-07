@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/user/index.dart';
 
-abstract class UserRepository {
+abstract class IUserRepository {
   Future<User> readUser({
     @required String uuid,
   });

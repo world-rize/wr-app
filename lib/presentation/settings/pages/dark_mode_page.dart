@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
 
 /// テーマページ
 class SettingsThemePage extends StatelessWidget {

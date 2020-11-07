@@ -10,25 +10,25 @@ import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
-import 'package:wr_app/domain/user/user_repository.dart';
+import 'package:wr_app/infrastructure/user/i_user_repository.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 
 // TODO: Error handling
 class UserService {
   const UserService({
-    @required UserRepository userPersistence,
+    @required IUserRepository userRepository,
     @required IUserAPI userApi,
-  })  : _userPersistence = userPersistence,
+  })  : _userRepository = userRepository,
         _userApi = userApi;
 
-  final UserRepository _userPersistence;
+  final IUserRepository _userRepository;
   final UserAPI _userApi;
 
   /// ユーザーデータを習得します
   Future<User> readUser({
     @required String uuid,
   }) async {
-    return _userPersistence.readUser(uuid: uuid);
+    return _userRepository.readUser(uuid: uuid);
   }
 
   /// フレーズをお気に入りに登録します
@@ -57,7 +57,7 @@ class UserService {
       list.phrases.removeAt(index);
     }
 
-    return _userPersistence.updateFavoriteList(user: user, list: list);
+    return _userRepository.updateFavoriteList(user: user, list: list);
   }
 
   /// 受講可能回数をリセット
@@ -65,7 +65,7 @@ class UserService {
     @required User user,
   }) async {
     user.statistics.testLimitCount = 3;
-    return _userPersistence.updateUser(user: user);
+    return _userRepository.updateUser(user: user);
   }
 
   /// ポイントを習得します
@@ -82,7 +82,7 @@ class UserService {
     @required Membership membership,
   }) {
     user.attributes.membership = membership;
-    return _userPersistence.updateUser(user: user);
+    return _userRepository.updateUser(user: user);
   }
 
   /// do test
@@ -100,7 +100,7 @@ class UserService {
       date: DateTime.now(),
     ));
 
-    return _userPersistence.updateUser(user: user);
+    return _userRepository.updateUser(user: user);
   }
 
   /// send result
@@ -121,12 +121,12 @@ class UserService {
       date: DateTime.now(),
     ));
 
-    return _userPersistence.updateUser(user: user);
+    return _userRepository.updateUser(user: user);
   }
 
   /// update user
   Future<User> updateUser({@required User user}) {
-    return _userPersistence.updateUser(user: user);
+    return _userRepository.updateUser(user: user);
   }
 
   /// create favorite list
@@ -134,7 +134,7 @@ class UserService {
     @required User user,
     @required String title,
   }) {
-    return _userPersistence.createFavoriteList(user: user, title: title);
+    return _userRepository.createFavoriteList(user: user, title: title);
   }
 
   /// delete favorite list
@@ -142,7 +142,7 @@ class UserService {
     @required User user,
     @required String listId,
   }) async {
-    return _userPersistence.deleteFavoriteList(user: user, listId: listId);
+    return _userRepository.deleteFavoriteList(user: user, listId: listId);
   }
 
   /// search user from User ID

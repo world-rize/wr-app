@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/note/widgets/note_table.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 
 /// `ノート` ページのトップ
 ///

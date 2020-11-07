@@ -3,11 +3,11 @@
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:get_it/get_it.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
-import 'package:wr_app/domain/shop/shop_repository.dart';
+import 'package:wr_app/infrastructure/shop/i_shop_repository.dart';
 import 'package:wr_app/util/cloud_functions.dart';
 import 'package:wr_app/util/env_keys.dart';
 
-class ShopPersistence implements ShopRepository {
+class ShopRepository implements IShopRepository {
   @override
   Future<List<GiftItem>> shopItems() async {
     return callFunction('getShopItems').then((res) => List.from(res.data)

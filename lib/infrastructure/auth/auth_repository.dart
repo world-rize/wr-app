@@ -4,11 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:wr_app/domain/auth/auth_repository.dart';
+import 'package:wr_app/infrastructure/auth/i_auth_repository.dart';
 import 'package:wr_app/util/cloud_functions.dart';
 
-class AuthPersistence implements AuthRepository {
-  const AuthPersistence({
+class AuthRepository implements IAuthRepository {
+  const AuthRepository({
     @required this.auth,
     @required this.googleSignIn,
   });

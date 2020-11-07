@@ -2,45 +2,45 @@
 
 import 'package:data_classes/data_classes.dart';
 import 'package:wr_app/domain/system/model/app_info.dart';
-import 'package:wr_app/domain/system/system_repository.dart';
+import 'package:wr_app/infrastructure/system/i_system_repository.dart';
 import 'package:wr_app/util/notification.dart';
 
 class SystemService {
-  final SystemRepository _systemPersistence;
+  final ISystemRepository _systemRepository;
 
   const SystemService({
-    @required SystemRepository systemPersistence,
-  }) : _systemPersistence = systemPersistence;
+    @required ISystemRepository systemRepository,
+  }) : _systemRepository = systemRepository;
 
-  bool getDarkMode() => _systemPersistence.getDarkMode();
+  bool getDarkMode() => _systemRepository.getDarkMode();
 
   void setDarkMode({bool value}) =>
-      _systemPersistence.setSetDarkMode(value: value);
+      _systemRepository.setSetDarkMode(value: value);
 
-  bool getFollowSystemTheme() => _systemPersistence.getFollowSystemTheme();
+  bool getFollowSystemTheme() => _systemRepository.getFollowSystemTheme();
 
   void setFollowSystemTheme({bool value}) =>
-      _systemPersistence.setFollowSystemTheme(value: value);
+      _systemRepository.setFollowSystemTheme(value: value);
 
-  bool getFirstLaunch() => _systemPersistence.getFirstLaunch();
+  bool getFirstLaunch() => _systemRepository.getFirstLaunch();
 
   void setFirstLaunch({bool value}) =>
-      _systemPersistence.setFirstLaunch(value: value);
+      _systemRepository.setFirstLaunch(value: value);
 
   bool getQuestionnaireAnswered() =>
-      _systemPersistence.getQuestionnaireAnswered();
+      _systemRepository.getQuestionnaireAnswered();
 
   void setQuestionnaireAnswered({bool value}) =>
-      _systemPersistence.setQuestionnaireAnswered(value: value);
+      _systemRepository.setQuestionnaireAnswered(value: value);
 
-  Future<AppInfo> getAppInfo() => _systemPersistence.getAppInfo();
+  Future<AppInfo> getAppInfo() => _systemRepository.getAppInfo();
 
   Future<void> notify(
       {NotificationNotifier notificator,
       String title,
       String body,
       String payload}) {
-    return _systemPersistence.notify(
+    return _systemRepository.notify(
         title: title, body: body, payload: payload);
   }
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/presentation/root_view.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/util/analytics.dart';
 
 /// 発音選択ページ
