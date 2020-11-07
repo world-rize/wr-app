@@ -9,7 +9,7 @@ import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/infrastructure/user/user_persistence.dart';
+import 'package:wr_app/infrastructure/user/user_repository.dart';
 
 extension StoreEx on FirebaseFirestore {
   CollectionReference get users => collection('users');

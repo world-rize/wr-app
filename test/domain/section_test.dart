@@ -1,7 +1,7 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wr_app/domain/lesson/index.dart';
-import 'package:wr_app/infrastructure/lesson/lesson_persistence.dart';
+import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
 
 void main() {
   // for using AssetBundle
