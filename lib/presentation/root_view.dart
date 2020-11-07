@@ -12,6 +12,7 @@ import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/index.dart';
 import 'package:wr_app/presentation/lesson/pages/anything_search_page.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';

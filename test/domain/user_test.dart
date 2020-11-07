@@ -12,6 +12,8 @@ import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
+import 'package:wr_app/infrastructure/user/user_persistence.dart';
+import 'package:wr_app/usecase/user_service.dart';
 
 extension StoreEx on FirebaseFirestore {
   CollectionReference get users => collection('users');
@@ -39,8 +41,8 @@ Future<bool> snapShotDiff<T>({
 
 void main() {
   final store = MockFirestoreInstance();
-  final repo = UserPersistence(store: store);
-  final service = UserService(userPersistence: repo, userApi: UserAPI());
+  final repo = UserRepository(store: store);
+  final service = UserService(userRepository: repo, userApi: UserAPI());
 
   setUp(() async {
     print('setup');

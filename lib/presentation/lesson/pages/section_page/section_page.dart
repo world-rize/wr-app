@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/widgets/phrase_detail_page_view.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/widgets/setting_dialog.dart';
 import 'package:wr_app/presentation/user_notifier.dart';

@@ -3,11 +3,11 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/domain/system/model/app_info.dart';
-import 'package:wr_app/domain/system/i_system_repository.dart';
+import 'package:wr_app/infrastructure/system/i_system_repository.dart';
 import 'package:wr_app/util/cloud_functions.dart';
 import 'package:wr_app/util/notification.dart';
 
-class SystemPersistence implements ISystemRepository {
+class SystemRepository implements ISystemRepository {
   @override
   Future<void> notify({String title, String body, String payload}) {
     final notificator = GetIt.I<NotificationNotifier>();

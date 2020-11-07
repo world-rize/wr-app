@@ -9,6 +9,7 @@ import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/infrastructure/user/user_persistence.dart';
 
 extension StoreEx on FirebaseFirestore {
   CollectionReference get users => collection('users');
@@ -36,7 +37,7 @@ Future<bool> snapShotDiff<T>({
 
 void main() {
   final store = MockFirestoreInstance();
-  final repo = UserPersistence(store: store);
+  final repo = UserRepository(store: store);
 
   setUp(() async {
     print('setup');
@@ -57,7 +58,7 @@ void main() {
     await store.setDummyUser(initialUser);
   });
 
-  group('User Persistence', () {
+  group('User Repository', () {
     test('readUser', () async {
       final user = await repo.readUser(uuid: 'test');
       final uuid = (await store.getDummyUser()).uuid;

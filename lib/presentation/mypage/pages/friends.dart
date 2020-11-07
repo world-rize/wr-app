@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';

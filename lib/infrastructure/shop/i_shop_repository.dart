@@ -2,7 +2,7 @@
 
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 
-abstract class ShopRepository {
+abstract class IShopRepository {
   Future<List<GiftItem>> shopItems();
 
   Future<void> sendAmazonGiftEmail(String uid);

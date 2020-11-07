@@ -11,9 +11,11 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
+import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/shop_notifier.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/logger.dart';
 

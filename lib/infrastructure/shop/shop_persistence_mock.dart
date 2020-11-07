@@ -1,9 +1,9 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:wr_app/domain/shop/model/shop_item.dart';
-import 'package:wr_app/domain/shop/i_shop_repository.dart';
+import 'package:wr_app/infrastructure/shop/i_shop_repository.dart';
 
-class ShopPersistenceMock implements ShopRepository {
+class ShopRepositoryMock implements IShopRepository {
   // TODO: マスタデータとして管理(Firebaseとかで)
   @override
   Future<List<GiftItem>> shopItems() async {

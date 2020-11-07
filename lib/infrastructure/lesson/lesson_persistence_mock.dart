@@ -3,13 +3,13 @@ import 'dart:async';
 
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wr_app/domain/lesson/i_lesson_repository.dart';
+import 'package:wr_app/infrastructure/lesson/i_lesson_repository.dart';
 import 'package:wr_app/domain/lesson/model/assets.dart';
 import 'package:wr_app/domain/lesson/model/lesson.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/util/logger.dart';
 
-class LessonPersistenceMock implements ILessonRepository {
+class LessonRepositoryMock implements ILessonRepository {
   String SHOW_JAPANESE = 'show_japanese';
   String SHOW_ENGLISH = 'show_english';
 
