@@ -1,6 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-enum GiftItemId {
+enum ShopItemId {
   accentIn,
   accentUk,
   accentUs,
@@ -10,49 +10,49 @@ enum GiftItemId {
   extraNote,
 }
 
-extension GiftItemIdEx on GiftItemId {
+extension ShopItemIdEx on ShopItemId {
   // TODO: json codec時に変換
-  static GiftItemId fromString(String id) {
+  static ShopItemId fromString(String id) {
     switch (id) {
       case 'accent_au':
-        return GiftItemId.accentAu;
+        return ShopItemId.accentAu;
       case 'accent_uk':
-        return GiftItemId.accentUk;
+        return ShopItemId.accentUk;
       case 'accent_us':
-        return GiftItemId.accentUs;
+        return ShopItemId.accentUs;
       case 'accent_in':
-        return GiftItemId.accentIn;
+        return ShopItemId.accentIn;
       case 'itunes':
-        return GiftItemId.iTunes;
+        return ShopItemId.iTunes;
       case 'amazon':
-        return GiftItemId.amazon;
+        return ShopItemId.amazon;
       case 'extra_note':
-        return GiftItemId.extraNote;
+        return ShopItemId.extraNote;
     }
     return null;
   }
 
   String get key {
     switch (this) {
-      case GiftItemId.accentAu:
+      case ShopItemId.accentAu:
         return 'accent_au';
         break;
-      case GiftItemId.accentUk:
+      case ShopItemId.accentUk:
         return 'accent_uk';
         break;
-      case GiftItemId.accentUs:
+      case ShopItemId.accentUs:
         return 'accent_us';
         break;
-      case GiftItemId.accentIn:
+      case ShopItemId.accentIn:
         return 'accent_in';
         break;
-      case GiftItemId.iTunes:
+      case ShopItemId.iTunes:
         return 'itunes';
         break;
-      case GiftItemId.amazon:
+      case ShopItemId.amazon:
         return 'amazon';
         break;
-      case GiftItemId.extraNote:
+      case ShopItemId.extraNote:
         return 'extra_note';
         break;
     }

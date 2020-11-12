@@ -25,8 +25,6 @@ import 'package:wr_app/infrastructure/auth/auth_repository.dart';
 import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
 import 'package:wr_app/infrastructure/lesson/lesson_repository_mock.dart';
 import 'package:wr_app/infrastructure/note/note_repository.dart';
-import 'package:wr_app/infrastructure/shop/shop_repository.dart';
-import 'package:wr_app/infrastructure/shop/shop_repository_mock.dart';
 import 'package:wr_app/infrastructure/system/system_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/presentation/app.dart';
@@ -34,14 +32,12 @@ import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/maintenance.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
-import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/usecase/auth_service.dart';
 import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
-import 'package:wr_app/usecase/shop_service.dart';
 import 'package:wr_app/usecase/system_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
@@ -167,7 +163,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
     final noteRepository =
         NoteRepository(firestore: FirebaseFirestore.instance);
-    final shopRepository = useMock ? ShopRepositoryMock() : ShopRepository();
 
     // services
     final userService = UserService(
@@ -179,9 +174,10 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     final systemService = SystemService(systemRepository: systemRepository);
     final authService = AuthService(
         authRepository: authRepository, userRepository: userRepository);
-    final shopService = ShopService(
-        userRepository: userRepository, shopRepository: shopRepository);
     final noteService = NoteService(noteRepository: noteRepository);
+
+    // DI Services
+    GetIt.I.registerSingleton<UserService>(userService);
 
     // maintenance check
     final appInfo = await systemService.getAppInfo();
@@ -192,19 +188,16 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
     final userNotifier = UserNotifier(userService: userService);
     final authNotifier = AuthNotifier(authService: authService);
-    final shopNotifier = ShopNotifier(shopService: shopService);
     authNotifier.addListener(() {
       userNotifier.user = authNotifier.user;
     });
     final noteNotifier = NoteNotifier(noteService: noteService);
     noteNotifier.addListener(() {
-      InAppLogger.debug('update note');
       userNotifier.user = noteNotifier.user;
     });
     userNotifier.addListener(() {
       authNotifier.user = userNotifier.user;
       noteNotifier.user = userNotifier.user;
-      shopNotifier.user = userNotifier.user;
     });
 
     final app = MultiProvider(
@@ -231,9 +224,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ),
         ChangeNotifierProvider.value(
           value: VoicePlayer(),
-        ),
-        ChangeNotifierProvider.value(
-          value: shopNotifier,
         ),
       ],
       child: WRApp(),

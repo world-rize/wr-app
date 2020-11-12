@@ -7,14 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:wr_app/domain/lesson/index.dart';
-import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
+import 'package:wr_app/presentation/mypage/notifier/shop_page_notifier.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
-import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/logger.dart';
@@ -27,7 +25,7 @@ class APITestView extends StatelessWidget {
     final un = context.watch<UserNotifier>();
     final ln = context.watch<LessonNotifier>();
     final nn = context.watch<NoteNotifier>();
-    final sn = context.watch<ShopNotifier>();
+    final sn = context.watch<ShopPageNotifier>();
 
     _showResultDialog(BuildContext context, String title, [dynamic content]) {
       showDialog(

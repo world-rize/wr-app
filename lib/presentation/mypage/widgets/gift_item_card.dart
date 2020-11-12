@@ -14,7 +14,7 @@ class GiftItemCard extends StatelessWidget {
     @required this.onTap,
   });
 
-  final GiftItem giftItem;
+  final ShopItem giftItem;
   final Function onTap;
 
   @override
