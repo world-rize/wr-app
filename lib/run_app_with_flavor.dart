@@ -23,7 +23,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/auth/auth_repository.dart';
 import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
-import 'package:wr_app/infrastructure/lesson/lesson_repository_mock.dart';
 import 'package:wr_app/infrastructure/note/note_repository.dart';
 import 'package:wr_app/infrastructure/system/system_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
@@ -152,9 +151,12 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     await setupGlobalSingletons(flavor: flavor, useMock: useMock);
 
     // repos
+<<<<<<< HEAD
+=======
+    final articleRepository = ArticleRepository();
+>>>>>>> develop
     final userRepository = UserRepository(store: GetIt.I<FirebaseFirestore>());
-    final lessonRepository =
-        useMock ? LessonRepositoryMock() : LessonRepository();
+    final lessonRepository = LessonRepository();
     final authRepository = AuthRepository(
       auth: GetIt.I<FirebaseAuth>(),
       googleSignIn: GetIt.I<GoogleSignIn>(),
@@ -162,7 +164,12 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     final systemRepository = SystemRepository();
 
     final noteRepository =
+<<<<<<< HEAD
         NoteRepository(firestore: FirebaseFirestore.instance);
+=======
+        NoteRepository(store: GetIt.I<FirebaseFirestore>());
+    final shopRepository = ShopRepository();
+>>>>>>> develop
 
     // services
     final userService = UserService(
