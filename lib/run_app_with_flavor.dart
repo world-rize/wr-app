@@ -23,7 +23,6 @@ import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/article/article_repository.dart';
-import 'package:wr_app/infrastructure/article/article_repository_mock.dart';
 import 'package:wr_app/infrastructure/auth/auth_repository.dart';
 import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
 import 'package:wr_app/infrastructure/lesson/lesson_repository_mock.dart';
@@ -166,8 +165,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     await setupGlobalSingletons(flavor: flavor, useMock: useMock);
 
     // repos
-    final articleRepository =
-        useMock ? ArticleRepositoryMock() : ArticleRepository();
+    final articleRepository = ArticleRepository();
     final userRepository = UserRepository(store: GetIt.I<FirebaseFirestore>());
     final lessonRepository =
         useMock ? LessonRepositoryMock() : LessonRepository();
