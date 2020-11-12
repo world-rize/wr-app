@@ -23,13 +23,10 @@ import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/article/article_repository.dart';
-import 'package:wr_app/infrastructure/article/article_repository_mock.dart';
 import 'package:wr_app/infrastructure/auth/auth_repository.dart';
 import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
-import 'package:wr_app/infrastructure/lesson/lesson_repository_mock.dart';
 import 'package:wr_app/infrastructure/note/note_repository.dart';
 import 'package:wr_app/infrastructure/shop/shop_repository.dart';
-import 'package:wr_app/infrastructure/shop/shop_repository_mock.dart';
 import 'package:wr_app/infrastructure/system/system_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/presentation/app.dart';
@@ -166,11 +163,9 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     await setupGlobalSingletons(flavor: flavor, useMock: useMock);
 
     // repos
-    final articleRepository =
-        useMock ? ArticleRepositoryMock() : ArticleRepository();
+    final articleRepository = ArticleRepository();
     final userRepository = UserRepository(store: GetIt.I<FirebaseFirestore>());
-    final lessonRepository =
-        useMock ? LessonRepositoryMock() : LessonRepository();
+    final lessonRepository = LessonRepository();
     final authRepository = AuthRepository(
       auth: GetIt.I<FirebaseAuth>(),
       googleSignIn: GetIt.I<GoogleSignIn>(),
@@ -178,8 +173,8 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     final systemRepository = SystemRepository();
 
     final noteRepository =
-        NoteRepository(firestore: FirebaseFirestore.instance);
-    final shopRepository = useMock ? ShopRepositoryMock() : ShopRepository();
+        NoteRepository(store: GetIt.I<FirebaseFirestore>());
+    final shopRepository = ShopRepository();
 
     // services
     final userService = UserService(
