@@ -3,7 +3,7 @@ import 'package:wr_app/infrastructure/note/note_repository.dart';
 
 void main() {
   final store = MockFirestoreInstance();
-  final noteRepo = NoteRepository(firestore: store);
+  final noteRepo = NoteRepository(store: store);
 
   // TODO: テストを書く
   // setUp(() async {

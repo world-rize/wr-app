@@ -8,9 +8,9 @@ import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/util/logger.dart';
 
 class NoteRepository implements INoteRepository {
-  NoteRepository({@required this.firestore});
+  NoteRepository({@required this.store});
 
-  final FirebaseFirestore firestore;
+  final FirebaseFirestore store;
 
   @override
   Future<Note> createNote({
@@ -19,7 +19,7 @@ class NoteRepository implements INoteRepository {
   }) async {
     user.notes.putIfAbsent(note.id, () => note);
     InAppLogger.debug('${note.toJson()}');
-    await firestore.collection('users').doc(user.uuid).set(user.toJson());
+    await store.collection('users').doc(user.uuid).set(user.toJson());
     return note;
   }
 
@@ -27,16 +27,16 @@ class NoteRepository implements INoteRepository {
   Future<void> deleteNote({@required User user, @required Note note}) {
     user.notes.removeWhere((key, value) => value.id == note.id);
     InAppLogger.debug('delete note $note');
-    return firestore.collection('users').doc(user.uuid).set(user.toJson());
+    return store.collection('users').doc(user.uuid).set(user.toJson());
   }
 
   @override
   Future<Note> updateNote({@required User user, @required Note note}) async {
-    await firestore.collection('users').doc(user.uuid).get().then((value) {
+    await store.collection('users').doc(user.uuid).get().then((value) {
       final user = User.fromJson(value.data());
       user.notes[note.id] = note;
       InAppLogger.debug('update note ${note.id}: ${note.title}');
-      return firestore.collection('users').doc(user.uuid).set(user.toJson());
+      return store.collection('users').doc(user.uuid).set(user.toJson());
     });
     return note;
   }
