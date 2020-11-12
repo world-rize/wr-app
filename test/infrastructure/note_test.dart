@@ -1,7 +1,4 @@
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
-import 'package:jiffy/jiffy.dart';
-import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
-import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/infrastructure/note/note_repository.dart';
@@ -26,8 +23,7 @@ void main() {
     await store.collection('users').doc(userUuid).delete();
   });
 
-  group('User Repository', () {
-    //Future<Note> createNote({
+  group('NoteRepository', () {
     test('createNote', () async {
       final initialUser = User.create()..uuid = userUuid;
       expect(initialUser.notes.length, 2);
@@ -39,7 +35,6 @@ void main() {
       expect(user.notes.length, 3);
     });
 
-    // Future<void> deleteNote({@required User user, @required Note note}) {
     test('deleteNote', () async {
       final initialUser = User.create()..uuid = userUuid;
       final note = Note.create(title: 'ほげノート')..id = 'hoge';
