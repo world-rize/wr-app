@@ -1,8 +1,6 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
@@ -10,30 +8,7 @@ import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
-
-extension StoreEx on FirebaseFirestore {
-  CollectionReference get users => collection('users');
-
-  Future<User> getDummyUser() async {
-    return User.fromJson((await users.doc('test').get()).data());
-  }
-
-  Future<User> setDummyUser(User user) async {
-    await users.doc('test').set(user.toJson());
-    return user;
-  }
-}
-
-Future<bool> snapShotDiff<T>({
-  @required Future<T> Function() getter,
-  @required Future Function() callback,
-  @required bool Function(T, T) matcher,
-}) async {
-  final before = await getter();
-  await callback();
-  final after = await getter();
-  return matcher(before, after);
-}
+import 'package:wr_app/util/test_util.dart';
 
 void main() {
   final store = MockFirestoreInstance();

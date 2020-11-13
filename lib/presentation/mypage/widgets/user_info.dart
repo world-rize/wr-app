@@ -2,9 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
@@ -13,10 +11,8 @@ class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userNotifier = Provider.of<UserNotifier>(context);
-    final streaks = userNotifier.calcTestStreaks();
     final theme = Theme.of(context);
     final user = userNotifier.user;
-    final items = Provider.of<ShopNotifier>(context).getShopItems();
 
     final badge = Padding(
       padding: const EdgeInsets.all(8),
@@ -58,9 +54,6 @@ class UserInfo extends StatelessWidget {
               const Spacer(),
             ],
           ),
-
-          // streak
-//          StreakView().padding(),
         ],
       ),
     );

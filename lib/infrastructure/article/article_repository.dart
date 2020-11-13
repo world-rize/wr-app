@@ -1,6 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:contentful/client.dart';
 import 'package:wr_app/domain/article/index.dart';
 import 'package:wr_app/infrastructure/article/i_article_repository.dart';
 
@@ -42,25 +41,7 @@ final List<ArticleCategory> categories = <ArticleCategory>[
 
 class ArticleRepository implements IArticleRepository {
   @override
-  Future<List<ArticleDigest>> findByCategory(
-      Client client, String category) async {
-    final collection = await client.getEntries<ArticleDigest>({
-      'content_type': 'article',
-      'fields.category': category,
-    }, ArticleDigest.fromJson);
-
-    return collection.items;
-  }
-
-  @override
   List<ArticleCategory> getCategories() {
-    /// # categories
-    /// - online_lesson
-    /// - article
-    /// - random
-    /// - listening
-    /// - comics
-    /// - cuisine
     return categories;
   }
 }

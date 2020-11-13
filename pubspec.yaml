@@ -30,12 +30,6 @@ dependencies:
   cloud_firestore_mocks: ^0.5.1
   google_sign_in: ^4.4.6
 
-  # contentful
-  contentful: ^1.1.3
-  contentful_rich_text: ^0.1.2
-  equatable: ^1.2.0
-
-
   # auth
   apple_sign_in: ^0.1.0
 

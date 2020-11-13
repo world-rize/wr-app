@@ -4,14 +4,17 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:google_sign_in_mocks/google_sign_in_mocks.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
+import 'package:wr_app/infrastructure/auth/auth_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/usecase/user_service.dart';
 
@@ -41,8 +44,12 @@ Future<bool> snapShotDiff<T>({
 
 void main() {
   final store = MockFirestoreInstance();
-  final repo = UserRepository(store: store);
-  final service = UserService(userRepository: repo, userApi: UserAPI());
+  final auth = MockFirebaseAuth();
+  final googleSignIn = MockGoogleSignIn();
+  final ur = UserRepository(store: store);
+  final ar = AuthRepository(auth: auth, googleSignIn: googleSignIn);
+  final service =
+      UserService(authRepository: ar, userRepository: ur, userApi: UserAPI());
 
   setUp(() async {
     print('setup');

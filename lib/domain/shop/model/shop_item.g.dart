@@ -6,8 +6,8 @@ part of 'shop_item.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GiftItem _$GiftItemFromJson(Map json) {
-  return GiftItem(
+ShopItem _$ShopItemFromJson(Map json) {
+  return ShopItem(
     id: json['id'] as String,
     title: json['title'] as String,
     description: json['description'] as String,
@@ -16,7 +16,7 @@ GiftItem _$GiftItemFromJson(Map json) {
   );
 }
 
-Map<String, dynamic> _$GiftItemToJson(GiftItem instance) => <String, dynamic>{
+Map<String, dynamic> _$ShopItemToJson(ShopItem instance) => <String, dynamic>{
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,

@@ -28,6 +28,11 @@ class AuthRepository implements IAuthRepository {
     return credential;
   }
 
+  @override
+  User getCurrentUser() {
+    return auth.currentUser;
+  }
+
   /// メールアドレスとパスワードでサインアップ
   @override
   Future<User> signUpWithEmailAndPassword({

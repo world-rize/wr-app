@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
@@ -122,6 +121,7 @@ class _RootViewState extends State<RootView>
 
   /// page loaded callback
   void onPageLoaded() {
+    print('on page loaded');
     _checkAppStatus();
     _checkUserStatus();
   }
@@ -255,7 +255,7 @@ class _RootViewState extends State<RootView>
       children: <Widget>[
         LessonIndexPage(),
         NotePage(),
-        ColumnIndexPage(),
+        ArticleIndexPage(),
         // AgencyIndexPage(),
         MyPagePage(),
       ],

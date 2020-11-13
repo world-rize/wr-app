@@ -7,8 +7,8 @@ part 'shop_item.g.dart';
 
 /// 交換できるもの
 @JsonSerializable(explicitToJson: true, anyMap: true)
-class GiftItem {
-  GiftItem({
+class ShopItem {
+  ShopItem({
     @required this.id,
     @required this.title,
     @required this.description,
@@ -31,8 +31,8 @@ class GiftItem {
   /// 複数購入可能か
   bool expendable;
 
-  factory GiftItem.fromJson(Map<dynamic, dynamic> json) =>
-      _$GiftItemFromJson(json);
+  factory ShopItem.fromJson(Map<dynamic, dynamic> json) =>
+      _$ShopItemFromJson(json);
 
-  Map<String, dynamic> toJson() => _$GiftItemToJson(this);
+  Map<String, dynamic> toJson() => _$ShopItemToJson(this);
 }

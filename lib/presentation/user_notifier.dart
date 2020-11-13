@@ -16,9 +16,7 @@ class UserNotifier with ChangeNotifier {
   final UserService _userService;
 
   /// ユーザーデータ
-  User _user = User.empty();
-  User get user => _user;
-  set user(User user) => _user = user;
+  User user = User.empty();
 
   /// singleton
   static UserNotifier _cache;
@@ -39,15 +37,17 @@ class UserNotifier with ChangeNotifier {
 
   /// ユーザーデータを取得
   Future<void> fetchUser() async {
-    _user = await _userService.readUser(uuid: _user.uuid);
+    final uid = _userService.getUid();
+    assert(uid != '');
+    user = await _userService.fetchUser(uid: uid);
     signedIn = true;
     notifyListeners();
   }
 
   /// update name
   Future<void> setName({@required String name}) async {
-    _user.name = name;
-    _user = await _userService.updateUser(user: _user);
+    user.name = name;
+    user = await _userService.updateUser(user: user);
     notifyListeners();
 
     InAppLogger.debug('setName $name');
@@ -60,20 +60,20 @@ class UserNotifier with ChangeNotifier {
     @required bool favorite,
   }) async {
     // TODO: default以外に保存できるようにする
-    final defaultFavoriteList = _user.getDefaultFavoriteList();
+    final defaultFavoriteList = user.getDefaultFavoriteList();
     // defaultふぁぼりてリスト以外に保存したらdeleteするときむずかしくね?
     if (favorite) {
       // false -> true
-      _user = await _userService.favorite(
-        user: _user,
+      user = await _userService.favorite(
+        user: user,
         listId: defaultFavoriteList.id,
         phraseId: phraseId,
         favorite: favorite,
       );
       await Future.delayed(const Duration(milliseconds: 1000));
     } else {
-      _user = await _userService.favorite(
-        user: _user,
+      user = await _userService.favorite(
+        user: user,
         listId: defaultFavoriteList.id,
         phraseId: phraseId,
         favorite: favorite,
@@ -86,7 +86,7 @@ class UserNotifier with ChangeNotifier {
 
   /// 受講可能回数をリセット
   Future<void> resetTestLimitCount() async {
-    _user = await _userService.resetTestCount(user: _user);
+    user = await _userService.resetTestCount(user: user);
 
     notifyListeners();
 
@@ -96,7 +96,7 @@ class UserNotifier with ChangeNotifier {
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int points}) async {
-    _user = await _userService.getPoints(uuid: _user.uuid, points: points);
+    user = await _userService.getPoints(uuid: user.uuid, points: points);
     notifyListeners();
 
     await sendEvent(
@@ -108,7 +108,7 @@ class UserNotifier with ChangeNotifier {
 
   /// テストを受ける
   Future<void> doTest({@required String sectionId}) async {
-    _user = await _userService.doTest(user: _user, sectionId: sectionId);
+    user = await _userService.doTest(user: user, sectionId: sectionId);
     notifyListeners();
 
     await sendEvent(
@@ -122,8 +122,8 @@ class UserNotifier with ChangeNotifier {
   /// テスト結果
   Future<void> sendTestScore(
       {@required String sectionId, @required int score}) async {
-    _user = await _userService.sendTestResult(
-        user: _user, sectionId: sectionId, score: score);
+    user = await _userService.sendTestResult(
+        user: user, sectionId: sectionId, score: score);
     notifyListeners();
 
     InAppLogger.info('sendTestScore');
@@ -131,7 +131,7 @@ class UserNotifier with ChangeNotifier {
 
   /// プランを変更
   Future<void> changePlan(Membership membership) async {
-    _user = await _userService.changePlan(user: _user, membership: membership);
+    user = await _userService.changePlan(user: user, membership: membership);
 
     notifyListeners();
     if (membership == Membership.pro) {
@@ -145,7 +145,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> createFavoriteList({
     @required String title,
   }) async {
-    _user = await _userService.createFavoriteList(user: _user, title: title);
+    user = await _userService.createFavoriteList(user: user, title: title);
 
     notifyListeners();
 
@@ -156,7 +156,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> deleteFavoriteList({
     @required String listId,
   }) async {
-    _user = await _userService.deleteFavoriteList(user: _user, listId: listId);
+    user = await _userService.deleteFavoriteList(user: user, listId: listId);
 
     notifyListeners();
 
@@ -168,7 +168,7 @@ class UserNotifier with ChangeNotifier {
   bool existPhraseInFavoriteList({
     @required String phraseId,
   }) {
-    return _user.favorites.values
+    return user.favorites.values
         .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 
@@ -176,7 +176,7 @@ class UserNotifier with ChangeNotifier {
   Future<void> createPhrasesList({
     @required String title,
   }) async {
-    _user = await _userService.createFavoriteList(user: _user, title: title);
+    user = await _userService.createFavoriteList(user: user, title: title);
 
     notifyListeners();
 
@@ -196,7 +196,7 @@ class UserNotifier with ChangeNotifier {
   bool existPhraseInNotes({
     @required String phraseId,
   }) {
-    return _user.notes.values
+    return user.notes.values
         .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 
@@ -204,7 +204,7 @@ class UserNotifier with ChangeNotifier {
   bool existPhraseInFavorites({
     @required String phraseId,
   }) {
-    return _user.favorites.values
+    return user.favorites.values
         .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 
@@ -217,7 +217,7 @@ class UserNotifier with ChangeNotifier {
 
   /// calculates test 30days streaks
   int calcTestStreaks() {
-    final heatMap = calcHeatMap(_user.statistics.testResults);
+    final heatMap = calcHeatMap(user.statistics.testResults);
     var i = 0;
     for (var day = Jiffy()..startOf(Units.DAY);
         heatMap.containsKey(day);
@@ -229,7 +229,7 @@ class UserNotifier with ChangeNotifier {
 
   /// check test 30days streaks
   Future<bool> checkTestStreaks() async {
-    return _userService.checkTestStreaks(user: _user);
+    return _userService.checkTestStreaks(user: user);
   }
 
   /// search user from user id
@@ -242,7 +242,7 @@ class UserNotifier with ChangeNotifier {
   }) async {
     // TODO: イケてない
     await _userService.introduceFriend(introduceeUserId: introduceeId);
-    _user = await _userService.readUser(uuid: _user.uuid);
+    user = await _userService.fetchUser(uid: _userService.getUid());
     notifyListeners();
   }
 }

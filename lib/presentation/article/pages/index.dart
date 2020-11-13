@@ -8,20 +8,70 @@ import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/domain/article/model/category.dart';
+import 'package:wr_app/infrastructure/article/article_repository.dart';
 import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/presentation/article/pages/english_lesson_pr_page.dart';
 import 'package:wr_app/presentation/article/widgets/category_view.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
+import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';
 
-/// Column > index
-class ColumnIndexPage extends StatelessWidget {
+class ArticleIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider<ArticleNotifier>(
+      create: (_) => ArticleNotifier(
+        articleService: ArticleService(
+          articleRepository: ArticleRepository(),
+        ),
+      ),
+      child: _IndexPage(),
+    );
+  }
+}
+
+/// Article > index
+class _IndexPage extends StatelessWidget {
+  Future onTapCategory(ArticleCategory category) async {
+    if (await canLaunch(category.url)) {
+      await launch(
+        category.url,
+        forceSafariVC: false,
+        forceWebView: false,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final categoryCards = [
+      CategoryView(
+        category: ArticleCategory(
+          id: 'online_lesson',
+          title: 'オンライン英会話',
+          thumbnailUrl: 'assets/thumbnails/english.jpg',
+          url: '',
+        ),
+        onTap: (_) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => EnglishLessonPrPage(),
+            ),
+          );
+        },
+      ),
+      // categories
+      ...categories.map(
+        (category) => CategoryView(category: category, onTap: onTapCategory),
+      ),
+    ];
+
     final env = GetIt.I<EnvKeys>();
-    final an = Provider.of<ArticleNotifier>(context);
-    final categories = an.getCategories();
+    final adsBanner = AdmobBanner(
+      adUnitId: env.admobBannerAdUnitId,
+      adSize: AdmobBannerSize.LEADERBOARD,
+    );
 
     return SingleChildScrollView(
       child: Column(
@@ -29,48 +79,8 @@ class ColumnIndexPage extends StatelessWidget {
         children: [
           const Header1(text: 'Column', dividerColor: GFColors.SUCCESS)
               .padding(),
-          // English lesson
-          CategoryView(
-            category: ArticleCategory(
-              id: 'online_lesson',
-              title: 'オンライン英会話',
-              thumbnailUrl: 'assets/thumbnails/english.jpg',
-              url: '',
-            ),
-            onTap: (_) {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => EnglishLessonPrPage(),
-                ),
-              );
-            },
-          ),
-          // categories
-          ...categories.map(
-            (category) => CategoryView(
-                category: category,
-                onTap: (_) async {
-                  if (await canLaunch(category.url)) {
-                    await launch(
-                      category.url,
-                      forceSafariVC: false,
-                      forceWebView: false,
-                    );
-                  }
-
-                  // TODO
-//                  Navigator.of(context).push(
-//                    MaterialPageRoute(
-//                      builder: (_) => CategoryPosts(category: category),
-//                    ),
-//                  );
-                }),
-          ),
-          // admob banner
-          AdmobBanner(
-            adUnitId: env.admobBannerAdUnitId,
-            adSize: AdmobBannerSize.LEADERBOARD,
-          ),
+          ...categoryCards,
+          adsBanner,
         ],
       ),
     );

@@ -5,8 +5,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class EnvKeys {
-  final String contentfulSpaceId;
-  final String contentfulToken;
   final String admobIosAppId;
   final String admobAndroidAppId;
   final String admobIosBannerAdUnitId;
@@ -28,8 +26,6 @@ class EnvKeys {
   final String instagramUrl;
 
   EnvKeys({
-    @required this.contentfulSpaceId,
-    @required this.contentfulToken,
     @required this.admobIosAppId,
     @required this.admobAndroidAppId,
     @required this.admobIosBannerAdUnitId,
@@ -54,8 +50,6 @@ class EnvKeys {
   factory EnvKeys.fromEnv({
     @required Map<String, String> env,
   }) {
-    assert(env.containsKey('CONTENTFUL_SPACE_ID'));
-    assert(env.containsKey('CONTENTFUL_TOKEN'));
     assert(env.containsKey('ADMOB_IOS_APP_ID'));
     assert(env.containsKey('ADMOB_ANDROID_APP_ID'));
     assert(env.containsKey('ADMOB_IOS_BANNER_AD_UNIT_ID'));
@@ -77,8 +71,6 @@ class EnvKeys {
     assert(env.containsKey('INSTA_URL'));
 
     return EnvKeys(
-      contentfulSpaceId: env['CONTENTFUL_SPACE_ID'],
-      contentfulToken: env['CONTENTFUL_TOKEN'],
       admobIosAppId: env['ADMOB_IOS_APP_ID'],
       admobAndroidAppId: env['ADMOB_ANDROID_APP_ID'],
       admobIosBannerAdUnitId: env['ADMOB_IOS_BANNER_AD_UNIT_ID'],

@@ -5,29 +5,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:wr_app/domain/lesson/index.dart';
-import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/domain/user/index.dart';
-import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
-import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
-import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/usecase/shop_service.dart';
 import 'package:wr_app/util/logger.dart';
 
 class APITestView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final syn = context.watch<SystemNotifier>();
-    final an = context.watch<AuthNotifier>();
     final un = context.watch<UserNotifier>();
     final ln = context.watch<LessonNotifier>();
-    final nn = context.watch<NoteNotifier>();
-    final sn = context.watch<ShopNotifier>();
 
     _showResultDialog(BuildContext context, String title, [dynamic content]) {
       showDialog(
@@ -158,7 +152,8 @@ class APITestView extends StatelessWidget {
                 title: 'ショップアイテム',
                 onTap: () async {
                   try {
-                    final items = await sn.getShopItems();
+                    final ss = GetIt.I<ShopService>();
+                    final items = await ss.getShopItems();
                     _showResultDialog(
                         context, '成功', items.map((e) => e.toJson()));
                   } on Exception catch (e) {

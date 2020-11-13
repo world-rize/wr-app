@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
-import 'package:contentful/client.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,28 +21,22 @@ import 'package:provider/provider.dart';
 import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
-import 'package:wr_app/infrastructure/article/article_repository.dart';
 import 'package:wr_app/infrastructure/auth/auth_repository.dart';
 import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
 import 'package:wr_app/infrastructure/note/note_repository.dart';
-import 'package:wr_app/infrastructure/shop/shop_repository.dart';
 import 'package:wr_app/infrastructure/system/system_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/presentation/app.dart';
-import 'package:wr_app/presentation/article/notifier/article_notifier.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/maintenance.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
-import 'package:wr_app/presentation/shop_notifier.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/presentation/voice_player.dart';
-import 'package:wr_app/usecase/article_service.dart';
 import 'package:wr_app/usecase/auth_service.dart';
 import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/usecase/note_service.dart';
-import 'package:wr_app/usecase/shop_service.dart';
 import 'package:wr_app/usecase/system_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/apple_signin.dart';
@@ -125,11 +118,6 @@ Future<void> setupGlobalSingletons({
   GetIt.I.registerSingleton<SharedPreferences>(pref);
   InAppLogger.info('🔥 SharedPreferences Initialized');
 
-  // contentful client
-  final client = Client(env.contentfulSpaceId, env.contentfulToken);
-  GetIt.I.registerSingleton<Client>(client);
-  InAppLogger.info('🔥 Contentful Initialized');
-
   // initialize admob
   Admob.initialize(testDeviceIds: [env.admobAppId]);
   InAppLogger.info('🔥 Admob Initialized');
@@ -150,6 +138,37 @@ Future<void> setupGlobalSingletons({
   final _sentry = SentryClient(dsn: env.sentryDsn);
   GetIt.I.registerSingleton<SentryClient>(_sentry);
   InAppLogger.info('🔥 sentry Initialized');
+
+  // repos
+  final userRepository = UserRepository(store: GetIt.I<FirebaseFirestore>());
+  final lessonRepository = LessonRepository();
+  final authRepository = AuthRepository(
+    auth: GetIt.I<FirebaseAuth>(),
+    googleSignIn: GetIt.I<GoogleSignIn>(),
+  );
+  final systemRepository = SystemRepository();
+
+  final noteRepository = NoteRepository(store: GetIt.I<FirebaseFirestore>());
+
+  // services
+  final userService = UserService(
+    authRepository: authRepository,
+    userRepository: userRepository,
+    userApi: UserAPI(),
+  );
+
+  final lessonService = LessonService(lessonRepository: lessonRepository);
+  final systemService = SystemService(systemRepository: systemRepository);
+  final authService = AuthService(
+      authRepository: authRepository, userRepository: userRepository);
+  final noteService = NoteService(noteRepository: noteRepository);
+
+  // DI Services
+  GetIt.I.registerSingleton<UserService>(userService);
+  GetIt.I.registerSingleton<SystemService>(systemService);
+  GetIt.I.registerSingleton<AuthService>(authService);
+  GetIt.I.registerSingleton<NoteService>(noteService);
+  GetIt.I.registerSingleton<LessonService>(lessonService);
 }
 
 /// runApp() with flavor
@@ -162,33 +181,11 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
     await setupGlobalSingletons(flavor: flavor, useMock: useMock);
 
-    // repos
-    final articleRepository = ArticleRepository();
-    final userRepository = UserRepository(store: GetIt.I<FirebaseFirestore>());
-    final lessonRepository = LessonRepository();
-    final authRepository = AuthRepository(
-      auth: GetIt.I<FirebaseAuth>(),
-      googleSignIn: GetIt.I<GoogleSignIn>(),
-    );
-    final systemRepository = SystemRepository();
-
-    final noteRepository =
-        NoteRepository(store: GetIt.I<FirebaseFirestore>());
-    final shopRepository = ShopRepository();
-
-    // services
-    final userService = UserService(
-      userRepository: userRepository,
-      userApi: UserAPI(),
-    );
-    final articleService = ArticleService(articleRepository: articleRepository);
-    final lessonService = LessonService(lessonRepository: lessonRepository);
-    final systemService = SystemService(systemRepository: systemRepository);
-    final authService = AuthService(
-        authRepository: authRepository, userRepository: userRepository);
-    final shopService = ShopService(
-        userRepository: userRepository, shopRepository: shopRepository);
-    final noteService = NoteService(noteRepository: noteRepository);
+    final systemService = GetIt.I<SystemService>();
+    final userService = GetIt.I<UserService>();
+    final authService = GetIt.I<AuthService>();
+    final noteService = GetIt.I<NoteService>();
+    final lessonService = GetIt.I<LessonService>();
 
     // maintenance check
     final appInfo = await systemService.getAppInfo();
@@ -197,31 +194,19 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       showMaintenance();
     }
 
-    // TODO: re-architecture
-    // notifier とストア分離する (StoreProvider)
-    // notifier は StatefulNotifier を Stateless化するものなので
-    // 1 Stateful画面 1 ChangeNotifier
-    //  Dao に CRUI
-    // 下から上の更新に依存したい
-    // 下から上(update): ProxyProvider
-    // 上から下(get): GetIt<UserNotifier>
-
-    // functions いらない説
     final userNotifier = UserNotifier(userService: userService);
     final authNotifier = AuthNotifier(authService: authService);
-    final shopNotifier = ShopNotifier(shopService: shopService);
     authNotifier.addListener(() {
       userNotifier.user = authNotifier.user;
     });
     final noteNotifier = NoteNotifier(noteService: noteService);
     noteNotifier.addListener(() {
-      InAppLogger.debug('update note');
       userNotifier.user = noteNotifier.user;
     });
+
     userNotifier.addListener(() {
       authNotifier.user = userNotifier.user;
       noteNotifier.user = userNotifier.user;
-      shopNotifier.user = userNotifier.user;
     });
 
     final app = MultiProvider(
@@ -248,15 +233,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ),
         ChangeNotifierProvider.value(
           value: VoicePlayer(),
-        ),
-        // Article
-        ChangeNotifierProvider.value(
-          value: ArticleNotifier(
-            articleService: articleService,
-          ),
-        ),
-        ChangeNotifierProvider.value(
-          value: shopNotifier,
         ),
       ],
       child: WRApp(),

@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class IAuthRepository {
+  User getCurrentUser();
+
   Future<User> signUpWithEmailAndPassword({
     @required String email,
     @required String password,

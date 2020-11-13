@@ -8,13 +8,13 @@ import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
 
 /// 交換できるもののカード
-class GiftItemCard extends StatelessWidget {
-  GiftItemCard({
-    @required this.giftItem,
+class ShopItemCard extends StatelessWidget {
+  ShopItemCard({
+    @required this.shopItem,
     @required this.onTap,
   });
 
-  final GiftItem giftItem;
+  final ShopItem shopItem;
   final Function onTap;
 
   @override
@@ -26,12 +26,12 @@ class GiftItemCard extends StatelessWidget {
     final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;
 
     final userHasItemCount =
-        user.items.containsKey(giftItem.id) ? user.items[giftItem.id] : 0;
+        user.items.containsKey(shopItem.id) ? user.items[shopItem.id] : 0;
     final gettable =
-        giftItem.expendable || !giftItem.expendable && userHasItemCount == 0;
+        shopItem.expendable || !shopItem.expendable && userHasItemCount == 0;
     final alreadyPurchased =
-        !giftItem.expendable && user.items.containsKey(giftItem.id);
-    final buyable = user.statistics.points >= giftItem.price;
+        !shopItem.expendable && user.items.containsKey(shopItem.id);
+    final buyable = user.statistics.points >= shopItem.price;
 
     final card = ShadowedContainer(
       color: backgroundColor,
@@ -46,7 +46,7 @@ class GiftItemCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      giftItem.title,
+                      shopItem.title,
                       style: englishStyle,
                     ).padding(4),
                     if (gettable && !buyable)
@@ -60,11 +60,11 @@ class GiftItemCard extends StatelessWidget {
                         style: englishStyle.apply(color: Colors.redAccent),
                       ).padding(4),
                     Text(
-                      '${giftItem.price} コイン',
+                      '${shopItem.price} コイン',
                       style: englishStyle.apply(color: Colors.redAccent),
                     ).padding(4),
                     Text(
-                      giftItem.description,
+                      shopItem.description,
                       style: japaneseStyle,
                     ).padding(4),
                   ],
