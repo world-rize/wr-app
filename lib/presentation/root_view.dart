@@ -121,6 +121,7 @@ class _RootViewState extends State<RootView>
 
   /// page loaded callback
   void onPageLoaded() {
+    print('on page loaded');
     _checkAppStatus();
     _checkUserStatus();
   }
