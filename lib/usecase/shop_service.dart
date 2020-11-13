@@ -26,6 +26,7 @@ class ShopService {
   }
 
   /// アイテムを購入
+  // TODO: functions?
   Future<User> purchaseItem({
     @required User user,
     @required String itemId,
@@ -34,7 +35,11 @@ class ShopService {
         .firstWhere((item) => item.id == itemId, orElse: () => null);
 
     if (item == null) {
-      return user;
+      throw Exception('item not found');
+    }
+
+    if (user.statistics.points < item.price) {
+      throw Exception('not enough money');
     }
 
     user.items.putIfAbsent(item.id, () => 0);

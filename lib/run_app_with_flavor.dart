@@ -138,6 +138,37 @@ Future<void> setupGlobalSingletons({
   final _sentry = SentryClient(dsn: env.sentryDsn);
   GetIt.I.registerSingleton<SentryClient>(_sentry);
   InAppLogger.info('🔥 sentry Initialized');
+
+  // repos
+  final userRepository = UserRepository(store: GetIt.I<FirebaseFirestore>());
+  final lessonRepository = LessonRepository();
+  final authRepository = AuthRepository(
+    auth: GetIt.I<FirebaseAuth>(),
+    googleSignIn: GetIt.I<GoogleSignIn>(),
+  );
+  final systemRepository = SystemRepository();
+
+  final noteRepository = NoteRepository(store: GetIt.I<FirebaseFirestore>());
+
+  // services
+  final userService = UserService(
+    authRepository: authRepository,
+    userRepository: userRepository,
+    userApi: UserAPI(),
+  );
+
+  final lessonService = LessonService(lessonRepository: lessonRepository);
+  final systemService = SystemService(systemRepository: systemRepository);
+  final authService = AuthService(
+      authRepository: authRepository, userRepository: userRepository);
+  final noteService = NoteService(noteRepository: noteRepository);
+
+  // DI Services
+  GetIt.I.registerSingleton<UserService>(userService);
+  GetIt.I.registerSingleton<SystemService>(systemService);
+  GetIt.I.registerSingleton<AuthService>(authService);
+  GetIt.I.registerSingleton<NoteService>(noteService);
+  GetIt.I.registerSingleton<LessonService>(lessonService);
 }
 
 /// runApp() with flavor
@@ -150,41 +181,11 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
 
     await setupGlobalSingletons(flavor: flavor, useMock: useMock);
 
-    // repos
-<<<<<<< HEAD
-=======
-    final articleRepository = ArticleRepository();
->>>>>>> develop
-    final userRepository = UserRepository(store: GetIt.I<FirebaseFirestore>());
-    final lessonRepository = LessonRepository();
-    final authRepository = AuthRepository(
-      auth: GetIt.I<FirebaseAuth>(),
-      googleSignIn: GetIt.I<GoogleSignIn>(),
-    );
-    final systemRepository = SystemRepository();
-
-    final noteRepository =
-<<<<<<< HEAD
-        NoteRepository(firestore: FirebaseFirestore.instance);
-=======
-        NoteRepository(store: GetIt.I<FirebaseFirestore>());
-    final shopRepository = ShopRepository();
->>>>>>> develop
-
-    // services
-    final userService = UserService(
-      userRepository: userRepository,
-      userApi: UserAPI(),
-    );
-
-    final lessonService = LessonService(lessonRepository: lessonRepository);
-    final systemService = SystemService(systemRepository: systemRepository);
-    final authService = AuthService(
-        authRepository: authRepository, userRepository: userRepository);
-    final noteService = NoteService(noteRepository: noteRepository);
-
-    // DI Services
-    GetIt.I.registerSingleton<UserService>(userService);
+    final systemService = GetIt.I<SystemService>();
+    final userService = GetIt.I<UserService>();
+    final authService = GetIt.I<AuthService>();
+    final noteService = GetIt.I<NoteService>();
+    final lessonService = GetIt.I<LessonService>();
 
     // maintenance check
     final appInfo = await systemService.getAppInfo();
@@ -202,6 +203,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     noteNotifier.addListener(() {
       userNotifier.user = noteNotifier.user;
     });
+
     userNotifier.addListener(() {
       authNotifier.user = userNotifier.user;
       noteNotifier.user = userNotifier.user;

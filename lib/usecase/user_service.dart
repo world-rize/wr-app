@@ -10,25 +10,31 @@ import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
-import 'package:wr_app/infrastructure/user/i_user_repository.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
+import 'package:wr_app/infrastructure/auth/i_auth_repository.dart';
+import 'package:wr_app/infrastructure/user/i_user_repository.dart';
 
 // TODO: Error handling
 class UserService {
   const UserService({
+    @required IAuthRepository authRepository,
     @required IUserRepository userRepository,
     @required IUserAPI userApi,
-  })  : _userRepository = userRepository,
+  })  : _authRepository = authRepository,
+        _userRepository = userRepository,
         _userApi = userApi;
 
+  final IAuthRepository _authRepository;
   final IUserRepository _userRepository;
   final UserAPI _userApi;
 
-  /// ユーザーデータを習得します
-  Future<User> readUser({
-    @required String uuid,
-  }) async {
-    return _userRepository.readUser(uuid: uuid);
+  // TODO: どこにおくべき
+  String getUid() {
+    return _authRepository.getCurrentUser()?.uid ?? '';
+  }
+
+  Future<User> fetchUser({@required String uid}) async {
+    return _userRepository.readUser(uuid: uid);
   }
 
   /// フレーズをお気に入りに登録します
