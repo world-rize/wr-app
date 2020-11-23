@@ -96,7 +96,7 @@ class AuthNotifier with ChangeNotifier {
   }
 
   Future<void> sendPasswordResetEmail() async {
-    return _authService.sendPasswordResetEmail(_user.attributes.email);
+    return _authService.sendPasswordResetEmail(_user.email);
   }
 
   /// update Email

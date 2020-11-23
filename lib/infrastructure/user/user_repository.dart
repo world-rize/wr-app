@@ -66,7 +66,7 @@ class UserRepository implements IUserRepository {
   }) async {
     return User.create()
       ..name = name
-      ..attributes.email = email;
+      ..email = email;
   }
 
   @override

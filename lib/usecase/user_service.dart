@@ -70,7 +70,7 @@ class UserService {
   Future<User> resetTestCount({
     @required User user,
   }) async {
-    user.statistics.testLimitCount = 3;
+    user.testLimitCount = 3;
     return _userRepository.updateUser(user: user);
   }
 
@@ -87,7 +87,7 @@ class UserService {
     @required User user,
     @required Membership membership,
   }) {
-    user.attributes.membership = membership;
+    user.membership = membership;
     return _userRepository.updateUser(user: user);
   }
 
@@ -96,11 +96,11 @@ class UserService {
     @required User user,
     @required String sectionId,
   }) {
-    if (user.statistics.testLimitCount == 0) {
+    if (user.testLimitCount == 0) {
       throw Exception('daily test limit exceeded');
     }
 
-    user.statistics.testLimitCount -= 1;
+    user.testLimitCount -= 1;
     user.activities.add(UserActivity(
       content: '$sectionId のテストを受ける',
       date: DateTime.now(),
@@ -116,7 +116,7 @@ class UserService {
     @required int score,
   }) {
     // 記録追加
-    user.statistics.testResults.add(TestResult(
+    user.testResults.add(TestResult(
       sectionId: sectionId,
       score: score,
       date: DateTime.now().toIso8601String(),
@@ -161,7 +161,7 @@ class UserService {
     // 29日前の0時
     final begin = Jiffy().startOf(Units.DAY).subtract(const Duration(days: 29));
     // 過去30日間のstreakを調べる
-    final last30daysResults = user.statistics.testResults
+    final last30daysResults = user.testResults
         .where((result) => Jiffy(result.date).isAfter(begin));
     final streaked = groupBy(last30daysResults,
             (TestResult result) => Jiffy(result.date).startOf(Units.DAY))

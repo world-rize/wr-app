@@ -31,7 +31,7 @@ class _TestTabState extends State<TestTab> {
       builder: (_) => CupertinoAlertDialog(
         title: Text(I.of(context).testConfirm(section.title)),
         content:
-            Text(I.of(context).testMessage(user.statistics.testLimitCount)),
+            Text(I.of(context).testMessage(user.testLimitCount)),
         actions: <Widget>[
           CupertinoButton(
             child: Text(I.of(context).no),
@@ -72,7 +72,7 @@ class _TestTabState extends State<TestTab> {
     final userNotifier = Provider.of<UserNotifier>(context, listen: false);
     final user = userNotifier.user;
 
-    if (user.statistics.testLimitCount == 0) {
+    if (user.testLimitCount == 0) {
       _showTestLimitAlertDialog();
     } else {
       _showConfirmTestDialog(section);

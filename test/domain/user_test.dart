@@ -65,7 +65,7 @@ void main() {
     initialUser
       ..notes[note.id] = note
       ..favorites[favList.id] = favList
-      ..statistics.testResults = streakResult;
+      ..testResults = streakResult;
 
     await store.setDummyUser(initialUser);
   });
@@ -79,8 +79,8 @@ void main() {
           await service.sendTestResult(user: u, sectionId: 'section', score: 3);
         },
         matcher: (b, a) =>
-            b.statistics.testResults.length + 1 ==
-            a.statistics.testResults.length,
+            b.testResults.length + 1 ==
+            a.testResults.length,
       );
 
       expect(true, diff);
@@ -100,7 +100,7 @@ void main() {
           await service.doTest(user: u, sectionId: '');
         },
         matcher: (b, a) =>
-            b.statistics.testLimitCount - 1 == a.statistics.testLimitCount,
+            b.testLimitCount - 1 == a.testLimitCount,
       );
 
       expect(true, diff);

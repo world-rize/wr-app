@@ -38,13 +38,13 @@ class ShopService {
       throw Exception('item not found');
     }
 
-    if (user.statistics.points < item.price) {
+    if (user.points < item.price) {
       throw Exception('not enough money');
     }
 
     user.items.putIfAbsent(item.id, () => 0);
     user.items[item.id] += 1;
-    user.statistics.points -= item.price;
+    user.points -= item.price;
     return user;
   }
 }

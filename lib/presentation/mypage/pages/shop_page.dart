@@ -41,7 +41,7 @@ class _ShopIndexPage extends StatelessWidget {
     final h = Theme.of(context).primaryTextTheme.headline3;
     final b = Theme.of(context).primaryTextTheme.bodyText1;
     final userNotifier = Provider.of<UserNotifier>(context);
-    final points = userNotifier.user.statistics.points;
+    final points = userNotifier.user.points;
 
     return Scaffold(
       appBar: AppBar(

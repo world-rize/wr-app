@@ -217,7 +217,7 @@ class UserNotifier with ChangeNotifier {
 
   /// calculates test 30days streaks
   int calcTestStreaks() {
-    final heatMap = calcHeatMap(user.statistics.testResults);
+    final heatMap = calcHeatMap(user.testResults);
     var i = 0;
     for (var day = Jiffy()..startOf(Units.DAY);
         heatMap.containsKey(day);

@@ -23,7 +23,7 @@ void main() {
   setUp(() async {
     final initialUser = User.create()
       ..uuid = userUuid
-      ..statistics.points = 1000;
+      ..points = 1000;
 
     await store.collection('shop').doc(dummyItem.id).set(dummyItem.toJson());
 
@@ -49,7 +49,7 @@ void main() {
           await store.setDummyUser(updated);
         },
         matcher: (b, a) {
-          return b.statistics.points - dummyItem.price == a.statistics.points &&
+          return b.points - dummyItem.price == a.points &&
               a.items[dummyItem.id] == 1;
         },
       );

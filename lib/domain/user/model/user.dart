@@ -4,12 +4,11 @@ import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
+import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
-import 'package:wr_app/domain/user/model/user_attributes.dart';
-import 'package:wr_app/domain/user/model/user_statistics.dart';
 
 part 'user.g.dart';
 
@@ -22,9 +21,15 @@ class User {
     @required this.userId,
     @required this.favorites,
     @required this.notes,
-    @required this.statistics,
+    @required this.testResults,
+    @required this.points,
+    @required this.testLimitCount,
+    @required this.lastLogin,
+    @required this.isIntroducedFriend,
     @required this.activities,
-    @required this.attributes,
+    @required this.age,
+    @required this.email,
+    @required this.membership,
     @required this.items,
   });
 
@@ -59,19 +64,15 @@ class User {
         defaultNote.id: defaultNote,
         achievedNote.id: achievedNote,
       },
-      statistics: UserStatistics(
-        testResults: [],
-        points: 0,
-        testLimitCount: 3,
-        lastLogin: DateTime.now().toIso8601String(),
-        isIntroducedFriend: false,
-      ),
+      testResults: [],
+      points: 0,
+      testLimitCount: 3,
+      lastLogin: DateTime.now().toIso8601String(),
+      isIntroducedFriend: false,
       activities: [],
-      attributes: UserAttributes(
-        age: '',
-        email: '',
-        membership: Membership.normal,
-      ),
+      age: '',
+      email: '',
+      membership: Membership.normal,
       items: {},
     );
   }
@@ -90,18 +91,14 @@ class User {
           phrases: [],
         ),
       },
-      statistics: UserStatistics(
-        testResults: [],
-        points: 0,
-        testLimitCount: 0,
-        lastLogin: '',
-        isIntroducedFriend: false,
-      ),
-      attributes: UserAttributes(
-        age: '0',
-        email: 'hoge@example.com',
-        membership: Membership.normal,
-      ),
+      testResults: [],
+      points: 0,
+      testLimitCount: 0,
+      lastLogin: '',
+      isIntroducedFriend: false,
+      age: '0',
+      email: 'hoge@example.com',
+      membership: Membership.normal,
       activities: [],
       notes: {},
       items: {},
@@ -116,8 +113,11 @@ class User {
       favorites: {
         'default': FavoritePhraseList.dummy(),
       },
-      statistics: UserStatistics.dummy(),
-      attributes: UserAttributes.dummy(),
+      testResults: <TestResult>[],
+      points: 100,
+      testLimitCount: 3,
+      lastLogin: '',
+      isIntroducedFriend: false,
       activities: [
         UserActivity(
           content: 'Dummy Activity',
@@ -132,6 +132,9 @@ class User {
         '3': 1,
         '4': 1,
       },
+      age: '0',
+      email: 'hoge@example.com',
+      membership: Membership.normal,
     );
   }
 
@@ -150,11 +153,21 @@ class User {
   /// オリジナルフレーズ UUIDで一発でアクセスしたい
   Map<String, Note> notes;
 
-  /// 統計情報
-  UserStatistics statistics;
+  List<TestResult> testResults;
 
-  /// 個人情報
-  UserAttributes attributes;
+  int points;
+
+  int testLimitCount;
+
+  String lastLogin;
+
+  bool isIntroducedFriend;
+
+  String age;
+
+  String email;
+
+  Membership membership;
 
   /// ユーザー活動
   List<UserActivity> activities;
@@ -162,7 +175,7 @@ class User {
   /// 所持アイテム(key: item_id, value: amount)
   Map<String, int> items;
 
-  bool get isPremium => attributes.membership == Membership.pro;
+  bool get isPremium => membership == Membership.pro;
 
   FavoritePhraseList getDefaultFavoriteList() {
     return favorites.values

@@ -20,7 +20,7 @@ class _MailAddressFormPageState extends State<MailAddressFormPage> {
     final an = context.watch<AuthNotifier>();
 
     final _emailField = TextFormField(
-      initialValue: an.user.attributes.email,
+      initialValue: an.user.email,
       onChanged: (email) {
         setState(() {
           _email = email;

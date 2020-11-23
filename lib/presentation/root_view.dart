@@ -153,7 +153,7 @@ class _RootViewState extends State<RootView>
             height: 20,
           ).padding(),
           Text(
-            '${user.statistics.points}',
+            '${user.points}',
             style: Theme.of(context).primaryTextTheme.headline6,
           ).padding(),
         ],
@@ -161,7 +161,7 @@ class _RootViewState extends State<RootView>
     );
 
     final limits = Row(children: [
-      ...List.generate(3, (index) => index < user.statistics.testLimitCount)
+      ...List.generate(3, (index) => index < user.testLimitCount)
           .map((b) => Icon(b ? Icons.favorite : Icons.favorite_border,
               color: Colors.pinkAccent)),
     ]).padding();

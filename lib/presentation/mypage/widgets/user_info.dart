@@ -19,7 +19,7 @@ class UserInfo extends StatelessWidget {
       child: Chip(
         backgroundColor: user.isPremium ? Colors.blueAccent : Colors.grey,
         label: Text(
-          I.of(context).memberStatus(user.attributes.membership),
+          I.of(context).memberStatus(user.membership),
           style: const TextStyle(color: Colors.white),
         ),
       ),
@@ -45,7 +45,7 @@ class UserInfo extends StatelessWidget {
                         badge,
                       ],
                     ),
-                    Text(user.attributes.email,
+                    Text(user.email,
                         style: theme.textTheme.headline6
                             .apply(color: Colors.grey)),
                   ],

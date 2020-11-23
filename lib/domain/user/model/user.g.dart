@@ -19,15 +19,19 @@ User _$UserFromJson(Map json) {
       (k, e) =>
           MapEntry(k as String, e == null ? null : Note.fromJson(e as Map)),
     ),
-    statistics: json['statistics'] == null
-        ? null
-        : UserStatistics.fromJson(json['statistics'] as Map),
+    testResults: (json['testResults'] as List)
+        ?.map((e) => e == null ? null : TestResult.fromJson(e as Map))
+        ?.toList(),
+    points: json['points'] as int,
+    testLimitCount: json['testLimitCount'] as int,
+    lastLogin: json['lastLogin'] as String,
+    isIntroducedFriend: json['isIntroducedFriend'] as bool,
     activities: (json['activities'] as List)
         ?.map((e) => e == null ? null : UserActivity.fromJson(e as Map))
         ?.toList(),
-    attributes: json['attributes'] == null
-        ? null
-        : UserAttributes.fromJson(json['attributes'] as Map),
+    age: json['age'] as String,
+    email: json['email'] as String,
+    membership: _$enumDecodeNullable(_$MembershipEnumMap, json['membership']),
     items: (json['items'] as Map)?.map(
       (k, e) => MapEntry(k as String, e as int),
     ),
@@ -40,8 +44,51 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'userId': instance.userId,
       'favorites': instance.favorites?.map((k, e) => MapEntry(k, e?.toJson())),
       'notes': instance.notes?.map((k, e) => MapEntry(k, e?.toJson())),
-      'statistics': instance.statistics?.toJson(),
-      'attributes': instance.attributes?.toJson(),
+      'testResults': instance.testResults?.map((e) => e?.toJson())?.toList(),
+      'points': instance.points,
+      'testLimitCount': instance.testLimitCount,
+      'lastLogin': instance.lastLogin,
+      'isIntroducedFriend': instance.isIntroducedFriend,
+      'age': instance.age,
+      'email': instance.email,
+      'membership': _$MembershipEnumMap[instance.membership],
       'activities': instance.activities?.map((e) => e?.toJson())?.toList(),
       'items': instance.items,
     };
+
+T _$enumDecode<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    throw ArgumentError('A value must be provided. Supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+
+  final value = enumValues.entries
+      .singleWhere((e) => e.value == source, orElse: () => null)
+      ?.key;
+
+  if (value == null && unknownValue == null) {
+    throw ArgumentError('`$source` is not one of the supported values: '
+        '${enumValues.values.join(', ')}');
+  }
+  return value ?? unknownValue;
+}
+
+T _$enumDecodeNullable<T>(
+  Map<T, dynamic> enumValues,
+  dynamic source, {
+  T unknownValue,
+}) {
+  if (source == null) {
+    return null;
+  }
+  return _$enumDecode<T>(enumValues, source, unknownValue: unknownValue);
+}
+
+const _$MembershipEnumMap = {
+  Membership.normal: 'normal',
+  Membership.pro: 'pro',
+};

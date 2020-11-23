@@ -28,7 +28,7 @@ void main() {
     initialUser
       ..notes[note.id] = note
       ..favorites[favList.id] = favList
-      ..statistics.testResults = streakResult;
+      ..testResults = streakResult;
 
     await store.setDummyUser(initialUser);
   });
@@ -79,10 +79,10 @@ void main() {
         getter: () => store.getDummyUser(),
         callback: () async {
           final u = await store.getDummyUser()
-            ..attributes.email = 'c@d.com';
+            ..email = 'c@d.com';
           await repo.updateUser(user: u);
         },
-        matcher: (b, a) => a.attributes.email == 'c@d.com',
+        matcher: (b, a) => a.email == 'c@d.com',
       );
 
       expect(diff, true);

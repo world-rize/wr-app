@@ -153,7 +153,7 @@ class AuthService {
     @required User user,
     @required String newEmail,
   }) async {
-    user.attributes.email = newEmail;
+    user.email = newEmail;
     await _userRepository.updateUser(user: user);
     await _authRepository.updateEmail(email: newEmail);
 
