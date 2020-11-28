@@ -27,7 +27,6 @@ void main() {
 
     initialUser
       ..notes[note.id] = note
-      ..favorites[favList.id] = favList
       ..testResults = streakResult;
 
     await store.setDummyUser(initialUser);
@@ -41,31 +40,13 @@ void main() {
     });
 
     test('createUser', () async {
-      final user = await repo.createUser(name: 'Test', email: 'a@b.com');
-      expect(user.name, 'Test');
-    });
-
-    test('deleteFavoriteList', () async {
-      final beforeUser = await store.getDummyUser();
-      await repo.deleteFavoriteList(user: beforeUser, listId: 'favlist');
-      final afterUser = await store.getDummyUser();
-      expect(afterUser.favorites.containsKey('favlist'), false);
-    });
-
-    test('createFavoriteList', () async {
-      final diff = await snapShotDiff<User>(
-        getter: () => store.getDummyUser(),
-        callback: () async {
-          final u = await store.getDummyUser();
-          await repo.createFavoriteList(user: u, title: '');
-        },
-        matcher: (b, a) {
-          print(b.favorites.keys);
-          print(a.favorites.keys);
-          return b.favorites.length + 1 == a.favorites.length;
-        },
-      );
-      expect(diff, true);
+      final user = User.create()
+        ..name = 'Test'
+        ..email = 'a@b.com';
+      await repo.createUser(user: user);
+      final storeUser = await repo.readUser(uuid: user.uuid);
+      expect(storeUser.name, user.name);
+      expect(storeUser.email, user.email);
     });
 
     test('deleteUser', () async {

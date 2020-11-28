@@ -22,6 +22,7 @@ import 'package:sentry/sentry.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/auth/auth_repository.dart';
+import 'package:wr_app/infrastructure/lesson/favorite_repository.dart';
 import 'package:wr_app/infrastructure/lesson/lesson_repository.dart';
 import 'package:wr_app/infrastructure/note/note_repository.dart';
 import 'package:wr_app/infrastructure/system/system_repository.dart';
@@ -149,15 +150,20 @@ Future<void> setupGlobalSingletons({
   final systemRepository = SystemRepository();
 
   final noteRepository = NoteRepository(store: GetIt.I<FirebaseFirestore>());
+  final favoriteRepository =
+      FavoriteRepository(store: GetIt.I<FirebaseFirestore>());
 
   // services
   final userService = UserService(
     authRepository: authRepository,
     userRepository: userRepository,
+    favoriteRepository: favoriteRepository,
     userApi: UserAPI(),
   );
 
-  final lessonService = LessonService(lessonRepository: lessonRepository);
+  final lessonService = LessonService(
+      lessonRepository: lessonRepository,
+      favoriteRepository: favoriteRepository);
   final systemService = SystemService(systemRepository: systemRepository);
   final authService = AuthService(
       authRepository: authRepository, userRepository: userRepository);
@@ -185,7 +191,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     final userService = GetIt.I<UserService>();
     final authService = GetIt.I<AuthService>();
     final noteService = GetIt.I<NoteService>();
-    final lessonService = GetIt.I<LessonService>();
 
     // maintenance check
     final appInfo = await systemService.getAppInfo();
@@ -195,18 +200,25 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     }
 
     final userNotifier = UserNotifier(userService: userService);
-    final authNotifier = AuthNotifier(authService: authService);
+    final authNotifier =
+        AuthNotifier(authService: authService, userService: userService);
+    final noteNotifier = NoteNotifier(noteService: noteService);
     authNotifier.addListener(() {
       userNotifier.user = authNotifier.user;
+      noteNotifier.user = authNotifier.user;
+      InAppLogger.debug('from auth to many notifier');
     });
-    final noteNotifier = NoteNotifier(noteService: noteService);
-    noteNotifier.addListener(() {
-      userNotifier.user = noteNotifier.user;
-    });
+
+    // noteNotifier.addListener(() {
+    //   userNotifier.user = noteNotifier.user;
+    //   authNotifier.user = noteNotifier.user;
+    //   InAppLogger.debug('from note to many notifier');
+    // });
 
     userNotifier.addListener(() {
       authNotifier.user = userNotifier.user;
       noteNotifier.user = userNotifier.user;
+      InAppLogger.debug('from user to many notifier');
     });
 
     final app = MultiProvider(
@@ -224,13 +236,6 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ChangeNotifierProvider.value(value: authNotifier),
         // Note
         ChangeNotifierProvider.value(value: noteNotifier),
-        // Lesson
-        ChangeNotifierProvider.value(
-          value: LessonNotifier(
-            userService: userService,
-            lessonService: lessonService,
-          ),
-        ),
         ChangeNotifierProvider.value(
           value: VoicePlayer(),
         ),

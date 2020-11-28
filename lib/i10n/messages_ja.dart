@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m1(count, all) => "クリア[${count}/${all}]";
 
-  static m2(membership) => "${Intl.select(membership, {'normal': 'FREE', 'pro': 'PRO', })}";
+  static m2(membership) => "${Intl.select(membership, {'normal': 'FREE', 'pro': 'PRO', 'other': 'NONE' })}";
 
   static m3(point) => "${point} coins";
 

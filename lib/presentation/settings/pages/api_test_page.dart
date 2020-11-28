@@ -113,7 +113,11 @@ class APITestView extends StatelessWidget {
                 title: 'お気に入りに登録',
                 onTap: () async {
                   try {
-                    await un.favoritePhrase(phraseId: '0000', favorite: true);
+                    await ln.favoritePhrase(
+                      phraseId: '0000',
+                      favorite: true,
+                      user: un.user,
+                    );
                     _showResultDialog(context, '成功');
                   } on Exception catch (e) {
                     _showResultDialog(context, 'エラー', e);

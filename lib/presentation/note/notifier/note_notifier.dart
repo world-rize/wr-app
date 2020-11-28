@@ -45,6 +45,7 @@ class NoteNotifier extends ChangeNotifier {
 
   String get nowSelectedNoteId {
     // TODO: 無駄コード
+    InAppLogger.debug('user ${user.email}: ${user.getDefaultNote()}');
     return _nowSelectedNoteId ??= user.getDefaultNote().id;
   }
 

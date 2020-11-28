@@ -6,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/user/i_user_repository.dart';
+import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/sentry.dart';
 
 // TODO: i10n注入
 class UserRepository implements IUserRepository {
@@ -13,43 +15,45 @@ class UserRepository implements IUserRepository {
 
   final FirebaseFirestore store;
 
-  CollectionReference get users => store.collection('users');
+  Future<CollectionReference> usersCollection() async {
+    InAppLogger.debug('in userCollection');
+    // final version = (await store
+    //         .collection('version')
+    //         .where('version', isEqualTo: 'v1')
+    //         .limit(1)
+    //         .get())
+    //     .docs[0]
+    //     .data()['version'];
+    // InAppLogger.debug('version: $version');
+    // return store.collection('version').doc(version).collection('users');
+    return (await store
+            .collection('versions')
+            .where('version', isEqualTo: 'v1')
+            .limit(1)
+            .get())
+        .docs[0]
+        .reference
+        .collection('users');
+  }
 
   Future<User> setUser(User user) async {
-    await users.doc(user.uuid).set(user.toJson());
+    await (await usersCollection()).doc(user.uuid).set(user.toJson());
     return user;
   }
 
   @override
-  Future<User> deleteFavoriteList({
-    @required User user,
-    @required String listId,
+  Future<User> findByUid({
+    @required String uid,
   }) async {
-    return setUser(user..favorites.remove(listId));
-  }
-
-  @override
-  Future<User> createFavoriteList({
-    @required User user,
-    @required String title,
-  }) async {
-    final list = FavoritePhraseList.create(title: title);
-    return setUser(user..favorites[list.id] = list);
-  }
-
-  @override
-  Future<User> updateFavoriteList({
-    @required User user,
-    @required FavoritePhraseList list,
-  }) async {
-    return setUser(user..favorites[list.id] = list);
+    final data = await (await usersCollection()).doc(uid).get();
+    return data.data() == null ? null : User.fromJson(data.data());
   }
 
   @override
   Future deleteUser({
     @required String uuid,
   }) async {
-    return users.doc(uuid).delete();
+    return (await usersCollection()).doc(uuid).delete();
   }
 
   @override
@@ -61,18 +65,17 @@ class UserRepository implements IUserRepository {
 
   @override
   Future<User> createUser({
-    @required String name,
-    @required String email,
+    @required User user,
   }) async {
-    return User.create()
-      ..name = name
-      ..email = email;
+    await (await usersCollection()).doc(user.uuid).set(user.toJson());
+    return user;
   }
 
   @override
   Future<User> readUser({
     @required String uuid,
   }) async {
-    return User.fromJson((await users.doc(uuid).get()).data());
+    final data = (await (await usersCollection()).doc(uuid).get()).data();
+    return data == null ? null : User.fromJson(data);
   }
 }

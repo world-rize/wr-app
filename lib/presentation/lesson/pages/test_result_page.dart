@@ -9,6 +9,7 @@ import 'package:wr_app/domain/lesson/model/test_stats.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
+import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
 import 'package:wr_app/presentation/lesson/widgets/reward_dialog.dart';
@@ -70,36 +71,46 @@ class _TestResultPageState extends State<TestResultPage> {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final userNotifier = Provider.of<UserNotifier>(context);
+    final un = Provider.of<UserNotifier>(context);
+    final ln = Provider.of<LessonNotifier>(context);
 
     final scoreText =
         I.of(context).testScore(widget.stats.questions, widget.stats.corrects);
 
     final resultList = List.generate(
-      widget.stats.section.phrases.length,
-      (i) => PhraseCard(
-        highlight: widget.stats.answers[i] ? Colors.green : Colors.red,
-        phrase: widget.stats.section.phrases[i],
-        onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) =>
-                  SectionPage(section: widget.stats.section, index: i),
-            ),
-          );
-        },
-        favorite: userNotifier.existPhraseInFavoriteList(
-            phraseId: widget.stats.section.phrases[i].id),
-        onFavorite: () {
-          final phrase = widget.stats.section.phrases[i];
-          userNotifier.favoritePhrase(
-            phraseId: phrase.id,
-            favorite:
-                !userNotifier.existPhraseInFavoriteList(phraseId: phrase.id),
-          );
-        },
-      ).padding(),
-    );
+        widget.stats.section.phrases.length,
+        (i) => FutureBuilder(
+              future: ln.existPhraseInFavoriteList(
+                  user: un.user, phraseId: widget.stats.section.phrases[i].id),
+              builder: (context, snapshot) {
+                var favorite = false;
+                if (snapshot.hasData) {
+                  favorite = snapshot.data;
+                }
+                return PhraseCard(
+                  highlight:
+                      widget.stats.answers[i] ? Colors.green : Colors.red,
+                  phrase: widget.stats.section.phrases[i],
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => SectionPage(
+                            section: widget.stats.section, index: i),
+                      ),
+                    );
+                  },
+                  favorite: favorite,
+                  onFavorite: () {
+                    final phrase = widget.stats.section.phrases[i];
+                    ln.favoritePhrase(
+                      phraseId: phrase.id,
+                      favorite: favorite,
+                      user: un.user,
+                    );
+                  },
+                ).padding();
+              },
+            ));
     final nextButton = PrimaryButton(
       label: Padding(
         padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 100),

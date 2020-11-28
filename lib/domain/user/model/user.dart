@@ -19,7 +19,6 @@ class User {
     @required this.uuid,
     @required this.name,
     @required this.userId,
-    @required this.favorites,
     @required this.notes,
     @required this.testResults,
     @required this.points,
@@ -33,16 +32,8 @@ class User {
     @required this.items,
   });
 
-  factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UserToJson(this);
-
   factory User.create() {
     final uuid = Uuid().v4();
-    final defaultFavoriteList = FavoritePhraseList.create(
-      title: 'お気に入り',
-      isDefault: true,
-    );
     final defaultNote = Note.create(
       title: 'ノート',
       isDefault: true,
@@ -57,9 +48,6 @@ class User {
       name: '',
       // TODO
       userId: uuid,
-      favorites: {
-        defaultFavoriteList.id: defaultFavoriteList,
-      },
       notes: {
         defaultNote.id: defaultNote,
         achievedNote.id: achievedNote,
@@ -82,15 +70,6 @@ class User {
       uuid: '',
       name: '',
       userId: '',
-      favorites: {
-        'default': FavoritePhraseList(
-          id: 'default',
-          title: 'お気に入り',
-          sortType: '',
-          isDefault: true,
-          phrases: [],
-        ),
-      },
       testResults: [],
       points: 0,
       testLimitCount: 0,
@@ -110,9 +89,6 @@ class User {
       uuid: 'uuid',
       name: 'Dummy',
       userId: '123-456-789',
-      favorites: {
-        'default': FavoritePhraseList.dummy(),
-      },
       testResults: <TestResult>[],
       points: 100,
       testLimitCount: 3,
@@ -138,6 +114,10 @@ class User {
     );
   }
 
+  factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+
   /// uuid
   String uuid;
 
@@ -146,9 +126,6 @@ class User {
 
   /// userId
   String userId;
-
-  /// お気に入りフレーズのリストのマップ
-  Map<String, FavoritePhraseList> favorites;
 
   /// オリジナルフレーズ UUIDで一発でアクセスしたい
   Map<String, Note> notes;
@@ -176,11 +153,6 @@ class User {
   Map<String, int> items;
 
   bool get isPremium => membership == Membership.pro;
-
-  FavoritePhraseList getDefaultFavoriteList() {
-    return favorites.values
-        .firstWhere((list) => list.isDefault, orElse: () => null);
-  }
 
   Note getNoteById({String noteId}) {
     // ノートを削除した直後はnullになる

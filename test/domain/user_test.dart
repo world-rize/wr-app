@@ -15,6 +15,7 @@ import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/auth/auth_repository.dart';
+import 'package:wr_app/infrastructure/lesson/favorite_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/usecase/user_service.dart';
 
@@ -48,8 +49,12 @@ void main() {
   final googleSignIn = MockGoogleSignIn();
   final ur = UserRepository(store: store);
   final ar = AuthRepository(auth: auth, googleSignIn: googleSignIn);
-  final service =
-      UserService(authRepository: ar, userRepository: ur, userApi: UserAPI());
+  final fr = FavoriteRepository(store: store);
+  final service = UserService(
+      authRepository: ar,
+      userRepository: ur,
+      userApi: UserAPI(),
+      favoriteRepository: fr);
 
   setUp(() async {
     print('setup');
@@ -64,7 +69,6 @@ void main() {
 
     initialUser
       ..notes[note.id] = note
-      ..favorites[favList.id] = favList
       ..testResults = streakResult;
 
     await store.setDummyUser(initialUser);
@@ -78,9 +82,7 @@ void main() {
           final u = await store.getDummyUser();
           await service.sendTestResult(user: u, sectionId: 'section', score: 3);
         },
-        matcher: (b, a) =>
-            b.testResults.length + 1 ==
-            a.testResults.length,
+        matcher: (b, a) => b.testResults.length + 1 == a.testResults.length,
       );
 
       expect(true, diff);
@@ -99,21 +101,10 @@ void main() {
           final u = await store.getDummyUser();
           await service.doTest(user: u, sectionId: '');
         },
-        matcher: (b, a) =>
-            b.testLimitCount - 1 == a.testLimitCount,
+        matcher: (b, a) => b.testLimitCount - 1 == a.testLimitCount,
       );
 
       expect(true, diff);
-    });
-
-    test('favoritePhrase', () async {
-      final user = await store.getDummyUser();
-      final favList = user.getDefaultFavoriteList();
-      await service.favorite(
-          user: user, phraseId: 'phrase', listId: favList.id, favorite: true);
-      final afterFavList =
-          (await store.getDummyUser()).getDefaultFavoriteList();
-      expect(1, afterFavList.phrases.where((d) => d.id == 'phrase').length);
     });
   });
 }

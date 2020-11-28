@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:wr_app/infrastructure/auth/i_auth_repository.dart';
 import 'package:wr_app/util/cloud_functions.dart';
+import 'package:wr_app/util/logger.dart';
 
 class AuthRepository implements IAuthRepository {
   const AuthRepository({
@@ -147,16 +148,16 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<bool> isAlreadySignedIn() async {
-    return auth.currentUser != null;
+    final currentUser = await auth.authStateChanges().first;
+    if (currentUser != null) {
+      InAppLogger.debug(
+          'auth.currentUser: ${currentUser.uid} ${currentUser.email}');
+    }
+    return currentUser != null;
   }
 
   @override
   Future<void> sendPasswordResetEmail({@required String email}) async {
     await auth.sendPasswordResetEmail(email: email);
-  }
-
-  @override
-  Future<void> login() {
-    return callFunction('login');
   }
 }

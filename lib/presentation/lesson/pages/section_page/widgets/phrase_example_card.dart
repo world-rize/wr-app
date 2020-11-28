@@ -16,6 +16,7 @@ import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/ui/widgets/boldable_text.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/sentry.dart';
 
 /// phrase example view testなら[isTest]trueでキーフレーズを隠す
 class PhraseExampleCard extends StatelessWidget {
@@ -142,11 +143,15 @@ class PhraseExampleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final vp = Provider.of<VoicePlayer>(context);
+    final ln = Provider.of<LessonNotifier>(context);
     final un = Provider.of<UserNotifier>(context);
 
     // TODO: phrase.id !== notePhrase.uuid
     final existNotes = un.existPhraseInNotes(phraseId: phrase.id);
-    final favorited = un.existPhraseInFavoriteList(phraseId: phrase.id);
+    final favorited = ln.existPhraseInFavoriteList(
+      phraseId: phrase.id,
+      user: un.user,
+    );
 
     final _addNotesButton = LikeButton(
       isLiked: false,
@@ -203,28 +208,55 @@ class PhraseExampleCard extends StatelessWidget {
       },
     );
 
-    final _favoriteButton = LikeButton(
-      isLiked: favorited,
-      circleColor: CircleColor(
-        start: Colors.redAccent[100],
-        end: Colors.redAccent[400],
-      ),
-      bubblesColor: BubblesColor(
-        dotSecondaryColor: Colors.redAccent[100],
-        dotPrimaryColor: Colors.redAccent[400],
-      ),
-      likeBuilder: (isLiked) => Icon(
-        isLiked ? Icons.favorite : Icons.favorite_border,
-        color: Colors.redAccent,
-      ),
-      onTap: (isLiked) async {
-        await un.favoritePhrase(
-          phraseId: phrase.id,
-          favorite: !isLiked,
-        );
-        return !isLiked;
-      },
-    );
+    final _favoriteButton = FutureBuilder(
+        future: favorited,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            if (!snapshot.hasError) {
+              sentryReportError(
+                  error: snapshot.error, stackTrace: StackTrace.current);
+            }
+            return LikeButton(
+              isLiked: false,
+              circleColor: CircleColor(
+                start: Colors.redAccent[100],
+                end: Colors.redAccent[400],
+              ),
+              bubblesColor: BubblesColor(
+                dotSecondaryColor: Colors.redAccent[100],
+                dotPrimaryColor: Colors.redAccent[400],
+              ),
+              likeBuilder: (isLiked) => Icon(
+                isLiked ? Icons.favorite : Icons.favorite_border,
+                color: Colors.redAccent,
+              ),
+              onTap: null,
+            );
+          }
+          return LikeButton(
+            isLiked: snapshot.data,
+            circleColor: CircleColor(
+              start: Colors.redAccent[100],
+              end: Colors.redAccent[400],
+            ),
+            bubblesColor: BubblesColor(
+              dotSecondaryColor: Colors.redAccent[100],
+              dotPrimaryColor: Colors.redAccent[400],
+            ),
+            likeBuilder: (isLiked) => Icon(
+              isLiked ? Icons.favorite : Icons.favorite_border,
+              color: Colors.redAccent,
+            ),
+            onTap: (isLiked) async {
+              await ln.favoritePhrase(
+                phraseId: phrase.id,
+                favorite: !isLiked,
+                user: un.user,
+              );
+              return !isLiked;
+            },
+          );
+        });
 
     final _buttons = Row(
       mainAxisSize: MainAxisSize.min,

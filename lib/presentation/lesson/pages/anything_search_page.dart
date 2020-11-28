@@ -45,6 +45,7 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context, listen: false);
+    final ln = Provider.of<LessonNotifier>(context, listen: false);
 
     final _wordField = TextFormField(
       onChanged: (word) {
@@ -108,11 +109,16 @@ class _AnythingSearchPageState extends State<AnythingSearchPage> {
                                       ),
                                     );
                                   },
-                                  onFavorite: () {
-                                    un.favoritePhrase(
+                                  onFavorite: () async {
+                                    final favorite =
+                                        await ln.existPhraseInFavoriteList(
+                                      phraseId: phrase.id,
+                                      user: un.user,
+                                    );
+                                    await ln.favoritePhrase(
                                         phraseId: phrase.id,
-                                        favorite: un.existPhraseInFavoriteList(
-                                            phraseId: phrase.id));
+                                        favorite: favorite,
+                                        user: un.user);
                                   },
                                 ),
                               )

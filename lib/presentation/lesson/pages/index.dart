@@ -2,8 +2,10 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:getflutter/getflutter.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
@@ -11,6 +13,7 @@ import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
+import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -21,9 +24,26 @@ import './section_select_page.dart';
 import '../widgets/carousel_cell.dart';
 import '../widgets/phrase_card.dart';
 
+class LessonIndexPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final un = Provider.of<UserNotifier>(context);
+    final lessonService = GetIt.I<LessonService>();
+
+    return ChangeNotifierProvider.value(
+      value: LessonNotifier(
+        user: un.user,
+        lessonService: lessonService,
+      ),
+      child: _LessonIndexPage(),
+    );
+  }
+}
+
+
 /// Lesson > index
 /// - top page of lesson
-class LessonIndexPage extends StatelessWidget {
+class _LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context);
@@ -69,7 +89,7 @@ class LessonIndexPage extends StatelessWidget {
           ),
 
           FutureBuilder<List<Phrase>>(
-            future: ln.favoritePhrases(user),
+            future: ln.getFavoritePhrases(user),
             builder: (_, res) {
               if (!res.hasData || res.data.isEmpty) {
                 return const Padding(
@@ -103,8 +123,15 @@ class LessonIndexPage extends StatelessWidget {
             dividerColor: GFColors.SUCCESS,
           ),
 
-          FutureBuilder<List<Phrase>>(
-            future: ln.newComingPhrases(),
+          FutureBuilder<List<Tuple2<Phrase, bool>>>(
+            future: ln.newComingPhrases().then((value) async {
+              return await Future.forEach(value, (element) async {
+                return Tuple2(
+                    element,
+                    await ln.existPhraseInFavoriteList(
+                        user: user, phraseId: element));
+              });
+            }),
             builder: (_, res) {
               if (!res.hasData || res.data.isEmpty) {
                 return Padding(
@@ -120,18 +147,21 @@ class LessonIndexPage extends StatelessWidget {
                 return Column(
                   children: [
                     PhraseCard(
-                      phrase: p,
-                      favorite: un.existPhraseInFavoriteList(phraseId: p.id),
+                      phrase: p.item1,
+                      favorite: p.item2,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (_) => NewComingPage()),
                         );
                       },
-                      onFavorite: () {
-                        un.favoritePhrase(
-                          phraseId: p.id,
-                          favorite:
-                              !un.existPhraseInFavoriteList(phraseId: p.id),
+                      onFavorite: () async {
+                        await ln.favoritePhrase(
+                          phraseId: p.item1.id,
+                          favorite: !await ln.existPhraseInFavoriteList(
+                            phraseId: p.item1.id,
+                            user: user,
+                          ),
+                          user: user,
                         );
                       },
                     ),
