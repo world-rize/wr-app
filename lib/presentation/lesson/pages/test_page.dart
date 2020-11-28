@@ -170,25 +170,28 @@ class TestPageState extends State<TestPage> {
     final primaryColor = Theme.of(context).primaryColor;
     final selection = _randomSelections();
 
-    return LoadingView(
-      loading: _isLoading,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: primaryColor,
-          title: Text(I.of(context).question(_index + 1)),
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: _showConfirmDialog,
-            )
-          ],
-        ),
-        body: TestChoices(
-          index: _index,
-          phrase: currentPhrase,
-          selection: selection,
-          onNext: _next,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: LoadingView(
+        loading: _isLoading,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: primaryColor,
+            title: Text(I.of(context).question(_index + 1)),
+            automaticallyImplyLeading: false,
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: _showConfirmDialog,
+              )
+            ],
+          ),
+          body: TestChoices(
+            index: _index,
+            phrase: currentPhrase,
+            selection: selection,
+            onNext: _next,
+          ),
         ),
       ),
     );
