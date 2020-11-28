@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
@@ -18,11 +19,18 @@ class FavoritePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).primaryColor;
-    final userNotifier = Provider.of<UserNotifier>(context);
-    final lessonNotifier = Provider.of<LessonNotifier>(context);
+    final un = Provider.of<UserNotifier>(context);
+    final ln = Provider.of<LessonNotifier>(context);
 
-    final favoritePhraseCards = FutureBuilder<List<Phrase>>(
-        future: lessonNotifier.favoritePhrases(userNotifier.user),
+    final favoritePhraseCards = FutureBuilder<List<Tuple2<Phrase, bool>>>(
+        future: ln.getFavoritePhrases(un.user).then((value) async {
+          return Future.forEach(value, (element) async {
+            return Tuple2(
+                element,
+                await ln.existPhraseInFavoriteList(
+                    user: un.user, phraseId: element.id));
+          });
+        }),
         builder: (_, res) {
           if (!res.hasData) {
             return Padding(
@@ -34,15 +42,14 @@ class FavoritePage extends StatelessWidget {
           final section = Section(
             id: 'favorite',
             title: I.of(context).favoritePageTitle,
-            phrases: res.data,
+            phrases: res.data.map((e) => e.item1),
           );
 
           return Column(
-            children: section.phrases.indexedMap((index, phrase) {
+            children: res.data.indexedMap((index, phrase) {
               return PhraseCard(
-                phrase: phrase,
-                favorite:
-                    userNotifier.existPhraseInFavoriteList(phraseId: phrase.id),
+                phrase: phrase.item1,
+                favorite: phrase.item2,
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -54,10 +61,11 @@ class FavoritePage extends StatelessWidget {
                   );
                 },
                 onFavorite: () {
-                  final favorite = userNotifier.existPhraseInFavoriteList(
-                      phraseId: phrase.id);
-                  userNotifier.favoritePhrase(
-                      phraseId: phrase.id, favorite: !favorite);
+                  ln.favoritePhrase(
+                    phraseId: phrase.item1.id,
+                    favorite: !phrase.item2,
+                    user: un.user,
+                  );
                 },
               );
             }).toList(),

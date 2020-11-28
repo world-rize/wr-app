@@ -31,7 +31,7 @@ class ShopItemCard extends StatelessWidget {
         shopItem.expendable || !shopItem.expendable && userHasItemCount == 0;
     final alreadyPurchased =
         !shopItem.expendable && user.items.containsKey(shopItem.id);
-    final buyable = user.statistics.points >= shopItem.price;
+    final buyable = user.points >= shopItem.price;
 
     final card = ShadowedContainer(
       color: backgroundColor,

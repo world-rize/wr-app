@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:wr_app/domain/lesson/model/favorite_phrase_digest.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/index.dart';
@@ -12,21 +11,57 @@ import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/auth/i_auth_repository.dart';
+import 'package:wr_app/infrastructure/lesson/i_favorite_repository.dart';
 import 'package:wr_app/infrastructure/user/i_user_repository.dart';
+import 'package:wr_app/util/logger.dart';
 
 // TODO: Error handling
 class UserService {
   const UserService({
     @required IAuthRepository authRepository,
     @required IUserRepository userRepository,
+    @required IFavoriteRepository favoriteRepository,
     @required IUserAPI userApi,
   })  : _authRepository = authRepository,
         _userRepository = userRepository,
+        _favoriteRepository = favoriteRepository,
         _userApi = userApi;
 
   final IAuthRepository _authRepository;
   final IUserRepository _userRepository;
+  final IFavoriteRepository _favoriteRepository;
   final UserAPI _userApi;
+
+  /// ユーザのすべてのデータの初期化
+  Future<void> initializeUserData({
+    @required String uid,
+    @required String name,
+    @required String email,
+  }) async {
+    InAppLogger.debug('_userRepository.createUser()');
+    final newUser = User.create()
+      ..uuid = uid
+      ..email = email
+      ..name = name;
+
+    await _userRepository.createUser(user: newUser);
+    await _favoriteRepository.createFavoriteList(
+      userUuid: uid,
+      title: '',
+      isDefault: true,
+    );
+  }
+
+  /// 前のバージョンのユーザからデータを再帰的にマイグレーションする
+  Future<void> migrationUserData({@required String uid}) async {
+    final user = await _userRepository.findByUid(uid: uid);
+    if (user != null) {
+      InAppLogger.debug('User $uid already exists.');
+      return;
+    }
+    // TODO: migrationして前のUser classからUserを作成する
+    throw Exception('unimplemented');
+  }
 
   // TODO: どこにおくべき
   String getUid() {
@@ -37,40 +72,12 @@ class UserService {
     return _userRepository.readUser(uuid: uid);
   }
 
-  /// フレーズをお気に入りに登録します
-  Future<User> favorite({
+  /// 受講可能回数をセット
+  Future<User> setTestCount({
     @required User user,
-    @required String listId,
-    @required String phraseId,
-    @required bool favorite,
+    @required int count,
   }) async {
-    final list = user.favorites[listId];
-
-    if (!user.favorites.containsKey(listId)) {
-      throw Exception('favorite list $listId not found');
-    }
-
-    final index = list.phrases.indexWhere((p) => p.id == phraseId);
-    if (favorite) {
-      if (index == -1) {
-        list.phrases
-            .add(FavoritePhraseDigest(id: phraseId, createdAt: DateTime.now()));
-      } else {
-        list.phrases[index] =
-            FavoritePhraseDigest(id: phraseId, createdAt: DateTime.now());
-      }
-    } else {
-      list.phrases.removeAt(index);
-    }
-
-    return _userRepository.updateFavoriteList(user: user, list: list);
-  }
-
-  /// 受講可能回数をリセット
-  Future<User> resetTestCount({
-    @required User user,
-  }) async {
-    user.statistics.testLimitCount = 3;
+    user.testLimitCount = count;
     return _userRepository.updateUser(user: user);
   }
 
@@ -87,7 +94,7 @@ class UserService {
     @required User user,
     @required Membership membership,
   }) {
-    user.attributes.membership = membership;
+    user.membership = membership;
     return _userRepository.updateUser(user: user);
   }
 
@@ -96,11 +103,11 @@ class UserService {
     @required User user,
     @required String sectionId,
   }) {
-    if (user.statistics.testLimitCount == 0) {
+    if (user.testLimitCount == 0) {
       throw Exception('daily test limit exceeded');
     }
 
-    user.statistics.testLimitCount -= 1;
+    user.testLimitCount -= 1;
     user.activities.add(UserActivity(
       content: '$sectionId のテストを受ける',
       date: DateTime.now(),
@@ -116,7 +123,7 @@ class UserService {
     @required int score,
   }) {
     // 記録追加
-    user.statistics.testResults.add(TestResult(
+    user.testResults.add(TestResult(
       sectionId: sectionId,
       score: score,
       date: DateTime.now().toIso8601String(),
@@ -135,22 +142,6 @@ class UserService {
     return _userRepository.updateUser(user: user);
   }
 
-  /// create favorite list
-  Future<User> createFavoriteList({
-    @required User user,
-    @required String title,
-  }) {
-    return _userRepository.createFavoriteList(user: user, title: title);
-  }
-
-  /// delete favorite list
-  Future<User> deleteFavoriteList({
-    @required User user,
-    @required String listId,
-  }) async {
-    return _userRepository.deleteFavoriteList(user: user, listId: listId);
-  }
-
   /// search user from User ID
   Future<User> searchUserFromUserId({@required String userId}) {
     return _userApi.findUserByUserId(uuid: userId);
@@ -161,8 +152,8 @@ class UserService {
     // 29日前の0時
     final begin = Jiffy().startOf(Units.DAY).subtract(const Duration(days: 29));
     // 過去30日間のstreakを調べる
-    final last30daysResults = user.statistics.testResults
-        .where((result) => Jiffy(result.date).isAfter(begin));
+    final last30daysResults =
+        user.testResults.where((result) => Jiffy(result.date).isAfter(begin));
     final streaked = groupBy(last30daysResults,
             (TestResult result) => Jiffy(result.date).startOf(Units.DAY))
         .values
@@ -176,4 +167,5 @@ class UserService {
   }) {
     return _userApi.introduceFriend(introduceeUserId: introduceeUserId);
   }
+
 }

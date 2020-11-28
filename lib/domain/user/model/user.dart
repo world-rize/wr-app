@@ -4,12 +4,11 @@ import 'package:data_classes/data_classes.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:uuid/uuid.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
+import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
-import 'package:wr_app/domain/user/model/user_attributes.dart';
-import 'package:wr_app/domain/user/model/user_statistics.dart';
 
 part 'user.g.dart';
 
@@ -20,24 +19,21 @@ class User {
     @required this.uuid,
     @required this.name,
     @required this.userId,
-    @required this.favorites,
     @required this.notes,
-    @required this.statistics,
+    @required this.testResults,
+    @required this.points,
+    @required this.testLimitCount,
+    @required this.lastLogin,
+    @required this.isIntroducedFriend,
     @required this.activities,
-    @required this.attributes,
+    @required this.age,
+    @required this.email,
+    @required this.membership,
     @required this.items,
   });
 
-  factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
-
-  Map<String, dynamic> toJson() => _$UserToJson(this);
-
   factory User.create() {
     final uuid = Uuid().v4();
-    final defaultFavoriteList = FavoritePhraseList.create(
-      title: 'お気に入り',
-      isDefault: true,
-    );
     final defaultNote = Note.create(
       title: 'ノート',
       isDefault: true,
@@ -52,26 +48,19 @@ class User {
       name: '',
       // TODO
       userId: uuid,
-      favorites: {
-        defaultFavoriteList.id: defaultFavoriteList,
-      },
       notes: {
         defaultNote.id: defaultNote,
         achievedNote.id: achievedNote,
       },
-      statistics: UserStatistics(
-        testResults: [],
-        points: 0,
-        testLimitCount: 3,
-        lastLogin: DateTime.now().toIso8601String(),
-        isIntroducedFriend: false,
-      ),
+      testResults: [],
+      points: 0,
+      testLimitCount: 3,
+      lastLogin: DateTime.now().toIso8601String(),
+      isIntroducedFriend: false,
       activities: [],
-      attributes: UserAttributes(
-        age: '',
-        email: '',
-        membership: Membership.normal,
-      ),
+      age: '',
+      email: '',
+      membership: Membership.normal,
       items: {},
     );
   }
@@ -81,27 +70,14 @@ class User {
       uuid: '',
       name: '',
       userId: '',
-      favorites: {
-        'default': FavoritePhraseList(
-          id: 'default',
-          title: 'お気に入り',
-          sortType: '',
-          isDefault: true,
-          phrases: [],
-        ),
-      },
-      statistics: UserStatistics(
-        testResults: [],
-        points: 0,
-        testLimitCount: 0,
-        lastLogin: '',
-        isIntroducedFriend: false,
-      ),
-      attributes: UserAttributes(
-        age: '0',
-        email: 'hoge@example.com',
-        membership: Membership.normal,
-      ),
+      testResults: [],
+      points: 0,
+      testLimitCount: 0,
+      lastLogin: '',
+      isIntroducedFriend: false,
+      age: '0',
+      email: 'hoge@example.com',
+      membership: Membership.normal,
       activities: [],
       notes: {},
       items: {},
@@ -113,11 +89,11 @@ class User {
       uuid: 'uuid',
       name: 'Dummy',
       userId: '123-456-789',
-      favorites: {
-        'default': FavoritePhraseList.dummy(),
-      },
-      statistics: UserStatistics.dummy(),
-      attributes: UserAttributes.dummy(),
+      testResults: <TestResult>[],
+      points: 100,
+      testLimitCount: 3,
+      lastLogin: '',
+      isIntroducedFriend: false,
       activities: [
         UserActivity(
           content: 'Dummy Activity',
@@ -132,8 +108,15 @@ class User {
         '3': 1,
         '4': 1,
       },
+      age: '0',
+      email: 'hoge@example.com',
+      membership: Membership.normal,
     );
   }
+
+  factory User.fromJson(Map<dynamic, dynamic> json) => _$UserFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserToJson(this);
 
   /// uuid
   String uuid;
@@ -144,17 +127,24 @@ class User {
   /// userId
   String userId;
 
-  /// お気に入りフレーズのリストのマップ
-  Map<String, FavoritePhraseList> favorites;
-
   /// オリジナルフレーズ UUIDで一発でアクセスしたい
   Map<String, Note> notes;
 
-  /// 統計情報
-  UserStatistics statistics;
+  List<TestResult> testResults;
 
-  /// 個人情報
-  UserAttributes attributes;
+  int points;
+
+  int testLimitCount;
+
+  String lastLogin;
+
+  bool isIntroducedFriend;
+
+  String age;
+
+  String email;
+
+  Membership membership;
 
   /// ユーザー活動
   List<UserActivity> activities;
@@ -162,12 +152,7 @@ class User {
   /// 所持アイテム(key: item_id, value: amount)
   Map<String, int> items;
 
-  bool get isPremium => attributes.membership == Membership.pro;
-
-  FavoritePhraseList getDefaultFavoriteList() {
-    return favorites.values
-        .firstWhere((list) => list.isDefault, orElse: () => null);
-  }
+  bool get isPremium => membership == Membership.pro;
 
   Note getNoteById({String noteId}) {
     // ノートを削除した直後はnullになる

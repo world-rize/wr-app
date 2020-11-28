@@ -64,7 +64,7 @@ class _AccountSettingsPageState extends State<AccountSettingsPage> {
         ),
         SettingsTile(
           title: 'メールアドレス',
-          subtitle: user.attributes.email,
+          subtitle: user.email,
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => MailAddressFormPage()));

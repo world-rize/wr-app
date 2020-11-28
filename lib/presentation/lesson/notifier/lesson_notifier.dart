@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/lesson/index.dart';
+import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
@@ -9,29 +10,31 @@ import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
 class LessonNotifier with ChangeNotifier {
-  LessonService _lessonService;
-  UserService _userService;
-
-  List<Lesson> _lessons = [];
-
-  /// singleton
-  static LessonNotifier _cache;
-
   factory LessonNotifier({
     @required LessonService lessonService,
-    @required UserService userService,
+    @required User user,
   }) {
     return _cache ??= LessonNotifier._internal(
-        userService: userService, lessonService: lessonService);
+      lessonService: lessonService,
+      user: user,
+    );
   }
 
   LessonNotifier._internal({
     @required LessonService lessonService,
-    @required UserService userService,
-  })  : _lessonService = lessonService,
-        _userService = userService {
+    @required User user,
+  }) : _lessonService = lessonService {
     loadAllLessons();
+    favorites = _lessonService.getAllFavoriteLists(userUuid: user.uuid);
   }
+
+  LessonService _lessonService;
+
+  List<Lesson> _lessons = [];
+  Future<List<FavoritePhraseList>> favorites;
+
+  /// singleton
+  static LessonNotifier _cache;
 
   Future<void> loadAllLessons() async {
     _lessons = await _lessonService.loadPhrases();
@@ -77,12 +80,6 @@ class LessonNotifier with ChangeNotifier {
     return _lessonService.getSectionsById(lessons: _lessons, id: id);
   }
 
-  Future<List<Phrase>> favoritePhrases(User user) async {
-    final favoriteIds =
-        user.favorites.values.expand((list) => list.phrases).map((p) => p.id);
-    return phrasesWhere((p) => favoriteIds.contains(p.id));
-  }
-
   Future<List<Phrase>> newComingPhrases() async {
     return _lessonService.newComingPhrases();
   }
@@ -94,6 +91,7 @@ class LessonNotifier with ChangeNotifier {
   }
 
   bool get showJapanese => _lessonService.getShowJapanese();
+
   bool get showEnglish => _lessonService.getShowEnglish();
 
   void toggleJapanese() {
@@ -104,5 +102,47 @@ class LessonNotifier with ChangeNotifier {
   void toggleEnglish() {
     _lessonService.toggleShowEnglish();
     notifyListeners();
+  }
+
+  Future<List<Phrase>> getFavoritePhrases(User user) async {
+    final favoriteIds =
+    (await favorites).expand((list) => list.phrases).map((p) => p.id);
+    return phrasesWhere((p) => favoriteIds.contains(p.id));
+  }
+
+  /// フレーズをお気に入りに登録します
+  Future<void> favoritePhrase({
+    @required User user,
+    @required String phraseId,
+    @required bool favorite,
+  }) async {
+    // TODO: default以外に保存できるようにする
+    // defaultふぁぼりてリスト以外に保存したらdeleteするときむずかしくね?
+    var defaultFavoriteList = (await favorites)
+        .firstWhere((element) => element.id == 'default');
+
+    // false -> true
+    defaultFavoriteList = await _lessonService.favorite(
+      user: user,
+      listId: defaultFavoriteList.id,
+      phraseId: phraseId,
+      favorite: favorite,
+    );
+
+    // 連打されると困るのでお気に入り登録するときだけdelay
+    if (favorite) {
+      await Future.delayed(const Duration(milliseconds: 1000));
+    }
+    notifyListeners();
+
+    InAppLogger.debug(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
+  }
+
+  /// exist phrase in favorites
+  Future<bool> existPhraseInFavoriteList({
+    @required User user,
+    @required String phraseId,
+  }) async {
+    return (await getFavoritePhrases(user)).any((p) => p.id == phraseId);
   }
 }

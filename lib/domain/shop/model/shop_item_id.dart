@@ -56,5 +56,6 @@ extension ShopItemIdEx on ShopItemId {
         return 'extra_note';
         break;
     }
+    return null;
   }
 }

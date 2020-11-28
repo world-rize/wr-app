@@ -10,9 +10,11 @@ import 'package:wr_app/domain/system/model/app_info.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/index.dart';
+import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/pages/anything_search_page.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
@@ -32,31 +34,6 @@ class _RootViewState extends State<RootView>
 
   /// navbar controller
   PageController _pageController;
-
-  /// 自動でサインイン
-  Future<void> _autoSignIn(BuildContext context) async {
-    try {
-      final an = context.read<AuthNotifier>();
-      final un = context.read<UserNotifier>();
-      final isAlreadySignIn = await an.isAlreadySignedIn();
-
-      if (isAlreadySignIn) {
-        await un.fetchUser();
-        await an.login();
-
-        // Navigator.popUntil(context, (route) => route.isFirst);
-        // return Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => RootView(),
-        //   ),
-        // );
-      }
-    } on Exception catch (e) {
-      InAppLogger.error(e);
-      NotifyToast.error(e);
-    }
-  }
 
   bool _isAvailable(AppInfo info) {
     return (Platform.isIOS && info.isIOsAppAvailable) ||
@@ -91,16 +68,21 @@ class _RootViewState extends State<RootView>
 
     try {
       // on first launch, show on-boarding page
-      final signedIn = await context.read<AuthNotifier>().isAlreadySignedIn();
-      final loggedIn = context.read<UserNotifier>().signedIn;
-      final firstLaunch = context.read<SystemNotifier>().getFirstLaunch();
+      final an = context.read<AuthNotifier>();
+      final un = context.read<UserNotifier>();
+      final sn = context.read<SystemNotifier>();
+
+      final signedIn = await an.isAlreadySignedIn();
+      final firstLaunch = sn.getFirstLaunch();
 
       InAppLogger.debug('first launch: $firstLaunch');
       InAppLogger.debug('signed in: $signedIn');
-      InAppLogger.debug('logged in: $loggedIn');
 
-      if (signedIn && !loggedIn) {
-        await _autoSignIn(context);
+      // firebaseでsignInしていたらアプリにログインする
+      if (signedIn) {
+        await an.login();
+        InAppLogger.debug('ok login');
+        return;
       }
 
       // show on boarding modal
@@ -142,6 +124,7 @@ class _RootViewState extends State<RootView>
     final primaryColor = Theme.of(context).primaryColor;
     final user = un.user;
     assert(user != null);
+    InAppLogger.debug('user: ${user.toJson()}');
 
     final coins = Container(
       padding: const EdgeInsets.only(left: 20),
@@ -153,7 +136,7 @@ class _RootViewState extends State<RootView>
             height: 20,
           ).padding(),
           Text(
-            '${user.statistics.points}',
+            '${user.points}',
             style: Theme.of(context).primaryTextTheme.headline6,
           ).padding(),
         ],
@@ -161,8 +144,8 @@ class _RootViewState extends State<RootView>
     );
 
     final limits = Row(children: [
-      ...List.generate(3, (index) => index < user.statistics.testLimitCount)
-          .map((b) => Icon(b ? Icons.favorite : Icons.favorite_border,
+      ...List.generate(3, (index) => index < user.testLimitCount).map((b) =>
+          Icon(b ? Icons.favorite : Icons.favorite_border,
               color: Colors.pinkAccent)),
     ]).padding();
 
@@ -285,6 +268,7 @@ class _RootViewState extends State<RootView>
       ),
       body: Stack(
         children: <Widget>[
+          // Lesson
           Padding(
             padding: const EdgeInsets.only(bottom: 60),
             child: pageView,

@@ -36,7 +36,5 @@ abstract class IAuthRepository {
 
   Future<bool> isAlreadySignedIn();
 
-  Future<void> login();
-
   Future<void> signOut();
 }

@@ -14,6 +14,7 @@ import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/sentry.dart';
 import 'package:wr_app/util/toast.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -65,7 +66,9 @@ class _SignUpPageState extends State<SignUpPage> {
       InAppLogger.error(e);
       final mes = e.toLocalizedMessage(context);
       NotifyToast.error(mes);
+      await sentryReportError(error: e, stackTrace: StackTrace.current);
     } on Exception catch (e) {
+      await sentryReportError(error: e, stackTrace: StackTrace.current);
       InAppLogger.error(e);
       NotifyToast.error(e);
     } finally {

@@ -17,6 +17,7 @@ class AuthService {
   final IUserRepository _userRepository;
 
   /// sign up with email & password
+  /// return User
   Future<User> signUpWithEmailAndPassword({
     @required String email,
     @required String password,
@@ -24,19 +25,18 @@ class AuthService {
     @required String age,
   }) async {
     InAppLogger.debug('_userRepository.signUpWithEmailAndPassword()');
-    await _authRepository.signUpWithEmailAndPassword(
+    final fbUser = await _authRepository.signUpWithEmailAndPassword(
         email: email, password: password);
 
-    InAppLogger.debug('_userRepository.createUser()');
-    final user = await _userRepository.createUser(name: name, email: email);
-
-    InAppLogger.debug('_userRepository.login()');
-    await _authRepository.login();
-
-    return user;
+    return User.create()
+      ..uuid = fbUser.uid
+      ..email = email
+      ..name = name
+      ..age = age;
   }
 
   /// sign up with Google
+  /// return User.uid
   Future<User> signUpWithGoogle(String name) async {
     InAppLogger.debug('_userRepository.signInWithGoogleSignIn()');
     final fbUser = await _authRepository.signInWithGoogleSignIn();
@@ -47,19 +47,14 @@ class AuthService {
     final userName = name ?? fbUser.displayName ?? '';
     assert(userName.isNotEmpty);
 
-    InAppLogger.debug('_userRepository.createUser()');
-    final user = _userRepository.createUser(
-      name: name,
-      email: userName,
-    );
-
-    InAppLogger.debug('_authRepository.login()');
-    await _authRepository.login();
-
-    return user;
+    return User.create()
+      ..uuid = fbUser.uid
+      ..email = fbUser.email
+      ..name = userName;
   }
 
   /// sign up with SIWA
+  /// return User.uid
   Future<User> signUpWithApple(String name) async {
     final fbUser = await _authRepository.signInWithSignInWithApple();
 
@@ -70,14 +65,10 @@ class AuthService {
     final userName = name ?? fbUser.displayName ?? '';
     assert(userName.isNotEmpty);
 
-    InAppLogger.debug('_userRepository.createUser()');
-    final user = await _userRepository.createUser(
-        name: name, email: fbUser.email ?? '');
-
-    InAppLogger.debug('_authRepository.login()');
-    await _authRepository.login();
-
-    return user;
+    return User.create()
+      ..uuid = fbUser.uid
+      ..name = userName
+      ..email = fbUser.email ?? '';
   }
 
   /// sign in with email & password
@@ -90,9 +81,6 @@ class AuthService {
     InAppLogger.debug('_userRepository.readUser()');
     final user = await _userRepository.readUser(uuid: res.uid);
 
-    InAppLogger.debug('_authRepository.login()');
-    await _authRepository.login();
-
     return user;
   }
 
@@ -103,9 +91,6 @@ class AuthService {
 
     InAppLogger.debug('_userRepository.readUser()');
     final user = await _userRepository.readUser(uuid: res.uid);
-
-    InAppLogger.debug('_authRepository.login()');
-    await _authRepository.login();
 
     return user;
   }
@@ -118,9 +103,6 @@ class AuthService {
     InAppLogger.debug('_userRepository.readUser()');
     final user = await _userRepository.readUser(uuid: res.uid);
 
-    InAppLogger.debug('_authRepository.login()');
-    await _authRepository.login();
-
     return user;
   }
 
@@ -129,14 +111,13 @@ class AuthService {
     return _authRepository.signOut();
   }
 
-  /// login
-  Future<void> login() {
-    return _authRepository.login();
-  }
-
-  /// サインイン済か判定
+  /// サインイン済かどうか
   Future<bool> isAlreadySignedIn() {
     return _authRepository.isAlreadySignedIn();
+  }
+
+  String getFirebaseUid() {
+    return _authRepository.getCurrentUser().uid;
   }
 
   /// update password
@@ -153,7 +134,7 @@ class AuthService {
     @required User user,
     @required String newEmail,
   }) async {
-    user.attributes.email = newEmail;
+    user.email = newEmail;
     await _userRepository.updateUser(user: user);
     await _authRepository.updateEmail(email: newEmail);
 

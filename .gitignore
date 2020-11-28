@@ -46,6 +46,7 @@ google-services.json
 # secrets
 /secrets/*
 *.env
+.envrc
 !/secrets/.env.sample
 setup.sh
 *.keystore

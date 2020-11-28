@@ -47,6 +47,7 @@ dependencies:
   like_button: ^1.0.1
 
   # util
+  tuple: ^1.0.0
   flutter_markdown: ^0.3.2
   front_matter: ^1.1.0
   flutter_svg: ^0.17.4
@@ -88,7 +89,7 @@ dev_dependencies:
   # linter
   pedantic_mono: any
   # task runner
-  build_runner: 1.10.1
+  build_runner: ^1.10.1
   # generator
   data_classes_generator: ^3.0.0
   json_serializable: ^3.0.0
@@ -98,8 +99,8 @@ dev_dependencies:
   freezed:
   test:
 
-#dependency_overrides:
-#  analyzer: ^0.39.14
+# dependency_overrides:
+#   analyzer: 0.39.14
 
 flutter:
   uses-material-design: true

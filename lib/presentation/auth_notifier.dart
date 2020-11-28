@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/auth_service.dart';
+import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
@@ -11,29 +12,36 @@ import 'package:wr_app/util/toast.dart';
 class AuthNotifier with ChangeNotifier {
   factory AuthNotifier({
     @required AuthService authService,
+    @required UserService userService,
   }) {
-    return _cache ??= AuthNotifier._internal(authService: authService);
+    return _cache ??= AuthNotifier._internal(
+        authService: authService, userService: userService);
+  }
+
+  AuthNotifier._internal({
+    @required AuthService authService,
+    @required UserService userService,
+  }) {
+    _authService = authService;
+    _userService = userService;
   }
 
   /// singleton
   static AuthNotifier _cache;
 
-  AuthNotifier._internal({
-    @required AuthService authService,
-  }) {
-    _authService = authService;
-  }
-
   AuthService _authService;
+  UserService _userService;
 
   User _user = User.empty();
+
   User get user => _user;
+
   set user(User user) {
     _user = user;
     notifyListeners();
   }
 
-  /// メールアドレスとパスワードでサインアップ
+  /// メールアドレスとパスワードでサインアップと初期化
   Future<void> signUpWithEmailAndPassword({
     @required String email,
     @required String password,
@@ -42,18 +50,33 @@ class AuthNotifier with ChangeNotifier {
     InAppLogger.info('✔ signUpWithEmailAndPassword');
     _user = await _authService.signUpWithEmailAndPassword(
         email: email, password: password, age: '0', name: name);
+    await _userService.initializeUserData(
+      uid: _user.uuid,
+      name: name,
+      email: email,
+    );
     notifyListeners();
   }
 
-  /// Google Sign in でサインアップ
+  /// Google Sign in でサインアップと初期化
   Future<void> signUpWithGoogle(String name) async {
     _user = await _authService.signUpWithGoogle(name);
+    await _userService.initializeUserData(
+      uid: _user.uuid,
+      email: _user.email,
+      name: _user.name,
+    );
     notifyListeners();
   }
 
-  /// Sign up with SIWA
+  /// Sign up with SIWAと初期化
   Future<void> signUpWithApple(String name) async {
     _user = await _authService.signUpWithApple(name);
+    await _userService.initializeUserData(
+      uid: _user.uuid,
+      email: _user.email,
+      name: _user.name,
+    );
     notifyListeners();
   }
 
@@ -78,10 +101,13 @@ class AuthNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  /// ログイン処理をする
+  /// アプリのログイン処理をする
   Future<void> login() async {
     await sendEvent(event: AnalyticsEvent.logIn);
-    await _authService.login();
+    final uid = getFirebaseUid();
+    await _userService.migrationUserData(uid: uid);
+    final user = await _userService.fetchUser(uid: uid);
+    await _userService.setTestCount(user: user, count: 3);
     notifyListeners();
   }
 
@@ -96,7 +122,12 @@ class AuthNotifier with ChangeNotifier {
   }
 
   Future<void> sendPasswordResetEmail() async {
-    return _authService.sendPasswordResetEmail(_user.attributes.email);
+    return _authService.sendPasswordResetEmail(_user.email);
+  }
+
+  /// firebaseでログイン中のuidを取得する
+  String getFirebaseUid() {
+    return _authService.getFirebaseUid();
   }
 
   /// update Email

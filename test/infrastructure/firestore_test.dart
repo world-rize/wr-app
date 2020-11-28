@@ -57,5 +57,11 @@ void main() {
       final user = await store.collection('users').doc(initialUser.uuid).get();
       print(user.data().keys.toList());
     });
+
+    test('Not Found Doc', () async {
+      final hogeUser =
+          await store.collection('users').doc('hogehogerandomid').get();
+      expect(hogeUser.data(), null);
+    });
   });
 }

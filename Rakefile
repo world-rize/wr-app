@@ -126,3 +126,9 @@ task :setup do
   Rake::Task[:splash].invoke
   Rake::Task[:icon].invoke
 end
+
+desc 'cleanとか'
+
+task :setup do
+  sh 'flutter clean && flutter pub get && flutter pub cache repair'
+end
