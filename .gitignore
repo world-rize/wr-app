@@ -58,3 +58,5 @@ android/fastlane/google-play-api-key.json
 
 ios/*.zip
 *.ipa
+
+.fvm/flutter_sdk
