@@ -8,7 +8,8 @@ import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
-import 'package:wr_app/util/test_util.dart';
+
+import '../util/test_util.dart';
 
 void main() {
   final store = MockFirestoreInstance();

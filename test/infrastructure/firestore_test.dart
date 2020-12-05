@@ -5,7 +5,6 @@ import 'package:wr_app/infrastructure/user/user_repository.dart';
 
 void main() {
   final store = MockFirestoreInstance();
-  final repo = UserRepository(store: store);
 
   const userUuid = 'test';
   setUp(() async {

@@ -12,20 +12,26 @@ import 'package:wr_app/util/toast.dart';
 class LessonNotifier with ChangeNotifier {
   factory LessonNotifier({
     @required LessonService lessonService,
-    @required User user,
   }) {
     return _cache ??= LessonNotifier._internal(
       lessonService: lessonService,
-      user: user,
     );
   }
 
   LessonNotifier._internal({
     @required LessonService lessonService,
-    @required User user,
   }) : _lessonService = lessonService {
     loadAllLessons();
+  }
+
+  User _user;
+
+  User get user => _user;
+
+  set user(User user) {
+    _user = user;
     favorites = _lessonService.getAllFavoriteLists(userUuid: user.uuid);
+    notifyListeners();
   }
 
   LessonService _lessonService;
@@ -106,7 +112,7 @@ class LessonNotifier with ChangeNotifier {
 
   Future<List<Phrase>> getFavoritePhrases(User user) async {
     final favoriteIds =
-    (await favorites).expand((list) => list.phrases).map((p) => p.id);
+        (await favorites).expand((list) => list.phrases).map((p) => p.id);
     return phrasesWhere((p) => favoriteIds.contains(p.id));
   }
 
@@ -118,8 +124,8 @@ class LessonNotifier with ChangeNotifier {
   }) async {
     // TODO: default以外に保存できるようにする
     // defaultふぁぼりてリスト以外に保存したらdeleteするときむずかしくね?
-    var defaultFavoriteList = (await favorites)
-        .firstWhere((element) => element.id == 'default');
+    var defaultFavoriteList =
+        (await favorites).firstWhere((element) => element.id == 'default');
 
     // false -> true
     defaultFavoriteList = await _lessonService.favorite(

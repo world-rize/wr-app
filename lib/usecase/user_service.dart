@@ -59,8 +59,9 @@ class UserService {
       InAppLogger.debug('User $uid already exists.');
       return;
     }
+    InAppLogger.debug('User $uid does not exists.');
     // TODO: migrationして前のUser classからUserを作成する
-    throw Exception('unimplemented');
+    // throw Exception('unimplemented');
   }
 
   // TODO: どこにおくべき

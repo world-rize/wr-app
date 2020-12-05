@@ -19,29 +19,7 @@ import 'package:wr_app/infrastructure/lesson/favorite_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/usecase/user_service.dart';
 
-extension StoreEx on FirebaseFirestore {
-  CollectionReference get users => collection('users');
-
-  Future<User> getDummyUser() async {
-    return User.fromJson((await users.doc('test').get()).data());
-  }
-
-  Future<User> setDummyUser(User user) async {
-    await users.doc('test').set(user.toJson());
-    return user;
-  }
-}
-
-Future<bool> snapShotDiff<T>({
-  @required Future<T> Function() getter,
-  @required Future Function() callback,
-  @required bool Function(T, T) matcher,
-}) async {
-  final before = await getter();
-  await callback();
-  final after = await getter();
-  return matcher(before, after);
-}
+import '../util/test_util.dart';
 
 void main() {
   final store = MockFirestoreInstance();

@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/model/app_info.dart';
+import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/index.dart';
-import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
+import 'package:wr_app/presentation/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/pages/anything_search_page.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
@@ -69,7 +70,6 @@ class _RootViewState extends State<RootView>
     try {
       // on first launch, show on-boarding page
       final an = context.read<AuthNotifier>();
-      final un = context.read<UserNotifier>();
       final sn = context.read<SystemNotifier>();
 
       final signedIn = await an.isAlreadySignedIn();
