@@ -2,11 +2,13 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
+import 'package:wr_app/presentation/lesson_notifier.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
+import 'package:wr_app/usecase/lesson_service.dart';
 
 /// リクエスト画面
 class RequestPage extends StatefulWidget {
@@ -25,7 +27,7 @@ class _RequestPageState extends State<RequestPage> {
 
   @override
   Widget build(BuildContext context) {
-    final notifier = Provider.of<LessonNotifier>(context);
+    final lessonService = GetIt.I<LessonService>();
     final primaryColor = Theme.of(context).primaryColor;
     final backgroundColor = Theme.of(context).backgroundColor;
     const hintText = '''
@@ -92,7 +94,7 @@ class _RequestPageState extends State<RequestPage> {
           onPressed: _text == ''
               ? null
               : () async {
-                  await notifier.sendPhraseRequest(text: _text);
+                  await lessonService.sendPhraseRequest(text: _text);
                 },
         ),
       ),

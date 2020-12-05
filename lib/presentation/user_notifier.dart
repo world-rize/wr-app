@@ -28,19 +28,21 @@ class UserNotifier with ChangeNotifier {
   final UserService _userService;
 
   /// ユーザーデータ
-  User user = User.empty();
+  User _user = User.empty();
+  User get user => _user;
+  set user(User user) {
+    if (user == null) {
+      InAppLogger.debug('user is null');
+      return;
+    }
+    _user = user;
+    notifyListeners();
+  }
 
   /// singleton
   static UserNotifier _cache;
 
   bool existUserData = false;
-
-  /// 過去データのマイグレーションの実行
-  Future<void> migrationUserData({
-    @required String uid,
-  }) async {
-    await _userService.migrationUserData(uid: uid);
-  }
 
   /// ユーザーデータを取得
   Future<void> fetchUser({@required String uid}) async {

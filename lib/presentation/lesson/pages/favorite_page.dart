@@ -11,7 +11,7 @@ import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
 
-import '../notifier/lesson_notifier.dart';
+import '../../lesson_notifier.dart';
 
 /// Lesson > index > favorites
 /// - favorites page of lesson

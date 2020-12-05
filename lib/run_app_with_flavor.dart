@@ -29,7 +29,7 @@ import 'package:wr_app/infrastructure/system/system_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/presentation/app.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
-import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
+import 'package:wr_app/presentation/lesson_notifier.dart';
 import 'package:wr_app/presentation/maintenance.dart';
 import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
@@ -191,6 +191,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     final userService = GetIt.I<UserService>();
     final authService = GetIt.I<AuthService>();
     final noteService = GetIt.I<NoteService>();
+    final lessonService = GetIt.I<LessonService>();
 
     // maintenance check
     final appInfo = await systemService.getAppInfo();
@@ -203,23 +204,17 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     final authNotifier =
         AuthNotifier(authService: authService, userService: userService);
     final noteNotifier = NoteNotifier(noteService: noteService);
+    final lessonNotifier = LessonNotifier(lessonService: lessonService);
     authNotifier.addListener(() {
+      if (authNotifier.user == null){
+        InAppLogger.debug('user is null');
+      }
       userNotifier.user = authNotifier.user;
       noteNotifier.user = authNotifier.user;
+      lessonNotifier.user = authNotifier.user;
       InAppLogger.debug('from auth to many notifier');
     });
 
-    // noteNotifier.addListener(() {
-    //   userNotifier.user = noteNotifier.user;
-    //   authNotifier.user = noteNotifier.user;
-    //   InAppLogger.debug('from note to many notifier');
-    // });
-
-    userNotifier.addListener(() {
-      authNotifier.user = userNotifier.user;
-      noteNotifier.user = userNotifier.user;
-      InAppLogger.debug('from user to many notifier');
-    });
 
     final app = MultiProvider(
       providers: [
@@ -236,9 +231,9 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
         ChangeNotifierProvider.value(value: authNotifier),
         // Note
         ChangeNotifierProvider.value(value: noteNotifier),
-        ChangeNotifierProvider.value(
-          value: VoicePlayer(),
-        ),
+        // Lesson
+        ChangeNotifierProvider.value(value: lessonNotifier),
+        ChangeNotifierProvider.value(value: VoicePlayer()),
       ],
       child: WRApp(),
     );

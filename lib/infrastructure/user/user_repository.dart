@@ -3,11 +3,9 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
-import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/user/i_user_repository.dart';
-import 'package:wr_app/util/logger.dart';
-import 'package:wr_app/util/sentry.dart';
+import 'package:wr_app/infrastructure/util/versioning.dart';
 
 // TODO: i10n注入
 class UserRepository implements IUserRepository {
@@ -16,24 +14,7 @@ class UserRepository implements IUserRepository {
   final FirebaseFirestore store;
 
   Future<CollectionReference> usersCollection() async {
-    InAppLogger.debug('in userCollection');
-    // final version = (await store
-    //         .collection('version')
-    //         .where('version', isEqualTo: 'v1')
-    //         .limit(1)
-    //         .get())
-    //     .docs[0]
-    //     .data()['version'];
-    // InAppLogger.debug('version: $version');
-    // return store.collection('version').doc(version).collection('users');
-    return (await store
-            .collection('versions')
-            .where('version', isEqualTo: 'v1')
-            .limit(1)
-            .get())
-        .docs[0]
-        .reference
-        .collection('users');
+    return store.latest.collection('users');
   }
 
   Future<User> setUser(User user) async {

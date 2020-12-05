@@ -1,11 +1,10 @@
-// Copyright © 2020 WorldRIZe. All rights reserved.
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
-import 'package:wr_app/domain/user/index.dart';
+import 'package:data_classes/data_classes.dart';
+import 'package:wr_app/domain/user/model/user.dart';
+import 'package:wr_app/infrastructure/util/versioning.dart';
 
 extension StoreEx on FirebaseFirestore {
-  CollectionReference get users => collection('users');
+  CollectionReference get users => latest.collection('users');
 
   Future<User> getDummyUser() async {
     return User.fromJson((await users.doc('test').get()).data());

@@ -7,7 +7,7 @@ import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/i10n/i10n.dart';
 
 import './section_list_page.dart';
-import '../notifier/lesson_notifier.dart';
+import '../../lesson_notifier.dart';
 
 /// Lesson > index > new coming
 class NewComingPage extends StatelessWidget {

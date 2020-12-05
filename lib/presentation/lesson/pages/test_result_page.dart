@@ -9,7 +9,7 @@ import 'package:wr_app/domain/lesson/model/test_stats.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
-import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
+import 'package:wr_app/presentation/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dart';
 import 'package:wr_app/presentation/lesson/widgets/reward_dialog.dart';

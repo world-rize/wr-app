@@ -3,8 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/infrastructure/shop/shop_repository.dart';
+import 'package:wr_app/infrastructure/util/versioning.dart';
 import 'package:wr_app/usecase/shop_service.dart';
-import 'package:wr_app/util/test_util.dart';
+
+import '../util/test_util.dart';
 
 void main() {
   final store = MockFirestoreInstance();
@@ -27,7 +29,7 @@ void main() {
 
     await store.collection('shop').doc(dummyItem.id).set(dummyItem.toJson());
 
-    await store
+    await store.latest
         .collection('users')
         .doc(initialUser.uuid)
         .set(initialUser.toJson());

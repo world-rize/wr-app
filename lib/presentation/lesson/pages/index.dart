@@ -4,12 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:getflutter/getflutter.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/extensions.dart';
-import 'package:wr_app/presentation/lesson/notifier/lesson_notifier.dart';
+import 'package:wr_app/presentation/lesson_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/header1.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
@@ -25,25 +26,6 @@ import '../widgets/carousel_cell.dart';
 import '../widgets/phrase_card.dart';
 
 class LessonIndexPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final un = Provider.of<UserNotifier>(context);
-    final lessonService = GetIt.I<LessonService>();
-
-    return ChangeNotifierProvider.value(
-      value: LessonNotifier(
-        user: un.user,
-        lessonService: lessonService,
-      ),
-      child: _LessonIndexPage(),
-    );
-  }
-}
-
-
-/// Lesson > index
-/// - top page of lesson
-class _LessonIndexPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final un = Provider.of<UserNotifier>(context);
