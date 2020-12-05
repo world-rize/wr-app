@@ -128,7 +128,6 @@ task :setup do
 end
 
 desc 'cleanとか'
-
-task :setup do
+task :clean do
   sh 'flutter clean && flutter pub get && flutter pub cache repair'
 end

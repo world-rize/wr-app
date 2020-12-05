@@ -84,10 +84,11 @@ class UserService {
 
   /// ポイントを習得します
   Future<User> getPoints({
-    @required String uuid,
+    @required User user,
     @required int points,
   }) async {
-    return _userApi.getPoint(uuid: uuid, points: points);
+    user.points += points;
+    return _userRepository.updateUser(user: user);
   }
 
   /// upgrade to Pro or downgrade
@@ -109,10 +110,6 @@ class UserService {
     }
 
     user.testLimitCount -= 1;
-    user.activities.add(UserActivity(
-      content: '$sectionId のテストを受ける',
-      date: DateTime.now(),
-    ));
 
     return _userRepository.updateUser(user: user);
   }
@@ -128,11 +125,6 @@ class UserService {
       sectionId: sectionId,
       score: score,
       date: DateTime.now().toIso8601String(),
-    ));
-
-    user.activities.add(UserActivity(
-      content: '$sectionId のテストで $score 点を獲得',
-      date: DateTime.now(),
     ));
 
     return _userRepository.updateUser(user: user);

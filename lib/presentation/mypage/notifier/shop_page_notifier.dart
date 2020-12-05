@@ -1,11 +1,16 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fa;
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:tuple/tuple.dart';
+import 'package:wr_app/domain/shop/model/receipt.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/domain/shop/model/shop_item_id.dart';
+import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/widgets/shop_item_card.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/usecase/shop_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/logger.dart';
@@ -15,14 +20,6 @@ import 'package:wr_app/util/logger.dart';
 /// 2. 購入しますか？ yes/no
 /// 3. 説明ダイアログ ok
 class ShopPageNotifier with ChangeNotifier {
-  final ShopService _shopService;
-  final UserService _userService;
-
-  /// singleton
-  static ShopPageNotifier _cache;
-
-  bool isLoading = false;
-
   ShopPageNotifier._internal({
     @required UserService userService,
     @required ShopService shopService,
@@ -36,6 +33,14 @@ class ShopPageNotifier with ChangeNotifier {
     return _cache ??= ShopPageNotifier._internal(
         userService: userService, shopService: shopService);
   }
+
+  final ShopService _shopService;
+  final UserService _userService;
+
+  /// singleton
+  static ShopPageNotifier _cache;
+
+  bool isLoading = false;
 
   // 1. ShopItemCard: onTap
   // TODO: 非同期なWidgetはどこにおくべき?
@@ -123,7 +128,7 @@ class ShopPageNotifier with ChangeNotifier {
   }
 
   Future _useItem(BuildContext context, ShopItem item) async {
-    final uid = FirebaseAuth.instance.currentUser.uid;
+    final uid = fa.FirebaseAuth.instance.currentUser.uid;
     final itemId = ShopItemIdEx.fromString(item.id);
 
     // 購入した瞬間使用
@@ -154,11 +159,22 @@ class ShopPageNotifier with ChangeNotifier {
           await _shopService.purchaseItem(user: user, itemId: item.id);
       await _useItem(context, item);
       await _userService.updateUser(user: updatedUser);
+      // TODO: globalなstoreみたいな使い方をしていてあんまり良くない。storeを作ろう
+      UserNotifier(userService: GetIt.I<UserService>()).user = updatedUser;
     } on Exception catch (e) {
       InAppLogger.error(e);
     } finally {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  /// レシートとitemの性質からUserがそのitemを買うことができるかを調べる
+  /// return (itemを何個もかえるか, ポイントが足りているか, すでに買ったことがあるか)
+  Future<Tuple3<bool, bool, bool>> purchasable({
+    @required User user,
+    @required ShopItem shopItem,
+  }) {
+    return _shopService.purchasable(user: user, shopItem: shopItem);
   }
 }

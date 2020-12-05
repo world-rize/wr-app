@@ -22,15 +22,9 @@ User _$UserFromJson(Map json) {
     testLimitCount: json['testLimitCount'] as int,
     lastLogin: json['lastLogin'] as String,
     isIntroducedFriend: json['isIntroducedFriend'] as bool,
-    activities: (json['activities'] as List)
-        ?.map((e) => e == null ? null : UserActivity.fromJson(e as Map))
-        ?.toList(),
     age: json['age'] as String,
     email: json['email'] as String,
     membership: _$enumDecodeNullable(_$MembershipEnumMap, json['membership']),
-    items: (json['items'] as Map)?.map(
-      (k, e) => MapEntry(k as String, e as int),
-    ),
   );
 }
 
@@ -47,8 +41,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'age': instance.age,
       'email': instance.email,
       'membership': _$MembershipEnumMap[instance.membership],
-      'activities': instance.activities?.map((e) => e?.toJson())?.toList(),
-      'items': instance.items,
     };
 
 T _$enumDecode<T>(

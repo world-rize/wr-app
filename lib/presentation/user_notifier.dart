@@ -74,7 +74,7 @@ class UserNotifier with ChangeNotifier {
 
   /// ポイントを習得します
   Future<void> callGetPoint({@required int points}) async {
-    user = await _userService.getPoints(uuid: user.uuid, points: points);
+    user = await _userService.getPoints(user: user, points: points);
     notifyListeners();
 
     await sendEvent(

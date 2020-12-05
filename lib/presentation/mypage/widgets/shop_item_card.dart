@@ -2,10 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:tuple/tuple.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
+import 'package:wr_app/presentation/mypage/notifier/shop_page_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/sentry.dart';
 
 /// 交換できるもののカード
 class ShopItemCard extends StatelessWidget {
@@ -17,23 +21,17 @@ class ShopItemCard extends StatelessWidget {
   final ShopItem shopItem;
   final Function onTap;
 
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final user = Provider.of<UserNotifier>(context).user;
+  Widget card(
+    BuildContext context,
+    bool gettable,
+    bool purchasable,
+    bool alreadyPurchased,
+  ) {
     final backgroundColor = Theme.of(context).backgroundColor;
-    final englishStyle = theme.primaryTextTheme.bodyText1;
+    final englishStyle = Theme.of(context).primaryTextTheme.bodyText1;
     final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;
 
-    final userHasItemCount =
-        user.items.containsKey(shopItem.id) ? user.items[shopItem.id] : 0;
-    final gettable =
-        shopItem.expendable || !shopItem.expendable && userHasItemCount == 0;
-    final alreadyPurchased =
-        !shopItem.expendable && user.items.containsKey(shopItem.id);
-    final buyable = user.points >= shopItem.price;
-
-    final card = ShadowedContainer(
+    return ShadowedContainer(
       color: backgroundColor,
       child: Container(
         child: Row(
@@ -49,7 +47,7 @@ class ShopItemCard extends StatelessWidget {
                       shopItem.title,
                       style: englishStyle,
                     ).padding(4),
-                    if (gettable && !buyable)
+                    if (gettable && !purchasable)
                       Text(
                         'WRコインが不足しています',
                         style: englishStyle.apply(color: Colors.redAccent),
@@ -75,15 +73,52 @@ class ShopItemCard extends StatelessWidget {
         ),
       ),
     );
+  }
 
-    return buyable && !alreadyPurchased
-        ? InkWell(
-            onTap: onTap,
-            child: card,
-          ).padding()
-        : Opacity(
-            opacity: 0.3,
-            child: card,
+  @override
+  Widget build(BuildContext context) {
+    final user = Provider.of<UserNotifier>(context).user;
+    final sn = Provider.of<ShopPageNotifier>(context);
+    return FutureBuilder<Tuple3<bool, bool, bool>>(
+      future: sn.purchasable(user: user, shopItem: shopItem),
+      builder: (context, snapshot) {
+        if (snapshot.error != null) {
+          sentryReportError(
+              error: snapshot.error, stackTrace: StackTrace.current);
+        }
+        // ここをConnectionState.doneじゃないやつにすると期待通りにリロード画面が間に入る
+        if (snapshot.data == null ||
+            snapshot.connectionState != ConnectionState.done) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 100.0,
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[200],
+              highlightColor: Colors.grey[400],
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.grey[200],
+                ),
+                width: MediaQuery.of(context).size.width,
+                height: 100,
+              ),
+            ),
           );
+        }
+        final gettable = snapshot.data.item1;
+        final purchasable = snapshot.data.item2;
+        final alreadyPurchased = snapshot.data.item3;
+        return purchasable && !alreadyPurchased
+            ? InkWell(
+                onTap: onTap,
+                child: card(context, gettable, purchasable, alreadyPurchased),
+              ).padding()
+            : Opacity(
+                opacity: 0.3,
+                child: card(context, gettable, purchasable, alreadyPurchased),
+              );
+      },
+    );
   }
 }

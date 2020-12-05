@@ -25,11 +25,9 @@ class User {
     @required this.testLimitCount,
     @required this.lastLogin,
     @required this.isIntroducedFriend,
-    @required this.activities,
     @required this.age,
     @required this.email,
     @required this.membership,
-    @required this.items,
   });
 
   factory User.create() {
@@ -57,11 +55,9 @@ class User {
       testLimitCount: 3,
       lastLogin: DateTime.now().toIso8601String(),
       isIntroducedFriend: false,
-      activities: [],
       age: '',
       email: '',
       membership: Membership.normal,
-      items: {},
     );
   }
 
@@ -78,9 +74,7 @@ class User {
       age: '0',
       email: 'hoge@example.com',
       membership: Membership.normal,
-      activities: [],
       notes: {},
-      items: {},
     );
   }
 
@@ -94,19 +88,9 @@ class User {
       testLimitCount: 3,
       lastLogin: '',
       isIntroducedFriend: false,
-      activities: [
-        UserActivity(
-          content: 'Dummy Activity',
-          date: DateTime.now(),
-        ),
-      ],
       notes: {
         'default': Note.dummy('ノート1', isDefaultNote: true),
         // TODO: achieved追加
-      },
-      items: {
-        '3': 1,
-        '4': 1,
       },
       age: '0',
       email: 'hoge@example.com',
@@ -145,12 +129,6 @@ class User {
   String email;
 
   Membership membership;
-
-  /// ユーザー活動
-  List<UserActivity> activities;
-
-  /// 所持アイテム(key: item_id, value: amount)
-  Map<String, int> items;
 
   bool get isPremium => membership == Membership.pro;
 

@@ -9,9 +9,9 @@ import 'package:wr_app/usecase/shop_service.dart';
 import '../util/test_util.dart';
 
 void main() {
-  final store = MockFirestoreInstance();
-  final repo = ShopRepository(store: store);
-  final service = ShopService(shopRepository: repo);
+  var store = MockFirestoreInstance();
+  var repo = ShopRepository(store: store);
+  var service = ShopService(shopRepository: repo);
 
   const userUuid = 'test';
   final dummyItem = ShopItem(
@@ -23,6 +23,9 @@ void main() {
   );
 
   setUp(() async {
+    store = MockFirestoreInstance();
+    repo = ShopRepository(store: store);
+    service = ShopService(shopRepository: repo);
     final initialUser = User.create()
       ..uuid = userUuid
       ..points = 1000;
@@ -42,20 +45,22 @@ void main() {
     });
 
     test('purchaseItem', () async {
-      final diff = await snapShotDiff<User>(
-        getter: store.getDummyUser,
-        callback: () async {
-          final u = await store.getDummyUser();
-          final updated =
-              await service.purchaseItem(user: u, itemId: dummyItem.id);
-          await store.setDummyUser(updated);
-        },
-        matcher: (b, a) {
-          return b.points - dummyItem.price == a.points &&
-              a.items[dummyItem.id] == 1;
-        },
-      );
-      expect(diff, true);
+      final user = await store.getDummyUser();
+      await service.purchaseItem(user: user, itemId: dummyItem.id);
+      final receipts = await service.getAllReceipts(userUuid);
+      expect(receipts[0].count, 1);
+      expect(receipts[0].itemId, dummyItem.id);
+    });
+
+    test('filterById', () async {
+      final user = await store.getDummyUser();
+      await service.purchaseItem(user: user, itemId: dummyItem.id);
+      await service.purchaseItem(user: user, itemId: dummyItem.id);
+      final receipts =
+          await repo.filterByItemId(userUuid: user.uuid, itemId: dummyItem.id);
+      expect(receipts[0].count, 1);
+      expect(receipts[0].itemId, dummyItem.id);
+      expect(receipts.length, 2);
     });
   });
 }

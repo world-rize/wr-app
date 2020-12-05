@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -61,6 +62,19 @@ void main() {
       final hogeUser =
           await store.collection('users').doc('hogehogerandomid').get();
       expect(hogeUser.data(), null);
+    });
+
+    test('get all docs', () async {
+      await store.collection('apples').doc('one').set({'hhh': 'hhh'});
+      await store.collection('apples').doc('two').set({'hhh': 'hhh'});
+      await store.collection('apples').doc('three').set({'hhh': 'hhh'});
+      await store.collection('apples').get().then((value) async {
+        print('next outer');
+        await Future.forEach(value.docs, (QueryDocumentSnapshot element) {
+          print('next inner');
+          print(element.data());
+        });
+      });
     });
   });
 }
