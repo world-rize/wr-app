@@ -94,7 +94,7 @@ class FlashCardController extends StatelessWidget {
             expand: false,
             context: context,
             backgroundColor: Colors.transparent,
-            builder: (context, scrollController) => Material(
+            builder: (context) => Material(
               child: SafeArea(
                 top: false,
                 child: Row(

@@ -174,7 +174,7 @@ class PhraseExampleCard extends StatelessWidget {
       onTap: (_) async {
         return showCupertinoModalBottomSheet(
           context: context,
-          builder: (context, _) => Material(
+          builder: (context) => Material(
             child: SafeArea(
               top: false,
               child: Column(

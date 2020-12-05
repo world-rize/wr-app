@@ -264,7 +264,7 @@ class _NoteTableState extends State<NoteTable> {
                       showCupertinoModalBottomSheet(
                         expand: false,
                         context: context,
-                        builder: (BuildContext context, _) => EditPhrase(
+                        builder: (context) => EditPhrase(
                           language: Language.japanese,
                           notePhrase: phrase,
                           onSubmit: (String text) {
@@ -299,7 +299,7 @@ class _NoteTableState extends State<NoteTable> {
                       showCupertinoModalBottomSheet(
                         expand: false,
                         context: context,
-                        builder: (BuildContext context, _) => EditPhrase(
+                        builder: (context) => EditPhrase(
                           language: Language.america,
                           notePhrase: phrase,
                           onSubmit: (String text) {
