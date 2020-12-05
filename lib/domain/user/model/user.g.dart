@@ -11,10 +11,6 @@ User _$UserFromJson(Map json) {
     uuid: json['uuid'] as String,
     name: json['name'] as String,
     userId: json['userId'] as String,
-    notes: (json['notes'] as Map)?.map(
-      (k, e) =>
-          MapEntry(k as String, e == null ? null : Note.fromJson(e as Map)),
-    ),
     testResults: (json['testResults'] as List)
         ?.map((e) => e == null ? null : TestResult.fromJson(e as Map))
         ?.toList(),
@@ -32,7 +28,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'uuid': instance.uuid,
       'name': instance.name,
       'userId': instance.userId,
-      'notes': instance.notes?.map((k, e) => MapEntry(k, e?.toJson())),
       'testResults': instance.testResults?.map((e) => e?.toJson())?.toList(),
       'points': instance.points,
       'testLimitCount': instance.testLimitCount,

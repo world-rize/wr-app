@@ -127,14 +127,6 @@ class UserNotifier with ChangeNotifier {
     return 0;
   }
 
-  /// exist phrase in notes
-  bool existPhraseInNotes({
-    @required String phraseId,
-  }) {
-    return user.notes.values
-        .any((list) => list.phrases.any((p) => p.id == phraseId));
-  }
-
   /// calculates heatMap of testResult
   Map<DateTime, int> calcHeatMap(List<TestResult> results) {
     final dates = results.map((r) => Jiffy(r.date)..startOf(Units.DAY));

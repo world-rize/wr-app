@@ -6,45 +6,51 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wr_app/infrastructure/util/versioning.dart';
 
 void main() {
-  final store = MockFirestoreInstance();
-  final repo = NoteRepository(store: store);
   const userUuid = 'test';
-  final uc = store.latest.collection('users');
+  var store = MockFirestoreInstance();
+  var repo = NoteRepository(store: store);
+  var uc = store.latest.collection('users');
+  var nc = uc.doc(userUuid).collection('notes');
 
   setUp(() async {
+    store = MockFirestoreInstance();
+    repo = NoteRepository(store: store);
+    uc = store.latest.collection('users');
+    nc = uc.doc(userUuid).collection('notes');
     final initialUser = User.create()..uuid = userUuid;
     print('setup');
 
     await uc.doc(initialUser.uuid).set(initialUser.toJson());
-  });
-
-  tearDown(() async {
-    await uc.doc(userUuid).delete();
+    final defaultNote = Note.create(title: 'default', isDefault: true);
+    final achievedNote = Note.create(title: 'achieved', isAchieved: true);
+    await nc.doc(defaultNote.id).set(defaultNote.toJson());
+    await nc.doc(achievedNote.id).set(achievedNote.toJson());
   });
 
   group('NoteRepository', () {
     test('createNote', () async {
       final initialUser = User.create()..uuid = userUuid;
-      expect(initialUser.notes.length, 2);
+      var notes = await repo.getAllNotes(user: initialUser);
+      expect(notes.length, 2);
       final note = Note.create(title: 'ほげノート')..id = 'hoge';
       await repo.createNote(note: note, user: initialUser);
 
-      final userSnapshot = await uc.doc(initialUser.uuid).get();
-      final user = User.fromJson(userSnapshot.data());
-
-      expect(user.notes.length, 3);
+      notes = await repo.getAllNotes(user: initialUser);
+      expect(notes.length, 3);
     });
 
     test('deleteNote', () async {
       final initialUser = User.create()..uuid = userUuid;
       final note = Note.create(title: 'ほげノート')..id = 'hoge';
+
       await repo.createNote(note: note, user: initialUser);
+      var notes = await repo.getAllNotes(user: initialUser);
+      expect(notes.length, 3);
+
       await repo.deleteNote(user: initialUser, note: note);
 
-      final userSnapshot = await uc.doc(initialUser.uuid).get();
-      final user = User.fromJson(userSnapshot.data());
-
-      expect(user.notes.length, 2);
+      notes = await repo.getAllNotes(user: initialUser);
+      expect(notes.length, 2);
     });
 
     test('updateNote', () async {
@@ -54,13 +60,9 @@ void main() {
       note.title = 'ほげほげ';
 
       await repo.updateNote(user: initialUser, note: note);
-      final userJson = await uc
-          .doc(initialUser.uuid)
-          .get()
-          .then((value) => value.data());
-      final user = User.fromJson(userJson);
 
-      expect(user.notes['hoge'].title, 'ほげほげ');
+      final notes = await repo.getAllNotes(user: initialUser);
+      expect(notes['hoge'].title, 'ほげほげ');
     });
   });
 }

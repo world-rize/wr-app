@@ -59,11 +59,9 @@ class _SectionPageState extends State<SectionPage>
 
   @override
   Widget build(BuildContext context) {
-    final un = Provider.of<UserNotifier>(context);
     final ln = Provider.of<LessonNotifier>(context);
     final vp = Provider.of<VoicePlayer>(context);
     final phrase = section.phrases[index];
-    final existNotes = un.existPhraseInNotes(phraseId: phrase.id);
 
     final _menuButton = IconButton(
       icon: const Icon(Icons.menu),

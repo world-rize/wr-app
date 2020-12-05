@@ -19,7 +19,6 @@ class User {
     @required this.uuid,
     @required this.name,
     @required this.userId,
-    @required this.notes,
     @required this.testResults,
     @required this.points,
     @required this.testLimitCount,
@@ -32,24 +31,12 @@ class User {
 
   factory User.create() {
     final uuid = Uuid().v4();
-    final defaultNote = Note.create(
-      title: 'ノート',
-      isDefault: true,
-    );
-    final achievedNote = Note.create(
-      title: 'Achieved Note',
-      isAchieved: true,
-    );
 
     return User(
       uuid: uuid,
       name: '',
       // TODO
       userId: uuid,
-      notes: {
-        defaultNote.id: defaultNote,
-        achievedNote.id: achievedNote,
-      },
       testResults: [],
       points: 0,
       testLimitCount: 3,
@@ -74,7 +61,6 @@ class User {
       age: '0',
       email: 'hoge@example.com',
       membership: Membership.normal,
-      notes: {},
     );
   }
 
@@ -88,10 +74,6 @@ class User {
       testLimitCount: 3,
       lastLogin: '',
       isIntroducedFriend: false,
-      notes: {
-        'default': Note.dummy('ノート1', isDefaultNote: true),
-        // TODO: achieved追加
-      },
       age: '0',
       email: 'hoge@example.com',
       membership: Membership.normal,
@@ -111,9 +93,6 @@ class User {
   /// userId
   String userId;
 
-  /// オリジナルフレーズ UUIDで一発でアクセスしたい
-  Map<String, Note> notes;
-
   List<TestResult> testResults;
 
   int points;
@@ -131,27 +110,4 @@ class User {
   Membership membership;
 
   bool get isPremium => membership == Membership.pro;
-
-  Note getNoteById({String noteId}) {
-    // ノートを削除した直後はnullになる
-    if (noteId == null || noteId.isEmpty) {
-      return getDefaultNote();
-    }
-    return notes.values
-        .firstWhere((note) => note.id == noteId, orElse: () => null);
-  }
-
-  Note getDefaultNote() {
-    return notes.values
-        .firstWhere((note) => note.isDefaultNote, orElse: () => null);
-  }
-
-  Note getAchievedNote() {
-    return notes.values
-        .firstWhere((note) => note.isAchievedNote, orElse: () => null);
-  }
-
-  NotePhrase getPhrase({@required String noteId, @required String phraseId}) {
-    return getNoteById(noteId: noteId)?.findByNotePhraseId(phraseId);
-  }
 }

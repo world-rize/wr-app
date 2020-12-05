@@ -16,6 +16,7 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/auth/auth_repository.dart';
 import 'package:wr_app/infrastructure/lesson/favorite_repository.dart';
+import 'package:wr_app/infrastructure/note/note_repository.dart';
 import 'package:wr_app/infrastructure/user/user_repository.dart';
 import 'package:wr_app/usecase/user_service.dart';
 
@@ -28,9 +29,11 @@ void main() {
   final ur = UserRepository(store: store);
   final ar = AuthRepository(auth: auth, googleSignIn: googleSignIn);
   final fr = FavoriteRepository(store: store);
+  final nr = NoteRepository(store: store);
   final service = UserService(
       authRepository: ar,
       userRepository: ur,
+      noteRepository: nr,
       userApi: UserAPI(),
       favoriteRepository: fr);
 
@@ -38,16 +41,12 @@ void main() {
     print('setup');
     final initialUser = User.create()..uuid = 'test';
 
-    final favList = FavoritePhraseList.create(title: '')..id = 'favlist';
-    final note = Note.create(title: '')..id = 'note';
     final streakResult = List.generate(100, (index) {
       final date = Jiffy().subtract(duration: Duration(days: index ~/ 3));
       return TestResult(sectionId: '', score: 1, date: date.toIso8601String());
     });
 
-    initialUser
-      ..notes[note.id] = note
-      ..testResults = streakResult;
+    initialUser.testResults = streakResult;
 
     await store.setDummyUser(initialUser);
   });

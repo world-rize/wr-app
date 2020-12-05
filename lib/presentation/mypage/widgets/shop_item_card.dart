@@ -13,19 +13,22 @@ import 'package:wr_app/util/sentry.dart';
 
 /// 交換できるもののカード
 class ShopItemCard extends StatelessWidget {
-  ShopItemCard({
+  const ShopItemCard({
     @required this.shopItem,
     @required this.onTap,
+    @required this.gettable,
+    @required this.purchasable,
+    @required this.alreadyPurchased,
   });
 
   final ShopItem shopItem;
   final Function onTap;
+  final bool gettable;
+  final bool purchasable;
+  final bool alreadyPurchased;
 
   Widget card(
     BuildContext context,
-    bool gettable,
-    bool purchasable,
-    bool alreadyPurchased,
   ) {
     final backgroundColor = Theme.of(context).backgroundColor;
     final englishStyle = Theme.of(context).primaryTextTheme.bodyText1;
@@ -79,46 +82,31 @@ class ShopItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<UserNotifier>(context).user;
     final sn = Provider.of<ShopPageNotifier>(context);
-    return FutureBuilder<Tuple3<bool, bool, bool>>(
-      future: sn.purchasable(user: user, shopItem: shopItem),
-      builder: (context, snapshot) {
-        if (snapshot.error != null) {
-          sentryReportError(
-              error: snapshot.error, stackTrace: StackTrace.current);
-        }
-        // ここをConnectionState.doneじゃないやつにすると期待通りにリロード画面が間に入る
-        if (snapshot.data == null ||
-            snapshot.connectionState != ConnectionState.done) {
-          return SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: 100.0,
-            child: Shimmer.fromColors(
-              baseColor: Colors.grey[200],
-              highlightColor: Colors.grey[400],
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  color: Colors.grey[200],
-                ),
-                width: MediaQuery.of(context).size.width,
-                height: 100,
-              ),
-            ),
+    return purchasable && !alreadyPurchased
+        ? InkWell(
+            onTap: onTap,
+            child: card(context),
+          ).padding()
+        : Opacity(
+            opacity: 0.3,
+            child: card(context),
           );
-        }
-        final gettable = snapshot.data.item1;
-        final purchasable = snapshot.data.item2;
-        final alreadyPurchased = snapshot.data.item3;
-        return purchasable && !alreadyPurchased
-            ? InkWell(
-                onTap: onTap,
-                child: card(context, gettable, purchasable, alreadyPurchased),
-              ).padding()
-            : Opacity(
-                opacity: 0.3,
-                child: card(context, gettable, purchasable, alreadyPurchased),
-              );
-      },
-    );
   }
 }
+// return SizedBox(
+// width: MediaQuery.of(context).size.width,
+// height: 100.0,
+// child: Shimmer.fromColors(
+// baseColor: Colors.grey[200],
+// highlightColor: Colors.grey[400],
+// child: Container(
+// decoration: BoxDecoration(
+// borderRadius: BorderRadius.all(Radius.circular(10)),
+// color: Colors.grey[200],
+// ),
+// width: MediaQuery.of(context).size.width,
+// height: 100,
+// ),
+// ),
+// );
+//

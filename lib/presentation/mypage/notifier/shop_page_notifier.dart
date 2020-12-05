@@ -3,6 +3,9 @@
 import 'package:firebase_auth/firebase_auth.dart' as fa;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:in_app_purchase/billing_client_wrappers.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:tuple/tuple.dart';
 import 'package:wr_app/domain/shop/model/receipt.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
@@ -14,6 +17,7 @@ import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/usecase/shop_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/sentry.dart';
 
 ///
 /// 1. ShopItemCard: onTap
@@ -45,25 +49,55 @@ class ShopPageNotifier with ChangeNotifier {
   // 1. ShopItemCard: onTap
   // TODO: 非同期なWidgetはどこにおくべき?
   Widget shopItemCards(BuildContext context) {
-    return FutureBuilder<List<ShopItem>>(
-      future: _shopService.getShopItems(),
-      builder: (_, ss) {
-        if (ss.hasError) {
-          return Text('Error');
+    final user = Provider.of<UserNotifier>(context, listen: false).user;
+    return FutureBuilder<List<Tuple4<ShopItem, bool, bool, bool>>>(
+      future: _shopService.getShopItems().then((value) async {
+        final l = <Tuple4<ShopItem, bool, bool, bool>>[];
+        await Future.forEach(value, (element) async {
+          final bs =
+              await _shopService.purchasable(user: user, shopItem: element);
+          l.add(Tuple4(element, bs.item1, bs.item2, bs.item3));
+        });
+        return l;
+      }),
+      builder: (_, snapshot) {
+        if (snapshot.error != null) {
+          sentryReportError(
+              error: snapshot.error, stackTrace: StackTrace.current);
         }
-        if (!ss.hasData) {
-          return CircularProgressIndicator();
+        // ここをConnectionState.doneじゃないやつにすると期待通りにリロード画面が間に入る
+        if (snapshot.data == null ||
+            snapshot.connectionState != ConnectionState.done) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 100.0,
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[200],
+              highlightColor: Colors.grey[400],
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.grey[200],
+                ),
+                width: MediaQuery.of(context).size.width,
+                height: 100,
+              ),
+            ),
+          );
         }
 
         return Column(
-          children: ss.data
+          children: snapshot.data
               .map(
-                (item) => Padding(
+                (t) => Padding(
                   padding: const EdgeInsets.all(4),
                   child: ShopItemCard(
-                    shopItem: item,
+                    shopItem: t.item1,
                     onTap: () => showShopItemPurchaseConfirmDialog(
-                        context: context, item: item),
+                        context: context, item: t.item1),
+                    gettable: t.item2,
+                    purchasable: t.item3,
+                    alreadyPurchased: t.item4,
                   ),
                 ),
               )

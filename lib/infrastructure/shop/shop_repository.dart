@@ -72,7 +72,7 @@ class ShopRepository implements IShopRepository {
 
   @override
   Future<List<Receipt>> getAllReceipts(String uuid) async {
-    final l = [];
+    final l = <Receipt>[];
     await store.latest
         .collection('users')
         .doc(uuid)
