@@ -46,6 +46,7 @@ dependencies:
   heatmap_calendar: ^1.2.8
   like_button: ^1.0.1
   expandable: ^4.1.4
+  video_player: ^1.0.1
 
   # util
   tuple: ^1.0.0
@@ -113,6 +114,8 @@ flutter:
     - assets/icon/
     - assets/voices/
     - assets/thumbnails/
+    - assets/se/
+    - assets/movies/
     - secrets/
 
 flutter_icons:
