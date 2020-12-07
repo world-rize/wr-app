@@ -48,6 +48,7 @@ dependencies:
   expandable: ^4.1.4
   video_player: ^1.0.1
   chewie:
+  shimmer: ^1.1.0
 
   # util
   tuple: ^1.0.0

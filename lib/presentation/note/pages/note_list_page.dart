@@ -26,8 +26,8 @@ class _NoteListPageState extends State<NoteListPage> {
   @override
   Widget build(BuildContext context) {
     final nn = context.watch<NoteNotifier>();
-    final notes = nn.getNotes();
-    print(notes.map((note) => note.title).join(','));
+    final notes = nn.notes;
+    InAppLogger.debug(notes.values.map((note) => note.title).join(','));
     final h6 = Theme.of(context).textTheme.headline6;
 
     void _showErrorDialog(String errorMessage) {
@@ -101,7 +101,7 @@ class _NoteListPageState extends State<NoteListPage> {
           child: Column(
             children: [
               _createNoteButton,
-              ...notes.map((note) => NoteCard(note: note)).toList(),
+              ...notes.values.map((note) => NoteCard(note: note)).toList(),
             ],
           ),
         ),

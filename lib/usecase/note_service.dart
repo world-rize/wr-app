@@ -6,6 +6,7 @@ import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/infrastructure/note/i_note_repository.dart';
 import 'package:wr_app/domain/user/model/user.dart';
+import 'package:wr_app/usecase/exceptions.dart';
 
 class NoteService {
   NoteService({
@@ -27,10 +28,16 @@ class NoteService {
     );
   }
 
+  /// throw NoteLimitExceeded
+  /// AchievedNote + 3
   Future<Note> createNote({
     @required User user,
     @required Note note,
   }) async {
+    final notes = await getAllNotes(user: user);
+    if (notes.length >= 4) {
+      throw NoteLimitExceeded('user: ${user.uuid}');
+    }
     return _noteRepository.createNote(user: user, note: note);
   }
 
@@ -46,5 +53,9 @@ class NoteService {
     @required Note note,
   }) {
     return _noteRepository.updateNote(user: user, note: note);
+  }
+
+  Future<Map<String, Note>> getAllNotes({@required User user}) {
+    return _noteRepository.getAllNotes(user: user);
   }
 }

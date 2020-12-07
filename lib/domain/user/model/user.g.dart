@@ -11,10 +11,6 @@ User _$UserFromJson(Map json) {
     uuid: json['uuid'] as String,
     name: json['name'] as String,
     userId: json['userId'] as String,
-    notes: (json['notes'] as Map)?.map(
-      (k, e) =>
-          MapEntry(k as String, e == null ? null : Note.fromJson(e as Map)),
-    ),
     testResults: (json['testResults'] as List)
         ?.map((e) => e == null ? null : TestResult.fromJson(e as Map))
         ?.toList(),
@@ -22,15 +18,9 @@ User _$UserFromJson(Map json) {
     testLimitCount: json['testLimitCount'] as int,
     lastLogin: json['lastLogin'] as String,
     isIntroducedFriend: json['isIntroducedFriend'] as bool,
-    activities: (json['activities'] as List)
-        ?.map((e) => e == null ? null : UserActivity.fromJson(e as Map))
-        ?.toList(),
     age: json['age'] as String,
     email: json['email'] as String,
     membership: _$enumDecodeNullable(_$MembershipEnumMap, json['membership']),
-    items: (json['items'] as Map)?.map(
-      (k, e) => MapEntry(k as String, e as int),
-    ),
   );
 }
 
@@ -38,7 +28,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'uuid': instance.uuid,
       'name': instance.name,
       'userId': instance.userId,
-      'notes': instance.notes?.map((k, e) => MapEntry(k, e?.toJson())),
       'testResults': instance.testResults?.map((e) => e?.toJson())?.toList(),
       'points': instance.points,
       'testLimitCount': instance.testLimitCount,
@@ -47,8 +36,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'age': instance.age,
       'email': instance.email,
       'membership': _$MembershipEnumMap[instance.membership],
-      'activities': instance.activities?.map((e) => e?.toJson())?.toList(),
-      'items': instance.items,
     };
 
 T _$enumDecode<T>(

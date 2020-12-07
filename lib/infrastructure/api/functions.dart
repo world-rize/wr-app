@@ -9,11 +9,6 @@ abstract class IUserAPI {
     @required String introduceeUserId,
   });
 
-  Future<User> getPoint({
-    @required String uuid,
-    @required int points,
-  });
-
   Future<User> findUserByUserId({
     @required String uuid,
   });
@@ -27,13 +22,6 @@ class UserAPI implements IUserAPI {
     return callFunction('introduceFriend', {
       'introduceeUserId': introduceeUserId,
     });
-  }
-
-  @override
-  Future<User> getPoint({@required String uuid, @required int points}) {
-    return callFunction('getPoint', {
-      'points': points,
-    }).then((res) => User.fromJson(res.data));
   }
 
   @override

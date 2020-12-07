@@ -124,7 +124,6 @@ class _RootViewState extends State<RootView>
     final primaryColor = Theme.of(context).primaryColor;
     final user = un.user;
     assert(user != null);
-    InAppLogger.debug('user: ${user.toJson()}');
 
     final coins = Container(
       padding: const EdgeInsets.only(left: 20),

@@ -145,9 +145,9 @@ class PhraseExampleCard extends StatelessWidget {
     final vp = Provider.of<VoicePlayer>(context);
     final ln = Provider.of<LessonNotifier>(context);
     final un = Provider.of<UserNotifier>(context);
+    final nn = Provider.of<NoteNotifier>(context);
 
     // TODO: phrase.id !== notePhrase.uuid
-    final existNotes = un.existPhraseInNotes(phraseId: phrase.id);
     final favorited = ln.existPhraseInFavoriteList(
       phraseId: phrase.id,
       user: un.user,
@@ -166,7 +166,7 @@ class PhraseExampleCard extends StatelessWidget {
       likeBuilder: (_) => Icon(
         // TODO: ここどうするのか
         // ノートはフレーズを編集できてしまうので存在するもクソもない?
-        un.existPhraseInNotes(phraseId: phrase.id)
+        nn.existPhraseInNotes(phraseId: phrase.id)
             ? Icons.bookmark
             : Icons.bookmark_border,
         color: Colors.grey,
@@ -186,7 +186,7 @@ class PhraseExampleCard extends StatelessWidget {
                     child: Center(child: Text('Add Phrase to Note')),
                   ),
                   Divider(),
-                  ...un.user.notes.entries
+                  ...nn.notes.entries
                       // TODO: ここwhereするの汚い
                       .where((element) => !element.value.isAchievedNote)
                       .map((e) => _noteOptions(context, e.value, phrase))

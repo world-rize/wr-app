@@ -26,16 +26,15 @@ class _NotePageState extends State<NotePage> {
   @override
   Widget build(BuildContext context) {
     // default note
-    final un = Provider.of<UserNotifier>(context);
     final nn = Provider.of<NoteNotifier>(context);
     final theme = Theme.of(context);
 
     // 最初はデフォルトを設定
     if (nn.nowSelectedNoteId.isEmpty) {
-      nn.nowSelectedNoteId = un.user.getDefaultNote().id;
+      nn.nowSelectedNoteId = nn.getDefaultNote().id;
     }
 
-    final note = nn.currentNote ?? un.user.getDefaultNote();
+    final note = nn.currentNote ?? nn.getDefaultNote();
     assert(note != null);
 
     final _noteNotFoundView = Padding(

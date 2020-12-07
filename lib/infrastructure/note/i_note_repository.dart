@@ -10,4 +10,6 @@ abstract class INoteRepository {
   Future<Note> updateNote({@required User user, @required Note note});
 
   Future<void> deleteNote({@required User user, @required Note note});
+
+  Future<Map<String, Note>> getAllNotes({@required User user});
 }

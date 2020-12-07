@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/presentation/note/notifier/note_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 
@@ -12,8 +13,8 @@ import 'package:wr_app/ui/widgets/shadowed_container.dart';
 class AchievedPhraseList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final un = Provider.of<UserNotifier>(context);
-    final achievedNote = un.user.getAchievedNote();
+    final nn = Provider.of<NoteNotifier>(context);
+    final achievedNote = nn.getAchievedNote();
 
     final englishStyle = Theme.of(context).primaryTextTheme.bodyText1;
     final japaneseStyle = Theme.of(context).primaryTextTheme.bodyText2;
