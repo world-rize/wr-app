@@ -3,8 +3,10 @@
 import 'package:collection/collection.dart';
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
+import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
@@ -12,6 +14,7 @@ import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/infrastructure/api/functions.dart';
 import 'package:wr_app/infrastructure/auth/i_auth_repository.dart';
 import 'package:wr_app/infrastructure/lesson/i_favorite_repository.dart';
+import 'package:wr_app/infrastructure/note/i_note_repository.dart';
 import 'package:wr_app/infrastructure/user/i_user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
@@ -21,15 +24,18 @@ class UserService {
     @required IAuthRepository authRepository,
     @required IUserRepository userRepository,
     @required IFavoriteRepository favoriteRepository,
+    @required INoteRepository noteRepository,
     @required IUserAPI userApi,
   })  : _authRepository = authRepository,
         _userRepository = userRepository,
         _favoriteRepository = favoriteRepository,
+        _noteRepository = noteRepository,
         _userApi = userApi;
 
   final IAuthRepository _authRepository;
   final IUserRepository _userRepository;
   final IFavoriteRepository _favoriteRepository;
+  final INoteRepository _noteRepository;
   final UserAPI _userApi;
 
   /// ユーザのすべてのデータの初期化
@@ -50,6 +56,11 @@ class UserService {
       title: '',
       isDefault: true,
     );
+
+    final defaultNote = Note.create(title: 'default', isDefault: true);
+    final achievedNote = Note.create(title: 'achieved', isAchieved: true);
+    await _noteRepository.createNote(user: newUser, note: defaultNote);
+    await _noteRepository.createNote(user: newUser, note: achievedNote);
   }
 
   /// 前のバージョンのユーザからデータを再帰的にマイグレーションする
@@ -84,10 +95,11 @@ class UserService {
 
   /// ポイントを習得します
   Future<User> getPoints({
-    @required String uuid,
+    @required User user,
     @required int points,
   }) async {
-    return _userApi.getPoint(uuid: uuid, points: points);
+    user.points += points;
+    return _userRepository.updateUser(user: user);
   }
 
   /// upgrade to Pro or downgrade
@@ -109,10 +121,6 @@ class UserService {
     }
 
     user.testLimitCount -= 1;
-    user.activities.add(UserActivity(
-      content: '$sectionId のテストを受ける',
-      date: DateTime.now(),
-    ));
 
     return _userRepository.updateUser(user: user);
   }
@@ -128,11 +136,6 @@ class UserService {
       sectionId: sectionId,
       score: score,
       date: DateTime.now().toIso8601String(),
-    ));
-
-    user.activities.add(UserActivity(
-      content: '$sectionId のテストで $score 点を獲得',
-      date: DateTime.now(),
     ));
 
     return _userRepository.updateUser(user: user);
@@ -168,5 +171,4 @@ class UserService {
   }) {
     return _userApi.introduceFriend(introduceeUserId: introduceeUserId);
   }
-
 }

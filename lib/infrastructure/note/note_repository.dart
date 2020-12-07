@@ -7,6 +7,7 @@ import 'package:wr_app/infrastructure/note/i_note_repository.dart';
 import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/infrastructure/util/versioning.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/infrastructure/util/versioning.dart';
 
 class NoteRepository implements INoteRepository {
   NoteRepository({@required this.store});
@@ -20,24 +21,49 @@ class NoteRepository implements INoteRepository {
     @required User user,
     @required Note note,
   }) async {
-    user.notes.putIfAbsent(note.id, () => note);
-    InAppLogger.debug('${note.toJson()}');
-    await usersCollection.doc(user.uuid).set(user.toJson());
+    await usersCollection
+        .doc(user.uuid)
+        .collection('notes')
+        .doc(note.id)
+        .set(note.toJson());
+    InAppLogger.debug('createNote ${note.id}: ${note.title}');
     return note;
   }
 
   @override
   Future<void> deleteNote({@required User user, @required Note note}) async {
-    user.notes.removeWhere((key, value) => value.id == note.id);
-    InAppLogger.debug('delete note $note');
-    return usersCollection.doc(user.uuid).set(user.toJson());
+    await usersCollection
+        .doc(user.uuid)
+        .collection('notes')
+        .doc(note.id)
+        .delete();
+    InAppLogger.debug('delete note ${note.id}: ${note.title}');
   }
 
   @override
   Future<Note> updateNote({@required User user, @required Note note}) async {
-    user.notes[note.id] = note;
+    await usersCollection
+        .doc(user.uuid)
+        .collection('notes')
+        .doc(note.id)
+        .set(note.toJson());
     InAppLogger.debug('update note ${note.id}: ${note.title}');
-    await usersCollection.doc(user.uuid).set(user.toJson());
     return note;
+  }
+
+  @override
+  Future<Map<String, Note>> getAllNotes({@required User user}) async {
+    final m = <String, Note>{};
+    await usersCollection
+        .doc(user.uuid)
+        .collection('notes')
+        .get()
+        .then((value) async {
+      await Future.forEach(value.docs, (QueryDocumentSnapshot element) {
+        final note = Note.fromJson(element.data());
+        m[note.id] = note;
+      });
+    });
+    return m;
   }
 }

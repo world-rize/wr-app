@@ -1,28 +1,29 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fa;
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:in_app_purchase/billing_client_wrappers.dart';
+import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:tuple/tuple.dart';
+import 'package:wr_app/domain/shop/model/receipt.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/domain/shop/model/shop_item_id.dart';
+import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/widgets/shop_item_card.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/usecase/shop_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/sentry.dart';
 
 ///
 /// 1. ShopItemCard: onTap
 /// 2. 購入しますか？ yes/no
 /// 3. 説明ダイアログ ok
 class ShopPageNotifier with ChangeNotifier {
-  final ShopService _shopService;
-  final UserService _userService;
-
-  /// singleton
-  static ShopPageNotifier _cache;
-
-  bool isLoading = false;
-
   ShopPageNotifier._internal({
     @required UserService userService,
     @required ShopService shopService,
@@ -37,28 +38,66 @@ class ShopPageNotifier with ChangeNotifier {
         userService: userService, shopService: shopService);
   }
 
+  final ShopService _shopService;
+  final UserService _userService;
+
+  /// singleton
+  static ShopPageNotifier _cache;
+
+  bool isLoading = false;
+
   // 1. ShopItemCard: onTap
   // TODO: 非同期なWidgetはどこにおくべき?
   Widget shopItemCards(BuildContext context) {
-    return FutureBuilder<List<ShopItem>>(
-      future: _shopService.getShopItems(),
-      builder: (_, ss) {
-        if (ss.hasError) {
-          return Text('Error');
+    final user = Provider.of<UserNotifier>(context, listen: false).user;
+    return FutureBuilder<List<Tuple4<ShopItem, bool, bool, bool>>>(
+      future: _shopService.getShopItems().then((value) async {
+        final l = <Tuple4<ShopItem, bool, bool, bool>>[];
+        await Future.forEach(value, (element) async {
+          final bs =
+              await _shopService.purchasable(user: user, shopItem: element);
+          l.add(Tuple4(element, bs.item1, bs.item2, bs.item3));
+        });
+        return l;
+      }),
+      builder: (_, snapshot) {
+        if (snapshot.error != null) {
+          sentryReportError(
+              error: snapshot.error, stackTrace: StackTrace.current);
         }
-        if (!ss.hasData) {
-          return CircularProgressIndicator();
+        // ここをConnectionState.doneじゃないやつにすると期待通りにリロード画面が間に入る
+        if (snapshot.data == null ||
+            snapshot.connectionState != ConnectionState.done) {
+          return SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: 100.0,
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[200],
+              highlightColor: Colors.grey[400],
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  color: Colors.grey[200],
+                ),
+                width: MediaQuery.of(context).size.width,
+                height: 100,
+              ),
+            ),
+          );
         }
 
         return Column(
-          children: ss.data
+          children: snapshot.data
               .map(
-                (item) => Padding(
+                (t) => Padding(
                   padding: const EdgeInsets.all(4),
                   child: ShopItemCard(
-                    shopItem: item,
+                    shopItem: t.item1,
                     onTap: () => showShopItemPurchaseConfirmDialog(
-                        context: context, item: item),
+                        context: context, item: t.item1),
+                    gettable: t.item2,
+                    purchasable: t.item3,
+                    alreadyPurchased: t.item4,
                   ),
                 ),
               )
@@ -123,7 +162,7 @@ class ShopPageNotifier with ChangeNotifier {
   }
 
   Future _useItem(BuildContext context, ShopItem item) async {
-    final uid = FirebaseAuth.instance.currentUser.uid;
+    final uid = fa.FirebaseAuth.instance.currentUser.uid;
     final itemId = ShopItemIdEx.fromString(item.id);
 
     // 購入した瞬間使用
@@ -154,11 +193,22 @@ class ShopPageNotifier with ChangeNotifier {
           await _shopService.purchaseItem(user: user, itemId: item.id);
       await _useItem(context, item);
       await _userService.updateUser(user: updatedUser);
+      // TODO: globalなstoreみたいな使い方をしていてあんまり良くない。storeを作ろう
+      UserNotifier(userService: GetIt.I<UserService>()).user = updatedUser;
     } on Exception catch (e) {
       InAppLogger.error(e);
     } finally {
       isLoading = false;
       notifyListeners();
     }
+  }
+
+  /// レシートとitemの性質からUserがそのitemを買うことができるかを調べる
+  /// return (itemを何個もかえるか, ポイントが足りているか, すでに買ったことがあるか)
+  Future<Tuple3<bool, bool, bool>> purchasable({
+    @required User user,
+    @required ShopItem shopItem,
+  }) {
+    return _shopService.purchasable(user: user, shopItem: shopItem);
   }
 }

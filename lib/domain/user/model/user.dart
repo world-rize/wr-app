@@ -19,49 +19,32 @@ class User {
     @required this.uuid,
     @required this.name,
     @required this.userId,
-    @required this.notes,
     @required this.testResults,
     @required this.points,
     @required this.testLimitCount,
     @required this.lastLogin,
     @required this.isIntroducedFriend,
-    @required this.activities,
     @required this.age,
     @required this.email,
     @required this.membership,
-    @required this.items,
   });
 
   factory User.create() {
     final uuid = Uuid().v4();
-    final defaultNote = Note.create(
-      title: 'ノート',
-      isDefault: true,
-    );
-    final achievedNote = Note.create(
-      title: 'Achieved Note',
-      isAchieved: true,
-    );
 
     return User(
       uuid: uuid,
       name: '',
       // TODO
       userId: uuid,
-      notes: {
-        defaultNote.id: defaultNote,
-        achievedNote.id: achievedNote,
-      },
       testResults: [],
       points: 0,
       testLimitCount: 3,
       lastLogin: DateTime.now().toIso8601String(),
       isIntroducedFriend: false,
-      activities: [],
       age: '',
       email: '',
       membership: Membership.normal,
-      items: {},
     );
   }
 
@@ -78,9 +61,6 @@ class User {
       age: '0',
       email: 'hoge@example.com',
       membership: Membership.normal,
-      activities: [],
-      notes: {},
-      items: {},
     );
   }
 
@@ -94,20 +74,6 @@ class User {
       testLimitCount: 3,
       lastLogin: '',
       isIntroducedFriend: false,
-      activities: [
-        UserActivity(
-          content: 'Dummy Activity',
-          date: DateTime.now(),
-        ),
-      ],
-      notes: {
-        'default': Note.dummy('ノート1', isDefaultNote: true),
-        // TODO: achieved追加
-      },
-      items: {
-        '3': 1,
-        '4': 1,
-      },
       age: '0',
       email: 'hoge@example.com',
       membership: Membership.normal,
@@ -127,9 +93,6 @@ class User {
   /// userId
   String userId;
 
-  /// オリジナルフレーズ UUIDで一発でアクセスしたい
-  Map<String, Note> notes;
-
   List<TestResult> testResults;
 
   int points;
@@ -146,34 +109,5 @@ class User {
 
   Membership membership;
 
-  /// ユーザー活動
-  List<UserActivity> activities;
-
-  /// 所持アイテム(key: item_id, value: amount)
-  Map<String, int> items;
-
   bool get isPremium => membership == Membership.pro;
-
-  Note getNoteById({String noteId}) {
-    // ノートを削除した直後はnullになる
-    if (noteId == null || noteId.isEmpty) {
-      return getDefaultNote();
-    }
-    return notes.values
-        .firstWhere((note) => note.id == noteId, orElse: () => null);
-  }
-
-  Note getDefaultNote() {
-    return notes.values
-        .firstWhere((note) => note.isDefaultNote, orElse: () => null);
-  }
-
-  Note getAchievedNote() {
-    return notes.values
-        .firstWhere((note) => note.isAchievedNote, orElse: () => null);
-  }
-
-  NotePhrase getPhrase({@required String noteId, @required String phraseId}) {
-    return getNoteById(noteId: noteId)?.findByNotePhraseId(phraseId);
-  }
 }

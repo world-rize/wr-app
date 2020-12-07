@@ -158,6 +158,7 @@ Future<void> setupGlobalSingletons({
     authRepository: authRepository,
     userRepository: userRepository,
     favoriteRepository: favoriteRepository,
+    noteRepository: noteRepository,
     userApi: UserAPI(),
   );
 
@@ -206,7 +207,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
     final noteNotifier = NoteNotifier(noteService: noteService);
     final lessonNotifier = LessonNotifier(lessonService: lessonService);
     authNotifier.addListener(() {
-      if (authNotifier.user == null){
+      if (authNotifier.user == null) {
         InAppLogger.debug('user is null');
       }
       userNotifier.user = authNotifier.user;
@@ -215,7 +216,7 @@ Future<void> runAppWithFlavor(final Flavor flavor) async {
       InAppLogger.debug('from auth to many notifier');
     });
 
-
+    // FIXME: rootに置くのはMaterialAppよりも上に置かないと、MaterialPageRouteからProviderを使えないので
     final app = MultiProvider(
       providers: [
         Provider.value(

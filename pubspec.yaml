@@ -45,6 +45,7 @@ dependencies:
   flutter_icons: ^1.1.0
   heatmap_calendar: ^1.2.8
   like_button: ^1.0.1
+  shimmer: ^1.1.0
 
   # util
   tuple: ^1.0.0

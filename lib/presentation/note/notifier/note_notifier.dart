@@ -3,8 +3,10 @@ import 'package:wr_app/domain/lesson/model/phrase.dart';
 import 'package:wr_app/domain/note/model/note.dart';
 import 'package:wr_app/domain/note/model/note_phrase.dart';
 import 'package:wr_app/domain/user/index.dart';
+import 'package:wr_app/usecase/exceptions.dart';
 import 'package:wr_app/usecase/note_service.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/sentry.dart';
 import 'package:wr_app/util/toast.dart';
 
 /// NotePageの状態を管理する
@@ -20,34 +22,39 @@ class NoteNotifier extends ChangeNotifier {
   static NoteNotifier _cache;
   NoteService _noteService;
 
+  Map<String, Note> notes;
+
   User _user = User.empty();
 
   User get user => _user;
 
   set user(User user) {
     _user = user;
+    _noteService.getAllNotes(user: user).then((value) {
+      notes = value;
+      nowSelectedNoteId =
+          notes.values.firstWhere((element) => element.isDefaultNote).id;
+      notifyListeners();
+    });
     notifyListeners();
   }
 
   /// 現在のノート
-  String _nowSelectedNoteId;
+  String _nowSelectedNoteId = 'dummy';
+
+  String get nowSelectedNoteId => _nowSelectedNoteId;
+
+  set nowSelectedNoteId(String noteId) {
+    _nowSelectedNoteId = noteId;
+    notifyListeners();
+  }
 
   Note get currentNote {
-    return _user.getNoteById(noteId: nowSelectedNoteId) ??
-        _user.getDefaultNote();
+    return notes[_nowSelectedNoteId];
   }
 
   /// 英語
   bool _canSeeEnglish = true;
-
-  /// 日本語
-  bool _canSeeJapanese = true;
-
-  String get nowSelectedNoteId {
-    // TODO: 無駄コード
-    InAppLogger.debug('user ${user.email}: ${user.getDefaultNote()}');
-    return _nowSelectedNoteId ??= user.getDefaultNote().id;
-  }
 
   bool get canSeeEnglish => _canSeeEnglish;
 
@@ -55,6 +62,9 @@ class NoteNotifier extends ChangeNotifier {
     _canSeeEnglish = canSeeEnglish;
     notifyListeners();
   }
+
+  /// 日本語
+  bool _canSeeJapanese = true;
 
   bool get canSeeJapanese => _canSeeJapanese;
 
@@ -73,69 +83,57 @@ class NoteNotifier extends ChangeNotifier {
     notifyListeners();
   }
 
-  set nowSelectedNoteId(String noteId) {
-    _nowSelectedNoteId = noteId;
-    notifyListeners();
-  }
-
-  List<Note> getNotes() {
-    return _user.notes.values.toList();
-  }
-
   /// create note
   Future<void> createNote({
     @required String title,
   }) async {
     final newNote = Note.empty(title);
-    final note = await _noteService.createNote(user: _user, note: newNote);
-    _user.notes[note.id] = note;
+    try {
+      final note = await _noteService.createNote(user: _user, note: newNote);
+      notes[note.id] = note;
+      notifyListeners();
 
-    notifyListeners();
-
-    InAppLogger.info('createNote ${note.id}');
-    NotifyToast.success('createNote ${note.id}');
+      InAppLogger.info('createNote ${note.id}');
+      NotifyToast.success('createNote ${note.title}');
+    } on NoteLimitExceeded {
+      NotifyToast.error('これ以上ノートを作れません');
+    }
   }
 
-  Note getDefaultNote() => _user.getDefaultNote();
+  Note getDefaultNote() =>
+      notes.values.firstWhere((element) => element.isDefaultNote, orElse: () {
+        sentryReportError(
+            error: Exception('default note is not found. userId: ${user.uuid}'),
+            stackTrace: StackTrace.current);
+        return null;
+      });
 
-  Note getAchievedNote() => _user.getAchievedNote();
+  Note getAchievedNote() =>
+      notes.values.firstWhere((element) => element.isAchievedNote, orElse: () {
+        sentryReportError(
+            error:
+                Exception('Achieved note is not found. userId: ${user.uuid}'),
+            stackTrace: StackTrace.current);
+        return null;
+      });
 
   /// update note title
   Future<void> updateNote({
     @required Note note,
   }) async {
     await _noteService.updateNote(user: _user, note: note);
-    _user.notes[note.id] = note;
+    notes[note.id] = note;
 
     notifyListeners();
 
     InAppLogger.info('updateNoteTitle ${note.id}');
   }
 
-  /// update note isDefault
-  Future<void> updateDefaultNote({@required String noteId}) async {
-    final defaultNote = _user.getDefaultNote();
-    if (defaultNote != null) {
-      defaultNote.isDefaultNote = false;
-    }
-
-    final note = _user.getNoteById(noteId: noteId)..isDefaultNote = true;
-
-    await _noteService.updateNote(note: defaultNote, user: _user);
-    await _noteService.updateNote(note: note, user: _user);
-    _user.notes[note.id] = note;
-
-    notifyListeners();
-
-    InAppLogger.info('updateDefaultNote ${note.id}');
-    // NotifyToast.success('updateDefaultNote ${note.id}');
-  }
-
   /// delete note
   Future<void> deleteNote({@required String noteId}) async {
-    final note = _user.getNoteById(noteId: noteId).clone();
+    final note = notes[noteId];
     await _noteService.deleteNote(user: _user, note: note);
-    _user.notes.remove(noteId);
+    notes.remove(noteId);
 
     notifyListeners();
 
@@ -148,10 +146,10 @@ class NoteNotifier extends ChangeNotifier {
     @required String noteId,
     @required NotePhrase phrase,
   }) async {
-    final note = _user.getNoteById(noteId: noteId).clone()..addPhrase(phrase);
+    final note = notes[noteId]..addPhrase(phrase);
 
     await _noteService.updateNote(user: _user, note: note);
-    _user.notes[noteId] = note;
+    notes[noteId] = note;
 
     notifyListeners();
 
@@ -166,9 +164,9 @@ class NoteNotifier extends ChangeNotifier {
     @required NotePhrase phrase,
   }) async {
     try {
-      final note = _user.getNoteById(noteId: noteId)?.clone();
+      final note = notes[noteId];
       await _noteService.updateNote(user: _user, note: note);
-      _user.notes[note.id] = note;
+      notes[note.id] = note;
       notifyListeners();
       InAppLogger.info('updatePhraseInNote $noteId');
     } on Exception catch (e) {
@@ -182,7 +180,7 @@ class NoteNotifier extends ChangeNotifier {
     @required String phraseId,
   }) async {
     // blank note
-    final note = _user.getNoteById(noteId: noteId);
+    final note = notes[noteId];
     final phrase = note.findByNotePhraseId(phraseId);
     if (phrase == null) {
       throw Exception('note phrase not found');
@@ -192,7 +190,7 @@ class NoteNotifier extends ChangeNotifier {
     final addPhrase =
         NotePhrase.create(english: phrase.english, japanese: phrase.japanese);
 
-    _user.getAchievedNote().addPhrase(addPhrase);
+    getAchievedNote().addPhrase(addPhrase);
 
     // refresh phrase
     phrase
@@ -203,7 +201,7 @@ class NoteNotifier extends ChangeNotifier {
   }
 
   Future<void> addLessonPhraseToNote(String noteId, Phrase phrase) async {
-    final note = _user.getNoteById(noteId: noteId);
+    final note = notes[noteId];
     final notePhrase = note.firstEmptyNotePhrase();
     if (notePhrase == null) {
       InAppLogger.error('error happened');
@@ -214,5 +212,13 @@ class NoteNotifier extends ChangeNotifier {
       ..english = phrase.title['en'];
     await _noteService.updateNote(user: _user, note: note);
     notifyListeners();
+  }
+
+  /// exist phrase in notes
+  bool existPhraseInNotes({
+    @required String phraseId,
+  }) {
+    return notes.values
+        .any((list) => list.phrases.any((p) => p.id == phraseId));
   }
 }
