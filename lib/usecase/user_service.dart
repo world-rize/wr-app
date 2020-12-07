@@ -109,10 +109,10 @@ class UserService {
     }
 
     user.testLimitCount -= 1;
-    user.activities.add(UserActivity(
-      content: '$sectionId のテストを受ける',
-      date: DateTime.now(),
-    ));
+    // user.activities.add(UserActivity(
+    //   content: '$sectionId のテストを受ける',
+    //   date: DateTime.now(),
+    // ));
 
     return _userRepository.updateUser(user: user);
   }
@@ -130,10 +130,10 @@ class UserService {
       date: DateTime.now().toIso8601String(),
     ));
 
-    user.activities.add(UserActivity(
-      content: '$sectionId のテストで $score 点を獲得',
-      date: DateTime.now(),
-    ));
+    // user.activities.add(UserActivity(
+    //   content: '$sectionId のテストで $score 点を獲得',
+    //   date: DateTime.now(),
+    // ));
 
     return _userRepository.updateUser(user: user);
   }

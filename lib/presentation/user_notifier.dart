@@ -131,8 +131,8 @@ class UserNotifier with ChangeNotifier {
   bool existPhraseInNotes({
     @required String phraseId,
   }) {
-    return user.notes.values
-        .any((list) => list.phrases.any((p) => p.id == phraseId));
+    return user.notes?.values
+        ?.any((list) => list.phrases.any((p) => p.id == phraseId)) ?? false;
   }
 
   /// calculates heatMap of testResult
