@@ -100,7 +100,7 @@ class VoicePlayer with ChangeNotifier {
   }
 
   void setSpeed(double speed) {
-    assert([0.5, 0.75, 1, 1.25, 1.5].contains(speed));
+    assert([0.8, 0.9, 1.0, 1.1, 1.2].contains(speed));
     player.setPlaySpeed(speed);
     _speed = speed;
     notifyListeners();

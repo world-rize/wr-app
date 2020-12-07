@@ -25,23 +25,8 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   bool _isLoading;
 
-  /// ホームへ移動
-  Future<void> _gotoHome() {
-    // debug
-    final user = Provider.of<UserNotifier>(context, listen: false).user;
-    // InAppLogger.debugJson(user.toJson());
-
-    // initial login
-    Provider.of<SystemNotifier>(context, listen: false)
-        .setFirstLaunch(value: false);
-
-    // login のみ
-    sendEvent(event: AnalyticsEvent.logIn);
-
-    Navigator.popUntil(context, (route) => route.isFirst);
-
-    return Navigator.pushReplacement(
-      context,
+  Future _gotoNextPage() {
+    Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => RootView(),
       ),
@@ -61,7 +46,7 @@ class _SignUpPageState extends State<SignUpPage> {
       final an = context.read<AuthNotifier>();
       await an.signUpWithEmailAndPassword(
           email: email, password: password, name: name);
-      await _gotoHome();
+      await _gotoNextPage();
     } on PlatformException catch (e) {
       InAppLogger.error(e);
       final mes = e.toLocalizedMessage(context);
@@ -88,7 +73,7 @@ class _SignUpPageState extends State<SignUpPage> {
       final an = context.read<AuthNotifier>();
       await an.signUpWithGoogle(name);
 
-      await _gotoHome();
+      await _gotoNextPage();
     } on Exception catch (e) {
       setState(() {
         _isLoading = false;
@@ -109,7 +94,7 @@ class _SignUpPageState extends State<SignUpPage> {
       final an = context.read<AuthNotifier>();
       await an.signUpWithApple(name);
 
-      await _gotoHome();
+      await _gotoNextPage();
     } on Exception catch (e) {
       setState(() {
         _isLoading = false;

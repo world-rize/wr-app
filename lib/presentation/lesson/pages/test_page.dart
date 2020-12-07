@@ -2,6 +2,7 @@
 
 import 'dart:math';
 
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,11 @@ class TestPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => TestPageState(section: section);
+}
+
+enum AnswerResult {
+  correct,
+  incorrect,
 }
 
 /// [TestPage] の State
@@ -62,6 +68,55 @@ class TestPageState extends State<TestPage> {
     _isLoading = false;
     _index = 0;
     _answers = [];
+  }
+
+  void _playOneshot(String path) {
+    final player = AssetsAudioPlayer();
+    final audio = Audio(path);
+    player.open(audio, autoStart: true);
+  }
+
+  void _showTransparentDialog(String path) {
+    showDialog(
+      context: context,
+      builder: (_) => Material(
+        type: MaterialType.transparency,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Center(
+            child: Image.network(path),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // TODO: refactoring
+  void playAnswerResultSe(AnswerResult result) {
+    switch (result) {
+      case AnswerResult.correct:
+        _playOneshot('assets/se/correct.mp3');
+        break;
+      case AnswerResult.incorrect:
+        _playOneshot('assets/se/incorrect.mp3');
+        break;
+    }
+  }
+
+  void showAnswerResultImage(AnswerResult result) {
+    switch (result) {
+      case AnswerResult.correct:
+        _showTransparentDialog(
+            'https://4.bp.blogspot.com/-CUR5NlGuXkU/UsZuCrI78dI/AAAAAAAAc20/mMqQPb9bBI0/s800/mark_maru.png');
+        break;
+      case AnswerResult.incorrect:
+        _showTransparentDialog(
+            'https://1.bp.blogspot.com/-eJGNGE4u8LA/UsZuCAMuehI/AAAAAAAAc2c/QQ5eBSC2Ey0/s800/mark_batsu.png');
+        break;
+    }
   }
 
   // テストを終了する
@@ -113,9 +168,11 @@ class TestPageState extends State<TestPage> {
     // show result
     if (answer == _answerIndex) {
       _corrects += 1;
-      // _showQuestionResult(correct: true);
+      showAnswerResultImage(AnswerResult.correct);
+      playAnswerResultSe(AnswerResult.correct);
     } else {
-      // _showQuestionResult(correct: false);
+      showAnswerResultImage(AnswerResult.incorrect);
+      playAnswerResultSe(AnswerResult.incorrect);
     }
 
     // test finish

@@ -45,6 +45,9 @@ dependencies:
   flutter_icons: ^1.1.0
   heatmap_calendar: ^1.2.8
   like_button: ^1.0.1
+  expandable: ^4.1.4
+  video_player: ^1.0.1
+  chewie:
   shimmer: ^1.1.0
 
   # util
@@ -77,7 +80,7 @@ dependencies:
   google_sign_in_mocks: ^0.1.0+2
 
   flutter_inappwebview: ^4.0.0+4
-  modal_bottom_sheet: ^0.2.0
+  modal_bottom_sheet: ^1.0.0+1
   sentry: ^3.0.0
   admob_flutter: ^1.0.1
   in_app_purchase: ^0.3.4+8
@@ -113,6 +116,8 @@ flutter:
     - assets/icon/
     - assets/voices/
     - assets/thumbnails/
+    - assets/se/
+    - assets/movies/
     - secrets/
 
 flutter_icons:

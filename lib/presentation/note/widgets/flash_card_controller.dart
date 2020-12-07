@@ -94,7 +94,7 @@ class FlashCardController extends StatelessWidget {
             expand: false,
             context: context,
             backgroundColor: Colors.transparent,
-            builder: (context, scrollController) => Material(
+            builder: (context) => Material(
               child: SafeArea(
                 top: false,
                 child: Row(
@@ -169,7 +169,7 @@ class FlashCardController extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 child: PitchSlider(
                   pitch: pitch,
-                  pitches: const [0.5, 0.75, 1.0, 1.5],
+                  pitches: const [0.8, 0.9, 1.0, 1.1, 1.2],
                   onChanged: (double p) {
                     Provider.of<FlashCardNotifier>(context, listen: false)
                         .setPlaySpeed(p);

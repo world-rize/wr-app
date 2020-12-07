@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/on_boarding/pages/index.dart';
+import 'package:wr_app/presentation/on_boarding/pages/tutorial_page.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/flavor.dart';
@@ -194,6 +195,13 @@ class _SettingsState extends State<SettingsPage> {
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => OnBoardingPage()));
+          },
+        ),
+        SettingsTile(
+          title: 'Tutorial Page',
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => TutorialPage()));
           },
         ),
         SettingsTile.switchTile(
