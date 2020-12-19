@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
+import 'package:wr_app/ui/widgets/primary_button.dart';
 
 class RewardDialog extends StatelessWidget {
   const RewardDialog({this.text, this.onTap});
@@ -25,13 +26,10 @@ class RewardDialog extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          GFButton(
-            color: Colors.orange,
-            text: I.of(context).answerQuestionnaire,
-            size: GFSize.LARGE * 1.5,
-            shape: GFButtonShape.pills,
-            fullWidthButton: true,
-            textStyle: TextStyle(fontSize: 18),
+          PrimaryButton(
+            label: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(I.of(context).answerQuestionnaire)),
             onPressed: () async {
               final systemNotifier = Provider.of<SystemNotifier>(
                 context,
@@ -52,14 +50,12 @@ class RewardDialog extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          GFButton(
-            color: Colors.orange,
-            text: I.of(context).close,
-            size: GFSize.LARGE,
-            shape: GFButtonShape.pills,
-            fullWidthButton: true,
+          PrimaryButton(
+            label: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(I.of(context).close)),
             onPressed: onTap,
-          )
+          ),
         ],
       ),
     );

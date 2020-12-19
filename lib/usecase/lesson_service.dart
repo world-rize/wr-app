@@ -115,6 +115,7 @@ class LessonService {
         list.phrases
             .add(FavoritePhraseDigest(id: phraseId, createdAt: DateTime.now()));
       } else {
+        // 時間を上書きする
         list.phrases[index] =
             FavoritePhraseDigest(id: phraseId, createdAt: DateTime.now());
       }

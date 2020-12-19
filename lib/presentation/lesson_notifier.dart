@@ -116,7 +116,7 @@ class LessonNotifier with ChangeNotifier {
     return phrasesWhere((p) => favoriteIds.contains(p.id));
   }
 
-  /// フレーズをお気に入りに登録します
+  /// favoriteのboolをsetする
   Future<void> favoritePhrase({
     @required User user,
     @required String phraseId,
@@ -125,7 +125,7 @@ class LessonNotifier with ChangeNotifier {
     // TODO: default以外に保存できるようにする
     // defaultふぁぼりてリスト以外に保存したらdeleteするときむずかしくね?
     var defaultFavoriteList =
-        (await favorites).firstWhere((element) => element.id == 'default');
+        (await favorites).firstWhere((element) => element.isDefault);
 
     // false -> true
     defaultFavoriteList = await _lessonService.favorite(
@@ -134,6 +134,9 @@ class LessonNotifier with ChangeNotifier {
       phraseId: phraseId,
       favorite: favorite,
     );
+    favorites = () async {
+      return [defaultFavoriteList];
+    }();
 
     // 連打されると困るのでお気に入り登録するときだけdelay
     if (favorite) {
