@@ -55,7 +55,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "bottomNavNote" : MessageLookupByLibrary.simpleMessage("Note"),
     "cancel" : MessageLookupByLibrary.simpleMessage("Cancel"),
     "changeButtonText" : MessageLookupByLibrary.simpleMessage("Change"),
-    "close" : MessageLookupByLibrary.simpleMessage("閉じる"),
+    "close" : MessageLookupByLibrary.simpleMessage("Close"),
     "currentPasswordHintText" : MessageLookupByLibrary.simpleMessage("Current password"),
     "darkMode" : MessageLookupByLibrary.simpleMessage("Dark Mode"),
     "doNotEmptyMessage" : MessageLookupByLibrary.simpleMessage("Do not empty"),
