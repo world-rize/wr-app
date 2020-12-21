@@ -2,15 +2,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
+import 'package:wr_app/presentation/on_boarding/notifier/tutorial_page_notifier.dart';
+import 'package:wr_app/presentation/on_boarding/pages/tutorial_page.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_up_form.dart';
 import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/loading_view.dart';
+import 'package:wr_app/usecase/system_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
@@ -25,10 +29,10 @@ class SignUpPage extends StatefulWidget {
 class _SignUpPageState extends State<SignUpPage> {
   bool _isLoading;
 
-  Future _gotoNextPage() {
-    Navigator.of(context).push(
+  Future _gotoNextPage() async {
+    await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => RootView(),
+        builder: (context) => TutorialPage(),
       ),
     );
   }
