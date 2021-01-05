@@ -37,7 +37,9 @@ class LessonNotifier with ChangeNotifier {
   LessonService _lessonService;
 
   List<Lesson> _lessons = [];
-  Future<List<FavoritePhraseList>> favorites;
+  Future<List<FavoritePhraseList>> favorites = () async {
+    return <FavoritePhraseList>[];
+  }();
 
   /// singleton
   static LessonNotifier _cache;
