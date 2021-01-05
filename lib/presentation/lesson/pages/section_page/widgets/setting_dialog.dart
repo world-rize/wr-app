@@ -24,7 +24,7 @@ class PhraseDetailSettingsDialog extends StatelessWidget {
             padding: EdgeInsets.all(8),
             child: PitchSlider(
               pitch: vp.speed,
-              pitches: const [0.5, 0.75, 1.0, 1.5],
+              pitches: const [0.8, 0.9, 1.0, 1.1, 1.2],
               onChanged: (double p) {
                 vp.setSpeed(p);
               },
