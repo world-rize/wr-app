@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/ui/theme.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/env_keys.dart';
@@ -67,7 +68,7 @@ class _SignUpFormState extends State<SignUpForm> {
   @override
   Widget build(BuildContext context) {
     final env = GetIt.I<EnvKeys>();
-    const splashColor = Color(0xff56c0ea);
+    final splashColor = Palette.symbolColor;
     final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
 
     final _nameField = TextFormField(

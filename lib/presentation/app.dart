@@ -24,8 +24,8 @@ class WRApp extends StatelessWidget {
     final observer = GetIt.I<FirebaseAnalyticsObserver>();
 
     return MaterialApp(
-      theme: WorldRizeLightTheme,
-      darkTheme: WorldRizeDarkTheme,
+      theme: wrLightTheme,
+      darkTheme: wrDarkTheme,
       themeMode: sn.getThemeMode(),
       debugShowCheckedModeBanner: false,
       navigatorObservers: <NavigatorObserver>[

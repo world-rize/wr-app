@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/ui/theme.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 
 import './sign_in_page.dart';
@@ -12,7 +13,7 @@ class OnBoardingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    const splashColor = Color(0xff56c0ea);
+    final splashColor = Palette.symbolColor;
 
     final signUpField = Padding(
       padding: const EdgeInsets.all(8),

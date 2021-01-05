@@ -2,11 +2,20 @@
 
 import 'package:flutter/material.dart';
 
+// 色
+class Palette {
+  void _;
+
+  static const Color symbolColor = Color(0xff56c0ea);
+  static const Color correctColor = Color(0xff77ff36);
+  static const Color inCorrectColor = Color(0xffff5757);
+}
+
 /// アプリのUIスタイル
 // TODO(high): implement
-final ThemeData WorldRizeLightTheme = ThemeData(
+final ThemeData wrLightTheme = ThemeData(
   brightness: Brightness.light,
-  primaryColor: const Color(0xff56c0ea),
+  primaryColor: Palette.symbolColor,
   accentColor: Colors.black,
   backgroundColor: Colors.white,
   primaryIconTheme: const IconThemeData(color: Colors.white),
@@ -48,9 +57,9 @@ final ThemeData WorldRizeLightTheme = ThemeData(
   ),
 );
 
-final ThemeData WorldRizeDarkTheme = ThemeData(
+final ThemeData wrDarkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: const Color(0xff56c0ea),
+  primaryColor: Palette.symbolColor,
   accentColor: Colors.white,
   backgroundColor: Colors.black45,
   primaryIconTheme: const IconThemeData(color: Colors.white),
