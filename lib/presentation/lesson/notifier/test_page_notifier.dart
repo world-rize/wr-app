@@ -4,11 +4,9 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wr_app/domain/lesson/model/phrase.dart';
+import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/domain/lesson/model/test_stats.dart';
-import 'package:wr_app/presentation/lesson_notifier.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
@@ -22,11 +20,22 @@ enum AnswerResult {
 /// システム情報など
 class TestPageNotifier with ChangeNotifier {
   TestPageNotifier({
+    @required this.choiceSources,
     @required this.section,
     @required this.userService,
-  });
+  }) {
+    createRandomSelections();
+  }
 
   final UserService userService;
+
+  // 選択肢数
+  final choiceLength = 4;
+
+  final List<Phrase> choiceSources;
+
+  // 現在の選択肢
+  final List<String> choices = [];
 
   /// くるくるをみせるか
   bool isLoading = false;
@@ -48,37 +57,6 @@ class TestPageNotifier with ChangeNotifier {
 
   /// stats
   TestStats stats;
-
-  void showAnswerResultImage(BuildContext context, AnswerResult result) {
-    switch (result) {
-      case AnswerResult.correct:
-        _showTransparentDialog(context,
-            'https://4.bp.blogspot.com/-CUR5NlGuXkU/UsZuCrI78dI/AAAAAAAAc20/mMqQPb9bBI0/s800/mark_maru.png');
-        break;
-      case AnswerResult.incorrect:
-        _showTransparentDialog(context,
-            'https://1.bp.blogspot.com/-eJGNGE4u8LA/UsZuCAMuehI/AAAAAAAAc2c/QQ5eBSC2Ey0/s800/mark_batsu.png');
-        break;
-    }
-  }
-
-  void _showTransparentDialog(BuildContext context, String path) {
-    showDialog(
-      context: context,
-      builder: (_) => Material(
-        type: MaterialType.transparency,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Center(
-            child: Image.network(path),
-          ),
-        ),
-      ),
-    );
-  }
 
   // テストを終了する
   Future finishTest() async {
@@ -102,7 +80,7 @@ class TestPageNotifier with ChangeNotifier {
       stats = TestStats(
         challengeAchieved: await userService.checkTestStreaks(user: user),
         section: section,
-        questions: 7,
+        questions: section.phrases.length,
         corrects: corrects,
         answers: answers,
       );
@@ -115,29 +93,35 @@ class TestPageNotifier with ChangeNotifier {
     }
   }
 
-  /// 選択肢を設定する
-  List<String> randomSelections(BuildContext context) {
-    final notifier = Provider.of<LessonNotifier>(context);
-    final selections =
-        notifier.phrases.sample(4).map((phrase) => phrase.title['en']).toList();
-    answerIndex = Random().nextInt(4);
-    selections[answerIndex] = section.phrases[index].title['en'];
-    return selections;
+  /// 選択肢を作成する
+  void createRandomSelections() {
+    final _choices = choiceSources
+        .sample(choiceLength)
+        .map((phrase) => phrase.title['en'])
+        .toList();
+    _choices[answerIndex] = section.phrases[index].title['en'];
+    choices
+      ..clear()
+      ..addAll(_choices);
+  }
+
+  Future checkAnswer(int answer) async {
+    answers.add(answer == answerIndex);
+
+    if (answer == answerIndex) {
+      corrects += 1;
+    }
   }
 
   /// 次の問題へ
-  Future<void> next(BuildContext context, int answer) async {
-    answers.add(answer == answerIndex);
-
-    // show result
-    if (answer == answerIndex) {
-      corrects += 1;
-      showAnswerResultImage(context, AnswerResult.correct);
-    } else {
-      showAnswerResultImage(context, AnswerResult.incorrect);
-    }
+  void next() {
     // seek index
     index++;
+
+    // 選択肢を作成
+    answerIndex = Random().nextInt(choiceLength);
+    createRandomSelections();
+
     notifyListeners();
   }
 }

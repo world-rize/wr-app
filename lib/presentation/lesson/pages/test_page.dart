@@ -1,6 +1,5 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
-import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -9,14 +8,14 @@ import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/domain/lesson/model/test_stats.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/lesson/pages/test_result_page.dart';
-import 'package:wr_app/presentation/lesson/test_notifier.dart';
+import 'package:wr_app/presentation/lesson/notifier/test_page_notifier.dart';
 import 'package:wr_app/presentation/lesson/widgets/test_choices.dart';
+import 'package:wr_app/presentation/lesson_notifier.dart';
 import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/usecase/user_service.dart';
 
 /// テストページ
 ///
-/// <https://projects.invisionapp.com/share/SZV8FUJV5TQ#/screens/397469139>
 class TestPage extends StatelessWidget {
   const TestPage({@required this.section});
 
@@ -25,8 +24,13 @@ class TestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final us = GetIt.I<UserService>();
+    final ln = Provider.of<LessonNotifier>(context);
     return ChangeNotifierProvider.value(
-      value: TestPageNotifier(section: section, userService: us),
+      value: TestPageNotifier(
+        choiceSources: ln.phrases,
+        section: section,
+        userService: us,
+      ),
       child: _TestPage(),
     );
   }
@@ -91,17 +95,18 @@ class _TestPage extends StatelessWidget {
             ],
           ),
           body: TestChoices(
-              phrase: tn.section
-                  .phrases[min(tn.index, tn.section.phrases.length - 1)],
-              selection: tn.randomSelections(context),
-              onNext: (choiceIdx) async {
-                // test finish
-                await tn.next(context, choiceIdx);
+              phrase: tn.section.phrases[tn.index],
+              choices: tn.choices,
+              answerIndex: tn.answerIndex,
+              onNext: (answer) async {
+                await tn.checkAnswer(answer);
 
-                if (tn.index == tn.section.phrases.length) {
+                if (tn.index == tn.section.phrases.length - 1) {
                   await tn.finishTest();
                   await _goResultPage(context, tn.stats);
                 }
+
+                tn.next();
               }),
         ),
       ),
