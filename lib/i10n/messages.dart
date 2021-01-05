@@ -370,4 +370,20 @@ mixin Messages {
   // 'An undefined Error happened.'
   String get errorUndefinedError =>
       Intl.message('不明なエラー', name: 'errorUndefinedError');
+
+  // 日付
+  String dateFromNow(DateTime date) {
+    final Duration difference = DateTime.now().difference(date);
+    final int sec = difference.inSeconds;
+
+    if (sec >= 60 * 60 * 24) {
+      return Intl.message('${difference.inDays.toString()}日前', args: [date]);
+    } else if (sec >= 60 * 60) {
+      return Intl.message('${difference.inHours.toString()}時間前', args: [date]);
+    } else if (sec >= 60) {
+      return Intl.message('${difference.inMinutes.toString()}分前', args: [date]);
+    } else {
+      return Intl.message('たった今', args: [date]);
+    }
+  }
 }
