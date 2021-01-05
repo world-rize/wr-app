@@ -9,6 +9,7 @@ import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_in_form.dart';
 import 'package:wr_app/presentation/root_view.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
+import 'package:wr_app/ui/theme.dart';
 import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/extensions.dart';
@@ -121,7 +122,7 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-    const splashColor = Color(0xff56c0ea);
+    final splashColor = Palette.symbolColor;
 
     return Scaffold(
       appBar: AppBar(

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/mypage/pages/friends.dart';
-import 'package:wr_app/presentation/mypage/pages/info_page.dart';
+import 'package:wr_app/presentation/mypage/pages/announcement_page.dart';
 import 'package:wr_app/presentation/mypage/pages/upgrade_page.dart';
 import 'package:wr_app/presentation/mypage/widgets/user_info.dart';
 import 'package:wr_app/presentation/settings/pages/account_settings_page.dart';
@@ -88,7 +88,7 @@ class MyPagePage extends StatelessWidget {
               icon: 'assets/icon/mypage_info.png',
               onTap: () {
                 Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (_) => InformationPage()));
+                    .push(MaterialPageRoute(builder: (_) => AnnouncementPage()));
               },
             ),
           ).padding(),

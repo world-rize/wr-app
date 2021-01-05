@@ -4,10 +4,13 @@ import 'package:apple_sign_in/apple_sign_in.dart';
 import 'package:apple_sign_in/apple_sign_in.dart' as siwa;
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
 import 'package:wr_app/i10n/i10n.dart';
+import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/ui/widgets/rounded_button.dart';
 import 'package:wr_app/util/apple_signin.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/flavor.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({
@@ -45,6 +48,7 @@ class _SignInFormState extends State<SignInForm> {
   @override
   Widget build(BuildContext context) {
     final appleSignInAvailable = GetIt.I<AppleSignInAvailable>();
+    final sn = Provider.of<SystemNotifier>(context);
 
     final _emailField = TextFormField(
       key: const Key('sign_in_form_email'),
@@ -169,7 +173,8 @@ class _SignInFormState extends State<SignInForm> {
           // if (appleSignInAvailable.isAvailable)
           //   _signInWithAppleButton.padding(),
 
-          // _signInByTestUserButton.padding(),
+          if (sn.flavor == Flavor.development)
+            _signInByTestUserButton.padding(),
         ],
       ),
     );

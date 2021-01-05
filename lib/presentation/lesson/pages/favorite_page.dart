@@ -10,39 +10,59 @@ import 'package:wr_app/presentation/lesson/pages/section_page/section_page.dart'
 import 'package:wr_app/presentation/lesson/widgets/phrase_card.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 
 import '../../lesson_notifier.dart';
 
 /// Lesson > index > favorites
 /// - favorites page of lesson
 class FavoritePage extends StatelessWidget {
+  Future<List<Tuple2<Phrase, bool>>> _getFavorites(BuildContext context) async {
+    final un = Provider.of<UserNotifier>(context);
+    final ln = Provider.of<LessonNotifier>(context);
+
+    final phrases = await ln.getFavoritePhrases(un.user);
+    final List<Tuple2<Phrase, bool>> tuples = [];
+    Future.forEach(phrases, (element) async {
+      final exist = await ln.existPhraseInFavoriteList(
+        user: un.user,
+        phraseId: element.id,
+      );
+      tuples.add(Tuple2(element, exist));
+    });
+    return tuples;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final primaryColor = Theme.of(context).primaryColor;
+    final primaryColor = Theme
+        .of(context)
+        .primaryColor;
     final un = Provider.of<UserNotifier>(context);
     final ln = Provider.of<LessonNotifier>(context);
 
     final favoritePhraseCards = FutureBuilder<List<Tuple2<Phrase, bool>>>(
-        future: ln.getFavoritePhrases(un.user).then((value) async {
-          return Future.forEach(value, (element) async {
-            return Tuple2(
-                element,
-                await ln.existPhraseInFavoriteList(
-                    user: un.user, phraseId: element.id));
-          });
-        }),
+        future: _getFavorites(context),
         builder: (_, res) {
           if (!res.hasData) {
-            return Padding(
-              padding: const EdgeInsets.all(8),
-              child: CircularProgressIndicator(),
+            return const Center(
+              child: Padding(
+                padding: EdgeInsets.all(24),
+                child: CircularProgressIndicator(),
+              ),
             );
+          }
+
+          if (res.hasError) {
+            InAppLogger.error(res.error);
           }
 
           final section = Section(
             id: 'favorite',
-            title: I.of(context).favoritePageTitle,
-            phrases: res.data.map((e) => e.item1),
+            title: I
+                .of(context)
+                .favoritePageTitle,
+            phrases: res.data.map((e) => e.item1).toList(),
           );
 
           return Column(
@@ -53,10 +73,11 @@ class FavoritePage extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (_) => SectionPage(
-                        section: section,
-                        index: index,
-                      ),
+                      builder: (_) =>
+                          SectionPage(
+                            section: section,
+                            index: index,
+                          ),
                     ),
                   );
                 },
@@ -76,7 +97,9 @@ class FavoritePage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: primaryColor,
         title: Text(
-          I.of(context).favoritePageTitle,
+          I
+              .of(context)
+              .favoritePageTitle,
           style: const TextStyle(color: Colors.white),
         ),
       ),

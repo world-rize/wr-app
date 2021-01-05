@@ -15,6 +15,7 @@ import 'package:wr_app/presentation/lesson/widgets/challenge_achieved_dialog.dar
 import 'package:wr_app/presentation/lesson/widgets/reward_dialog.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
+import 'package:wr_app/ui/theme.dart';
 import 'package:wr_app/ui/widgets/primary_button.dart';
 
 import '../widgets/phrase_card.dart';
@@ -88,8 +89,9 @@ class _TestResultPageState extends State<TestResultPage> {
                   favorite = snapshot.data;
                 }
                 return PhraseCard(
-                  highlight:
-                      widget.stats.answers[i] ? Colors.green : Colors.red,
+                  highlight: widget.stats.answers[i]
+                      ? Palette.correctColor
+                      : Palette.inCorrectColor,
                   phrase: widget.stats.section.phrases[i],
                   onTap: () {
                     Navigator.of(context).push(

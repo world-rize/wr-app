@@ -97,7 +97,14 @@ class _RootViewState extends State<RootView>
     } on Exception catch (e) {
       InAppLogger.error(e);
       NotifyToast.error(e);
-      rethrow;
+
+      // トップ画面に戻す
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => OnBoardingPage(),
+          fullscreenDialog: true,
+        ),
+      );
     }
   }
 
