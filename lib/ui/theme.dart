@@ -9,6 +9,8 @@ class Palette {
   static const Color symbolColor = Color(0xff56c0ea);
   static const Color correctColor = Color(0xff77ff36);
   static const Color inCorrectColor = Color(0xffff5757);
+
+  static const Color primaryOrange = Color(0xffffb944);
 }
 
 /// アプリのUIスタイル
