@@ -131,3 +131,8 @@ desc 'cleanとか'
 task :clean do
   sh 'flutter clean && flutter pub get && flutter pub cache repair'
 end
+
+desc 'update submodule'
+task :update_submodule do
+  sh 'git submodule update --remote'
+end

@@ -16,6 +16,7 @@ import 'package:wr_app/presentation/voice_player.dart';
 import 'package:wr_app/ui/widgets/boldable_text.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/sentry.dart';
 
 /// phrase example view testなら[isTest]trueでキーフレーズを隠す
@@ -213,6 +214,7 @@ class PhraseExampleCard extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             if (!snapshot.hasError) {
+              InAppLogger.debug(snapshot.error.toString());
               sentryReportError(
                   error: snapshot.error, stackTrace: StackTrace.current);
             }
