@@ -12,6 +12,16 @@ task :help do
   sh 'rake -T'
 end
 
+task :release do
+  cd 'android' do
+    sh 'fastlane beta'
+  end
+
+  cd 'ios' do
+    sh 'fastlane beta'
+  end
+end
+
 desc 'Run App with Development'
 task :dev do
   sh 'flutter run --flavor development -t lib/main_development.dart'

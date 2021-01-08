@@ -1,3 +1,6 @@
+## v0.7.0 Beta Release(2021-01-06)
+- 多数の修正
+
 ## v0.6.4 Beta Release(2020-10-17)
 - Sign in with Apple, Google Sign in 保留 
 - 多数の修正
