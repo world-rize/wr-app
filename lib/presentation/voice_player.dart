@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:wr_app/domain/lesson/model/message.dart';
 import 'package:wr_app/domain/voice_accent.dart';
 import 'package:wr_app/util/logger.dart';
@@ -32,6 +31,7 @@ class VoicePlayer with ChangeNotifier {
 
   VoicePlayer._internal() {
     InAppLogger.debug('VoicePlayer._internal()');
+    player = AssetsAudioPlayer();
     isPlaying = false;
     _speed = 1.0;
     locale = VoiceAccent.americanEnglish;
@@ -61,6 +61,8 @@ class VoicePlayer with ChangeNotifier {
     await Future.forEach(messages, (message) async {
       // 毎回playerを作り直す
       player = AssetsAudioPlayer();
+      // 毎回スピードをセット
+      await player.setPlaySpeed(_speed);
       player.playlistFinished.listen((finished) {
         print('done? isPlaying: ${player.isPlaying.value}');
         if (finished) {
@@ -100,8 +102,7 @@ class VoicePlayer with ChangeNotifier {
   }
 
   void setSpeed(double speed) {
-    assert([0.8, 0.9, 1.0, 1.1, 1.2].contains(speed));
-    player.setPlaySpeed(speed);
+    print(speed);
     _speed = speed;
     notifyListeners();
   }

@@ -7,10 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/domain/lesson/model/test_stats.dart';
 import 'package:wr_app/i10n/i10n.dart';
-import 'package:wr_app/presentation/lesson/pages/test_result_page.dart';
 import 'package:wr_app/presentation/lesson/notifier/test_page_notifier.dart';
+import 'package:wr_app/presentation/lesson/pages/test_result_page.dart';
 import 'package:wr_app/presentation/lesson/widgets/test_choices.dart';
 import 'package:wr_app/presentation/lesson_notifier.dart';
+import 'package:wr_app/presentation/user_notifier.dart';
 import 'package:wr_app/ui/widgets/loading_view.dart';
 import 'package:wr_app/usecase/user_service.dart';
 
@@ -102,7 +103,13 @@ class _TestPage extends StatelessWidget {
                 await tn.checkAnswer(answer);
 
                 if (tn.index == tn.section.phrases.length - 1) {
-                  await tn.finishTest();
+                  final corrects = await tn.finishTest();
+
+                  // get points
+                  // TODO: fix
+                  final un = Provider.of<UserNotifier>(context, listen: false);
+                  await un.callGetPoint(points: corrects);
+
                   await _goResultPage(context, tn.stats);
                 }
 
