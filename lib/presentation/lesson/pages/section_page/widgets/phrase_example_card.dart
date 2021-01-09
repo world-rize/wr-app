@@ -213,7 +213,7 @@ class PhraseExampleCard extends StatelessWidget {
         future: favorited,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            if (!snapshot.hasError) {
+            if (snapshot.hasError) {
               InAppLogger.debug(snapshot.error.toString());
               sentryReportError(
                   error: snapshot.error, stackTrace: StackTrace.current);

@@ -35,7 +35,7 @@ dependencies:
 
   # ui
   fluttertoast: ^4.0.0
-  cupertino_icons: ^0.1.2
+  cupertino_icons: ^1.0.0
   flutter_swiper: ^1.1.5
   getflutter: ^1.0.10
   flappy_search_bar: 1.4.1
@@ -46,8 +46,7 @@ dependencies:
   heatmap_calendar: ^1.2.8
   like_button: ^1.0.1
   expandable: ^4.1.4
-  video_player: ^1.0.1
-  chewie:
+  chewie: ^0.12.1+1
   shimmer: ^1.1.0
 
   # util

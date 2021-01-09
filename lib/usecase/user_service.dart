@@ -3,11 +3,9 @@
 import 'package:collection/collection.dart';
 import 'package:data_classes/data_classes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/lesson/model/test_result.dart';
 import 'package:wr_app/domain/note/model/note.dart';
-import 'package:wr_app/domain/system/model/user_activity.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/membership.dart';
 import 'package:wr_app/domain/user/model/user.dart';
@@ -48,7 +46,8 @@ class UserService {
     final newUser = User.create()
       ..uuid = uid
       ..email = email
-      ..name = name;
+      ..name = name
+      ..membership = Membership.pro;
 
     await _userRepository.createUser(user: newUser);
     await _favoriteRepository.createFavoriteList(
