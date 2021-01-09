@@ -14,9 +14,11 @@ import 'package:wr_app/infrastructure/util/versioning.dart';
 import 'package:wr_app/util/logger.dart';
 
 extension FireStoreBatchExtension on WriteBatch {
-  void addAll<T>(CollectionReference ref, List<Map<String, dynamic>> entries) {
-    for (final entry in entries) {
-      set(ref.doc(), entry);
+  void addAll<T>(CollectionReference ref, Iterable<T> list,
+      MapEntry<String, Map<String, dynamic>> Function(T) toEntry) {
+    for (final data in list) {
+      final entry = toEntry(data);
+      set(ref.doc(entry.key), entry.value);
     }
   }
 }
@@ -70,8 +72,8 @@ class MigrationExecutor {
       // set
       final batch = store.batch()
         ..set(toRef, userV1.toJson())
-        ..addAll(
-            toRef.collection('notes'), notesV1.map((note) => note.toJson()));
+        ..addAll<NoteV1>(toRef.collection('notes'), notesV1,
+            (note) => MapEntry(note.id, note.toJson()));
 
       await batch.commit();
     } on Exception catch (e) {
@@ -107,8 +109,8 @@ class MigrationExecutor {
       // set
       final batch = store.batch()
         ..set(toRef, userV2.toJson())
-        ..addAll(
-            toRef.collection('notes'), notesV2.map((note) => note.toJson()));
+        ..addAll<NoteV2>(toRef.collection('notes'), notesV2,
+            (note) => MapEntry(note.id, note.toJson()));
 
       await batch.commit();
     } on Exception catch (e) {
@@ -135,8 +137,8 @@ class MigrationExecutor {
 
       // set
       final batch = store.batch()
-        ..addAll(toRef.collection('items'),
-            itemsV1.map((item) => item.toJson()));
+        ..addAll<ShopItemV1>(toRef.collection('items'), itemsV1,
+            (item) => MapEntry(item.id, item.toJson()));
 
       await batch.commit();
     } on Exception catch (e) {
@@ -165,8 +167,8 @@ class MigrationExecutor {
 
       // set
       final batch = store.batch()
-        ..addAll(toRef.collection('items'),
-            itemsV2.map((item) => item.toJson()));
+        ..addAll<ShopItemV2>(toRef.collection('items'), itemsV2,
+            (item) => MapEntry(item.id, item.toJson()));
 
       await batch.commit();
     } on Exception catch (e) {

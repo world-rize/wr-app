@@ -2,6 +2,9 @@
 
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wr_app/domain/note/model/note.dart';
+import 'package:wr_app/domain/note/model/note_v1.dart';
+import 'package:wr_app/domain/note/model/note_v2.dart';
 import 'package:wr_app/domain/shop/model/shop_item.dart';
 import 'package:wr_app/domain/shop/model/shop_item_v1.dart';
 import 'package:wr_app/domain/shop/model/shop_item_v2.dart';
@@ -9,14 +12,11 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/domain/user/model/user_v1.dart';
 import 'package:wr_app/domain/user/model/user_v2.dart';
 import 'package:wr_app/util/migrations.dart';
-import 'package:wr_app/infrastructure/util/versioning.dart';
+import '../util/test_util.dart';
 
 void main() {
   final store = MockFirestoreInstance();
   final migrationExecutor = MigrationExecutor(store: store);
-  final v0Ref = store.version('v0');
-  final v1Ref = store.version('v1');
-  final v2Ref = store.version('v2');
   const uid = 'test';
 
   setUp(() async {
@@ -38,6 +38,9 @@ void main() {
       ..uuid = uid
       ..name = uid;
 
+    final notes =
+        ['note1', 'note2'].map((id) => Note.create(title: id)..id = id);
+
     final items = ['item1', 'item2'].map((id) => ShopItem(
           id: id,
           title: id,
@@ -46,44 +49,50 @@ void main() {
           expendable: false,
         ));
 
-    await v0Ref.collection('users').add(userV0.toJson());
+    await store.set('v0/users/$uid', userV0.toJson());
+
+    for (final note in notes) {
+      await store.set('v0/users/$uid/notes/${note.id}', note.toJson());
+    }
 
     for (final item in items) {
-      await v0Ref.collection('items').add(item.toJson());
+      await store.set('v0/items/${item.id}', item.toJson());
     }
   });
 
   group('Migration', () {
     test('user data migration', () async {
-      print(store.dump());
-
       await migrationExecutor.migrateUserData(uid);
 
-      final userV1ss = await v1Ref.collection('users').doc(uid).get();
-      expect(userV1ss.exists, true);
-      final userV1 = UserV1.fromJson(userV1ss.data());
-      expect(userV1.nameUpperCase, 'TEST');
-
-      final userV2ss = await v2Ref.collection('users').doc(uid).get();
-      expect(userV2ss.exists, true);
-      final userV2 = UserV2.fromJson(userV2ss.data());
-      expect(userV2.nameReversed, 'TSET');
+      expect(
+          (await store.get<UserV1>('v1/users/$uid', (json) => UserV1.fromJson(json))).nameUpperCase,
+          'TEST'
+      );
+      expect(
+          (await store.get<UserV2>('v2/users/$uid', (json) => UserV2.fromJson(json))).nameReversed,
+          'TSET'
+      );
+      expect(
+          (await store.get<NoteV1>('v1/users/$uid/notes/note1', (json) => NoteV1.fromJson(json))).titleUpperCase,
+          'NOTE1'
+      );
+      expect(
+          (await store.get<NoteV2>('v2/users/$uid/notes/note1', (json) => NoteV2.fromJson(json))).titleReversed,
+          '1ETON'
+      );
     });
 
     test('master data migration', () async {
-      print(store.dump());
-
       await migrationExecutor.migrateMasterData();
 
-      final itemV1ss = await v1Ref.collection('items').doc('item1').get();
-      expect(itemV1ss.exists, true);
-      final itemV1 = ShopItemV1.fromJson(itemV1ss.data());
-      expect(itemV1.titleUpperCase, 'ITEM1');
-
-      final itemV2ss = await v2Ref.collection('items').doc('item1').get();
-      expect(itemV2ss.exists, true);
-      final itemV2 = ShopItemV2.fromJson(itemV2ss.data());
-      expect(itemV2.titleReversed, '1METI');
+      expect(
+          (await store.get<ShopItemV1>('v1/items/item1', (json) => ShopItemV1.fromJson(json))).titleUpperCase,
+          'ITEM1'
+      );
+      expect(
+          (await store.get<ShopItemV2>('v2/items/item1', (json) => ShopItemV2.fromJson(json))).titleReversed,
+          '1METI'
+      );
     });
   });
 }
