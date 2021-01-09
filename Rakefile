@@ -24,17 +24,17 @@ end
 
 desc 'Run App with Development'
 task :dev do
-  sh 'flutter run --flavor development -t lib/main_development.dart'
+  sh 'fvm flutter run --flavor development -t lib/main_development.dart'
 end
 
 desc 'Run App with Staging'
 task :stg do
-  sh 'flutter run --flavor staging -t lib/main_staging.dart'
+  sh 'fvm flutter run --flavor staging -t lib/main_staging.dart'
 end
 
 desc 'Run App with Production'
 task :prd do
-  sh 'flutter run --flavor production -t lib/main_production.dart'
+  sh 'fvm flutter run --flavor production -t lib/main_production.dart'
 end
 
 desc 'open Xcode Workspace'
@@ -45,13 +45,13 @@ end
 desc 'コード生成'
 task :gen do
   puts '[Task gen]'
-  sh 'flutter pub run build_runner build --delete-conflicting-outputs'
+  sh 'fvm flutter pub run build_runner build --delete-conflicting-outputs'
 end
 
 desc 'コード生成(watch)'
 task :watch do
   puts '[Task watch]'
-  sh 'flutter pub run build_runner watch --delete-conflicting-outputs'
+  sh 'fvm flutter pub run build_runner watch --delete-conflicting-outputs'
 end
 
 desc 'i10n生成'
@@ -63,28 +63,28 @@ end
 desc 'スプラッシュ画像更新'
 task :splash do
   puts '[Task splash]'
-  sh 'flutter pub run flutter_native_splash:create'
+  sh 'fvm flutter pub run flutter_native_splash:create'
 end
 
 desc 'アイコン更新'
 task :icon do
   puts '[Task icon]'
-  sh 'flutter pub run flutter_launcher_icons:main'
+  sh 'fvm flutter pub run flutter_launcher_icons:main'
 end
 
 desc 'テスト'
 task :test do
   puts '[Task test]'
   # flutter unit test
-  sh 'flutter test --coverage'
+  sh 'fvm flutter test --coverage'
 
   # TODO: flutter driver test
   # TODO: codecov
 
   # clound functions test
-  cd 'functions' do
-    sh 'yarn test'
-  end
+  # cd 'functions' do
+  #  sh 'yarn test'
+  # end
 end
 
 desc 'ドキュメント'
