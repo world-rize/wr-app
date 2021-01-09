@@ -48,7 +48,7 @@ class MigrationExecutor {
   }
 
   // v0 -> v1
-  Future _migrateUserDataFromV0(String uid) async {
+  Future migrateUserDataFromV0(String uid) async {
     const from = 'v0';
     const to = 'v1';
     final fromRef = userRef(from, uid);
@@ -59,6 +59,8 @@ class MigrationExecutor {
     }
 
     try {
+      // == Edit followings ... ==
+
       // get
       final userV0 = User.fromJson((await fromRef.get()).data());
       final notesV0 = (await fromRef.collection('notes').get())
@@ -83,7 +85,7 @@ class MigrationExecutor {
     }
   }
 
-  Future _migrateUserDateFromV1(String uid) async {
+  Future migrateUserDateFromV1(String uid) async {
     const from = 'v1';
     const to = 'v2';
     final fromRef = userRef(from, uid);
@@ -94,7 +96,9 @@ class MigrationExecutor {
     }
 
     try {
-      await _migrateUserDataFromV0(uid);
+      await migrateUserDataFromV0(uid);
+
+      // == Edit followings ... ==
 
       // get
       final userV1 = UserV1.fromJson((await fromRef.get()).data());
@@ -120,13 +124,15 @@ class MigrationExecutor {
     }
   }
 
-  Future _migrateMasterDataFromV0() async {
+  Future migrateMasterDataFromV0() async {
     const from = 'v0';
     const to = 'v1';
     final fromRef = store.version(from);
     final toRef = store.version(to);
 
     try {
+      // == Edit followings ... ==
+
       // get
       final itemsV0 = (await fromRef.collection('items').get())
           .docs
@@ -148,15 +154,16 @@ class MigrationExecutor {
     }
   }
 
-  Future _migrateMasterDataFromV1() async {
+  Future migrateMasterDataFromV1() async {
     const from = 'v1';
     const to = 'v2';
     final fromRef = store.version(from);
     final toRef = store.version(to);
 
     try {
-      await _migrateMasterDataFromV0();
+      await migrateMasterDataFromV0();
 
+      // == Edit followings ... ==
       // get
       final itemsV1 = (await fromRef.collection('items').get())
           .docs
@@ -179,12 +186,12 @@ class MigrationExecutor {
   }
 
   Future migrateUserData(String uid) async {
-    // latest model is V2 for test
-    await _migrateUserDateFromV1(uid);
+    // User -> UserV1 -> UserV2 (latest model is UserV2 for test)
+    // await migrateUserDateFromV1(uid);
   }
 
   Future migrateMasterData() async {
     // latest model is V2 for test
-    await _migrateMasterDataFromV1();
+    // await migrateMasterDataFromV1();
   }
 }
