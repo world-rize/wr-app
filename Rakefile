@@ -13,11 +13,14 @@ task :help do
 end
 
 task :release do
-  cd 'android' do
-    sh 'fastlane beta'
-  end
+  # cd 'android' do
+  #  sh 'fastlane beta'
+  # end
 
   cd 'ios' do
+    sh 'flutter clean'
+    sh 'flutter pub get'
+    sh 'pod install'
     sh 'fastlane beta'
   end
 end
