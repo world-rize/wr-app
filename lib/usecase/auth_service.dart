@@ -6,6 +6,7 @@ import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/infrastructure/user/i_user_repository.dart';
 import 'package:wr_app/util/logger.dart';
 
+// TODO: AuthServiceはUserを知らないべき
 class AuthService {
   const AuthService({
     @required IAuthRepository authRepository,

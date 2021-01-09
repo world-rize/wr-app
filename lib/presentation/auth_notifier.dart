@@ -107,6 +107,7 @@ class AuthNotifier with ChangeNotifier {
     final uid = getFirebaseUid();
     await _userService.migrationUserData(uid: uid);
     user = await _userService.fetchUser(uid: uid);
+    // ???
     await _userService.setTestCount(user: user, count: 3);
     notifyListeners();
   }
