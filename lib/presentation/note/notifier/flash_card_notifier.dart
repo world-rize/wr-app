@@ -118,7 +118,6 @@ class FlashCardNotifier extends ChangeNotifier {
   /// しゃべる倍率をわたす
   void setPlaySpeed(double speed) {
     // to 0 - 1
-    print(speed);
     _rate = 0.5 * speed;
     _flutterTts.setSpeechRate(_rate);
     notifyListeners();

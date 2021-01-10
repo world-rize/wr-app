@@ -48,16 +48,6 @@ import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/notification.dart';
 import 'package:wr_app/util/sentry.dart';
 
-void showMaintenance() {
-  runZonedGuarded(
-    () => runApp(Maintenance()),
-    (error, stackTrace) => sentryReportError(
-      error: error,
-      stackTrace: stackTrace,
-    ),
-  );
-}
-
 /// initialize singleton instances and inject to GetIt
 /// [useMock] によって差し替える
 Future<void> setupGlobalSingletons({
@@ -180,75 +170,82 @@ Future<void> setupGlobalSingletons({
 
 /// runApp() with flavor
 Future<void> runAppWithFlavor(final Flavor flavor) async {
-  try {
-    Provider.debugCheckInvalidValueType = null;
-    WidgetsFlutterBinding.ensureInitialized();
-
-    const useMock = false;
-
-    await setupGlobalSingletons(flavor: flavor, useMock: useMock);
-
-    final systemService = GetIt.I<SystemService>();
-    final userService = GetIt.I<UserService>();
-    final authService = GetIt.I<AuthService>();
-    final noteService = GetIt.I<NoteService>();
-    final lessonService = GetIt.I<LessonService>();
-
-    // maintenance check
-    final appInfo = await systemService.getAppInfo();
-    print(appInfo);
-    if (!appInfo.isValid) {
-      showMaintenance();
+  // override flutter error
+  // <https://flutter.dev/docs/cookbook/maintenance/error-reporting>
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (isInDebugMode && false) {
+      // In development mode, simply print to console.
+      FlutterError.dumpErrorToConsole(details);
+    } else {
+      // In production mode, report to the application zone to report to
+      // Sentry.
+      sentryReportError(error: details.exception, stackTrace: details.stack);
     }
+  };
 
-    final userNotifier = UserNotifier(userService: userService);
-    final authNotifier =
-        AuthNotifier(authService: authService, userService: userService);
-    final noteNotifier = NoteNotifier(noteService: noteService);
-    final lessonNotifier = LessonNotifier(lessonService: lessonService);
-    authNotifier.addListener(() {
-      if (authNotifier.user == null) {
-        InAppLogger.debug('user is null');
+  await runZonedGuarded<Future>(
+    () async {
+      Provider.debugCheckInvalidValueType = null;
+      WidgetsFlutterBinding.ensureInitialized();
+
+      const useMock = false;
+
+      await setupGlobalSingletons(flavor: flavor, useMock: useMock);
+
+      final systemService = GetIt.I<SystemService>();
+      final userService = GetIt.I<UserService>();
+      final authService = GetIt.I<AuthService>();
+      final noteService = GetIt.I<NoteService>();
+      final lessonService = GetIt.I<LessonService>();
+
+      // maintenance check
+      final appInfo = await systemService.getAppInfo();
+      print(appInfo);
+      if (!appInfo.isValid) {
+        runApp(Maintenance());
       }
-      userNotifier.user = authNotifier.user;
-      noteNotifier.user = authNotifier.user;
-      lessonNotifier.user = authNotifier.user;
-      InAppLogger.debug('from auth to many notifier');
-    });
 
-    // FIXME: rootに置くのはMaterialAppよりも上に置かないと、MaterialPageRouteからProviderを使えないので
-    final app = MultiProvider(
-      providers: [
-        Provider.value(
-            value:
-                SystemNotifier(systemService: systemService, flavor: flavor)),
-        // system
-        ChangeNotifierProvider.value(
-          value: SystemNotifier(systemService: systemService, flavor: flavor),
-        ),
-        // ユーザーデータ
-        ChangeNotifierProvider.value(value: userNotifier),
-        // Auth
-        ChangeNotifierProvider.value(value: authNotifier),
-        // Note
-        ChangeNotifierProvider.value(value: noteNotifier),
-        // Lesson
-        ChangeNotifierProvider.value(value: lessonNotifier),
-        ChangeNotifierProvider.value(value: VoicePlayer()),
-      ],
-      child: WRApp(),
-    );
+      final userNotifier = UserNotifier(userService: userService);
+      final authNotifier =
+          AuthNotifier(authService: authService, userService: userService);
+      final noteNotifier = NoteNotifier(noteService: noteService);
+      final lessonNotifier = LessonNotifier(lessonService: lessonService);
+      authNotifier.addListener(() {
+        if (authNotifier.user == null) {
+          InAppLogger.debug('user is null');
+        }
+        userNotifier.user = authNotifier.user;
+        noteNotifier.user = authNotifier.user;
+        lessonNotifier.user = authNotifier.user;
+      });
 
-    runZonedGuarded(
-      () => runApp(app),
-      (error, stackTrace) => sentryReportError(
-        error: error,
-        stackTrace: stackTrace,
-      ),
-    );
-  } on Exception catch (e) {
-    // set up error
-    InAppLogger.error(e);
-    await sentryReportError(error: e, stackTrace: StackTrace.current);
-  }
+      // FIXME: rootに置くのはMaterialAppよりも上に置かないと、MaterialPageRouteからProviderを使えないので
+      final app = MultiProvider(
+        providers: [
+          Provider.value(
+              value:
+                  SystemNotifier(systemService: systemService, flavor: flavor)),
+          // system
+          ChangeNotifierProvider.value(
+            value: SystemNotifier(systemService: systemService, flavor: flavor),
+          ),
+          // ユーザーデータ
+          ChangeNotifierProvider.value(value: userNotifier),
+          // Auth
+          ChangeNotifierProvider.value(value: authNotifier),
+          // Note
+          ChangeNotifierProvider.value(value: noteNotifier),
+          // Lesson
+          ChangeNotifierProvider.value(value: lessonNotifier),
+          ChangeNotifierProvider.value(value: VoicePlayer()),
+        ],
+        child: WRApp(),
+      );
+
+      runApp(app);
+    },
+    (error, stackTrace) {
+      sentryReportError(error: error, stackTrace: stackTrace);
+    },
+  );
 }

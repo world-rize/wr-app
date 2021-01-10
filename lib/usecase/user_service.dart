@@ -64,14 +64,7 @@ class UserService {
 
   /// 前のバージョンのユーザからデータを再帰的にマイグレーションする
   Future<void> migrationUserData({@required String uid}) async {
-    final user = await _userRepository.findByUid(uid: uid);
-    if (user != null) {
-      InAppLogger.debug('User $uid already exists.');
-      return;
-    }
-    InAppLogger.debug('User $uid does not exists.');
-    // TODO: migrationして前のUser classからUserを作成する
-    // throw Exception('unimplemented');
+    // TODO
   }
 
   // TODO: どこにおくべき

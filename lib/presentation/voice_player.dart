@@ -30,7 +30,6 @@ class VoicePlayer with ChangeNotifier {
   }
 
   VoicePlayer._internal() {
-    InAppLogger.debug('VoicePlayer._internal()');
     player = AssetsAudioPlayer();
     isPlaying = false;
     _speed = 1.0;
