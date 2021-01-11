@@ -22,7 +22,7 @@ platform :ios do
     build_app(workspace: "Runner.xcworkspace", scheme: "Production")
     # changelog_from_git_commits
     upload_to_testflight(
-      changelog: "ChangeLog"
+      changelog: "ベータ版リリース"
     )
 
     slack(
