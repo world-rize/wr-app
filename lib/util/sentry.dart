@@ -5,9 +5,14 @@ import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
 
 bool get isInDebugMode {
+  // Assume you're in production mode.
   var inDebugMode = false;
+
+  // Assert expressions are only evaluated during development. They are ignored
+  // in production. Therefore, this code only sets `inDebugMode` to true
+  // in a development environment.
   assert(inDebugMode = true);
-  inDebugMode = false;
+
   return inDebugMode;
 }
 
@@ -21,13 +26,12 @@ Future<void> sentryReportError({
   // Errors thrown in development mode are unlikely to be interesting. You can
   // check if you are running in dev mode using an assertion and omit sending
   // the report.
-  if (isInDebugMode) {
+  if (isInDebugMode && false) {
     print(stackTrace);
     print('In dev mode. Not sending report to Sentry.io.');
     return;
   }
 
-  InAppLogger.info('Reportiawait sentry.capturing to Sentry.io...');
   final flavor = GetIt.I<Flavor>();
   final response = await GetIt.I<SentryClient>().capture(
     event: Event(
@@ -38,7 +42,7 @@ Future<void> sentryReportError({
   );
 
   if (response.isSuccessful) {
-    InAppLogger.info('Success! Event ID: ${response.eventId}');
+    InAppLogger.info('Reporting Success! Event ID: ${response.eventId}');
   } else {
     InAppLogger.error('Failed to report to Sentry.io: ${response.error}');
   }

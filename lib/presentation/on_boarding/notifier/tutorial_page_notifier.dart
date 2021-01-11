@@ -43,6 +43,8 @@ class TutorialPageNotifier extends ChangeNotifier {
   // ホームへ移動
   // TODO: name based routing for omit BuildContext
   Future gotoHome(BuildContext context) async {
+    await player.pause();
+
     // initial login
     _systemService.setFirstLaunch(value: false);
 

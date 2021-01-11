@@ -30,7 +30,6 @@ class VoicePlayer with ChangeNotifier {
   }
 
   VoicePlayer._internal() {
-    InAppLogger.debug('VoicePlayer._internal()');
     player = AssetsAudioPlayer();
     isPlaying = false;
     _speed = 1.0;
@@ -73,7 +72,7 @@ class VoicePlayer with ChangeNotifier {
         print(error.error);
       };
       final l = _voiceAccentMP3AssetsName[locale];
-      final audio = Audio("assets/" + message.assets.voice[l]);
+      final audio = Audio('assets/' + message.assets.voice[l]);
       await player.open(
         audio,
         autoStart: false,

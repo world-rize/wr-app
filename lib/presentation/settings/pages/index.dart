@@ -7,7 +7,6 @@ import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/on_boarding/pages/index.dart';
 import 'package:wr_app/presentation/on_boarding/pages/tutorial_page.dart';
@@ -125,9 +124,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: I.of(context).privacyPolicy,
           onTap: () async {
-            if (await canLaunch(env.privacyPolicyJaUrl)) {
+            if (await canLaunch(env.privacyPolicyUrl)) {
               await launch(
-                env.privacyPolicyJaUrl,
+                env.privacyPolicyUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
@@ -163,13 +162,6 @@ class _SettingsState extends State<SettingsPage> {
             );
           },
         ),
-        SettingsTile(
-          title: 'InApp Log',
-          onTap: () {
-            Navigator.of(context)
-                .push(MaterialPageRoute(builder: (_) => LoggerView()));
-          },
-        ),
       ],
     );
   }
@@ -188,6 +180,13 @@ class _SettingsState extends State<SettingsPage> {
           onTap: () {
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (_) => APITestView()));
+          },
+        ),
+        SettingsTile(
+          title: 'InApp Log',
+          onTap: () {
+            Navigator.of(context)
+                .push(MaterialPageRoute(builder: (_) => LoggerView()));
           },
         ),
         SettingsTile(

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:chewie/chewie.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/presentation/on_boarding/notifier/tutorial_page_notifier.dart';
@@ -27,8 +27,10 @@ class _TutorialPage extends StatelessWidget {
       right: 10,
       top: 10,
       child: CloseButton(
-        color: Colors.white,
-        onPressed: () => state.gotoHome(context),
+        color: Colors.grey,
+        onPressed: () {
+          state.gotoHome(context);
+        },
       ),
     );
 
@@ -36,7 +38,6 @@ class _TutorialPage extends StatelessWidget {
       body: Stack(
         children: [
           Chewie(controller: state.player),
-
           closeButton,
         ],
       ),

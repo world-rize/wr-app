@@ -7,15 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:wr_app/domain/system/model/app_info.dart';
-import 'package:wr_app/domain/user/model/user.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/index.dart';
-import 'package:wr_app/presentation/lesson_notifier.dart';
 import 'package:wr_app/presentation/lesson/pages/anything_search_page.dart';
 import 'package:wr_app/presentation/system_notifier.dart';
 import 'package:wr_app/presentation/user_notifier.dart';
-import 'package:wr_app/usecase/lesson_service.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/extensions.dart';
 import 'package:wr_app/util/logger.dart';
@@ -46,7 +43,6 @@ class _RootViewState extends State<RootView>
     try {
       final sn = context.read<SystemNotifier>();
       final appInfo = await sn.getAppInfo();
-      InAppLogger.debugJson(appInfo.toJson());
 
       if (!_isAvailable(appInfo)) {
         await Navigator.of(context).push(
@@ -71,22 +67,16 @@ class _RootViewState extends State<RootView>
       // on first launch, show on-boarding page
       final an = context.read<AuthNotifier>();
       final sn = context.read<SystemNotifier>();
-
       final signedIn = await an.isAlreadySignedIn();
-      final firstLaunch = sn.getFirstLaunch();
-
-      InAppLogger.debug('first launch: $firstLaunch');
-      InAppLogger.debug('signed in: $signedIn');
 
       // firebaseでsignInしていたらアプリにログインする
       if (signedIn) {
         await an.login();
-        InAppLogger.debug('ok login');
         return;
       }
 
       // show on boarding modal
-      if (firstLaunch || !signedIn) {
+      if (!signedIn) {
         await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => OnBoardingPage(),
@@ -96,7 +86,6 @@ class _RootViewState extends State<RootView>
       }
     } on Exception catch (e) {
       InAppLogger.error(e);
-      NotifyToast.error(e);
 
       // トップ画面に戻す
       await Navigator.of(context).push(
@@ -110,7 +99,6 @@ class _RootViewState extends State<RootView>
 
   /// page loaded callback
   void onPageLoaded() {
-    print('on page loaded');
     _checkAppStatus();
     _checkUserStatus();
   }
