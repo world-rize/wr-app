@@ -62,11 +62,6 @@ class UserService {
     await _noteRepository.createNote(user: newUser, note: achievedNote);
   }
 
-  /// 前のバージョンのユーザからデータを再帰的にマイグレーションする
-  Future<void> migrationUserData({@required String uid}) async {
-    // TODO
-  }
-
   // TODO: どこにおくべき
   String getUid() {
     return _authRepository.getCurrentUser()?.uid ?? '';

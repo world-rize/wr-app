@@ -1,12 +1,14 @@
 // Copyright © 2020 WorldRIZe. All rights reserved.
 
 import 'package:flutter/foundation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/auth_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/migrations.dart';
 import 'package:wr_app/util/toast.dart';
 
 /// ログイン等
@@ -110,7 +112,11 @@ class AuthNotifier with ChangeNotifier {
   Future<void> login() async {
     await sendEvent(event: AnalyticsEvent.logIn);
     final uid = getFirebaseUid();
-    await _userService.migrationUserData(uid: uid);
+
+    // migration my user_data if needed.
+    final migrationExecutor = GetIt.I<MigrationExecutor>();
+    await migrationExecutor.migrateUserData(uid);
+
     user = await _userService.fetchUser(uid: uid);
 
     if (user.lastLogin.isNotEmpty && _loginCheck(Jiffy(user.lastLogin))) {

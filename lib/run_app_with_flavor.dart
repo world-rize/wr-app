@@ -45,6 +45,7 @@ import 'package:wr_app/util/cloud_functions.dart';
 import 'package:wr_app/util/env_keys.dart';
 import 'package:wr_app/util/flavor.dart';
 import 'package:wr_app/util/logger.dart';
+import 'package:wr_app/util/migrations.dart';
 import 'package:wr_app/util/notification.dart';
 import 'package:wr_app/util/sentry.dart';
 
@@ -143,6 +144,9 @@ Future<void> setupGlobalSingletons({
   final favoriteRepository =
       FavoriteRepository(store: GetIt.I<FirebaseFirestore>());
 
+  final migrationExecutor =
+      MigrationExecutor(store: GetIt.I<FirebaseFirestore>());
+
   // services
   final userService = UserService(
     authRepository: authRepository,
@@ -166,6 +170,8 @@ Future<void> setupGlobalSingletons({
   GetIt.I.registerSingleton<AuthService>(authService);
   GetIt.I.registerSingleton<NoteService>(noteService);
   GetIt.I.registerSingleton<LessonService>(lessonService);
+
+  GetIt.I.registerSingleton<MigrationExecutor>(migrationExecutor);
 }
 
 /// runApp() with flavor
