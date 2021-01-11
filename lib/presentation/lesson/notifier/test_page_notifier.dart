@@ -9,8 +9,8 @@ import 'package:wr_app/domain/lesson/model/section.dart';
 import 'package:wr_app/domain/lesson/model/test_stats.dart';
 import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/analytics.dart';
-import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/extensions.dart';
+import 'package:wr_app/util/logger.dart';
 
 enum AnswerResult {
   correct,
@@ -59,7 +59,7 @@ class TestPageNotifier with ChangeNotifier {
   TestStats stats;
 
   // テストを終了する
-  Future finishTest() async {
+  Future<int> finishTest() async {
     try {
       isLoading = true;
       notifyListeners();
@@ -74,8 +74,6 @@ class TestPageNotifier with ChangeNotifier {
         sectionId: section.id,
         score: corrects,
       );
-      // get points
-      await userService.getPoints(user: user, points: corrects);
 
       stats = TestStats(
         challengeAchieved: await userService.checkTestStreaks(user: user),
@@ -84,12 +82,12 @@ class TestPageNotifier with ChangeNotifier {
         corrects: corrects,
         answers: answers,
       );
+
+      // 一時的
+      return stats.corrects;
     } on Exception catch (e) {
       InAppLogger.error(e);
-    } finally {
-//      setState(() {
-//        _isLoading = false;
-//      });
+      rethrow;
     }
   }
 
@@ -117,6 +115,10 @@ class TestPageNotifier with ChangeNotifier {
   void next() {
     // seek index
     index++;
+
+    if (index > 6) {
+      return;
+    }
 
     // 選択肢を作成
     answerIndex = Random().nextInt(choiceLength);

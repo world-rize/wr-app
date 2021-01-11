@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:wr_app/domain/system/index.dart';
 import 'package:wr_app/i10n/i10n.dart';
 import 'package:wr_app/presentation/auth_notifier.dart';
 import 'package:wr_app/presentation/on_boarding/widgets/sign_in_form.dart';
@@ -57,6 +56,7 @@ class _SignInPageState extends State<SignInPage> {
       NotifyToast.success(I.of(context).signInSuccessful);
       await _gotoHome();
     } on PlatformException catch (e) {
+      // TODO: suppress to report to sentry
       InAppLogger.error(e);
       final mes = e.toLocalizedMessage(context);
       NotifyToast.error(mes);

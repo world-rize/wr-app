@@ -11,7 +11,6 @@ import 'package:wr_app/presentation/note/notifier/flash_card_notifier.dart';
 import 'package:wr_app/presentation/note/widgets/pitch_slider.dart';
 import 'package:wr_app/ui/widgets/locale_to_image.dart';
 import 'package:wr_app/ui/widgets/shadowed_container.dart';
-import 'package:wr_app/util/logger.dart';
 
 class FlashCardController extends StatelessWidget {
   @override
@@ -146,6 +145,7 @@ class FlashCardController extends StatelessWidget {
     );
 
     final pitch = context.watch<FlashCardNotifier>().playSpeed;
+    final fp = Provider.of<FlashCardNotifier>(context);
 
     return ShadowedContainer(
       color: Colors.white30,
@@ -171,8 +171,7 @@ class FlashCardController extends StatelessWidget {
                   pitch: pitch,
                   pitches: const [0.8, 0.9, 1.0, 1.1, 1.2],
                   onChanged: (double p) {
-                    Provider.of<FlashCardNotifier>(context, listen: false)
-                        .setPlaySpeed(p);
+                    fp.setPlaySpeed(p);
                   },
                 ),
               ),

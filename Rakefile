@@ -13,11 +13,16 @@ task :help do
 end
 
 task :release do
-  cd 'android' do
-    sh 'fastlane beta'
-  end
+  sh 'export $(cat ./secrets/.env.prd | grep -v ^# | xargs)'
+
+  # cd 'android' do
+  #  sh 'fastlane beta'
+  # end
 
   cd 'ios' do
+    sh 'flutter clean'
+    sh 'flutter pub get'
+    sh 'pod install'
     sh 'fastlane beta'
   end
 end
@@ -29,12 +34,12 @@ end
 
 desc 'Run App with Staging'
 task :stg do
-  sh 'fvm flutter run --flavor staging -t lib/main_staging.dart'
+  sh 'flutter run --release --flavor staging -t lib/main_staging.dart'
 end
 
 desc 'Run App with Production'
 task :prd do
-  sh 'fvm flutter run --flavor production -t lib/main_production.dart'
+  sh 'flutter run --release --flavor production -t lib/main.dart'
 end
 
 desc 'open Xcode Workspace'

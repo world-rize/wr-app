@@ -22,7 +22,7 @@ class PitchSlider extends StatelessWidget {
       value: pitch,
       min: pitches.reduce(min),
       max: pitches.reduce(max),
-      divisions: pitches.length,
+      divisions: pitches.length - 1,
       label: pitch.toString(),
       onChanged: onChanged,
     );

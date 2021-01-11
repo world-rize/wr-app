@@ -5,7 +5,6 @@ import 'package:wr_app/domain/lesson/index.dart';
 import 'package:wr_app/domain/lesson/model/favorite_phrase_list.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/lesson_service.dart';
-import 'package:wr_app/usecase/user_service.dart';
 import 'package:wr_app/util/logger.dart';
 import 'package:wr_app/util/toast.dart';
 
@@ -139,12 +138,12 @@ class LessonNotifier with ChangeNotifier {
     favorites = () async {
       return [defaultFavoriteList];
     }();
+    notifyListeners();
 
     // 連打されると困るのでお気に入り登録するときだけdelay
     if (favorite) {
       await Future.delayed(const Duration(milliseconds: 1000));
     }
-    notifyListeners();
 
     InAppLogger.debug(favorite ? 'お気に入りに登録しました' : 'お気に入りを解除しました');
   }

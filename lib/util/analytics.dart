@@ -3,7 +3,8 @@
 import 'package:data_classes/data_classes.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get_it/get_it.dart';
-import 'package:wr_app/util/logger.dart';
+
+import 'logger.dart';
 
 enum AnalyticsEvent {
   logIn,

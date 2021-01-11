@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:intl/intl.dart';
+import 'package:stack_trace/stack_trace.dart' show Trace, Frame;
 import 'package:wr_app/domain/system/model/user_activity.dart';
 
 class LogLevel {
@@ -23,16 +24,37 @@ class InAppLogger {
   static final List<UserActivity> _logs = [];
   static const int logLevel = LogLevel.DEBUG;
 
+  static const start = '\x1b[90m';
+  static const reset = '\x1b[0m';
+  static const white = '\x1b[37m';
+
+  static String logColor(int level) {
+    if (level == -1) {
+      return '\x1b[90m';
+    }
+    if (level == LogLevel.DEBUG) {
+      return white;
+    }
+    if (level == LogLevel.INFO) {
+      return '\x1b[37m';
+    } else {
+      return '';
+    }
+  }
+
+  static String _format(int level, String content, Frame frame) {
+    final time = DateFormat('HH:mm:ss').format(DateTime.now());
+    return '${logColor(level)}$content\n  ${logColor(-1)}$frame [$time]$reset';
+  }
+
   static void _log(int level, String content) {
-    final now = DateTime.now();
-    final formatter = DateFormat('HH:mm:ss');
-    final timestamp = formatter.format(now);
-    final header = LogLevel.header(level);
-    final log = '[$timestamp][$header] $content';
+    final frames = Trace.current(2).frames;
+    final frame = frames.isEmpty ? null : frames.first;
+    final log = _format(level, content, frame);
 
     _logs.add(UserActivity(
-      content: log,
-      date: now,
+      content: content,
+      date: null,
     ));
 
     if (logLevel <= level) {
@@ -46,17 +68,14 @@ class InAppLogger {
   }
 
   static void _logJson(int level, Map<String, dynamic> json) {
-    final now = DateTime.now();
-    final formatter = DateFormat('HH:mm:ss');
-    final timestamp = formatter.format(now);
-    final header = LogLevel.header(level);
     final jsonString = prettify(json);
-
-    final log = '[$timestamp][$header] $jsonString';
+    final frames = Trace.current(2).frames;
+    final frame = frames.isEmpty ? null : frames.first;
+    final log = _format(level, '$jsonString\n', frame);
 
     _logs.add(UserActivity(
-      content: log,
-      date: now,
+      content: jsonString,
+      date: null,
     ));
 
     if (logLevel <= level) {
@@ -65,6 +84,7 @@ class InAppLogger {
   }
 
   static void debug(String content) => _log(LogLevel.DEBUG, content);
+
   static void debugJson(Map<String, dynamic> json) =>
       _logJson(LogLevel.DEBUG, json);
 

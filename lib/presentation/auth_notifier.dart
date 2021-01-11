@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:wr_app/domain/user/index.dart';
 import 'package:wr_app/usecase/auth_service.dart';
 import 'package:wr_app/usecase/user_service.dart';
@@ -103,6 +104,10 @@ class AuthNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  bool _loginCheck(Jiffy lastLogin) {
+    return lastLogin.startOf(Units.DAY).isAfter(Jiffy().startOf(Units.DAY));
+  }
+
   /// アプリのログイン処理をする
   Future<void> login() async {
     await sendEvent(event: AnalyticsEvent.logIn);
@@ -113,8 +118,11 @@ class AuthNotifier with ChangeNotifier {
     await migrationExecutor.migrateUserData(uid);
 
     user = await _userService.fetchUser(uid: uid);
-    // ???
-    await _userService.setTestCount(user: user, count: 3);
+
+    if (user.lastLogin.isNotEmpty && _loginCheck(Jiffy(user.lastLogin))) {
+      await _userService.setTestCount(user: user, count: 3);
+    }
+
     notifyListeners();
   }
 

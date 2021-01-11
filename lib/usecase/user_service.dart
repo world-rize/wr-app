@@ -46,7 +46,8 @@ class UserService {
     final newUser = User.create()
       ..uuid = uid
       ..email = email
-      ..name = name;
+      ..name = name
+      ..membership = Membership.pro;
 
     await _userRepository.createUser(user: newUser);
     await _favoriteRepository.createFavoriteList(
