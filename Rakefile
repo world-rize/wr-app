@@ -13,7 +13,7 @@ task :help do
 end
 
 task :release do
-  sh 'export $(cat ./secrets/.env | grep -v ^# | xargs)'
+  sh 'export $(cat ./secrets/.env.prd | grep -v ^# | xargs)'
 
   # cd 'android' do
   #  sh 'fastlane beta'

@@ -28,7 +28,9 @@ class _TutorialPage extends StatelessWidget {
       top: 10,
       child: CloseButton(
         color: Colors.grey,
-        onPressed: () => state.gotoHome(context),
+        onPressed: () {
+          state.gotoHome(context);
+        },
       ),
     );
 

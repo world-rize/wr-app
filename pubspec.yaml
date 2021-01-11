@@ -64,7 +64,7 @@ dependencies:
 
   # native
   url_launcher: ^5.4.10
-  assets_audio_player: ^2.0.12
+  assets_audio_player: ^2.0.13+1
   settings_ui: ^0.2.0
   package_info: ^0.4.0+16
   flutter_dotenv: ^2.0.1

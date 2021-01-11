@@ -16,8 +16,7 @@ class EnvKeys {
   final String giftMailAddress;
   final String questionnaireUrl;
   final String termsOfServiceUrl;
-  final String privacyPolicyJaUrl;
-  final String privacyPolicyEuUrl;
+  final String privacyPolicyUrl;
   final String specifiedCommercialTransactionActUrl;
   final String faqUrl;
   final String contactUrl;
@@ -37,8 +36,7 @@ class EnvKeys {
     @required this.giftMailAddress,
     @required this.questionnaireUrl,
     @required this.termsOfServiceUrl,
-    @required this.privacyPolicyJaUrl,
-    @required this.privacyPolicyEuUrl,
+    @required this.privacyPolicyUrl,
     @required this.specifiedCommercialTransactionActUrl,
     @required this.faqUrl,
     @required this.contactUrl,
@@ -61,8 +59,7 @@ class EnvKeys {
     assert(env.containsKey('GIFT_MAIL_ADDRESS'));
     assert(env.containsKey('QUESTIONNAIRE_URL'));
     assert(env.containsKey('TERMS_OF_SERVICE_URL'));
-    assert(env.containsKey('PRIVACY_POLICY_JA_URL'));
-    assert(env.containsKey('PRIVACY_POLICY_EU_URL'));
+    assert(env.containsKey('PRIVACY_POLICY_URL'));
     assert(env.containsKey('SPECIFIED_COMMERCIAL_TRANSACTION_ACT_URL'));
     assert(env.containsKey('FAQ_URL'));
     assert(env.containsKey('CONTACT_URL'));
@@ -82,8 +79,7 @@ class EnvKeys {
       giftMailAddress: env['GIFT_MAIL_ADDRESS'],
       questionnaireUrl: env['QUESTIONNAIRE_URL'],
       termsOfServiceUrl: env['TERMS_OF_SERVICE_URL'],
-      privacyPolicyJaUrl: env['PRIVACY_POLICY_JA_URL'],
-      privacyPolicyEuUrl: env['PRIVACY_POLICY_EU_URL'],
+      privacyPolicyUrl: env['PRIVACY_POLICY_URL'],
       specifiedCommercialTransactionActUrl:
           env['SPECIFIED_COMMERCIAL_TRANSACTION_ACT_URL'],
       faqUrl: env['FAQ_URL'],

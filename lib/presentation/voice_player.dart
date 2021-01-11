@@ -72,7 +72,7 @@ class VoicePlayer with ChangeNotifier {
         print(error.error);
       };
       final l = _voiceAccentMP3AssetsName[locale];
-      final audio = Audio("assets/" + message.assets.voice[l]);
+      final audio = Audio('assets/' + message.assets.voice[l]);
       await player.open(
         audio,
         autoStart: false,

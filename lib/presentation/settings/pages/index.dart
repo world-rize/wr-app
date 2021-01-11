@@ -124,9 +124,9 @@ class _SettingsState extends State<SettingsPage> {
         SettingsTile(
           title: I.of(context).privacyPolicy,
           onTap: () async {
-            if (await canLaunch(env.privacyPolicyJaUrl)) {
+            if (await canLaunch(env.privacyPolicyUrl)) {
               await launch(
-                env.privacyPolicyJaUrl,
+                env.privacyPolicyUrl,
                 forceSafariVC: false,
                 forceWebView: false,
               );
